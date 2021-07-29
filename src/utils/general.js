@@ -129,6 +129,16 @@ export const getObjectLength = object =>
   object ? Object.keys(object).length : 0;
 export const isObjectEmpty = object => getObjectLength(object) === 0;
 
+export const areAnyFields = (param, obj) => {
+  if (!obj || !param) return;
+  if (param === 'truthy') {
+    return Object.values(obj).some(field => field);
+  }
+  if (param === 'falsy') {
+    return Object.values(obj).some(field => !field);
+  }
+};
+
 export const numberWithCommas = num => {
   if (num === 0) return 0;
   if (!num) return;

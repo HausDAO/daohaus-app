@@ -26,6 +26,7 @@ import { defaultProposals, getBoostPlaylists } from '../utils/playlists';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useDao } from '../contexts/DaoContext';
+import { areAnyFields } from '../utils/general';
 
 const ProposalTypes = () => {
   const { daoProposals } = useMetaData();
@@ -308,24 +309,35 @@ const ProposalListItem = ({
   handleTogglePlaylist,
   playlists,
 }) => {
+  const hasBeenEdited = useMemo(
+    () => customFormData && areAnyFields('truthy', customFormData),
+    [customFormData],
+  );
+
   return (
     <ContentBox mb={4} maxW='1200px' minW='250px'>
       <Flex justifyContent='space-between'>
         {/* <Image h='70px' minW='70px' mb={6} /> */}
         <Box>
-          <TextBox mb={2}>{customFormData?.title || title}</TextBox>
+          <TextBox mb={3}>{customFormData?.title || title}</TextBox>
           <Box fontFamily='body' size='sm' color='whiteAlpha.800'>
             {customFormData?.description || description}
           </Box>
         </Box>
-        <Flex>
+        <Flex flexDir='column' justifyContent='space-between'>
           <ProposalMenuList
             handleEditProposal={handleEditProposal}
             handleRestoreProposal={handleRestoreProposal}
             handleTogglePlaylist={handleTogglePlaylist}
             playlists={playlists}
             formId={id}
+            hasBeenEdited={hasBeenEdited}
           />
+          {hasBeenEdited && (
+            <TextBox variant='body' size='xs' opacity={0.6} fontStyle='italic'>
+              edited
+            </TextBox>
+          )}
         </Flex>
       </Flex>
     </ContentBox>
@@ -337,6 +349,7 @@ const ProposalMenuList = ({
   handleTogglePlaylist,
   formId,
   playlists,
+  hasBeenEdited,
 }) => {
   const formCentricPlaylistData = useMemo(() => {
     if (playlists) {
@@ -346,6 +359,13 @@ const ProposalMenuList = ({
       }));
     }
   }, [playlists]);
+  const isOnAnyList = useMemo(() => {
+    if (formCentricPlaylistData) {
+      const result = formCentricPlaylistData?.some(list => list.isListed);
+      return result;
+    }
+  }, [formCentricPlaylistData]);
+
   const handleClickEdit = () => handleEditProposal(formId);
   const handleClickReset = () => handleRestoreProposal(formId);
   const handleClickToggle = e => {
@@ -356,43 +376,49 @@ const ProposalMenuList = ({
     handleTogglePlaylist(formId, selectedList.id, selectedList.isListed);
   };
   return (
-    <Menu isLazy>
-      <MenuButton alignItems='start'>
-        <Icon
-          as={RiMore2Line}
-          color='white'
-          w='20px'
-          h='20px'
-          cursor='pointer'
-        />
-      </MenuButton>
-      <MenuList p={4}>
-        <MenuItem
-          onClick={handleClickEdit}
-          icon={<Icon w='20px' h='20px' as={HiPencil} />}
-        >
-          Edit Proposal Details
-        </MenuItem>
-        <MenuItem
-          onClick={handleClickReset}
-          icon={<Icon w='20px' h='20px' as={HiRefresh} />}
-        >
-          Reset Proposal Details
-        </MenuItem>
-        <TextBox size='xs' p={3}>
-          Add/Remove From Playlist
-        </TextBox>
-        {formCentricPlaylistData?.map(list => (
+    <Flex justifyContent='flex-end'>
+      {isOnAnyList && (
+        <Icon as={RiStarFill} color='white' w='20px' h='20px' mr={2} mt={1} />
+      )}
+      <Menu isLazy>
+        <MenuButton alignItems='start'>
+          <Icon
+            as={RiMore2Line}
+            color='white'
+            w='20px'
+            h='20px'
+            cursor='pointer'
+          />
+        </MenuButton>
+        <MenuList p={4}>
           <MenuItem
-            key={list.id}
-            icon={list.isListed ? <RiStarFill /> : <RiStarFill opacity={0} />}
-            onClick={handleClickToggle}
-            value={list.id}
+            onClick={handleClickEdit}
+            icon={<Icon w='20px' h='20px' as={HiPencil} />}
           >
-            {list.name}
+            Edit Proposal Details
           </MenuItem>
-        ))}
-      </MenuList>
-    </Menu>
+          <MenuItem
+            onClick={handleClickReset}
+            isDisabled={!hasBeenEdited}
+            icon={<Icon w='20px' h='20px' as={HiRefresh} />}
+          >
+            Reset Proposal Details
+          </MenuItem>
+          <TextBox size='xs' p={3}>
+            Add/Remove From Playlist
+          </TextBox>
+          {formCentricPlaylistData?.map(list => (
+            <MenuItem
+              key={list.id}
+              icon={list.isListed ? <RiStarFill /> : <RiStarFill opacity={0} />}
+              onClick={handleClickToggle}
+              value={list.id}
+            >
+              {list.name}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+    </Flex>
   );
 };

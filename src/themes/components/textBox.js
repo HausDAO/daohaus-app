@@ -5,7 +5,7 @@ const TextBoxComponent = {
     fontFamily: 'heading',
     textTransform: props.textTransform || 'uppercase',
     letterSpacing: '0.15em',
-    opacity: 1.0,
+    opacity: props.opacity || 1.0,
   }),
 
   sizes: {
@@ -62,6 +62,7 @@ const TextBoxComponent = {
       fontFamily: 'body',
       textTransform: 'none',
       fontWeight: 400,
+      opacity: props.opacity || 1.0,
     }),
   },
 };

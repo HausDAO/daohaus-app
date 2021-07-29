@@ -1,4 +1,4 @@
-import { FORM } from '../data/forms';
+import { CORE_FORMS } from '../data/forms';
 
 // NEXT STEPS:
 // - Rarible default actions - added if on mainnet?
@@ -16,7 +16,7 @@ const defaultConfig = {
       tooltTipLabel:
         'Make a proposal to tranfer this nft to the applicant address',
       modalName: 'transfer721',
-      formLego: FORM.MINION_SEND_ERC721_TOKEN,
+      formLego: CORE_FORMS.MINION_SEND_ERC721_TOKEN,
       localValues: ['tokenId', 'contractAddress'],
     },
   },
@@ -35,7 +35,7 @@ const nftConfig = {
         tooltTipLabel:
           'Make a proposal to set the price of the nft on nifty.ink',
         modalName: 'sellNifty',
-        formLego: FORM.MINION_SELL_NIFTY,
+        formLego: CORE_FORMS.MINION_SELL_NIFTY,
         localValues: ['tokenId', 'contractAddress'],
       },
     },
