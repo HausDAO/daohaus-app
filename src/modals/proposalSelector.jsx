@@ -10,12 +10,14 @@ import {
   Flex,
   Select,
   Divider,
+  Icon,
 } from '@chakra-ui/react';
 
 import { rgba } from 'polished';
 
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
+import { VscGear } from 'react-icons/vsc';
 import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
@@ -119,7 +121,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
     selectPlaylist(e.target.value);
   };
   return (
-    <Flex>
+    <Flex alignItems='top'>
       <Select mb={8} width='60%' onChange={handleChange} fontFamily='accessory'>
         {playlists?.map(list => (
           <option key={list.id} value={list.id}>
@@ -131,9 +133,12 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
         to={`/dao/${daochain}/${daoid}/settings/proposals`}
         onClick={handleClose}
       >
-        <TextBox variant='body' color='secondary.500'>
-          Manage
-        </TextBox>
+        <Flex ml={4} alignItems='center' transform='translateY(5px)'>
+          <Icon as={VscGear} mr={2} />
+          <TextBox variant='body' color='secondary.600'>
+            Manage
+          </TextBox>
+        </Flex>
       </RouterLink>
     </Flex>
   );

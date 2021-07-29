@@ -42,7 +42,7 @@ const TextBoxComponent = {
   },
   variants: {
     label: props => ({
-      color: 'mode.900',
+      color: props.color || 'mode.900',
       textAlign: props.textAlign || null,
       fontFamily: 'heading',
       textTransform: 'uppercase',
@@ -50,14 +50,14 @@ const TextBoxComponent = {
       opacity: 0.7,
     }),
     value: props => ({
-      color: 'mode.900',
+      color: props.color || 'mode.900',
       textAlign: props.textAlign || null,
       fontFamily: 'mono',
       textTransform: 'none',
       mt: '9px',
     }),
     body: props => ({
-      color: 'mode.900',
+      color: props.color || 'mode.900',
       textAlign: props.textAlign || null,
       fontFamily: 'body',
       textTransform: 'none',
