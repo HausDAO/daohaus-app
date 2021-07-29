@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   ModalContent,
@@ -32,13 +32,18 @@ const ProposalSelector = () => {
   const { theme } = useCustomTheme();
 
   const { playlists, customData } = daoProposals || {};
-  const startingList = playlists?.[0];
 
-  const [currentPlaylist, setCurrentPlaylist] = useState(startingList);
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
+
+  useEffect(() => {
+    if (playlists) {
+      setCurrentPlaylist(playlists[0]);
+    }
+  }, [playlists]);
 
   const handleClose = () => {
     setProposalSelector(false);
-    setCurrentPlaylist(startingList);
+    setCurrentPlaylist(playlists[0]);
   };
 
   const selectProposal = id => {
