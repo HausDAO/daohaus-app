@@ -124,7 +124,7 @@ const FormBuilder = props => {
   const renderInputs = fields =>
     fields.map(field =>
       Array.isArray(field) ? (
-        <Flex flex={1} pl={2} pr={2} flexDir='column'>
+        <Flex flex={1} flexDir='column'>
           {renderInputs(field)}
         </Flex>
       ) : (
@@ -145,6 +145,7 @@ const FormBuilder = props => {
       <Flex flexDir='column'>
         <FormControl display='flex' mb={5}>
           <Flex
+            width='100%'
             flexDirection={['column', null, 'row']}
             justifyContent='space-between'
           >

@@ -25,8 +25,8 @@ import MinionProposalForm from '../forms/minionSimpleProposal';
 
 // TODO Refactor this logic with new UX
 const getMaxWidth = proposalForm => {
-  if (!proposalForm?.form?.props?.layout) return '800px';
-  if (proposalForm?.form?.propos?.layout === 'singleRow') {
+  if (proposalForm?.form?.props?.fields?.length === 2) return '800px';
+  if (proposalForm?.form?.props?.fields?.length === 1) {
     return '500px';
   }
 };
