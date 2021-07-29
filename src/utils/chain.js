@@ -132,6 +132,10 @@ export const supportedChains = {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
+    neapolitanMinion: {
+      minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
+      version: 'v1',
+    },
   },
   '0x89': {
     name: 'Matic',

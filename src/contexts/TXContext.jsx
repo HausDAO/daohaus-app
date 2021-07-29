@@ -21,6 +21,7 @@ import {
 } from '../utils/txHelpers';
 import { customValidations } from '../utils/validation';
 import { TX } from '../data/contractTX';
+import { supportedChains } from '../utils/chain';
 
 export const TXContext = createContext();
 
@@ -59,6 +60,7 @@ export const TXProvider = ({ children }) => {
   } = useDaoMember();
 
   const { daoid, daochain } = useParams();
+  const chainConfig = supportedChains[daochain];
 
   const contextData = {
     address,
@@ -74,6 +76,7 @@ export const TXProvider = ({ children }) => {
     userHubDaos,
     outstandingTXs,
     daoVaults,
+    chainConfig,
   };
 
   const uiControl = {
@@ -151,6 +154,8 @@ export const TXProvider = ({ children }) => {
               daoMetaData,
             });
           }
+
+          // could we add some more
         },
       },
     });

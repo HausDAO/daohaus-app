@@ -22,12 +22,8 @@ const FormBuilder = props => {
     localValues,
   } = props;
 
-  console.log('required', required);
-
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
-
-  console.log('formFields', formFields);
 
   const [options, setOptions] = useState(additionalOptions);
   const localForm = useForm();
@@ -144,6 +140,7 @@ const FormBuilder = props => {
           onCatch() {
             setLoading(false);
           },
+          ...props.lifeCycleFns,
         },
       });
     } catch (error) {
