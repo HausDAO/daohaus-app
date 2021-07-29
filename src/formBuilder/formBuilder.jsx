@@ -14,24 +14,18 @@ import {
 } from '../utils/formBuilder';
 
 const FormBuilder = props => {
-<<<<<<< HEAD
   const {
     submitTransaction,
     handleCustomValidation,
     modifyFields,
     submitCallback,
   } = useTX();
-  const { fields, additionalOptions = null, required = [] } = props;
-=======
-  const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
   const {
     fields,
     additionalOptions = null,
     required = [],
     localValues,
   } = props;
->>>>>>> 301e5c4f685e488568f7df87c3b7c69f0e9b7ef7
-
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
 

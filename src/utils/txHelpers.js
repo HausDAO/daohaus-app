@@ -29,7 +29,6 @@ const searchData = (data, fields, shouldThrow = true) => {
   const newData = data[fields[0]];
   if (newData == null) {
     if (shouldThrow) {
-      console.log('searchData error', data, fields);
       throw new Error(`txHelpers => searchData()`);
     } else {
       return false;
@@ -52,22 +51,27 @@ const handleConditionalPaths = (data, paths) => {
   }
   if (nextString) return nextString;
   throw new Error(
-    `txHelpers => handleFallback: Dead end, bruh. No values found for given conditional paths`,
+    `txHelpers => handleFallback: No values found for given conditional paths`,
   );
 };
 
 const buildJSONdetails = (data, fields) => {
   const newObj = {};
   for (const key in fields) {
-    const isSearchPath = fields[key][0] === '.';
-    if (isSearchPath) {
+    const value = fields[key];
+    if (typeof value === 'string' && value.includes('||')) {
+      const paths = getConditions(value);
+      if (!paths.length)
+        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+      const result = handleConditionalPaths(data, paths);
+      newObj[key] = result;
+    } else if (fields[key][0] === '.') {
       const path = getPath(fields[key]);
       newObj[key] = searchData(data, path);
     } else {
       newObj[key] = fields[key];
     }
   }
-
   return JSON.stringify(newObj);
 };
 
@@ -120,7 +124,6 @@ const gatherArgs = data => {
         ...data,
         tx: { ...tx, gatherArgs: arg.gatherArgs },
       });
-      console.log(args);
       return safeEncodeHexFunction(getABIsnippet(arg), args);
     }
     //  for convenience, will search the values object for a field with the given string.
@@ -244,7 +247,6 @@ export const Transaction = async data => {
     chainID: contextData.daochain,
     web3: injectedProvider,
   });
-  console.log(web3Contract);
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
   return transaction
@@ -353,7 +355,6 @@ export const handleFieldModifiers = appData => {
     if (field.modifiers) {
       //  check to see that all modifiers are valid
       field.modifiers.forEach(mod => {
-        console.log(`mod`, mod);
         const modifiedVal = fieldModifiers[mod](newValues[field.name], appData);
         newValues[field.name] = modifiedVal;
       });

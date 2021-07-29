@@ -187,9 +187,6 @@ export const useConfirmation = () => {
   };
 };
 
-// export const useFormModal = ({}) => {
-
-// }
 export const useFormModal = () => {
   const { setModal, errorToast, closeModal } = useContext(OverlayContext);
   return {

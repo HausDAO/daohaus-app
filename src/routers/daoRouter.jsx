@@ -34,15 +34,10 @@ import Snapshot from '../pages/Snapshot';
 import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import CcoAdmin from '../pages/CcoAdmin';
-<<<<<<< HEAD
-import { isDaosquareCcoPath } from '../utils/cco';
-import NewerProposals from '../pages/NewerProposals';
-=======
 import Vaults from '../pages/Vaults';
 import MinionVault from '../pages/MinionVault';
 import MinionGallery from '../pages/MinionGallery';
 import Treasury from '../pages/Treasury';
->>>>>>> 301e5c4f685e488568f7df87c3b7c69f0e9b7ef7
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -224,13 +219,6 @@ const DaoRouter = () => {
             daoOverview={daoOverview}
           />
         </Route> */}
-        <Route exact path={`${path}/proposals/new`}>
-          <NewerProposals
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
-            daoOverview={daoOverview}
-          />
-        </Route>
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal
             overview={daoOverview}

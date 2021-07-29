@@ -81,9 +81,9 @@ export const ACTIONS = {
 
 export const DETAILS = {
   STANDARD_PROPOSAL: {
-    title: '.values.title',
-    description: '.values.description',
-    link: '.values.link.',
+    title: '.values.title || null',
+    description: '.values.description || null',
+    link: '.values.link || null',
     proposalType: '.formData.type',
   },
   VANILLA_MINION_PROPOSAL: {
