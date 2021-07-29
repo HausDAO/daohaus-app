@@ -51,9 +51,16 @@ export const collapse = (values, flag, collapseType) => {
 
 export const mapInRequired = (fields, required) => {
   if (!required?.length || !fields) return fields;
-  return fields.map(field =>
-    required.includes(field.name) ? { ...field, required: true } : field,
-  );
+  // go through each sub array to
+  // REVIEW
+  return fields.map(field => {
+    if (Array.isArray(field)) {
+      return field.map(f =>
+        required.includes(f.name) ? { ...f, required: true } : f,
+      );
+    }
+    return required.includes(field.name) ? { ...field, required: true } : field;
+  });
 };
 
 export const inputDataFromABI = inputs => {

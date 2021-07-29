@@ -40,6 +40,7 @@ const FormBuilder = props => {
   const buildABIOptions = abiString => {
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
+
     if (abiString === 'clear' || abiString === 'hex') {
       setFields(originalFields);
     } else {
@@ -51,6 +52,16 @@ const FormBuilder = props => {
   const updateErrors = errors => {
     setFields(prevFields =>
       prevFields.map(field => {
+        // REVIEW
+        if (Array.isArray(field)) {
+          return field.map(f => {
+            const error = errors.find(error => error.name === f.name);
+            if (error) {
+              return { ...f, error };
+            }
+            return { ...f, error: false };
+          });
+        }
         const error = errors.find(error => error.name === field.name);
         if (error) {
           return { ...field, error };
@@ -61,7 +72,15 @@ const FormBuilder = props => {
   };
   const clearErrors = () => {
     setFields(prevFields =>
-      prevFields.map(field => ({ ...field, error: false })),
+      prevFields.map(field => {
+        // REVIEW
+        if (Array.isArray(field)) {
+          return field.map(f => {
+            return { ...f, error: false };
+          });
+        }
+        return { ...field, error: false };
+      }),
     );
   };
 
@@ -71,15 +90,21 @@ const FormBuilder = props => {
     //  Checks for required values
     const missingVals = validateRequired(
       values,
-      formFields.filter(field => field.required),
+      // REVIEW
+      // formFields.filter(field => field.required),
+      formFields.flat().filter(field => field.required),
     );
+
     if (missingVals) {
+      console.log('missingVals', missingVals);
       updateErrors(missingVals);
       return;
     }
 
     //  Checks for type errors
-    const typeErrors = checkFormTypes(values, formFields);
+    // REVIEW
+    // const typeErrors = checkFormTypes(values, formFields);
+    const typeErrors = checkFormTypes(values, formFields.flat());
     if (typeErrors) {
       updateErrors(typeErrors);
       return;
@@ -88,7 +113,9 @@ const FormBuilder = props => {
 
     const modifiedValues = modifyFields({
       values: collapsedValues,
-      activeFields: formFields,
+      // REVIEW
+      // activeFields: formFields,
+      activeFields: formFields.flat(),
       formData: props,
       tx: props.tx,
     });
@@ -113,6 +140,7 @@ const FormBuilder = props => {
           onCatch() {
             setLoading(false);
           },
+          ...props.lifeCycleFns,
         },
       });
     } catch (error) {
