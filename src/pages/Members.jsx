@@ -5,20 +5,23 @@ import deepEqual from 'deep-eql';
 
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberCard from '../components/memberCard';
-import MemberInfo from '../components/memberInfo';
+import MemberInfoWrapper from '../components/memberInfoWrapper';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
-import { membersSortOptions } from '../utils/memberContent';
-import MemberFilters from '../components/memberFilters';
+import {
+  membersFilterOptions,
+  membersSortOptions,
+} from '../utils/memberContent';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import UberHausMemberCard from '../components/uberHausMemberCard';
 import CsvDownloadButton from '../components/csvDownloadButton';
+import ListFilter from '../components/listFilter';
 
 const Members = React.memo(
   ({
@@ -139,7 +142,12 @@ const Members = React.memo(
             />
           </Box>
           <Box>
-            <MemberFilters filter={filter} setFilter={setFilter} />
+            <ListFilter
+              filter={filter}
+              setFilter={setFilter}
+              options={membersFilterOptions}
+              labelText='Filter By'
+            />
           </Box>
           <Box>
             <CsvDownloadButton entityList={listMembers} typename='Members' />
@@ -206,7 +214,7 @@ const Members = React.memo(
             <Stack style={scrolled ? scrolledStyle : null} spacing={4}>
               <Box>
                 {selectedMember ? (
-                  <MemberInfo
+                  <MemberInfoWrapper
                     key={selectedMember.memberAddress}
                     member={selectedMember}
                     customTerms={customTerms}

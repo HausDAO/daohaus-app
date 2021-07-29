@@ -16,6 +16,7 @@ export const OverlayProvider = ({ children }) => {
   const [imageUploadModal, setImageUploadModal] = useState(false);
   const [d2dProposalTypeModal, setD2dProposalTypeModal] = useState(false);
   const [d2dProposalModal, setD2dProposalModal] = useState(false);
+  const [nftViewModal, setNftViewModal] = useState(false);
   const [genericModal, setGenericModal] = useState({});
 
   const errorToast = content => {
@@ -84,6 +85,8 @@ export const OverlayProvider = ({ children }) => {
         proposalSelector,
         setProposalSelector,
         closeModal,
+        nftViewModal,
+        setNftViewModal,
       }}
     >
       {children}
@@ -120,6 +123,8 @@ export const useOverlay = () => {
     setGenericModal,
     proposalSelector,
     setProposalSelector,
+    nftViewModal,
+    setNftViewModal,
   } = useContext(OverlayContext);
   return {
     modal,
@@ -147,6 +152,8 @@ export const useOverlay = () => {
     setGenericModal,
     proposalSelector,
     setProposalSelector,
+    nftViewModal,
+    setNftViewModal,
   };
 };
 

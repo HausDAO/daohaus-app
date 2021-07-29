@@ -15,6 +15,10 @@ const GenericTextarea = ({
   h = 10,
   error,
   disabled,
+<<<<<<< HEAD
+=======
+  w,
+>>>>>>> 301e5c4f685e488568f7df87c3b7c69f0e9b7ef7
   layout,
 }) => {
   const { register } = localForm;
@@ -27,6 +31,10 @@ const GenericTextarea = ({
       helperText={helperText}
       btn={btn}
       error={error}
+<<<<<<< HEAD
+=======
+      w={w}
+>>>>>>> 301e5c4f685e488568f7df87c3b7c69f0e9b7ef7
       layout={layout}
     >
       <Textarea

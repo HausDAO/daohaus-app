@@ -10,6 +10,7 @@ export const createContract = ({ address, abi, chainID, web3 }) => {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
   }
+
   return new web3.eth.Contract(abi, address);
 };
 

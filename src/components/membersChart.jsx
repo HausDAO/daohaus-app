@@ -207,7 +207,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
           align='center'
           justify='center'
         >
-          <TextBox>Waiting on more member data.</TextBox>
+          <TextBox>--</TextBox>
         </Flex>
       )}
     </Box>

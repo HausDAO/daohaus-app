@@ -40,6 +40,22 @@ export const fetchApiVaultData = async (network, minions) => {
   }
 };
 
+export const putRefreshApiVault = async args => {
+  try {
+    const body = { ...args };
+    const response = await fetch(`${metadataApiUrl}/dao/refresh-vault`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    });
+
+    console.log('response', response);
+
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const formatBoosts = boostsArr =>
   boostsArr.reduce((obj, boost) => {
     return {
@@ -125,7 +141,7 @@ export const getTerm = (customTerms, word) => {
     return customTerms?.guildkick || 'Guild Kick';
   }
   if (word === 'minion') {
-    return customTerms?.minion || 'minion';
+    return customTerms?.minion || 'Minion';
   }
   if (word === 'minions') {
     return customTerms?.minions || 'Minions';

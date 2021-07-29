@@ -9,7 +9,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import UberHausMemberInfoGuts from './uberHausMemberInfoGuts';
 
-const MemberInfoCard = ({ member, customTerms, hideCopy }) => {
+const MemberInfo = ({ member, customTerms, hideCopy }) => {
   const { address } = useInjectedProvider();
   const { daoid, daochain } = useParams();
 
@@ -49,4 +49,4 @@ const MemberInfoCard = ({ member, customTerms, hideCopy }) => {
   );
 };
 
-export default MemberInfoCard;
+export default MemberInfo;
