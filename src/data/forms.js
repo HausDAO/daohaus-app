@@ -207,4 +207,14 @@ export const FORM = {
     tx: TX.MINION_NIFTY_SET_PRICE,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
+  NEW_NEAPOLITAN_MINION: {
+    // title: 'Summon a new Minion',
+    // subtitle: 'Add a neapolitan minion to your DAO.',
+    // type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
+    // minionType: MINION_TYPES.VANILLA,
+    // layout: 'singleRow',
+    required: ['minQuorum', 'minionName'],
+    tx: TX.MINION_NIFTY_SET_PRICE,
+    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM]],
+  },
 };

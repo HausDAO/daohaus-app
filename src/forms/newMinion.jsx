@@ -22,7 +22,7 @@ import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
 
-const NewMinionForm = ({ minionType }) => {
+const NewMinion = ({ minionType }) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
@@ -38,7 +38,7 @@ const NewMinionForm = ({ minionType }) => {
     setLoading(true);
     setStep(2);
     let summonParams;
-    if (minionType === 'niftyMinion') {
+    if (minionType === 'niftyMinion' || minionType === 'neapolitanMinion') {
       summonParams = [daoid, values.details, values.minQuorum];
     } else {
       summonParams = [daoid, values.details];
@@ -204,4 +204,4 @@ const NewMinionForm = ({ minionType }) => {
   );
 };
 
-export default NewMinionForm;
+export default NewMinion;

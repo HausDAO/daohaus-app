@@ -65,8 +65,6 @@ export const checkFormTypes = (values, fields) => {
 };
 
 export const validateRequired = (values, required) => {
-  console.log(`values`, values);
-  console.log(`required`, required);
   //  takes in array of required fields
   if (!values || !required?.length) return;
   const errors = required.reduce((arr, field) => {

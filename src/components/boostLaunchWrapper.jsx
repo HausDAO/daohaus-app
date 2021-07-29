@@ -3,7 +3,8 @@ import { Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import CustomThemeLaunch from './customThemeLaunch';
-import NewMinionForm from '../forms/newMinion';
+import NewMinion from '../forms/newMinion';
+import NewMinionForm from '../forms/newMinionForm';
 import NewSuperfluidMinionForm from '../forms/newSuperfluidMinion';
 import NotificationsLaunch from './notificationsLaunch';
 import ProposalTypesLaunch from './proposalTypesLaunch';
@@ -20,6 +21,8 @@ import { useUser } from '../contexts/UserContext';
 import { createPoll } from '../services/pollService';
 import { WrapNZapFactoryService } from '../services/wrapNZapFactoryService';
 import { supportedChains } from '../utils/chain';
+import FormBuilder from '../formBuilder/formBuilder';
+import { FORM } from '../data/forms';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
@@ -125,13 +128,17 @@ const BoostLaunchWrapper = ({ boost }) => {
         );
       }
       case 'vanillaMinion': {
-        return <NewMinionForm />;
+        // return <NewMinion />;
+        return <NewMinionForm minionType='vanilla minion' />;
+      }
+      case 'neapolitanMinion': {
+        return <NewMinionForm minionType='Neapolitan minion' />;
       }
       case 'superfluidMinion': {
         return <NewSuperfluidMinionForm />;
       }
       case 'niftyMinion': {
-        return <NewMinionForm minionType='niftyMinion' />;
+        return <NewMinion minionType='nifty minion' />;
       }
       case 'minionSafe': {
         return <NewMinionSafe />;
