@@ -25,8 +25,8 @@ import MinionProposalForm from '../forms/minionSimpleProposal';
 
 // TODO Refactor this logic with new UX
 const getMaxWidth = proposalForm => {
-  if (!proposalForm?.form?.props?.layout) return '800px';
-  if (proposalForm?.form?.propos?.layout === 'singleRow') {
+  if (proposalForm?.form?.props?.fields?.length === 2) return '800px';
+  if (proposalForm?.form?.props?.fields?.length === 1) {
     return '500px';
   }
 };
@@ -97,6 +97,12 @@ const ProposalFormModal = ({ proposalType }) => {
       heading: `New Transmutation ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a Transmutation proposal here.',
       form: <TransmutationProposal />,
+    },
+    sellNft: {
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New NFT Sale ${getTerm(customTerms, 'proposal')}`,
+      subline: 'Submit new NFT Sell proposal here.',
+      form: <FormBuilder {...FORM.SELL_NFT} />,
     },
     payroll: {
       heading: `Payroll`,

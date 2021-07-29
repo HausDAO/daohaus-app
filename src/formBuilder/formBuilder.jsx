@@ -121,24 +121,35 @@ const FormBuilder = props => {
     }
   };
 
+  const renderInputs = fields =>
+    fields.map(field =>
+      Array.isArray(field) ? (
+        <Flex flex={1} flexDir='column'>
+          {renderInputs(field)}
+        </Flex>
+      ) : (
+        <InputFactory
+          key={field?.htmlFor || field?.name}
+          {...field}
+          minionType={props.minionType}
+          layout={props.layout}
+          localForm={localForm}
+          localValues={localValues}
+          buildABIOptions={buildABIOptions}
+        />
+      ),
+    );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl display='flex' mb={5}>
-          <Flex w='100%' flexWrap='wrap' justifyContent='space-between'>
-            {formFields?.map(field => {
-              return (
-                <InputFactory
-                  key={field?.htmlFor || field?.name}
-                  {...field}
-                  minionType={props.minionType}
-                  layout={props.layout}
-                  localForm={localForm}
-                  localValues={localValues}
-                  buildABIOptions={buildABIOptions}
-                />
-              );
-            })}
+          <Flex
+            width='100%'
+            flexDirection={['column', null, 'row']}
+            justifyContent='space-between'
+          >
+            {renderInputs(formFields)}
           </Flex>
         </FormControl>
         <FormFooter options={options} addOption={addOption} loading={loading} />

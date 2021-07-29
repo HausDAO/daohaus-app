@@ -154,6 +154,27 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'address',
   },
+  SET_PRICE: {
+    type: 'priceInput',
+    htmlFor: 'sellPrice',
+    name: 'sellPrice',
+    placeholder: '0',
+    label: 'Set Price (Take)',
+    expectType: 'number',
+  },
+  NFT_SELECT: {
+    type: 'nftSelect',
+    htmlFor: 'nftSelect',
+    name: 'nftSelect',
+    label: 'Select an NFT',
+  },
+  DATE_RANGE: {
+    type: 'dateRange',
+    htmlFor: 'dateRange',
+    name: 'dateRange',
+    maxDays: 7,
+    label: 'Set Auction Duration',
+  },
   DELEGATE_ADDRESS: {
     type: 'input',
     htmlFor: 'delegateAddress',

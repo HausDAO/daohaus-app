@@ -119,48 +119,46 @@ const NftViewModal = () => {
                       )}
                     </Flex>
 
-                    <>
-                      <Box
-                        mt={5}
-                        size='xl'
-                        color='secondary.500'
-                        _hover={{ cursor: 'pointer' }}
-                      >
-                        Sell
-                      </Box>
-                      <Box
-                        mt={2}
-                        size='xl'
-                        color='secondary.500'
-                        _hover={{ cursor: 'pointer' }}
-                      >
-                        Send
-                      </Box>
-                      <Box
-                        mt={2}
-                        size='s'
-                        color='secondary.500'
-                        _hover={{ cursor: 'pointer' }}
-                      >
-                        View on OpenSea
-                      </Box>
-                      <Box
-                        mt={2}
-                        size='s'
-                        color='secondary.500'
-                        _hover={{ cursor: 'pointer' }}
-                      >
-                        Share Link
-                      </Box>
-                      <Box
-                        mt={2}
-                        size='s'
-                        color='secondary.500'
-                        _hover={{ cursor: 'pointer' }}
-                      >
-                        buy
-                      </Box>
-                    </>
+                    <Box
+                      mt={5}
+                      size='xl'
+                      color='secondary.500'
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      Sell
+                    </Box>
+                    <Box
+                      mt={2}
+                      size='xl'
+                      color='secondary.500'
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      Send
+                    </Box>
+                    <Box
+                      mt={2}
+                      size='s'
+                      color='secondary.500'
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      View on Rarible
+                    </Box>
+                    <Box
+                      mt={2}
+                      size='s'
+                      color='secondary.500'
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      Share Link
+                    </Box>
+                    <Box
+                      mt={2}
+                      size='s'
+                      color='secondary.500'
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      buy
+                    </Box>
                   </Box>
                 </Flex>
               </Flex>
