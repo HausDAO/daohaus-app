@@ -1,29 +1,19 @@
 import { FORM } from '../data/forms';
-import { createPlaylist } from '../utils/playlists';
-
-const DEFAULT_PLAYLISTS = [
-  {
-    name: 'Favorites',
-    id: 'favorites',
-    forms: ['BUY_SHARES', 'SHARES_FOR_WORK', 'TOKEN', 'GUILDKICK'],
-  },
-  {
-    name: 'The Classics',
-    id: 'classics',
-    forms: [
-      'MEMBER',
-      'FUNDING',
-      'TOKEN',
-      'TRADE',
-      'GUILDKICK',
-      'LOOT_GRAB',
-      'SIGNAL',
-    ],
-  },
-];
+import {
+  createPlaylist,
+  DEFAULT_PLAYLISTS,
+  getBoostPlaylists,
+} from '../utils/playlists';
 
 const handleInit = payload => {
-  return payload || { playlists: DEFAULT_PLAYLISTS, customData: null };
+  if (payload?.proposalConfig) {
+    return payload.proposalConfig;
+  }
+
+  return {
+    playlists: [...DEFAULT_PLAYLISTS, ...getBoostPlaylists(payload)],
+    customData: null,
+  };
 };
 
 const handleEditPlaylist = (state, params) => {
@@ -61,8 +51,6 @@ const handleRemoveCustomData = (state, params) => ({
   },
 });
 const handleAddToPlaylist = (state, params) => {
-  console.log(params);
-  console.log(state);
   const newPlaylists = state.playlists.map(list => {
     console.log(`list`, list);
     if (list.id === params.listId) {

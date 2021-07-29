@@ -57,10 +57,7 @@ export const MetaDataProvider = ({ children }) => {
           setCustomTerms(daoMeta.customTerms);
         }
         setDaoMetaData(daoMeta);
-        dispatchPropConfig({
-          action: 'INIT',
-          payload: daoMeta.proposalConfig,
-        });
+        dispatchPropConfig({ action: 'INIT', payload: daoMeta });
         shouldUpdateTheme.current = false;
       }
     }
@@ -82,7 +79,7 @@ export const MetaDataProvider = ({ children }) => {
             setCustomTerms(data.customTerms);
           }
           setDaoMetaData(data);
-          dispatchPropConfig({ action: 'INIT', payload: data.proposalConfig });
+          dispatchPropConfig({ action: 'INIT', payload: data });
           shouldUpdateTheme.current = false;
         }
       } catch (error) {
@@ -109,7 +106,7 @@ export const MetaDataProvider = ({ children }) => {
           setCustomTerms(data.customTerms);
         }
         setDaoMetaData(data);
-        dispatchPropConfig({ action: 'INIT', payload: data.proposalConfig });
+        dispatchPropConfig({ action: 'INIT', payload: data });
         shouldUpdateTheme.current = false;
       }
     } catch (error) {

@@ -1,21 +1,5 @@
-import { list } from '@chakra-ui/styled-system';
-import { FaPray } from 'react-icons/fa';
 import { v4 as uuid } from 'uuid';
 import { FORM } from '../data/forms';
-
-// export const CLASSIC_FORMS = {
-//   name: 'The Classics',
-//   id: 'classics',
-//   forms: [
-//     FORM.MEMBER,
-//     FORM.FUNDING,
-//     FORM.TOKEN,
-//     FORM.TRADE,
-//     FORM.GUILDKICK,
-//     FORM.LOOT_GRAB,
-//     FORM.SIGNAL,
-//   ],
-// };
 
 const BOOST_PLAYLISTS = {
   VANILLA_MINION: {
@@ -51,6 +35,31 @@ export const defaultProposals = {
   id: 'all',
   forms: Object.values(FORM).map(form => form.id),
 };
+export const DEFAULT_PLAYLISTS = [
+  {
+    name: 'Favorites',
+    id: 'favorites',
+    forms: ['BUY_SHARES', 'SHARES_FOR_WORK', 'TOKEN', 'GUILDKICK'],
+  },
+  {
+    name: 'The Classics',
+    id: 'classics',
+    forms: [
+      'MEMBER',
+      'FUNDING',
+      'TOKEN',
+      'TRADE',
+      'GUILDKICK',
+      'LOOT_GRAB',
+      'SIGNAL',
+    ],
+  },
+];
+
+export const getBoostPlaylists = daoMetaData => {
+  console.log(daoMetaData);
+  return [];
+};
 
 // const checkBoostProposals = (daoMetaData) => {
 //   const
@@ -62,16 +71,16 @@ export const defaultProposals = {
 
 // const handleProposalConfig = () => {};
 
-export const generatePlaylists = daoMetaData => {
-  if (!daoMetaData) return;
-  return (
-    daoMetaData.proposalConfig || {
-      playlists: DEFAULT_PLAYISTS,
-      customData: null,
-    }
-  );
-  // return { all, hydratedPlaylists };
-};
+// export const generatePlaylists = daoMetaData => {
+//   if (!daoMetaData) return;
+//   return (
+//     daoMetaData.proposalConfig || {
+//       playlists: DEFAULT_PLAYISTS,
+//       customData: null,
+//     }
+//   );
+//   // return { all, hydratedPlaylists };
+// };
 
 export const createPlaylist = ({
   name = 'New Playlist',

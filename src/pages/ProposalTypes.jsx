@@ -22,14 +22,17 @@ import TextBox from '../components/TextBox';
 import { CORE_FORMS, FORM } from '../data/forms';
 
 import { useConfirmation, useFormModal } from '../contexts/OverlayContext';
-import { defaultProposals } from '../utils/playlists';
+import { defaultProposals, getBoostPlaylists } from '../utils/playlists';
 
 import { useMetaData } from '../contexts/MetaDataContext';
+import { useDao } from '../contexts/DaoContext';
 
 const ProposalTypes = () => {
   const { daoProposals } = useMetaData();
 
   const { playlists, customData } = daoProposals || {};
+  const { daoOverview } = useDao();
+  const [allPlaylists, setAllPlaylists] = useState(null);
   const [selectedList, setSelectedList] = useState('all');
 
   const selectList = id => {
