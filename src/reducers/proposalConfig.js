@@ -1,19 +1,11 @@
-import { FORM } from '../data/forms';
-import {
-  createPlaylist,
-  DEFAULT_PLAYLISTS,
-  getBoostPlaylists,
-} from '../utils/playlists';
+import { isObjectEmpty } from '../utils/general';
+import { createPlaylist, generateNewConfig } from '../utils/playlists';
 
 const handleInit = payload => {
-  if (payload?.proposalConfig) {
+  if (!isObjectEmpty(payload?.proposalConfig)) {
     return payload.proposalConfig;
   }
-
-  return {
-    playlists: [...DEFAULT_PLAYLISTS, ...getBoostPlaylists(payload)],
-    customData: null,
-  };
+  return generateNewConfig(payload);
 };
 
 const handleEditPlaylist = (state, params) => {

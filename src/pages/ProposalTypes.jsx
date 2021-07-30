@@ -10,6 +10,8 @@ import {
   MenuItem,
   MenuButton,
   Spinner,
+  Input,
+  InputGroup,
 } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 import { FiTrash2 } from 'react-icons/fi';
@@ -22,18 +24,22 @@ import TextBox from '../components/TextBox';
 import { CORE_FORMS, FORM } from '../data/forms';
 
 import { useConfirmation, useFormModal } from '../contexts/OverlayContext';
-import { defaultProposals, getBoostPlaylists } from '../utils/playlists';
 
 import { useMetaData } from '../contexts/MetaDataContext';
-import { useDao } from '../contexts/DaoContext';
 import { areAnyFields } from '../utils/general';
+
+const handleSearch = (formsArr, str) => {
+  if (!str) return formsArr;
+  if (!formsArr?.length) return [];
+  return formsArr.filter(formId =>
+    FORM[formId].title.toLowerCase().includes(str),
+  );
+};
 
 const ProposalTypes = () => {
   const { daoProposals } = useMetaData();
 
-  const { playlists, customData } = daoProposals || {};
-  const { daoOverview } = useDao();
-  const [allPlaylists, setAllPlaylists] = useState(null);
+  const { playlists, allForms = {}, customData } = daoProposals || {};
   const [selectedList, setSelectedList] = useState('all');
 
   const selectList = id => {
@@ -47,23 +53,27 @@ const ProposalTypes = () => {
 
   return (
     <MainViewLayout isDao header='Proposal Types'>
-      <Flex w='auto'>
+      <Flex flexDir='column' w='95%'>
+        <Flex justifyContent='flex-end' mb={9}>
+          <Button size='lg'>SAVE CHANGES</Button>
+        </Flex>
         {daoProposals ? (
-          <>
+          <Flex>
             <PlaylistSelector
-              allForms={defaultProposals}
+              allForms={allForms}
               playlists={playlists}
               selectedList={selectedList}
               selectList={selectList}
             />
             <ProposalList
+              allForms={allForms}
               forms={selectedList?.forms}
               playlists={playlists}
               customData={customData}
               selectedList={selectedList}
               // toggleFavorite={toggleFavorite}
             />
-          </>
+          </Flex>
         ) : (
           <Spinner />
         )}
@@ -98,9 +108,10 @@ const PlaylistSelector = ({
   };
 
   const handleDeletePlaylist = id => {
+    const playlist = playlists.find(list => list.id === id);
     openConfirmation({
       title: 'Delete Playlist',
-      header: `Are you sure you want to delete ${selectedList?.name}?`,
+      header: `Are you sure you want to delete ${playlist?.name}?`,
       onSubmit() {
         dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
         closeModal();
@@ -119,42 +130,46 @@ const PlaylistSelector = ({
   };
 
   return (
-    <ContentBox
-      p='0'
+    <Flex
       minW='250px'
       maxW='400px'
       w='100%'
-      border='none'
-      mb={6}
-      mr={12}
       height='fit-content'
+      flexDir='column'
+      mr={12}
     >
-      <Flex flexDir='column'>
-        <PlaylistItem
-          {...allForms}
-          selectList={selectList}
-          isSelected={selectedList === 'all'}
-          isMutable={false}
-        />
-        <TextBox ml={6} my={6}>
-          Playlists
-        </TextBox>
-        {playlists?.map(list => (
-          <PlaylistItem
-            key={list.id}
-            {...list}
-            isMutable
-            isSelected={selectedList === list.id}
-            selectList={selectList}
-            handleEditPlaylist={handleEditPlaylist}
-            handleDeletePlaylist={handleDeletePlaylist}
-          />
-        ))}
-        <Button variant='outline' m={6} onClick={handleAddPlaylist}>
-          <TextBox color='secondary.400'>create new list</TextBox>
+      <Flex justifyContent='flex-end' mb={4}>
+        <Button variant='ghost' onClick={handleAddPlaylist}>
+          <TextBox mr={2} color='secondary.400'>
+            New Playlist
+          </TextBox>
         </Button>
       </Flex>
-    </ContentBox>
+      <ContentBox p='0' border='none' mb={6} w='100%'>
+        <Flex flexDir='column'>
+          <PlaylistItem
+            {...allForms}
+            selectList={selectList}
+            isSelected={selectedList === 'all'}
+            isMutable={false}
+          />
+          <TextBox ml={6} my={6}>
+            Playlists
+          </TextBox>
+          {playlists?.map(list => (
+            <PlaylistItem
+              key={list.id}
+              {...list}
+              isMutable
+              isSelected={selectedList === list.id}
+              selectList={selectList}
+              handleEditPlaylist={handleEditPlaylist}
+              handleDeletePlaylist={handleDeletePlaylist}
+            />
+          ))}
+        </Flex>
+      </ContentBox>
+    </Flex>
   );
 };
 
@@ -241,17 +256,23 @@ const ProposalList = ({
   toggleFavorite,
   customData,
   selectedList,
+  allForms,
 }) => {
   const { openFormModal, closeModal } = useFormModal();
   const { dispatchPropConfig } = useMetaData();
 
+  const [searchStr, setSearchStr] = useState(null);
+
   const forms = useMemo(() => {
     if (!playlists || !selectedList) return [];
     if (selectedList === 'all') {
-      return defaultProposals.forms;
+      return handleSearch(allForms.forms, searchStr);
     }
-    return playlists.find(list => list.id === selectedList)?.forms;
-  }, [selectedList, playlists]);
+    return handleSearch(
+      playlists.find(list => list.id === selectedList)?.forms,
+      searchStr,
+    );
+  }, [selectedList, playlists, searchStr]);
 
   const handleEditProposal = formId => {
     openFormModal({
@@ -281,8 +302,21 @@ const ProposalList = ({
     dispatchPropConfig({ action: 'TOGGLE_PLAYLIST', listId, formId, isListed });
   };
 
+  const handleTypeSearch = e => {
+    setSearchStr(e.target.value.toLowerCase());
+  };
+
   return (
-    <Flex flexDir='column' w='60%'>
+    <Flex flexDir='column' w='100%'>
+      <Flex mb={4}>
+        <TextBox p={2} mr='auto'>
+          Proposals
+        </TextBox>
+
+        <InputGroup w='200px'>
+          <Input onChange={handleTypeSearch} placeholder='Search Proposals' />
+        </InputGroup>
+      </Flex>
       {forms?.map(formId => (
         <ProposalListItem
           {...FORM[formId]}
@@ -315,11 +349,11 @@ const ProposalListItem = ({
   );
 
   return (
-    <ContentBox mb={4} maxW='1200px' minW='250px'>
+    <ContentBox mb={4}>
       <Flex justifyContent='space-between'>
         {/* <Image h='70px' minW='70px' mb={6} /> */}
         <Box>
-          <TextBox mb={3}>{customFormData?.title || title}</TextBox>
+          <TextBox mb={2}>{customFormData?.title || title}</TextBox>
           <Box fontFamily='body' size='sm' color='whiteAlpha.800'>
             {customFormData?.description || description}
           </Box>

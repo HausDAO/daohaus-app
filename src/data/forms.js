@@ -291,23 +291,3 @@ export const FORM = {
     ],
   },
 };
-
-// export const LOCAL_PLAYLISTS = {
-//   favorites: 'Favorites',
-//   classics: 'The Classics',
-//   vanillaMinion: 'Vanilla Minion',
-// };
-
-// export const ALL_FORMS = {
-//   name: 'All Proposals',
-//   id: 'all',
-//   forms: Object.values(FORM),
-// };
-// export const PLAYLISTS = [
-//   ...Object.entries(LOCAL_PLAYLISTS).map(list => ({
-//     id: list[0],
-//     name: list[1],
-//     forms: ALL_FORMS.forms.filter(form => form.playlists[list[0]]),
-//   })),
-//   ALL_FORMS,
-// ];
