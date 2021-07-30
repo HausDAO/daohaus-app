@@ -53,14 +53,13 @@ export const mapInRequired = (fields, required) => {
   if (!required?.length || !fields) return fields;
   // go through each sub array to
   // REVIEW
-  return fields.map(field => {
-    if (Array.isArray(field)) {
-      return field.map(f =>
-        required.includes(f.name) ? { ...f, required: true } : f,
-      );
-    }
-    return required.includes(field.name) ? { ...field, required: true } : field;
-  });
+  const mapIn = field =>
+    Array.isArray(field)
+      ? field.map(mapIn)
+      : required.includes(field.name)
+      ? { ...field, required: true }
+      : field;
+  return fields.map(mapIn);
 };
 
 export const inputDataFromABI = inputs => {

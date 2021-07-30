@@ -50,38 +50,25 @@ const FormBuilder = props => {
   };
 
   const updateErrors = errors => {
-    setFields(prevFields =>
-      prevFields.map(field => {
-        // REVIEW
+    // REVIEW
+    setFields(prevFields => {
+      const update = field => {
         if (Array.isArray(field)) {
-          return field.map(f => {
-            const error = errors.find(error => error.name === f.name);
-            if (error) {
-              return { ...f, error };
-            }
-            return { ...f, error: false };
-          });
+          return field.map(update);
         }
         const error = errors.find(error => error.name === field.name);
-        if (error) {
-          return { ...field, error };
-        }
-        return { ...field, error: false };
-      }),
-    );
+        return { ...field, error };
+      };
+      return prevFields.map(update);
+    });
   };
   const clearErrors = () => {
-    setFields(prevFields =>
-      prevFields.map(field => {
-        // REVIEW
-        if (Array.isArray(field)) {
-          return field.map(f => {
-            return { ...f, error: false };
-          });
-        }
-        return { ...field, error: false };
-      }),
-    );
+    // REVIEW
+    setFields(prevFields => {
+      const clear = f =>
+        Array.isArray(f) ? f.map(clear) : { ...f, error: false };
+      return prevFields.map(clear);
+    });
   };
 
   const onSubmit = async values => {
@@ -92,7 +79,7 @@ const FormBuilder = props => {
       values,
       // REVIEW
       // formFields.filter(field => field.required),
-      formFields.flat().filter(field => field.required),
+      formFields.flat(Infinity).filter(field => field.required),
     );
 
     if (missingVals) {
@@ -104,7 +91,7 @@ const FormBuilder = props => {
     //  Checks for type errors
     // REVIEW
     // const typeErrors = checkFormTypes(values, formFields);
-    const typeErrors = checkFormTypes(values, formFields.flat());
+    const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
     if (typeErrors) {
       updateErrors(typeErrors);
       return;
@@ -115,7 +102,7 @@ const FormBuilder = props => {
       values: collapsedValues,
       // REVIEW
       // activeFields: formFields,
-      activeFields: formFields.flat(),
+      activeFields: formFields.flat(Infinity),
       formData: props,
       tx: props.tx,
     });
