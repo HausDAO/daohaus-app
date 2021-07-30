@@ -149,13 +149,8 @@ export const FORM = {
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      [
-        FIELD.TITLE,
-        FIELD.APPLICANT,
-        FIELD.DESCRIPTION,
-        FIELD.PAYMENT_REQUEST,
-        FIELD.LINK,
-      ],
+      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.APPLICANT, FIELD.PAYMENT_REQUEST],
     ],
     additionalOptions: [
       FIELD.SHARES_REQUEST,
