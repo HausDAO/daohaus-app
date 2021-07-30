@@ -38,6 +38,16 @@ export const pollTXHash = async ({ chainID, txHash }) => {
   });
 };
 
+export const pollBoostTXHash = async ({ chainID, txHash }) => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'boosts_graph_url'),
+    query: TX_HASH,
+    variables: {
+      id: txHash,
+    },
+  });
+};
+
 export const pollProposals = async ({ daoID, chainID }) => {
   return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),

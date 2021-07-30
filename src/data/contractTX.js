@@ -71,6 +71,11 @@ export const CONTRACTS = {
     abiName: 'SUPERFLUID_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  WRAP_N_ZAP_FACTORY: {
+    location: 'local',
+    abiName: 'WRAP_N_ZAP_FACTORY',
+    contractAddress: '.localValues.contractAddress',
+  },
 };
 
 export const ACTIONS = {
@@ -120,6 +125,15 @@ export const DETAILS = {
 };
 
 export const TX = {
+  CREATE_WRAP_N_ZAP: {
+    contract: CONTRACTS.WRAP_N_ZAP_FACTORY,
+    name: 'create',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    poll: 'boostSubgraph',
+    display: 'Create Wrap-N-Zap',
+    errMsg: 'Error creating Wrap-N-Zap',
+    successMsg: 'Wrap-N-Zap added!',
+  },
   SUBMIT_PROPOSAL: {
     contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'submitProposal',
