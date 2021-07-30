@@ -71,6 +71,22 @@ export const CONTRACTS = {
     abiName: 'SUPERFLUID_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  NEAPOLITAN_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'NEAPOLITAN_MINION_FACTORY',
+    contractAddress:
+      '.contextData.chainConfig.neapolitanMinion.minion_factory_addr',
+  },
+  NIFTY_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'NIFTY_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.niftyMinion.minion_factory_addr',
+  },
+  VANILLA_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'VANILLA_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.minion_factory_addr',
+  },
 };
 
 export const ACTIONS = {
@@ -450,5 +466,43 @@ export const TX = {
     display: 'Executing Minion Proposal',
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
+  },
+  SUMMON_MINION_NEAPOLITAN: {
+    contract: CONTRACTS.NEAPOLITAN_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.values.minionName',
+      '.values.minQuorum',
+    ],
+  },
+  SUMMON_MINION_NIFTY: {
+    contract: CONTRACTS.NIFTY_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.values.minionName',
+      '.values.minQuorum',
+    ],
+  },
+  SUMMON_MINION_VANILLA: {
+    contract: CONTRACTS.VANILLA_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: ['.contextData.daoid', '.values.minionName'],
   },
 };

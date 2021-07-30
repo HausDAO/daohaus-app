@@ -33,6 +33,14 @@ const Button = {
         outline: 'none',
       },
     },
+    nftSelect: {
+      bg: 'transparent',
+      borderColor: 'white',
+      borderStyle: 'dashed',
+      borderWidth: '1px',
+      height: '300px',
+      width: '300px',
+    },
     // 4. Override existing variants
     solid: () => ({
       bg: 'secondary.400',

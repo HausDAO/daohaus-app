@@ -17,6 +17,8 @@ export const INFO_TEXT = {
   DELEGATE_ADDRESS:
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
+  MINION_QUORUM:
+    'Once this percentage of DAO shares have votes yes this minion action will be executable.',
 };
 
 export const FIELD = {
@@ -154,6 +156,27 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'address',
   },
+  SET_PRICE: {
+    type: 'priceInput',
+    htmlFor: 'sellPrice',
+    name: 'sellPrice',
+    placeholder: '0',
+    label: 'Set Price (Take)',
+    expectType: 'number',
+  },
+  NFT_SELECT: {
+    type: 'nftSelect',
+    htmlFor: 'nftSelect',
+    name: 'nftSelect',
+    label: 'Select an NFT',
+  },
+  DATE_RANGE: {
+    type: 'dateRange',
+    htmlFor: 'dateRange',
+    name: 'dateRange',
+    maxDays: 7,
+    label: 'Set Auction Duration',
+  },
   DELEGATE_ADDRESS: {
     type: 'input',
     htmlFor: 'delegateAddress',
@@ -180,6 +203,23 @@ export const FIELD = {
     info: INFO_TEXT.NFT_PRICE,
     expectType: 'number',
     modifiers: ['addWeiDecimals'],
+  },
+  MINION_NAME: {
+    type: 'input',
+    label: 'Minion Name',
+    name: 'minionName',
+    htmlFor: 'minionName',
+    placeholder: 'Sally',
+    expectType: 'any',
+  },
+  MINION_QUORUM: {
+    type: 'input',
+    label: 'Minumum Quorum (%)',
+    name: 'minQuorum',
+    htmlFor: 'minQuorum',
+    placeholder: '50',
+    info: INFO_TEXT.MINION_QUORUM,
+    expectType: 'number',
   },
 };
 

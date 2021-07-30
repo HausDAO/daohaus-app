@@ -64,7 +64,7 @@ const handleAddToPlaylist = (state, params) => {
 };
 export const handleUpdateChanges = async (state, params) => {
   const { meta, injectedProvider, address, network } = params;
-  console.log(`params`, params);
+
   if (!meta || !injectedProvider || !state || !network)
     throw new Error('proposalConfig => handlePostNewConfig');
   try {
@@ -79,7 +79,6 @@ export const handleUpdateChanges = async (state, params) => {
       network,
       signature,
     };
-
     const res = await put('dao/update', updateData);
     if (res.error) throw new Error(res.error);
     return res;
@@ -89,8 +88,6 @@ export const handleUpdateChanges = async (state, params) => {
 };
 
 export const proposalConfigReducer = (state, params) => {
-  // if (!params || !state) return state;
-
   const { action } = params;
   if (action === 'INIT') return handleInit(params.payload);
   if (action === 'EDIT_PLAYLIST') return handleEditPlaylist(state, params);

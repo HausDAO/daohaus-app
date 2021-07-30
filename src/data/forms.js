@@ -143,11 +143,13 @@ export const FORM = {
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      FIELD.SHARES_REQUEST,
-      FIELD.DESCRIPTION,
-      FIELD.TRIBUTE,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        FIELD.SHARES_REQUEST,
+        FIELD.DESCRIPTION,
+        FIELD.TRIBUTE,
+        FIELD.LINK,
+      ],
     ],
     additionalOptions: [
       FIELD.APPLICANT,
@@ -165,11 +167,13 @@ export const FORM = {
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      FIELD.APPLICANT,
-      FIELD.DESCRIPTION,
-      FIELD.PAYMENT_REQUEST,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+        FIELD.PAYMENT_REQUEST,
+        FIELD.LINK,
+      ],
     ],
     additionalOptions: [
       FIELD.SHARES_REQUEST,
@@ -188,10 +192,12 @@ export const FORM = {
     required: ['title', 'tokenAddress'], // Use name key from proposal type object
     tx: TX.WHITELIST_TOKEN_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
-      FIELD.LINK,
-      FIELD.DESCRIPTION,
+      [
+        FIELD.TITLE,
+        { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
+        FIELD.LINK,
+        FIELD.DESCRIPTION,
+      ],
     ],
   },
   TRADE: {
@@ -203,11 +209,13 @@ export const FORM = {
     required: ['title'],
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      FIELD.TRIBUTE,
-      FIELD.DESCRIPTION,
-      FIELD.PAYMENT_REQUEST,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        FIELD.TRIBUTE,
+        FIELD.DESCRIPTION,
+        FIELD.PAYMENT_REQUEST,
+        FIELD.LINK,
+      ],
     ],
     additionalOptions: [
       FIELD.APPLICANT,
@@ -225,14 +233,16 @@ export const FORM = {
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.GUILDKICK_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      {
-        ...FIELD.APPLICANT,
-        label: 'Member to Kick',
-        info: INFO_TEXT.ADDR_KICK,
-      },
-      FIELD.DESCRIPTION,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        {
+          ...FIELD.APPLICANT,
+          label: 'Member to Kick',
+          info: INFO_TEXT.ADDR_KICK,
+        },
+        FIELD.DESCRIPTION,
+        FIELD.LINK,
+      ],
     ],
   },
   SIGNAL: {
@@ -243,7 +253,7 @@ export const FORM = {
     tx: TX.SUBMIT_PROPOSAL,
     layout: 'singleColumn',
     required: ['title'], // Use name key from proposal type object
-    fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
   MINION: {
     id: 'MINION',
@@ -255,15 +265,24 @@ export const FORM = {
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_PROPOSE_ACTION,
     fields: [
-      FIELD.TITLE,
-      FIELD.MINION_SELECT,
-      FIELD.TARGET_CONTRACT,
-      FIELD.ABI_INPUT,
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.ABI_INPUT,
+      ],
     ],
     additionalOptions: [
       FIELD.MINION_PAYMENT,
       { ...FIELD.DESCRIPTION, h: '10' },
     ],
+  },
+  UPDATE_DELEGATE: {
+    title: 'UPDATE DELEGATE ADDRESS',
+    layout: 'singleRow',
+    required: ['delegateAddress'],
+    tx: TX.UPDATE_DELEGATE,
+    fields: [[FIELD.DELEGATE_ADDRESS]],
   },
   LOOT_GRAB: {
     id: 'LOOT_GRAB',
@@ -272,7 +291,7 @@ export const FORM = {
     layout: 'singleColumn',
     required: ['tributeOffered'],
     tx: TX.LOOT_GRAB_PROPOSAL,
-    fields: [FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE],
+    fields: [[FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE]],
   },
   PAYROLL: {
     id: 'PAYROLL',
@@ -284,10 +303,75 @@ export const FORM = {
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
     fields: [
-      FIELD.MINION_SELECT,
-      FIELD.MINION_PAYMENT,
-      FIELD.APPLICANT,
-      FIELD.DESCRIPTION,
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
     ],
+  },
+  MINION_SEND_NETWORK_TOKEN: {
+    title: 'Network Token Transfer',
+    subtitle: 'Make a proposal to transfer tokens out of the minion',
+    layout: 'singleRow',
+    type: PROPOSAL_TYPES.MINION_NATIVE,
+    required: ['minionPayment', 'applicant', 'description'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_NETWORK_TOKEN,
+    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
+  },
+  MINION_SEND_ERC20_TOKEN: {
+    title: 'ERC20 Token Transfer',
+    subtitle: 'Make a proposal to transfer tokens out of the minion',
+    layout: 'singleRow',
+    type: PROPOSAL_TYPES.MINION_ERC20,
+    required: ['minionPayment', 'applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_ERC20_TOKEN,
+    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
+  },
+  SELL_NFT: {
+    title: 'Sell NFT on Rarible',
+    subtitle: 'Post an NFT for sale on Rarible',
+    type: PROPOSAL_TYPES.SELL_NFT,
+    minionType: MINION_TYPES.RARIBLE,
+    tx: null,
+    fields: [[FIELD.NFT_SELECT], [FIELD.SET_PRICE, FIELD.DATE_RANGE]],
+  },
+  MINION_SEND_ERC721_TOKEN: {
+    title: 'ERC721 Token Transfer',
+    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    layout: 'singleRow',
+    type: PROPOSAL_TYPES.MINION_ERC721,
+    required: ['applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_ERC721_TOKEN,
+    fields: [[FIELD.APPLICANT, FIELD.DESCRIPTION]],
+  },
+  MINION_SELL_NIFTY: {
+    title: 'Sell Nifty ERC721',
+    subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
+    layout: 'singleRow',
+    type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
+    required: ['price'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_NIFTY_SET_PRICE,
+    fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
+  },
+  NEW_NEAPOLITAN_MINION: {
+    required: ['minQuorum', 'minionName'],
+    tx: TX.SUMMON_MINION_NEAPOLITAN,
+    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM]],
+  },
+  NEW_NIFTY_MINION: {
+    required: ['minQuorum', 'minionName'],
+    tx: TX.SUMMON_MINION_NIFTY,
+    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM]],
+  },
+  NEW_VANILLA_MINION: {
+    required: ['minionName'],
+    tx: TX.SUMMON_MINION_VANILLA,
+    fields: [[FIELD.MINION_NAME]],
   },
 };

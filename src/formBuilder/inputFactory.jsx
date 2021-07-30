@@ -11,10 +11,13 @@ import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
 import TargetContract from './targetContract';
 import MultiInput from './multiInput';
+import NftSelect from './nftSelect';
 import GatedInput from './gatedInput';
 import GenericFormDisplay from './genericFormDisplay';
 import LootGrabDisplay from './lootGrabDisplay';
 import MinionPayment from './minionPayment';
+import DateRange from './dateRange';
+import PriceInput from './priceInput';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -57,11 +60,20 @@ export const InputFactory = props => {
   if (type === 'multiInput') {
     return <MultiInput {...props} />;
   }
+  if (type === 'nftSelect') {
+    return <NftSelect {...props} />;
+  }
+  if (type === 'priceInput') {
+    return <PriceInput {...props} />;
+  }
   if (type === 'genericDisplay') {
     return <GenericFormDisplay {...props} />;
   }
   if (type === 'lootGrabDisplay') {
     return <LootGrabDisplay {...props} />;
+  }
+  if (type === 'dateRange') {
+    return <DateRange {...props} />;
   }
   return null;
 };

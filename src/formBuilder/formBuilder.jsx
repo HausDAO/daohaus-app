@@ -44,6 +44,7 @@ const FormBuilder = props => {
   const buildABIOptions = abiString => {
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
+
     if (abiString === 'clear' || abiString === 'hex') {
       setFields(originalFields);
     } else {
@@ -53,20 +54,25 @@ const FormBuilder = props => {
   };
 
   const updateErrors = errors => {
-    setFields(prevFields =>
-      prevFields.map(field => {
-        const error = errors.find(error => error.name === field.name);
-        if (error) {
-          return { ...field, error };
+    // REVIEW
+    setFields(prevFields => {
+      const update = field => {
+        if (Array.isArray(field)) {
+          return field.map(update);
         }
-        return { ...field, error: false };
-      }),
-    );
+        const error = errors.find(error => error.name === field.name);
+        return { ...field, error };
+      };
+      return prevFields.map(update);
+    });
   };
   const clearErrors = () => {
-    setFields(prevFields =>
-      prevFields.map(field => ({ ...field, error: false })),
-    );
+    // REVIEW
+    setFields(prevFields => {
+      const clear = f =>
+        Array.isArray(f) ? f.map(clear) : { ...f, error: false };
+      return prevFields.map(clear);
+    });
   };
 
   const onSubmit = async values => {
@@ -75,15 +81,21 @@ const FormBuilder = props => {
     //  Checks for required values
     const missingVals = validateRequired(
       values,
-      formFields.filter(field => field.required),
+      // REVIEW
+      // formFields.filter(field => field.required),
+      formFields.flat(Infinity).filter(field => field.required),
     );
+
     if (missingVals) {
+      console.log('missingVals', missingVals);
       updateErrors(missingVals);
       return;
     }
 
     //  Checks for type errors
-    const typeErrors = checkFormTypes(values, formFields);
+    // REVIEW
+    // const typeErrors = checkFormTypes(values, formFields);
+    const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
     if (typeErrors) {
       updateErrors(typeErrors);
       return;
@@ -92,7 +104,9 @@ const FormBuilder = props => {
 
     const modifiedValues = modifyFields({
       values: collapsedValues,
-      activeFields: formFields,
+      // REVIEW
+      // activeFields: formFields,
+      activeFields: formFields.flat(Infinity),
       formData: props,
       tx: props.tx,
     });
@@ -130,6 +144,7 @@ const FormBuilder = props => {
           onCatch() {
             setLoading(false);
           },
+          ...props.lifeCycleFns,
         },
       });
     } catch (error) {
@@ -138,24 +153,35 @@ const FormBuilder = props => {
     }
   };
 
+  const renderInputs = fields =>
+    fields.map(field =>
+      Array.isArray(field) ? (
+        <Flex flex={1} flexDir='column'>
+          {renderInputs(field)}
+        </Flex>
+      ) : (
+        <InputFactory
+          key={field?.htmlFor || field?.name}
+          {...field}
+          minionType={props.minionType}
+          layout={props.layout}
+          localForm={localForm}
+          localValues={localValues}
+          buildABIOptions={buildABIOptions}
+        />
+      ),
+    );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl display='flex' mb={5}>
-          <Flex w='100%' flexWrap='wrap' justifyContent='space-between'>
-            {formFields?.map(field => {
-              return (
-                <InputFactory
-                  key={field?.htmlFor || field?.name}
-                  {...field}
-                  minionType={props.minionType}
-                  layout={props.layout}
-                  localForm={localForm}
-                  localValues={localValues}
-                  buildABIOptions={buildABIOptions}
-                />
-              );
-            })}
+          <Flex
+            width='100%'
+            flexDirection={['column', null, 'row']}
+            justifyContent='space-between'
+          >
+            {renderInputs(formFields)}
           </Flex>
         </FormControl>
         <FormFooter options={options} addOption={addOption} loading={loading} />

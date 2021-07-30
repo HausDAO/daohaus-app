@@ -299,6 +299,14 @@ export const hubChainQuery = async ({
         variables,
       });
 
+      if (
+        chain.endpoint ===
+        'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus'
+      ) {
+        console.log('query', query);
+        console.log('chainData', chainData);
+      }
+
       const withMetaData = chainData?.membersHub
         .map(dao => {
           const withResolvedProposals = {

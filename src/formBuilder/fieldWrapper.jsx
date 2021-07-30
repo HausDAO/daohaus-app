@@ -22,8 +22,8 @@ const FieldWrapper = ({
 }) => {
   const width = useMemo(() => {
     if (w) return w;
-    if (layout === 'singleColumn') return '100%';
-    return ['100%', null, '48%'];
+    // if (layout === 'singleRow') return '100%';
+    // return ['100%', null, '48%'];
   }, [w, layout]);
   return (
     <Flex w={width} mb={mb || 3} flexDir='column' {...containerProps}>
