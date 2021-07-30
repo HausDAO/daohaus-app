@@ -27,6 +27,8 @@ import { useConfirmation, useFormModal } from '../contexts/OverlayContext';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { areAnyFields } from '../utils/general';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { handleUpdateChanges } from '../reducers/proposalConfig';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
@@ -37,10 +39,12 @@ const handleSearch = (formsArr, str) => {
 };
 
 const ProposalTypes = () => {
-  const { daoProposals } = useMetaData();
+  const { daoProposals, daoMetaData } = useMetaData();
+  const { injectedProvider, address, injectedChain } = useInjectedProvider();
 
   const { playlists, allForms = {}, customData } = daoProposals || {};
   const [selectedList, setSelectedList] = useState('all');
+  const [loading, setLoading] = useState(false);
 
   const selectList = id => {
     if (!id) return;
@@ -51,11 +55,25 @@ const ProposalTypes = () => {
     }
   };
 
+  const handleSaveConfig = async () => {
+    setLoading(true);
+    const res = await handleUpdateChanges(daoProposals, {
+      injectedProvider,
+      meta: daoMetaData,
+      address,
+      network: injectedChain.network,
+    });
+    console.log(res);
+    setLoading(false);
+  };
+
   return (
     <MainViewLayout isDao header='Proposal Types'>
       <Flex flexDir='column' w='95%'>
         <Flex justifyContent='flex-end' mb={9}>
-          <Button size='lg'>SAVE CHANGES</Button>
+          <Button size='lg' onClick={handleSaveConfig} disabled={loading}>
+            SAVE CHANGES {loading && <Spinner ml={3} />}
+          </Button>
         </Flex>
         {daoProposals ? (
           <Flex>

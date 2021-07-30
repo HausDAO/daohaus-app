@@ -1,8 +1,9 @@
-import { isObjectEmpty } from '../utils/general';
+import { put } from '../utils/metadata';
 import { createPlaylist, generateNewConfig } from '../utils/playlists';
 
 const handleInit = payload => {
-  if (!isObjectEmpty(payload?.proposalConfig)) {
+  console.log(payload);
+  if (payload?.proposalConfig) {
     return payload.proposalConfig;
   }
   return generateNewConfig(payload);
@@ -61,6 +62,31 @@ const handleAddToPlaylist = (state, params) => {
     playlists: newPlaylists,
   };
 };
+export const handleUpdateChanges = async (state, params) => {
+  const { meta, injectedProvider, address, network } = params;
+  console.log(`params`, params);
+  if (!meta || !injectedProvider || !state || !network)
+    throw new Error('proposalConfig => handlePostNewConfig');
+  try {
+    const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
+    const signature = await injectedProvider.eth.personal.sign(
+      messageHash,
+      address,
+    );
+    const updateData = {
+      proposalConfig: state,
+      contractAddress: meta.contractAddress,
+      network,
+      signature,
+    };
+
+    const res = await put('dao/update', updateData);
+    if (res.error) throw new Error(res.error);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const proposalConfigReducer = (state, params) => {
   // if (!params || !state) return state;
@@ -74,4 +100,5 @@ export const proposalConfigReducer = (state, params) => {
   if (action === 'RESTORE_PROPOSAL')
     return handleRemoveCustomData(state, params);
   if (action === 'TOGGLE_PLAYLIST') return handleAddToPlaylist(state, params);
+  throw new Error('Error in ProposalConfig Reducer => Invalid Action');
 };
