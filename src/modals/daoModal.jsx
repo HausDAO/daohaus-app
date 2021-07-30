@@ -19,10 +19,11 @@ import FormBuilder from '../formBuilder/formBuilder';
 import TextBox from '../components/TextBox';
 
 const getMaxWidth = modal => {
-  if (modal?.lego) {
-    const { layout } = modal?.lego;
-    if (layout === 'doubleColumn') return '800px';
-    if (layout === 'singleColumn') return '500px';
+  if (modal?.lego?.fields) {
+    if (modal?.lego.fields?.length > 1) {
+      return '800px';
+    }
+    return '500px';
   }
   if (modal?.width === 'sm') return '400px';
   if (modal?.width === 'md') return '500px';

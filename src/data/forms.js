@@ -6,7 +6,6 @@ export const CORE_FORMS = {
   EDIT_PLAYLIST: {
     id: 'EDIT_PLAYLIST',
     title: 'Edit Proposal Playlist',
-    layout: 'singleColumn',
     type: PROPOSAL_TYPES.CORE,
     required: ['title'],
     fields: [
@@ -20,7 +19,6 @@ export const CORE_FORMS = {
   ADD_PLAYLIST: {
     id: 'ADD_PLAYLIST',
     title: 'Add a Proposal Playlist',
-    layout: 'singleColumn',
     type: PROPOSAL_TYPES.CORE,
     required: ['selectedMinion'],
     fields: [
@@ -34,7 +32,6 @@ export const CORE_FORMS = {
   UPDATE_DELEGATE: {
     id: 'UPDATE_DELEGATE',
     title: 'UPDATE DELEGATE ADDRESS',
-    layout: 'singleColumn',
     required: ['delegateAddress'],
     tx: TX.UPDATE_DELEGATE,
     fields: [FIELD.DELEGATE_ADDRESS],
@@ -42,7 +39,6 @@ export const CORE_FORMS = {
   EDIT_PROPOSAL: {
     id: 'EDIT_PROPOSAL',
     title: 'Edit Proposal',
-    layout: 'singleColumn',
     type: PROPOSAL_TYPES.CORE,
     required: ['title', 'description'],
     fields: [
@@ -62,7 +58,6 @@ export const CORE_FORMS = {
     id: 'MINION_SEND_NETWORK_TOKEN',
     title: 'Network Token Transfer',
     subtitle: 'Make a proposal to transfer tokens out of the minion',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_NATIVE,
     required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
@@ -73,7 +68,6 @@ export const CORE_FORMS = {
     id: 'MINION_SEND_ERC20_TOKEN',
     title: 'ERC20 Token Transfer',
     subtitle: 'Make a proposal to transfer tokens out of the minion',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_ERC20,
     required: ['minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -84,7 +78,6 @@ export const CORE_FORMS = {
     id: 'MINION_SEND_ERC721_TOKEN',
     title: 'ERC721 Token Transfer',
     subtitle: 'Make a proposal to transfer the nft out of the minion',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_ERC721,
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -95,7 +88,6 @@ export const CORE_FORMS = {
     id: 'MINION_SELL_NIFTY',
     title: 'Sell Nifty ERC721',
     subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
@@ -112,13 +104,9 @@ export const FORM = {
     playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
-    layout: 'singleColumn',
     required: ['sharesRequested', 'tributeOffered', 'title'],
     fields: [
-      FIELD.TITLE,
-      FIELD.SHARES_REQUEST,
-      FIELD.TRIBUTE,
-      FIELD.DESCRIPTION,
+      [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.TRIBUTE, FIELD.DESCRIPTION],
     ],
     additionalOptions: [FIELD.LINK],
   },
@@ -128,28 +116,23 @@ export const FORM = {
     description: 'Request shares from the DAO by showing finished work.',
     playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
-    layout: 'singleColumn',
     tx: TX.SUBMIT_PROPOSAL,
     required: ['sharesRequested', 'link', 'title'],
-    fields: [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.LINK, FIELD.DESCRIPTION],
+    fields: [
+      [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.LINK, FIELD.DESCRIPTION],
+    ],
     additionalOptions: [FIELD.PAYMENT_REQUEST, FIELD.SHARES_REQUEST],
   },
   MEMBER: {
     id: 'MEMBER',
-    title: 'Request To Join',
-    description: 'Create a proposal and apply for DAO membership',
+    title: 'Membership Proposal',
+    description: 'Proposal for DAO membership',
     type: PROPOSAL_TYPES.MEMBER,
-    layout: 'doubleColumn',
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      [
-        FIELD.TITLE,
-        FIELD.SHARES_REQUEST,
-        FIELD.DESCRIPTION,
-        FIELD.TRIBUTE,
-        FIELD.LINK,
-      ],
+      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.SHARES_REQUEST, FIELD.TRIBUTE],
     ],
     additionalOptions: [
       FIELD.APPLICANT,
@@ -159,11 +142,10 @@ export const FORM = {
   },
   FUNDING: {
     id: 'FUNDING',
-    title: 'Request Shares and/or Loot',
-    description: 'Transfer funds to/from the DAO treasury',
+    title: 'Funding Proposal',
+    description: 'Proposal for transferring funds to/from the DAO treasury.',
     origin: 'classics',
     type: PROPOSAL_TYPES.FUNDING,
-    layout: 'doubleColumn',
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
@@ -188,7 +170,6 @@ export const FORM = {
     description: 'Create a proposal to add a new token to the DAO treasury.',
     origin: 'classics',
     type: PROPOSAL_TYPES.WHITELIST,
-    layout: 'doubleColumn',
     required: ['title', 'tokenAddress'], // Use name key from proposal type object
     tx: TX.WHITELIST_TOKEN_PROPOSAL,
     fields: [
@@ -205,7 +186,6 @@ export const FORM = {
     title: 'Swap Tokens for Loot or Shares',
     description: 'Offer to trade your shares, loot, or tokens with the DAO',
     type: PROPOSAL_TYPES.TRADE,
-    layout: 'singleColumn',
     required: ['title'],
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
@@ -229,7 +209,6 @@ export const FORM = {
     description: 'Create a proposal to kick a member',
     origin: 'classics',
     type: PROPOSAL_TYPES.GUILDKICK,
-    layout: 'singleColumn',
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.GUILDKICK_PROPOSAL,
     fields: [
@@ -251,7 +230,6 @@ export const FORM = {
     description: 'Create an on-chain signal proposal',
     type: PROPOSAL_TYPES.SIGNAL,
     tx: TX.SUBMIT_PROPOSAL,
-    layout: 'singleColumn',
     required: ['title'], // Use name key from proposal type object
     fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
@@ -260,7 +238,6 @@ export const FORM = {
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
-    layout: 'doubleColumn',
     required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_PROPOSE_ACTION,
@@ -279,7 +256,6 @@ export const FORM = {
   },
   UPDATE_DELEGATE: {
     title: 'UPDATE DELEGATE ADDRESS',
-    layout: 'singleRow',
     required: ['delegateAddress'],
     tx: TX.UPDATE_DELEGATE,
     fields: [[FIELD.DELEGATE_ADDRESS]],
@@ -288,7 +264,6 @@ export const FORM = {
     id: 'LOOT_GRAB',
     title: 'Loot Grab proposal',
     description: 'Trade ERC-20s for DAO loot',
-    layout: 'singleColumn',
     required: ['tributeOffered'],
     tx: TX.LOOT_GRAB_PROPOSAL,
     fields: [[FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE]],
@@ -297,7 +272,6 @@ export const FORM = {
     id: 'PAYROLL',
     title: 'Payroll Proposal',
     description: 'Pay Members with a minion',
-    layout: 'singleColumn',
     type: PROPOSAL_TYPES.PAYROLL,
     required: ['selectedMinion', 'minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -314,7 +288,6 @@ export const FORM = {
   MINION_SEND_NETWORK_TOKEN: {
     title: 'Network Token Transfer',
     subtitle: 'Make a proposal to transfer tokens out of the minion',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_NATIVE,
     required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
@@ -324,7 +297,6 @@ export const FORM = {
   MINION_SEND_ERC20_TOKEN: {
     title: 'ERC20 Token Transfer',
     subtitle: 'Make a proposal to transfer tokens out of the minion',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_ERC20,
     required: ['minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -342,7 +314,6 @@ export const FORM = {
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
     subtitle: 'Make a proposal to transfer the nft out of the minion',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_ERC721,
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -352,7 +323,6 @@ export const FORM = {
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
     subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
-    layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
