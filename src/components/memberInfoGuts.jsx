@@ -15,7 +15,7 @@ const MemberInfoGuts = ({ member, showMenu, hideCopy }) => {
             {showMenu ? <ProfileMenu member={member} /> : null}
           </Flex>
           <Flex w='100%' justify='space-between' mt={6}>
-            <Box>
+            <Box w={['100%']}>
               <TextBox size='xs'>Shares</TextBox>
               <Skeleton isLoaded={member?.shares}>
                 <TextBox variant='value' size='xl'>
@@ -23,7 +23,7 @@ const MemberInfoGuts = ({ member, showMenu, hideCopy }) => {
                 </TextBox>
               </Skeleton>
             </Box>
-            <Box>
+            <Box w={['100%']}>
               <TextBox size='xs'>Loot</TextBox>
               <Skeleton isLoaded={member?.loot}>
                 <TextBox variant='value' size='xl'>
@@ -31,7 +31,7 @@ const MemberInfoGuts = ({ member, showMenu, hideCopy }) => {
                 </TextBox>
               </Skeleton>
             </Box>
-            <Box>
+            <Box w={['100%']}>
               <TextBox size='xs'>Anniversary</TextBox>
               <Skeleton isLoaded={member?.createdAt}>
                 <TextBox variant='value' size='xl'>

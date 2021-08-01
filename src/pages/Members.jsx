@@ -5,7 +5,7 @@ import deepEqual from 'deep-eql';
 
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberCard from '../components/memberCard';
-import MemberInfo from '../components/memberInfo';
+import MemberInfoWrapper from '../components/memberInfoWrapper';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
@@ -214,7 +214,7 @@ const Members = React.memo(
             <Stack style={scrolled ? scrolledStyle : null} spacing={4}>
               <Box>
                 {selectedMember ? (
-                  <MemberInfo
+                  <MemberInfoWrapper
                     key={selectedMember.memberAddress}
                     member={selectedMember}
                     customTerms={customTerms}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import ActivitiesFeed from '../components/activitiesFeed';
-import MemberInfoCard from '../components/memberInfo';
+import MemberInfo from '../components/memberInfo';
 import OverviewCard from '../components/overviewCard';
 import { getDaoActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
@@ -42,7 +42,7 @@ const Overview = React.memo(function overview({
           )}
           {isMember && (
             <Box w={['100%', null, null, null, '50%']}>
-              <MemberInfoCard member={daoMember} hideCopy />
+              <MemberInfo member={daoMember} hideCopy />
               <Box mt={6}>
                 <ActivitiesFeed
                   activities={activities}

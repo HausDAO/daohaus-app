@@ -43,7 +43,7 @@ const DaoSwitcherModal = () => {
   //     : {};
 
   useEffect(() => {
-    if ((userHubDaos, injectedChain && injectedChain.chainId)) {
+    if (userHubDaos && injectedChain && injectedChain.chainId) {
       const newNetworks = getDaosByNetwork(userHubDaos, injectedChain.chainId);
       setDaosByNetwork(newNetworks);
     }
