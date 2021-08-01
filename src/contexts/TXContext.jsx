@@ -246,6 +246,10 @@ export const TXProvider = ({ children }) => {
     return handleFieldModifiers({ ...formState, contextData });
   };
 
+  const submitCallback = formState => {
+    return formState.onSubmit({ ...formState, contextData, injectedProvider });
+  };
+
   return (
     <TXContext.Provider
       value={{
@@ -253,6 +257,7 @@ export const TXProvider = ({ children }) => {
         submitTransaction,
         handleCustomValidation,
         modifyFields,
+        submitCallback,
       }}
     >
       {children}
@@ -266,11 +271,13 @@ export const useTX = () => {
     submitTransaction,
     handleCustomValidation,
     modifyFields,
+    submitCallback,
   } = useContext(TXContext);
   return {
     refreshDao,
     submitTransaction,
     handleCustomValidation,
     modifyFields,
+    submitCallback,
   };
 };

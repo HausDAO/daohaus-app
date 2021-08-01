@@ -13,7 +13,7 @@ import {
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
 const GenericSelect = ({
-  options,
+  options = {},
   handleSelect,
   currentOption,
   label,

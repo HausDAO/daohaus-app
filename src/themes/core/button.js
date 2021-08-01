@@ -53,10 +53,10 @@ const Button = {
       },
       _active: { bg: 'inherit' },
     }),
-    outline: () => ({
+    outline: props => ({
       borderColor: 'secondary.400',
       bg: 'transparent',
-      color: 'secondary.400',
+      color: props.color || 'secondary.400',
       _hover: {
         borderColor: 'secondary.500',
         color: 'secondary.500',

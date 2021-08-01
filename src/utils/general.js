@@ -125,8 +125,19 @@ export const filterObject = (object, callback) => {
   }
   return newObj;
 };
-export const getObjectLength = object => Object.keys(object).length;
+export const getObjectLength = object =>
+  object ? Object.keys(object).length : 0;
 export const isObjectEmpty = object => getObjectLength(object) === 0;
+
+export const areAnyFields = (param, obj) => {
+  if (!obj || !param) return;
+  if (param === 'truthy') {
+    return Object.values(obj).some(field => field);
+  }
+  if (param === 'falsy') {
+    return Object.values(obj).some(field => !field);
+  }
+};
 
 export const numberWithCommas = num => {
   if (num === 0) return 0;
@@ -270,4 +281,16 @@ export const handlePossibleNumber = (val, comma = true, roundAmt = 4) => {
 export const isSameAddress = (addr1, addr2) => {
   if (typeof addr1 !== 'string' || typeof addr2 !== 'string') return null;
   return addr1.toLowerCase() === addr2.toLowerCase();
+};
+
+export const getKeyedArray = (obj, keyName = 'field') => {
+  if (!obj) {
+    console.error('Receieved falsy value for object in getKeyedArray');
+    return null;
+  }
+  if (isObjectEmpty(obj)) {
+    console.warn('Object passed to getKeyedArray is Empty');
+    return [];
+  }
+  return Object.entries(obj).map(item => ({ ...item[1], [keyName]: item[0] }));
 };
