@@ -7,7 +7,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
 
-const NftSelect = ({ label, ...props }) => {
+const NftSelect = ({ label }) => {
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
