@@ -20,14 +20,18 @@ const PriceInput = props => {
   const { getValues, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
-  const [balance, setBalance] = useState(null);
+  const [, setBalance] = useState(null);
 
   const paymentToken = watch('paymentToken');
+<<<<<<< HEAD
   const maxBtnDisplay =
     balance || balance === 0
       ? `Max: ${balance.toFixed(4)}`
       : 'Error: Not found.';
   console.log(maxBtnDisplay);
+=======
+
+>>>>>>> 0d773baf9f03fea46c7b8e60df32c49abe6b1329
   useEffect(() => {
     if (daoOverview) {
       const depTokenAddress = daoOverview.depositToken?.tokenAddress;

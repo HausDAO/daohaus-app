@@ -3,31 +3,16 @@ import { Link, useParams } from 'react-router-dom';
 import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
-import { useTX } from '../contexts/TXContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import { displayBalance } from '../utils/tokenValue';
-import { TX } from '../data/contractTX';
-import { useDao } from '../contexts/DaoContext';
 
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
-  const { refreshMinionVault } = useDao();
-
-  // TODO: refactor so we're not hijacking the context.
-  // - maybe make 2 different components for in/outside daos
-  // - note: the tx is not used outside of the dao context right now
-  const { submitTransaction, refreshDao } = daochain
-    ? useTX()
-    : { submitTransaction: null, refreshDao: null };
-  const { isMember } = daochain ? useDaoMember() : { isMember: null };
-
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
-  const [loading, setLoading] = useState();
 
   useEffect(() => {
     const isWhitelisted =
@@ -40,30 +25,6 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
       });
     setTokenWhitelisted(!isWhitelisted);
   }, [currentDaoTokens]);
-
-  const handleWithdraw = async options => {
-    setLoading(true);
-
-    await submitTransaction({
-      tx: TX.MINION_WITHDRAW,
-      args: [
-        token.moloch.id,
-        token.token.tokenAddress,
-        token.tokenBalance,
-        options.transfer,
-      ],
-      localValues: {
-        minionAddress: minion,
-      },
-    });
-
-    if (!options.transfer) {
-      await refreshMinionVault(minion);
-      refreshDao();
-    }
-
-    setLoading(false);
-  };
 
   return (
     <Flex h='60px' align='center'>
@@ -120,9 +81,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
             <MinionInternalBalanceActionMenu
               targetDao={token}
               tokenWhitelisted={tokenWhitelisted}
-              handleWithdraw={handleWithdraw}
-              loading={loading}
-              isMember={isMember}
+              token={token}
               daoConnectedAndSameChain={
                 !daoConnectedAndSameChain(
                   address,

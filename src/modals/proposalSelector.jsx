@@ -39,13 +39,13 @@ const ProposalSelector = () => {
 
   useEffect(() => {
     if (playlists) {
-      setCurrentPlaylist(playlists[0]);
+      setCurrentPlaylist(playlists?.[0]);
     }
   }, [playlists]);
 
   const handleClose = () => {
     setProposalSelector(false);
-    setCurrentPlaylist(playlists[0]);
+    setCurrentPlaylist(playlists?.[0]);
   };
 
   const selectProposal = id => {
