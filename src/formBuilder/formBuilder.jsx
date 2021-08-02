@@ -38,10 +38,7 @@ const FormBuilder = props => {
       option => option.htmlFor === e.target.value,
     );
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
-    const lastCol = formFields.slice(-1);
-    const rest = formFields.slice(0, -1);
-
-    setFields([...rest, [...lastCol, selectedOption]]);
+    setFields([...formFields, selectedOption]);
   };
 
   const buildABIOptions = abiString => {
@@ -156,16 +153,11 @@ const FormBuilder = props => {
     }
   };
 
-  const renderInputs = (fields, depth = 0) =>
-    fields.map((field, index) =>
+  const renderInputs = fields =>
+    fields.map(field =>
       Array.isArray(field) ? (
-        <Flex
-          flex={1}
-          flexDir='column'
-          key={`${depth}-${index}`}
-          _notFirst={{ pl: [0, null, 8] }}
-        >
-          {renderInputs(field, depth + 1)}
+        <Flex flex={1} flexDir='column'>
+          {renderInputs(field)}
         </Flex>
       ) : (
         <InputFactory
