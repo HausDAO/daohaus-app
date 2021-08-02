@@ -38,7 +38,10 @@ const FormBuilder = props => {
       option => option.htmlFor === e.target.value,
     );
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
-    setFields([...formFields, selectedOption]);
+    const lastCol = formFields.slice(-1);
+    const rest = formFields.slice(0, -1);
+
+    setFields([...rest, [...lastCol, selectedOption]]);
   };
 
   const buildABIOptions = abiString => {
