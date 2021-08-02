@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Menu,
   MenuList,
@@ -11,16 +11,48 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { BsThreeDots } from 'react-icons/bs';
+
+import { useTX } from '../contexts/TXContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { chainByName } from '../utils/chain';
+import { useDao } from '../contexts/DaoContext';
+import { TX } from '../data/contractTX';
 
 const MinionInternalBalanceActionMenu = ({
   targetDao,
   tokenWhitelisted,
   daoConnectedAndSameChain,
-  handleWithdraw,
-  loading,
-  isMember,
+  token,
 }) => {
+  const { submitTransaction, refreshDao } = useTX();
+  const { isMember } = useDaoMember();
+  const { refreshMinionVault } = useDao();
+  const { minion } = useParams();
+  const [loading, setLoading] = useState();
+
+  const handleWithdraw = async options => {
+    setLoading(true);
+
+    await submitTransaction({
+      tx: TX.MINION_WITHDRAW,
+      args: [
+        token.moloch.id,
+        token.token.tokenAddress,
+        token.tokenBalance,
+        options.transfer,
+      ],
+      localValues: {
+        minionAddress: minion,
+      },
+    });
+
+    if (!options.transfer) {
+      await refreshMinionVault(minion);
+      refreshDao();
+    }
+
+    setLoading(false);
+  };
   return (
     <Menu isDisabled>
       <MenuButton
