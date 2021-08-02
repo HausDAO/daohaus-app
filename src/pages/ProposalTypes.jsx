@@ -307,13 +307,7 @@ const ProposalList = ({
     });
   };
   const handleRestoreProposal = formId => {
-    openFormModal({
-      lego: CORE_FORMS.EDIT_PROPOSAL,
-      onSubmit: () => {
-        dispatchPropConfig({ action: 'EDIT_PROPOSAL', formId });
-        closeModal();
-      },
-    });
+    dispatchPropConfig({ action: 'RESTORE_PROPOSAL', formId });
   };
 
   const handleTogglePlaylist = (formId, listId, isListed) => {
