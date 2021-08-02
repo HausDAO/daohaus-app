@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
-import { ModButton } from './staticElements';
 
 import { handleDecimals } from '../utils/general';
-import FieldWrapper from './fieldWrapper';
 
 const getMaxBalance = (tokenData, tokenAddress) => {
   //  Uses token select data structure
@@ -19,7 +17,7 @@ const getMaxBalance = (tokenData, tokenAddress) => {
 const PriceInput = props => {
   const { daoOverview } = useDao();
   const { localForm } = props;
-  const { getValues, setValue, watch } = localForm;
+  const { getValues, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
   const [balance, setBalance] = useState(null);
@@ -29,7 +27,7 @@ const PriceInput = props => {
     balance || balance === 0
       ? `Max: ${balance.toFixed(4)}`
       : 'Error: Not found.';
-
+  console.log(maxBtnDisplay);
   useEffect(() => {
     if (daoOverview) {
       const depTokenAddress = daoOverview.depositToken?.tokenAddress;

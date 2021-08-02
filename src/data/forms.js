@@ -9,11 +9,13 @@ export const CORE_FORMS = {
     type: PROPOSAL_TYPES.CORE,
     required: ['title'],
     fields: [
-      {
-        ...FIELD.TITLE,
-        helperText: 'Max 100 characters',
-        placeholder: 'Playlist Title',
-      },
+      [
+        {
+          ...FIELD.TITLE,
+          helperText: 'Max 100 characters',
+          placeholder: 'Playlist Title',
+        },
+      ],
     ],
   },
   ADD_PLAYLIST: {
@@ -22,11 +24,13 @@ export const CORE_FORMS = {
     type: PROPOSAL_TYPES.CORE,
     required: ['selectedMinion'],
     fields: [
-      {
-        ...FIELD.TITLE,
-        helperText: 'Max 100 characters',
-        placeholder: 'Playlist Title',
-      },
+      [
+        {
+          ...FIELD.TITLE,
+          helperText: 'Max 100 characters',
+          placeholder: 'Playlist Title',
+        },
+      ],
     ],
   },
   UPDATE_DELEGATE: {
@@ -42,16 +46,18 @@ export const CORE_FORMS = {
     type: PROPOSAL_TYPES.CORE,
     required: ['title', 'description'],
     fields: [
-      {
-        ...FIELD.TITLE,
-        helperText: 'Max 30 characters',
-        placeholder: 'Proposal Title',
-      },
-      {
-        ...FIELD.DESCRIPTION,
-        helperText: 'Max 100 characters',
-        placeholder: 'proposal Title',
-      },
+      [
+        {
+          ...FIELD.TITLE,
+          helperText: 'Max 30 characters',
+          placeholder: 'Proposal Title',
+        },
+        {
+          ...FIELD.DESCRIPTION,
+          helperText: 'Max 100 characters',
+          placeholder: 'proposal Title',
+        },
+      ],
     ],
   },
   MINION_SEND_NETWORK_TOKEN: {
@@ -62,7 +68,7 @@ export const CORE_FORMS = {
     required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_NETWORK_TOKEN,
-    fields: [FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION],
+    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   MINION_SEND_ERC20_TOKEN: {
     id: 'MINION_SEND_ERC20_TOKEN',
@@ -72,7 +78,7 @@ export const CORE_FORMS = {
     required: ['minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_ERC20_TOKEN,
-    fields: [FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION],
+    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   MINION_SEND_ERC721_TOKEN: {
     id: 'MINION_SEND_ERC721_TOKEN',
@@ -82,7 +88,7 @@ export const CORE_FORMS = {
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_ERC721_TOKEN,
-    fields: [FIELD.APPLICANT, FIELD.DESCRIPTION],
+    fields: [[FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   MINION_SELL_NIFTY: {
     id: 'MINION_SELL_NIFTY',
@@ -92,7 +98,7 @@ export const CORE_FORMS = {
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_NIFTY_SET_PRICE,
-    fields: [FIELD.NFT_PRICE, FIELD.DESCRIPTION],
+    fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
 };
 
