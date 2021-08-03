@@ -10,7 +10,7 @@ const DateRange = props => {
   const startDate = watch('startDate');
 
   return (
-    <FieldWrapper>
+    <FieldWrapper {...props}>
       <Flex flexDir='row' justify='space-between'>
         <DateSelect
           {...props}

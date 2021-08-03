@@ -36,7 +36,7 @@ const CustomWrapper = styled(Box)`
     z-index: 3;
     padding: var(--chakra-space-1);
     margin-top: var(--chakra-space-3);
-    background: var(--chakra-colors-blackAlpha-600);
+    background: var(--chakra-colors-blackAlpha-900);
     border-radius: var(--chakra-radii-md);
     border: 1px solid var(--chakra-colors-whiteAlpha-200);
   }
