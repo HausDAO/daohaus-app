@@ -15,9 +15,11 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import GenericModal from '../modals/genericModal';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const NftCardActionMenu = ({ nft, loading, isMember }) => {
+const NftCardActionMenu = ({ nft, loading }) => {
   const { minion, daochain } = useParams();
+  const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
   const { setGenericModal } = useOverlay();
   const [modalData, setModalData] = useState(null);

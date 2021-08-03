@@ -57,7 +57,7 @@ const ProposalTypes = () => {
 
   const handleSaveConfig = async () => {
     setLoading(true);
-    const res = await handleUpdateChanges(daoProposals, {
+    await handleUpdateChanges(daoProposals, {
       injectedProvider,
       meta: daoMetaData,
       address,

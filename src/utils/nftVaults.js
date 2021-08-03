@@ -86,3 +86,9 @@ export const hydrateNftCard = nft => {
     ...hydratedFields,
   };
 };
+
+export const concatNftSearchData = nft => {
+  return `${nft.name} ${nft.metadata?.name ? nft.metadata?.name : ''} ${
+    nft.metadata?.description ? nft.metadata?.description : ''
+  }`.toLowerCase();
+};

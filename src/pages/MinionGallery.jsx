@@ -4,13 +4,15 @@ import { useParams } from 'react-router-dom';
 import { Wrap, WrapItem, Flex, Button, Box } from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
 import NftFilter from '../components/nftFilter';
-import ListSort from '../components/listSort';
+// import ListSort from '../components/listSort';
 import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
 import NftCard from '../components/nftCard';
+import { concatNftSearchData } from '../utils/nftVaults';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
-  const [sort, setSort] = useState(null);
+  // const [sort, setSort] = useState(null);
+  const [sort] = useState(nftSortOptions[0]);
   const [filters, setFilters] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [collection, setCollection] = useState('all');
@@ -54,22 +56,23 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
       const filtered = nftData.filter(item => {
         let result = true;
         if (searchText.length > 0) {
+          const dataSearchString = concatNftSearchData(item);
           result =
-            result &&
-            (item.title.includes(searchText) ||
-              item.description.includes(searchText));
+            result && dataSearchString.includes(searchText.toLowerCase());
         }
-        if (filters.length > 0) {
-          if (filters.indexOf('forSale') !== -1) {
-            result = result && !!item.auction;
-          }
-          if (filters.indexOf('hasOffer') !== -1) {
-            result = result && !!item.offers && item.offers.length > 0;
-          }
-        }
+        // if (filters.length > 0) {
+        //   if (filters.indexOf('forSale') !== -1) {
+        //     result = result && !!item.auction;
+        //   }
+        //   if (filters.indexOf('hasOffer') !== -1) {
+        //     result = result && !!item.offers && item.offers.length > 0;
+        //   }
+        // }
         if (collection !== 'all') {
           result = result && collection === item.name;
         }
+
+        console.log('result', result);
         return result;
       });
       if (!deepEqual(filtered, nfts)) {
@@ -140,7 +143,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
             {nfts?.length || 0} NFTs
           </Box>
           <Box ml={[0, 5, null, 10]}>
-            <ListSort sort={sort} setSort={setSort} options={nftSortOptions} />
+            {/* <ListSort sort={sort} setSort={setSort} options={nftSortOptions} /> */}
           </Box>
           <Box ml={[0, 5, null, 10]} mt={[5, 0, null, 0]}>
             <NftFilter
@@ -155,7 +158,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
               options={nftFilterOptions}
             />
           </Box>
-          <Box
+          {/* <Box
             ml='auto'
             mt={[5, 0, null, 0]}
             mr={[0, 5, null, 5]}
@@ -164,7 +167,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
             fontSize={['sm', null, null, 'md']}
           >
             View Balances
-          </Box>
+          </Box> */}
         </Flex>
         <Wrap flex={1} spacing={4} w='90%'>
           {nfts &&

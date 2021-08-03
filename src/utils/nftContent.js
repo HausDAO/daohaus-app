@@ -14,14 +14,14 @@ export const nftSortOptions = [
 ];
 
 export const nftFilterOptions = [
-  {
-    name: 'For Sale',
-    value: 'forSale',
-    type: 'main',
-  },
-  {
-    name: 'Has Offer',
-    value: 'hasOffer',
-    type: 'main',
-  },
+  // {
+  //   name: 'For Sale',
+  //   value: 'forSale',
+  //   type: 'main',
+  // },
+  // {
+  //   name: 'Has Offer',
+  //   value: 'hasOffer',
+  //   type: 'main',
+  // },
 ];

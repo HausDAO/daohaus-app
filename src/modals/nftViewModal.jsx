@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Image,
   Flex,
@@ -5,9 +6,10 @@ import {
   Modal,
   ModalOverlay,
   ModalCloseButton,
+  Link,
 } from '@chakra-ui/react';
-import React from 'react';
 import { rgba } from 'polished';
+
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import AddressAvatar from '../components/addressAvatar';
@@ -94,6 +96,7 @@ const NftViewModal = () => {
                       justify='space-between'
                       w='100%'
                       mt={5}
+                      mb={5}
                     >
                       {nftViewModal.creator && (
                         <Box size='xs' fontFamily='mono'>
@@ -118,8 +121,20 @@ const NftViewModal = () => {
                         </Box>
                       )}
                     </Flex>
+                    {nftViewModal.name && nftViewModal.metadata.external_url && (
+                      <Box
+                        as={Link}
+                        href={nftViewModal.metadata.external_url}
+                        isExternal
+                        size='xl'
+                        color='secondary.500'
+                        _hover={{ cursor: 'pointer' }}
+                      >
+                        View on {nftViewModal.name}
+                      </Box>
+                    )}
 
-                    <Box
+                    {/* <Box
                       mt={5}
                       size='xl'
                       color='secondary.500'
@@ -158,7 +173,7 @@ const NftViewModal = () => {
                       _hover={{ cursor: 'pointer' }}
                     >
                       buy
-                    </Box>
+                    </Box> */}
                   </Box>
                 </Flex>
               </Flex>
