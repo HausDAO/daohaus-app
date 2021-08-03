@@ -31,15 +31,11 @@ const MinionExecute = ({ proposal, early }) => {
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
 
-  console.log('minionDetails', proposal.proposalType);
-
   useEffect(() => {
     const getMinionDetails = async () => {
       setLoading(true);
       try {
         const tx = transactionByProposalType(proposal);
-
-        console.log('tx', tx);
         const abi = LOCAL_ABI[tx.contract.abiName];
         const web3Contract = createContract({
           address: proposal.minionAddress,
