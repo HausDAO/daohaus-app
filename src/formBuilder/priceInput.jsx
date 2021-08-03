@@ -23,7 +23,6 @@ const PriceInput = props => {
   const [, setBalance] = useState(null);
 
   const paymentToken = watch('paymentToken');
-
   useEffect(() => {
     if (daoOverview) {
       const depTokenAddress = daoOverview.depositToken?.tokenAddress;

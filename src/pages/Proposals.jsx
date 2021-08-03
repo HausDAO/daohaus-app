@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -13,7 +13,7 @@ import { getTerm, getTitle } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 
 const Proposals = React.memo(({ proposals, activities, customTerms }) => {
-  const { daoid, daochain } = useParams();
+  const { daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
   const { setProposalSelector } = useOverlay();
 

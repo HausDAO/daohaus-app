@@ -47,7 +47,7 @@ export const TXProvider = ({ children }) => {
     errorToast,
     successToast,
     setTxInfoModal,
-    setProposalModal,
+    setModal,
     setGenericModal,
   } = useOverlay();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
@@ -86,8 +86,8 @@ export const TXProvider = ({ children }) => {
     cachePoll,
     refetch,
     setTxInfoModal,
-    setProposalModal,
     setGenericModal,
+    setModal,
   };
 
   const refreshDao = () => {
