@@ -305,8 +305,10 @@ export const FORM = {
     fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   SELL_NFT: {
+    id: 'SELL_NFT',
     title: 'Sell NFT on Rarible',
     subtitle: 'Post an NFT for sale on Rarible',
+    description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.RARIBLE,
     tx: null,

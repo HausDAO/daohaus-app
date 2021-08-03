@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
-import { Box, Flex, Icon } from '@chakra-ui/react';
+import { Box, Flex, Icon, Input } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri';
 
@@ -161,17 +161,25 @@ const CustomWrapper = styled(Box)`
   }
 `;
 
-const DateSelect = ({
-  placeholderText,
-  showTimeInput,
-  selected,
-  onChange,
-  minDate,
-  minTime,
-  maxDate,
-  maxTime,
-  ...props
-}) => {
+const DateSelect = props => {
+  const {
+    placeholderText,
+    showTimeSelect,
+    minDate,
+    minTime,
+    maxDate,
+    maxTime,
+    localForm,
+    name,
+    htmlFor,
+  } = props;
+  const { register, setValue } = localForm;
+
+  const [selected, setSelected] = useState();
+  useEffect(() => {
+    setValue(name, selected);
+  }, [selected]);
+
   const renderHeader = ({
     date,
     decreaseMonth,
@@ -209,12 +217,13 @@ const DateSelect = ({
 
   return (
     <CustomWrapper {...props}>
+      <Input type='hidden' htmlFor={htmlFor} name={name} ref={register} />
       <DatePicker
         placeholderText={placeholderText}
-        showTimeSelect
+        showTimeSelect={showTimeSelect}
         renderCustomHeader={renderHeader}
         selected={selected}
-        onChange={onChange}
+        onChange={setSelected}
         minDate={minDate}
         minTime={minTime}
         dateFormat='dd/MM/yyyy h:mm aa'

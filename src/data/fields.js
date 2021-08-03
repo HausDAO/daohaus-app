@@ -174,7 +174,6 @@ export const FIELD = {
     type: 'dateRange',
     htmlFor: 'dateRange',
     name: 'dateRange',
-    maxDays: 7,
     label: 'Set Auction Duration',
   },
   DELEGATE_ADDRESS: {
