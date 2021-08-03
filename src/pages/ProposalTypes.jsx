@@ -63,7 +63,6 @@ const ProposalTypes = () => {
       address,
       network: injectedChain.network,
     });
-    console.log(res);
     setLoading(false);
   };
 

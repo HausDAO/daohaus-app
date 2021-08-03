@@ -3,6 +3,10 @@ import { utils } from 'ethers';
 import Web3 from 'web3';
 import { validate } from './validation';
 
+export const HASH = {
+  EMPTY_FIELD: 'e3bb180f-dda4-46e0-8ba5-7b24e7b00855',
+};
+
 export const SECONDS = {
   PER_MINUTE: 60,
   PER_HOUR: 3600,
@@ -120,8 +124,8 @@ export const filterObject = (object, callback) => {
   for (const key in object) {
     if (callback(object[key], key, index, newObj)) {
       newObj[key] = object[key];
-      index += 1;
     }
+    index += 1;
   }
   return newObj;
 };

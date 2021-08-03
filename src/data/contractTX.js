@@ -8,6 +8,7 @@
 //   successMsg: String
 // }
 
+import { HASH } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const CONTRACTS = {
@@ -95,16 +96,22 @@ export const ACTIONS = {
   GENERIC_MODAL: ['closeGenericModal', 'openTxModal'],
 };
 
+//  HASH.EMPTY_FIELD allows the search to turn up
+//  falsy without crashing searchFields()
+
+//  buildJSONdetails simply filters any values that are HASH.EMPTY_FIELD
+//  any other falsy will get stringified as is.
+
 export const DETAILS = {
   STANDARD_PROPOSAL: {
-    title: '.values.title || null',
-    description: '.values.description || null',
-    link: '.values.link || null',
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
   },
   VANILLA_MINION_PROPOSAL: {
-    title: '.values.title',
-    description: '.values.description',
+    title: `.values.title`,
+    description: `.values.description`,
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },

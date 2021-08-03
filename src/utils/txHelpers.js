@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 
-import { detailsToJSON } from './general';
+import { detailsToJSON, filterObject, HASH } from './general';
 import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
 import { collapse } from './formBuilder';
@@ -72,7 +72,10 @@ const buildJSONdetails = (data, fields) => {
       newObj[key] = fields[key];
     }
   }
-  return JSON.stringify(newObj);
+  const cleanValues = filterObject(newObj, val => {
+    return val !== HASH.EMPTY_FIELD;
+  });
+  return JSON.stringify(cleanValues);
 };
 
 const argBuilderCallback = Object.freeze({
@@ -157,75 +160,6 @@ export const getArgs = data => {
   );
 };
 
-// export const MolochTransaction = async ({
-//   args,
-//   poll,
-//   onTxHash,
-//   contextData,
-//   injectedProvider,
-//   tx,
-// }) => {
-//   const { daoid, daochain, daoOverview, address } = contextData;
-//   return MolochService({
-//     web3: injectedProvider,
-//     daoAddress: daoid,
-//     chainID: daochain,
-//     version: daoOverview.version,
-//   })(tx.name)({
-//     args,
-//     address,
-//     poll,
-//     onTxHash,
-//   });
-// };
-// export const MinionTransaction = async ({
-//   args,
-//   poll,
-//   onTxHash,
-//   contextData,
-//   injectedProvider,
-//   values,
-//   tx,
-// }) => {
-//   const { daochain, daoOverview, address } = contextData;
-//   const minionAddress = values.minionAddress || values.selectedMinion;
-//   return MinionService({
-//     web3: injectedProvider,
-//     minion: minionAddress,
-//     chainID: daochain,
-//     version: daoOverview.version,
-//   })(tx.name)({
-//     args,
-//     address,
-//     poll,
-//     onTxHash,
-//   });
-// };
-
-// export const TokenTransaction = async ({
-//   args,
-//   poll,
-//   onTxHash,
-//   contextData,
-//   injectedProvider,
-//   values,
-//   tx,
-// }) => {
-//   const { daochain, daoOverview, address } = contextData;
-//   const { tokenAddress } = values;
-//   return TokenService({
-//     web3: injectedProvider,
-//     tokenAddress,
-//     chainID: daochain,
-//     version: daoOverview.version,
-//   })(tx.name)({
-//     args,
-//     address,
-//     poll,
-//     onTxHash,
-//   });
-// };
-
 export const getContractAddress = data => {
   const { contractAddress } = data.tx.contract;
   if (contractAddress[0] === '.') {
@@ -275,6 +209,7 @@ export const exposeValues = data => {
 };
 
 export const createActions = ({ tx, uiControl, stage }) => {
+  console.log(`uiControl`, uiControl);
   if (!tx[stage]) return;
 
   // FOR REFERENCE:
@@ -285,18 +220,18 @@ export const createActions = ({ tx, uiControl, stage }) => {
   //   cachePoll,
   //   refetch,
   //   setTxInfoModal,
-  //   setProposalModal,
+  //   setModal,
   //   setGenericModal
   // };
   const actions = {
     closeProposalModal() {
-      uiControl.setProposalModal(false);
+      uiControl?.setModal?.(false);
     },
     openTxModal() {
-      uiControl.setTxInfoModal(true);
+      uiControl?.setTxInfoModal?.(true);
     },
     closeGenericModal() {
-      uiControl.setGenericModal({});
+      uiControl?.setGenericModal?.({});
     },
   };
 
