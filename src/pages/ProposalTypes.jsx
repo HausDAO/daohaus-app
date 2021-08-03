@@ -128,7 +128,7 @@ const PlaylistSelector = ({
     const playlist = playlists.find(list => list.id === id);
     openConfirmation({
       title: 'Delete Playlist',
-      header: `Are you sure you want to delete ${playlist?.name}?`,
+      header: `Are you sure you want to delete '${playlist?.name}'?`,
       onSubmit() {
         dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
         closeModal();

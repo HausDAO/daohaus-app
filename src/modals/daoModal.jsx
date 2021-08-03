@@ -80,7 +80,11 @@ const DaoModal = () => {
           >
             {lego?.title || title}
           </Box>
-          {header && <TextBox>{header}</TextBox>}
+          {header && (
+            <TextBox size='md' variant='label'>
+              {header}
+            </TextBox>
+          )}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
