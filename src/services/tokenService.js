@@ -13,7 +13,7 @@ export const TokenService = ({
 }) => {
   if (!tokenAddress)
     throw new Error(
-      'Token Service did not recieve a token address. If you are using submitTransaction(), please include a tokenAddress value in the values object',
+      'Token Service did not receive a token address. If you are using submitTransaction(), please include a tokenAddress value in the values object',
     );
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
