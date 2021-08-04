@@ -27,9 +27,13 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
           return vault.address === minion;
         })?.nfts;
       } else {
-        nfts = daoVaults?.reduce((acc, item) => [...acc, ...item.nfts], []);
+        nfts = daoVaults?.reduce((acc, item) => {
+          const nftsWithMinionAddress = item.nfts.map(n => {
+            return { ...n, minionAddress: item.address };
+          });
+          return [...acc, ...nftsWithMinionAddress];
+        }, []);
       }
-      console.log(nfts);
       setNftData(nfts);
       setNfts(nfts);
     }
@@ -72,7 +76,6 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
           result = result && collection === item.name;
         }
 
-        console.log('result', result);
         return result;
       });
       if (!deepEqual(filtered, nfts)) {
@@ -174,7 +177,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
             nfts.length > 0 &&
             nfts.map((nft, i) => (
               <WrapItem key={i}>
-                <NftCard nft={nft} />
+                <NftCard nft={nft} minion={minion || nft.minionAddress} />
               </WrapItem>
             ))}
         </Wrap>

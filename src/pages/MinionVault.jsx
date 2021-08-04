@@ -152,7 +152,7 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
-                  <NftCard nft={nft} key={i} isMember={isMember} />
+                  <NftCard key={i} nft={nft} minion={minion} />
                 ))}
               </>
             )}
