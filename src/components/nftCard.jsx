@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box, Flex, Image } from '@chakra-ui/react';
+import { Box, Flex, Image, AspectRatio } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
@@ -8,7 +8,7 @@ import NftViewModal from '../modals/nftViewModal';
 import NftCardActionMenu from './nftCardActionMenu';
 import { hydrateNftCard } from '../utils/nftVaults';
 
-const NftCard = ({ nft, minion }) => {
+const NftCard = ({ nft, minion, ...props }) => {
   const { setNftViewModal } = useOverlay();
 
   const hydratedNft = useMemo(() => {
@@ -22,7 +22,7 @@ const NftCard = ({ nft, minion }) => {
   };
 
   return (
-    <ContentBox w='100%' mt={5}>
+    <ContentBox mt={5} {...props}>
       <Flex
         direction='row'
         align='center'
@@ -30,7 +30,9 @@ const NftCard = ({ nft, minion }) => {
         w='100%'
         mb={5}
       >
-        <Box size='xs'>{hydratedNft?.metadata?.name || hydratedNft.name}</Box>
+        <Box size='xs' noOfLines={1}>
+          {hydratedNft?.metadata?.name || hydratedNft.name}
+        </Box>
 
         <Box
           size='xs'
@@ -44,14 +46,14 @@ const NftCard = ({ nft, minion }) => {
         </Box>
         <NftCardActionMenu nft={hydratedNft} minion={minion} />
       </Flex>
-      <Flex justify='center' w='100%' mb={5}>
+      <AspectRatio ratio={1} mb={5}>
         <Image
           src={hydratedNft?.metadata?.image}
-          height={[200, null, null, 300]}
+          margin='auto'
           fit='contain'
           objectFit='contain'
         />
-      </Flex>
+      </AspectRatio>
       <Flex
         direction='row'
         align='center'
