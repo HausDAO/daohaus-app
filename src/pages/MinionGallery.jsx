@@ -172,12 +172,16 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
             View Balances
           </Box> */}
         </Flex>
-        <Wrap flex={1} spacing={4} w='90%'>
+        <Wrap flex={1} spacing={4} w='100%'>
           {nfts &&
             nfts.length > 0 &&
             nfts.map((nft, i) => (
               <WrapItem key={i}>
-                <NftCard nft={nft} minion={minion || nft.minionAddress} />
+                <NftCard
+                  nft={nft}
+                  minion={minion || nft.minionAddress}
+                  width={['85vw', '85vw', 350, 350]}
+                />
               </WrapItem>
             ))}
         </Wrap>
