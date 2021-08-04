@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import deepEqual from 'deep-eql';
-import { Box, Text, Flex, Button, Icon, Select, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Flex,
+  Button,
+  Icon,
+  Select,
+  Image,
+  Input,
+} from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
 
-const NftSelect = ({ label }) => {
+const NftSelect = props => {
+  const { label, localForm, htmlFor, name } = props;
+  const { register, setValue } = localForm;
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
@@ -50,6 +61,10 @@ const NftSelect = ({ label }) => {
       }
     }
   }, [filter, nfts]);
+
+  useEffect(() => {
+    setValue(name, selected?.tokenAddress);
+  }, [selected]);
 
   const selectModal = (
     <GenericModal closeOnOverlayClick modalId='nftSelect'>
@@ -98,6 +113,7 @@ const NftSelect = ({ label }) => {
 
   return (
     <FieldWrapper>
+      <Input type='hidden' id={htmlFor} name={name} ref={register} />
       <Box>
         <Text mb={3}>{label}</Text>
         {selected ? (
