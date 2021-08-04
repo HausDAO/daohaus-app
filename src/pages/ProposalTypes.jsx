@@ -29,6 +29,8 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { areAnyFields } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { handleUpdateChanges } from '../reducers/proposalConfig';
+import ListSelector from '../components/ListSelector';
+import ListSelectorItem from '../components/ListSelectorItem';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
@@ -41,6 +43,9 @@ const handleSearch = (formsArr, str) => {
 const ProposalTypes = () => {
   const { daoProposals, daoMetaData } = useMetaData();
   const { injectedProvider, address, injectedChain } = useInjectedProvider();
+  const { openFormModal, closeModal } = useFormModal();
+  const { openConfirmation } = useConfirmation();
+  const { dispatchPropConfig } = useMetaData();
 
   const { playlists, allForms = {}, customData } = daoProposals || {};
   const [selectedList, setSelectedList] = useState('all');
@@ -57,7 +62,7 @@ const ProposalTypes = () => {
 
   const handleSaveConfig = async () => {
     setLoading(true);
-    const res = await handleUpdateChanges(daoProposals, {
+    await handleUpdateChanges(daoProposals, {
       injectedProvider,
       meta: daoMetaData,
       address,
@@ -65,6 +70,42 @@ const ProposalTypes = () => {
     });
     setLoading(false);
   };
+
+  const editPlaylist = id => {
+    openFormModal({
+      lego: CORE_FORMS.EDIT_PLAYLIST,
+      onSubmit: ({ values }) => {
+        const name = values?.title;
+        if (name && id) {
+          dispatchPropConfig({ action: 'EDIT_PLAYLIST', id, name });
+          closeModal();
+        }
+      },
+    });
+  };
+
+  const deletePlaylist = id => {
+    const playlist = playlists.find(list => list.id === id);
+    openConfirmation({
+      title: 'Delete Playlist',
+      header: `Are you sure you want to delete '${playlist?.name}'?`,
+      onSubmit() {
+        dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
+        closeModal();
+      },
+    });
+  };
+
+  const addPlaylist = () => {
+    openFormModal({
+      lego: CORE_FORMS.ADD_PLAYLIST,
+      onSubmit: ({ values }) => {
+        dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
+        closeModal();
+      },
+    });
+  };
+  console.log(allForms);
 
   return (
     <MainViewLayout isDao header='Proposal Types'>
@@ -76,11 +117,48 @@ const ProposalTypes = () => {
         </Flex>
         {daoProposals ? (
           <Flex>
-            <PlaylistSelector
-              allForms={allForms}
-              playlists={playlists}
-              selectedList={selectedList}
+            <ListSelector
               selectList={selectList}
+              headerSection={
+                <Flex justifyContent='flex-end' mb={4}>
+                  <Button variant='ghost' onClick={addPlaylist}>
+                    <TextBox mr={2} color='secondary.400'>
+                      New Playlist
+                    </TextBox>
+                  </Button>
+                </Flex>
+              }
+              topListItem={
+                <ListSelectorItem
+                  lists={allForms?.forms}
+                  id='all'
+                  isSelected={selectedList === 'all'}
+                  selectList={selectList}
+                  listLabel={{
+                    name: 'Proposals',
+                    length: allForms?.forms?.length,
+                  }}
+                />
+              }
+              divider='Playlists'
+              lists={playlists?.map(list => (
+                <ListSelectorItem
+                  key={list.id}
+                  isSelected={list.id === selectedList}
+                  listLabel={{ name: list.name, length: list.forms.length }}
+                  id={list.id}
+                  selectList={selectList}
+                  displayActions={
+                    list.id === selectedList && (
+                      <SelectorMenu
+                        id={list.id}
+                        onDelete={deletePlaylist}
+                        onEdit={editPlaylist}
+                      />
+                    )
+                  }
+                />
+              ))}
             />
             <ProposalList
               allForms={allForms}
@@ -100,173 +178,6 @@ const ProposalTypes = () => {
 };
 
 export default ProposalTypes;
-
-const PlaylistSelector = ({
-  allForms,
-  playlists,
-  selectedList,
-  selectList,
-}) => {
-  const { openFormModal, closeModal } = useFormModal();
-  const { openConfirmation } = useConfirmation();
-  const { dispatchPropConfig } = useMetaData();
-
-  const handleEditPlaylist = id => {
-    openFormModal({
-      lego: CORE_FORMS.EDIT_PLAYLIST,
-      onSubmit: ({ values }) => {
-        const name = values?.title;
-        if (name && id) {
-          dispatchPropConfig({ action: 'EDIT_PLAYLIST', id, name });
-          closeModal();
-        }
-      },
-    });
-  };
-
-  const handleDeletePlaylist = id => {
-    const playlist = playlists.find(list => list.id === id);
-    openConfirmation({
-      title: 'Delete Playlist',
-      header: `Are you sure you want to delete '${playlist?.name}'?`,
-      onSubmit() {
-        dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
-        closeModal();
-      },
-    });
-  };
-
-  const handleAddPlaylist = () => {
-    openFormModal({
-      lego: CORE_FORMS.ADD_PLAYLIST,
-      onSubmit: ({ values }) => {
-        dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
-        closeModal();
-      },
-    });
-  };
-
-  return (
-    <Flex
-      minW='250px'
-      maxW='400px'
-      w='100%'
-      height='fit-content'
-      flexDir='column'
-      mr={12}
-    >
-      <Flex justifyContent='flex-end' mb={4}>
-        <Button variant='ghost' onClick={handleAddPlaylist}>
-          <TextBox mr={2} color='secondary.400'>
-            New Playlist
-          </TextBox>
-        </Button>
-      </Flex>
-      <ContentBox p='0' border='none' mb={6} w='100%'>
-        <Flex flexDir='column'>
-          <PlaylistItem
-            {...allForms}
-            selectList={selectList}
-            isSelected={selectedList === 'all'}
-            isMutable={false}
-          />
-          <TextBox ml={6} my={6}>
-            Playlists
-          </TextBox>
-          {playlists?.map(list => (
-            <PlaylistItem
-              key={list.id}
-              {...list}
-              isMutable
-              isSelected={selectedList === list.id}
-              selectList={selectList}
-              handleEditPlaylist={handleEditPlaylist}
-              handleDeletePlaylist={handleDeletePlaylist}
-            />
-          ))}
-        </Flex>
-      </ContentBox>
-    </Flex>
-  );
-};
-
-const PlaylistItem = ({
-  name,
-  forms,
-  id,
-  isMutable,
-  isSelected,
-  selectList,
-  handleEditPlaylist,
-  handleDeletePlaylist,
-}) => {
-  const displayActions = isSelected && isMutable;
-  const handleClick = () => {
-    selectList(id);
-  };
-  const handleClickEdit = e => {
-    e.stopPropagation();
-    handleEditPlaylist(id);
-  };
-  const handleClickDelete = e => {
-    e.stopPropagation();
-    handleDeletePlaylist(id);
-  };
-
-  return (
-    <Flex
-      position='relative'
-      p={6}
-      flexDir='column'
-      onClick={handleClick}
-      transition='.2s all'
-    >
-      <Box
-        position='absolute'
-        top='0'
-        right='0'
-        left='0'
-        bottom='0'
-        zIndex='0'
-        opacity='0.7'
-        bg={isSelected ? 'primary.600' : 'transparent'}
-        _hover={{ bg: 'primary.600' }}
-      />
-      <Flex
-        justifyContent='space-between'
-        mb={displayActions ? 2 : 0}
-        zIndex='10'
-        pointerEvents='none'
-      >
-        <TextBox textTransform='none' size='lg'>
-          {name}
-        </TextBox>
-        <TextBox size='lg'>{forms?.length}</TextBox>
-      </Flex>
-      {displayActions && (
-        <Flex zIndex='10'>
-          <Icon
-            as={VscGear}
-            color='secondary.400'
-            w='20px'
-            h='20px'
-            mr={4}
-            cursor='pointer'
-            onClick={handleClickEdit}
-          />
-          <Icon
-            as={FiTrash2}
-            color='secondary.400'
-            w='20px'
-            h='20px'
-            cursor='pointer'
-            onClick={handleClickDelete}
-          />
-        </Flex>
-      )}
-    </Flex>
-  );
-};
 
 const ProposalList = ({
   playlists,
@@ -464,6 +375,37 @@ const ProposalMenuList = ({
           ))}
         </MenuList>
       </Menu>
+    </Flex>
+  );
+};
+const SelectorMenu = ({ onEdit, onDelete, id }) => {
+  const handleClickEdit = e => {
+    e.stopPropagation();
+    onEdit(id);
+  };
+  const handleClickDelete = e => {
+    e.stopPropagation();
+    onDelete(id);
+  };
+  return (
+    <Flex zIndex='10'>
+      <Icon
+        as={VscGear}
+        color='secondary.400'
+        w='20px'
+        h='20px'
+        mr={4}
+        cursor='pointer'
+        onClick={handleClickEdit}
+      />
+      <Icon
+        as={FiTrash2}
+        color='secondary.400'
+        w='20px'
+        h='20px'
+        cursor='pointer'
+        onClick={handleClickDelete}
+      />
     </Flex>
   );
 };
