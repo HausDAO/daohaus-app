@@ -2,6 +2,8 @@ import { Box, Flex } from '@chakra-ui/layout';
 import React from 'react';
 import TextBox from './TextBox';
 
+const getBorderRadius = () => {};
+
 const ListSelectorItem = ({
   selectList,
   isSelected,
@@ -9,8 +11,11 @@ const ListSelectorItem = ({
   listLabel = { name: 'listname', length: 0 },
   customLabel,
   id,
+  isBottom,
+  isTop,
 }) => {
   const handleSelectList = () => selectList(id);
+
   return (
     <Flex
       position='relative'
@@ -27,6 +32,8 @@ const ListSelectorItem = ({
         bottom='0'
         zIndex='0'
         opacity='0.7'
+        borderTopRadius={isTop && 'lg'}
+        borderBottomRadius={isBottom && 'lg'}
         bg={isSelected ? 'primary.600' : 'transparent'}
         _hover={{ bg: 'primary.600' }}
       />
@@ -38,9 +45,9 @@ const ListSelectorItem = ({
           pointerEvents='none'
         >
           <TextBox textTransform='none' size='lg'>
-            {listLabel?.name}
+            {listLabel?.left}
           </TextBox>
-          <TextBox size='lg'>{listLabel?.length}</TextBox>
+          <TextBox size='lg'>{listLabel?.right}</TextBox>
         </Flex>
       )}
       {customLabel}

@@ -18,7 +18,6 @@ import { FiTrash2 } from 'react-icons/fi';
 
 import { RiMore2Line, RiStarFill } from 'react-icons/ri';
 import { HiPencil, HiRefresh } from 'react-icons/hi';
-import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import { CORE_FORMS, FORM } from '../data/forms';
@@ -31,6 +30,8 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { handleUpdateChanges } from '../reducers/proposalConfig';
 import ListSelector from '../components/ListSelector';
 import ListSelectorItem from '../components/ListSelectorItem';
+import List from '../components/list';
+import ListItem from '../components/listItem';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
@@ -39,6 +40,7 @@ const handleSearch = (formsArr, str) => {
     FORM[formId].title.toLowerCase().includes(str),
   );
 };
+const isLastItem = (lists, index) => index === lists?.length - 1;
 
 const ProposalTypes = () => {
   const { daoProposals, daoMetaData } = useMetaData();
@@ -48,15 +50,15 @@ const ProposalTypes = () => {
   const { dispatchPropConfig } = useMetaData();
 
   const { playlists, allForms = {}, customData } = daoProposals || {};
-  const [selectedList, setSelectedList] = useState('all');
+  const [selectedListID, setListID] = useState('all');
   const [loading, setLoading] = useState(false);
 
   const selectList = id => {
     if (!id) return;
-    if (id === selectedList) {
-      setSelectedList(null);
+    if (id === selectedListID) {
+      setListID(null);
     } else {
-      setSelectedList(id);
+      setListID(id);
     }
   };
 
@@ -105,7 +107,6 @@ const ProposalTypes = () => {
       },
     });
   };
-  console.log(allForms);
 
   return (
     <MainViewLayout isDao header='Proposal Types'>
@@ -117,56 +118,20 @@ const ProposalTypes = () => {
         </Flex>
         {daoProposals ? (
           <Flex>
-            <ListSelector
+            <PlaylistSelector
               selectList={selectList}
-              headerSection={
-                <Flex justifyContent='flex-end' mb={4}>
-                  <Button variant='ghost' onClick={addPlaylist}>
-                    <TextBox mr={2} color='secondary.400'>
-                      New Playlist
-                    </TextBox>
-                  </Button>
-                </Flex>
-              }
-              topListItem={
-                <ListSelectorItem
-                  lists={allForms?.forms}
-                  id='all'
-                  isSelected={selectedList === 'all'}
-                  selectList={selectList}
-                  listLabel={{
-                    name: 'Proposals',
-                    length: allForms?.forms?.length,
-                  }}
-                />
-              }
-              divider='Playlists'
-              lists={playlists?.map(list => (
-                <ListSelectorItem
-                  key={list.id}
-                  isSelected={list.id === selectedList}
-                  listLabel={{ name: list.name, length: list.forms.length }}
-                  id={list.id}
-                  selectList={selectList}
-                  displayActions={
-                    list.id === selectedList && (
-                      <SelectorMenu
-                        id={list.id}
-                        onDelete={deletePlaylist}
-                        onEdit={editPlaylist}
-                      />
-                    )
-                  }
-                />
-              ))}
+              addPlaylist={addPlaylist}
+              allForms={allForms}
+              selectedListID={selectedListID}
+              playlists={playlists}
+              deletePlaylist={deletePlaylist}
+              editPlaylist={editPlaylist}
             />
             <ProposalList
-              allForms={allForms}
-              forms={selectedList?.forms}
               playlists={playlists}
               customData={customData}
-              selectedList={selectedList}
-              // toggleFavorite={toggleFavorite}
+              selectedListID={selectedListID}
+              allForms={allForms}
             />
           </Flex>
         ) : (
@@ -179,30 +144,81 @@ const ProposalTypes = () => {
 
 export default ProposalTypes;
 
-const ProposalList = ({
-  playlists,
-  toggleFavorite,
-  customData,
-  selectedList,
+const PlaylistSelector = ({
+  selectList,
+  addPlaylist,
   allForms,
+  selectedListID,
+  playlists,
+  deletePlaylist,
+  editPlaylist,
 }) => {
+  return (
+    <ListSelector
+      selectList={selectList}
+      headerSection={
+        <Flex justifyContent='flex-end' mb={4}>
+          <Button variant='ghost' onClick={addPlaylist}>
+            <TextBox mr={2} color='secondary.400'>
+              New Playlist
+            </TextBox>
+          </Button>
+        </Flex>
+      }
+      topListItem={
+        <ListSelectorItem
+          lists={allForms?.forms}
+          id='all'
+          isSelected={selectedListID === 'all'}
+          selectList={selectList}
+          listLabel={{
+            left: 'Proposals',
+            right: allForms?.forms?.length,
+          }}
+          isTop
+        />
+      }
+      divider='Playlists'
+      lists={playlists?.map((list, index) => (
+        <ListSelectorItem
+          key={list.id}
+          isSelected={list.id === selectedListID}
+          listLabel={{ left: list.name, right: list.forms.length }}
+          id={list.id}
+          selectList={selectList}
+          isBottom={isLastItem(playlists, index)}
+          displayActions={
+            list.id === selectedListID && (
+              <SelectorMenu
+                id={list.id}
+                onDelete={deletePlaylist}
+                onEdit={editPlaylist}
+              />
+            )
+          }
+        />
+      ))}
+    />
+  );
+};
+
+const ProposalList = ({ playlists, customData, selectedListID, allForms }) => {
   const { openFormModal, closeModal } = useFormModal();
   const { dispatchPropConfig } = useMetaData();
-
   const [searchStr, setSearchStr] = useState(null);
 
-  const forms = useMemo(() => {
-    if (!playlists || !selectedList) return [];
-    if (selectedList === 'all') {
+  const proposalList = useMemo(() => {
+    if (!playlists || !selectedListID || !allForms) return [];
+    if (selectedListID === 'all') {
       return handleSearch(allForms.forms, searchStr);
     }
     return handleSearch(
-      playlists.find(list => list.id === selectedList)?.forms,
+      playlists.find(list => list.id === selectedListID)?.forms,
       searchStr,
     );
-  }, [selectedList, playlists, searchStr]);
+  }, [selectedListID, playlists, allForms, searchStr]);
 
-  const handleEditProposal = formId => {
+  const handleEditProposal = formId =>
     openFormModal({
       lego: CORE_FORMS.EDIT_PROPOSAL,
       onSubmit: ({ values }) => {
@@ -215,90 +231,53 @@ const ProposalList = ({
         closeModal();
       },
     });
-  };
-  const handleRestoreProposal = formId => {
+
+  const handleRestoreProposal = formId =>
     dispatchPropConfig({ action: 'RESTORE_PROPOSAL', formId });
-  };
 
-  const handleTogglePlaylist = (formId, listId, isListed) => {
+  const handleTogglePlaylist = (formId, listId, isListed) =>
     dispatchPropConfig({ action: 'TOGGLE_PLAYLIST', listId, formId, isListed });
-  };
 
-  const handleTypeSearch = e => {
-    setSearchStr(e.target.value.toLowerCase());
-  };
+  const handleTypeSearch = e => setSearchStr(e.target.value.toLowerCase());
 
   return (
-    <Flex flexDir='column' w='100%'>
-      <Flex mb={4}>
-        <TextBox p={2} mr='auto'>
-          Proposals
-        </TextBox>
-
-        <InputGroup w='200px'>
-          <Input onChange={handleTypeSearch} placeholder='Search Proposals' />
-        </InputGroup>
-      </Flex>
-      {forms?.map(formId => (
-        <ProposalListItem
-          {...FORM[formId]}
-          key={formId}
-          customFormData={customData?.[formId]}
-          toggleFavorite={toggleFavorite}
-          handleEditProposal={handleEditProposal}
-          handleRestoreProposal={handleRestoreProposal}
-          handleTogglePlaylist={handleTogglePlaylist}
-          playlists={playlists}
+    <List
+      headerSection={
+        <>
+          <TextBox p={2} mr='auto'>
+            Proposals
+          </TextBox>
+          <InputGroup w='200px'>
+            <Input onChange={handleTypeSearch} placeholder='Search Proposals' />
+          </InputGroup>
+        </>
+      }
+      list={proposalList?.map(proposalID => (
+        <ListItem
+          {...FORM[proposalID]}
+          customFormData={customData?.[proposalID]}
+          hasBeenEdited={
+            customData?.[proposalID] &&
+            areAnyFields('truthy', customData[proposalID])
+          }
+          key={proposalID}
+          menuSection={
+            <Flex flexDir='column' justifyContent='space-between'>
+              <ProposalMenuList
+                formId={proposalID}
+                playlists={playlists}
+                handleTogglePlaylist={handleTogglePlaylist}
+                handleEditProposal={handleEditProposal}
+                handleRestoreProposal={handleRestoreProposal}
+              />
+            </Flex>
+          }
         />
       ))}
-    </Flex>
+    />
   );
 };
 
-const ProposalListItem = ({
-  title,
-  id,
-  description,
-  customFormData,
-  handleEditProposal,
-  handleRestoreProposal,
-  handleTogglePlaylist,
-  playlists,
-}) => {
-  const hasBeenEdited = useMemo(
-    () => customFormData && areAnyFields('truthy', customFormData),
-    [customFormData],
-  );
-
-  return (
-    <ContentBox mb={4}>
-      <Flex justifyContent='space-between'>
-        {/* <Image h='70px' minW='70px' mb={6} /> */}
-        <Box>
-          <TextBox mb={2}>{customFormData?.title || title}</TextBox>
-          <Box fontFamily='body' size='sm' color='whiteAlpha.800'>
-            {customFormData?.description || description}
-          </Box>
-        </Box>
-        <Flex flexDir='column' justifyContent='space-between'>
-          <ProposalMenuList
-            handleEditProposal={handleEditProposal}
-            handleRestoreProposal={handleRestoreProposal}
-            handleTogglePlaylist={handleTogglePlaylist}
-            playlists={playlists}
-            formId={id}
-            hasBeenEdited={hasBeenEdited}
-          />
-          {hasBeenEdited && (
-            <TextBox variant='body' size='xs' opacity={0.6} fontStyle='italic'>
-              edited
-            </TextBox>
-          )}
-        </Flex>
-      </Flex>
-    </ContentBox>
-  );
-};
 const ProposalMenuList = ({
   handleEditProposal,
   handleRestoreProposal,
