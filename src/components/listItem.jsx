@@ -15,27 +15,7 @@ const ListItem = ({ customFormData, title, description, menuSection }) => {
               {customFormData?.description || description}
             </Box>
           </Box>
-          <Flex flexDir='column' justifyContent='space-between'>
-            {menuSection}
-            {/* <ProposalMenuList
-              // handleEditProposal={handleEditProposal}
-              // handleRestoreProposal={handleRestoreProposal}
-              // handleTogglePlaylist={handleTogglePlaylist}
-              // playlists={playlists}
-              // formId={id}
-              // hasBeenEdited={hasBeenEdited}
-            /> */}
-            {/* {hasBeenEdited && (
-              <TextBox
-                variant='body'
-                size='xs'
-                opacity={0.6}
-                fontStyle='italic'
-              >
-                edited
-              </TextBox>
-            )} */}
-          </Flex>
+          {menuSection}
         </Flex>
       </ContentBox>
     </ChakraListItem>

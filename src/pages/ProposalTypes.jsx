@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Flex, Button, Spinner } from '@chakra-ui/react';
 
@@ -12,6 +12,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { handleUpdateChanges } from '../reducers/proposalConfig';
 import PlaylistSelector from './PlaylistSelector';
 import ProposalList from './ProposalList';
+import SaveButton from '../components/saveButton';
 
 const ProposalTypes = () => {
   const { daoProposals, daoMetaData } = useMetaData();
@@ -20,7 +21,8 @@ const ProposalTypes = () => {
   const { openConfirmation } = useConfirmation();
   const { dispatchPropConfig } = useMetaData();
 
-  const { playlists, allForms = {}, customData } = daoProposals || {};
+  const { playlists, allForms = {}, customData, hasChanged } =
+    daoProposals || {};
   const [selectedListID, setListID] = useState('all');
   const [loading, setLoading] = useState(false);
 
@@ -82,10 +84,15 @@ const ProposalTypes = () => {
   return (
     <MainViewLayout isDao header='Proposal Types'>
       <Flex flexDir='column' w='95%'>
-        <Flex justifyContent='flex-end' mb={9}>
-          <Button size='lg' onClick={handleSaveConfig} disabled={loading}>
+        <Flex justifyContent='flex-end' mb={12}>
+          <SaveButton
+            size='md'
+            watch={daoProposals}
+            onClick={handleSaveConfig}
+            disabled={loading}
+          >
             SAVE CHANGES {loading && <Spinner ml={3} />}
-          </Button>
+          </SaveButton>
         </Flex>
         {daoProposals ? (
           <Flex>

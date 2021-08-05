@@ -2,7 +2,6 @@ import { put } from '../utils/metadata';
 import { createPlaylist, generateNewConfig } from '../utils/playlists';
 
 const handleInit = payload => {
-  console.log(payload);
   if (payload?.proposalConfig) {
     return payload.proposalConfig;
   }
@@ -45,7 +44,6 @@ const handleRemoveCustomData = (state, params) => ({
 });
 const handleAddToPlaylist = (state, params) => {
   const newPlaylists = state.playlists.map(list => {
-    console.log(`list`, list);
     if (list.id === params.listId) {
       return {
         ...list,
@@ -56,7 +54,6 @@ const handleAddToPlaylist = (state, params) => {
     }
     return list;
   });
-  console.log(`newPlaylists`, newPlaylists);
   return {
     ...state,
     playlists: newPlaylists,
