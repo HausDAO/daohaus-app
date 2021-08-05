@@ -298,3 +298,5 @@ export const getKeyedArray = (obj, keyName = 'field') => {
   }
   return Object.entries(obj).map(item => ({ ...item[1], [keyName]: item[0] }));
 };
+
+export const isLastItem = (list, index) => index === list?.length - 1;
