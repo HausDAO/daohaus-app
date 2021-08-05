@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
@@ -27,6 +27,12 @@ const BoostLaunchWrapper = ({ boost }) => {
   const { daoid, daochain } = useParams();
   const { refetchMetaData } = useMetaData();
   const { submitTransaction } = useTX();
+
+  useEffect(() => {
+    return () => {
+      setLoading(false);
+    };
+  }, []);
 
   const handleLaunch = async boostMetadata => {
     setLoading(true);

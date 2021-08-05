@@ -1,3 +1,4 @@
+import Web3 from 'web3';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST, PROPOSAL_BY_ID } from '../graphQL/proposal-queries';
 import {
@@ -13,7 +14,7 @@ import {
   MEMBER_DELEGATE_KEY,
 } from '../graphQL/member-queries';
 import { GET_TRANSMUTATIONS, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
-import { getGraphEndpoint } from '../utils/chain';
+import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import {
   MINION_ACTION_FUNCTION_NAMES,
   PROPOSAL_TYPES,
@@ -46,6 +47,23 @@ export const pollBoostTXHash = async ({ chainID, txHash }) => {
       id: txHash,
     },
   });
+};
+
+export const pollWrapNZap = async ({ chainID, contractAddress }) => {
+  const rpcUrl = supportedChains[chainID].rpc_url;
+  const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+  const pollFinal = await web3.eth.getBalance(
+    contractAddress,
+    (error, result) => {
+      if (error) {
+        console.log('Error detecting Wrap-N-Zap poke balance.', error);
+        return false;
+      }
+      console.log('Wrap-N-Zap Poke Balance', result);
+      return result;
+    },
+  );
+  return pollFinal;
 };
 
 export const pollProposals = async ({ daoID, chainID }) => {
