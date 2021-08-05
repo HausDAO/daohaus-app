@@ -19,6 +19,8 @@ export const INFO_TEXT = {
   NFT_PRICE: 'Price in xDai',
   MINION_QUORUM:
     'Once this percentage of DAO shares have votes yes this minion action will be executable.',
+  NIFTY_REPAYMENT_REQUEST:
+    'This proposal requires the selected minion to hold the XDAI funds to purchase the NiftyInk. Enter that amount in WXDAI to repay the minion from the DAO treasury.',
 };
 
 export const FIELD = {
@@ -219,6 +221,23 @@ export const FIELD = {
     placeholder: '50',
     info: INFO_TEXT.MINION_QUORUM,
     expectType: 'number',
+  },
+  NIFTY_MINION_PAYMENT_REQUEST: {
+    type: 'paymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Minion Repayment Requested',
+    info: INFO_TEXT.NIFTY_REPAYMENT_REQUEST,
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
+  },
+  NIFTY_INK_URL: {
+    type: 'targetInk',
+    htmlFor: 'targetInk',
+    name: 'targetInk',
+    label: 'Target NiftyInk Url',
+    expectType: 'any',
   },
 };
 

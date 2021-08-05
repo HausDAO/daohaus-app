@@ -22,6 +22,11 @@ export const CONTRACTS = {
     abiName: 'VANILLA_MINION',
     contractAddress: '.values.selectedMinion',
   },
+  SELECTED_MINION_NIFTY: {
+    location: 'local',
+    abiName: 'NIFTY_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
   ERC_20: {
     location: 'local',
     abiName: 'ERC_20',
@@ -139,6 +144,13 @@ export const DETAILS = {
     description: '.values.description',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
+  },
+  MINION_BUY_NIFTY: {
+    title: 'Minion Buys a NiftyInk',
+    description: '.localValues.metadata.name',
+    link: '.localValues.metadata.image',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.NIFTY,
   },
 };
 
@@ -511,5 +523,30 @@ export const TX = {
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',
     gatherArgs: ['.contextData.daoid', '.values.minionName'],
+  },
+  MINION_BUY_NIFTY_INK: {
+    contract: CONTRACTS.SELECTED_MINION_NIFTY,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Buy NiftyInk',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '0xcf964c89f509a8c0ac36391c5460df94b91daba5',
+      '.values.paymentRequested',
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.NIFTY_INK,
+        fnName: 'buyInk',
+        gatherArgs: ['.localValues.ipfsHash'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_BUY_NIFTY,
+      },
+      '.values.paymentToken',
+      '.values.paymentRequested',
+    ],
   },
 };

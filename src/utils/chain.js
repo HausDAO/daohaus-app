@@ -275,3 +275,5 @@ export const EIP3085 = {
     '0x4': true,
   },
 };
+
+export const NIFTYINK_ADDRESS = '0xcf964c89f509a8c0ac36391c5460df94b91daba5';

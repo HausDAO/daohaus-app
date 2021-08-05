@@ -13,6 +13,7 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
   // const { daoMetaData } = useMetaData();
 
   const { address } = useInjectedProvider();
+
   const navLinks =
     dao?.chainID && dao?.daoID && dao.daoProposals
       ? generateDaoLinks(dao.chainID, dao.daoID, dao.daoProposals)
