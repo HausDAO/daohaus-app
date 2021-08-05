@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
@@ -18,6 +18,12 @@ const PokeTokenButton = ({ wnzAddress }) => {
   const [loading, setLoading] = useState(false);
 
   const canSync = !isDelegating(daoMember) || delegate;
+
+  useEffect(() => {
+    return () => {
+      setLoading(false);
+    };
+  }, []);
 
   const handlePoke = async () => {
     setLoading(true);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
@@ -19,6 +19,12 @@ const SyncTokenButton = ({ token }) => {
   const [loading, setLoading] = useState(false);
 
   const canSync = !isDelegating(daoMember) || delegate;
+
+  useEffect(() => {
+    return () => {
+      setLoading(false);
+    };
+  }, []);
 
   const handleSync = async () => {
     setLoading(true);
