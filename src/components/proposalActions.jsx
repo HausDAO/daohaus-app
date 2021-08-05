@@ -372,13 +372,14 @@ const ProposalVote = ({
                           {+proposal?.yesShares > +proposal?.noShares && (
                             <Box>
                               Currently Passing
-                              {proposal?.minion?.minionType ===
-                                MINION_TYPES.NIFTY && (
-                                <>
-                                  {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
-                                  <MinionExecute proposal={proposal} early />
-                                </>
-                              )}
+                              {proposal.proposalType !== 'Funding Proposal' &&
+                                proposal?.minion?.minionType ===
+                                  MINION_TYPES.NIFTY && (
+                                  <>
+                                    {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
+                                    <MinionExecute proposal={proposal} early />
+                                  </>
+                                )}
                             </Box>
                           )}
                           {+proposal?.yesShares === 0 &&
@@ -405,6 +406,7 @@ const ProposalVote = ({
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.yesShares > +proposal?.noShares &&
+                            proposal.proposalType !== 'Funding Proposal' &&
                             proposal?.minion?.minionType ===
                               MINION_TYPES.NIFTY && (
                               <>
@@ -505,9 +507,9 @@ const ProposalVote = ({
               </Flex>
             </Flex>
           ))}
-        {proposal?.status === 'Passed' && proposal?.minionAddress && (
-          <MinionExecute proposal={proposal} />
-        )}
+        {proposal?.status === 'Passed' &&
+          proposal.proposalType !== 'Funding Proposal' &&
+          proposal?.minionAddress && <MinionExecute proposal={proposal} />}
       </ContentBox>
     </>
   );

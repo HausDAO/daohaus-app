@@ -234,6 +234,24 @@ const MinionBox = ({ proposal, daoOverview }) => {
       />
     );
   }
+  // handles case of a funding proposal sending funds to a minion address
+  if (
+    (minionType === MINION_TYPES.VANILLA ||
+      minionType === MINION_TYPES.NIFTY) &&
+    proposal.proposalType === 'Funding Proposal'
+  ) {
+    return (
+      <MemberIndicator
+        address={proposal?.minionAddress}
+        label='minion'
+        tooltip
+        tooltipText={TIP_LABELS.FUNDING_MINION_PROPOSAL}
+        link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
+        shouldFetchProfile={false}
+        name={minionName}
+      />
+    );
+  }
   if (
     minionType === MINION_TYPES.VANILLA ||
     minionType === MINION_TYPES.NIFTY
