@@ -39,6 +39,11 @@ export const PLAYLISTS = [
       'SIGNAL',
     ],
   },
+  {
+    name: 'Rarible',
+    id: 'rarible',
+    forms: ['SELL_NFT'],
+  },
 ];
 
 export const generateNewConfig = daoMetaData => {

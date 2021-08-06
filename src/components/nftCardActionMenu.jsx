@@ -15,9 +15,11 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import GenericModal from '../modals/genericModal';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const NftCardActionMenu = ({ nft, loading, isMember }) => {
-  const { minion, daochain } = useParams();
+const NftCardActionMenu = ({ nft, minion }) => {
+  const { daochain } = useParams();
+  const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
   const { setGenericModal } = useOverlay();
   const [modalData, setModalData] = useState(null);
@@ -52,7 +54,6 @@ const NftCardActionMenu = ({ nft, loading, isMember }) => {
           size='sm'
           color='secondary.400'
           _hover={{ cursor: 'pointer' }}
-          isDisabled={loading}
         >
           <Icon
             as={BsThreeDots}

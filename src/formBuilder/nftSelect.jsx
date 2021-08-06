@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import deepEqual from 'deep-eql';
-import { Box, Text, Flex, Button, Icon, Select, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Flex,
+  Button,
+  Icon,
+  Select,
+  Image,
+  Input,
+} from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
 
-const NftSelect = ({ label }) => {
+const NftSelect = props => {
+  const { label, localForm, htmlFor, name } = props;
+  const { register, setValue } = localForm;
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
@@ -51,6 +62,22 @@ const NftSelect = ({ label }) => {
     }
   }, [filter, nfts]);
 
+  useEffect(() => {
+    setValue(name, selected?.tokenAddress);
+  }, [selected]);
+
+  const openModal = () => {
+    setGenericModal({ nftSelect: true });
+  };
+
+  const selectNft = e => {
+    const nft = nfts[e.nativeEvent.target.value];
+    setGenericModal({});
+    setSelected(nft);
+  };
+
+  const onFilterChange = e => setFilter(e.nativeEvent.target.value);
+
   const selectModal = (
     <GenericModal closeOnOverlayClick modalId='nftSelect'>
       <Box>
@@ -64,10 +91,7 @@ const NftSelect = ({ label }) => {
         >
           Select An NFT
         </Box>
-        <Select
-          placeholder='Filter by Collection'
-          onChange={e => setFilter(e.nativeEvent.target.value)}
-        >
+        <Select placeholder='Filter by Collection' onChange={onFilterChange}>
           {collections?.map(collection => (
             <option value={collection} key={collection}>
               {collection}
@@ -80,12 +104,7 @@ const NftSelect = ({ label }) => {
               <Text textTransform='uppercase' fontFamily='header'>
                 {nft.metadata.name}
               </Text>
-              <Button
-                onClick={() => {
-                  setGenericModal({});
-                  setSelected(nft);
-                }}
-              >
+              <Button value={i} onClick={selectNft}>
                 Select
               </Button>
             </Flex>
@@ -98,13 +117,12 @@ const NftSelect = ({ label }) => {
 
   return (
     <FieldWrapper>
+      <Input type='hidden' id={htmlFor} name={name} ref={register} />
       <Box>
         <Text mb={3}>{label}</Text>
         {selected ? (
           <Image
-            onClick={() => {
-              setGenericModal({ nftSelect: true });
-            }}
+            onClick={openModal}
             _hover={{
               opacity: 0.5,
               cursor: 'pointer',
@@ -114,12 +132,7 @@ const NftSelect = ({ label }) => {
             h='300px'
           />
         ) : (
-          <Button
-            variant='nftSelect'
-            onClick={() => {
-              setGenericModal({ nftSelect: true });
-            }}
-          >
+          <Button variant='nftSelect' onClick={openModal}>
             <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
           </Button>
         )}

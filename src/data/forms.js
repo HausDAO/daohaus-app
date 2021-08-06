@@ -305,12 +305,14 @@ export const FORM = {
     fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   SELL_NFT: {
+    id: 'SELL_NFT',
     title: 'Sell NFT on Rarible',
     subtitle: 'Post an NFT for sale on Rarible',
+    description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.RARIBLE,
     tx: null,
-    fields: [[FIELD.NFT_SELECT], [FIELD.SET_PRICE, FIELD.DATE_RANGE]],
+    fields: [[FIELD.NFT_SELECT], [FIELD.DATE_RANGE, FIELD.SET_PRICE]],
   },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
