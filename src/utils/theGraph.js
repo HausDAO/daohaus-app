@@ -197,6 +197,8 @@ const completeQueries = {
         ),
       };
 
+      console.log('resolvedActivity', resolvedActivity);
+
       if (setter.setDaoActivities) {
         setter.setDaoActivities(resolvedActivity);
       }
@@ -298,14 +300,6 @@ export const hubChainQuery = async ({
         query,
         variables,
       });
-
-      if (
-        chain.endpoint ===
-        'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus'
-      ) {
-        console.log('query', query);
-        console.log('chainData', chainData);
-      }
 
       const withMetaData = chainData?.membersHub
         .map(dao => {

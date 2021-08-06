@@ -29,6 +29,7 @@ const searchData = (data, fields, shouldThrow = true) => {
   const newData = data[fields[0]];
   if (newData == null) {
     if (shouldThrow) {
+      console.log('data, fields', data, fields);
       throw new Error(`txHelpers => searchData()`);
     } else {
       return false;

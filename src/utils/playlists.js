@@ -12,6 +12,16 @@ const BOOST_PLAYLISTS = [
     id: 'test',
     forms: ['CRASH', 'CAT'],
   },
+  {
+    name: 'Rarible',
+    id: 'rarible',
+    forms: ['SELL_NFT'],
+  },
+  {
+    name: 'NiftyInk',
+    id: 'nifty minion',
+    forms: ['BUY_NIFTY_INK'],
+  },
 ];
 
 export const defaultProposals = {
@@ -37,11 +47,6 @@ export const PLAYLISTS = [
       'LOOT_GRAB',
       'SIGNAL',
     ],
-  },
-  {
-    name: 'Rarible',
-    id: 'rarible',
-    forms: ['SELL_NFT'],
   },
 ];
 
