@@ -4,9 +4,6 @@ import React from 'react';
 import TextBox from './TextBox';
 
 const List = ({ list, headerSection }) => {
-  // const useMemo(() => {
-  //   if()
-  // }, [selectedList ])
   return (
     <Flex flexDir='column' w='100%'>
       <Flex mb={4}>{headerSection}</Flex>

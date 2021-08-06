@@ -17,12 +17,11 @@ import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
 
 const ProposalTypes = () => {
-  const { daoProposals, daoMetaData } = useMetaData();
+  const { daoProposals, daoMetaData, dispatchPropConfig } = useMetaData();
   const { injectedProvider, address, injectedChain } = useInjectedProvider();
   const { openFormModal, closeModal } = useFormModal();
   const { successToast, errorToast } = useOverlay();
   const { openConfirmation } = useConfirmation();
-  const { dispatchPropConfig } = useMetaData();
 
   const { playlists, allForms = {}, customData } = daoProposals || {};
   const [selectedListID, setListID] = useState('all');

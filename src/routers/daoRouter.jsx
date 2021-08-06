@@ -38,6 +38,7 @@ import Vaults from '../pages/Vaults';
 import MinionVault from '../pages/MinionVault';
 import MinionGallery from '../pages/MinionGallery';
 import Treasury from '../pages/Treasury';
+import MarketPlaceV0 from '../pages/MarketPlaceV0';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -132,12 +133,13 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/settings/boosts`}>
-          <Boosts
+          <MarketPlaceV0 />
+          {/* <Boosts
             daoOverview={daoOverview}
             daoMetaData={daoMetaData}
             customTerms={customTerms}
             daoMember={daoMember}
-          />
+          /> */}
         </Route>
         <Route exact path={`${path}/staking`}>
           <Redirect to='/' />

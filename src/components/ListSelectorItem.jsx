@@ -2,13 +2,11 @@ import { Box, Flex } from '@chakra-ui/layout';
 import React from 'react';
 import TextBox from './TextBox';
 
-const getBorderRadius = () => {};
-
 const ListSelectorItem = ({
   selectList,
   isSelected,
   displayActions,
-  listLabel = { name: 'listname', length: 0 },
+  listLabel,
   customLabel,
   id,
   isBottom,
