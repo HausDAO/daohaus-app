@@ -11,8 +11,8 @@ import { NIFTYINK_ADDRESS } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const NiftyInkUrl = props => {
-  const { localForm, localValues } = props;
-  const { watch, setValue } = localForm;
+  const { localForm } = props;
+  const { watch, setValue, register } = localForm;
   const { daochain } = useParams();
   const { injectedProvider } = useInjectedProvider();
   const [nftData, setNftData] = useState(null);
@@ -20,6 +20,11 @@ const NiftyInkUrl = props => {
   const [invalidLink, setInvalidLink] = useState(false);
 
   const targetInk = watch('targetInk');
+
+  useEffect(() => {
+    register('nftMetadata');
+    register('ipfsHash');
+  }, []);
 
   useEffect(() => {
     const getNiftyData = async () => {
@@ -53,8 +58,8 @@ const NiftyInkUrl = props => {
         );
 
         setNftData({ tokenId, tokenUri, ipfsHash, metadata });
-        localValues.metadata = metadata;
-        localValues.ipfsHash = ipfsHash;
+        setValue('nftMetadata', metadata);
+        setValue('ipfsHash', ipfsHash);
         setNftLoading(false);
       } catch (err) {
         console.log('nifty ink err', err);

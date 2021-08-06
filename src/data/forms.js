@@ -355,8 +355,6 @@ export const FORM = {
     minionType: MINION_TYPES.NIFTY,
     tx: TX.MINION_BUY_NIFTY_INK,
     required: ['selectedMinion', 'targetInk', 'paymentRequested'],
-    // this is a little odd. i need it to set some vals later based on a field input.
-    localValues: { ipfsHash: null, metadata: null },
     fields: [
       [FIELD.NIFTY_INK_URL],
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],

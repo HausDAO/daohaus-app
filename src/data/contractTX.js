@@ -147,8 +147,8 @@ export const DETAILS = {
   },
   MINION_BUY_NIFTY: {
     title: 'Minion Buys a NiftyInk',
-    description: '.localValues.metadata.name',
-    link: '.localValues.metadata.image',
+    description: '.values.nftMetadata.name',
+    link: '.values.nftMetadata.image',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.NIFTY,
   },
@@ -539,7 +539,7 @@ export const TX = {
         type: 'encodeHex',
         contract: CONTRACTS.NIFTY_INK,
         fnName: 'buyInk',
-        gatherArgs: ['.localValues.ipfsHash'],
+        gatherArgs: ['.values.ipfsHash'],
       },
       {
         type: 'detailsToJSON',

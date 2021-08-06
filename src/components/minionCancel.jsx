@@ -15,7 +15,7 @@ const MinionCancel = ({ proposal }) => {
   const {
     errorToast,
     successToast,
-    setProposalModal,
+    // setProposalModal,
     setTxInfoModal,
   } = useOverlay();
   const { address, injectedProvider } = useInjectedProvider();
@@ -54,7 +54,7 @@ const MinionCancel = ({ proposal }) => {
         },
       });
       const onTxHash = () => {
-        setProposalModal(false);
+        // setProposalModal(false);
         setTxInfoModal(true);
       };
 
