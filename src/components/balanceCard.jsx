@@ -3,17 +3,16 @@ import { useParams } from 'react-router';
 import { Flex, Box, Image, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
-import Web3 from 'web3';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionTransfer from './minionTransfer';
+import PokeTokenButton from './pokeTokenButton';
 import SyncTokenButton from './syncTokenButton';
 import Withdraw from './withdraw';
 import { numberWithCommas } from '../utils/general';
 import { displayBalance } from '../utils/tokenValue';
 import { getWrapNZap } from '../utils/theGraph';
-import PokeTokenButton from './pokeTokenButton';
-import { supportedChains } from '../utils/chain';
 
 const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
   const toast = useToast();
@@ -22,6 +21,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
   const [needsSync, setNeedsSync] = useState(null);
   const [wnzAddress, setWnzAddress] = useState(null);
   const [needsPoke, setNeedsPoke] = useState(null);
+  const { injectedProvider } = useInjectedProvider();
 
   useEffect(() => {
     if (token?.contractBalances) {
@@ -40,9 +40,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
     getWnzAddress();
 
     if (wnzAddress) {
-      const rpcUrl = supportedChains[daochain].rpc_url;
-      const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-      web3.eth.getBalance(wnzAddress, (error, result) => {
+      injectedProvider.eth.getBalance(wnzAddress, (error, result) => {
         if (error) {
           console.log('Error detecting Wrap-N-Zap poke balance.', error);
         } else {
