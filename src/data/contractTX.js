@@ -71,6 +71,16 @@ export const CONTRACTS = {
     abiName: 'SUPERFLUID_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  WRAP_N_ZAP_FACTORY: {
+    location: 'local',
+    abiName: 'WRAP_N_ZAP_FACTORY',
+    contractAddress: '.localValues.contractAddress',
+  },
+  WRAP_N_ZAP: {
+    location: 'local',
+    abiName: 'WRAP_N_ZAP',
+    contractAddress: '.localValues.contractAddress',
+  },
 };
 
 export const ACTIONS = {
@@ -450,5 +460,23 @@ export const TX = {
     display: 'Executing Minion Proposal',
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
+  },
+  CREATE_WRAP_N_ZAP: {
+    contract: CONTRACTS.WRAP_N_ZAP_FACTORY,
+    name: 'create',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    poll: 'boostSubgraph',
+    display: 'Create Wrap-N-Zap',
+    errMsg: 'Error creating Wrap-N-Zap',
+    successMsg: 'Wrap-N-Zap added!',
+  },
+  POKE_WRAP_N_ZAP: {
+    contract: CONTRACTS.WRAP_N_ZAP,
+    name: 'poke',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    specialPoll: 'pollWrapNZap',
+    display: 'Poke Wrap-N-Zap',
+    errMsg: 'Error poking Wrap-N-Zap',
+    successMsg: 'Wrap-N-Zap Poke Successful!',
   },
 };

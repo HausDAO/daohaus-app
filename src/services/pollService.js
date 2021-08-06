@@ -18,7 +18,9 @@ import {
   pollTransmutationSummon,
   pollProposal,
   pollTXHash,
+  pollBoostTXHash,
   pollMinionExecuteAction,
+  pollWrapNZap,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -42,6 +44,7 @@ import {
   wrapNZapSummonTest,
   transmutationSummonTest,
   testTXHash,
+  testWrapNZap,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -96,6 +99,66 @@ export const createPoll = ({
       const args = { txHash, chainID, now, tx };
       startPoll({
         pollFetch: pollTXHash,
+        testFn: testTXHash,
+        shouldEqual: txHash,
+        args,
+        actions,
+        txHash,
+      });
+      cachePoll?.({
+        txHash,
+        action,
+        timeSent: now,
+        status: 'unresolved',
+        resolvedMsg: tx.successMsg,
+        unresolvedMsg: 'Processing',
+        successMsg: tx.successMsg,
+        errorMsg: tx.errMsg,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: args,
+      });
+    };
+    // NEW TX specialPoll
+  } else if (action === 'pollWrapNZap') {
+    return ({ chainID, contractAddress, actions, now, tx }) => txHash => {
+      if (!tx) return;
+      const args = { txHash, chainID, contractAddress, now, tx };
+      startPoll({
+        pollFetch: pollWrapNZap,
+        testFn: testWrapNZap,
+        shouldEqual: '0',
+        args,
+        actions,
+        txHash,
+      });
+      cachePoll?.({
+        txHash,
+        action,
+        timeSent: now,
+        status: 'unresolved',
+        resolvedMsg: tx.successMsg,
+        unresolvedMsg: 'Processing',
+        successMsg: tx.successMsg,
+        errorMsg: tx.errMsg,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: args,
+      });
+    };
+    // NEW TX specialPoll
+  } else if (action === 'boostSubgraph') {
+    return ({ chainID, actions, now, tx }) => txHash => {
+      if (!tx) return;
+      const args = { txHash, chainID, now, tx };
+      startPoll({
+        pollFetch: pollBoostTXHash,
         testFn: testTXHash,
         shouldEqual: txHash,
         args,
