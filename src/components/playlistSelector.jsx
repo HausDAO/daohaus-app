@@ -4,10 +4,10 @@ import { Icon, Flex, Button } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 import { FiTrash2 } from 'react-icons/fi';
 
-import TextBox from '../components/TextBox';
+import TextBox from './TextBox';
 
-import ListSelector from '../components/ListSelector';
-import ListSelectorItem from '../components/ListSelectorItem';
+import ListSelector from './ListSelector';
+import ListSelectorItem from './ListSelectorItem';
 import { isLastItem } from '../utils/general';
 
 const PlaylistSelector = ({

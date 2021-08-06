@@ -1,4 +1,3 @@
-import { put } from '../utils/metadata';
 import { createPlaylist, generateNewConfig } from '../utils/playlists';
 
 const handleInit = payload => {
@@ -58,30 +57,6 @@ const handleAddToPlaylist = (state, params) => {
     ...state,
     playlists: newPlaylists,
   };
-};
-export const handleUpdateChanges = async (state, params) => {
-  const { meta, injectedProvider, address, network } = params;
-
-  if (!meta || !injectedProvider || !state || !network)
-    throw new Error('proposalConfig => handlePostNewConfig');
-  try {
-    const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
-    const signature = await injectedProvider.eth.personal.sign(
-      messageHash,
-      address,
-    );
-    const updateData = {
-      proposalConfig: state,
-      contractAddress: meta.contractAddress,
-      network,
-      signature,
-    };
-    const res = await put('dao/update', updateData);
-    if (res.error) throw new Error(res.error);
-    return res;
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 export const proposalConfigReducer = (state, params) => {

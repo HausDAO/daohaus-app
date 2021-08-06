@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Flex, Spinner } from '@chakra-ui/react';
 
-import { Flex, Button, Spinner } from '@chakra-ui/react';
-
-import MainViewLayout from '../components/mainViewLayout';
-import { CORE_FORMS } from '../data/forms';
-
-import { useConfirmation, useFormModal } from '../contexts/OverlayContext';
-
+import {
+  useConfirmation,
+  useFormModal,
+  useOverlay,
+} from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { handleUpdateChanges } from '../reducers/proposalConfig';
-import PlaylistSelector from './PlaylistSelector';
-import ProposalList from './ProposalList';
+
+import PlaylistSelector from '../components/playlistSelector';
+import MainViewLayout from '../components/mainViewLayout';
+import ProposalList from '../components/formList';
 import SaveButton from '../components/saveButton';
+import { updateProposalConfig } from '../utils/metadata';
+import { CORE_FORMS } from '../data/forms';
 
 const ProposalTypes = () => {
   const { daoProposals, daoMetaData } = useMetaData();
   const { injectedProvider, address, injectedChain } = useInjectedProvider();
   const { openFormModal, closeModal } = useFormModal();
+  const { successToast, errorToast } = useOverlay();
   const { openConfirmation } = useConfirmation();
   const { dispatchPropConfig } = useMetaData();
 
-  const { playlists, allForms = {}, customData, hasChanged } =
-    daoProposals || {};
+  const { playlists, allForms = {}, customData } = daoProposals || {};
   const [selectedListID, setListID] = useState('all');
   const [loading, setLoading] = useState(false);
 
@@ -37,12 +39,18 @@ const ProposalTypes = () => {
 
   const handleSaveConfig = async () => {
     setLoading(true);
-    await handleUpdateChanges(daoProposals, {
+    const res = await updateProposalConfig(daoProposals, {
       injectedProvider,
       meta: daoMetaData,
       address,
       network: injectedChain.network,
     });
+    if (res.error) {
+      errorToast({ title: 'Error saving Proposal Data' });
+    } else {
+      successToast({ title: 'Proposal data updated!' });
+    }
+
     setLoading(false);
   };
 

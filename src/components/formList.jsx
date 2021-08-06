@@ -13,15 +13,15 @@ import {
 
 import { RiMore2Line, RiStarFill } from 'react-icons/ri';
 import { HiPencil, HiRefresh } from 'react-icons/hi';
-import TextBox from '../components/TextBox';
+import TextBox from './TextBox';
 import { CORE_FORMS, FORM } from '../data/forms';
 
 import { useFormModal } from '../contexts/OverlayContext';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { areAnyFields } from '../utils/general';
-import List from '../components/list';
-import ListItem from '../components/listItem';
+import List from './list';
+import ListItem from './listItem';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
