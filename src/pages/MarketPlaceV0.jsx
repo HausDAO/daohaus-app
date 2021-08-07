@@ -6,10 +6,10 @@ import { Spinner } from '@chakra-ui/spinner';
 import React, { useMemo, useState } from 'react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 import { Button } from '@chakra-ui/button';
+import { Tabs, Tab, TabList, TabPanel, TabPanels } from '@chakra-ui/tabs';
 import List from '../components/list';
 import ListItem from '../components/listItem';
 import ListSelector from '../components/ListSelector';
-import GenericSelect from '../components/genericSelect';
 
 import ListSelectorItem from '../components/ListSelectorItem';
 import MainViewLayout from '../components/mainViewLayout';
@@ -26,10 +26,58 @@ const MarketPlaceV0 = () => {
   // const { openFormModal, closeModal } = useFormModal();
   // const { successToast, errorToast } = useOverlay();
 
+  return (
+    <MainViewLayout isDao header='Boosts'>
+      <Tabs isLazy>
+        <TabList borderBottom='none' mb={6}>
+          <Tab
+            px={6}
+            color='white'
+            _selected={{
+              color: 'white',
+              borderBottom: '2px solid white',
+            }}
+            _hover={{
+              color: 'white',
+              borderBottom: '2px solid rgba(255,255,255,0.3)',
+            }}
+            borderBottom='2px solid transparent'
+          >
+            Installed
+          </Tab>
+          <Tab
+            px={6}
+            color='white'
+            _selected={{
+              color: 'white',
+              borderBottom: '2px solid white',
+            }}
+            _hover={{
+              color: 'white',
+              borderBottom: '2px solid rgba(255,255,255,0.4)',
+            }}
+            borderBottom='2px solid transparent'
+          >
+            Market
+          </Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Installed />
+          </TabPanel>
+          <TabPanel>
+            <Market />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    </MainViewLayout>
+  );
+};
+
+const Market = () => {
+  const { daoBoosts = {} } = useMetaData();
   const [loading, setLoading] = useState(false);
   const [categoryID, setID] = useState('all');
-  const { daoBoosts = {} } = useMetaData();
-
   const selectCategory = id => {
     if (!id) return;
     if (id === categoryID) {
@@ -38,55 +86,62 @@ const MarketPlaceV0 = () => {
       setID(id);
     }
   };
-
   return (
-    <MainViewLayout isDao header='Boosts'>
-      <Flex flexDir='column' w='95%'>
-        <Flex justifyContent='flex-end' mb={12}>
-          <SaveButton size='md' watch={daoBoosts} disabled={loading}>
-            SAVE CHANGES {loading && <Spinner ml={3} />}
-          </SaveButton>
+    <Flex flexDir='column' w='95%'>
+      {daoBoosts ? (
+        <Flex>
+          <CategorySelector
+            categoryID={categoryID}
+            selectList={selectCategory}
+          />
+          <BoostsList categoryID={categoryID} />
         </Flex>
-        {daoBoosts ? (
-          <Flex>
-            <CategorySelector
-              categoryID={categoryID}
-              selectList={selectCategory}
-            />
-            <BoostsList categoryID={categoryID} />
-            {/* 
-            
-            <PlaylistSelector
-              selectCategory={selectCategory}
-              addPlaylist={addPlaylist}
-              allForms={allForms}
-              categoryID={categoryID}
-              playlists={playlists}
-              deletePlaylist={deletePlaylist}
-              editPlaylist={editPlaylist}
-            />
-
-            <ProposalList
-              playlists={playlists}
-              customData={customData}
-              categoryID={categoryID}
-              allForms={allForms}
-            /> */}
-          </Flex>
-        ) : (
-          <Spinner />
-        )}
-      </Flex>
-    </MainViewLayout>
+      ) : (
+        <Spinner />
+      )}
+    </Flex>
   );
 };
 
-const CategorySelector = ({ selectList, categoryID }) => {
+const Installed = () => {
+  const { daoBoosts = {} } = useMetaData();
+  const [loading, setLoading] = useState(false);
+  const [categoryID, setID] = useState('all');
+  const selectCategory = id => {
+    if (!id) return;
+    if (id === categoryID) {
+      setID(null);
+    } else {
+      setID(id);
+    }
+  };
+  return (
+    <Flex flexDir='column' w='95%'>
+      {daoBoosts ? (
+        <Flex>
+          <CategorySelector
+            categoryID={categoryID}
+            selectList={selectCategory}
+            allBoosts={allBoosts}
+          />
+          <BoostsList categoryID={categoryID} />
+        </Flex>
+      ) : (
+        <Spinner />
+      )}
+    </Flex>
+  );
+};
+
+const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   return (
     <ListSelector
       topListItem={
         <ListSelectorItem
-          listLabel={{ left: 'All Boosts', right: 10 }}
+          listLabel={{
+            left: 'All Boosts',
+            right: allBoosts?.boosts?.length || 0,
+          }}
           isTop
           id='all'
           isSelected={categoryID === 'all'}
@@ -109,10 +164,7 @@ const CategorySelector = ({ selectList, categoryID }) => {
 };
 
 const BoostsList = ({ categoryID }) => {
-  const [sortBy, setSort] = useState('Title');
   const currentCategory = useMemo(() => {
-    console.log(`categoryID`, categoryID);
-    console.log(`categories`, categories);
     if (categoryID && categories) {
       if (categoryID === 'all') {
         return allBoosts;
@@ -127,25 +179,7 @@ const BoostsList = ({ categoryID }) => {
           <InputGroup w='250px' mr={6}>
             <Input placeholder='Search Boosts' />
           </InputGroup>
-
           <TextBox p={2}>Sort By:</TextBox>
-          <Menu isLazy>
-            <MenuButton
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize={['sm', null, null, 'md']}
-              color='secondary.500'
-              _hover={{ color: 'secondary.400' }}
-              display='inline-block'
-              mr='auto'
-            >
-              {sortBy}
-              <setSort as={RiArrowDropDownFill} color='secondary.500' />
-            </MenuButton>
-            <MenuList>
-              <MenuItem>Title</MenuItem>
-            </MenuList>
-          </Menu>
           <Menu isLazy>
             <MenuButton
               textTransform='uppercase'
@@ -169,7 +203,7 @@ const BoostsList = ({ categoryID }) => {
           {...BOOSTS[boost]}
           key={boost.id}
           menuSection={
-            <Button variant='ghost'>
+            <Button variant='ghost' p={0}>
               <TextBox>Details</TextBox>
             </Button>
           }

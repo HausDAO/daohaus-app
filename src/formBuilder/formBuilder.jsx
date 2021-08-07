@@ -25,12 +25,14 @@ const FormBuilder = props => {
     additionalOptions = null,
     required = [],
     localValues,
+    parentForm,
+    nextStep,
   } = props;
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
 
   const [options, setOptions] = useState(additionalOptions);
-  const localForm = useForm();
+  const localForm = parentForm || useForm();
   const { handleSubmit } = localForm;
 
   const addOption = e => {
@@ -125,11 +127,13 @@ const FormBuilder = props => {
     //  checks if submit is not a contract interaction and is a callback
     if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
       try {
-        return await submitCallback({
+        const res = await submitCallback({
           values: modifiedValues,
           formData: props,
           onSubmit: props.onSubmit,
         });
+        nextStep?.();
+        return res;
       } catch (error) {
         console.error(error);
         setLoading(false);
@@ -138,7 +142,7 @@ const FormBuilder = props => {
 
     try {
       setLoading(true);
-      await submitTransaction({
+      const res = await submitTransaction({
         values: modifiedValues,
         formData: props,
         localValues,
@@ -150,6 +154,8 @@ const FormBuilder = props => {
           ...props.lifeCycleFns,
         },
       });
+      nextStep?.();
+      return res;
     } catch (error) {
       console.error(error);
       setLoading(false);

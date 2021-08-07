@@ -6,7 +6,7 @@ import TextBox from './TextBox';
 const ListItem = ({ customFormData, title, description, menuSection }) => {
   return (
     <ChakraListItem>
-      <ContentBox mb={4}>
+      <ContentBox mb={4} p={5} d>
         <Flex justifyContent='space-between'>
           {/* <Image h='70px' minW='70px' mb={6} /> */}
           <Box>
