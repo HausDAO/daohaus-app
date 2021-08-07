@@ -33,12 +33,9 @@ export const defaultHubData = [
   },
 ];
 
-export const generateDaoLinks = (chainID, daoID, proposals) => {
+export const generateDaoLinks = (chainID, daoID) => {
   return defaultDaoData.map(link => {
-    let path = `/dao/${chainID}/${daoID}/${link.path}`;
-    if (link.path === 'proposals' && !proposals.length) {
-      path = `${path}/new`;
-    }
+    const path = `/dao/${chainID}/${daoID}/${link.path}`;
     return {
       ...link,
       path,

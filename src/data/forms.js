@@ -347,4 +347,17 @@ export const FORM = {
     tx: TX.SUMMON_MINION_VANILLA,
     fields: [[FIELD.MINION_NAME]],
   },
+  BUY_NIFTY_INK: {
+    id: 'BUY_NIFTY_INK',
+    title: 'Buy a NiftyInk',
+    description: 'Make a proposal to buy an NFT for the Nifty Minion vault',
+    type: PROPOSAL_TYPES.BUY_NIFTY_INK,
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.MINION_BUY_NIFTY_INK,
+    required: ['selectedMinion', 'targetInk', 'paymentRequested'],
+    fields: [
+      [FIELD.NIFTY_INK_URL],
+      [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
+    ],
+  },
 };

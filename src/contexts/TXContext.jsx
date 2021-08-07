@@ -219,6 +219,8 @@ export const TXProvider = ({ children }) => {
   };
 
   const submitTransaction = data => {
+    // console.log('data', data);
+
     const {
       tx: { name },
     } = data;

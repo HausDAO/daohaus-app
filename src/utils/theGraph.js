@@ -197,6 +197,8 @@ const completeQueries = {
         ),
       };
 
+      console.log('resolvedActivity', resolvedActivity);
+
       if (setter.setDaoActivities) {
         setter.setDaoActivities(resolvedActivity);
       }

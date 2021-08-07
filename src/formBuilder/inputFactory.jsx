@@ -18,6 +18,7 @@ import LootGrabDisplay from './lootGrabDisplay';
 import MinionPayment from './minionPayment';
 import DateRange from './dateRange';
 import PriceInput from './priceInput';
+import NiftyInkUrl from './niftyInkUrl';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -74,6 +75,9 @@ export const InputFactory = props => {
   }
   if (type === 'dateRange') {
     return <DateRange {...props} />;
+  }
+  if (type === 'targetInk') {
+    return <NiftyInkUrl {...props} />;
   }
   return null;
 };

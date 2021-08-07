@@ -14,11 +14,13 @@ import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
 import NEAPOLITAN_MINION_FACTORY from '../contracts/neapolitanMinionFactory.json';
 import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import NIFTY_MINION_FACTORY from '../contracts/minionNiftyFactory.json';
+import NIFTY_MINION from '../contracts/minionNifty.json';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
   ERC_20,
   VANILLA_MINION,
+  NIFTY_MINION,
   ERC_721,
   NIFTY_INK,
   UBERHAUS_MINION,
