@@ -190,12 +190,13 @@ export const useConfirmation = () => {
 export const useFormModal = () => {
   const { setModal, errorToast, closeModal } = useContext(OverlayContext);
   return {
-    openFormModal({ lego, onSubmit, onCancel }) {
+    openFormModal({ lego, onSubmit, onCancel, steps }) {
       //  TODO once TX Context is ready on Hub level
       //  get url info from useParams  and conditionally load the correct
       //  modal based on scope. Same pattern can be used for other scoped modals
-      if (lego && onSubmit && !lego?.tx) {
-        console.log('fired');
+      if (steps && !lego) {
+        setModal({ steps, onCancel });
+      } else if (lego && onSubmit && !lego?.tx) {
         setModal({ lego, onSubmit, onCancel });
       } else if (lego) {
         setModal({ lego, onCancel });

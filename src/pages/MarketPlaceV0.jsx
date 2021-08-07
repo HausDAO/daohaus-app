@@ -20,6 +20,8 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { isLastItem } from '../utils/general';
 import { titleMaker } from '../utils/proposalUtils';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
+import { useFormModal } from '../contexts/OverlayContext';
+import { FORM } from '../data/forms';
 
 const MarketPlaceV0 = () => {
   // const { injectedProvider, address, injectedChain } = useInjectedProvider();
@@ -76,8 +78,10 @@ const MarketPlaceV0 = () => {
 
 const Market = () => {
   const { daoBoosts = {} } = useMetaData();
-  const [loading, setLoading] = useState(false);
+  const { openFormModal } = useFormModal();
+
   const [categoryID, setID] = useState('all');
+
   const selectCategory = id => {
     if (!id) return;
     if (id === categoryID) {
@@ -86,6 +90,10 @@ const Market = () => {
       setID(id);
     }
   };
+
+  const openDetails = () => {
+    openFormModal({ lego: FORM.NEW_VANILLA_MINION });
+  };
   return (
     <Flex flexDir='column' w='95%'>
       {daoBoosts ? (
@@ -93,8 +101,13 @@ const Market = () => {
           <CategorySelector
             categoryID={categoryID}
             selectList={selectCategory}
+            allBoosts={allBoosts}
           />
-          <BoostsList categoryID={categoryID} />
+          <BoostsList
+            categoryID={categoryID}
+            allBoosts={allBoosts}
+            openDetails={openDetails}
+          />
         </Flex>
       ) : (
         <Spinner />
@@ -119,12 +132,12 @@ const Installed = () => {
     <Flex flexDir='column' w='95%'>
       {daoBoosts ? (
         <Flex>
-          <CategorySelector
+          {/* <CategorySelector
             categoryID={categoryID}
             selectList={selectCategory}
             allBoosts={allBoosts}
           />
-          <BoostsList categoryID={categoryID} />
+          <BoostsList categoryID={categoryID} allBoosts={allBoosts} /> */}
         </Flex>
       ) : (
         <Spinner />
@@ -163,7 +176,7 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   );
 };
 
-const BoostsList = ({ categoryID }) => {
+const BoostsList = ({ categoryID, openDetails }) => {
   const currentCategory = useMemo(() => {
     if (categoryID && categories) {
       if (categoryID === 'all') {
@@ -203,7 +216,7 @@ const BoostsList = ({ categoryID }) => {
           {...BOOSTS[boost]}
           key={boost.id}
           menuSection={
-            <Button variant='ghost' p={0}>
+            <Button variant='ghost' p={0} onClick={openDetails}>
               <TextBox>Details</TextBox>
             </Button>
           }

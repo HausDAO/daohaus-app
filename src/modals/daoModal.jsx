@@ -17,6 +17,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import FormBuilder from '../formBuilder/formBuilder';
 import TextBox from '../components/TextBox';
+import StepperForm from '../formBuilder/StepperForm';
 
 const getMaxWidth = modal => {
   if (modal?.lego?.fields) {
@@ -46,6 +47,9 @@ const DaoModal = () => {
     onCancel,
     isConfirmation,
     loading,
+    prependBody,
+    appendBody,
+    steps,
   } = modal;
 
   const handleClose = () => setModal(false);
@@ -88,7 +92,11 @@ const DaoModal = () => {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {lego ? <FormBuilder {...lego} onSubmit={onSubmit} /> : body}
+          {prependBody}
+          {steps && <StepperForm steps={steps} />}
+          {lego && <FormBuilder {...lego} onSubmit={onSubmit} />}
+          {body}
+          {appendBody}
         </ModalBody>
         <ModalFooter>
           {footer}

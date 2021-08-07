@@ -145,7 +145,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
 };
 
 const ProposalOption = ({ form, selectProposal, customFormData }) => {
-  const { title, description, id } = form;
+  const { title, description, id } = form || {};
   const handleClick = () => selectProposal(id);
   return (
     <>

@@ -1,12 +1,11 @@
 import { PLAYLISTS } from '../utils/playlists';
 
 export const BOOSTS = {
-  VANILLA_MINION: {
-    id: 'VANILLA_MINION',
+  DEV_SUITE: {
+    id: 'DEV_SUITE',
     playlist: PLAYLISTS.VANILLA_MINION,
-    title: 'Vanilla Minion Suite',
-    description:
-      'Call any contract with a DAO Proposal. One call per proposal.',
+    title: 'Nerd Rage Dev Suite',
+    description: 'Unlock a suite of generic, customizable minion proposals. ',
     deploySteps: [],
     categories: ['dev'],
     networks: 'all',
@@ -14,25 +13,27 @@ export const BOOSTS = {
   NIFTY_INK: {
     id: 'NIFTY_INK',
     title: 'Nifty Ink',
-    description: 'Buy and Sell Niftys as a DAO with Nifty Ink!',
+    description:
+      'MS Paint and NFTs gone mad! Buy and Sell Nifty Inks as a DAO.',
     categories: ['nft'],
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',
     title: 'SuperFluid',
-    description: 'Stream Vault funds from a DAO vault to any account.',
+    description: 'Hook up the DAO to Superfluid and stream funds.',
     categories: ['defi', 'token', 'tools'],
   },
   DISCORD: {
     id: 'DISCORD',
     title: 'Discord',
-    description: 'Discord alerts for proposals',
+    description: 'Recieve DAO proposal alerts on the DAOs Discord channel.',
     categories: ['social'],
   },
   DISCOURSE: {
     id: 'DISCOURSE',
     title: 'Discourse',
-    description: 'Create a Discourse Forum for your DAO',
+    description:
+      'Palaver over DAO affairs with a DAO specific Discourse Forum.',
     categories: ['social'],
   },
   SWAPR: {
