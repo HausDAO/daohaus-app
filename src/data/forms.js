@@ -360,4 +360,19 @@ export const FORM = {
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
     ],
   },
+  TEST_UNREGISTERED: {
+    id: 'TEST_UNREGISTERED',
+    title: 'Unregistered Form',
+    dev: true,
+    description: 'This should not appear unless registered to app branch',
+    type: PROPOSAL_TYPES.BUY_NIFTY_INK,
+    tx: TX.SUBMIT_PROPOSAL,
+    required: ['sharesRequested', 'tributeOffered', 'title'],
+    fields: [
+      [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.TRIBUTE, FIELD.DESCRIPTION],
+    ],
+    additionalOptions: [FIELD.LINK],
+  },
 };
+
+export const TEST_FORMS = {};

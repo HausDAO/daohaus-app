@@ -349,7 +349,7 @@ export const updateProposalConfig = async (state, params) => {
     };
     const res = await put('dao/update', updateData);
     if (res.error) throw new Error(res.error);
-    return res;
+    return true;
   } catch (error) {
     console.error(error);
   }

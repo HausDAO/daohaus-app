@@ -51,7 +51,7 @@ export const PLAYLISTS = [
   },
 ];
 
-export const generateNewConfig = daoMetaData => {
+export const generateNewConfig = ({ daoMetaData }) => {
   const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
   const { boosts } = daoMetaData;
 
@@ -106,4 +106,14 @@ export const createPlaylist = ({
   name,
   id,
   forms,
+});
+export const devList = createPlaylist({
+  name: 'Rage Mode',
+  id: 'dev',
+  forms: Object.values(FORM).reduce((arr, form) => {
+    if (form.dev) {
+      return [...arr, form.id];
+    }
+    return arr;
+  }, []),
 });

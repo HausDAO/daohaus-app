@@ -23,10 +23,10 @@ const ProposalTypes = () => {
   const { successToast, errorToast } = useOverlay();
   const { openConfirmation } = useConfirmation();
 
-  const { playlists, allForms = {}, customData } = daoProposals || {};
+  const { playlists, allForms = {}, customData, devList } = daoProposals || {};
   const [selectedListID, setListID] = useState('all');
   const [loading, setLoading] = useState(false);
-
+  // console.log(daoProposals);
   const selectList = id => {
     if (!id) return;
     if (id === selectedListID) {
@@ -36,7 +36,7 @@ const ProposalTypes = () => {
     }
   };
 
-  const handleSaveConfig = async () => {
+  const saveConfig = async () => {
     setLoading(true);
     const res = await updateProposalConfig(daoProposals, {
       injectedProvider,
@@ -44,13 +44,30 @@ const ProposalTypes = () => {
       address,
       network: injectedChain.network,
     });
-    if (res.error) {
+    if (res?.error) {
       errorToast({ title: 'Error saving Proposal Data' });
     } else {
       successToast({ title: 'Proposal data updated!' });
     }
 
     setLoading(false);
+  };
+
+  const handleSaveConfig = () => {
+    if (process.env.REACT_APP_DEV) {
+      openConfirmation({
+        onSubmit: () => {
+          closeModal();
+          saveConfig();
+        },
+        title: 'DEV WARNING',
+        header: 'DEV WARNING',
+        body:
+          'Local DEV builds may have data that is out of sync with the app branch. If you are pushing a form to the DAO metadata, make sure the form exists on the app branch first.',
+      });
+    } else {
+      saveConfig();
+    }
   };
 
   const editPlaylist = id => {
@@ -111,12 +128,14 @@ const ProposalTypes = () => {
               playlists={playlists}
               deletePlaylist={deletePlaylist}
               editPlaylist={editPlaylist}
+              devList={devList}
             />
             <ProposalList
               playlists={playlists}
               customData={customData}
               selectedListID={selectedListID}
               allForms={allForms}
+              devList={devList}
             />
           </Flex>
         ) : (

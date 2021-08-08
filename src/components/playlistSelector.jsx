@@ -18,6 +18,7 @@ const PlaylistSelector = ({
   playlists,
   deletePlaylist,
   editPlaylist,
+  devList,
 }) => {
   return (
     <ListSelector
@@ -32,17 +33,32 @@ const PlaylistSelector = ({
         </Flex>
       }
       topListItem={
-        <ListSelectorItem
-          lists={allForms?.forms}
-          id='all'
-          isSelected={selectedListID === 'all'}
-          selectList={selectList}
-          listLabel={{
-            left: 'Proposals',
-            right: allForms?.forms?.length,
-          }}
-          isTop
-        />
+        <>
+          {devList && (
+            <ListSelectorItem
+              lists={allForms?.forms}
+              id='dev'
+              isSelected={selectedListID === 'dev'}
+              selectList={selectList}
+              listLabel={{
+                left: devList.name,
+                right: devList?.forms?.length,
+              }}
+              isTop={devList}
+            />
+          )}
+          <ListSelectorItem
+            lists={allForms?.forms}
+            id='all'
+            isSelected={selectedListID === 'all'}
+            selectList={selectList}
+            listLabel={{
+              left: 'Proposals',
+              right: allForms?.forms?.length,
+            }}
+            isTop={!devList}
+          />
+        </>
       }
       divider='Playlists'
       lists={playlists?.map((list, index) => (

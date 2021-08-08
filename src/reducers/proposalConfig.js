@@ -1,10 +1,16 @@
-import { createPlaylist, generateNewConfig } from '../utils/playlists';
+import { devList, createPlaylist, generateNewConfig } from '../utils/playlists';
+
+const handleDevForms = (data = {}) => {
+  const isDev = process.env.REACT_APP_DEV;
+
+  return isDev ? { ...data, devList } : data;
+};
 
 const handleInit = payload => {
   if (payload?.proposalConfig) {
-    return payload.proposalConfig;
+    return handleDevForms(payload.proposalConfig);
   }
-  return generateNewConfig(payload);
+  return handleDevForms(generateNewConfig({ daoMetaData: payload }));
 };
 
 const handleEditPlaylist = (state, params) => {

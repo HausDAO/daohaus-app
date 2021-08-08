@@ -9,6 +9,7 @@ import {
   MenuButton,
   Input,
   InputGroup,
+  Button,
 } from '@chakra-ui/react';
 
 import { RiMore2Line, RiStarFill } from 'react-icons/ri';
@@ -31,16 +32,24 @@ const handleSearch = (formsArr, str) => {
   );
 };
 
-const ProposalList = ({ playlists, customData, selectedListID, allForms }) => {
+const ProposalList = ({
+  playlists,
+  customData,
+  selectedListID,
+  allForms,
+  devList,
+}) => {
+  console.log(devList);
   const { openFormModal, closeModal } = useFormModal();
   const { dispatchPropConfig } = useMetaData();
+
   const [searchStr, setSearchStr] = useState(null);
 
   const proposalList = useMemo(() => {
     if (!playlists || !selectedListID || !allForms) return [];
-    if (selectedListID === 'all') {
+    if (selectedListID === 'all')
       return handleSearch(allForms.forms, searchStr);
-    }
+    if (selectedListID === 'dev') return handleSearch(devList.forms, searchStr);
     return handleSearch(
       playlists.find(list => list.id === selectedListID)?.forms,
       searchStr,
@@ -68,7 +77,10 @@ const ProposalList = ({ playlists, customData, selectedListID, allForms }) => {
     dispatchPropConfig({ action: 'TOGGLE_PLAYLIST', listId, formId, isListed });
 
   const handleTypeSearch = e => setSearchStr(e.target.value.toLowerCase());
-
+  const handlePreview = form =>
+    openFormModal({
+      lego: form,
+    });
   return (
     <List
       headerSection={
@@ -85,22 +97,28 @@ const ProposalList = ({ playlists, customData, selectedListID, allForms }) => {
         const customFormData = customData?.[proposalID];
         const hasBeenEdited =
           customFormData && areAnyFields('truthy', customFormData);
+        const form = FORM?.[proposalID];
+        console.log(form);
         return (
           <ListItem
-            {...FORM[proposalID]}
+            {...form}
             customFormData={customFormData}
             hasBeenEdited={hasBeenEdited}
             key={proposalID}
             menuSection={
               <Flex flexDir='column' justifyContent='space-between'>
-                <ProposalMenuList
-                  formId={proposalID}
-                  playlists={playlists}
-                  hasBeenEdited={hasBeenEdited}
-                  handleTogglePlaylist={handleTogglePlaylist}
-                  handleEditProposal={handleEditProposal}
-                  handleRestoreProposal={handleRestoreProposal}
-                />
+                {form?.dev ? (
+                  <DevMenu form={form} handlePreview={handlePreview} />
+                ) : (
+                  <ProposalMenuList
+                    formId={proposalID}
+                    playlists={playlists}
+                    hasBeenEdited={hasBeenEdited}
+                    handleTogglePlaylist={handleTogglePlaylist}
+                    handleEditProposal={handleEditProposal}
+                    handleRestoreProposal={handleRestoreProposal}
+                  />
+                )}
               </Flex>
             }
           />
@@ -189,5 +207,16 @@ const ProposalMenuList = ({
         </MenuList>
       </Menu>
     </Flex>
+  );
+};
+
+const DevMenu = ({ form, handlePreview }) => {
+  const handleClick = () => {
+    handlePreview(form);
+  };
+  return (
+    <Button variant='ghost' onClick={handleClick}>
+      Preview
+    </Button>
   );
 };
