@@ -19,9 +19,12 @@ import MinionPayment from './minionPayment';
 import DateRange from './dateRange';
 import PriceInput from './priceInput';
 import NiftyInkUrl from './niftyInkUrl';
+import Paragraphs from './Paragraphs';
+import Header from './header';
 
 export const InputFactory = props => {
   const { type } = props;
+  console.log(`props`, props);
   if (type === 'input') {
     return <GenericInput {...props} />;
   }
@@ -78,6 +81,12 @@ export const InputFactory = props => {
   }
   if (type === 'targetInk') {
     return <NiftyInkUrl {...props} />;
+  }
+  if (type === 'paragraphs') {
+    return <Paragraphs {...props} />;
+  }
+  if (type === 'header') {
+    return <Header {...props} />;
   }
   return null;
 };

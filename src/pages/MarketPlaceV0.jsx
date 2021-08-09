@@ -13,15 +13,13 @@ import ListSelector from '../components/ListSelector';
 
 import ListSelectorItem from '../components/ListSelectorItem';
 import MainViewLayout from '../components/mainViewLayout';
-import PlaylistSelector from '../components/playlistSelector';
-import SaveButton from '../components/saveButton';
 import TextBox from '../components/TextBox';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { isLastItem } from '../utils/general';
-import { titleMaker } from '../utils/proposalUtils';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { useFormModal } from '../contexts/OverlayContext';
 import { FORM } from '../data/forms';
+import { PUBLISHERS } from '../data/publishers';
 
 const MarketPlaceV0 = () => {
   // const { injectedProvider, address, injectedChain } = useInjectedProvider();
@@ -41,11 +39,11 @@ const MarketPlaceV0 = () => {
             }}
             _hover={{
               color: 'white',
-              borderBottom: '2px solid rgba(255,255,255,0.3)',
+              borderBottom: '2px solid rgba(255,255,255,0.4)',
             }}
             borderBottom='2px solid transparent'
           >
-            Installed
+            Market
           </Tab>
           <Tab
             px={6}
@@ -56,19 +54,19 @@ const MarketPlaceV0 = () => {
             }}
             _hover={{
               color: 'white',
-              borderBottom: '2px solid rgba(255,255,255,0.4)',
+              borderBottom: '2px solid rgba(255,255,255,0.3)',
             }}
             borderBottom='2px solid transparent'
           >
-            Market
+            Installed
           </Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Installed />
+            <Market />
           </TabPanel>
           <TabPanel>
-            <Market />
+            <Installed />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -92,7 +90,44 @@ const Market = () => {
   };
 
   const openDetails = () => {
-    openFormModal({ lego: FORM.NEW_VANILLA_MINION });
+    openFormModal({
+      title: 'Boost Marketplace',
+      steps: {
+        STEP1: {
+          start: true,
+          type: 'details',
+          content: {
+            header: "'Nerd Mode' Dev Suite",
+            publisher: PUBLISHERS.DAOHAUS,
+            version: '1.00',
+            pars: [
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
+              'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.',
+            ],
+            externalLinks: [
+              { href: 'https://daohaus.club/', label: 'DAOhaus' },
+              {
+                href: 'https://www.webfx.com/tools/lorem-ipsum-generator/',
+                label: 'Lorem Ipsum generator',
+              },
+            ],
+          },
+          next: 'STEP2',
+        },
+        STEP2: {
+          prependBody: <TextBox variant='body'>This is a description</TextBox>,
+          type: 'form',
+          lego: FORM.NEW_VANILLA_MINION,
+          next: 'STEP2',
+        },
+        STEP3: {
+          start: true,
+          type: 'form',
+          lego: FORM.TOKEN,
+          next: 'FINAL',
+        },
+      },
+    });
   };
   return (
     <Flex flexDir='column' w='95%'>
@@ -214,7 +249,7 @@ const BoostsList = ({ categoryID, openDetails }) => {
       list={currentCategory?.boosts?.map(boost => (
         <ListItem
           {...BOOSTS[boost]}
-          key={boost.id}
+          key={boost}
           menuSection={
             <Button variant='ghost' p={0} onClick={openDetails}>
               <TextBox>Details</TextBox>

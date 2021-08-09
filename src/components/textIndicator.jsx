@@ -5,9 +5,22 @@ import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 import { handlePossibleNumber } from '../utils/general';
 
+const getLabelSize = size => {
+  if (size === 'lg') return 'sm';
+  if (size === 'sm') return 'xs';
+  return 'xs';
+};
+const getTextSize = size => {
+  if (size === 'lg') return '3xl';
+  if (size === 'sm') return 'sm';
+
+  return 'lg';
+};
+
 const TextIndicator = ({
   value,
   label,
+  numString,
   fallback = '--',
   link,
   tooltip,
@@ -16,14 +29,21 @@ const TextIndicator = ({
   comma = true,
   roundAmt = 4,
   append,
+  onClick,
 }) => {
-  const text = handlePossibleNumber(value, comma, roundAmt);
+  const text = numString ? value : handlePossibleNumber(value, comma, roundAmt);
+
   return (
-    <ToolTipWrapper link={link} tooltip={tooltip} tooltipText={tooltipText}>
+    <ToolTipWrapper
+      link={link}
+      tooltip={tooltip}
+      tooltipText={tooltipText}
+      onClick={onClick}
+    >
       <Box mb={3}>
-        <TextBox size={size === 'lg' ? 'sm' : 'xs'}>{label}</TextBox>
+        <TextBox size={getLabelSize(size)}>{label}</TextBox>
         <Skeleton isLoaded={value}>
-          <TextBox size={size === 'lg' ? '3xl' : 'lg'} variant='value'>
+          <TextBox size={getTextSize(size)} variant='value'>
             {text || fallback} {append}
           </TextBox>
         </Skeleton>

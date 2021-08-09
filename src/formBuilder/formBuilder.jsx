@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { v4 as uuid } from 'uuid';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
@@ -175,7 +176,7 @@ const FormBuilder = props => {
         </Flex>
       ) : (
         <InputFactory
-          key={field?.htmlFor || field?.name}
+          key={field?.htmlFor || field?.name || uuid()}
           {...field}
           minionType={props.minionType}
           layout={props.layout}

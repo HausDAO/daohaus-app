@@ -239,6 +239,15 @@ export const FIELD = {
     label: 'Target NiftyInk Url',
     expectType: 'any',
   },
+  PARAGRAPHS: {
+    type: 'paragraphs',
+
+    pars: [] /* Overwrite with customCopy */,
+  },
+  HEADER: {
+    type: 'header',
+    headerText: 'Empty' /* Overwrite with custom Copy */,
+  },
 };
 
 export const FORM_DISPLAY = {
