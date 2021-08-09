@@ -4,19 +4,23 @@ import { Flex } from '@chakra-ui/layout';
 import { useDao } from '../contexts/DaoContext';
 import Header from './header';
 import Paragraphs from './Paragraphs';
+import TextBox from '../components/TextBox';
 
-const minionContent = {};
+const generateMinionText = ({ minionType }) => {
+  return { headerText: `Summon a ${minionType}` };
+};
 
-const MinionSummonInput = ({ minionType, content }) => {
+const TheSummoner = ({ minionType, hasMinionContent, noMinionContent }) => {
   const [hasMinion, setHasMinion] = useState();
   const { daoOverview } = useDao();
 
   return (
     <Flex>
-      <Header />
-      <Paragraphs />
+      <TextBox>Fuck</TextBox>
+      {/* <Header />
+      <Paragraphs /> */}
     </Flex>
   );
 };
 
-export default MinionSummonInput;
+export default TheSummoner;

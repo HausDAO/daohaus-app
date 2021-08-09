@@ -9,7 +9,7 @@ import TextBox from './TextBox';
 
 import TextIndicator from './textIndicator';
 
-const BoostDetails = ({ content = {}, goToNext }) => {
+const BoostDetails = ({ content = {}, goToNext, next }) => {
   const { closeModal } = useFormModal();
   const {
     publisher = {},
@@ -19,7 +19,11 @@ const BoostDetails = ({ content = {}, goToNext }) => {
     header,
   } = content;
   const { name, daoData } = publisher;
-
+  const handleGoTo = () => {
+    if (typeof next === 'string') {
+      goToNext(next);
+    }
+  };
   return (
     <Flex flexDirection='column'>
       <TextBox mb={6} size='lg'>
@@ -79,7 +83,7 @@ const BoostDetails = ({ content = {}, goToNext }) => {
       <Box>
         <Flex alignItems='flex-end' flexDir='column'>
           <Flex mb={2}>
-            <Button onClick={goToNext} loadingText='Submitting'>
+            <Button onClick={handleGoTo} loadingText='Submitting'>
               Install
             </Button>
           </Flex>

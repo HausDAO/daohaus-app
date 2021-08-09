@@ -349,9 +349,7 @@ export const FORM = {
   },
   NEW_VANILLA_MINION: {
     required: ['minionName'],
-    header: 'Summon a Vanilla Minion.',
-    tx: TX.SUMMON_MINION_VANILLA,
-    fields: [[FIELD.MINION_NAME]],
+    fields: [[]],
   },
   BUY_NIFTY_INK: {
     id: 'BUY_NIFTY_INK',

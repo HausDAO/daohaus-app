@@ -24,7 +24,6 @@ import Header from './header';
 
 export const InputFactory = props => {
   const { type } = props;
-  console.log(`props`, props);
   if (type === 'input') {
     return <GenericInput {...props} />;
   }

@@ -241,7 +241,6 @@ export const FIELD = {
   },
   PARAGRAPHS: {
     type: 'paragraphs',
-
     pars: [] /* Overwrite with customCopy */,
   },
   HEADER: {

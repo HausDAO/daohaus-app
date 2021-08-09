@@ -27,11 +27,14 @@ const FormBuilder = props => {
     required = [],
     localValues,
     parentForm,
-    nextStep,
+    next,
+    goToNext,
+    ctaText,
   } = props;
+
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
-
+  const [condition, setContition] = useState(null);
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm();
   const { handleSubmit } = localForm;
@@ -81,6 +84,7 @@ const FormBuilder = props => {
     });
   };
 
+  //  TODO: REFACTOR ALL THIS SHIT
   const onSubmit = async values => {
     clearErrors();
 
@@ -107,7 +111,6 @@ const FormBuilder = props => {
       return;
     }
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-
     const modifiedValues = modifyFields({
       values: collapsedValues,
       // REVIEW
@@ -125,42 +128,73 @@ const FormBuilder = props => {
       updateErrors(customValErrors);
       return;
     }
-    //  checks if submit is not a contract interaction and is a callback
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+
+    const handleSubmitCallback = async then => {
       try {
+        setLoading(true);
         const res = await submitCallback({
           values: modifiedValues,
           formData: props,
           onSubmit: props.onSubmit,
         });
-        nextStep?.();
+        then?.();
         return res;
       } catch (error) {
         console.error(error);
         setLoading(false);
       }
-    }
-
-    try {
-      setLoading(true);
-      const res = await submitTransaction({
-        values: modifiedValues,
-        formData: props,
-        localValues,
-        tx: props.tx,
-        lifeCycleFns: {
-          onCatch() {
-            setLoading(false);
+    };
+    const handleSubmitTX = async then => {
+      try {
+        setLoading(true);
+        const res = await submitTransaction({
+          values: modifiedValues,
+          formData: props,
+          localValues,
+          tx: props.tx,
+          lifeCycleFns: {
+            onCatch() {
+              setLoading(false);
+            },
+            ...props?.lifeCycleFns,
+            afterTx() {
+              then?.();
+              props?.lifeCycleFns?.afterTx?.();
+            },
           },
-          ...props.lifeCycleFns,
-        },
-      });
-      nextStep?.();
-      return res;
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
+        });
+        return res;
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    const handleConditional = async choice => {
+      if (choice.tx && choice.then)
+        return () => handleSubmitTX(handleConditional(choice.then));
+      if (choice.tx) return () => handleSubmitTX();
+      if (choice.callback) return () => handleSubmitCallback();
+      if (choice.goTo) return () => goToNext(choice.goTo);
+    };
+
+    //  HANDLE CONDITIONAL SUBMIT + AFTER EFFECTS
+    if (condition && next && typeof goToNext === 'function') {
+      console.log(`condition`, condition);
+      console.log(`next`, next);
+      console.log(`goToNext`, goToNext);
+      return;
+      // const choice = next[condition];
+      // return handleConditional(choice)();
     }
+    //  HANDLE CALLBACK ON SUBMIT
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+      console.log('FIRE CALLBACK');
+      return handleSubmitCallback();
+    }
+    //  HANDLE CONTRACT TX ON SUBMIT
+    console.log('FIRE TX');
+    return handleSubmitTX();
   };
 
   const renderInputs = (fields, depth = 0) =>
@@ -183,6 +217,7 @@ const FormBuilder = props => {
           localForm={localForm}
           localValues={localValues}
           buildABIOptions={buildABIOptions}
+          setContition={setContition}
         />
       ),
     );
@@ -199,7 +234,12 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <FormFooter options={options} addOption={addOption} loading={loading} />
+        <FormFooter
+          options={options}
+          addOption={addOption}
+          loading={loading}
+          ctaText={ctaText}
+        />
       </Flex>
     </form>
   );

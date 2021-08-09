@@ -20,6 +20,7 @@ import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { useFormModal } from '../contexts/OverlayContext';
 import { FORM } from '../data/forms';
 import { PUBLISHERS } from '../data/publishers';
+import { TX } from '../data/contractTX';
 
 const MarketPlaceV0 = () => {
   // const { injectedProvider, address, injectedChain } = useInjectedProvider();
@@ -118,7 +119,13 @@ const Market = () => {
           prependBody: <TextBox variant='body'>This is a description</TextBox>,
           type: 'form',
           lego: FORM.NEW_VANILLA_MINION,
-          next: 'STEP2',
+          next: {
+            hasNotSummoned: {
+              tx: TX.SUMMON_MINION_VANILLA,
+              then: { goTo: 'Step3' },
+            },
+            hasMinion: { goTo: 'Step3' },
+          },
         },
         STEP3: {
           start: true,

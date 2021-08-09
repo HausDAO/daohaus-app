@@ -43,7 +43,13 @@ export const ModButton = ({ label, callback }) => (
   </Button>
 );
 
-export const FormFooter = ({ options, loading, addOption, errors }) => {
+export const FormFooter = ({
+  options,
+  loading,
+  addOption,
+  errors,
+  ctaText,
+}) => {
   if (options?.length) {
     return (
       <Box>
@@ -62,7 +68,7 @@ export const FormFooter = ({ options, loading, addOption, errors }) => {
               borderBottomLeftRadius='0'
               borderTopLeftRadius='0'
             >
-              Submit
+              {ctaText || 'Submit'}
             </Button>
           </Flex>
           <SubmitErrList errors={errors} />
@@ -78,7 +84,7 @@ export const FormFooter = ({ options, loading, addOption, errors }) => {
         isLoading={loading}
         disabled={loading}
       >
-        Submit
+        {ctaText || 'Submit'}
       </Button>
     </Flex>
   );

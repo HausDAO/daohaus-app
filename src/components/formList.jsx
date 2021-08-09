@@ -39,7 +39,6 @@ const ProposalList = ({
   allForms,
   devList,
 }) => {
-  console.log(devList);
   const { openFormModal, closeModal } = useFormModal();
   const { dispatchPropConfig } = useMetaData();
 
@@ -98,7 +97,7 @@ const ProposalList = ({
         const hasBeenEdited =
           customFormData && areAnyFields('truthy', customFormData);
         const form = FORM?.[proposalID];
-        console.log(form);
+
         return (
           <ListItem
             {...form}
