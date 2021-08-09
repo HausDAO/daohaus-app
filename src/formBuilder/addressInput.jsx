@@ -40,7 +40,6 @@ const AddressInput = props => {
         }),
       );
       if (shouldSet) {
-        console.log(`memberProfiles`, memberProfiles);
         setAddresses(memberProfiles);
       }
     };

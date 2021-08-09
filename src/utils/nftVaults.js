@@ -9,7 +9,9 @@ import { CORE_FORMS } from '../data/forms';
 
 const defaultConfig = {
   platform: 'unknown',
-  fields: {},
+  fields: {
+    image: 'getMetadataImage',
+  },
   actions: {
     transfer721: {
       menuLabel: 'Transfer NFT',
@@ -26,6 +28,7 @@ const nftConfig = {
   '0xcf964c89f509a8c0ac36391c5460df94b91daba5': {
     platform: 'nifty ink',
     fields: {
+      ...defaultConfig.fields,
       creator: 'getNiftyCreator',
     },
     actions: {
@@ -43,6 +46,10 @@ const nftConfig = {
 };
 
 export const attributeModifiers = Object.freeze({
+  getMetadataImage(nft) {
+    console.log('nft', nft);
+    return nft.metadata.image_url ? nft.metadata.image_url : nft.metadata.image;
+  },
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
     if (!description) {

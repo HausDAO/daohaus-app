@@ -19,6 +19,7 @@ import MinionPayment from './minionPayment';
 import DateRange from './dateRange';
 import PriceInput from './priceInput';
 import NiftyInkUrl from './niftyInkUrl';
+import SuperfluidRate from './superfluidRate';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -78,6 +79,9 @@ export const InputFactory = props => {
   }
   if (type === 'targetInk') {
     return <NiftyInkUrl {...props} />;
+  }
+  if (type === 'superfluidRate') {
+    return <SuperfluidRate {...props} />;
   }
   return null;
 };

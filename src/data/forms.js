@@ -360,4 +360,18 @@ export const FORM = {
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
     ],
   },
+  SUPERFLUID_STREAM: {
+    id: 'SUPERFLUID_STREAM',
+    title: 'Superfluid Payment Stream',
+    description: 'Stream funds from the Superfluid Minion',
+    type: PROPOSAL_TYPES.MINION_SUPERFLUID,
+    minionType: MINION_TYPES.SUPERFLUID,
+    tx: null,
+    required: ['selectedMinion', 'targetInk', 'paymentRequested'],
+    fields: [
+      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.APPLICANT, FIELD.PAYMENT_REQUEST, FIELD.SUPERFLUID_RATE],
+    ],
+    customValidations: ['nonDaoApplicant'],
+  },
 };

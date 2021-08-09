@@ -88,7 +88,6 @@ export const validateRequired = (values, required) => {
 
 export const customValidations = {
   nonDaoApplicant({ appState, values }) {
-    console.log('appState', appState);
     const { apiData } = appState;
     const { applicant } = values;
 
@@ -96,5 +95,33 @@ export const customValidations = {
       return { name: 'applicant', message: 'Applicant cannot be another DAO.' };
     }
     return false;
+  },
+  async superfluidStreamProposal({ appState, values }) {
+    console.log('validating', appState, values);
+    if (+values.superfluidRate <= 0) {
+      return {
+        name: 'superfluidRate',
+        message: 'Rate must be greater than zero',
+      };
+    }
+
+    // TODO: add injectedProvider to TXContext.js line 65?
+    const minDeposit = appState.injectedProvider.utils.toWei(
+      values.paymentRequested,
+    );
+    if (+minDeposit < +values.weiRatePerSec * 3600) {
+      return {
+        name: 'paymentRequested',
+        message: 'Funds requested must be at least one-hour stream value',
+      };
+    }
+
+    // will async work? use contract service this will be a pain
+    // const hasActiveStreams = await minionService('hasActiveStreams')({
+    //   to: values.memberApplicant || values.applicant,
+    //   tokenAddress: values.paymentToken,
+    // });
+    // likely need to do this on member or paymenttoken changes - custom fields...
+    // or create a beforeTx lifecycle
   },
 };

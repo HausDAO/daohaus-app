@@ -34,7 +34,7 @@ const BalanceList = ({
         <TextBox size='xs' mb={6}>
           {balanceListTitle}
         </TextBox>
-        {!isNativeToken && !isTreasury && balances?.length && (
+        {!isNativeToken && !isTreasury && balances?.length > 0 && (
           <MinionVaultRefreshButton />
         )}
       </Flex>
