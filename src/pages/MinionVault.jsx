@@ -16,7 +16,7 @@ import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { formatNativeData } from '../utils/vaults';
 
-const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
+const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
@@ -144,17 +144,20 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
                 <Flex direction='row' justify='space-between'>
                   <TextBox w='100%'>NFTS</TextBox>
                   <TextBox w='100%' fontcolor='secondary'>
-                    {false && (
-                      <Link
-                        to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
-                      >
-                        View Gallery
-                      </Link>
-                    )}
+                    <Link
+                      to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
+                    >
+                      View Gallery
+                    </Link>
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
-                  <NftCard nft={nft} key={i} isMember={isMember} />
+                  <NftCard
+                    key={i}
+                    nft={nft}
+                    minion={minion}
+                    minionType={vault.minionType}
+                  />
                 ))}
               </>
             )}

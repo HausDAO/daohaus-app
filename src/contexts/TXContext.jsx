@@ -218,6 +218,8 @@ export const TXProvider = ({ children }) => {
       tx: { name },
     } = data;
 
+    console.log('data', data);
+
     //  Checks that this TX has a name and that the name is in the
     //  list of existing Transactions
     if (!name) {
