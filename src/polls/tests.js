@@ -11,6 +11,14 @@ export const testTXHash = (data, shouldEqual, pollId) => {
   );
 };
 
+export const testWrapNZap = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data === shouldEqual;
+  }
+  clearInterval(pollId);
+  throw new Error('Did not receive results from the Wrap N Zap transaction.');
+};
+
 export const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
     const recentProposalHashes = data.proposals.map(proposal =>

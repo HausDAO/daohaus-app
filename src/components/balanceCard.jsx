@@ -5,17 +5,29 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionTransfer from './minionTransfer';
+import PokeTokenButton from './pokeTokenButton';
 import SyncTokenButton from './syncTokenButton';
 import Withdraw from './withdraw';
 import { numberWithCommas } from '../utils/general';
 import { displayBalance } from '../utils/tokenValue';
+import { getWrapNZap } from '../utils/theGraph';
 
-const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
+const balanceCard = ({
+  token,
+  isBank = true,
+  hasBalance,
+  isNativeToken,
+  vault,
+}) => {
   const toast = useToast();
-  const { minion } = useParams();
+  const { daoid, daochain, minion } = useParams();
   const { daoMember, delegate, isMember } = useDaoMember();
   const [needsSync, setNeedsSync] = useState(null);
+  const [wnzAddress, setWnzAddress] = useState(null);
+  const [needsPoke, setNeedsPoke] = useState(null);
+  const { injectedProvider } = useInjectedProvider();
 
   useEffect(() => {
     if (token?.contractBalances) {
@@ -27,7 +39,23 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
 
       setNeedsSync(isAccurateBalance);
     }
-  }, [token, isBank, daoMember, delegate]);
+
+    const getWnzAddress = async () => {
+      setWnzAddress(await getWrapNZap(daochain, daoid));
+    };
+    getWnzAddress();
+
+    if (wnzAddress) {
+      injectedProvider.eth.getBalance(wnzAddress, (error, result) => {
+        if (error) {
+          console.log('Error detecting Wrap-N-Zap poke balance.', error);
+        } else {
+          console.log('Wrap-N-Zap Poke Balance', result);
+          setNeedsPoke(result !== '0');
+        }
+      });
+    }
+  }, [daochain, daoid, daoMember, delegate, isBank, token]);
 
   const copiedToast = () => {
     toast({
@@ -85,6 +113,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
 
       <Box w={['10%', null, null, '30%']} d='inline-block' textAlign='right'>
         {hasBalance && <Withdraw token={token} />}
+        {needsPoke && <PokeTokenButton wnzAddress={wnzAddress} />}
         {needsSync && <SyncTokenButton token={token} />}
         {minion && token?.tokenBalance > 0 && (
           <MinionTransfer
@@ -92,6 +121,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
             isNativeToken={isNativeToken}
             minion={minion}
             token={token}
+            vault={vault}
           />
         )}
       </Box>
