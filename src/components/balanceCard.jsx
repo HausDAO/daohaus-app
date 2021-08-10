@@ -14,7 +14,13 @@ import { numberWithCommas } from '../utils/general';
 import { displayBalance } from '../utils/tokenValue';
 import { getWrapNZap } from '../utils/theGraph';
 
-const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
+const balanceCard = ({
+  token,
+  isBank = true,
+  hasBalance,
+  isNativeToken,
+  vault,
+}) => {
   const toast = useToast();
   const { daoid, daochain, minion } = useParams();
   const { daoMember, delegate, isMember } = useDaoMember();
@@ -115,6 +121,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
             isNativeToken={isNativeToken}
             minion={minion}
             token={token}
+            vault={vault}
           />
         )}
       </Box>
