@@ -17,9 +17,11 @@ const ListSelector = ({ lists, topListItem, divider, headerSection }) => {
       <ContentBox p='0' border='none' mb={6} w='100%'>
         <Flex flexDir='column'>
           {topListItem}
-          <TextBox ml={6} my={6}>
-            {divider}
-          </TextBox>
+          {divider && (
+            <TextBox ml={6} my={6}>
+              {divider}
+            </TextBox>
+          )}
           {lists}
         </Flex>
       </ContentBox>

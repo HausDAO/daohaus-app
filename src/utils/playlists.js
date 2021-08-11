@@ -117,3 +117,8 @@ export const devList = createPlaylist({
     return arr;
   }, []),
 });
+
+export const installedDefaults = [
+  { name: 'Boosts', id: 'boosts', types: [] },
+  { name: 'Market', id: 'market', types: [] },
+];

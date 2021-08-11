@@ -3,10 +3,11 @@ import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex } from '@chakra-ui/layout';
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/menu';
 import { Spinner } from '@chakra-ui/spinner';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 import { Button } from '@chakra-ui/button';
 import { Tabs, Tab, TabList, TabPanel, TabPanels } from '@chakra-ui/tabs';
+import { list } from '@chakra-ui/styled-system';
 import List from '../components/list';
 import ListItem from '../components/listItem';
 import ListSelector from '../components/ListSelector';
@@ -15,12 +16,17 @@ import ListSelectorItem from '../components/ListSelectorItem';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { isLastItem } from '../utils/general';
+import { isFirstItem, isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
+import { generateLists } from '../utils/marketplace';
 import { useFormModal } from '../contexts/OverlayContext';
 import { FORM } from '../data/forms';
 import { PUBLISHERS } from '../data/publishers';
 import { TX } from '../data/contractTX';
+import TheSummoner from '../components/theSummoner';
+import { useDao } from '../contexts/DaoContext';
+
+const dev = process.env.REACT_APP_DEV;
 
 const MarketPlaceV0 = () => {
   // const { injectedProvider, address, injectedChain } = useInjectedProvider();
@@ -158,37 +164,6 @@ const Market = () => {
   );
 };
 
-const Installed = () => {
-  const { daoMetaData } = useMetaData();
-  const [loading, setLoading] = useState(false);
-  const [categoryID, setID] = useState('all');
-  const selectCategory = id => {
-    if (!id) return;
-    if (id === categoryID) {
-      setID(null);
-    } else {
-      setID(id);
-    }
-  };
-  return (
-    <Flex flexDir='column' w='95%'>
-      {daoMetaData ? (
-        <Flex>
-          {/* <CategorySelector
-            categoryID={categoryID}
-            selectList={selectCategory}
-            allBoosts={allBoosts}
-          />
-          <BoostsList categoryID={categoryID} allBoosts={allBoosts} /> */}
-          <InstalledList />
-        </Flex>
-      ) : (
-        <Spinner />
-      )}
-    </Flex>
-  );
-};
-
 const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   return (
     <ListSelector
@@ -272,14 +247,107 @@ const BoostsList = ({ categoryID, openDetails }) => {
 export default MarketPlaceV0;
 
 /// //////////// INSTALLED STUFF
-const InstalledList = () => {
+
+const Installed = () => {
+  const { daoMetaData } = useMetaData();
+  const { daoOverview } = useDao();
+  const [loading, setLoading] = useState(false);
+  const [lists, setLists] = useState(null);
+  const [listID, setListID] = useState(null);
+
+  useEffect(() => {
+    if (daoMetaData && daoOverview) {
+      const generatedLists = generateLists(daoMetaData, daoOverview, dev);
+      console.log(`generatedLists`, generatedLists);
+      setLists(generatedLists);
+    }
+  }, [daoMetaData, daoOverview, dev]);
+
+  const selectList = id => {
+    if (!id) return;
+    if (id === listID) {
+      setListID(null);
+    } else {
+      setListID(id);
+    }
+  };
+
+  return (
+    <Flex flexDir='column' w='95%'>
+      {daoMetaData ? (
+        <Flex>
+          {/* <CategorySelector
+            categoryID={categoryID}
+            selectList={selectCategory}
+            allBoosts={allBoosts}
+          />
+          
+          <BoostsList categoryID={categoryID} allBoosts={allBoosts} /> */}
+          <ListTypeSelector
+            selectList={selectList}
+            listID={listID}
+            lists={lists}
+          />
+          <InstalledList listID={listID} lists={lists} />
+        </Flex>
+      ) : (
+        <Spinner />
+      )}
+    </Flex>
+  );
+};
+
+const InstalledList = ({ listID, lists }) => {
+  const currentList = useMemo(() => {
+    if (listID && lists) {
+      return lists?.find(list => list.id === listID);
+    }
+  }, [listID, lists]);
+
   return (
     <List
       headerSection={
         <InputGroup w='250px' mr={6}>
-          <Input placeholder='Search Boosts' />
+          <Input
+            placeholder={`Search ${currentList?.name || 'Installed'}...`}
+          />
         </InputGroup>
       }
+      list={currentList?.types?.map(boost => (
+        <ListItem
+          {...boost}
+          key={boost.id}
+          menuSection={
+            listID === 'minion' ? (
+              <Button variant='ghost'>
+                <TextBox>Minion Page</TextBox>
+              </Button>
+            ) : (
+              <Button variant='ghost'>
+                <TextBox>Details</TextBox>
+              </Button>
+            )
+          }
+        />
+      ))}
+    />
+  );
+};
+
+const ListTypeSelector = ({ selectList, listID, lists }) => {
+  return (
+    <ListSelector
+      lists={lists?.map((type, index) => (
+        <ListSelectorItem
+          key={type.id}
+          id={type.id}
+          selectList={selectList}
+          isSelected={type.id === listID}
+          listLabel={{ left: type.name, right: type.types?.length }}
+          isBottom={isLastItem(lists, index)}
+          isTop={dev || isFirstItem(lists, index)}
+        />
+      ))}
     />
   );
 };

@@ -301,3 +301,4 @@ export const getKeyedArray = (obj, keyName = 'field') => {
 };
 
 export const isLastItem = (list, index) => index === list?.length - 1;
+export const isFirstItem = (list, index) => index === 0;

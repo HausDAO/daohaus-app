@@ -42,6 +42,13 @@ export const BOOSTS = {
     description: 'Swap, Pool, and Farm DAO Tokens using Swapr',
     categories: ['token', 'tools'],
   },
+  BOOSTY_BOOST: {
+    id: 'BOOSTY_BOOST',
+    dev: true,
+    title: 'Unregistered Boost',
+    description: "Just Didn't register it.",
+    categories: ['dev'],
+  },
 };
 
 export const allBoosts = {
@@ -62,3 +69,14 @@ export const categories = categoryStarter.map(cat => ({
     .filter(boost => boost.categories.includes(cat.id))
     .map(cat => cat.id),
 }));
+
+export const devBoostList = {
+  name: 'DEV Boosts',
+  id: 'dev',
+  types: Object.values(BOOSTS).reduce((arr, form) => {
+    if (form.dev) {
+      return [...arr, form.id];
+    }
+    return arr;
+  }, []),
+};
