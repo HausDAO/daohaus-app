@@ -239,6 +239,23 @@ export const FIELD = {
     label: 'Target NiftyInk Url',
     expectType: 'any',
   },
+  SUPERFLUID_RATE: {
+    type: 'superfluidRate',
+    htmlFor: 'superfluidRate',
+    name: 'superfluidRate',
+    label: 'Streaming Rate',
+    expectType: 'greaterThanZero',
+  },
+  SUPERFLUID_PAYMENT_REQUEST: {
+    type: 'superfluidPaymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Payment Requested',
+    info: INFO_TEXT.PAYMENT_REQUEST,
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
+  },
 };
 
 export const FORM_DISPLAY = {

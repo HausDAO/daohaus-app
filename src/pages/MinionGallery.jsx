@@ -29,7 +29,11 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
       } else {
         nfts = daoVaults?.reduce((acc, item) => {
           const nftsWithMinionAddress = item.nfts.map(n => {
-            return { ...n, minionAddress: item.address };
+            return {
+              ...n,
+              minionAddress: item.address,
+              minionType: item.minionType,
+            };
           });
           return [...acc, ...nftsWithMinionAddress];
         }, []);
@@ -180,6 +184,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
                 <NftCard
                   nft={nft}
                   minion={minion || nft.minionAddress}
+                  minionType={nft.minionType}
                   width={['85vw', '85vw', 350, 350]}
                 />
               </WrapItem>

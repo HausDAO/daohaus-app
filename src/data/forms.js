@@ -329,7 +329,7 @@ export const FORM = {
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_NIFTY_SET_PRICE,
+    tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   NEW_NEAPOLITAN_MINION: {
@@ -359,5 +359,30 @@ export const FORM = {
       [FIELD.NIFTY_INK_URL],
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
     ],
+  },
+  SUPERFLUID_STREAM: {
+    id: 'SUPERFLUID_STREAM',
+    title: 'Superfluid Payment Stream',
+    description: 'Stream funds from the Superfluid Minion',
+    type: PROPOSAL_TYPES.MINION_SUPERFLUID,
+    minionType: MINION_TYPES.SUPERFLUID,
+    tx: TX.SUPERFLUID_PROPOSE_ACTION,
+    required: [
+      'title',
+      'applicant',
+      'selectedMinion',
+      'targetInk',
+      'paymentRequested',
+      'superfluidRate',
+    ],
+    fields: [
+      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [
+        FIELD.APPLICANT,
+        FIELD.SUPERFLUID_PAYMENT_REQUEST,
+        FIELD.SUPERFLUID_RATE,
+      ],
+    ],
+    customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
   },
 };

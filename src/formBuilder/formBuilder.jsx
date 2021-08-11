@@ -114,14 +114,21 @@ const FormBuilder = props => {
       tx: props.tx,
     });
     //  Checks for custom validation
+    console.log('before customValErrors');
+
     const customValErrors = handleCustomValidation({
       values: modifiedValues,
       formData: props,
     });
+
+    console.log('customValErrors likely not async', customValErrors);
     if (customValErrors) {
       updateErrors(customValErrors);
       return;
     }
+
+    console.log('after customValErrors');
+
     //  checks if submit is not a contract interaction and is a callback
     if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
       try {

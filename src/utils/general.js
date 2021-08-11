@@ -153,6 +153,11 @@ export const numberWithCommas = num => {
     parseInt(localNum.split('.')[1]) === 0
       ? localNum.split('.')[0]
       : parseFloat(localNum);
+
+  const localNoZeroDec =
+    typeof noZeroDec !== 'string' ? noZeroDec.toString() : noZeroDec;
+  if (localNoZeroDec.includes(`e-`)) return localNoZeroDec;
+
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 

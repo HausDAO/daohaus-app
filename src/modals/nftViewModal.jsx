@@ -51,7 +51,7 @@ const NftViewModal = () => {
                 maxWidth={['100%', '50vh']}
                 fit='contain'
                 objectFit='contain'
-                src={nftViewModal.metadata?.image}
+                src={nftViewModal?.image}
               />
               <Flex
                 w='100%'

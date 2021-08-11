@@ -8,12 +8,12 @@ import NftViewModal from '../modals/nftViewModal';
 import NftCardActionMenu from './nftCardActionMenu';
 import { hydrateNftCard } from '../utils/nftVaults';
 
-const NftCard = ({ nft, minion, ...props }) => {
+const NftCard = ({ nft, minion, minionType, ...props }) => {
   const { setNftViewModal } = useOverlay();
 
   const hydratedNft = useMemo(() => {
     if (nft) {
-      return hydrateNftCard(nft);
+      return hydrateNftCard(nft, minionType);
     }
   }, [nft]);
 
@@ -48,7 +48,7 @@ const NftCard = ({ nft, minion, ...props }) => {
       </Flex>
       <AspectRatio ratio={1} maxWidth={300} maxHeight={300} m='auto' mb={5}>
         <Image
-          src={hydratedNft?.metadata?.image}
+          src={hydratedNft?.image}
           margin='auto'
           fit='contain'
           objectFit='contain'

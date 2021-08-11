@@ -6,17 +6,16 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { CORE_FORMS } from '../data/forms';
+import { getMinionActionFormLego } from '../utils/vaults';
 
-const MinionTransfer = ({ isMember, isNativeToken, minion, token }) => {
+const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
   const { address, injectedChain } = useInjectedProvider();
   const { setGenericModal } = useOverlay();
   const { daochain } = useParams();
 
   const transferFormLego = useMemo(() => {
-    return isNativeToken
-      ? CORE_FORMS.MINION_SEND_NETWORK_TOKEN
-      : CORE_FORMS.MINION_SEND_ERC20_TOKEN;
+    const tokenType = isNativeToken ? 'network' : 'erc20';
+    return getMinionActionFormLego(tokenType, vault.minionType);
   }, [isNativeToken]);
 
   const openSendModal = () => {
