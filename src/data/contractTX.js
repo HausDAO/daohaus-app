@@ -172,6 +172,15 @@ export const DETAILS = {
     proposalType: '.formData.type',
     minionType: MINION_TYPES.NIFTY,
   },
+  SUPERFLUID_STREAM: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    recipient: '.values.applicant',
+    token: '.values.paymentToken',
+    tokenRate: '.values.rateString',
+  },
 };
 
 export const TX = {
@@ -702,17 +711,8 @@ export const TX = {
       '0x0',
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.STANDARD_PROPOSAL,
+        gatherFields: DETAILS.SUPERFLUID_STREAM,
       },
     ],
   },
 };
-
-// const args = [
-//   values.memberApplicant || values.applicant,
-//   values.paymentToken,
-//   values.weiRatePerSec,
-//   minDeposit,
-//   '0x',
-//   details,
-// ];
