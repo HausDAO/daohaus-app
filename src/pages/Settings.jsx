@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Flex, Link, Stack } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-import BoostStatus from '../components/boostStatus';
+// import BoostStatus from '../components/boostStatus';
 import Superpowers from '../components/daoSuperpowers';
 import DaoContractSettings from '../components/daoContractSettings';
 import DaoMetaOverview from '../components/daoMetaOverview';
