@@ -109,11 +109,13 @@ const SuperfluidMinionProposalForm = () => {
 
       const minDeposit = injectedProvider.utils.toWei(values.paymentRequested);
       const ratePerSec = values.weiRatePerSec;
+
+      console.log('values.weiRatePerSec', values.weiRatePerSec);
       // TODO: check if Minion already has enough funds to cover the minimum deposit
       if (+minDeposit < +ratePerSec * 3600) {
         setCurrentError({
           field: 'paymentRequested',
-          message: 'Funds requested must be at least one-hour stream value',
+          message: 'Funds requested must be at least one-hour of stream value',
         });
         setLoading(false);
         return;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
 
 import TextBox from './TextBox';
@@ -11,19 +11,30 @@ const BalanceList = ({
   profile,
   hasBalance,
   needsSync,
-  vaultConfig,
+  vault,
   isNativeToken,
   isTreasury,
 }) => {
+  const balanceListTitle = useMemo(() => {
+    if (vault) {
+      if (isNativeToken) {
+        return 'Network Token Balance';
+      }
+      if (vault.type === 'treasury') {
+        return 'Whitelisted Token Balances';
+      }
+      return 'ERC20 Token Balances';
+    }
+    return null;
+  }, [isNativeToken, vault]);
+
   return (
     <ContentBox mt={6}>
       <Flex justify='space-between'>
         <TextBox size='xs' mb={6}>
-          {isNativeToken
-            ? `Network Token Balance`
-            : `${vaultConfig.balanceListTitle}`}
+          {balanceListTitle}
         </TextBox>
-        {!isNativeToken && !isTreasury && balances?.length && (
+        {!isNativeToken && !isTreasury && balances?.length > 0 && (
           <MinionVaultRefreshButton />
         )}
       </Flex>
@@ -58,6 +69,7 @@ const BalanceList = ({
                 hasBalance={hasBalance}
                 hasSync={needsSync}
                 isNativeToken={isNativeToken}
+                vault={vault}
               />
             );
           })

@@ -17,6 +17,10 @@ export const INFO_TEXT = {
   DELEGATE_ADDRESS:
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
+  MINION_QUORUM:
+    'Once this percentage of DAO shares have votes yes this minion action will be executable.',
+  NIFTY_REPAYMENT_REQUEST:
+    'This proposal requires the selected minion to hold the XDAI funds to purchase the NiftyInk. Enter that amount in WXDAI to repay the minion from the DAO treasury.',
 };
 
 export const FIELD = {
@@ -154,6 +158,26 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'address',
   },
+  SET_PRICE: {
+    type: 'priceInput',
+    htmlFor: 'sellPrice',
+    name: 'sellPrice',
+    placeholder: '0',
+    label: 'Set Price (Take)',
+    expectType: 'number',
+  },
+  NFT_SELECT: {
+    type: 'nftSelect',
+    htmlFor: 'nftSelect',
+    name: 'nftSelect',
+    label: 'Select an NFT',
+  },
+  DATE_RANGE: {
+    type: 'dateRange',
+    htmlFor: 'dateRange',
+    name: 'dateRange',
+    label: 'Set Auction Duration',
+  },
   DELEGATE_ADDRESS: {
     type: 'input',
     htmlFor: 'delegateAddress',
@@ -180,6 +204,57 @@ export const FIELD = {
     info: INFO_TEXT.NFT_PRICE,
     expectType: 'number',
     modifiers: ['addWeiDecimals'],
+  },
+  MINION_NAME: {
+    type: 'input',
+    label: 'Minion Name',
+    name: 'minionName',
+    htmlFor: 'minionName',
+    placeholder: 'Sally',
+    expectType: 'any',
+  },
+  MINION_QUORUM: {
+    type: 'input',
+    label: 'Minumum Quorum (%)',
+    name: 'minQuorum',
+    htmlFor: 'minQuorum',
+    placeholder: '50',
+    info: INFO_TEXT.MINION_QUORUM,
+    expectType: 'number',
+  },
+  NIFTY_MINION_PAYMENT_REQUEST: {
+    type: 'paymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Minion Repayment Requested',
+    info: INFO_TEXT.NIFTY_REPAYMENT_REQUEST,
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
+  },
+  NIFTY_INK_URL: {
+    type: 'targetInk',
+    htmlFor: 'targetInk',
+    name: 'targetInk',
+    label: 'Target NiftyInk Url',
+    expectType: 'any',
+  },
+  SUPERFLUID_RATE: {
+    type: 'superfluidRate',
+    htmlFor: 'superfluidRate',
+    name: 'superfluidRate',
+    label: 'Streaming Rate',
+    expectType: 'greaterThanZero',
+  },
+  SUPERFLUID_PAYMENT_REQUEST: {
+    type: 'superfluidPaymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Payment Requested',
+    info: INFO_TEXT.PAYMENT_REQUEST,
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
   },
 };
 

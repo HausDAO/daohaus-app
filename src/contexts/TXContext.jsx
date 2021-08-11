@@ -21,6 +21,7 @@ import {
 } from '../utils/txHelpers';
 import { customValidations } from '../utils/validation';
 import { TX } from '../data/contractTX';
+import { supportedChains } from '../utils/chain';
 
 export const TXContext = createContext();
 
@@ -46,7 +47,7 @@ export const TXProvider = ({ children }) => {
     errorToast,
     successToast,
     setTxInfoModal,
-    setProposalModal,
+    setModal,
     setGenericModal,
   } = useOverlay();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
@@ -59,6 +60,7 @@ export const TXProvider = ({ children }) => {
   } = useDaoMember();
 
   const { daoid, daochain } = useParams();
+  const chainConfig = supportedChains[daochain];
 
   const contextData = {
     address,
@@ -74,6 +76,7 @@ export const TXProvider = ({ children }) => {
     userHubDaos,
     outstandingTXs,
     daoVaults,
+    chainConfig,
   };
 
   const uiControl = {
@@ -83,8 +86,8 @@ export const TXProvider = ({ children }) => {
     cachePoll,
     refetch,
     setTxInfoModal,
-    setProposalModal,
     setGenericModal,
+    setModal,
   };
 
   const refreshDao = () => {
@@ -151,6 +154,8 @@ export const TXProvider = ({ children }) => {
               daoMetaData,
             });
           }
+
+          // could we add some more
         },
       },
     });
@@ -214,6 +219,8 @@ export const TXProvider = ({ children }) => {
   };
 
   const submitTransaction = data => {
+    console.log('data', data);
+
     const {
       tx: { name },
     } = data;
@@ -241,6 +248,10 @@ export const TXProvider = ({ children }) => {
     return handleFieldModifiers({ ...formState, contextData });
   };
 
+  const submitCallback = formState => {
+    return formState.onSubmit({ ...formState, contextData, injectedProvider });
+  };
+
   return (
     <TXContext.Provider
       value={{
@@ -248,6 +259,7 @@ export const TXProvider = ({ children }) => {
         submitTransaction,
         handleCustomValidation,
         modifyFields,
+        submitCallback,
       }}
     >
       {children}
@@ -261,11 +273,13 @@ export const useTX = () => {
     submitTransaction,
     handleCustomValidation,
     modifyFields,
+    submitCallback,
   } = useContext(TXContext);
   return {
     refreshDao,
     submitTransaction,
     handleCustomValidation,
     modifyFields,
+    submitCallback,
   };
 };

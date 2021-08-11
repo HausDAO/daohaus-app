@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Flex, Spinner } from '@chakra-ui/react';
+import { ToolTipWrapper } from '../staticElements/wrappers';
 
 import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -14,7 +15,7 @@ const MinionCancel = ({ proposal }) => {
   const {
     errorToast,
     successToast,
-    setProposalModal,
+    // setProposalModal,
     setTxInfoModal,
   } = useOverlay();
   const { address, injectedProvider } = useInjectedProvider();
@@ -53,7 +54,7 @@ const MinionCancel = ({ proposal }) => {
         },
       });
       const onTxHash = () => {
-        setProposalModal(false);
+        // setProposalModal(false);
         setTxInfoModal(true);
       };
 
@@ -78,9 +79,19 @@ const MinionCancel = ({ proposal }) => {
 
   const getMinionAction = () => {
     return (
-      <Button onClick={cancelMinion} disabled={!isCorrectChain}>
-        Cancel Minion
-      </Button>
+      <ToolTipWrapper
+        tooltip
+        tooltipText={{ body: `Only proposor can cancel` }}
+        placement='right'
+        layoutProps={{
+          transform: 'translateY(-2px)',
+          display: 'inline-block',
+        }}
+      >
+        <Button onClick={cancelMinion} disabled={!isCorrectChain}>
+          Cancel Minion
+        </Button>
+      </ToolTipWrapper>
     );
   };
 

@@ -35,7 +35,7 @@ const MinionExecute = ({ proposal, early }) => {
     const getMinionDetails = async () => {
       setLoading(true);
       try {
-        const tx = transactionByProposalType(proposal.proposalType);
+        const tx = transactionByProposalType(proposal);
         const abi = LOCAL_ABI[tx.contract.abiName];
         const web3Contract = createContract({
           address: proposal.minionAddress,
@@ -94,7 +94,7 @@ const MinionExecute = ({ proposal, early }) => {
 
     const args = [proposal.proposalId];
     await submitTransaction({
-      tx: transactionByProposalType(proposal.proposalType),
+      tx: transactionByProposalType(proposal),
       args,
       localValues: {
         minionAddress: proposal.minionAddress,

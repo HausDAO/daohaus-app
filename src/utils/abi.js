@@ -11,15 +11,27 @@ import ERC_721 from '../contracts/nft.json';
 import NIFTY_INK from '../contracts/niftyInk.json';
 import UBERHAUS_MINION from '../contracts/uberHausMinion.json';
 import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
+import NEAPOLITAN_MINION_FACTORY from '../contracts/neapolitanMinionFactory.json';
+import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
+import NIFTY_MINION_FACTORY from '../contracts/minionNiftyFactory.json';
+import NIFTY_MINION from '../contracts/minionNifty.json';
+import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
+import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
   ERC_20,
   VANILLA_MINION,
+  NIFTY_MINION,
   ERC_721,
   NIFTY_INK,
   UBERHAUS_MINION,
   SUPERFLUID_MINION,
+  NEAPOLITAN_MINION_FACTORY,
+  VANILLA_MINION_FACTORY,
+  NIFTY_MINION_FACTORY,
+  WRAP_N_ZAP_FACTORY,
+  WRAP_N_ZAP,
 });
 
 const isEtherScan = chainID => {

@@ -74,8 +74,8 @@ const DaoRouter = () => {
             isCorrectNetwork={isCorrectNetwork}
             daoOverview={daoOverview}
             members={daoMembers}
-            currentDaoTokens={currentDaoTokens}
             daoMetaData={daoMetaData}
+            daoVaults={daoVaults}
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
@@ -212,20 +212,13 @@ const DaoRouter = () => {
             daoMembers={daoMembers}
           />
         </Route>
-        <Route exact path={`${path}/proposals/new/:proposalType`}>
+        {/* <Route exact path={`${path}/proposals/new/:proposalType`}>
           <NewProposal
             customTerms={customTerms}
             daoMetaData={daoMetaData}
             daoOverview={daoOverview}
           />
-        </Route>
-        <Route exact path={`${path}/proposals/new`}>
-          <NewProposal
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
-            daoOverview={daoOverview}
-          />
-        </Route>
+        </Route> */}
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal
             overview={daoOverview}

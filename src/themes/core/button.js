@@ -33,6 +33,14 @@ const Button = {
         outline: 'none',
       },
     },
+    nftSelect: {
+      bg: 'transparent',
+      borderColor: 'white',
+      borderStyle: 'dashed',
+      borderWidth: '1px',
+      height: '300px',
+      width: '300px',
+    },
     // 4. Override existing variants
     solid: () => ({
       bg: 'secondary.400',
@@ -45,10 +53,10 @@ const Button = {
       },
       _active: { bg: 'inherit' },
     }),
-    outline: () => ({
+    outline: props => ({
       borderColor: 'secondary.400',
       bg: 'transparent',
-      color: 'secondary.400',
+      color: props.color || 'secondary.400',
       _hover: {
         borderColor: 'secondary.500',
         color: 'secondary.500',

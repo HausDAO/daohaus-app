@@ -161,7 +161,7 @@ const completeQueries = {
               totalUSD: calcTotalUSD(
                 token.token.decimals,
                 token.tokenBalance,
-                priceData.price || 0,
+                priceData?.price || 0,
               ),
             };
           }),
@@ -196,6 +196,8 @@ const completeQueries = {
           }),
         ),
       };
+
+      console.log('resolvedActivity', resolvedActivity);
 
       if (setter.setDaoActivities) {
         setter.setDaoActivities(resolvedActivity);

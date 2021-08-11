@@ -1,30 +1,36 @@
-import { FORM } from '../data/forms';
+import { CORE_FORMS } from '../data/forms';
+import { getMinionActionFormLego } from './vaults';
 
 // NEXT STEPS:
 // - Rarible default actions - added if on mainnet?
 // - daohaus marketplace
 // - example without a form modal - just fire  transaction
 // - example with a link out to platform
+// - move to config to data folder
 
 const defaultConfig = {
   platform: 'unknown',
-  fields: {},
+  fields: {
+    image: 'getMetadataImage',
+  },
   actions: {
     transfer721: {
       menuLabel: 'Transfer NFT',
       tooltTipLabel:
         'Make a proposal to tranfer this nft to the applicant address',
       modalName: 'transfer721',
-      formLego: FORM.MINION_SEND_ERC721_TOKEN,
+      formLego: CORE_FORMS.MINION_SEND_ERC721_TOKEN,
       localValues: ['tokenId', 'contractAddress'],
+      minionTypeOverride: true,
     },
   },
 };
 
-const nftConfig = {
+const nftConfigs = {
   '0xcf964c89f509a8c0ac36391c5460df94b91daba5': {
     platform: 'nifty ink',
     fields: {
+      ...defaultConfig.fields,
       creator: 'getNiftyCreator',
     },
     actions: {
@@ -34,14 +40,18 @@ const nftConfig = {
         tooltTipLabel:
           'Make a proposal to set the price of the nft on nifty.ink',
         modalName: 'sellNifty',
-        formLego: FORM.MINION_SELL_NIFTY,
+        formLego: CORE_FORMS.MINION_SELL_NIFTY,
         localValues: ['tokenId', 'contractAddress'],
+        minionTypeOverride: true,
       },
     },
   },
 };
 
 export const attributeModifiers = Object.freeze({
+  getMetadataImage(nft) {
+    return nft.metadata.image_url ? nft.metadata.image_url : nft.metadata.image;
+  },
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
     if (!description) {
@@ -51,11 +61,9 @@ export const attributeModifiers = Object.freeze({
   },
 });
 
-export const hydrateNftCard = nft => {
-  const config = nftConfig[nft.contractAddress] || defaultConfig;
-  // TODO: need a better way to get passed in values if it's deeper than 1 level on nft object
-  // - maybe searchTerm like in tx gather args?
-  // - also now adding one from the component so this is a little hard to reason about
+export const hydrateNftCard = (nft, minionType) => {
+  const config = nftConfigs[nft.contractAddress] || defaultConfig;
+
   const hydratedActions = Object.keys(config.actions).map(key => {
     const action = config.actions[key];
     const localValues =
@@ -64,8 +72,13 @@ export const hydrateNftCard = nft => {
         vals[field] = nft[field];
         return vals;
       }, {});
+    let { formLego } = action;
+    if (action.minionTypeOverride) {
+      formLego = getMinionActionFormLego('erc721', minionType);
+    }
     return {
       ...action,
+      formLego,
       localValues,
     };
   });
@@ -84,4 +97,10 @@ export const hydrateNftCard = nft => {
     actions: hydratedActions,
     ...hydratedFields,
   };
+};
+
+export const concatNftSearchData = nft => {
+  return `${nft.name} ${nft.metadata?.name ? nft.metadata?.name : ''} ${
+    nft.metadata?.description ? nft.metadata?.description : ''
+  }`.toLowerCase();
 };

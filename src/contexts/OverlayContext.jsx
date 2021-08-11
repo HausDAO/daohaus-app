@@ -5,10 +5,13 @@ export const OverlayContext = createContext();
 
 export const OverlayProvider = ({ children }) => {
   const toast = useToast();
+  const [modal, setModal] = useState(false);
+  // console.log('modal', modal);
   const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
   const [hubAccountModal, setHubAccountModal] = useState(false);
   const [daoAccountModal, setDaoAccountModal] = useState(false);
-  const [proposalModal, setProposalModal] = useState(false);
+  const [formModal, setFormModal] = useState(null);
+  const [proposalSelector, setProposalSelector] = useState(false);
   const [txInfoModal, setTxInfoModal] = useState(false);
   const [imageUploadModal, setImageUploadModal] = useState(false);
   const [d2dProposalTypeModal, setD2dProposalTypeModal] = useState(false);
@@ -47,17 +50,25 @@ export const OverlayProvider = ({ children }) => {
     });
   };
 
+  // const useAppModal = params => {
+  //   setModal(params);
+  // };
+
+  const closeModal = () => setModal(false);
+
   return (
     <OverlayContext.Provider
       value={{
+        modal,
+        setModal,
         daoSwitcherModal,
         setDaoSwitcherModal,
         hubAccountModal,
         setHubAccountModal,
         daoAccountModal,
         setDaoAccountModal,
-        proposalModal,
-        setProposalModal,
+        formModal,
+        setFormModal,
         errorToast,
         successToast,
         warningToast,
@@ -71,6 +82,9 @@ export const OverlayProvider = ({ children }) => {
         setD2dProposalModal,
         genericModal,
         setGenericModal,
+        proposalSelector,
+        setProposalSelector,
+        closeModal,
         nftViewModal,
         setNftViewModal,
       }}
@@ -84,14 +98,16 @@ export default OverlayProvider;
 
 export const useOverlay = () => {
   const {
+    modal,
+    setModal,
     daoSwitcherModal,
     setDaoSwitcherModal,
     hubAccountModal,
     setHubAccountModal,
     daoAccountModal,
     setDaoAccountModal,
-    proposalModal,
-    setProposalModal,
+    formModal,
+    setFormModal,
     errorToast,
     successToast,
     warningToast,
@@ -105,18 +121,22 @@ export const useOverlay = () => {
     setD2dProposalModal,
     genericModal,
     setGenericModal,
+    proposalSelector,
+    setProposalSelector,
     nftViewModal,
     setNftViewModal,
   } = useContext(OverlayContext);
   return {
+    modal,
+    setModal,
     daoSwitcherModal,
     setDaoSwitcherModal,
     daoAccountModal,
     setDaoAccountModal,
     hubAccountModal,
     setHubAccountModal,
-    proposalModal,
-    setProposalModal,
+    formModal,
+    setFormModal,
     errorToast,
     successToast,
     warningToast,
@@ -130,7 +150,62 @@ export const useOverlay = () => {
     setD2dProposalModal,
     genericModal,
     setGenericModal,
+    proposalSelector,
+    setProposalSelector,
     nftViewModal,
     setNftViewModal,
+  };
+};
+
+export const useConfirmation = () => {
+  const { setModal, closeModal } = useContext(OverlayContext);
+
+  return {
+    openConfirmation({
+      title,
+      body,
+      width = '500px',
+      onCancel,
+      onSubmit,
+      header,
+      overrideFooter,
+      loading,
+    }) {
+      setModal({
+        isConfirmation: true,
+        title,
+        header,
+        body,
+        width,
+        onCancel,
+        onSubmit,
+        overrideFooter,
+        loading,
+      });
+    },
+    closeModal,
+  };
+};
+
+export const useFormModal = () => {
+  const { setModal, errorToast, closeModal } = useContext(OverlayContext);
+  return {
+    openFormModal({ lego, onSubmit, onCancel }) {
+      //  TODO once TX Context is ready on Hub level
+      //  get url info from useParams  and conditionally load the correct
+      //  modal based on scope. Same pattern can be used for other scoped modals
+      if (lego && onSubmit && !lego?.tx) {
+        console.log('fired');
+        setModal({ lego, onSubmit, onCancel });
+      } else if (lego) {
+        setModal({ lego, onCancel });
+      } else {
+        errorToast({
+          title: 'Modal Error',
+          description: 'Did not receive valid Form lego',
+        });
+      }
+    },
+    closeModal,
   };
 };

@@ -17,6 +17,7 @@ export const ProposalStatus = {
 };
 
 export const PROPOSAL_TYPES = {
+  CORE: 'Core',
   MEMBER: 'Member Proposal',
   SIGNAL: 'Signal Proposal',
   WHITELIST: 'Whitelist Token Proposal',
@@ -30,6 +31,7 @@ export const PROPOSAL_TYPES = {
   MINION_VANILLA: 'Vanilla Minion',
   MINION_NIFTY: 'Nifty Minion',
   MINION_SUPERFLUID: 'Superfluid Proposal',
+  MINION_RARIBLE: 'Rarible Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
   PAYROLL: 'Payroll Proposal',
@@ -37,6 +39,7 @@ export const PROPOSAL_TYPES = {
   MINION_ERC20: 'Minion Erc20 Token Transfer Proposal',
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
+  BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
 };
 
 export const MINION_TYPES = {
@@ -44,6 +47,7 @@ export const MINION_TYPES = {
   NIFTY: 'nifty minion',
   UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
+  RARIBLE: 'Rarible minion',
   NEAPOLITAN: 'Neapolitan minion',
 };
 

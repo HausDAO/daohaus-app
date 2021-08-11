@@ -132,6 +132,10 @@ export const supportedChains = {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
+    neapolitanMinion: {
+      minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
+      version: 'v1',
+    },
   },
   '0x89': {
     name: 'Matic',
@@ -271,3 +275,5 @@ export const EIP3085 = {
     '0x4': true,
   },
 };
+
+export const NIFTYINK_ADDRESS = '0xcf964c89f509a8c0ac36391c5460df94b91daba5';

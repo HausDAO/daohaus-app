@@ -12,7 +12,7 @@ const GenericSelect = props => {
     options = [],
     disabled,
   } = props;
-  const { register } = localForm;
+  const { register } = localForm || {};
   return (
     <FieldWrapper {...props}>
       <Select

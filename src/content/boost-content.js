@@ -25,6 +25,20 @@ export const boostList = [
     },
   },
   {
+    name: 'Advanced Minion Vault',
+    key: 'neapolitanMinion',
+    description:
+      'Store funds outside ragequit and create and vote on execution of external contracts. Now with multicall and early execution.',
+    price: '0',
+    modalName: 'neapolitanMinionLaunch',
+    successRoute: '',
+    settings: true,
+    networks: {
+      all: false,
+      '0x4': true,
+    },
+  },
+  {
     name: 'Discord Notificatons',
     key: 'notificationsLevel1',
     description:
@@ -51,19 +65,19 @@ export const boostList = [
       all: true,
     },
   },
-  {
-    name: 'Proposal Types',
-    key: 'proposalTypes',
-    description:
-      'Customize the proposal types available for members to streamline onboarding or other DAO activities.',
-    price: '0',
-    modalName: 'proposalTypesLaunch',
-    successRoute: 'proposals',
-    settings: true,
-    networks: {
-      all: true,
-    },
-  },
+  // {
+  //   name: 'Proposal Types',
+  //   key: 'proposalTypes',
+  //   description:
+  //     'Customize the proposal types available for members to streamline onboarding or other DAO activities.',
+  //   price: '0',
+  //   modalName: 'proposalTypesLaunch',
+  //   successRoute: 'proposals',
+  //   settings: true,
+  //   networks: {
+  //     all: true,
+  //   },
+  // },
   {
     name: 'MintGate',
     key: 'mintGate',
@@ -107,7 +121,7 @@ export const boostList = [
   {
     name: 'Minion Safe',
     key: 'minionSafe',
-    description: 'Launch and interact with a Gnosis Safe multisig',
+    description: 'Launch and interact with a Gnosis Safe multisig.',
     price: '0',
     comingSoon: true,
     modalName: 'minionSafeLaunch',
@@ -122,7 +136,7 @@ export const boostList = [
   {
     name: 'Superfluid Minion',
     key: 'superfluidMinion',
-    description: 'Stream/distribute tokens using Superfluid Protocol',
+    description: 'Stream/distribute tokens using Superfluid Protocol.',
     price: '0',
     modalName: 'superfluidMinionLaunch',
     successRoute: '',
@@ -131,6 +145,20 @@ export const boostList = [
       '0x64': true,
       '0x4': true,
       '0x89': true,
+    },
+  },
+  {
+    name: 'NFT Banks',
+    key: 'nftBank',
+    comingSoon: false,
+    description:
+      'Buy, sell & showcase NFTs as a DAO.  Requires an Advanced Minion',
+    price: '1',
+    modalName: 'nftBank',
+    dependency: 'advanced minion',
+    successRoute: '',
+    networks: {
+      all: true,
     },
   },
   {
@@ -150,7 +178,8 @@ export const boostList = [
     name: 'Manage Liquidity',
     key: 'liquidity',
     comingSoon: true,
-    description: 'Set pool parameters and add or remove liquidity collectively',
+    description:
+      'Set pool parameters and add or remove liquidity collectively.',
     price: '1',
     modalName: 'manageLiquidity',
     successRoute: '',
@@ -159,21 +188,9 @@ export const boostList = [
     },
   },
   {
-    name: 'NFT Banks',
-    key: 'nftBank',
-    comingSoon: true,
-    description: 'Buy, sell & showcase NFTs as a DAO',
-    price: '1',
-    modalName: 'nftBank',
-    successRoute: '',
-    networks: {
-      all: true,
-    },
-  },
-  {
-    name: 'NiftyMinion Vault',
+    name: 'NiftyMinion Vault (beta)',
     key: 'niftyMinion',
-    description: 'Early Execution and Fund and Execute. (beta)',
+    description: 'Early Execution and Fund and Execute.',
     price: '0',
     modalName: 'niftyMinionLaunch',
     successRoute: '',
@@ -260,11 +277,11 @@ export const superpowerLinks = [
     label: 'Discourse Forum',
     link: 'settings/discourse',
   },
-  {
-    boostKey: 'proposalTypes',
-    label: 'Proposal Settings',
-    link: 'settings/proposals',
-  },
+  // {
+  //   boostKey: 'proposalTypes',
+  //   label: 'Proposal Settings',
+  //   link: 'settings/proposals',
+  // },
   {
     boostKey: 'minionSafe',
     label: 'Minion Safe',
