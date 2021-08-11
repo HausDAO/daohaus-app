@@ -1,6 +1,7 @@
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { TX } from './contractTX';
+import { SUMMON_PACK } from './minions';
 
 const testPars = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
@@ -349,7 +350,8 @@ export const FORM = {
   },
   NEW_VANILLA_MINION: {
     required: ['minionName'],
-    fields: [[]],
+    minionType: MINION_TYPES.VANILLA,
+    fields: [[SUMMON_PACK.VANILLA]],
   },
   BUY_NIFTY_INK: {
     id: 'BUY_NIFTY_INK',

@@ -34,7 +34,7 @@ const FormBuilder = props => {
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
-  const [condition, setContition] = useState(null);
+  const [condition, setCondition] = useState(null);
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm();
   const { handleSubmit } = localForm;
@@ -217,7 +217,7 @@ const FormBuilder = props => {
           localForm={localForm}
           localValues={localValues}
           buildABIOptions={buildABIOptions}
-          setContition={setContition}
+          setCondition={setCondition}
         />
       ),
     );

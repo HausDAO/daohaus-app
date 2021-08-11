@@ -40,11 +40,11 @@ const MarketPlaceV0 = () => {
             }}
             _hover={{
               color: 'white',
-              borderBottom: '2px solid rgba(255,255,255,0.4)',
+              borderBottom: '2px solid rgba(255,255,255,0.3)',
             }}
             borderBottom='2px solid transparent'
           >
-            Market
+            Installed
           </Tab>
           <Tab
             px={6}
@@ -55,19 +55,19 @@ const MarketPlaceV0 = () => {
             }}
             _hover={{
               color: 'white',
-              borderBottom: '2px solid rgba(255,255,255,0.3)',
+              borderBottom: '2px solid rgba(255,255,255,0.4)',
             }}
             borderBottom='2px solid transparent'
           >
-            Installed
+            Market
           </Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Market />
+            <Installed />
           </TabPanel>
           <TabPanel>
-            <Installed />
+            <Market />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -159,7 +159,7 @@ const Market = () => {
 };
 
 const Installed = () => {
-  const { daoBoosts = {} } = useMetaData();
+  const { daoMetaData } = useMetaData();
   const [loading, setLoading] = useState(false);
   const [categoryID, setID] = useState('all');
   const selectCategory = id => {
@@ -172,7 +172,7 @@ const Installed = () => {
   };
   return (
     <Flex flexDir='column' w='95%'>
-      {daoBoosts ? (
+      {daoMetaData ? (
         <Flex>
           {/* <CategorySelector
             categoryID={categoryID}
@@ -180,6 +180,7 @@ const Installed = () => {
             allBoosts={allBoosts}
           />
           <BoostsList categoryID={categoryID} allBoosts={allBoosts} /> */}
+          <InstalledList />
         </Flex>
       ) : (
         <Spinner />
@@ -269,3 +270,16 @@ const BoostsList = ({ categoryID, openDetails }) => {
 };
 
 export default MarketPlaceV0;
+
+/// //////////// INSTALLED STUFF
+const InstalledList = () => {
+  return (
+    <List
+      headerSection={
+        <InputGroup w='250px' mr={6}>
+          <Input placeholder='Search Boosts' />
+        </InputGroup>
+      }
+    />
+  );
+};
