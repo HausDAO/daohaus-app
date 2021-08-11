@@ -88,10 +88,10 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
               <Minions />
             </Stack>
           )}
-          <Stack spacing={2}>
+          {/* <Stack spacing={2}>
             <TextBox size='xs'>Boost Status</TextBox>
             <BoostStatus />
-          </Stack>
+          </Stack> */}
         </Stack>
       </Flex>
     </MainViewLayout>

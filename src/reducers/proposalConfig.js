@@ -2,7 +2,7 @@ import { put } from '../utils/metadata';
 import { createPlaylist, generateNewConfig } from '../utils/playlists';
 
 const handleInit = payload => {
-  console.log(payload);
+  console.log('init', payload);
   if (payload?.proposalConfig) {
     return payload.proposalConfig;
   }

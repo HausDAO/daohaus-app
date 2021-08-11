@@ -27,6 +27,11 @@ const BOOST_PLAYLISTS = [
     id: 'Superfluid minion',
     forms: ['SUPERFLUID_STREAM'],
   },
+  {
+    name: 'MintGate',
+    id: 'mintGate',
+    forms: ['PAYROLL'],
+  },
 ];
 
 export const defaultProposals = {

@@ -24,16 +24,19 @@ import TextBox from '../components/TextBox';
 
 import { FORM } from '../data/forms';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 // PLAYLISTS.find(list => list.id === 'favorites');
 
 const ProposalSelector = () => {
-  const { daoProposals } = useMetaData();
+  const { daoProposals, daoMetaData } = useMetaData();
   const { proposalSelector, setProposalSelector } = useOverlay();
   const { openFormModal } = useFormModal();
   const { theme } = useCustomTheme();
 
   const { playlists, customData } = daoProposals || {};
+
+  console.log('daoMetaData', daoMetaData);
 
   const [currentPlaylist, setCurrentPlaylist] = useState(null);
 
@@ -116,10 +119,13 @@ export default ProposalSelector;
 
 const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
   const { daochain, daoid } = useParams();
+  const { isMember } = useDaoMember();
   const handleChange = e => {
     if (!e?.target?.value) return;
     selectPlaylist(e.target.value);
   };
+
+  console.log('isMember', isMember);
   return (
     <Flex alignItems='top'>
       <Select mb={8} width='60%' onChange={handleChange} fontFamily='accessory'>
@@ -129,17 +135,19 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
           </option>
         ))}
       </Select>
-      <RouterLink
-        to={`/dao/${daochain}/${daoid}/settings/proposals`}
-        onClick={handleClose}
-      >
-        <Flex ml={4} alignItems='center' transform='translateY(5px)'>
-          <Icon as={VscGear} mr={2} />
-          <TextBox variant='body' color='secondary.600'>
-            Manage
-          </TextBox>
-        </Flex>
-      </RouterLink>
+      {isMember && (
+        <RouterLink
+          to={`/dao/${daochain}/${daoid}/settings/proposals`}
+          onClick={handleClose}
+        >
+          <Flex ml={4} alignItems='center' transform='translateY(5px)'>
+            <Icon as={VscGear} mr={2} />
+            <TextBox variant='body' color='secondary.600'>
+              Manage
+            </TextBox>
+          </Flex>
+        </RouterLink>
+      )}
     </Flex>
   );
 };
