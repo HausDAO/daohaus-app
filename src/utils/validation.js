@@ -1,3 +1,5 @@
+import Web3 from 'web3';
+
 // Error Model {
 //   message: String (required)
 //   name: String (required)
@@ -11,6 +13,7 @@ export const TYPE_ERR_MSGS = {
   string: 'Must be a valid string',
   address: 'Must be a valid Ethereum Address',
   urlNoHTTP: 'Must be a URL. Http not needed.',
+  greaterThanZero: 'Must be greater than zero.',
 };
 
 export const validate = {
@@ -30,6 +33,9 @@ export const validate = {
   },
   urlNoHTTP(val) {
     return !val.includes('http') && val.includes('.');
+  },
+  greaterThanZero(val) {
+    return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },
 };
 
@@ -96,32 +102,24 @@ export const customValidations = {
     }
     return false;
   },
-  async superfluidStreamProposal({ appState, values }) {
-    console.log('validating', appState, values);
-    if (+values.superfluidRate <= 0) {
-      return {
-        name: 'superfluidRate',
-        message: 'Rate must be greater than zero',
-      };
-    }
-
-    // TODO: add injectedProvider to TXContext.js line 65?
-    const minDeposit = appState.injectedProvider.utils.toWei(
-      values.paymentRequested,
-    );
+  superFluidStreamMinimum({ values }) {
+    const minDeposit = Web3.utils.toWei(values.paymentRequested);
     if (+minDeposit < +values.weiRatePerSec * 3600) {
       return {
         name: 'paymentRequested',
-        message: 'Funds requested must be at least one-hour stream value',
+        message: 'Funds requested must be at least one-hour of stream value',
       };
     }
-
-    // will async work? use contract service this will be a pain
-    // const hasActiveStreams = await minionService('hasActiveStreams')({
-    //   to: values.memberApplicant || values.applicant,
-    //   tokenAddress: values.paymentToken,
-    // });
-    // likely need to do this on member or paymenttoken changes - custom fields...
-    // or create a beforeTx lifecycle
+    return false;
+  },
+  noActiveStream({ values }) {
+    if (values.activeStreams) {
+      return {
+        name: 'applicant',
+        message:
+          "There's an active stream for the selected recipient and token",
+      };
+    }
+    return false;
   },
 };

@@ -20,6 +20,7 @@ import DateRange from './dateRange';
 import PriceInput from './priceInput';
 import NiftyInkUrl from './niftyInkUrl';
 import SuperfluidRate from './superfluidRate';
+import SuperfluidPaymentInput from './superfluidPaymentInput';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -82,6 +83,9 @@ export const InputFactory = props => {
   }
   if (type === 'superfluidRate') {
     return <SuperfluidRate {...props} />;
+  }
+  if (type === 'superfluidPaymentInput') {
+    return <SuperfluidPaymentInput {...props} />;
   }
   return null;
 };

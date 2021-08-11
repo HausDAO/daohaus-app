@@ -1,0 +1,34 @@
+[
+  {
+    "type": "constructor",
+    "stateMutability": "payable",
+    "inputs": [
+      { "type": "address", "name": "_zappee", "internalType": "address" },
+      { "type": "address", "name": "_wrapper", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "poke",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "", "internalType": "contract IWrappedETH" }
+    ],
+    "name": "wrapper",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "zappee",
+    "inputs": []
+  },
+  { "type": "receive", "stateMutability": "payable" }
+]

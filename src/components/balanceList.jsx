@@ -69,6 +69,7 @@ const BalanceList = ({
                 hasBalance={hasBalance}
                 hasSync={needsSync}
                 isNativeToken={isNativeToken}
+                vault={vault}
               />
             );
           })

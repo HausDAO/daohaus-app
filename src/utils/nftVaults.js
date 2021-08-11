@@ -1,4 +1,5 @@
 import { CORE_FORMS } from '../data/forms';
+import { getMinionActionFormLego } from './vaults';
 
 // NEXT STEPS:
 // - Rarible default actions - added if on mainnet?
@@ -20,11 +21,12 @@ const defaultConfig = {
       modalName: 'transfer721',
       formLego: CORE_FORMS.MINION_SEND_ERC721_TOKEN,
       localValues: ['tokenId', 'contractAddress'],
+      minionTypeOverride: true,
     },
   },
 };
 
-const nftConfig = {
+const nftConfigs = {
   '0xcf964c89f509a8c0ac36391c5460df94b91daba5': {
     platform: 'nifty ink',
     fields: {
@@ -40,6 +42,7 @@ const nftConfig = {
         modalName: 'sellNifty',
         formLego: CORE_FORMS.MINION_SELL_NIFTY,
         localValues: ['tokenId', 'contractAddress'],
+        minionTypeOverride: true,
       },
     },
   },
@@ -47,7 +50,6 @@ const nftConfig = {
 
 export const attributeModifiers = Object.freeze({
   getMetadataImage(nft) {
-    console.log('nft', nft);
     return nft.metadata.image_url ? nft.metadata.image_url : nft.metadata.image;
   },
   getNiftyCreator(nft) {
@@ -59,11 +61,9 @@ export const attributeModifiers = Object.freeze({
   },
 });
 
-export const hydrateNftCard = nft => {
-  const config = nftConfig[nft.contractAddress] || defaultConfig;
-  // TODO: need a better way to get passed in values if it's deeper than 1 level on nft object
-  // - maybe searchTerm like in tx gather args?
-  // - also now adding one from the component so this is a little hard to reason about
+export const hydrateNftCard = (nft, minionType) => {
+  const config = nftConfigs[nft.contractAddress] || defaultConfig;
+
   const hydratedActions = Object.keys(config.actions).map(key => {
     const action = config.actions[key];
     const localValues =
@@ -72,8 +72,13 @@ export const hydrateNftCard = nft => {
         vals[field] = nft[field];
         return vals;
       }, {});
+    let { formLego } = action;
+    if (action.minionTypeOverride) {
+      formLego = getMinionActionFormLego('erc721', minionType);
+    }
     return {
       ...action,
+      formLego,
       localValues,
     };
   });

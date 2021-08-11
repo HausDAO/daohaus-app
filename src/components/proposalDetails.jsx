@@ -76,6 +76,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
     );
   };
 
+  console.log('proposal', proposal);
+
   return (
     <Box pt={6}>
       <ContentBox>

@@ -36,15 +36,17 @@ const SuperfluidRate = props => {
       const weiRatePerSec = parseInt(
         (newRate * 10 ** +selectedTokenDecimals) / +baseRate,
       );
+
+      console.log('selectedTokenDecimals', selectedTokenDecimals);
+
+      console.log('newRate', newRate);
       setPerSecond(newRate);
       setValue('weiRatePerSec', weiRatePerSec);
 
       console.log('weiRatePerSec', weiRatePerSec);
 
-      // TODO: some crazy validation needed see superFluidMinionProposal.jsx
-      //   - paymentRequested field
       // TODO: some general validation on if the minion has a stream
-      //    = maybe on minion select or paymentToken
+      //    = maybe on minion select or paymentToken when it changes or minion changes
       // TODO: what/where are balances needed - in minion at all or just treasury
     }
   }, [superfluidRate, baseRate]);

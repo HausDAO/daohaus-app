@@ -147,12 +147,18 @@ export const numberWithCommas = num => {
   if (num === 0) return 0;
   if (!num) return;
   const localNum = typeof num !== 'string' ? num.toString() : num;
+  console.log('localNum', localNum);
   if (localNum.includes(`e-`)) return localNum;
   // drop zero after decimal
   const noZeroDec =
     parseInt(localNum.split('.')[1]) === 0
       ? localNum.split('.')[0]
       : parseFloat(localNum);
+
+  const localNoZeroDec =
+    typeof noZeroDec !== 'string' ? noZeroDec.toString() : noZeroDec;
+  if (localNoZeroDec.includes(`e-`)) return localNoZeroDec;
+
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
