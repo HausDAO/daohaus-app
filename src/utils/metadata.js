@@ -254,6 +254,23 @@ export const ipfsPost = async (creds, file) => {
   }
 };
 
+export const ipfsJsonPin = async (creds, file) => {
+  const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        pinata_api_key: creds.pinata_api_key,
+        pinata_secret_api_key: creds.pinata_api_secret,
+      },
+      body: file,
+    });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const post = async (endpoint, data) => {
   const url = `${metadataApiUrl}/${endpoint}`;
   try {
