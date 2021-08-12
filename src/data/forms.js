@@ -379,4 +379,15 @@ export const FORM = {
     ],
     additionalOptions: [FIELD.LINK],
   },
+  SUMMON_MINION_SELECTOR: {
+    id: 'SUMMON_MINION_SELECTOR',
+    title: 'Minion Summon Selectpr',
+    description: 'Choose which damn minion you want to summon',
+    dev: true,
+    type: PROPOSAL_TYPES.BUY_NIFTY_INK,
+    tx: TX.SUBMIT_PROPOSAL,
+    required: ['sharesRequested', 'tributeOffered', 'title'],
+    fields: [[FIELD.MINION_TYPE_SELECT]],
+    additionalOptions: [FIELD.LINK],
+  },
 };

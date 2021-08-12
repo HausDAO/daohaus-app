@@ -12,28 +12,38 @@ export const BOOSTS = {
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
+    oldId: 'niftyInk',
     title: 'Nifty Ink',
-    description:
-      'MS Paint and NFTs gone mad! Buy and Sell Nifty Inks as a DAO.',
+    description: 'The Niftiest Inks in all Hell.',
     categories: ['nft'],
+  },
+  DISCORD: {
+    id: 'DISCORD',
+    oldId: 'notificationsLevel1',
+    title: 'Discord Notifications',
+    description: `You're basically rugproof with this`,
+    categories: ['social'],
+  },
+  MINT_GATE: {
+    id: 'MINT_GATE',
+    oldId: 'mintGate',
+    title: 'Mint Gate',
+    description: 'Gatin those mints since 1975, baby!',
+    categories: ['nft', 'tools'],
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',
+    oldId: 'superfluid',
     title: 'SuperFluid',
     description: 'Hook up the DAO to Superfluid and stream funds.',
     categories: ['defi', 'token', 'tools'],
   },
-  DISCORD: {
-    id: 'DISCORD',
-    title: 'Discord',
-    description: 'Recieve DAO proposal alerts on the DAOs Discord channel.',
-    categories: ['social'],
-  },
+
   DISCOURSE: {
     id: 'DISCOURSE',
+    oldId: 'discourse',
     title: 'Discourse',
-    description:
-      'Palaver over DAO affairs with a DAO specific Discourse Forum.',
+    description: 'Brood over these deep, eternal mysteries of the DAO.',
     categories: ['social'],
   },
   SWAPR: {
@@ -66,17 +76,6 @@ const categoryStarter = [
 export const categories = categoryStarter.map(cat => ({
   ...cat,
   boosts: Object.values(BOOSTS)
-    .filter(boost => boost.categories.includes(cat.id))
+    .filter(boost => boost.categories.includes(cat.id) && !boost.dev)
     .map(cat => cat.id),
 }));
-
-export const devBoostList = {
-  name: 'DEV Boosts',
-  id: 'dev',
-  types: Object.values(BOOSTS).reduce((arr, form) => {
-    if (form.dev) {
-      return [...arr, form.id];
-    }
-    return arr;
-  }, []),
-};

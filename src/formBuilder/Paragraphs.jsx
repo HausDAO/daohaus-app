@@ -7,7 +7,6 @@ import TextBox from '../components/TextBox';
 
 const Paragraphs = props => {
   const { pars } = props;
-  console.log(pars);
   return (
     <Flex flexDirection='column'>
       {pars?.length > 0 && (

@@ -16,6 +16,8 @@ import SaveButton from '../components/saveButton';
 import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
 
+const dev = process.env.REACT_APP_DEV;
+
 const ProposalTypes = () => {
   const { daoProposals, daoMetaData, dispatchPropConfig } = useMetaData();
   const { injectedProvider, address, injectedChain } = useInjectedProvider();
@@ -24,7 +26,7 @@ const ProposalTypes = () => {
   const { openConfirmation } = useConfirmation();
 
   const { playlists, allForms = {}, customData, devList } = daoProposals || {};
-  const [selectedListID, setListID] = useState('all');
+  const [selectedListID, setListID] = useState(dev ? 'dev' : 'all');
   const [loading, setLoading] = useState(false);
   // console.log(daoProposals);
   const selectList = id => {
@@ -54,7 +56,7 @@ const ProposalTypes = () => {
   };
 
   const handleSaveConfig = () => {
-    if (process.env.REACT_APP_DEV) {
+    if (dev) {
       openConfirmation({
         onSubmit: () => {
           closeModal();

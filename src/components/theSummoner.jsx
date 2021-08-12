@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Flex } from '@chakra-ui/layout';
+import { Flex, Link } from '@chakra-ui/layout';
 
 import { useDao } from '../contexts/DaoContext';
-import Header from '../formBuilder/header';
-import Paragraphs from '../formBuilder/Paragraphs';
 import TextBox from './TextBox';
-import GenericInput from '../formBuilder/genericInput';
-import { MINION_TYPES } from '../utils/proposalUtils';
-
-const generateMinionText = ({ minionType }) => {
-  return { headerText: `Summon a ${minionType}` };
-};
 
 const minionFromDaoOverview = ({ searchBy, daoOverview, searchParam }) => {
-  console.log(`daoOverview`, daoOverview);
-  console.log(`searchBy`, searchBy);
-  console.log(`searchParam`, searchParam);
   if (!daoOverview || !searchBy || !searchParam) return;
   if (searchBy === 'type')
     return daoOverview.minions?.filter(
@@ -24,6 +13,33 @@ const minionFromDaoOverview = ({ searchBy, daoOverview, searchParam }) => {
   if (searchBy === 'name')
     return daoOverview.minions.find(minion => minion.details === searchParam);
 };
+
+const MinionNotFound = ({ minionType = 'Minion' }) => (
+  <TextBox variant='body' size='sm'>
+    This boost is dependent on a {minionType} contract. The following minions
+    can be selected or a new one can be created.
+    <Link
+      href='https://daohaus.club/docs/users/minion-faq'
+      color='secondary.400'
+      isExternal
+    >
+      Learn more about minions here.
+    </Link>
+  </TextBox>
+);
+
+const MinionFound = ({ minionType = 'Minion' }) => (
+  <TextBox variant='body' size='sm'>
+    This boost is dependent on a {minionType} contract. Use the form below to
+    summon a new minion.{' '}
+    <Link
+      href='https://daohaus.club/docs/users/minion-faq'
+      color='secondary.400'
+    >
+      Learn more about minions here.
+    </Link>
+  </TextBox>
+);
 
 const TheSummoner = props => {
   const [minions, setMinions] = useState([]);
@@ -36,13 +52,8 @@ const TheSummoner = props => {
     setCondition,
   } = props;
 
-  const header = minions?.length
-    ? contentForMinion.header
-    : contentForNoMinion.header;
-
   useEffect(() => {
     if (daoOverview) {
-      console.log(`props`, props);
       const minionsOfType = minionFromDaoOverview({
         searchBy: 'type',
         daoOverview,
@@ -57,9 +68,9 @@ const TheSummoner = props => {
 
   return (
     <Flex flexDirection='column'>
-      <TextBox>{minionType}</TextBox>
-      <Header headerText={header} />
-
+      {/* <Header headerText={header} /> */}
+      <Flex justifyContent='space-between' flexWrap='wrap' />
+      {minions?.length < 0 ? <MinionNotFound /> : <MinionFound />}
       {/* <Paragraphs />  */}
     </Flex>
   );

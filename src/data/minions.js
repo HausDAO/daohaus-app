@@ -1,21 +1,49 @@
 import { MINION_TYPES } from '../utils/proposalUtils';
 
-const MINION_CONTENT = {
-  VANILLA: {
-    about: 'Vanilla minion is one of the first generic ',
+export const MINION_CONTENT = {
+  [MINION_TYPES.VANILLA]: {
+    header: 'Vanilla Minion',
+    info: [
+      "Vanilla minions may be boring, but that doesn't make them any less dangerous",
+      'If left unchecked, these foul, conniving, hive-minded beasts will coordinate to bring the end of times.',
+    ],
     publisher: 'DAOhaus',
-    contentForMinion: { header: 'Already Has Minion' },
-    contentForNoMinion: { header: 'Does not have Minion' },
+    networks: 'all',
   },
-};
-
-const NETWORKS = {
-  VANILLA: {
-    0x1: '0x88207Daf515e0da1A32399b3f92D128B1BF45294',
-    0x4: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
-    0x2a: '0xCE63803E265617c55567a7A7b584fF2dbD76210B',
-    0x64: '0x53508D981439Ce6A3283597a4775F6f23504d4A2',
-    0x89: '0x02e458B5eEF8f23e78AefaC0F15f5d294C3762e9',
+  [MINION_TYPES.NIFTY]: {
+    header: 'Nifty Minion',
+    info: [
+      'Deep in warped voids of Microsoft Paint Hell, the nifty minion awaits its arrival to enslave the world with weird NFTs',
+      'Travel to the desolate cesspool of xDAI to experience the true terror of insanity.',
+    ],
+    publisher: 'DAOhaus',
+    networks: { '0x64': true },
+  },
+  [MINION_TYPES.UBER]: {
+    header: 'Uberhaus Minion',
+    info: [
+      'Uberhaus is legion. Uberhaus is many. Uberhaus is a million-legged beast built from a hive of smaller beasts.',
+      "Uberhaus won't rest until the civilization is overrun with foul, disgusting creatures",
+    ],
+    publisher: 'DAOhaus',
+    networks: { '0x2a': true, '0x64': true },
+  },
+  [MINION_TYPES.SUPERFLUID]: {
+    header: 'Superfluid Minion',
+    info: [
+      'Perhaps most insidious is the Superfluid Minion. This creature tempts the hearts of man with mind-numbing convenience',
+      "The Superfluid minion opens a portal to Hell, and allows them to stream riches to anywhere in the world. The cost? Only the summoner's eternal soul.",
+    ],
+    publisher: 'DAOhaus',
+    networks: { '0x64': true, '0x89': true, '0x4': true },
+  },
+  [MINION_TYPES.NEAPOLITAN]: {
+    header: 'Neapolitan Minion',
+    info: [
+      'The Neapolitan Minion is anywhere and everywhere. It can morph into anything, then change shape.',
+      "It could be in the room with you right now, and you wouldn't even know. It could even be you.",
+    ],
+    networks: { '0x64': true },
   },
 };
 
@@ -23,7 +51,6 @@ export const SUMMON_PACK = {
   VANILLA: {
     type: 'summoner',
     minionTypeName: 'Vanilla Minion',
-    ...MINION_CONTENT.VANILLA,
-    availableNetworks: NETWORKS.VANILLA,
+    content: MINION_CONTENT.VANILLA,
   },
 };

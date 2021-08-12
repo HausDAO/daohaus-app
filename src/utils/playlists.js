@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid';
 import { FORM } from '../data/forms';
-import { put } from './metadata';
 
 const BOOST_PLAYLISTS = [
   {
@@ -117,8 +116,3 @@ export const devList = createPlaylist({
     return arr;
   }, []),
 });
-
-export const installedDefaults = [
-  { name: 'Boosts', id: 'boosts', types: [] },
-  { name: 'Market', id: 'market', types: [] },
-];

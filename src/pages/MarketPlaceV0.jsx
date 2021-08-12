@@ -16,7 +16,7 @@ import ListSelectorItem from '../components/ListSelectorItem';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { isFirstItem, isLastItem } from '../utils/general';
+import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { generateLists } from '../utils/marketplace';
 import { useFormModal } from '../contexts/OverlayContext';
@@ -25,6 +25,7 @@ import { PUBLISHERS } from '../data/publishers';
 import { TX } from '../data/contractTX';
 import TheSummoner from '../components/theSummoner';
 import { useDao } from '../contexts/DaoContext';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -122,9 +123,9 @@ const Market = () => {
           next: 'STEP2',
         },
         STEP2: {
-          prependBody: <TextBox variant='body'>This is a description</TextBox>,
-          type: 'form',
+          type: 'summoner',
           lego: FORM.NEW_VANILLA_MINION,
+          minionType: MINION_TYPES.VANILLA,
           next: {
             hasNotSummoned: {
               tx: TX.SUMMON_MINION_VANILLA,
@@ -251,14 +252,12 @@ export default MarketPlaceV0;
 const Installed = () => {
   const { daoMetaData } = useMetaData();
   const { daoOverview } = useDao();
-  const [loading, setLoading] = useState(false);
   const [lists, setLists] = useState(null);
-  const [listID, setListID] = useState(null);
+  const [listID, setListID] = useState(dev ? 'dev' : 'boosts');
 
   useEffect(() => {
     if (daoMetaData && daoOverview) {
       const generatedLists = generateLists(daoMetaData, daoOverview, dev);
-      console.log(`generatedLists`, generatedLists);
       setLists(generatedLists);
     }
   }, [daoMetaData, daoOverview, dev]);
@@ -274,7 +273,7 @@ const Installed = () => {
 
   return (
     <Flex flexDir='column' w='95%'>
-      {daoMetaData ? (
+      {daoMetaData && daoOverview ? (
         <Flex>
           {/* <CategorySelector
             categoryID={categoryID}
@@ -298,38 +297,62 @@ const Installed = () => {
 };
 
 const InstalledList = ({ listID, lists }) => {
+  const { openFormModal, closeModal } = useFormModal();
   const currentList = useMemo(() => {
     if (listID && lists) {
       return lists?.find(list => list.id === listID);
     }
   }, [listID, lists]);
 
+  const handleClick = () => {
+    useFormModal({
+      steps: {
+        title: 'Minion Summoner',
+        steps: {
+          STEP1: {
+            start: true,
+            type: 'form',
+            lego: FORM.SUMMON_MINION_SELECTOR,
+          },
+        },
+      },
+    });
+  };
   return (
     <List
       headerSection={
-        <InputGroup w='250px' mr={6}>
-          <Input
-            placeholder={`Search ${currentList?.name || 'Installed'}...`}
-          />
-        </InputGroup>
+        <Flex w='100%' justifyContent='space-between'>
+          <InputGroup w='250px' mr={6}>
+            <Input
+              placeholder={`Search ${currentList?.name || 'Installed'}...`}
+            />
+          </InputGroup>
+          {listID === 'minion' && (
+            <Button variant='outline' onClick={handleClick}>
+              Summon Minion
+            </Button>
+          )}
+        </Flex>
       }
-      list={currentList?.types?.map(boost => (
-        <ListItem
-          {...boost}
-          key={boost.id}
-          menuSection={
-            listID === 'minion' ? (
-              <Button variant='ghost'>
-                <TextBox>Minion Page</TextBox>
-              </Button>
-            ) : (
-              <Button variant='ghost'>
-                <TextBox>Details</TextBox>
-              </Button>
-            )
-          }
-        />
-      ))}
+      list={currentList?.types?.map(boost => {
+        return (
+          <ListItem
+            {...boost}
+            key={boost.id}
+            menuSection={
+              listID === 'minion' ? (
+                <Button variant='ghost'>
+                  <TextBox>Minion Page</TextBox>
+                </Button>
+              ) : (
+                <Button variant='ghost'>
+                  <TextBox>Details</TextBox>
+                </Button>
+              )
+            }
+          />
+        );
+      })}
     />
   );
 };
@@ -345,7 +368,7 @@ const ListTypeSelector = ({ selectList, listID, lists }) => {
           isSelected={type.id === listID}
           listLabel={{ left: type.name, right: type.types?.length }}
           isBottom={isLastItem(lists, index)}
-          isTop={dev || isFirstItem(lists, index)}
+          isTop={index === 0}
         />
       ))}
     />
