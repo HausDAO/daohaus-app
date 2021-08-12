@@ -254,7 +254,7 @@ export const ipfsPost = async (creds, file) => {
   }
 };
 
-export const ipfsJsonPin = async (creds, file) => {
+export const ipfsJsonPin = async (creds, obj) => {
   const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
   try {
     const response = await fetch(url, {
@@ -262,8 +262,9 @@ export const ipfsJsonPin = async (creds, file) => {
       headers: {
         pinata_api_key: creds.pinata_api_key,
         pinata_secret_api_key: creds.pinata_api_secret,
+        'Content-Type': 'application/json',
       },
-      body: file,
+      body: JSON.stringify(obj),
     });
     return response.json();
   } catch (err) {

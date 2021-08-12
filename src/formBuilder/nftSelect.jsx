@@ -16,12 +16,18 @@ import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
-import { buildEncodeOrder, encodeOrder } from '../utils/rarible';
+import {
+  buildEncodeOrder,
+  encodeOrder,
+  getMessageHash,
+  getSignatureHash,
+  pinOrderToIpfs,
+} from '../utils/rarible';
 
 const NftSelect = props => {
   const { label, localForm, htmlFor, name } = props;
   const { register, setValue, watch } = localForm;
-  const { daochain } = useParams();
+  const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
@@ -40,15 +46,14 @@ const NftSelect = props => {
 
   useEffect(() => {
     register('ipfsOrderHash');
-    register('eip712Hash');
+    register('eip712HashValue');
     register('signatureHash');
     register('tokenId');
+    register('description');
+    register('image');
   }, []);
 
   useEffect(() => {
-    console.log('name', name, nftSelect);
-    console.log(startDate, endDate, paymentToken, nftSelect, sellPrice);
-
     const setupOrder = async () => {
       const orderObj = buildEncodeOrder({
         nftContract: nftSelect,
@@ -60,15 +65,16 @@ const NftSelect = props => {
         startDate: parseInt(new Date(startDate).getTime() / 1000),
         endDate: parseInt(new Date(endDate).getTime() / 1000),
       });
-
-      console.log('orderObj', orderObj);
-
       const encodedOrder = await encodeOrder(orderObj, daochain);
-
       console.log('encodedOrder', encodedOrder);
+      const eip712 = getMessageHash(encodedOrder);
+      console.log('eip712', eip712);
+      const ipfsHash = await pinOrderToIpfs(encodedOrder, daoid);
+      console.log('ipfsHash', ipfsHash);
 
-      // set constup order object/call
-      //
+      setValue('eip712HashValue', eip712);
+      setValue('ipfsOrderHash', ipfsHash);
+      setValue('signatureHash', getSignatureHash());
     };
     if (
       startDate &&
@@ -78,7 +84,6 @@ const NftSelect = props => {
       sellPrice &&
       selectedMinion
     ) {
-      console.log('trigger');
       setupOrder();
     }
   }, [
@@ -127,8 +132,21 @@ const NftSelect = props => {
   }, [filter, nfts]);
 
   useEffect(() => {
-    setValue(name, selected?.contractAddress);
-    setValue('tokenId', selected?.tokenId);
+    if (selected) {
+      console.log('selected', selected);
+      setValue(name, selected.contractAddress);
+      setValue('tokenId', selected.tokenId);
+      setValue(
+        'description',
+        `Selling ${selected.metadata?.name || selected.name} tokenId ${
+          selected.tokenId
+        }`,
+      );
+      setValue(
+        'image',
+        selected.metadata?.image_url || selected.metadata?.image,
+      );
+    }
   }, [selected]);
 
   const openModal = () => {

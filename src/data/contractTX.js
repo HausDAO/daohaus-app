@@ -27,6 +27,11 @@ export const CONTRACTS = {
     abiName: 'NIFTY_MINION',
     contractAddress: '.values.selectedMinion',
   },
+  SELECTED_MINION_NEAPOLITAN: {
+    location: 'local',
+    abiName: 'NEAPOLITAN_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
   ERC_20: {
     location: 'local',
     abiName: 'ERC_20',
@@ -180,6 +185,15 @@ export const DETAILS = {
     recipient: '.values.applicant',
     token: '.values.paymentToken',
     tokenRate: '.values.rateString',
+  },
+  SELL_NFT_RARIBLE: {
+    title: 'Rarible NFT Sell Order',
+    description: '.values.description',
+    link: '.values.image',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.NEAPOLITAN,
+    orderIpfsHash: '.values.ipfsHash',
+    eip712HashValue: '.values.eip712HashValue',
   },
 };
 
@@ -700,18 +714,39 @@ export const TX = {
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
-    display: 'Submitting Stream Proposal',
+    display: 'Submitting NFT Sale Proposal',
     errMsg: 'Error Submitting Proposals',
     successMsg: 'Proposal Submitted',
     gatherArgs: [
-      '.values.applicant',
-      '.values.paymentToken',
-      '.values.weiRatePerSec',
-      '.values.paymentRequested',
-      '0x0',
+      // need array values
+      {
+        type: 'array',
+        gatherArgs: ['0'],
+      },
+      {
+        type: 'array',
+        gatherArgs: ['0'],
+      },
+      {
+        type: 'array',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+            fnName: 'sign',
+            gatherArgs: [
+              '.values.eip712HashValue',
+              '.values.signatureHash',
+              '0x1626ba7e',
+            ],
+          },
+        ],
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      '0',
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.SUPERFLUID_STREAM,
+        gatherFields: DETAILS.SELL_NFT_RARIBLE,
       },
     ],
   },

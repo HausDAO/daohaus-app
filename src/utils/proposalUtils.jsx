@@ -40,6 +40,7 @@ export const PROPOSAL_TYPES = {
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
+  SELL_NFT: 'Sell NFT',
 };
 
 export const MINION_TYPES = {

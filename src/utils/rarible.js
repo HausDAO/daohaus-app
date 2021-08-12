@@ -1,4 +1,4 @@
-import { eip712Hash } from 'eth-sig-util';
+import { TypedDataUtils } from 'eth-sig-util';
 import { bufferToHex } from 'ethereumjs-util';
 import Web3 from 'web3';
 import { supportedChains } from './chain';
@@ -68,12 +68,36 @@ export const createOrder = async (order, daochain) => {
   }
 };
 
+const DOMAIN_TYPE = [
+  {
+    type: 'string',
+    name: 'name',
+  },
+  {
+    type: 'string',
+    name: 'version',
+  },
+  {
+    type: 'uint256',
+    name: 'chainId',
+  },
+  {
+    type: 'address',
+    name: 'verifyingContract',
+  },
+];
+
 export const getMessageHash = encodedOrder => {
-  // what is version?
-  const version = '0';
-  const hash = eip712Hash(encodedOrder.signMessage, version);
-  console.log('hash', hash);
-  return bufferToHex(hash);
+  const typeData = {
+    /* eslint-disable */
+    types: Object.assign({
+      EIP712Domain: DOMAIN_TYPE,
+    }, encodedOrder.signMessage.types),
+    domain: encodedOrder.signMessage.domain,
+    primaryType: encodedOrder.signMessage.structType,
+    message: encodedOrder.signMessage.struct,
+  };
+  return bufferToHex(TypedDataUtils.sign(typeData));
 };
 
 export const getSignatureHash = () => {
@@ -91,6 +115,8 @@ export const pinOrderToIpfs = async (order, daoid) => {
   const keyRes = await ipfsPrePost('dao/ipfs-key', {
     daoAddress: daoid,
   });
+
+  console.log('keyRes', keyRes);
   const ipfsRes = await ipfsJsonPin(keyRes, order);
 
   console.log('ipfsRes', ipfsRes);
