@@ -140,6 +140,7 @@ export const FIELD = {
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
     expectType: 'address',
+    // TODO: check if this is being used or if it gets type from form config
     minionType: MINION_TYPES.VANILLA,
   },
   ABI_INPUT: {

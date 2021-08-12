@@ -11,14 +11,17 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
+import { useParams } from 'react-router';
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
+import { buildEncodeOrder, encodeOrder } from '../utils/rarible';
 
 const NftSelect = props => {
   const { label, localForm, htmlFor, name } = props;
-  const { register, setValue } = localForm;
+  const { register, setValue, watch } = localForm;
+  const { daochain } = useParams();
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
@@ -26,6 +29,67 @@ const NftSelect = props => {
   const [selected, setSelected] = useState();
   const [collections, setCollections] = useState();
   const [filter, setFilter] = useState();
+
+  const startDate = watch('startDate');
+  const endDate = watch('endDate');
+  const paymentToken = watch('paymentToken');
+  const nftSelect = watch('nftSelect');
+  const sellPrice = watch('sellPrice');
+  const tokenId = watch('tokenId');
+  const selectedMinion = watch('selectedMinion');
+
+  useEffect(() => {
+    register('ipfsOrderHash');
+    register('eip712Hash');
+    register('signatureHash');
+    register('tokenId');
+  }, []);
+
+  useEffect(() => {
+    console.log('name', name, nftSelect);
+    console.log(startDate, endDate, paymentToken, nftSelect, sellPrice);
+
+    const setupOrder = async () => {
+      const orderObj = buildEncodeOrder({
+        nftContract: nftSelect,
+        tokenId,
+        tokenAddress: paymentToken,
+        price: sellPrice,
+        minionAddress: selectedMinion,
+        // TODO: Set this in date range input
+        startDate: parseInt(new Date(startDate).getTime() / 1000),
+        endDate: parseInt(new Date(endDate).getTime() / 1000),
+      });
+
+      console.log('orderObj', orderObj);
+
+      const encodedOrder = await encodeOrder(orderObj, daochain);
+
+      console.log('encodedOrder', encodedOrder);
+
+      // set constup order object/call
+      //
+    };
+    if (
+      startDate &&
+      endDate &&
+      paymentToken &&
+      nftSelect &&
+      sellPrice &&
+      selectedMinion
+    ) {
+      console.log('trigger');
+      setupOrder();
+    }
+  }, [
+    startDate,
+    endDate,
+    paymentToken,
+    nftSelect,
+    sellPrice,
+    tokenId,
+    selectedMinion,
+  ]);
 
   useEffect(() => {
     if (nfts) {
@@ -63,7 +127,8 @@ const NftSelect = props => {
   }, [filter, nfts]);
 
   useEffect(() => {
-    setValue(name, selected?.tokenAddress);
+    setValue(name, selected?.contractAddress);
+    setValue('tokenId', selected?.tokenId);
   }, [selected]);
 
   const openModal = () => {

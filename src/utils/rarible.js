@@ -1,28 +1,29 @@
 import { eip712Hash } from 'eth-sig-util';
 import { bufferToHex } from 'ethereumjs-util';
 import Web3 from 'web3';
+import { supportedChains } from './chain';
 
 import { ipfsPrePost, ipfsJsonPin } from './metadata';
 
-export const buildEncodeOrder = data => {
-  const salt = Math.floor(Math.random() * (1 - 1000));
+export const buildEncodeOrder = args => {
+  const salt = Math.floor(Math.random() * 1000);
   return {
     type: 'RARIBLE_V2',
-    maker: data.minionAddress,
+    maker: args.minionAddress,
     make: {
       assetType: {
         assetClass: 'ERC721',
-        contract: data.nftContract,
-        tokenId: data.tokenId,
+        contract: args.nftContract,
+        tokenId: args.tokenId,
       },
       value: '1',
     },
     take: {
       assetType: {
         assetClass: 'ERC20',
-        contract: data.tokenAddress,
+        contract: args.tokenAddress,
       },
-      value: data.price,
+      value: args.price,
     },
     data: {
       dataType: 'RARIBLE_V2_DATA_V1',
@@ -30,18 +31,36 @@ export const buildEncodeOrder = data => {
       originFees: [],
     },
     salt,
-    start: data.start,
-    end: data.end,
+    start: args.startDate,
+    end: args.endDate,
   };
 };
 
-export const encodeOrder = async order => {
-  const url =
-    'https://api-staging.rarible.com/protocol/v0.1/ethereum/order/encoder/order';
+export const encodeOrder = async (order, daochain) => {
+  const url = `${supportedChains[daochain].rarible.api_url}/order/encoder/order`;
   try {
     const response = await fetch(url, {
       method: 'POST',
-      body: order,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(order),
+    });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const createOrder = async (order, daochain) => {
+  const url = `${supportedChains[daochain].rinkeby.api_url}/order/orders`;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(order),
     });
     return response.json();
   } catch (err) {

@@ -695,7 +695,7 @@ export const TX = {
     errMsg: 'Error poking Wrap-N-Zap',
     successMsg: 'Wrap-N-Zap Poke Successful!',
   },
-  SUPERFLUID_PROPOSE_ACTION: {
+  SELL_NFT_RARIBLE: {
     contract: CONTRACTS.SUPERFLUID_MINION_SELECT,
     name: 'proposeAction',
     poll: 'subgraph',

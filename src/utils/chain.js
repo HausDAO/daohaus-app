@@ -25,6 +25,10 @@ export const supportedChains = {
     wrapper_contract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://etherscan.io',
+    rarible: {
+      api_url: 'https://ethereum-api.rarible.org/protocol/v0.1/ethereum',
+      nft_transfer_proxy: '0x0',
+    },
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
@@ -61,6 +65,13 @@ export const supportedChains = {
         v1: '0x7d8151FAB5D6742F1c574fff472B6794062C2D0C',
       },
       version: 'v1',
+    },
+    rarible: {
+      api_url:
+        // 'https://ethereum-api-staging.rarible.org/protocol/v0.1/ethereum',
+        'https://api-staging.rarible.com/protocol/v0.1/ethereum',
+
+      nft_transfer_proxy: '0x7d47126a2600E22eab9eD6CF0e515678727779A6',
     },
   },
   '0x2a': {
