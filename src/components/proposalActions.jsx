@@ -12,6 +12,9 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
+import MinionExecute from './minionExecute';
+import MinionCancel from './minionCancel';
+import { TokenService } from '../services/tokenService';
 import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getTerm, getTitle } from '../utils/metadata';
@@ -20,9 +23,6 @@ import {
   daoConnectedAndSameChain,
   isDelegating,
 } from '../utils/general';
-import MinionExecute from './minionExecute';
-import MinionCancel from './minionCancel';
-import { TokenService } from '../services/tokenService';
 
 import { TX } from '../data/contractTX';
 
@@ -49,19 +49,22 @@ const canInteract = (daoMember, delegate) => {
 };
 
 const ProposalVote = ({
-  proposal,
-  overview,
-  daoProposals,
   daoMember,
+  daoProposals,
   delegate,
+  hideMinionExecuteButton,
+  minionAction,
+  overview,
+  proposal,
 }) => {
-  const [nextProposalToProcess, setNextProposal] = useState(null);
-  const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { submitTransaction } = useTX();
   const { customTerms } = useMetaData();
+
   const [enoughDeposit, setEnoughDeposit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [nextProposalToProcess, setNextProposal] = useState(null);
 
   const currentlyVoting = proposal => {
     return (
@@ -372,14 +375,20 @@ const ProposalVote = ({
                           {+proposal?.yesShares > +proposal?.noShares && (
                             <Box>
                               Currently Passing
-                              {proposal.proposalType !== 'Funding Proposal' &&
-                                proposal?.minion?.minionType ===
-                                  MINION_TYPES.NIFTY && (
-                                  <>
-                                    {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
-                                    <MinionExecute proposal={proposal} early />
-                                  </>
-                                )}
+                              {proposal?.minion?.minionType ===
+                                MINION_TYPES.NIFTY && (
+                                <>
+                                  {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
+                                  <MinionExecute
+                                    hideMinionExecuteButton={
+                                      hideMinionExecuteButton
+                                    }
+                                    minionAction={minionAction}
+                                    proposal={proposal}
+                                    early
+                                  />
+                                </>
+                              )}
                             </Box>
                           )}
                           {+proposal?.yesShares === 0 &&
@@ -406,12 +415,18 @@ const ProposalVote = ({
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.yesShares > +proposal?.noShares &&
-                            proposal.proposalType !== 'Funding Proposal' &&
                             proposal?.minion?.minionType ===
                               MINION_TYPES.NIFTY && (
                               <>
                                 {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
-                                <MinionExecute proposal={proposal} early />
+                                <MinionExecute
+                                  minionAction={minionAction}
+                                  hideMinionExecuteButton={
+                                    hideMinionExecuteButton
+                                  }
+                                  proposal={proposal}
+                                  early
+                                />
                               </>
                             )}
                         </TextBox>
@@ -507,9 +522,13 @@ const ProposalVote = ({
               </Flex>
             </Flex>
           ))}
-        {proposal?.status === 'Passed' &&
-          proposal.proposalType !== 'Funding Proposal' &&
-          proposal?.minionAddress && <MinionExecute proposal={proposal} />}
+        {proposal?.status === 'Passed' && proposal?.minionAddress && (
+          <MinionExecute
+            hideMinionExecuteButton={hideMinionExecuteButton}
+            minionAction={minionAction}
+            proposal={proposal}
+          />
+        )}
       </ContentBox>
     </>
   );

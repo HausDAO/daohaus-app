@@ -42,7 +42,7 @@ const urlify = text => {
   });
 };
 
-const ProposalDetails = ({ proposal, daoMember }) => {
+const ProposalDetails = ({ proposal, daoMember, hideMinionExecuteButton }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
   const { isUberHaus, daoOverview } = useDao();
@@ -61,7 +61,13 @@ const ProposalDetails = ({ proposal, daoMember }) => {
       return <UberDaoInfo proposal={proposal} />;
     }
     if (proposal?.minion) {
-      return <MinionBox proposal={proposal} daoOverview={daoOverview} />;
+      return (
+        <MinionBox
+          daoOverview={daoOverview}
+          hideMinionExecuteButton={hideMinionExecuteButton}
+          proposal={proposal}
+        />
+      );
     }
     return (
       <MemberIndicator
@@ -204,7 +210,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
-const MinionBox = ({ proposal, daoOverview }) => {
+const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
   const { daoid, daochain } = useParams();
 
   const minionName = useMemo(() => {
@@ -238,7 +244,7 @@ const MinionBox = ({ proposal, daoOverview }) => {
   if (
     (minionType === MINION_TYPES.VANILLA ||
       minionType === MINION_TYPES.NIFTY) &&
-    proposal.proposalType === 'Funding Proposal'
+    hideMinionExecuteButton === true
   ) {
     return (
       <MemberIndicator

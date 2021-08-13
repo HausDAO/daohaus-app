@@ -183,10 +183,6 @@ export const determineProposalType = proposal => {
   if (proposal.trade) {
     return PROPOSAL_TYPES.TRADE;
   }
-  // handles case of a funding proposal sending funds to a minion address
-  if (parsedDetails.proposalType === 'Funding Proposal' && proposal.isMinion) {
-    return PROPOSAL_TYPES.FUNDING;
-  }
   if (proposal.isMinion) {
     return getMinionProposalType(proposal, parsedDetails);
   }
