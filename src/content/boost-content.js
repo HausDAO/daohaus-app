@@ -181,6 +181,7 @@ export const boostList = [
     networks: {
       '0x64': true,
       '0x89': true,
+      '0x1': true,
     },
   },
 ];
