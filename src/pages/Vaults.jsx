@@ -87,7 +87,7 @@ const Vaults = ({
             labelText='Showing'
           />
         </Box>
-        {hasNfts && false && (
+        {hasNfts && (
           <Box
             mt={5}
             texttransform='uppercase'

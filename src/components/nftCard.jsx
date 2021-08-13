@@ -48,7 +48,7 @@ const NftCard = ({ nft, minion, minionType, ...props }) => {
       </Flex>
       <AspectRatio ratio={1} maxWidth={300} maxHeight={300} m='auto' mb={5}>
         <Image
-          src={hydratedNft?.metadata?.image}
+          src={hydratedNft?.image}
           margin='auto'
           fit='contain'
           objectFit='contain'
