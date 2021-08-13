@@ -11,6 +11,7 @@ import {
   RiFireLine,
   RiRocket2Line,
   RiSearch2Line,
+  RiImage2Line,
 } from 'react-icons/ri';
 import { FaDiscourse, FaRegHandshake } from 'react-icons/fa';
 
@@ -19,6 +20,11 @@ export const defaultDaoData = [
   { icon: RiBookMarkLine, label: 'Proposals', path: 'proposals' },
   { icon: RiBankLine, label: 'Vaults', path: 'vaults' },
   { icon: RiTeamLine, label: 'Members', path: 'members' },
+  {
+    icon: RiImage2Line,
+    label: 'Gallery',
+    path: 'gallery',
+  },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
   { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
@@ -33,8 +39,13 @@ export const defaultHubData = [
   },
 ];
 
-export const generateDaoLinks = (chainID, daoID, proposals) => {
-  return defaultDaoData.map(link => {
+export const generateDaoLinks = (chainID, daoID, proposals, vaults) => {
+  let links = [...defaultDaoData];
+  const hasNfts = vaults.some(v => v.nfts.length);
+  if (!hasNfts) {
+    links = links.filter(link => link.label !== 'Gallery');
+  }
+  return links.map(link => {
     let path = `/dao/${chainID}/${daoID}/${link.path}`;
     if (link.path === 'proposals' && !proposals.length) {
       path = `${path}/new`;
