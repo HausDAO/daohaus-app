@@ -29,6 +29,10 @@ export const supportedChains = {
       api_url: 'https://ethereum-api.rarible.org/protocol/v0.1/ethereum',
       nft_transfer_proxy: '0x0',
     },
+    niftyMinion: {
+      minion_factory_addr: '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
+      version: 'v1',
+    },
   },
   '0x4': {
     name: 'Ethereum Rinkeby',

@@ -172,12 +172,14 @@ export const FIELD = {
     htmlFor: 'nftSelect',
     name: 'nftSelect',
     label: 'Select an NFT',
+    expectType: 'any',
   },
   DATE_RANGE: {
     type: 'dateRange',
     htmlFor: 'dateRange',
     name: 'dateRange',
     label: 'Set Auction Duration',
+    expectType: 'any',
   },
   DELEGATE_ADDRESS: {
     type: 'input',

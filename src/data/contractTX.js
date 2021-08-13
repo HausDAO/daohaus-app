@@ -192,7 +192,7 @@ export const DETAILS = {
     link: '.values.image',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.NEAPOLITAN,
-    orderIpfsHash: '.values.ipfsHash',
+    orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
   },
 };
@@ -718,17 +718,16 @@ export const TX = {
     errMsg: 'Error Submitting Proposals',
     successMsg: 'Proposal Submitted',
     gatherArgs: [
-      // need array values
       {
-        type: 'array',
+        type: 'nestedArgs',
         gatherArgs: ['0'],
       },
       {
-        type: 'array',
+        type: 'nestedArgs',
         gatherArgs: ['0'],
       },
       {
-        type: 'array',
+        type: 'nestedArgs',
         gatherArgs: [
           {
             type: 'encodeHex',

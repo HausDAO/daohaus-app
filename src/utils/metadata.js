@@ -107,6 +107,9 @@ export const getTerm = (customTerms, word) => {
   if (word === 'bank') {
     return customTerms?.bank || 'Bank';
   }
+  // if (word === 'vaults') {
+  //   return customTerms?.bank || 'Vaults';
+  // }
   if (word === 'boost') {
     return customTerms?.boost || 'Boost';
   }
@@ -145,6 +148,9 @@ export const getTerm = (customTerms, word) => {
   }
   if (word === 'minions') {
     return customTerms?.minions || 'Minions';
+  }
+  if (word === 'nft gallery') {
+    return 'NFT Gallery';
   }
   if (word === 'f04subhead') {
     return (

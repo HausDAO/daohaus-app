@@ -73,7 +73,7 @@ const NftSelect = props => {
       console.log('ipfsHash', ipfsHash);
 
       setValue('eip712HashValue', eip712);
-      setValue('ipfsOrderHash', ipfsHash);
+      setValue('ipfsOrderHash', ipfsHash.IpfsHash);
       setValue('signatureHash', getSignatureHash());
     };
     if (
