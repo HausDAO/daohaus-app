@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Box, Stack, Button } from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
+import { RiAddFill } from 'react-icons/ri';
 
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberCard from '../components/memberCard';
@@ -22,6 +23,7 @@ import { daoConnectedAndSameChain } from '../utils/general';
 import UberHausMemberCard from '../components/uberHausMemberCard';
 import CsvDownloadButton from '../components/csvDownloadButton';
 import ListFilter from '../components/listFilter';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const Members = React.memo(
   ({
@@ -35,6 +37,7 @@ const Members = React.memo(
   }) => {
     const { daoid, daochain } = useParams();
     const { address, injectedChain } = useInjectedProvider();
+    const { setProposalSelector } = useOverlay();
 
     const [selectedMember, setSelectedMember] = useState(null);
     const [scrolled, setScrolled] = useState(false);
@@ -101,14 +104,21 @@ const Members = React.memo(
         sortMembers();
       }
     }, [members, sort, filter]);
+    const openProposalSelector = () => {
+      setProposalSelector(true);
+    };
 
     const ctaButton = daoConnectedAndSameChain(
       address,
       injectedChain?.chainId,
       daochain,
     ) && (
-      <Button as={Link} to={`/dao/${daochain}/${daoid}/proposals/new/member`}>
-        Apply
+      <Button
+        rightIcon={<RiAddFill />}
+        title={getTitle(customTerms, 'Proposal')}
+        onClick={openProposalSelector}
+      >
+        New {getTerm(customTerms, 'proposal')}
       </Button>
     );
 
