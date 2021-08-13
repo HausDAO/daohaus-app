@@ -26,6 +26,7 @@ const FormBuilder = props => {
     required = [],
     localValues,
   } = props;
+
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
 

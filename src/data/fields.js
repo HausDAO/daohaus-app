@@ -169,10 +169,10 @@ export const FIELD = {
   },
   NFT_SELECT: {
     type: 'nftSelect',
-    htmlFor: 'nftSelect',
-    name: 'nftSelect',
+    htmlFor: 'nftAddress',
+    name: 'nftAddress',
     label: 'Select an NFT',
-    expectType: 'any',
+    expectType: 'address',
   },
   DATE_RANGE: {
     type: 'dateRange',

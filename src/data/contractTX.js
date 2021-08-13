@@ -710,7 +710,7 @@ export const TX = {
     successMsg: 'Wrap-N-Zap Poke Successful!',
   },
   SELL_NFT_RARIBLE: {
-    contract: CONTRACTS.SUPERFLUID_MINION_SELECT,
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
@@ -720,15 +720,24 @@ export const TX = {
     gatherArgs: [
       {
         type: 'nestedArgs',
-        gatherArgs: ['0'],
+        gatherArgs: ['.values.nftAddress', '.values.selectedMinion'],
       },
       {
         type: 'nestedArgs',
-        gatherArgs: ['0'],
+        gatherArgs: ['0', '0'],
       },
       {
         type: 'nestedArgs',
         gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.ERC_721,
+            fnName: 'setApprovalForAll',
+            gatherArgs: [
+              '.contextData.chainConfig.rarible.nft_transfer_proxy',
+              'true',
+            ],
+          },
           {
             type: 'encodeHex',
             contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
@@ -746,6 +755,21 @@ export const TX = {
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.SELL_NFT_RARIBLE,
+      },
+    ],
+  },
+};
+
+export const EXTRA_MULTICALL_ACTIONS = {
+  APPROVE_RARIBLE_NFT_PROXY: {
+    actionTo: ['.values.nftAddress'],
+    actionValue: ['0'],
+    actionData: [
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.ERC_721,
+        fnName: 'setApprovalForAll',
+        gatherArgs: ['.chainConfig.rarible.nft_transfer_proxy', 'true'],
       },
     ],
   },

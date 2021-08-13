@@ -23,6 +23,10 @@ import {
   getSignatureHash,
   pinOrderToIpfs,
 } from '../utils/rarible';
+import { LOCAL_ABI } from '../utils/abi';
+import { createContract } from '../utils/contract';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { supportedChains } from '../utils/chain';
 
 const NftSelect = props => {
   const { label, localForm, htmlFor, name } = props;
@@ -30,6 +34,7 @@ const NftSelect = props => {
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
+  const { injectedProvider } = useInjectedProvider();
   const [nftData, setNftData] = useState();
   const [nfts, setNfts] = useState();
   const [selected, setSelected] = useState();
@@ -39,7 +44,7 @@ const NftSelect = props => {
   const startDate = watch('startDate');
   const endDate = watch('endDate');
   const paymentToken = watch('paymentToken');
-  const nftSelect = watch('nftSelect');
+  const nftAddress = watch('nftAddress');
   const sellPrice = watch('sellPrice');
   const tokenId = watch('tokenId');
   const selectedMinion = watch('selectedMinion');
@@ -56,7 +61,7 @@ const NftSelect = props => {
   useEffect(() => {
     const setupOrder = async () => {
       const orderObj = buildEncodeOrder({
-        nftContract: nftSelect,
+        nftContract: nftAddress,
         tokenId,
         tokenAddress: paymentToken,
         price: sellPrice,
@@ -80,7 +85,7 @@ const NftSelect = props => {
       startDate &&
       endDate &&
       paymentToken &&
-      nftSelect &&
+      nftAddress &&
       sellPrice &&
       selectedMinion
     ) {
@@ -90,7 +95,7 @@ const NftSelect = props => {
     startDate,
     endDate,
     paymentToken,
-    nftSelect,
+    nftAddress,
     sellPrice,
     tokenId,
     selectedMinion,
@@ -132,8 +137,30 @@ const NftSelect = props => {
   }, [filter, nfts]);
 
   useEffect(() => {
-    if (selected) {
-      console.log('selected', selected);
+    const setUpNftValues = async () => {
+      const nftContract = createContract({
+        address: selected.contractAddress,
+        abi: LOCAL_ABI.ERC_721,
+        chainID: daochain,
+        web3: injectedProvider,
+      });
+
+      const approvedForAll = await nftContract.methods
+        .isApprovedForAll(
+          selectedMinion,
+          supportedChains[daochain].rarible.nft_transfer_proxy,
+        )
+        .call();
+
+      console.log('approvedForAll', approvedForAll);
+      // TODO: can't actually change the tx element from here - maybe set a value to toggle on later?
+
+      // if (!approvedForAll) {
+      //   console.log('')
+      // }
+      // const tokenId = await nftContract.methods
+      //   .inkTokenByIndex(ipfsHash, 0)
+      //   .call();
       setValue(name, selected.contractAddress);
       setValue('tokenId', selected.tokenId);
       setValue(
@@ -146,8 +173,11 @@ const NftSelect = props => {
         'image',
         selected.metadata?.image_url || selected.metadata?.image,
       );
+    };
+    if (selected && selectedMinion) {
+      setUpNftValues();
     }
-  }, [selected]);
+  }, [selected, selectedMinion]);
 
   const openModal = () => {
     setGenericModal({ nftSelect: true });

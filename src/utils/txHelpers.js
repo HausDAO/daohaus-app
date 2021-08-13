@@ -192,6 +192,7 @@ export const Transaction = async data => {
   });
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
+  console.log('contextData', contextData, data);
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
     .on('transactionHash', txHash => {
