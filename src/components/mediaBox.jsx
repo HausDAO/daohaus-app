@@ -10,14 +10,17 @@ const hasImage = string => {
   return imageExtensions.some(o => string.includes(o));
 };
 
+const hasHttp = string => {
+  return string.indexOf('http') === 0;
+};
+
 const MediaBox = memo(({ link }) => {
   if (link === '') return;
   if (hasImage(link)) {
-    console.log('render');
     return (
       <Box width='100%'>
         <Image
-          src={`https://${link}`}
+          src={hasHttp(link) ? link : `https://${link}`}
           maxW='100%'
           margin='0 auto'
           alt='link image'

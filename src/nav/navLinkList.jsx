@@ -14,8 +14,13 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
 
   const { address } = useInjectedProvider();
   const navLinks =
-    dao?.chainID && dao?.daoID && dao.daoProposals
-      ? generateDaoLinks(dao.chainID, dao.daoID, dao.daoProposals)
+    dao?.chainID && dao?.daoID && dao.daoProposals && dao.daoVaults
+      ? generateDaoLinks(
+          dao.chainID,
+          dao.daoID,
+          dao.daoProposals,
+          dao.daoVaults,
+        )
       : defaultHubData;
   const inDao = dao?.daoID && address;
 
