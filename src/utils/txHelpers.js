@@ -130,6 +130,10 @@ const gatherArgs = data => {
       });
       return safeEncodeHexFunction(getABIsnippet(arg), args);
     }
+    if (arg.type === 'array') {
+      // gather an arg for each item in the array and return an array of each
+      // const args = gatherArgs
+    }
     //  for convenience, will search the values object for a field with the given string.
     return arg;
   });
