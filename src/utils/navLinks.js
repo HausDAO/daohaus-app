@@ -20,13 +20,13 @@ export const defaultDaoData = [
   { icon: RiBookMarkLine, label: 'Proposals', path: 'proposals' },
   { icon: RiBankLine, label: 'Vaults', path: 'vaults' },
   { icon: RiTeamLine, label: 'Members', path: 'members' },
-  { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
-  { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
   {
     icon: RiImage2Line,
     label: 'Gallery',
     path: 'gallery',
   },
+  { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
+  { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
   { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
