@@ -42,7 +42,7 @@ const urlify = text => {
   });
 };
 
-const ProposalDetails = ({ proposal, daoMember }) => {
+const ProposalDetails = ({ proposal, daoMember, hideMinionExecuteButton }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
   const { isUberHaus, daoOverview } = useDao();
@@ -61,7 +61,13 @@ const ProposalDetails = ({ proposal, daoMember }) => {
       return <UberDaoInfo proposal={proposal} />;
     }
     if (proposal?.minion) {
-      return <MinionBox proposal={proposal} daoOverview={daoOverview} />;
+      return (
+        <MinionBox
+          daoOverview={daoOverview}
+          hideMinionExecuteButton={hideMinionExecuteButton}
+          proposal={proposal}
+        />
+      );
     }
     return (
       <MemberIndicator
@@ -204,7 +210,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
-const MinionBox = ({ proposal, daoOverview }) => {
+const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
   const { daoid, daochain } = useParams();
 
   const minionName = useMemo(() => {
@@ -229,6 +235,24 @@ const MinionBox = ({ proposal, daoOverview }) => {
         tooltip
         tooltipText={TIP_LABELS.UBER_PROPOSAL}
         link={UBER_LINK}
+        shouldFetchProfile={false}
+        name={minionName}
+      />
+    );
+  }
+  // handles case of a funding proposal sending funds to a minion address
+  if (
+    (minionType === MINION_TYPES.VANILLA ||
+      minionType === MINION_TYPES.NIFTY) &&
+    hideMinionExecuteButton === true
+  ) {
+    return (
+      <MemberIndicator
+        address={proposal?.minionAddress}
+        label='minion'
+        tooltip
+        tooltipText={TIP_LABELS.FUNDING_MINION_PROPOSAL}
+        link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
         shouldFetchProfile={false}
         name={minionName}
       />
