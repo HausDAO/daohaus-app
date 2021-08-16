@@ -163,6 +163,14 @@ const ProposalMinionCard = ({ proposal }) => {
     );
   };
 
+  // hides details on funding and payroll proposals
+  if (
+    minionDeets &&
+    minionDeets[1] === '0x0000000000000000000000000000000000000000'
+  ) {
+    return null;
+  }
+
   return (
     <>
       <Skeleton isLoaded={!loading}>
