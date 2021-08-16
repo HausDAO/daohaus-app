@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Flex } from '@chakra-ui/layout';
 
+import { useParams } from 'react-router';
 import { capitalize } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { MINION_CONTENT } from '../data/minions';
+import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
 import GenericSelect from './genericSelect';
 import Paragraphs from './Paragraphs';
 import Header from './header';
@@ -25,9 +26,19 @@ const minions = Object.entries(MINION_TYPES).map(([key, value]) => ({
   name: betterCapitalize(value),
   value,
 }));
-const MinionTypeSelect = () => {
+const MinionTypeSelect = props => {
+  const { daochain } = useParams();
   const [minionType, setMinionType] = useState(null);
   const currentMinion = MINION_CONTENT[minionType];
+
+  const eligableMinions = useMemo(() => {
+    if (!minions || !daochain) return;
+    return minions?.filter(
+      minion =>
+        MINION_NETWORKS?.[minion.value]?.[daochain] ||
+        MINION_NETWORKS?.[minion.value] === 'all',
+    );
+  }, [minions, daochain]);
 
   const handleChange = e => {
     const { value } = e?.target;
@@ -40,11 +51,13 @@ const MinionTypeSelect = () => {
 
   return (
     <Flex flexDir='column'>
-      <Header headerText={`Summon a ${currentMinion?.header || 'Minion'}`} />
+      <Header mb={4}>Summon a {currentMinion?.header || 'Minion'}</Header>
       <GenericSelect
-        options={minions}
+        options={eligableMinions}
         placeholder='Select a minion'
         onChange={handleChange}
+        mb={6}
+        {...props}
       />
       <Paragraphs pars={currentMinion?.info || descrip} />
     </Flex>

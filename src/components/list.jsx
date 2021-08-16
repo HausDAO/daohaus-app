@@ -1,7 +1,5 @@
-import { InputGroup } from '@chakra-ui/input';
-import { Flex, List as ChakraList } from '@chakra-ui/layout';
 import React from 'react';
-import TextBox from './TextBox';
+import { Flex, List as ChakraList } from '@chakra-ui/layout';
 
 const List = ({ list, headerSection }) => {
   return (

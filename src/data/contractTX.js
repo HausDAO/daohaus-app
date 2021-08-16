@@ -511,7 +511,6 @@ export const TX = {
     contract: CONTRACTS.VANILLA_MINION_FACTORY,
     name: 'summonMinion',
     poll: 'subgraph',
-    onTxHash: ACTIONS.BASIC,
     display: 'Summoning Minion',
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',

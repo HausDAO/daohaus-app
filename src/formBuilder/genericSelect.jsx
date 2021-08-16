@@ -12,10 +12,12 @@ const GenericSelect = props => {
     options = [],
     disabled,
     onChange,
+    containerProps,
+    mb,
   } = props;
   const { register } = localForm || {};
   return (
-    <FieldWrapper {...props}>
+    <FieldWrapper {...props} containerProps={containerProps} mb={mb}>
       <Select
         placeholder={placeholder}
         ref={register}

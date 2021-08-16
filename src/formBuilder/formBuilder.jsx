@@ -34,7 +34,7 @@ const FormBuilder = props => {
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
-  const [condition, setCondition] = useState(null);
+
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm();
   const { handleSubmit } = localForm;
@@ -137,14 +137,13 @@ const FormBuilder = props => {
           formData: props,
           onSubmit: props.onSubmit,
         });
-        then?.();
         return res;
       } catch (error) {
         console.error(error);
         setLoading(false);
       }
     };
-    const handleSubmitTX = async then => {
+    const handleSubmitTX = async () => {
       try {
         setLoading(true);
         const res = await submitTransaction({
@@ -153,16 +152,17 @@ const FormBuilder = props => {
           localValues,
           tx: props.tx,
           lifeCycleFns: {
+            ...props?.lifeCycleFns,
             onCatch() {
               setLoading(false);
+              props?.lifeCycleFns?.onCatch?.();
             },
-            ...props?.lifeCycleFns,
             afterTx() {
-              then?.();
               props?.lifeCycleFns?.afterTx?.();
             },
           },
         });
+        setLoading(false);
         return res;
       } catch (error) {
         console.error(error);
@@ -170,30 +170,27 @@ const FormBuilder = props => {
       }
     };
 
-    const handleConditional = async choice => {
-      if (choice.tx && choice.then)
-        return () => handleSubmitTX(handleConditional(choice.then));
-      if (choice.tx) return () => handleSubmitTX();
-      if (choice.callback) return () => handleSubmitCallback();
-      if (choice.goTo) return () => goToNext(choice.goTo);
-    };
+    // const handleConditional = async choice => {
+    //   if (choice.tx && choice.then)
+    //     return () => handleSubmitTX(handleConditional(choice.then));
+    //   if (choice.tx) return () => handleSubmitTX();
+    //   if (choice.callback) return () => handleSubmitCallback();
+    //   if (choice.goTo) return () => goToNext(choice.goTo);
+    // };
 
-    //  HANDLE CONDITIONAL SUBMIT + AFTER EFFECTS
-    if (condition && next && typeof goToNext === 'function') {
-      console.log(`condition`, condition);
+    if (next && typeof goToNext === 'function') {
       console.log(`next`, next);
       console.log(`goToNext`, goToNext);
-      return;
+      return goToNext(next);
+
       // const choice = next[condition];
       // return handleConditional(choice)();
     }
     //  HANDLE CALLBACK ON SUBMIT
     if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
-      console.log('FIRE CALLBACK');
       return handleSubmitCallback();
     }
     //  HANDLE CONTRACT TX ON SUBMIT
-    console.log('FIRE TX');
     return handleSubmitTX();
   };
 
@@ -217,7 +214,6 @@ const FormBuilder = props => {
           localForm={localForm}
           localValues={localValues}
           buildABIOptions={buildABIOptions}
-          setCondition={setCondition}
         />
       ),
     );
@@ -239,6 +235,8 @@ const FormBuilder = props => {
           addOption={addOption}
           loading={loading}
           ctaText={ctaText}
+          next={next}
+          goToNext={goToNext}
         />
       </Flex>
     </form>

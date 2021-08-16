@@ -7,7 +7,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 import { Button } from '@chakra-ui/button';
 import { Tabs, Tab, TabList, TabPanel, TabPanels } from '@chakra-ui/tabs';
-import { list } from '@chakra-ui/styled-system';
 import List from '../components/list';
 import ListItem from '../components/listItem';
 import ListSelector from '../components/ListSelector';
@@ -23,7 +22,6 @@ import { useFormModal } from '../contexts/OverlayContext';
 import { FORM } from '../data/forms';
 import { PUBLISHERS } from '../data/publishers';
 import { TX } from '../data/contractTX';
-import TheSummoner from '../components/theSummoner';
 import { useDao } from '../contexts/DaoContext';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
@@ -97,9 +95,27 @@ const Market = () => {
     }
   };
 
+  const sample = {
+    title: 'Minion Summoner',
+    steps: {
+      STEP1: {
+        start: true,
+        type: 'form',
+        next: 'STEP2',
+        lego: FORM.SUMMON_MINION_SELECTOR,
+      },
+      STEP2: {
+        type: 'summoner',
+        next: 'DONE',
+        isForBoost: false,
+      },
+    },
+  };
   const openDetails = () => {
     openFormModal({
       title: 'Boost Marketplace',
+      boostData: {},
+      minion: {},
       steps: {
         STEP1: {
           start: true,
@@ -124,21 +140,15 @@ const Market = () => {
         },
         STEP2: {
           type: 'summoner',
-          lego: FORM.NEW_VANILLA_MINION,
-          minionType: MINION_TYPES.VANILLA,
-          next: {
-            hasNotSummoned: {
-              tx: TX.SUMMON_MINION_VANILLA,
-              then: { goTo: 'Step3' },
-            },
-            hasMinion: { goTo: 'Step3' },
-          },
+          next: 'STEP3',
+          isForBoost: true,
+          staticMinionType: MINION_TYPES.VANILLA,
         },
         STEP3: {
           start: true,
           type: 'form',
           lego: FORM.TOKEN,
-          next: 'FINAL',
+          next: 'DONE',
         },
       },
     });
@@ -305,15 +315,19 @@ const InstalledList = ({ listID, lists }) => {
   }, [listID, lists]);
 
   const handleClick = () => {
-    useFormModal({
+    openFormModal({
+      title: 'Minion Summoner',
       steps: {
-        title: 'Minion Summoner',
-        steps: {
-          STEP1: {
-            start: true,
-            type: 'form',
-            lego: FORM.SUMMON_MINION_SELECTOR,
-          },
+        STEP1: {
+          start: true,
+          type: 'form',
+          next: 'STEP2',
+          lego: FORM.SUMMON_MINION_SELECTOR,
+        },
+        STEP2: {
+          type: 'summoner',
+          next: 'DONE',
+          isForBoost: false,
         },
       },
     });

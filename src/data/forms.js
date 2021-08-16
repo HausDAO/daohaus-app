@@ -1,7 +1,6 @@
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { TX } from './contractTX';
-import { SUMMON_PACK } from './minions';
 
 const testPars = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
@@ -351,7 +350,8 @@ export const FORM = {
   NEW_VANILLA_MINION: {
     required: ['minionName'],
     minionType: MINION_TYPES.VANILLA,
-    fields: [[SUMMON_PACK.VANILLA]],
+    tx: TX.SUMMON_MINION_VANILLA,
+    fields: [[FIELD.MINION_NAME]],
   },
   BUY_NIFTY_INK: {
     id: 'BUY_NIFTY_INK',
@@ -384,10 +384,7 @@ export const FORM = {
     title: 'Minion Summon Selectpr',
     description: 'Choose which damn minion you want to summon',
     dev: true,
-    type: PROPOSAL_TYPES.BUY_NIFTY_INK,
-    tx: TX.SUBMIT_PROPOSAL,
-    required: ['sharesRequested', 'tributeOffered', 'title'],
+    required: ['minionType'],
     fields: [[FIELD.MINION_TYPE_SELECT]],
-    additionalOptions: [FIELD.LINK],
   },
 };

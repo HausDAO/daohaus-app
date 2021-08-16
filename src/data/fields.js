@@ -209,6 +209,7 @@ export const FIELD = {
     type: 'input',
     label: 'Minion Name',
     name: 'minionName',
+    helperText: 'All minions get a name',
     htmlFor: 'minionName',
     placeholder: 'Sally',
     expectType: 'any',
@@ -251,6 +252,7 @@ export const FIELD = {
     type: 'minionTypeSelect',
     name: 'minionType',
     label: 'Choose a Minion Type',
+    expectType: 'any',
   },
 };
 

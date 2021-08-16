@@ -1,10 +1,11 @@
 import React from 'react';
 import TextBox from '../components/TextBox';
 
-const Header = ({ headerText }) => {
+const Header = (props = {}) => {
+  const { children } = props;
   return (
-    <TextBox size='lg' mb={6}>
-      {headerText}
+    <TextBox size='lg' mb={6} {...props}>
+      {children}
     </TextBox>
   );
 };

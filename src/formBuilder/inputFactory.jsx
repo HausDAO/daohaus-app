@@ -81,7 +81,7 @@ export const InputFactory = props => {
     return <NiftyInkUrl {...props} />;
   }
   if (type === 'minionTypeSelect') {
-    return <MinionTypeSelect />;
+    return <MinionTypeSelect {...props} />;
   }
   // if (type === 'paragraphs') {
   //   return <Paragraphs {...props} />;
