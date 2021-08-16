@@ -317,5 +317,8 @@ export const transactionByProposalType = proposal => {
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return TX.SUPERFLUID_MINION_EXECUTE;
   }
+  if (proposal.minion.minionType === 'Neapolitan minion') {
+    return TX.MINION_NEAPOLITAN_EXECUTE;
+  }
   return TX.MINION_SIMPLE_EXECUTE;
 };

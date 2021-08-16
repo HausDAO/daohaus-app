@@ -54,6 +54,7 @@ export const MINION_TYPES = {
 
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
+  NEAPOLITAN_MINION: 'actions',
   UBERHAUS_MINION: 'appointments',
   SUPERFLUID_MINION: 'streams',
 };
@@ -554,5 +555,17 @@ export const pendingUberHausStakingProposal = (prop, minionAddress) => {
     prop.proposalType === 'Member Proposal' &&
     !prop.cancelled &&
     !prop.processed
+  );
+};
+
+export const multicallActionsFromProposal = prop => {
+  return prop.actions.reduce(
+    (obj, action) => {
+      obj.targets.push(action.target);
+      obj.values.push(action.value);
+      obj.datas.push(action.data);
+      return obj;
+    },
+    { targets: [], values: [], datas: [] },
   );
 };

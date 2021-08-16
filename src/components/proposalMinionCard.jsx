@@ -29,54 +29,63 @@ import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import UberHausAvatar from './uberHausAvatar';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ProposalMinionCard = ({ proposal }) => {
+const ProposalMinionCard = ({ proposal, minionAction }) => {
   const { daochain } = useParams();
   const { theme } = useCustomTheme();
   const [minionDeets, setMinionDeets] = useState();
   const [decodedData, setDecodedData] = useState();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getMinionDeets = async () => {
-      try {
-        if (
-          proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
-        ) {
-          const action = await MinionService({
-            minion: proposal?.minionAddress,
-            chainID: daochain,
-          })('getAction')({ proposalId: proposal?.proposalId });
-          setMinionDeets(action);
-        } else if (
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
-        ) {
-          const action = await UberHausMinionService({
-            uberHausMinion: proposal.minionAddress,
-            chainID: daochain,
-          })('getAction')({ proposalId: proposal?.proposalId });
-          setMinionDeets(action);
-        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-          const action = await UberHausMinionService({
-            uberHausMinion: proposal.minionAddress,
-            chainID: daochain,
-          })('getAppointment')({ proposalId: proposal?.proposalId });
-
-          setMinionDeets(action);
-        }
-      } catch (err) {
-        console.error(err);
-        setMinionDeets(null);
-      } finally {
-        setLoading(false);
-      }
+      // try {
+      //   if (
+      //     proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+      //     proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
+      //   ) {
+      //     const action = await MinionService({
+      //       minion: proposal?.minionAddress,
+      //       chainID: daochain,
+      //     })('getAction')({ proposalId: proposal?.proposalId });
+      //     setMinionDeets(action);
+      //   } else if (
+      //     proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+      //     proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+      //   ) {
+      //     const action = await UberHausMinionService({
+      //       uberHausMinion: proposal.minionAddress,
+      //       chainID: daochain,
+      //     })('getAction')({ proposalId: proposal?.proposalId });
+      //     setMinionDeets(action);
+      //   } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+      //     const action = await UberHausMinionService({
+      //       uberHausMinion: proposal.minionAddress,
+      //       chainID: daochain,
+      //     })('getAppointment')({ proposalId: proposal?.proposalId });
+      //     setMinionDeets(action);
+      //   }
+      // } catch (err) {
+      //   console.error(err);
+      //   setMinionDeets(null);
+      // } finally {
+      //   setLoading(false);
+      // }
     };
-    if (proposal?.proposalId && proposal?.minionAddress && daochain) {
-      getMinionDeets();
+    if (minionAction) {
+      // if (proposal?.proposalId && proposal?.minionAddress && daochain) {
+      setMinionDeets(minionAction);
+
+      // getMinionDeets();
     }
-  }, [proposal, daochain]);
+    // }, [proposal, daochain]);
+  }, [minionAction]);
+
+  // console.log('minionDeets', minionDeets);
+  // TODO: adjust this to use the action on the proposal object if neapolitan
+  // - add to query Actions
+  // needs to deal with multiple actions
+  // console.log('proposal', proposal);
 
   useEffect(() => {
     const getAbi = async () => {

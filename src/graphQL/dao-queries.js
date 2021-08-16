@@ -105,6 +105,11 @@ export const DAO_ACTIVITIES = gql`
           minionType
           minQuorum
         }
+        actions {
+          target
+          value
+          data
+        }
         moloch {
           gracePeriodLength
           periodDuration
