@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Button, Flex, Spinner } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
-import {
-  PROPOSAL_TYPES,
-  MINION_ACTION_FUNCTION_NAMES,
-} from '../utils/proposalUtils';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { LOCAL_ABI } from '../utils/abi';
-import { createContract } from '../utils/contract';
 import { transactionByProposalType } from '../utils/txHelpers';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const MinionExecute = ({ proposal, early }) => {
+const MinionExecute = ({
+  hideMinionExecuteButton,
+  minionAction,
+  proposal,
+  early,
+}) => {
   const { daochain } = useParams();
   const { injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
@@ -35,19 +35,6 @@ const MinionExecute = ({ proposal, early }) => {
     const getMinionDetails = async () => {
       setLoading(true);
       try {
-        const tx = transactionByProposalType(proposal);
-        const abi = LOCAL_ABI[tx.contract.abiName];
-        const web3Contract = createContract({
-          address: proposal.minionAddress,
-          abi,
-          chainID: daochain,
-          web3: injectedProvider,
-        });
-
-        const action = await web3Contract.methods[
-          MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
-        ](proposal.proposalId).call();
-
         if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
           const hausService = await TokenService({
             chainID: daochain,
@@ -68,7 +55,9 @@ const MinionExecute = ({ proposal, early }) => {
           setNeedsHausApproval(+amountApproved < +minionBalance);
         }
 
-        setMinionDetails(action);
+        if (minionAction) {
+          setMinionDetails(minionAction);
+        }
         setShouldFetch(false);
         setLoading(false);
       } catch (err) {
@@ -86,7 +75,7 @@ const MinionExecute = ({ proposal, early }) => {
     ) {
       getMinionDetails();
     }
-  }, [proposal, daochain, shouldFetch]);
+  }, [daochain, minionAction, proposal, shouldFetch]);
 
   const handleExecute = async () => {
     if (!proposal?.minion) return;
@@ -121,6 +110,10 @@ const MinionExecute = ({ proposal, early }) => {
       );
     }
 
+    if (hideMinionExecuteButton) {
+      return null;
+    }
+
     if (
       !minionDetails?.executed &&
       proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
@@ -138,11 +131,13 @@ const MinionExecute = ({ proposal, early }) => {
       );
     }
 
-    return (
-      <Button onClick={handleExecute} disabled={!isCorrectChain}>
-        {early && 'Early '}Execute Minion
-      </Button>
-    );
+    if (hideMinionExecuteButton === false) {
+      return (
+        <Button onClick={handleExecute} disabled={!isCorrectChain}>
+          {early && 'Early '}Execute Minion
+        </Button>
+      );
+    }
   };
 
   return (
