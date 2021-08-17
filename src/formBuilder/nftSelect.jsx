@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import deepEqual from 'deep-eql';
 import {
   Box,
@@ -11,18 +12,11 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
-import { useParams } from 'react-router';
+
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
-import {
-  buildEncodeOrder,
-  encodeOrder,
-  getMessageHash,
-  getSignatureHash,
-  pinOrderToIpfs,
-} from '../utils/rarible';
 import { LOCAL_ABI } from '../utils/abi';
 import { createContract } from '../utils/contract';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -31,7 +25,7 @@ import { supportedChains } from '../utils/chain';
 const NftSelect = props => {
   const { label, localForm, htmlFor, name, localValues } = props;
   const { register, setValue, watch } = localForm;
-  const { daochain, daoid } = useParams();
+  const { daochain } = useParams();
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const { injectedProvider } = useInjectedProvider();
@@ -41,64 +35,13 @@ const NftSelect = props => {
   const [collections, setCollections] = useState();
   const [filter, setFilter] = useState();
 
-  const startDate = watch('startDate');
-  const endDate = watch('endDate');
-  const paymentToken = watch('paymentToken');
-  const nftAddress = watch('nftAddress');
-  const sellPrice = watch('sellPrice');
-  const tokenId = watch('tokenId');
   const selectedMinion = watch('selectedMinion');
 
   useEffect(() => {
-    register('ipfsOrderHash');
-    register('eip712HashValue');
-    register('signatureHash');
     register('tokenId');
     register('description');
     register('image');
   }, []);
-
-  useEffect(() => {
-    const setupOrder = async () => {
-      const orderObj = buildEncodeOrder({
-        nftContract: nftAddress,
-        tokenId,
-        tokenAddress: paymentToken,
-        price: sellPrice,
-        minionAddress: selectedMinion,
-        startDate,
-        endDate,
-      });
-      const encodedOrder = await encodeOrder(orderObj, daochain);
-      console.log('encodedOrder', encodedOrder);
-      const eip712 = getMessageHash(encodedOrder);
-      console.log('eip712', eip712);
-      const ipfsHash = await pinOrderToIpfs(encodedOrder, daoid);
-      console.log('ipfsHash', ipfsHash);
-
-      setValue('eip712HashValue', eip712);
-      setValue('ipfsOrderHash', ipfsHash.IpfsHash);
-      setValue('signatureHash', getSignatureHash());
-    };
-    if (
-      startDate &&
-      endDate &&
-      paymentToken &&
-      nftAddress &&
-      sellPrice &&
-      selectedMinion
-    ) {
-      setupOrder();
-    }
-  }, [
-    startDate,
-    endDate,
-    paymentToken,
-    nftAddress,
-    sellPrice,
-    tokenId,
-    selectedMinion,
-  ]);
 
   useEffect(() => {
     if (nfts) {
@@ -144,22 +87,16 @@ const NftSelect = props => {
         web3: injectedProvider,
       });
 
-      const approvedForAll = await nftContract.methods
+      const raribleApprovedForAll = await nftContract.methods
         .isApprovedForAll(
           selectedMinion,
           supportedChains[daochain].rarible.nft_transfer_proxy,
         )
         .call();
 
-      console.log('approvedForAll', approvedForAll);
+      console.log('approvedForAll', raribleApprovedForAll);
       // TODO: can't actually change the tx element from here - maybe set a value to toggle on later?
 
-      // if (!approvedForAll) {
-      //   console.log('')
-      // }
-      // const tokenId = await nftContract.methods
-      //   .inkTokenByIndex(ipfsHash, 0)
-      //   .call();
       setValue(name, selected.contractAddress);
       setValue('tokenId', selected.tokenId);
       setValue(

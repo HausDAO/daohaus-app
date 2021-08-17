@@ -174,6 +174,13 @@ export const FIELD = {
     label: 'Select an NFT',
     expectType: 'address',
   },
+  RARIBLE_NFT_DATA: {
+    type: 'raribleNftData',
+    htmlFor: 'raribleNftData',
+    name: 'raribleNftData',
+    label: 'raribleNftData',
+    expectType: 'any',
+  },
   DATE_RANGE: {
     type: 'dateRange',
     htmlFor: 'dateRange',

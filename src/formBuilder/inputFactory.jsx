@@ -21,6 +21,7 @@ import PriceInput from './priceInput';
 import NiftyInkUrl from './niftyInkUrl';
 import SuperfluidRate from './superfluidRate';
 import SuperfluidPaymentInput from './superfluidPaymentInput';
+import RaribleNftSelect from './raribleNftData';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -86,6 +87,9 @@ export const InputFactory = props => {
   }
   if (type === 'superfluidPaymentInput') {
     return <SuperfluidPaymentInput {...props} />;
+  }
+  if (type === 'raribleNftData') {
+    return <RaribleNftSelect {...props} />;
   }
   return null;
 };

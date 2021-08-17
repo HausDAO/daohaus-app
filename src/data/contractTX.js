@@ -952,6 +952,7 @@ export const TX = {
         type: 'detailsToJSON',
         gatherFields: DETAILS.SELL_NFT_RARIBLE,
       },
+      'true',
     ],
   },
 };

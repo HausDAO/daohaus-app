@@ -35,6 +35,8 @@ const MinionExecute = ({
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
 
+  console.log('proposal', proposal);
+
   useEffect(() => {
     const getMinionDetails = async () => {
       setLoading(true);

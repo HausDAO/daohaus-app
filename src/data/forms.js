@@ -312,10 +312,17 @@ export const FORM = {
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.NEAPOLITAN,
     tx: TX.SELL_NFT_RARIBLE,
+    required: ['selectedMinion', 'sellPrice'],
     fields: [
       [FIELD.NFT_SELECT],
-      [FIELD.MINION_SELECT, FIELD.DATE_RANGE, FIELD.SET_PRICE],
+      [
+        FIELD.MINION_SELECT,
+        FIELD.DATE_RANGE,
+        FIELD.SET_PRICE,
+        FIELD.RARIBLE_NFT_DATA,
+      ],
     ],
+    disableSubmit: 'raribleNftData',
   },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',

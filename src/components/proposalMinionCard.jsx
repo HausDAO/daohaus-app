@@ -46,7 +46,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   // needs to deal with multiple actions
   // console.log('proposal', proposal);
 
-  console.log('minionDeets', minionDeets);
+  // console.log('minionDeets', minionDeets);
 
   useEffect(() => {
     const getAbi = async () => {
