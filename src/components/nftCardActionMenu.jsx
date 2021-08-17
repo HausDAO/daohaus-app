@@ -25,6 +25,7 @@ const NftCardActionMenu = ({ nft, minion }) => {
   const [modalData, setModalData] = useState(null);
 
   const handleActionClick = action => {
+    // NOTE: Thinking maybe we should use formModal instead of generic
     setModalData({
       id: action.modalName,
       formLego: {
