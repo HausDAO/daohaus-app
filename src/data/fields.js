@@ -21,6 +21,7 @@ export const INFO_TEXT = {
     'Once this percentage of DAO shares have votes yes this minion action will be executable.',
   NIFTY_REPAYMENT_REQUEST:
     'This proposal requires the selected minion to hold the XDAI funds to purchase the NiftyInk. Enter that amount in WXDAI to repay the minion from the DAO treasury.',
+  RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
 };
 
 export const FIELD = {
@@ -255,6 +256,15 @@ export const FIELD = {
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
     modifiers: ['addPaymentDecimals'],
+  },
+  RAGE_QUIT_INPUT: {
+    type: 'rageInput',
+    label: 'Shares To Rage',
+    name: 'shares',
+    htmlFor: 'shares',
+    placeholder: '0',
+    info: INFO_TEXT.RAGE_QUIT_INPUT,
+    expectType: 'integer',
   },
 };
 

@@ -364,6 +364,7 @@ export const TX = {
     display: 'Rage Quit',
     errMsg: 'Error Rage Quitting',
     successMsg: 'Rage quit processed!',
+    gatherArgs: ['.values.shares', '.values.loot'],
   },
   PAYROLL: {
     contract: CONTRACTS.SELECTED_MINION,

@@ -122,4 +122,32 @@ export const customValidations = {
     }
     return false;
   },
+  rageQuitMinimum({ values }) {
+    if (
+      (values.shares === '' || values.shares === 0 || values.shares === '0') &&
+      (values.loot === '' || values.loot === 0 || values.loot === '0')
+    ) {
+      return {
+        name: 'shares',
+        message: 'Set loot or shares to Rage Quit',
+      };
+    }
+    return false;
+  },
+  rageQuitMax({ appState, values }) {
+    if (values.shares > appState.daoMember.shares) {
+      return {
+        name: 'shares',
+        message: `Shares to Rage Quit may not exceed ${appState.daoMember.shares}.`,
+      };
+    }
+
+    if (values.loot > appState.daoMember.loot) {
+      return {
+        name: 'loot',
+        message: `Loot to Rage Quit may not exceed ${appState.daoMember.loot} loot.`,
+      };
+    }
+    return false;
+  },
 };
