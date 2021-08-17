@@ -578,16 +578,16 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
-      '.localValues.contractAddress',
+      '.values.nftAddress',
       0,
       {
         type: 'encodeHex',
         contract: CONTRACTS.LOCAL_ERC_721,
         fnName: 'safeTransferFrom',
         gatherArgs: [
-          '.localValues.minionAddress',
+          '.values.minionAddress',
           '.values.applicant',
-          '.localValues.tokenId',
+          '.values.tokenId',
         ],
       },
       {

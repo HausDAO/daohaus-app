@@ -10,6 +10,7 @@ import {
   Select,
   Image,
   Input,
+  AspectRatio,
 } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 
@@ -186,22 +187,31 @@ const NftSelect = props => {
       <Input type='hidden' id={htmlFor} name={name} ref={register} />
       <Box>
         <Text mb={3}>{label}</Text>
-        {selected ? (
-          <Image
-            onClick={openModal}
-            _hover={{
-              opacity: 0.5,
-              cursor: 'pointer',
-            }}
-            src={selected.metadata.image}
-            w='300px'
-            h='300px'
-          />
-        ) : (
-          <Button variant='nftSelect' onClick={openModal}>
-            <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
-          </Button>
-        )}
+        <AspectRatio
+          ratio={1}
+          width='100%'
+          className='aspect-box'
+          sx={{
+            '&>img': {
+              objectFit: 'contain',
+            },
+          }}
+        >
+          {selected ? (
+            <Image
+              onClick={openModal}
+              _hover={{
+                opacity: 0.5,
+                cursor: 'pointer',
+              }}
+              src={selected.metadata.image}
+            />
+          ) : (
+            <Button variant='nftSelect' onClick={openModal}>
+              <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
+            </Button>
+          )}
+        </AspectRatio>
       </Box>
       {selectModal}
     </FieldWrapper>
