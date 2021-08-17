@@ -14,6 +14,7 @@ import {
 import { TokenService } from '../services/tokenService';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import RaribleSellOrder from './raribleSellOrder';
 
 const MinionExecute = ({
   hideMinionExecuteButton,
@@ -35,7 +36,8 @@ const MinionExecute = ({
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
 
-  console.log('proposal', proposal);
+  const hasRaribleAction =
+    proposal.title === 'Rarible NFT Sell Order' && proposal.executed;
 
   useEffect(() => {
     const getMinionDetails = async () => {
@@ -114,6 +116,9 @@ const MinionExecute = ({
   };
 
   const getMinionAction = () => {
+    // todo: neapolitan breaks most of this
+    if (hasRaribleAction) return <RaribleSellOrder proposal={proposal} />;
+
     if (minionDetails?.executed) return <Box>Executed</Box>;
 
     if (needsHausApproval) {

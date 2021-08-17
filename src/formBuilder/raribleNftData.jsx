@@ -10,9 +10,10 @@ import {
   getSignatureHash,
   pinOrderToIpfs,
 } from '../utils/rarible';
+import { SubmitFormError } from './staticElements';
 
 const RaribleNftSelect = props => {
-  const { localForm, name } = props;
+  const { localForm, name, error } = props;
   const { register, setValue, watch } = localForm;
   const { daochain, daoid } = useParams();
   const [loading, setLoading] = useState(false);
@@ -80,7 +81,7 @@ const RaribleNftSelect = props => {
           mt={3}
           mr={3}
         >
-          Setup Rarible Order
+          Setup Rarible Order Data
         </Button>
         {raribleNftData && (
           <RiCheckboxCircleLine
@@ -92,6 +93,7 @@ const RaribleNftSelect = props => {
         )}
         {loading && <Spinner />}
       </Flex>
+      {error && <SubmitFormError message={error.message} />}
     </FieldWrapper>
   );
 };

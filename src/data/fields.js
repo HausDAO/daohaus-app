@@ -178,7 +178,7 @@ export const FIELD = {
     type: 'raribleNftData',
     htmlFor: 'raribleNftData',
     name: 'raribleNftData',
-    label: 'raribleNftData',
+    label: 'Vaild Rarible Order Data',
     expectType: 'any',
   },
   DATE_RANGE: {

@@ -3,7 +3,8 @@ import { bufferToHex } from 'ethereumjs-util';
 import Web3 from 'web3';
 import { supportedChains } from './chain';
 
-import { ipfsPrePost, ipfsJsonPin } from './metadata';
+import { ipfsPrePost, ipfsJsonPin, getNftMeta } from './metadata';
+import { raribleHashMaker } from './proposalUtils';
 
 export const buildEncodeOrder = args => {
   const salt = Math.floor(Math.random() * 1000);
@@ -123,3 +124,14 @@ export const pinOrderToIpfs = async (order, daoid) => {
 
   return ipfsRes;
 };
+
+export const getOrderDataFromProposal = async (proposal) => {
+  const hash = raribleHashMaker(proposal);
+  console.log('hash', hash)
+  if (hash !== '') {
+    const ipfsData = await getNftMeta(`https://daohaus.mypinata.cloud/ipfs/${hash}`)
+    return ipfsData;
+  } else {
+    return null
+  }
+}

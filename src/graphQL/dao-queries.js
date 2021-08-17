@@ -65,6 +65,7 @@ export const DAO_ACTIVITIES = gql`
         createdAt
         details
         didPass
+        executed
         gracePeriodEnds
         guildkick
         isMinion
