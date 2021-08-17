@@ -5,7 +5,6 @@ import GenericSelect from './genericSelect';
 
 const MinionSelect = props => {
   const { name, localValues, localForm } = props;
-  const { minionAddress } = localValues;
   const { setValue } = localForm;
   const { daoOverview } = useDao();
   const minions = useMemo(() => {
@@ -18,10 +17,10 @@ const MinionSelect = props => {
   }, []);
 
   useEffect(() => {
-    if (minionAddress) {
-      setValue(name, minionAddress);
+    if (localValues && localValues.minionAddress) {
+      setValue(name, localValues.minionAddress);
     }
-  }, [name, minionAddress]);
+  }, [name, localValues]);
 
   return <GenericSelect {...props} options={minions} />;
 };
