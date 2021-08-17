@@ -19,12 +19,10 @@ import { useParams } from 'react-router-dom';
 import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
 
-import { MinionService } from '../services/minionService';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
-import { UberHausMinionService } from '../services/uberHausMinionService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import UberHausAvatar from './uberHausAvatar';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
@@ -34,51 +32,12 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   const { theme } = useCustomTheme();
   const [minionDeets, setMinionDeets] = useState();
   const [decodedData, setDecodedData] = useState();
-  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const getMinionDeets = async () => {
-      // try {
-      //   if (
-      //     proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
-      //     proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
-      //   ) {
-      //     const action = await MinionService({
-      //       minion: proposal?.minionAddress,
-      //       chainID: daochain,
-      //     })('getAction')({ proposalId: proposal?.proposalId });
-      //     setMinionDeets(action);
-      //   } else if (
-      //     proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-      //     proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
-      //   ) {
-      //     const action = await UberHausMinionService({
-      //       uberHausMinion: proposal.minionAddress,
-      //       chainID: daochain,
-      //     })('getAction')({ proposalId: proposal?.proposalId });
-      //     setMinionDeets(action);
-      //   } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-      //     const action = await UberHausMinionService({
-      //       uberHausMinion: proposal.minionAddress,
-      //       chainID: daochain,
-      //     })('getAppointment')({ proposalId: proposal?.proposalId });
-      //     setMinionDeets(action);
-      //   }
-      // } catch (err) {
-      //   console.error(err);
-      //   setMinionDeets(null);
-      // } finally {
-      //   setLoading(false);
-      // }
-    };
     if (minionAction) {
-      // if (proposal?.proposalId && proposal?.minionAddress && daochain) {
       setMinionDeets(minionAction);
-
-      // getMinionDeets();
     }
-    // }, [proposal, daochain]);
   }, [minionAction]);
 
   // console.log('minionDeets', minionDeets);
@@ -86,6 +45,8 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   // - add to query Actions
   // needs to deal with multiple actions
   // console.log('proposal', proposal);
+
+  console.log('minionDeets', minionDeets);
 
   useEffect(() => {
     const getAbi = async () => {
@@ -182,39 +143,43 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
 
   return (
     <>
-      <Skeleton isLoaded={!loading}>
-        {minionDeets && (
-          <Flex mt={6}>
-            <Flex flexDir='column'>
-              <TextBox size='xs' mb={3}>
-                {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
-              </TextBox>
-              {minionDeets?.to && getAvatar(minionDeets.to)}
-              {minionDeets?.nominee && (
-                <Box>
-                  <AddressAvatar addr={minionDeets.nominee} alwaysShowName />
-                </Box>
-              )}
+      {minionDeets && (
+        <Flex mt={6}>
+          <Flex flexDir='column'>
+            <TextBox size='xs' mb={3}>
+              {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
+            </TextBox>
+            {minionDeets?.to && getAvatar(minionDeets.to)}
+            {minionDeets?.nominee && (
+              <Box>
+                <AddressAvatar addr={minionDeets.nominee} alwaysShowName />
+              </Box>
+            )}
 
-              {minionDeets?.to && (
-                <Button
-                  mt={3}
-                  px={3}
-                  py={1}
-                  width='fit-content'
-                  color='secondary.300'
-                  onClick={toggleModal}
-                  size='xs'
-                  variant='outline'
-                  textTransform='capitalize'
-                >
-                  Details
-                </Button>
-              )}
-            </Flex>
+            {minionDeets.proposer && (
+              <Box fontFamily='heading' textTransform='capitalize' size='xs'>
+                ** Multicall detail coming soon
+              </Box>
+            )}
+
+            {minionDeets?.to && (
+              <Button
+                mt={3}
+                px={3}
+                py={1}
+                width='fit-content'
+                color='secondary.300'
+                onClick={toggleModal}
+                size='xs'
+                variant='outline'
+                textTransform='capitalize'
+              >
+                Details
+              </Button>
+            )}
           </Flex>
-        )}
-      </Skeleton>
+        </Flex>
+      )}
       <Modal isOpen={showModal} onClose={toggleModal} isCentered>
         <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
