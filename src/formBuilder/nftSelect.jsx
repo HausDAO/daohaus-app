@@ -29,7 +29,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { supportedChains } from '../utils/chain';
 
 const NftSelect = props => {
-  const { label, localForm, htmlFor, name } = props;
+  const { label, localForm, htmlFor, name, localValues } = props;
   const { register, setValue, watch } = localForm;
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
@@ -177,6 +177,23 @@ const NftSelect = props => {
       setUpNftValues();
     }
   }, [selected, selectedMinion]);
+
+  useEffect(() => {
+    if (
+      localValues &&
+      localValues.tokenId &&
+      localValues.contractAddress &&
+      nfts
+    ) {
+      setSelected(
+        nfts.filter(
+          item =>
+            item.tokenId === localValues.tokenId &&
+            item.contractAddess === localValues.contractAddess,
+        )[0],
+      );
+    }
+  }, [localValues, nfts]);
 
   const openModal = () => {
     setGenericModal({ nftSelect: true });
