@@ -66,9 +66,8 @@ const NftSelect = props => {
         tokenAddress: paymentToken,
         price: sellPrice,
         minionAddress: selectedMinion,
-        // TODO: Set this in date range input
-        startDate: parseInt(new Date(startDate).getTime() / 1000),
-        endDate: parseInt(new Date(endDate).getTime() / 1000),
+        startDate,
+        endDate,
       });
       const encodedOrder = await encodeOrder(orderObj, daochain);
       console.log('encodedOrder', encodedOrder);

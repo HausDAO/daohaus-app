@@ -178,7 +178,7 @@ const DateSelect = props => {
 
   const [selected, setSelected] = useState();
   useEffect(() => {
-    setValue(name, selected);
+    setValue(name, parseInt(new Date(selected).getTime() / 1000));
   }, [selected]);
 
   const renderHeader = ({
