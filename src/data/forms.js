@@ -324,7 +324,14 @@ export const FORM = {
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_ERC721_TOKEN,
-    fields: [[FIELD.APPLICANT, FIELD.DESCRIPTION]],
+    fields: [
+      [
+        FIELD.NFT_SELECT,
+        FIELD.MINION_SELECT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
   },
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
