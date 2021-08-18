@@ -2,21 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BoostDetails from '../components/boostDetails';
 import TheSummoner from '../components/theSummoner';
-import { useFormModal } from '../contexts/OverlayContext';
+import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import FormBuilder from './formBuilder';
 
-const StepperForm = ({ steps = {} }) => {
+const StepperForm = props => {
+  const { steps = {} } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
-
+  const { errorToast } = useOverlay();
+  console.log(`props`, props);
   const [currentStep, setCurrentStep] = useState(
     Object.values(steps).find(step => step.start),
   );
-  const goToNext = stepKey => {
-    if (stepKey === 'DONE') {
+
+  const goToNext = () => {
+    if (currentStep.finish) {
       closeModal();
+    } else if (currentStep.next) {
+      const nextStep = steps[currentStep.next];
+      if (nextStep) {
+        setCurrentStep(nextStep);
+      } else {
+        errorToast({
+          title: 'Next step does not match any other steps',
+          description:
+            'Check the steps and make sure the "next" key links to a valid step',
+        });
+      }
     } else {
-      setCurrentStep(steps[stepKey]);
+      errorToast({
+        title: 'Next step is undefined or falsy',
+      });
     }
   };
 
@@ -31,10 +47,10 @@ const StepperForm = ({ steps = {} }) => {
       />
     );
   }
-  if (currentStep?.type === 'details') {
+  if (currentStep?.type === 'boostDetails') {
     return (
       <BoostDetails
-        content={currentStep.content}
+        content={props.boostContent}
         goToNext={goToNext}
         next={currentStep.next}
       />

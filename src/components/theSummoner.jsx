@@ -58,7 +58,15 @@ const MinionNotFound = ({ minionType = 'Minion' }) => {
 };
 
 const TheSummoner = props => {
-  const { isForBoost, localForm, staticMinionType, goToNext, next } = props;
+  const {
+    isForBoost,
+    localForm,
+    staticMinionType,
+    goToNext,
+    next,
+    minion,
+  } = props;
+  console.log(`minion`, minion);
   const { daoOverview } = useDao();
   const { daoid, daochain } = useParams();
 

@@ -95,64 +95,8 @@ const Market = () => {
     }
   };
 
-  const sample = {
-    title: 'Minion Summoner',
-    steps: {
-      STEP1: {
-        start: true,
-        type: 'form',
-        next: 'STEP2',
-        lego: FORM.SUMMON_MINION_SELECTOR,
-      },
-      STEP2: {
-        type: 'summoner',
-        next: 'DONE',
-        isForBoost: false,
-      },
-    },
-  };
-  const openDetails = () => {
-    openFormModal({
-      title: 'Boost Marketplace',
-      boostData: {},
-      minion: {},
-      steps: {
-        STEP1: {
-          start: true,
-          type: 'details',
-          content: {
-            header: "'Nerd Mode' Dev Suite",
-            publisher: PUBLISHERS.DAOHAUS,
-            version: '1.00',
-            pars: [
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
-              'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.',
-            ],
-            externalLinks: [
-              { href: 'https://daohaus.club/', label: 'DAOhaus' },
-              {
-                href: 'https://www.webfx.com/tools/lorem-ipsum-generator/',
-                label: 'Lorem Ipsum generator',
-              },
-            ],
-          },
-          next: 'STEP2',
-        },
-        STEP2: {
-          type: 'summoner',
-          next: 'STEP3',
-          isForBoost: true,
-          staticMinionType: MINION_TYPES.VANILLA,
-        },
-        STEP3: {
-          start: true,
-          type: 'form',
-          lego: FORM.TOKEN,
-          next: 'DONE',
-        },
-      },
-    });
-  };
+  const openDetails = boost => openFormModal({ boost });
+
   return (
     <Flex flexDir='column' w='95%'>
       {daoBoosts ? (
@@ -214,6 +158,7 @@ const BoostsList = ({ categoryID, openDetails }) => {
       return categories.find(cat => cat.id === categoryID);
     }
   }, [categoryID, categories]);
+
   return (
     <List
       headerSection={
@@ -240,17 +185,22 @@ const BoostsList = ({ categoryID, openDetails }) => {
           </Menu>
         </>
       }
-      list={currentCategory?.boosts?.map(boost => (
-        <ListItem
-          {...BOOSTS[boost]}
-          key={boost}
-          menuSection={
-            <Button variant='ghost' p={0} onClick={openDetails}>
-              <TextBox>Details</TextBox>
-            </Button>
-          }
-        />
-      ))}
+      list={currentCategory?.boosts?.map(boostID => {
+        const boost = BOOSTS[boostID];
+        const handleSteps = () => openDetails(boost);
+        return (
+          <ListItem
+            key={boostID}
+            title={boost?.boostContent?.title}
+            description={boost?.boostContent?.description}
+            menuSection={
+              <Button variant='ghost' p={0} onClick={handleSteps}>
+                <TextBox>Details</TextBox>
+              </Button>
+            }
+          />
+        );
+      })}
     />
   );
 };

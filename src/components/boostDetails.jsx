@@ -17,6 +17,7 @@ const BoostDetails = ({ content = {}, goToNext, next }) => {
     pars = [],
     externalLinks = [],
     header,
+    title,
   } = content;
   const { name, daoData } = publisher;
   const handleGoTo = () => {
@@ -27,7 +28,7 @@ const BoostDetails = ({ content = {}, goToNext, next }) => {
   return (
     <Flex flexDirection='column'>
       <TextBox mb={6} size='lg'>
-        {header}
+        {header || title}
       </TextBox>
       <Flex justifyContent='space-between' flexWrap='wrap'>
         <MemberIndicator

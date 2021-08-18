@@ -50,9 +50,10 @@ const DaoModal = () => {
     prependBody,
     appendBody,
     steps,
+    boost,
   } = modal;
   const handleClose = () => setModal(false);
-
+  console.log(`modal`, modal);
   return (
     <Modal
       isOpen={modal}
@@ -88,7 +89,8 @@ const DaoModal = () => {
         <ModalCloseButton />
         <ModalBody>
           {prependBody}
-          {steps && <StepperForm steps={steps} />}
+          {/* {steps && <StepperForm steps={steps} />} */}
+          {boost && <StepperForm {...boost} />}
           {lego && <FormBuilder {...lego} onSubmit={onSubmit} />}
           {body}
           {appendBody}
