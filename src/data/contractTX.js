@@ -360,11 +360,11 @@ export const TX = {
     contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'ragequit',
     poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
+    onTxHash: ACTIONS.PROPOSAL,
     display: 'Rage Quit',
     errMsg: 'Error Rage Quitting',
     successMsg: 'Rage quit processed!',
-    gatherArgs: ['.values.shares', '.values.loot'],
+    gatherArgs: ['.values.shares || 0', '.values.loot || 0'],
   },
   RAGE_KICK: {
     contract: CONTRACTS.CURRENT_MOLOCH,
