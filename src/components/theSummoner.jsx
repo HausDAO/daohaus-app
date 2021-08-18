@@ -10,7 +10,6 @@ import { Spinner } from '@chakra-ui/spinner';
 import { useDao } from '../contexts/DaoContext';
 import FormBuilder from '../formBuilder/formBuilder';
 import Header from '../formBuilder/header';
-import ExplorerLink from './explorerLink';
 import TextBox from './TextBox';
 
 import { SUMMON_DATA } from '../data/minions';
