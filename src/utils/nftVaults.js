@@ -1,4 +1,4 @@
-import { CORE_FORMS } from '../data/forms';
+import { CORE_FORMS, FORM } from '../data/forms';
 import { getMinionActionFormLego } from './vaults';
 
 // NEXT STEPS:
@@ -22,6 +22,15 @@ const defaultConfig = {
       formLego: CORE_FORMS.MINION_SEND_ERC721_TOKEN,
       localValues: ['tokenId', 'contractAddress'],
       minionTypeOverride: true,
+    },
+    // REVIEW: Should this be under nftConfigs or default config?
+    sellRarible: {
+      menuLabel: 'Sell NFT on Rarible',
+      tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
+      modalName: 'sell721',
+      formLego: FORM.SELL_NFT_RARIBLE,
+      localValues: ['tokenId', 'contractAddress'],
+      minionTypeOverride: false,
     },
   },
 };

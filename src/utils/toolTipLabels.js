@@ -13,6 +13,10 @@ export const TIP_LABELS = {
       "To perform the minion's action, hit the 'Execute' button after processing the proposal",
     ],
   },
+  FUNDING_MINION_PROPOSAL: {
+    title: 'Funding Proposal',
+    pars: ['This Proposal sends funds to a minion.'],
+  },
 };
 
 export const generateSFLabels = proposal => {

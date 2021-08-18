@@ -130,6 +130,14 @@ const gatherArgs = data => {
       });
       return safeEncodeHexFunction(getABIsnippet(arg), args);
     }
+    if (arg.type === 'nestedArgs') {
+      return arg.gatherArgs.flatMap(a => {
+        return gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: [a] },
+        });
+      });
+    }
     //  for convenience, will search the values object for a field with the given string.
     return arg;
   });
@@ -184,6 +192,7 @@ export const Transaction = async data => {
   });
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
+  console.log('contextData', contextData, data);
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
     .on('transactionHash', txHash => {
@@ -307,6 +316,9 @@ export const transactionByProposalType = proposal => {
   }
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return TX.SUPERFLUID_MINION_EXECUTE;
+  }
+  if (proposal.minion.minionType === 'Neapolitan minion') {
+    return TX.MINION_NEAPOLITAN_EXECUTE;
   }
   return TX.MINION_SIMPLE_EXECUTE;
 };
