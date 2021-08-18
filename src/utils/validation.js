@@ -42,7 +42,7 @@ export const validate = {
 export const checkFormTypes = (values, fields) => {
   if (!values || !fields) {
     throw new Error(
-      `Did not recieve truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,
+      `Did not receive truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,
     );
   }
   const errors = fields.reduce((arr, field) => {
