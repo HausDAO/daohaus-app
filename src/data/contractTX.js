@@ -193,7 +193,7 @@ export const DETAILS = {
   },
   SELL_NFT_RARIBLE: {
     title: 'Rarible NFT Sell Order',
-    description: '.values.description',
+    description: '.values.raribleDescription',
     link: '.values.image',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.NEAPOLITAN,

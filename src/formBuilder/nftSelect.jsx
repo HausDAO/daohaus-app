@@ -40,7 +40,7 @@ const NftSelect = props => {
 
   useEffect(() => {
     register('tokenId');
-    register('description');
+    register('raribleDescription');
     register('image');
   }, []);
 
@@ -101,7 +101,7 @@ const NftSelect = props => {
       setValue(name, selected.contractAddress);
       setValue('tokenId', selected.tokenId);
       setValue(
-        'description',
+        'raribleDescription',
         `Selling ${selected.metadata?.name || selected.name} tokenId ${
           selected.tokenId
         }`,
