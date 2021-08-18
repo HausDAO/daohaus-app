@@ -366,6 +366,15 @@ export const TX = {
     successMsg: 'Rage quit processed!',
     gatherArgs: ['.values.shares', '.values.loot'],
   },
+  RAGE_KICK: {
+    contract: CONTRACTS.CURRENT_MOLOCH,
+    name: 'ragekick',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Rage Kick',
+    errMsg: 'Error Rage Kicking',
+    successMsg: 'Rage kick processed!',
+  },
   PAYROLL: {
     contract: CONTRACTS.SELECTED_MINION,
     name: 'proposeAction',

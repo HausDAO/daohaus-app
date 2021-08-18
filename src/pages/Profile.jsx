@@ -4,11 +4,9 @@ import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import BankList from '../components/BankList';
-import GenericModal from '../modals/genericModal';
 import ActivitiesFeed from '../components/activitiesFeed';
 import ProfileCard from '../components/profileCard';
 import MainViewLayout from '../components/mainViewLayout';
-import { CORE_FORMS } from '../data/forms';
 import { getProfileActivites } from '../utils/activities';
 import { handleGetProfile } from '../utils/3box';
 import { initTokenData } from '../utils/tokenValue';
@@ -80,16 +78,6 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
           pr={[0, null, null, null, 6]}
           pb={6}
         >
-          <GenericModal
-            modalId='rageQuit'
-            formLego={CORE_FORMS.RAGE_QUIT}
-            closeOnOverlayClick
-          />
-          <GenericModal
-            modalId='updateDelegate'
-            formLego={CORE_FORMS.UPDATE_DELEGATE}
-            closeOnOverlayClick
-          />
           <ProfileCard
             overview={overview}
             daoTokens={daoTokens}
