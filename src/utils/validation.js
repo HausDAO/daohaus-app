@@ -123,10 +123,7 @@ export const customValidations = {
     return false;
   },
   rageQuitMinimum({ values }) {
-    if (
-      (values.shares === '' || values.shares === 0 || values.shares === '0') &&
-      (values.loot === '' || values.loot === 0 || values.loot === '0')
-    ) {
+    if (!values.shares || !values.loot) {
       return {
         name: 'shares',
         message: 'Set loot or shares to Rage Quit',
