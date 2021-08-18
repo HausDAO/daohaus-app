@@ -57,8 +57,6 @@ const Proposal = ({
         ](currentProposal.proposalId).call();
         setMinionAction(action);
 
-        console.log('action', action);
-
         // hides execute minion button on funding and payroll proposals
         // hides execute minion button on executed proposals
         if (
