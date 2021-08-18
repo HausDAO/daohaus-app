@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@chakra-ui/react';
 import { useParams } from 'react-router';
-import { createOrder, getOrderDataFromProposal } from '../utils/rarible';
+import {
+  compareSellOrder,
+  createOrder,
+  getOrderByItem,
+  getOrderDataFromProposal,
+} from '../utils/rarible';
 
 const RaribleSellOrder = ({ proposal }) => {
   const { daochain } = useParams();
@@ -9,20 +14,29 @@ const RaribleSellOrder = ({ proposal }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // TODO: fetch the order based on prop details to see if it exists, if so link to it on rarible
-    setNeedSellOrder(true);
+    const getOrder = async () => {
+      const orderData = await getOrderDataFromProposal(proposal);
+      const orderRes = await getOrderByItem(
+        orderData.make.assetType.contract,
+        orderData.make.assetType.tokenId,
+        orderData.maker,
+        daochain,
+      );
+
+      setNeedSellOrder(!compareSellOrder(orderData, orderRes.orders));
+    };
+
+    getOrder();
   }, []);
 
   const makeSellOrder = async () => {
     setLoading(true);
 
     const orderData = await getOrderDataFromProposal(proposal);
+    const res = await createOrder(orderData, daochain);
+    console.log('order res', res);
 
-    console.log('orderData', orderData);
-
-    // const res = await createOrder(orderData, daochain);
-    // console.log('res', res);
-
+    setNeedSellOrder(false);
     setLoading(false);
   };
 

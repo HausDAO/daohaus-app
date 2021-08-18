@@ -1,3 +1,4 @@
+import deepEqual from 'deep-equal';
 import { TypedDataUtils } from 'eth-sig-util';
 import { bufferToHex } from 'ethereumjs-util';
 import Web3 from 'web3';
@@ -54,7 +55,7 @@ export const encodeOrder = async (order, daochain) => {
 };
 
 export const createOrder = async (order, daochain) => {
-  const url = `${supportedChains[daochain].rinkeby.api_url}/order/orders`;
+  const url = `${supportedChains[daochain].rarible.api_url}/order/orders`;
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -62,6 +63,22 @@ export const createOrder = async (order, daochain) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(order),
+    });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getOrderByItem = async (contract, tokenId, maker, daochain) => {
+  const url = `${supportedChains[daochain].rarible.api_url}/order/orders/sell/byItem`;
+  const params = `?contract=${contract}&tokenId=${tokenId}&maker=${maker}`;
+  try {
+    const response = await fetch(`${url}${params}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
     return response.json();
   } catch (err) {
@@ -101,9 +118,10 @@ export const getMessageHash = encodedOrder => {
   return bufferToHex(TypedDataUtils.sign(typeData));
 };
 
+export const arbitrarySignature =
+  '0xc531a1d9046945d3732c73d049da2810470c3b0663788dca9e9f329a35c8a0d56add77ed5ea610b36140641860d13849abab295ca46c350f50731843c6517eee1c';
+
 export const getSignatureHash = () => {
-  const arbitrarySignature =
-    '0xc531a1d9046945d3732c73d049da2810470c3b0663788dca9e9f329a35c8a0d56add77ed5ea610b36140641860d13849abab295ca46c350f50731843c6517eee1c';
   const arbitrarySignatureHash = Web3.utils.soliditySha3({
     t: 'bytes',
     v: arbitrarySignature,
@@ -134,4 +152,23 @@ export const getOrderDataFromProposal = async (proposal) => {
   } else {
     return null
   }
+}
+
+export const compareSellOrder = (ipfsData, orderRes) => {
+  return orderRes.some(order => {
+    const propOrderData = {
+      ...ipfsData.make,
+      ...ipfsData.take,
+      start: +ipfsData.start,
+      end: +ipfsData.end
+    }
+  
+    const raribleOrderData = {
+      ...order.make,
+      ...order.take,
+      start: order.start,
+      end: order.end
+    }
+    return deepEqual(propOrderData, raribleOrderData)
+  })
 }

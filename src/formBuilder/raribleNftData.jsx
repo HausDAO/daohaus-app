@@ -4,6 +4,7 @@ import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
 import FieldWrapper from './fieldWrapper';
 import {
+  arbitrarySignature,
   buildEncodeOrder,
   encodeOrder,
   getMessageHash,
@@ -11,10 +12,13 @@ import {
   pinOrderToIpfs,
 } from '../utils/rarible';
 import { SubmitFormError } from './staticElements';
+import { useDao } from '../contexts/DaoContext';
+import { addZeros } from '../utils/tokenValue';
 
 const RaribleNftSelect = props => {
   const { localForm, name, error } = props;
   const { register, setValue, watch } = localForm;
+  const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const [loading, setLoading] = useState(false);
 
@@ -48,18 +52,21 @@ const RaribleNftSelect = props => {
   const setupOrder = async () => {
     setLoading(true);
 
+    const guildToken = daoOverview.tokenBalances.find(token => {
+      return token.token.tokenAddress === paymentToken;
+    });
     const orderObj = buildEncodeOrder({
       nftContract: nftAddress,
       tokenId,
       tokenAddress: paymentToken,
-      price: sellPrice,
+      price: addZeros(sellPrice, guildToken.token.decimals),
       minionAddress: selectedMinion,
       startDate: isNaN(startDate) ? '0' : startDate,
       endDate: isNaN(endDate) ? '0' : endDate,
     });
     const encodedOrder = await encodeOrder(orderObj, daochain);
     const eip712 = getMessageHash(encodedOrder);
-    orderObj.signature = eip712;
+    orderObj.signature = arbitrarySignature;
     const ipfsHash = await pinOrderToIpfs(orderObj, daoid);
 
     setValue('eip712HashValue', eip712);

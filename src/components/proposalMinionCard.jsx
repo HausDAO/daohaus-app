@@ -12,7 +12,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Skeleton,
   HStack,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';

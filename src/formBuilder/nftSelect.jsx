@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 import deepEqual from 'deep-eql';
 import {
   Box,
@@ -18,18 +17,12 @@ import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
-import { LOCAL_ABI } from '../utils/abi';
-import { createContract } from '../utils/contract';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { supportedChains } from '../utils/chain';
 
 const NftSelect = props => {
   const { label, localForm, htmlFor, name, localValues } = props;
   const { register, setValue, watch } = localForm;
-  const { daochain } = useParams();
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
-  const { injectedProvider } = useInjectedProvider();
   const [nftData, setNftData] = useState();
   const [nfts, setNfts] = useState();
   const [selected, setSelected] = useState();
@@ -81,23 +74,6 @@ const NftSelect = props => {
 
   useEffect(() => {
     const setUpNftValues = async () => {
-      const nftContract = createContract({
-        address: selected.contractAddress,
-        abi: LOCAL_ABI.ERC_721,
-        chainID: daochain,
-        web3: injectedProvider,
-      });
-
-      const raribleApprovedForAll = await nftContract.methods
-        .isApprovedForAll(
-          selectedMinion,
-          supportedChains[daochain].rarible.nft_transfer_proxy,
-        )
-        .call();
-
-      console.log('approvedForAll', raribleApprovedForAll);
-      // TODO: can't actually change the tx element from here - maybe set a value to toggle on later?
-
       setValue(name, selected.contractAddress);
       setValue('tokenId', selected.tokenId);
       setValue(

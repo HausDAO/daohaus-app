@@ -116,7 +116,6 @@ const MinionExecute = ({
   };
 
   const getMinionAction = () => {
-    // todo: neapolitan breaks most of this
     if (hasRaribleAction) return <RaribleSellOrder proposal={proposal} />;
 
     if (minionDetails?.executed) return <Box>Executed</Box>;
