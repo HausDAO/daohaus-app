@@ -100,6 +100,24 @@ export const CORE_FORMS = {
     tx: TX.MINION_NIFTY_SET_PRICE,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
+  RAGE_QUIT: {
+    customValidations: ['rageQuitMinimum', 'rageQuitMax'],
+    id: 'RAGE_QUIT',
+    title: 'RAGE QUIT',
+    required: [],
+    tx: TX.RAGE_QUIT,
+    fields: [
+      [
+        FIELD.RAGE_QUIT_INPUT,
+        {
+          ...FIELD.RAGE_QUIT_INPUT,
+          htmlFor: 'loot',
+          label: 'Loot to Rage',
+          name: 'loot',
+        },
+      ],
+    ],
+  },
 };
 
 export const FORM = {
@@ -254,12 +272,6 @@ export const FORM = {
       FIELD.MINION_PAYMENT,
       { ...FIELD.DESCRIPTION, h: '10' },
     ],
-  },
-  UPDATE_DELEGATE: {
-    title: 'UPDATE DELEGATE ADDRESS',
-    required: ['delegateAddress'],
-    tx: TX.UPDATE_DELEGATE,
-    fields: [[FIELD.DELEGATE_ADDRESS]],
   },
   LOOT_GRAB: {
     id: 'LOOT_GRAB',
