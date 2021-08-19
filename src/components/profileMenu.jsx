@@ -90,19 +90,6 @@ const ProfileMenu = ({ member }) => {
         },
       });
 
-      /*
-      const molochContract = createContract({
-        address: daoid,
-        abi: LOCAL_ABI.MOLOCH_V2,
-        chainID: daochain,
-        web3: injectedProvider,
-      });
-
-      await molochContract.methods
-        .ragekick(args, address, poll, onTxHash)
-        .call();
-      */
-
       await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
