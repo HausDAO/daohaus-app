@@ -123,7 +123,6 @@ export const customValidations = {
     return false;
   },
   rageQuitMinimum({ values }) {
-    console.log('values.shares', values.shares);
     if (!Number(values.shares) && !Number(values.loot)) {
       return {
         name: 'shares',
