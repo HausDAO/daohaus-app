@@ -10,12 +10,12 @@ const BOOST_PLAYLISTS = [
   {
     name: 'Nifty Minion',
     id: 'nifty minion',
-    forms: ['MINION_NIFTY', 'BUY_NIFTY_INK'],
+    forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
   },
   {
     name: 'Neapolitan Minion',
     id: 'Neapolitan minion',
-    forms: ['MINION_NEAPOLITAN_SIMPLE'],
+    forms: ['MINION_NEAPOLITAN_SIMPLE', 'PAYROLL_NEAPOLITAN'],
   },
   {
     name: 'Rarible',
@@ -27,11 +27,11 @@ const BOOST_PLAYLISTS = [
     id: 'Superfluid minion',
     forms: ['SUPERFLUID_STREAM'],
   },
-  {
-    name: 'MintGate',
-    id: 'mintGate',
-    forms: ['PAYROLL'],
-  },
+  // {
+  //   name: 'MintGate',
+  //   id: 'mintGate',
+  //   forms: ['PAYROLL'],
+  // },
 ];
 
 export const defaultProposals = {

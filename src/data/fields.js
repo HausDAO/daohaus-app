@@ -1,4 +1,3 @@
-import { MINION_TYPES } from '../utils/proposalUtils';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 
 export const INFO_TEXT = {
@@ -150,8 +149,6 @@ export const FIELD = {
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
     expectType: 'address',
-    // TODO: check if this is being used or if it gets type from form config
-    minionType: MINION_TYPES.VANILLA,
   },
   ABI_INPUT: {
     type: 'abiInput',

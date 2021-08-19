@@ -274,7 +274,7 @@ export const FORM = {
     ],
   },
   MINION_NEAPOLITAN_SIMPLE: {
-    id: 'MINION_NIFTY',
+    id: 'MINION_NEAPOLITAN_SIMPLE',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
@@ -315,6 +315,40 @@ export const FORM = {
     required: ['selectedMinion', 'minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NIFTY: {
+    id: 'PAYROLL_NIFTY',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.PAYROLL_NIFTY,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NEAPOLITAN: {
+    id: 'PAYROLL_NEAPOLITAN',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.PAYROLL_NEAPOLITAN,
     fields: [
       [
         FIELD.MINION_SELECT,
