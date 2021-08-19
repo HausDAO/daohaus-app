@@ -323,6 +323,20 @@ export const FORM = {
       ],
     ],
   },
+  MINION_BUYOUT_ERC721_TOKEN: {
+    id: 'MINION_BUYOUT_ERC721_TOKEN',
+    title: 'Buyout Proposal',
+    subtitle: 'Request funds as buyout',
+    description: 'Request funds as buyout',
+    type: PROPOSAL_TYPES.MINION_BUYOUT,
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.SELL_NFT_RARIBLE,
+    required: [],
+    fields: [
+      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.BUYOUT_PAYMENT_REQUEST],
+    ],
+  },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
     subtitle: 'Make a proposal to transfer the nft out of the minion',

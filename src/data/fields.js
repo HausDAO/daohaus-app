@@ -266,6 +266,15 @@ export const FIELD = {
     expectType: 'number',
     modifiers: ['addPaymentDecimals'],
   },
+  BUYOUT_PAYMENT_REQUEST: {
+    type: 'buyoutPaymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Request Funds',
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
+  },
 };
 
 export const FORM_DISPLAY = {
