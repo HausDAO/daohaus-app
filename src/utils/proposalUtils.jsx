@@ -40,6 +40,7 @@ export const PROPOSAL_TYPES = {
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
+  SELL_NFT: 'Sell NFT',
 };
 
 export const MINION_TYPES = {
@@ -53,6 +54,7 @@ export const MINION_TYPES = {
 
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
+  NEAPOLITAN_MINION: 'actions',
   UBERHAUS_MINION: 'appointments',
   SUPERFLUID_MINION: 'streams',
 };
@@ -240,6 +242,16 @@ export const linkMaker = proposal => {
     const parsed =
       IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.link || '';
+  } catch (e) {
+    return '';
+  }
+};
+
+export const raribleHashMaker = proposal => {
+  try {
+    const parsed =
+      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    return parsed.orderIpfsHash || '';
   } catch (e) {
     return '';
   }
@@ -553,5 +565,17 @@ export const pendingUberHausStakingProposal = (prop, minionAddress) => {
     prop.proposalType === 'Member Proposal' &&
     !prop.cancelled &&
     !prop.processed
+  );
+};
+
+export const multicallActionsFromProposal = prop => {
+  return prop.actions.reduce(
+    (obj, action) => {
+      obj.targets.push(action.target);
+      obj.values.push(action.value);
+      obj.datas.push(action.data);
+      return obj;
+    },
+    { targets: [], values: [], datas: [] },
   );
 };
