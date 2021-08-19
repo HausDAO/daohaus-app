@@ -50,7 +50,6 @@ const balanceCard = ({
         if (error) {
           console.log('Error detecting Wrap-N-Zap poke balance.', error);
         } else {
-          console.log('Wrap-N-Zap Poke Balance', result);
           setNeedsPoke(result !== '0');
         }
       });

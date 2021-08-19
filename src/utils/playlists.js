@@ -15,7 +15,7 @@ const BOOST_PLAYLISTS = [
   {
     name: 'Rarible',
     id: 'rarible',
-    forms: ['SELL_NFT'],
+    forms: ['SELL_NFT_RARIBLE'],
   },
   {
     name: 'NiftyInk',

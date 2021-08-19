@@ -1,37 +1,79 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Flex, Box, Stack, Link, Icon, IconButton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
 
-import ActivitiesFeed from '../components/activitiesFeed';
-
-import { getProposalHistories } from '../utils/activities';
-import TextBox from '../components/TextBox';
-import ProposalDetails from '../components/proposalDetails';
-import ProposalActions from '../components/proposalActions';
-import { getTerm, getTitle } from '../utils/metadata';
-import MainViewLayout from '../components/mainViewLayout';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
+import ActivitiesFeed from '../components/activitiesFeed';
+import MainViewLayout from '../components/mainViewLayout';
+import ProposalActions from '../components/proposalActions';
+import ProposalDetails from '../components/proposalDetails';
+import TextBox from '../components/TextBox';
+import { createContract } from '../utils/contract';
+import { getTerm, getTitle } from '../utils/metadata';
+import { getProposalHistories } from '../utils/activities';
+import { LOCAL_ABI } from '../utils/abi';
+import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
+import { transactionByProposalType } from '../utils/txHelpers';
 
 const Proposal = ({
   activities,
-  overview,
+  customTerms,
   daoProposals,
   daoMember,
-  customTerms,
   delegate,
+  overview,
 }) => {
-  const { propid, daochain, daoid } = useParams();
   const { refreshDao } = useTX();
+  const { injectedProvider } = useInjectedProvider();
+  const { propid, daochain, daoid } = useParams();
+
+  const [minionAction, setMinionAction] = useState(null);
+  const [hideMinionExecuteButton, setHideMinionExecuteButton] = useState(null);
 
   const currentProposal = activities
     ? activities?.proposals?.find(proposal => proposal.proposalId === propid)
     : null;
-  // console.log(currentProposal);
 
   const handleRefreshDao = () => {
     refreshDao();
   };
+
+  useEffect(() => {
+    const getMinionAction = async currentProposal => {
+      try {
+        console.log('currentProposal.minion', currentProposal);
+        // TODO: need the type here
+        const tx = transactionByProposalType(currentProposal);
+        const abi = LOCAL_ABI[tx.contract.abiName];
+        const web3Contract = createContract({
+          address: currentProposal.minionAddress,
+          abi,
+          chainID: daochain,
+          web3: injectedProvider,
+        });
+
+        const action = await web3Contract.methods[
+          MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
+        ](currentProposal.proposalId).call();
+
+        setMinionAction(action);
+
+        // hides execute minion button on funding and payroll proposals
+        if (action[1] === '0x0000000000000000000000000000000000000000') {
+          setHideMinionExecuteButton(true);
+        } else {
+          setHideMinionExecuteButton(false);
+        }
+      } catch (err) {
+        console.error('Error: getMinionAction', err);
+      }
+    };
+
+    if (currentProposal && currentProposal.minion)
+      getMinionAction(currentProposal);
+  }, [currentProposal, daochain]);
 
   return (
     <MainViewLayout header='Proposal' customTerms={customTerms} isDao>
@@ -64,6 +106,8 @@ const Proposal = ({
               proposal={currentProposal}
               daoMember={daoMember}
               overview={overview}
+              hideMinionExecuteButton={hideMinionExecuteButton}
+              minionAction={minionAction}
             />
           </Flex>
           <Flex
@@ -90,8 +134,10 @@ const Proposal = ({
                   proposal={currentProposal}
                   overview={overview}
                   daoMember={daoMember}
-                  delegate={delegate}
                   daoProposals={daoProposals}
+                  delegate={delegate}
+                  hideMinionExecuteButton={hideMinionExecuteButton}
+                  minionAction={minionAction}
                 />
               )}
               <ActivitiesFeed
