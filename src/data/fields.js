@@ -17,6 +17,7 @@ export const INFO_TEXT = {
   DELEGATE_ADDRESS:
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
+  MINION_VALUE: 'Value in wei of network token for payable functions.',
   MINION_QUORUM:
     'Once this percentage of DAO shares have votes yes this minion action will be executable.',
   NIFTY_REPAYMENT_REQUEST:
@@ -73,6 +74,15 @@ export const FIELD = {
     htmlFor: 'link',
     placeholder: 'daolink.club',
     expectType: 'urlNoHTTP',
+  },
+  MINION_VALUE: {
+    type: 'input',
+    label: 'Value',
+    name: 'minionValue',
+    htmlFor: 'minionValue',
+    placeholder: '0',
+    expectType: 'number',
+    info: INFO_TEXT.MINION_VALUE,
   },
   APPLICANT: {
     type: 'applicantInput',

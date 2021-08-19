@@ -45,6 +45,7 @@ const AbiInput = props => {
   }, [targetContract]);
 
   useEffect(() => {
+    console.log('abiInput', abiInput);
     if (abiInput) {
       props.buildABIOptions(abiInput);
     } else if (isRawHex) {

@@ -53,7 +53,14 @@ const FormBuilder = props => {
       setFields(originalFields);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      setFields([...originalFields, ...inputDataFromABI(abiInputs)]);
+      let updatedFields = [
+        ...originalFields[originalFields.length - 1],
+        ...inputDataFromABI(abiInputs),
+      ];
+      if (originalFields.length > 1) {
+        updatedFields = [originalFields[0], updatedFields];
+      }
+      setFields(updatedFields);
     }
   };
 

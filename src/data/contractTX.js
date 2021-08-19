@@ -17,6 +17,11 @@ export const CONTRACTS = {
     abiName: 'MOLOCH_V2',
     contractAddress: '.contextData.daoid',
   },
+  MINION_ACTION: {
+    location: 'fetch',
+    // abiName: 'VANILLA_MINION',
+    contractAddress: '.values.targetContract',
+  },
   SELECTED_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -290,7 +295,18 @@ export const TX = {
     display: 'Propose Minion Action',
     errMsg: 'Error submitting action to minion',
     successMsg: 'Minion Proposal Created!',
-    argsFromCallback: true,
+    createDiscourse: true,
+    argsFromCallback: 'proposeActionVanilla',
+  },
+  MINION_PROPOSE_ACTION_NIFTY: {
+    contract: CONTRACTS.SELECTED_MINION_NIFTY,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    argsFromCallback: 'proposeActionNifty',
     createDiscourse: true,
   },
   CANCEL_PROPOSAL: {

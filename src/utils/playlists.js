@@ -8,19 +8,14 @@ const BOOST_PLAYLISTS = [
     forms: ['MINION', 'PAYROLL'],
   },
   {
-    name: 'Test',
-    id: 'test',
-    forms: ['CRASH', 'CAT'],
+    name: 'Nifty Minion',
+    id: 'nifty minion',
+    forms: ['MINION_NIFTY', 'BUY_NIFTY_INK'],
   },
   {
     name: 'Rarible',
     id: 'rarible',
     forms: ['SELL_NFT_RARIBLE'],
-  },
-  {
-    name: 'NiftyInk',
-    id: 'nifty minion',
-    forms: ['BUY_NIFTY_INK'],
   },
   {
     name: 'Superfluid',
