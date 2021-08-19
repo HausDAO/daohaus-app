@@ -1,12 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
-import { useParams } from 'react-router';
+
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useDao } from '../contexts/DaoContext';
 
 import PaymentInput from './paymentInput';
 
 const BuyoutPaymentInput = props => {
   const { localForm } = props;
   const { setValue, watch, register } = localForm;
+  const { isMember, daoMember } = useDaoMember();
+  const { daoOverview } = useDao();
+  const [sharesLoot, setSharesLoot] = useState();
+  const [percentSharesLoot, setPercentSharesLoot] = useState();
+
+  useEffect(() => {
+    console.log({ isMember, daoMember });
+    if (isMember && daoMember) {
+      const newSharesLoot = +daoMember.shares + +daoMember.loot;
+      setSharesLoot(newSharesLoot);
+      setPercentSharesLoot(
+        newSharesLoot / (+daoOverview.totalShares + +daoOverview.totalLoot),
+      );
+    }
+  }, [isMember, daoMember]);
 
   return (
     <Flex direction='column'>
@@ -23,7 +40,7 @@ const BuyoutPaymentInput = props => {
           Your Shares and Loot
         </Text>
         <Text fontSize='xs' fontFamily='mono' color='mode.200' marginBottom={4}>
-          {1020} ({1.5}% of total)
+          {sharesLoot} ({percentSharesLoot}% of total)
         </Text>
         <Text fontSize='sm' fontFamily='heading' color='mode.900'>
           Estimated Exit Value on Ragequit
