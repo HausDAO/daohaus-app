@@ -43,17 +43,13 @@ const ProfileMenu = ({ member }) => {
 
   const handleRageQuitClick = () => {
     openFormModal({
-      lego: {
-        ...CORE_FORMS.RAGE_QUIT,
-      },
+      lego: CORE_FORMS.RAGE_QUIT,
     });
   };
 
   const handleUpdateDelegateClick = () => {
     openFormModal({
-      lego: {
-        ...CORE_FORMS.UPDATE_DELEGATE,
-      },
+      lego: CORE_FORMS.UPDATE_DELEGATE,
     });
   };
 
