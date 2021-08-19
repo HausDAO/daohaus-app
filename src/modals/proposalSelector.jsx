@@ -29,14 +29,12 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 // PLAYLISTS.find(list => list.id === 'favorites');
 
 const ProposalSelector = () => {
-  const { daoProposals, daoMetaData } = useMetaData();
+  const { daoProposals } = useMetaData();
   const { proposalSelector, setProposalSelector } = useOverlay();
   const { openFormModal } = useFormModal();
   const { theme } = useCustomTheme();
 
   const { playlists, customData } = daoProposals || {};
-
-  console.log('daoMetaData', daoMetaData);
 
   const [currentPlaylist, setCurrentPlaylist] = useState(null);
 
@@ -125,7 +123,6 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
     selectPlaylist(e.target.value);
   };
 
-  console.log('isMember', isMember);
   return (
     <Flex alignItems='top'>
       <Select mb={8} width='60%' onChange={handleChange} fontFamily='accessory'>

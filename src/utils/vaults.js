@@ -105,8 +105,8 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
   }
 
   if (vaultMinionType === 'Neapolitan minion') {
-    // minionType = MINION_TYPES.NEAPOLITAN;
-    // tx = TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
+    minionType = MINION_TYPES.NEAPOLITAN;
+    tx = TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
   }
 
   return {
