@@ -191,11 +191,6 @@ const ProposalVote = ({
     setLoading(false);
   };
 
-  const getCurrentMemberFunds = () => {
-    if (!daoMember) return 0;
-    return Number(daoMember?.depositTokenBalance)?.toFixed(3);
-  };
-
   return (
     <>
       <ContentBox position='relative'>
@@ -225,13 +220,13 @@ const ProposalVote = ({
                   {`${overview?.proposalDeposit /
                     10 ** overview?.depositToken.decimals}
                   ${overview?.depositToken?.symbol}`}
-                  {!enoughDeposit ? (
+                  {!enoughDeposit && daoMember ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
-                      label={`Insufficient Funds: You only have ${getCurrentMemberFunds()} ${
-                        overview?.depositToken?.symbol
-                      }`}
+                      label={`Insufficient Funds: You only have ${Number(
+                        daoMember?.depositTokenBalance,
+                      )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
                         color='red.500'
