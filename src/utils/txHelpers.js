@@ -91,6 +91,43 @@ const argBuilderCallback = Object.freeze({
     });
     return [values.targetContract, values.minionValue || '0', hexData, details];
   },
+  proposeActionNifty({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+    const details = detailsToJSON({
+      ...values,
+      minionType: formData.minionType,
+    });
+    return [
+      values.targetContract,
+      values.minionValue || '0',
+      hexData,
+      details,
+      values.paymentToken,
+      values.paymetRequested,
+    ];
+  },
+  proposeActionNeapolitan({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+    const details = detailsToJSON({
+      ...values,
+      minionType: formData.minionType,
+    });
+    return [
+      [values.targetContract],
+      [values.minionValue || '0'],
+      [hexData],
+      values.paymentToken,
+      values.paymetRequested,
+      details,
+      'true',
+    ];
+  },
 });
 
 const gatherArgs = data => {

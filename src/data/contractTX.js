@@ -309,6 +309,17 @@ export const TX = {
     argsFromCallback: 'proposeActionNifty',
     createDiscourse: true,
   },
+  MINION_PROPOSE_ACTION_NEAPOLITAN: {
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    argsFromCallback: 'proposeActionNeapolitan',
+    createDiscourse: true,
+  },
   CANCEL_PROPOSAL: {
     contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'cancelProposal',

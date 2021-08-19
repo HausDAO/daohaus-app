@@ -13,6 +13,11 @@ const BOOST_PLAYLISTS = [
     forms: ['MINION_NIFTY', 'BUY_NIFTY_INK'],
   },
   {
+    name: 'Neapolitan Minion',
+    id: 'Neapolitan minion',
+    forms: ['MINION_NEAPOLITAN_SIMPLE'],
+  },
+  {
     name: 'Rarible',
     id: 'rarible',
     forms: ['SELL_NFT_RARIBLE'],

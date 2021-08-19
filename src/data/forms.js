@@ -267,6 +267,27 @@ export const FORM = {
         FIELD.MINION_SELECT,
         FIELD.TARGET_CONTRACT,
         FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.DESCRIPTION,
+      ],
+      [FIELD.ABI_INPUT],
+    ],
+  },
+  MINION_NEAPOLITAN_SIMPLE: {
+    id: 'MINION_NIFTY',
+    title: 'Minion Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
         FIELD.DESCRIPTION,
       ],
       [FIELD.ABI_INPUT],
