@@ -257,7 +257,7 @@ export const FORM = {
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
-    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    required: ['targetContract', 'title', 'selectedMinion'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_PROPOSE_ACTION,
     fields: [
@@ -265,12 +265,50 @@ export const FORM = {
         FIELD.TITLE,
         FIELD.MINION_SELECT,
         FIELD.TARGET_CONTRACT,
-        FIELD.ABI_INPUT,
+        FIELD.MINION_VALUE,
+        FIELD.DESCRIPTION,
       ],
+      [FIELD.ABI_INPUT],
     ],
-    additionalOptions: [
-      FIELD.MINION_PAYMENT,
-      { ...FIELD.DESCRIPTION, h: '10' },
+  },
+  MINION_NIFTY: {
+    id: 'MINION_NIFTY',
+    title: 'Minion Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.DESCRIPTION,
+      ],
+      [FIELD.ABI_INPUT],
+    ],
+  },
+  MINION_NEAPOLITAN_SIMPLE: {
+    id: 'MINION_NEAPOLITAN_SIMPLE',
+    title: 'Minion Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.DESCRIPTION,
+      ],
+      [FIELD.ABI_INPUT],
     ],
   },
   LOOT_GRAB: {
@@ -289,6 +327,40 @@ export const FORM = {
     required: ['selectedMinion', 'minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NIFTY: {
+    id: 'PAYROLL_NIFTY',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.PAYROLL_NIFTY,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NEAPOLITAN: {
+    id: 'PAYROLL_NEAPOLITAN',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.PAYROLL_NEAPOLITAN,
     fields: [
       [
         FIELD.MINION_SELECT,

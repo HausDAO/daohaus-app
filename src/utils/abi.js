@@ -158,6 +158,8 @@ const getRemoteSnippet = async ({ contract, fnName }, data) => {
 
 export const getABIsnippet = (params, data) => {
   const { contract } = params;
+
+  console.log('params, data', params, data);
   if (contract.location === 'local') return getLocalSnippet(params);
   if (contract.location === 'fetch') return getRemoteSnippet(params, data);
   if (contract.location === 'static') return contract.value;

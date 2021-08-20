@@ -80,21 +80,52 @@ const buildJSONdetails = (data, fields) => {
 };
 
 const argBuilderCallback = Object.freeze({
-  proposeAction({ values, hash, formData }) {
+  proposeActionVanilla({ values, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
       collapse(values, '*ABI_ARG*', 'array'),
     );
     const details = detailsToJSON({
       ...values,
-      hash,
+      minionType: formData.minionType,
+    });
+    return [values.targetContract, values.minionValue || '0', hexData, details];
+  },
+  proposeActionNifty({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+    const details = detailsToJSON({
+      ...values,
       minionType: formData.minionType,
     });
     return [
       values.targetContract,
-      values.minionPayment || '0',
+      values.minionValue || '0',
       hexData,
       details,
+      values.paymentToken,
+      values.paymetRequested,
+    ];
+  },
+  proposeActionNeapolitan({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+    const details = detailsToJSON({
+      ...values,
+      minionType: formData.minionType,
+    });
+    return [
+      [values.targetContract],
+      [values.minionValue || '0'],
+      [hexData],
+      values.paymentToken,
+      values.paymetRequested,
+      details,
+      'true',
     ];
   },
 });

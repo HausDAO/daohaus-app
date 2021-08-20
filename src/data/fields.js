@@ -1,4 +1,3 @@
-import { MINION_TYPES } from '../utils/proposalUtils';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 
 export const INFO_TEXT = {
@@ -17,6 +16,7 @@ export const INFO_TEXT = {
   DELEGATE_ADDRESS:
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
+  MINION_VALUE: 'Value in wei of network token for payable functions.',
   MINION_QUORUM:
     'Once this percentage of DAO shares have votes yes this minion action will be executable.',
   NIFTY_REPAYMENT_REQUEST:
@@ -74,6 +74,15 @@ export const FIELD = {
     htmlFor: 'link',
     placeholder: 'daolink.club',
     expectType: 'urlNoHTTP',
+  },
+  MINION_VALUE: {
+    type: 'input',
+    label: 'Value',
+    name: 'minionValue',
+    htmlFor: 'minionValue',
+    placeholder: '0',
+    expectType: 'number',
+    info: INFO_TEXT.MINION_VALUE,
   },
   APPLICANT: {
     type: 'applicantInput',
@@ -141,8 +150,6 @@ export const FIELD = {
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
     expectType: 'address',
-    // TODO: check if this is being used or if it gets type from form config
-    minionType: MINION_TYPES.VANILLA,
   },
   ABI_INPUT: {
     type: 'abiInput',
