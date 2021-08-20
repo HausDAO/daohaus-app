@@ -852,7 +852,7 @@ export const TX = {
   MINION_NEAPOLITAN_EXECUTE: {
     contract: CONTRACTS.MINION_NEAPOLITAN_EXECUTE,
     name: 'executeAction',
-    specialPoll: 'executeAction',
+    poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Executing Minion Proposal',
     errMsg: 'Error Executing Minion Proposal',
