@@ -123,6 +123,11 @@ export const CONTRACTS = {
     abiName: 'WRAP_N_ZAP',
     contractAddress: '.localValues.contractAddress',
   },
+  DAO_CONDITIONAL_HELPER: {
+    location: 'local',
+    abiName: 'DAO_CONDITIONAL_HELPER',
+    contractAddress: '.localValues.helperAddress',
+  },
 };
 
 export const ACTIONS = {
@@ -953,6 +958,48 @@ export const TX = {
         gatherFields: DETAILS.SELL_NFT_RARIBLE,
       },
       'true',
+    ],
+  },
+  SET_BUYOUT_NFT: {
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    name: 'buyout',
+    display: 'Submitting Buyout Proposal',
+    errMsg: 'Error Submitting Buyout Proposal',
+    successMsg: 'Buyout Proposal Submitted',
+    actionData: [
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['.localValues.helperAddress', '.values.paymentToken'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['0', '0'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.DAO_CONDITIONAL_HELPER,
+            fnName: 'isNotDaoMember',
+            gatherArgs: [
+              // NOTE: Is this the correct user's address and dao?
+              '.contextData.address',
+              '.contextData.daoid',
+            ],
+          },
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.ERC_20,
+            fnName: 'transfer',
+            gatherArgs: ['.contextData.address', '.values.paymentRequested'],
+          },
+        ],
+      },
+      '.value.paymentToken',
+      '0',
+      'TEST',
+      false,
     ],
   },
 };

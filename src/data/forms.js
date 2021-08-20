@@ -331,7 +331,7 @@ export const FORM = {
     type: PROPOSAL_TYPES.MINION_BUYOUT,
     minionType: MINION_TYPES.NEAPOLITAN,
     tx: TX.SELL_NFT_RARIBLE,
-    required: [],
+    required: ['title', 'buyoutPaymentInput'],
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [FIELD.BUYOUT_PAYMENT_REQUEST],
