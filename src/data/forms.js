@@ -105,6 +105,12 @@ export const CORE_FORMS = {
     tx: TX.MINION_NIFTY_SET_PRICE,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
+  SUMMON_MINION_SELECTOR: {
+    id: 'SUMMON_MINION_SELECTOR',
+    title: 'Minion Summon Selector',
+    required: ['minionType'],
+    fields: [[FIELD.MINION_TYPE_SELECT]],
+  },
 };
 
 export const FORM = {
@@ -239,7 +245,7 @@ export const FORM = {
     required: ['title'], // Use name key from proposal type object
     fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
-  MINION: {
+  VAN_MINION_GENERIC: {
     id: 'MINION',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
@@ -365,26 +371,5 @@ export const FORM = {
       [FIELD.NIFTY_INK_URL],
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
     ],
-  },
-  TEST_UNREGISTERED: {
-    id: 'TEST_UNREGISTERED',
-    title: 'Unregistered Form',
-    dev: true,
-    description: 'This should not appear unless registered to app branch',
-    type: PROPOSAL_TYPES.BUY_NIFTY_INK,
-    tx: TX.SUBMIT_PROPOSAL,
-    required: ['sharesRequested', 'tributeOffered', 'title'],
-    fields: [
-      [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.TRIBUTE, FIELD.DESCRIPTION],
-    ],
-    additionalOptions: [FIELD.LINK],
-  },
-  SUMMON_MINION_SELECTOR: {
-    id: 'SUMMON_MINION_SELECTOR',
-    title: 'Minion Summon Selectpr',
-    description: 'Choose which damn minion you want to summon',
-    dev: true,
-    required: ['minionType'],
-    fields: [[FIELD.MINION_TYPE_SELECT]],
   },
 };

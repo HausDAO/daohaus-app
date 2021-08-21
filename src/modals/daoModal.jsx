@@ -89,7 +89,7 @@ const DaoModal = () => {
         <ModalCloseButton />
         <ModalBody>
           {prependBody}
-          {/* {steps && <StepperForm steps={steps} />} */}
+          {steps && <StepperForm steps={steps} />}
           {boost && <StepperForm {...boost} />}
           {lego && <FormBuilder {...lego} onSubmit={onSubmit} />}
           {body}

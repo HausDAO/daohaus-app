@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BoostDetails from '../components/boostDetails';
+import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
 import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import FormBuilder from './formBuilder';
 
 const StepperForm = props => {
-  const { steps = {} } = props;
+  const { steps = {}, minionData, boostContent, playlist } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
   const { errorToast } = useOverlay();
-  console.log(`props`, props);
+
   const [currentStep, setCurrentStep] = useState(
     Object.values(steps).find(step => step.start),
   );
@@ -50,9 +51,10 @@ const StepperForm = props => {
   if (currentStep?.type === 'boostDetails') {
     return (
       <BoostDetails
-        content={props.boostContent}
+        content={boostContent}
         goToNext={goToNext}
         next={currentStep.next}
+        steps={steps}
       />
     );
   }
@@ -62,7 +64,20 @@ const StepperForm = props => {
         {...currentStep}
         localForm={parentForm}
         next={currentStep.next}
+        minionData={minionData}
         goToNext={goToNext}
+        boostContent={boostContent}
+      />
+    );
+  }
+  if (currentStep?.type === 'signer') {
+    return (
+      <Signer
+        {...currentStep}
+        boostData={props}
+        next={currentStep.next}
+        goToNext={goToNext}
+        playlist={playlist}
       />
     );
   }

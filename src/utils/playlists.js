@@ -1,28 +1,28 @@
 import { v4 as uuid } from 'uuid';
 import { FORM } from '../data/forms';
 
-const BOOST_PLAYLISTS = [
-  {
-    name: 'Vanilla Minion',
-    id: 'vanilla minion',
-    forms: ['MINION', 'PAYROLL'],
+export const BOOST_PLAYLISTS = {
+  OLD_DEV_SUITE: {
+    name: 'Vanilla Minion Classics',
+    id: 'vanMinionClassics',
+    forms: ['VAN_MINION_GENERIC', 'PAYROLL'],
   },
-  {
+  TEST: {
     name: 'Test',
     id: 'test',
     forms: ['CRASH', 'CAT'],
   },
-  {
+  RARIBLE: {
     name: 'Rarible',
     id: 'rarible',
     forms: ['SELL_NFT'],
   },
-  {
+  NIFTY_INK: {
     name: 'NiftyInk',
     id: 'nifty minion',
     forms: ['BUY_NIFTY_INK'],
   },
-];
+};
 
 export const defaultProposals = {
   name: 'All Proposals',
@@ -51,24 +51,25 @@ export const PLAYLISTS = [
 ];
 
 export const generateNewConfig = ({ daoMetaData }) => {
-  const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
-  const { boosts } = daoMetaData;
-
-  const playlists = boostIDs.reduce((acc, boostID) => {
-    if (boosts?.[boostID]) {
-      return [...acc, BOOST_PLAYLISTS.find(list => list.id === boostID)];
-    }
-    return acc;
-  }, PLAYLISTS);
+  // const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
+  // const { boosts } = daoMetaData;
+  // const playlists = boostIDs.reduce((acc, boostID) => {
+  console.log('GENERATING NEW CONFIG');
+  console.log(`daoMetaData`, daoMetaData);
+  //   if (boosts?.[boostID]) {
+  //     return [...acc, BOOST_PLAYLISTS.find(list => list.id === boostID)];
+  //   }
+  //   return acc;
+  // }, PLAYLISTS);
 
   return {
-    playlists,
+    playlists: PLAYLISTS,
     allForms: {
       name: 'All Proposals',
       id: 'all',
       forms: [
         ...new Set(
-          playlists.reduce((acc, list) => [...acc, ...list.forms], []),
+          PLAYLISTS.reduce((acc, list) => [...acc, ...list.forms], []),
         ),
       ],
     },
@@ -116,3 +117,21 @@ export const devList = createPlaylist({
     return arr;
   }, []),
 });
+
+const createNewAllForms = (allForms, newPlaylistForms) => {
+  return {
+    name: 'All Proposals',
+    id: 'all',
+    forms: [...new Set([...allForms.forms, ...newPlaylistForms])],
+  };
+};
+export const addBoostPlaylist = (proposalConfig, newPlaylist) => {
+  const { playlists, allForms } = proposalConfig;
+  if (!playlists || !allForms)
+    throw new Error(
+      'playlists.js => addBoostPlaylist(): Playlists or allForms is falsy',
+    );
+  const newAllForms = createNewAllForms(allForms, newPlaylist.forms);
+  const newPlaylists = [...playlists, newPlaylist];
+  return { ...proposalConfig, playlists: newPlaylists, allForms: newAllForms };
+};

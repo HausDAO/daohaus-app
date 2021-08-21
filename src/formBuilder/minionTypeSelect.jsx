@@ -2,28 +2,20 @@ import React, { useMemo, useState } from 'react';
 import { Flex } from '@chakra-ui/layout';
 
 import { useParams } from 'react-router';
-import { capitalize } from '../utils/general';
+import { capitalizeWords } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
 import GenericSelect from './genericSelect';
 import Paragraphs from './Paragraphs';
 import Header from './header';
 
-const betterCapitalize = string => {
-  if (!string) return null;
-  const words = string.split(' ');
-  if (words?.length <= 1) {
-    return capitalize(words);
-  }
-  return words.map(word => capitalize(word)).join(' ');
-};
 const descrip = [
   'Minions are horrible beings you can summon from the earth.',
   'You can use them sew destruction and peril across the land. Make them do your bidding, bring the world to its knees, etc...',
 ];
 const minions = Object.entries(MINION_TYPES).map(([key, value]) => ({
   id: key,
-  name: betterCapitalize(value),
+  name: capitalizeWords(value),
   value,
 }));
 const MinionTypeSelect = props => {

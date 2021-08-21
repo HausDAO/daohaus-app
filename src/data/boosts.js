@@ -1,4 +1,4 @@
-import { PLAYLISTS } from '../utils/playlists';
+import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { SUMMON_DATA } from './minions';
 import { PUBLISHERS } from './publishers';
@@ -7,6 +7,17 @@ export const CONTENT = {
   DEV_SUITE: {
     title: 'DEV Suite',
     description: 'Developer tools to prototype, build and test your own boosts',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.00',
+    pars: [
+      'The DEV Suite is an all-in-one developer toolset for advanced builders to prototype, build and test their own Minions and Boosts.',
+    ],
+    externalLinks: [{ href: 'https://daohaus.club/', label: 'Boost Support' }],
+  },
+  OLD_DEV_SUITE: {
+    title: 'Old DEV Suite',
+    description:
+      'Developer tools to prototype, build and test your own boosts. Oldschool.',
     publisher: PUBLISHERS.DAOHAUS,
     version: '1.00',
     pars: [
@@ -136,24 +147,40 @@ export const CONTENT = {
 
 const STEPS = {
   MINION_BOOST: {
-    STEP1: {
+    DISPLAY: {
       type: 'boostDetails',
+      next: 'STEP1',
       start: true,
+      isUserStep: false,
+    },
+    STEP1: {
+      type: 'summoner',
       next: 'STEP2',
+      stepLabel: 'Deploy Minion',
+      isForBoost: true,
+      isUserStep: true,
     },
     STEP2: {
-      type: 'summoner',
-      next: 'STEP3',
-      isForBoost: true,
-    },
-    STEP3: {
       type: 'signer',
+      stepLabel: 'Add Proposals & Sign',
       finish: true,
+      isUserStep: true,
     },
   },
 };
 
 export const BOOSTS = {
+  OLD_DEV_SUITE: {
+    id: 'OLD_DEV_SUITE',
+    boostContent: CONTENT.OLD_DEV_SUITE,
+    minionData: SUMMON_DATA[MINION_TYPES.VANILLA],
+    categories: ['dev', 'ops'],
+    steps: STEPS.MINION_BOOST,
+    playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
+    networks: 'all',
+    cost: 'free',
+    createConfig: false,
+  },
   DEV_SUITE: {
     id: 'DEV_SUITE',
     // requires content to be exposed to details
@@ -161,7 +188,7 @@ export const BOOSTS = {
     minionData: SUMMON_DATA[MINION_TYPES.NEAPOLITAN],
     categories: ['dev', 'ops'],
     steps: STEPS.MINION_BOOST,
-    playlist: PLAYLISTS.VANILLA_MINION,
+    // playlist: PLAYLISTS.VANILLA_MINION,
     networks: 'all',
     cost: 'free',
   },

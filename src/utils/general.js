@@ -207,6 +207,14 @@ export const capitalize = string => {
     return string[0].toUpperCase() + string.slice(1);
   }
 };
+export const capitalizeWords = string => {
+  if (!string) return null;
+  const words = string.split(' ');
+  if (words?.length <= 1) {
+    return capitalize(words);
+  }
+  return words.map(word => capitalize(word)).join(' ');
+};
 
 export const daoConnectedAndSameChain = (
   address,

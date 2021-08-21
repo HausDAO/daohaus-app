@@ -14,6 +14,8 @@ import TextBox from './TextBox';
 
 import { SUMMON_DATA } from '../data/minions';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { capitalizeWords } from '../utils/general';
+import ProgressIndicator from './progressIndicator';
 
 const minionFromDaoOverview = ({ searchBy, daoOverview, searchParam }) => {
   if (!daoOverview || !searchBy || !searchParam) return;
@@ -49,6 +51,7 @@ const MinionNotFound = ({ minionType = 'Minion' }) => {
       summon a new minion.{' '}
       <Link
         href='https://daohaus.club/docs/users/minion-faq'
+        isExternal
         color='secondary.400'
       >
         Learn more about minions here.
@@ -58,43 +61,36 @@ const MinionNotFound = ({ minionType = 'Minion' }) => {
 };
 
 const TheSummoner = props => {
-  const {
-    isForBoost,
-    localForm,
-    staticMinionType,
-    goToNext,
-    next,
-    minion,
-  } = props;
-  console.log(`minion`, minion);
+  const { localForm, goToNext, minionData, next } = props;
   const { daoOverview } = useDao();
   const { daoid, daochain } = useParams();
 
   const [existingMinions, setExistingMinions] = useState([]);
   const [menuState, setMenuState] = useState(
-    staticMinionType ? null : 'summon',
+    minionData?.minionType ? null : 'summon',
   );
 
-  const minionType = staticMinionType || localForm.watch('minionType');
+  const minionType = minionData?.minionType || localForm.watch('minionType');
   const summonData = SUMMON_DATA[minionType];
 
   useEffect(() => {
-    if (daoOverview && minionType && isForBoost) {
+    if (daoOverview && minionType && !menuState) {
       const minionsOfType = minionFromDaoOverview({
         searchBy: 'type',
         daoOverview,
         searchParam: minionType,
       });
       if (minionsOfType?.length) {
+        console.log(minionsOfType);
         setExistingMinions(minionsOfType);
         setMenuState('displayExisting');
       } else {
         setMenuState('summon');
       }
     }
-  }, [minionType, daoOverview, isForBoost]);
+  }, [minionType, daoOverview, menuState]);
 
-  const handleNext = () => goToNext(next);
+  const handleNext = () => goToNext();
   const switchToSummon = () => setMenuState('summon');
   const lifeCycleFns = {
     beforeTx() {
@@ -111,7 +107,7 @@ const TheSummoner = props => {
   if (menuState === 'displayExisting') {
     return (
       <Flex flexDirection='column'>
-        <Header>Boost Name</Header>
+        <Header>{minionType}</Header>
         <MinionFound minionType={minionType} />
         <Flex flexDir='column' mb={4}>
           <Flex w='100%' mt={6} mb={4}>
@@ -129,9 +125,13 @@ const TheSummoner = props => {
                   <Link
                     to={`/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`}
                     isExternal
+                    transform='translateY(-1px)'
                     ml={2}
                   >
-                    <Icon as={RiExternalLinkLine} name='transaction link' />
+                    <Icon
+                      as={RiExternalLinkLine}
+                      transform='translateY(-2px)'
+                    />
                   </Link>
                 </TextBox>
                 <TextBox variant='body'>{minion.minionType}</TextBox>
@@ -199,19 +199,3 @@ const TheSummoner = props => {
 };
 
 export default TheSummoner;
-
-const ProgressIndicator = ({ prepend, text, append, icon }) => {
-  const { theme } = useCustomTheme();
-  return (
-    <Flex
-      border={`2px ${theme.colors.secondary[500]} solid`}
-      borderRadius='md'
-      p={3}
-    >
-      {prepend}
-      {icon && <Icon mr={3} as={BsCheckCircle} h='25px' w='25px' />}
-      <TextBox variant='body'>{text}</TextBox>
-      {append}
-    </Flex>
-  );
-};

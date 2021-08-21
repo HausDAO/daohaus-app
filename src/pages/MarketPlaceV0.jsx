@@ -19,7 +19,7 @@ import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { generateLists } from '../utils/marketplace';
 import { useFormModal } from '../contexts/OverlayContext';
-import { FORM } from '../data/forms';
+import { CORE_FORMS, FORM } from '../data/forms';
 import { PUBLISHERS } from '../data/publishers';
 import { TX } from '../data/contractTX';
 import { useDao } from '../contexts/DaoContext';
@@ -266,22 +266,22 @@ const InstalledList = ({ listID, lists }) => {
 
   const handleClick = () => {
     openFormModal({
-      title: 'Minion Summoner',
       steps: {
         STEP1: {
           start: true,
           type: 'form',
           next: 'STEP2',
-          lego: FORM.SUMMON_MINION_SELECTOR,
+          lego: CORE_FORMS.SUMMON_MINION_SELECTOR,
         },
         STEP2: {
           type: 'summoner',
-          next: 'DONE',
+          finish: true,
           isForBoost: false,
         },
       },
     });
   };
+
   return (
     <List
       headerSection={
