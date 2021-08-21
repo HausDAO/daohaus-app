@@ -28,6 +28,7 @@ export const supportedChains = {
     rarible: {
       api_url: 'https://ethereum-api.rarible.org/protocol/v0.1/ethereum',
       nft_transfer_proxy: '0x0',
+      base_url: 'https://rarible.com',
     },
     niftyMinion: {
       minion_factory_addr: '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
@@ -76,6 +77,7 @@ export const supportedChains = {
         'https://api-staging.rarible.com/protocol/v0.1/ethereum',
 
       nft_transfer_proxy: '0x7d47126a2600E22eab9eD6CF0e515678727779A6',
+      base_url: 'https://rinkeby.rarible.com',
     },
   },
   '0x2a': {

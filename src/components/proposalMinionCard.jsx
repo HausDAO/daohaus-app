@@ -22,7 +22,7 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { hasMinionActions, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import UberHausAvatar from './uberHausAvatar';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
@@ -35,6 +35,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
 
   useEffect(() => {
     if (minionAction) {
+      console.log('minionAction', minionAction);
       setMinionDeets(minionAction);
     }
   }, [minionAction]);
@@ -133,10 +134,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   };
 
   // hides details on funding and payroll proposals
-  if (
-    minionDeets &&
-    minionDeets[1] === '0x0000000000000000000000000000000000000000'
-  ) {
+  if (hasMinionActions(proposal, minionDeets)) {
     return null;
   }
 
