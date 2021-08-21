@@ -220,7 +220,7 @@ const ProposalVote = ({
                   {`${overview?.proposalDeposit /
                     10 ** overview?.depositToken.decimals}
                   ${overview?.depositToken?.symbol}`}
-                  {!enoughDeposit ? (
+                  {!enoughDeposit && daoMember ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
