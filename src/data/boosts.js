@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { SUMMON_DATA } from './minions';
+import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
 export const CONTENT = {
@@ -167,14 +167,18 @@ const STEPS = {
       isUserStep: true,
     },
   },
+  ADD_DISCORD: {},
+  ADD_DISCOURSE: {},
+  ADD_SNAPSHOT: {},
+  ADD_MINTGATE: {},
 };
 
 export const BOOSTS = {
   OLD_DEV_SUITE: {
     id: 'OLD_DEV_SUITE',
     boostContent: CONTENT.OLD_DEV_SUITE,
-    minionData: SUMMON_DATA[MINION_TYPES.VANILLA],
-    categories: ['dev', 'ops'],
+    minionData: MINIONS[MINION_TYPES.VANILLA],
+    categories: ['advanced', 'ops'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
     networks: 'all',
@@ -183,48 +187,74 @@ export const BOOSTS = {
   },
   DEV_SUITE: {
     id: 'DEV_SUITE',
-    // requires content to be exposed to details
     boostContent: CONTENT.DEV_SUITE,
-    minionData: SUMMON_DATA[MINION_TYPES.NEAPOLITAN],
-    categories: ['dev', 'ops'],
+    minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
+    categories: ['advanced', 'ops'],
     steps: STEPS.MINION_BOOST,
-    // playlist: PLAYLISTS.VANILLA_MINION,
-    networks: 'all',
+    playlist: BOOST_PLAYLISTS.DEV_SUITE,
+    networks: MINIONS[MINION_TYPES.NEAPOLITAN].networks,
     cost: 'free',
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
-    boostContent: CONTENT.NIFTY_INK,
     oldId: 'niftyInk',
+    boostContent: CONTENT.NIFTY_INK,
+    minionData: MINIONS[MINION_TYPES.NIFTY],
     categories: ['nft'],
+    steps: STEPS.MINION_BOOST,
+    networks: MINIONS[MINION_TYPES.NIFTY].networks,
+    playlist: BOOST_PLAYLISTS.NIFTY_INK,
+  },
+  SUPERFLUID: {
+    id: 'SUPERFLUID',
+    oldId: 'superfluid',
+    boostContent: CONTENT.UBERHAUS,
+    minionData: MINIONS[MINION_TYPES.UBERHAUS],
+    categories: ['social', 'advanced'],
+    steps: STEPS.MINION_BOOST,
+    networks: MINIONS[MINION_TYPES.UBERHAUS].networks,
+  },
+  UBERHAUS: {
+    id: 'SUPERFLUID',
+    oldId: 'superfluid',
+    boostContent: CONTENT.SUPERFLUID,
+    minionData: MINIONS[MINION_TYPES.SUPERFLUID],
+    categories: ['token', 'tools'],
+    steps: STEPS.MINION_BOOST,
+    networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
   },
   SNAPSHOT: {
     id: 'SNAPSHOT',
     oldId: 'snapshot',
     boostContent: CONTENT.SNAPSHOT,
+    steps: STEPS.ADD_SNAPSHOT,
     categories: ['ops', 'social'],
+    networks: 'all',
+  },
+  RARIBLE: {
+    name: 'Rarible',
+    id: 'rarible',
+    categories: ['nft'],
+    playlist: BOOST_PLAYLISTS.RARIBLE,
   },
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',
+    steps: STEPS.ADD_SNAPSHOT,
     boostContent: CONTENT.DISCORD,
     categories: ['social'],
   },
   MINT_GATE: {
     id: 'MINT_GATE',
     oldId: 'mintGate',
+    steps: STEPS.ADD_MINTGATE,
     boostContent: CONTENT.MINT_GATE,
     categories: ['nft', 'tools'],
-  },
-  SUPERFLUID: {
-    id: 'SUPERFLUID',
-    oldId: 'superfluid',
-    boostContent: CONTENT.SUPERFLUID,
-    categories: ['defi', 'token', 'tools'],
   },
   DISCOURSE: {
     id: 'DISCOURSE',
     oldId: 'discourse',
+    steps: STEPS.DISCOURSE,
     boostContent: CONTENT.DISCOURSE,
     categories: ['social'],
   },
@@ -237,9 +267,10 @@ export const allBoosts = {
 };
 const categoryStarter = [
   { name: 'NFT', id: 'nft' },
-  { name: 'DAO Dev', id: 'dev' },
-  { name: 'Community', id: 'social' },
-  { name: 'Tools', id: 'tools' },
+  { name: 'Advanced', id: 'advanced' },
+  { name: 'Social', id: 'social' },
+  { name: 'DAO Ops', id: 'ops' },
+  { name: 'Defi', id: 'defi' },
   { name: 'Token', id: 'token' },
 ];
 export const categories = categoryStarter.map(cat => ({

@@ -12,7 +12,7 @@ import FormBuilder from '../formBuilder/formBuilder';
 import Header from '../formBuilder/header';
 import TextBox from './TextBox';
 
-import { SUMMON_DATA } from '../data/minions';
+import { MINIONS } from '../data/minions';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { capitalizeWords } from '../utils/general';
 import ProgressIndicator from './progressIndicator';
@@ -71,7 +71,7 @@ const TheSummoner = props => {
   );
 
   const minionType = minionData?.minionType || localForm.watch('minionType');
-  const summonData = SUMMON_DATA[minionType];
+  const summonData = MINIONS[minionType];
 
   useEffect(() => {
     if (daoOverview && minionType && !menuState) {

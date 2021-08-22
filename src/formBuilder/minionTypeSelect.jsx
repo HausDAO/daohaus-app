@@ -8,6 +8,7 @@ import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
 import GenericSelect from './genericSelect';
 import Paragraphs from './Paragraphs';
 import Header from './header';
+import TextBox from '../components/TextBox';
 
 const descrip = [
   'Minions are horrible beings you can summon from the earth.',
@@ -18,6 +19,7 @@ const minions = Object.entries(MINION_TYPES).map(([key, value]) => ({
   name: capitalizeWords(value),
   value,
 }));
+
 const MinionTypeSelect = props => {
   const { daochain } = useParams();
   const [minionType, setMinionType] = useState(null);
@@ -43,7 +45,10 @@ const MinionTypeSelect = props => {
 
   return (
     <Flex flexDir='column'>
-      <Header mb={4}>Summon a {currentMinion?.header || 'Minion'}</Header>
+      <Header mb={4}>Summon a {currentMinion?.title || 'Minion'}</Header>
+      <TextBox variant='body' size='sm' mb={2}>
+        {currentMinion.description}
+      </TextBox>
       <GenericSelect
         options={eligableMinions}
         placeholder='Select a minion'

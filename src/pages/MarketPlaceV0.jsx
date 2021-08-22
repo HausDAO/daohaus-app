@@ -19,11 +19,8 @@ import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { generateLists } from '../utils/marketplace';
 import { useFormModal } from '../contexts/OverlayContext';
-import { CORE_FORMS, FORM } from '../data/forms';
-import { PUBLISHERS } from '../data/publishers';
-import { TX } from '../data/contractTX';
+import { CORE_FORMS } from '../data/forms';
 import { useDao } from '../contexts/DaoContext';
-import { MINION_TYPES } from '../utils/proposalUtils';
 
 const dev = process.env.REACT_APP_DEV;
 

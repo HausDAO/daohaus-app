@@ -24,57 +24,67 @@ export const MINION_NETWORKS = {
 
 export const MINION_CONTENT = {
   [MINION_TYPES.VANILLA]: {
-    header: 'Vanilla Minion',
+    title: 'Vanilla Minion',
+    description:
+      'Enable one-time interactions with other smart contracts via DAO proposals',
     info: [
-      "Vanilla minions may be boring, but that doesn't make them any less dangerous",
-      'If left unchecked, these foul, conniving, hive-minded beasts will coordinate to bring the end of times.',
+      'Want a simple way to execute smart contract calls automatically based on the outcome of your proposals? ',
+      'A vanilla minion is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed.',
     ],
     publisher: 'DAOhaus',
     //  MINION_NETWORKS[MINION_TYPES.VANILLA],
   },
   [MINION_TYPES.NIFTY]: {
-    header: 'Nifty Minion',
+    title: 'Nifty Minion',
+    description:
+      'Upgrade on the Vanilla Minion, enabling proposals to be executed early, if a certain quorum is met.',
     info: [
-      'Deep in warped voids of Microsoft Paint Hell, the nifty minion awaits its arrival to enslave the world with weird NFTs',
-      'Travel to the desolate cesspool of xDAI to experience the true terror of insanity.',
+      'Within 1 proposal, you are also able to fund your Minion Vault from your Treasury, saving on transaction fees and execution time.',
+      'This legacy boost is used for the Nifty Ink Boost, but will soon be phased out to the neapolitan minion.',
     ],
     publisher: 'DAOhaus',
     //  MINION_NETWORKS[MINION_TYPES.NIFTY],
   },
   [MINION_TYPES.UBER]: {
-    header: 'Uberhaus Minion',
+    title: 'Uberhaus Minion',
+    description:
+      'Join and participate in UberHaus - the governance for DAOs of DAOs',
     info: [
-      'Uberhaus is legion. Uberhaus is many. Uberhaus is a million-legged beast built from a hive of smaller beasts.',
-      "Uberhaus won't rest until the civilization is overrun with foul, disgusting creatures",
+      'UberHaus is the DAO of DAOs - governing the ecosystem and roadmap of DAOhaus.',
+      'As the gateway to UberHaus governance, the UberHaus Minion enables you to stake your HAUS tokens, manage delegates, withdraw funds and rage-quit from UberHaus.',
     ],
     publisher: 'DAOhaus',
     //  MINION_NETWORKS[MINION_TYPES.UBER],
   },
   [MINION_TYPES.SUPERFLUID]: {
-    header: 'Superfluid Minion',
+    title: 'Superfluid Minion',
+    description: 'Stream Tokens from a minion vault via Superfluid Protocol',
     info: [
-      'Perhaps most insidious is the Superfluid Minion. This creature tempts the hearts of man with mind-numbing convenience',
-      "The Superfluid minion opens a portal to Hell, and allows them to stream riches to anywhere in the world. The cost? Only the summoner's eternal soul.",
+      'This minion is a specialized minion used exclusively for Super Fluid',
+      'The SuperFluid Minion helps automate ongoing streams of payments via the SuperFluid Protocol.',
+      'Set it up once, and your payments will be streamed in real-time.',
     ],
     publisher: 'DAOhaus',
     //  MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
   },
   [MINION_TYPES.NEAPOLITAN]: {
-    header: 'Neapolitan Minion',
+    title: 'Neapolitan Minion',
+    description:
+      'Enable multiple interactions with other smart contracts via DAO proposals',
     info: [
-      'The Neapolitan Minion is anywhere and everywhere. It can morph into anything, then change shape.',
-      "It could be in the room with you right now, and you wouldn't even know. It could even be you.",
+      'The Advanced Minion is an upgrade to the Vanilla Minion, enabling you to do multiple smart contract transactions once a proposal is passed.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimise their proposals velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
     ],
     //  MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
   },
   // [MINION_TYPES.RARIBLE]: {
-  //   header: 'Rarible Minion',
+  //   title: 'Rarible Minion',
   //   info: [],
   //    { '0x1': true, '0x4': true },
   // },
 };
 
-export const SUMMON_DATA = {
+export const MINIONS = {
   [MINION_TYPES.VANILLA]: {
     minionType: MINION_TYPES.VANILLA,
     content: MINION_CONTENT[MINION_TYPES.VANILLA],
@@ -89,8 +99,8 @@ export const SUMMON_DATA = {
   [MINION_TYPES.UBER]: {
     content: MINION_CONTENT[MINION_TYPES.UBER],
     networks: MINION_NETWORKS[MINION_TYPES.UBER],
-    summonForm: null,
     // summonForm: FORM.NEW_UBER_MINION,
+    summonForm: null,
   },
   [MINION_TYPES.SUPERFLUID]: {
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],

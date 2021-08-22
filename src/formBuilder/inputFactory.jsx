@@ -96,5 +96,8 @@ export const InputFactory = props => {
   if (type === 'raribleNftData') {
     return <RaribleNftSelect {...props} />;
   }
+  if (type === 'minionTypeSelect') {
+    return <MinionTypeSelect {...props} />;
+  }
   return null;
 };
