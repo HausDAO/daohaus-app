@@ -1,5 +1,5 @@
-import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Menu,
   MenuList,
@@ -12,31 +12,45 @@ import {
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { useUser } from '../contexts/UserContext';
-import { useDao } from '../contexts/DaoContext';
-import { createPoll } from '../services/pollService';
-import { MolochService } from '../services/molochService';
+import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useTX } from '../contexts/TXContext';
+import { TX } from '../data/contractTX';
+import { CORE_FORMS, FORM } from '../data/forms';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { createContract } from '../utils/contract';
+import { LOCAL_ABI } from '../utils/abi';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
+  const { openFormModal } = useFormModal();
   const { daochain, daoid } = useParams();
-  const { daoOverview } = useDao();
-  const {
-    setGenericModal,
-    errorToast,
-    successToast,
-    setTxInfoModal,
-  } = useOverlay();
-  const { cachePoll, resolvePoll } = useUser();
-  const history = useHistory();
+  const { daoMember } = useDaoMember();
+  const { errorToast } = useOverlay();
+  const { submitTransaction } = useTX();
 
-  const handleGuildkickClick = () => {
-    history.push(
-      `/dao/${daochain}/${daoid}/proposals/new/guildkick?applicant=${member.memberAddress}`,
-    );
+  const [canRageQuit, setCanRageQuit] = useState(false);
+
+  const handleGuildKickClick = () => {
+    openFormModal({
+      lego: {
+        ...FORM.GUILDKICK,
+        localValues: { memberAddress: member.memberAddress },
+      },
+    });
+  };
+
+  const handleRageQuitClick = () => {
+    openFormModal({
+      lego: CORE_FORMS.RAGE_QUIT,
+    });
+  };
+
+  const handleUpdateDelegateClick = () => {
+    openFormModal({
+      lego: CORE_FORMS.UPDATE_DELEGATE,
+    });
   };
 
   const copiedToast = () => {
@@ -56,43 +70,10 @@ const ProfileMenu = ({ member }) => {
   };
 
   const handleRageKick = async () => {
-    const args = [member.memberAddress];
-
-    const onTxHash = () => {
-      setTxInfoModal(true);
-    };
-
     try {
-      const poll = createPoll({ action: 'ragekick', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        memberAddress: member.memberAddress,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not ragekick member: ${error}`);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Member kicked',
-            });
-            resolvePoll(txHash);
-          },
-        },
-      });
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: daoOverview?.version,
-      })('ragekick')({
-        args,
-        address,
-        poll,
-        onTxHash,
+      await submitTransaction({
+        tx: TX.RAGE_KICK,
+        args: [member.memberAddress],
       });
     } catch (err) {
       console.log('error: ', err);
@@ -105,9 +86,29 @@ const ProfileMenu = ({ member }) => {
     member?.memberAddress &&
     address.toLowerCase() === member?.memberAddress.toLowerCase();
 
-  const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
+  const hasSharesOrLoot = +member.shares > 0 || +member.loot > 0;
 
-  console.log('member', member);
+  useEffect(() => {
+    const getCanRageQuit = async () => {
+      if (daoMember?.highestIndexYesVote?.proposalIndex) {
+        const molochContract = createContract({
+          address: daoid,
+          abi: LOCAL_ABI.MOLOCH_V2,
+          chainID: daochain,
+          web3: injectedProvider,
+        });
+
+        const localCanRage = await molochContract.methods
+          .canRagequit(daoMember?.highestIndexYesVote?.proposalIndex)
+          .call();
+
+        setCanRageQuit(localCanRage);
+      } else {
+        setCanRageQuit(true);
+      }
+    };
+    getCanRageQuit();
+  }, [daoMember]);
 
   return (
     <Menu>
@@ -135,25 +136,21 @@ const ProfileMenu = ({ member }) => {
 
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <>
-            {isMember && hasSharesOrloot && (
-              <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
-                RageQuit
-              </MenuItem>
+            {isMember && hasSharesOrLoot && (
+              <MenuItem onClick={handleRageQuitClick}>RageQuit</MenuItem>
             )}
-            {isMember && hasSharesOrloot && (
-              <MenuItem
-                onClick={() => setGenericModal({ updateDelegate: true })}
-              >
+            {isMember && hasSharesOrLoot && canRageQuit && (
+              <MenuItem onClick={handleUpdateDelegateClick}>
                 Add Delegate Key
               </MenuItem>
             )}
             {!isMember &&
               member.exists &&
               !member.jailed &&
-              hasSharesOrloot && (
-                <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
+              hasSharesOrLoot && (
+                <MenuItem onClick={handleGuildKickClick}>GuildKick</MenuItem>
               )}
-            {!isMember && member.jailed && hasSharesOrloot && (
+            {!isMember && member.jailed && hasSharesOrLoot && (
               <MenuItem onClick={handleRageKick}>RageKick</MenuItem>
             )}
           </>

@@ -9,16 +9,18 @@ import {
   Select,
   Image,
   Input,
+  AspectRatio,
 } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
+
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
 
 const NftSelect = props => {
-  const { label, localForm, htmlFor, name } = props;
-  const { register, setValue } = localForm;
+  const { label, localForm, htmlFor, name, localValues } = props;
+  const { register, setValue, watch } = localForm;
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
@@ -26,6 +28,14 @@ const NftSelect = props => {
   const [selected, setSelected] = useState();
   const [collections, setCollections] = useState();
   const [filter, setFilter] = useState();
+
+  const selectedMinion = watch('selectedMinion');
+
+  useEffect(() => {
+    register('tokenId');
+    register('raribleDescription');
+    register('image');
+  }, []);
 
   useEffect(() => {
     if (nfts) {
@@ -63,8 +73,41 @@ const NftSelect = props => {
   }, [filter, nfts]);
 
   useEffect(() => {
-    setValue(name, selected?.tokenAddress);
-  }, [selected]);
+    const setUpNftValues = async () => {
+      setValue(name, selected.contractAddress);
+      setValue('tokenId', selected.tokenId);
+      setValue(
+        'raribleDescription',
+        `Selling ${selected.metadata?.name || selected.name} tokenId ${
+          selected.tokenId
+        }`,
+      );
+      setValue(
+        'image',
+        selected.metadata?.image_url || selected.metadata?.image,
+      );
+    };
+    if (selected && selectedMinion) {
+      setUpNftValues();
+    }
+  }, [selected, selectedMinion]);
+
+  useEffect(() => {
+    if (
+      localValues &&
+      localValues.tokenId &&
+      localValues.contractAddress &&
+      nfts
+    ) {
+      setSelected(
+        nfts.filter(
+          item =>
+            item.tokenId === localValues.tokenId &&
+            item.contractAddess === localValues.contractAddess,
+        )[0],
+      );
+    }
+  }, [localValues, nfts]);
 
   const openModal = () => {
     setGenericModal({ nftSelect: true });
@@ -120,22 +163,31 @@ const NftSelect = props => {
       <Input type='hidden' id={htmlFor} name={name} ref={register} />
       <Box>
         <Text mb={3}>{label}</Text>
-        {selected ? (
-          <Image
-            onClick={openModal}
-            _hover={{
-              opacity: 0.5,
-              cursor: 'pointer',
-            }}
-            src={selected.metadata.image}
-            w='300px'
-            h='300px'
-          />
-        ) : (
-          <Button variant='nftSelect' onClick={openModal}>
-            <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
-          </Button>
-        )}
+        <AspectRatio
+          ratio={1}
+          width='100%'
+          className='aspect-box'
+          sx={{
+            '&>img': {
+              objectFit: 'contain',
+            },
+          }}
+        >
+          {selected ? (
+            <Image
+              onClick={openModal}
+              _hover={{
+                opacity: 0.5,
+                cursor: 'pointer',
+              }}
+              src={selected.metadata.image}
+            />
+          ) : (
+            <Button variant='nftSelect' onClick={openModal}>
+              <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
+            </Button>
+          )}
+        </AspectRatio>
       </Box>
       {selectModal}
     </FieldWrapper>

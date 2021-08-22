@@ -108,6 +108,9 @@ export const getTerm = (customTerms, word) => {
   if (word === 'bank') {
     return customTerms?.bank || 'Bank';
   }
+  // if (word === 'vaults') {
+  //   return customTerms?.bank || 'Vaults';
+  // }
   if (word === 'boost') {
     return customTerms?.boost || 'Boost';
   }
@@ -146,6 +149,9 @@ export const getTerm = (customTerms, word) => {
   }
   if (word === 'minions') {
     return customTerms?.minions || 'Minions';
+  }
+  if (word === 'nft gallery') {
+    return 'NFT Gallery';
   }
   if (word === 'f04subhead') {
     return (
@@ -248,6 +254,24 @@ export const ipfsPost = async (creds, file) => {
         pinata_secret_api_key: creds.pinata_api_secret,
       },
       body: file,
+    });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const ipfsJsonPin = async (creds, obj) => {
+  const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        pinata_api_key: creds.pinata_api_key,
+        pinata_secret_api_key: creds.pinata_api_secret,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj),
     });
     return response.json();
   } catch (err) {

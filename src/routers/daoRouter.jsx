@@ -62,6 +62,7 @@ const DaoRouter = () => {
     daoMember,
     customTerms,
     daoProposals,
+    daoVaults,
   };
 
   return (

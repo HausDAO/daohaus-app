@@ -7,15 +7,20 @@ export const BOOST_PLAYLISTS = {
     id: 'vanMinionClassics',
     forms: ['VAN_MINION_GENERIC', 'PAYROLL'],
   },
-  TEST: {
-    name: 'Test',
-    id: 'test',
-    forms: ['CRASH', 'CAT'],
+  NFT: {
+    name: 'NFT Suite',
+    id: 'nifty minion',
+    forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
+  },
+  DEV_SUITE: {
+    name: 'Dev Suite',
+    id: 'Neapolitan minion',
+    forms: ['MINION_NEAPOLITAN_SIMPLE', 'PAYROLL_NEAPOLITAN'],
   },
   RARIBLE: {
     name: 'Rarible',
     id: 'rarible',
-    forms: ['SELL_NFT'],
+    forms: ['SELL_NFT_RARIBLE'],
   },
   NIFTY_INK: {
     name: 'NiftyInk',

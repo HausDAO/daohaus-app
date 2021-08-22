@@ -196,6 +196,7 @@ export const TXProvider = ({ children }) => {
 
     try {
       const args = getArgs({ ...consolidatedData });
+
       const poll = buildTXPoll({
         ...consolidatedData,
       });
@@ -219,7 +220,7 @@ export const TXProvider = ({ children }) => {
   };
 
   const submitTransaction = data => {
-    // console.log('data', data);
+    console.log('data', data);
 
     const {
       tx: { name },

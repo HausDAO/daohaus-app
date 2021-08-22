@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import deepEqual from 'deep-eql';
 import { useParams } from 'react-router-dom';
-import { Wrap, WrapItem, Flex, Button, Box } from '@chakra-ui/react';
+import { Wrap, WrapItem, Flex, Box } from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
 import NftFilter from '../components/nftFilter';
 // import ListSort from '../components/listSort';
@@ -29,7 +29,11 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
       } else {
         nfts = daoVaults?.reduce((acc, item) => {
           const nftsWithMinionAddress = item.nfts.map(n => {
-            return { ...n, minionAddress: item.address };
+            return {
+              ...n,
+              minionAddress: item.address,
+              minionType: item.minionType,
+            };
           });
           return [...acc, ...nftsWithMinionAddress];
         }, []);
@@ -115,17 +119,17 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
     }
   }, [sort, nfts]);
 
-  const addButton = (
-    <Flex>
-      <Button>ADD NFT +</Button>
-    </Flex>
-  );
+  // const addButton = (
+  //   <Flex>
+  //     <Button>ADD NFT +</Button>
+  //   </Flex>
+  // );
 
   return (
     <MainViewLayout
-      header='Minion Gallery'
+      header='NFT Gallery'
       customTerms={customTerms}
-      headerEl={addButton}
+      // headerEl={addButton}
       isDao
     >
       <Flex d='column'>
@@ -135,7 +139,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
           align='center'
           w='100%'
           mt={[0, null, null, 10]}
-          mb={10}
+          // mb={10}
         >
           <Box
             mr={[0, 5, null, 5]}
@@ -180,6 +184,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
                 <NftCard
                   nft={nft}
                   minion={minion || nft.minionAddress}
+                  minionType={nft.minionType}
                   width={['85vw', '85vw', 350, 350]}
                 />
               </WrapItem>

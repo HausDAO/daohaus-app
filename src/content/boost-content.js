@@ -65,19 +65,19 @@ export const boostList = [
       all: true,
     },
   },
-  {
-    name: 'Proposal Types',
-    key: 'proposalTypes',
-    description:
-      'Customize the proposal types available for members to streamline onboarding or other DAO activities.',
-    price: '0',
-    modalName: 'proposalTypesLaunch',
-    successRoute: 'proposals',
-    settings: true,
-    networks: {
-      all: true,
-    },
-  },
+  // {
+  //   name: 'Proposal Types',
+  //   key: 'proposalTypes',
+  //   description:
+  //     'Customize the proposal types available for members to streamline onboarding or other DAO activities.',
+  //   price: '0',
+  //   modalName: 'proposalTypesLaunch',
+  //   successRoute: 'proposals',
+  //   settings: true,
+  //   networks: {
+  //     all: true,
+  //   },
+  // },
   {
     name: 'MintGate',
     key: 'mintGate',
@@ -91,20 +91,20 @@ export const boostList = [
       all: true,
     },
   },
-  {
-    name: 'Snapshot Proposals',
-    key: 'snapshot',
-    description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
-    price: '0',
-    modalName: 'snapshot',
-    successRoute: '',
-    link: 'snapshot',
-    settings: true,
-    networks: {
-      all: true,
-    },
-  },
+  // {
+  //   name: 'Snapshot Proposals',
+  //   key: 'snapshot',
+  //   description:
+  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
+  //   price: '0',
+  //   modalName: 'snapshot',
+  //   successRoute: '',
+  //   link: 'snapshot',
+  //   settings: true,
+  //   networks: {
+  //     all: true,
+  //   },
+  // },
   {
     name: 'Wrap-N-Zap',
     key: 'wrapNZap',
@@ -198,6 +198,7 @@ export const boostList = [
     networks: {
       '0x64': true,
       '0x89': true,
+      '0x1': true,
     },
   },
 ];
@@ -277,19 +278,19 @@ export const superpowerLinks = [
     label: 'Discourse Forum',
     link: 'settings/discourse',
   },
-  {
-    boostKey: 'proposalTypes',
-    label: 'Proposal Settings',
-    link: 'settings/proposals',
-  },
+  // {
+  //   boostKey: 'proposalTypes',
+  //   label: 'Proposal Settings',
+  //   link: 'settings/proposals',
+  // },
   {
     boostKey: 'minionSafe',
     label: 'Minion Safe',
     link: 'settings/minion-safe',
   },
-  {
-    boostKey: 'snapshot',
-    label: 'Snapshot',
-    modal: 'snapshot',
-  },
+  // {
+  //   boostKey: 'snapshot',
+  //   label: 'Snapshot',
+  //   modal: 'snapshot',
+  // },
 ];

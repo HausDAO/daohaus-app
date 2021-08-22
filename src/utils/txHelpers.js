@@ -80,21 +80,52 @@ const buildJSONdetails = (data, fields) => {
 };
 
 const argBuilderCallback = Object.freeze({
-  proposeAction({ values, hash, formData }) {
+  proposeActionVanilla({ values, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
       collapse(values, '*ABI_ARG*', 'array'),
     );
     const details = detailsToJSON({
       ...values,
-      hash,
+      minionType: formData.minionType,
+    });
+    return [values.targetContract, values.minionValue || '0', hexData, details];
+  },
+  proposeActionNifty({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+    const details = detailsToJSON({
+      ...values,
       minionType: formData.minionType,
     });
     return [
       values.targetContract,
-      values.minionPayment || '0',
+      values.minionValue || '0',
       hexData,
       details,
+      values.paymentToken,
+      values.paymetRequested,
+    ];
+  },
+  proposeActionNeapolitan({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+    const details = detailsToJSON({
+      ...values,
+      minionType: formData.minionType,
+    });
+    return [
+      [values.targetContract],
+      [values.minionValue || '0'],
+      [hexData],
+      values.paymentToken,
+      values.paymetRequested,
+      details,
+      'true',
     ];
   },
 });
@@ -129,6 +160,14 @@ const gatherArgs = data => {
         tx: { ...tx, gatherArgs: arg.gatherArgs },
       });
       return safeEncodeHexFunction(getABIsnippet(arg), args);
+    }
+    if (arg.type === 'nestedArgs') {
+      return arg.gatherArgs.flatMap(a => {
+        return gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: [a] },
+        });
+      });
     }
     //  for convenience, will search the values object for a field with the given string.
     return arg;
@@ -184,6 +223,7 @@ export const Transaction = async data => {
   });
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
+  console.log('contextData', contextData, data);
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
     .on('transactionHash', txHash => {
@@ -307,6 +347,9 @@ export const transactionByProposalType = proposal => {
   }
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return TX.SUPERFLUID_MINION_EXECUTE;
+  }
+  if (proposal.minion.minionType === 'Neapolitan minion') {
+    return TX.MINION_NEAPOLITAN_EXECUTE;
   }
   return TX.MINION_SIMPLE_EXECUTE;
 };

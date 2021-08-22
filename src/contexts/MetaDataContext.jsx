@@ -98,6 +98,7 @@ export const MetaDataProvider = ({ children }) => {
         if (data.customTerms) {
           setCustomTerms(data.customTerms);
         }
+        console.log('setting metadata', data);
         setDaoMetaData(data);
         dispatchPropConfig({ action: 'INIT', payload: data });
         shouldUpdateTheme.current = false;

@@ -58,7 +58,14 @@ const FormBuilder = props => {
       setFields(originalFields);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      setFields([...originalFields, ...inputDataFromABI(abiInputs)]);
+      let updatedFields = [
+        ...originalFields[originalFields.length - 1],
+        ...inputDataFromABI(abiInputs),
+      ];
+      if (originalFields.length > 1) {
+        updatedFields = [originalFields[0], updatedFields];
+      }
+      setFields(updatedFields);
     }
   };
 
@@ -120,27 +127,32 @@ const FormBuilder = props => {
       tx: props.tx,
     });
     //  Checks for custom validation
+
     const customValErrors = handleCustomValidation({
       values: modifiedValues,
       formData: props,
     });
+
     if (customValErrors) {
       updateErrors(customValErrors);
       return;
     }
 
-    const handleSubmitCallback = async then => {
-      try {
-        setLoading(true);
-        const res = await submitCallback({
-          values: modifiedValues,
-          formData: props,
-          onSubmit: props.onSubmit,
-        });
-        return res;
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
+    const handleSubmitCallback = async () => {
+      //  checks if submit is not a contract interaction and is a callback
+      if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+        try {
+          setLoading(true);
+          const res = await submitCallback({
+            values: modifiedValues,
+            formData: props,
+            onSubmit: props.onSubmit,
+          });
+          return res;
+        } catch (error) {
+          console.error(error);
+          setLoading(false);
+        }
       }
     };
     const handleSubmitTX = async () => {
@@ -179,8 +191,6 @@ const FormBuilder = props => {
     // };
 
     if (next && typeof goToNext === 'function') {
-      console.log(`next`, next);
-      console.log(`goToNext`, goToNext);
       return goToNext(next);
 
       // const choice = next[condition];

@@ -3,11 +3,13 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Button, Heading, Link } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { FORM } from '../data/forms';
 import FormBuilder from '../formBuilder/formBuilder';
 
 const NewMinionForm = ({ minionType }) => {
   const { daoOverview, refetch, refreshAllDaoVaults } = useDao();
+  const { refetchMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
   const [step, setStep] = useState(1);
 
@@ -36,9 +38,10 @@ const NewMinionForm = ({ minionType }) => {
   }, [minionType]);
 
   const handleAfterTransaction = async () => {
+    setStep('success');
     await refreshAllDaoVaults();
     refetch();
-    setStep('success');
+    refetchMetaData();
   };
 
   return (
