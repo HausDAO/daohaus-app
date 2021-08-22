@@ -194,39 +194,39 @@ export const BOOSTS = {
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
+    boostContent: CONTENT.NIFTY_INK,
     oldId: 'niftyInk',
-
     categories: ['nft'],
+  },
+  SNAPSHOT: {
+    id: 'SNAPSHOT',
+    oldId: 'snapshot',
+    boostContent: CONTENT.SNAPSHOT,
+    categories: ['ops', 'social'],
   },
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',
+    boostContent: CONTENT.DISCORD,
     categories: ['social'],
   },
   MINT_GATE: {
     id: 'MINT_GATE',
     oldId: 'mintGate',
+    boostContent: CONTENT.MINT_GATE,
     categories: ['nft', 'tools'],
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',
     oldId: 'superfluid',
+    boostContent: CONTENT.SUPERFLUID,
     categories: ['defi', 'token', 'tools'],
   },
-
   DISCOURSE: {
     id: 'DISCOURSE',
     oldId: 'discourse',
+    boostContent: CONTENT.DISCOURSE,
     categories: ['social'],
-  },
-  SWAPR: {
-    id: 'SWAPR',
-    categories: ['token', 'tools'],
-  },
-  BOOSTY_BOOST: {
-    id: 'BOOSTY_BOOST',
-    dev: true,
-    categories: ['dev'],
   },
 };
 

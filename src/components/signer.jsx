@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Divider, Flex, Link, Spinner, Button } from '@chakra-ui/react';
+import { Divider, Flex, Link, Spinner, Button, Box } from '@chakra-ui/react';
 import { BsCheckCircle } from 'react-icons/bs';
 
 import { useParams } from 'react-router';
@@ -58,15 +58,15 @@ const Signer = props => {
       {playlist?.forms.map(formID => {
         const form = FORM[formID];
         return (
-          <>
-            <Flex key={formID} mb={4} flexDir='column'>
+          <Box key={formID}>
+            <Flex mb={4} flexDir='column'>
               <TextBox mb={2}>{form.title}</TextBox>
               <TextBox variant='body' size='sm'>
                 {form.description}
               </TextBox>
             </Flex>
             <Divider mb={2} />
-          </>
+          </Box>
         );
       })}
       {state === 'signing' && (

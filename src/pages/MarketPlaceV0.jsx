@@ -282,6 +282,33 @@ const InstalledList = ({ listID, lists }) => {
     });
   };
 
+  const renderMinions = () =>
+    currentList?.types?.map(minion => (
+      <ListItem
+        {...minion}
+        key={minion.id}
+        menuSection={
+          <Button variant='ghost'>
+            <TextBox>Settings</TextBox>
+          </Button>
+        }
+      />
+    ));
+
+  const renderBoosts = () =>
+    currentList?.types?.map(boost => (
+      <ListItem
+        title={boost.boostContent.title}
+        description={boost.boostContent.description}
+        key={boost.id}
+        menuSection={
+          <Button variant='ghost'>
+            <TextBox>Details</TextBox>
+          </Button>
+        }
+      />
+    ));
+
   return (
     <List
       headerSection={
@@ -298,25 +325,7 @@ const InstalledList = ({ listID, lists }) => {
           )}
         </Flex>
       }
-      list={currentList?.types?.map(boost => {
-        return (
-          <ListItem
-            {...boost}
-            key={boost.id}
-            menuSection={
-              listID === 'minion' ? (
-                <Button variant='ghost'>
-                  <TextBox>Minion Page</TextBox>
-                </Button>
-              ) : (
-                <Button variant='ghost'>
-                  <TextBox>Details</TextBox>
-                </Button>
-              )
-            }
-          />
-        );
-      })}
+      list={listID === 'minion' ? renderMinions() : renderBoosts()}
     />
   );
 };

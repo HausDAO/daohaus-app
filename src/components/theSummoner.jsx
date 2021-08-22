@@ -118,8 +118,8 @@ const TheSummoner = props => {
           </Flex>
 
           {existingMinions?.map(minion => (
-            <>
-              <Flex key={minion.minionAddress} mb={2}>
+            <Box key={minion.minionAddress}>
+              <Flex mb={2}>
                 <TextBox variant='body' w='40%' mr={2}>
                   {minion.details}
                   <Link
@@ -137,7 +137,7 @@ const TheSummoner = props => {
                 <TextBox variant='body'>{minion.minionType}</TextBox>
               </Flex>
               <Divider mb={2} />
-            </>
+            </Box>
           ))}
         </Flex>
         <Button
