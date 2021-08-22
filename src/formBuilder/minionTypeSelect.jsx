@@ -10,10 +10,14 @@ import Paragraphs from './Paragraphs';
 import Header from './header';
 import TextBox from '../components/TextBox';
 
-const descrip = [
-  'Minions are horrible beings you can summon from the earth.',
-  'You can use them sew destruction and peril across the land. Make them do your bidding, bring the world to its knees, etc...',
-];
+const noneSelected = {
+  title: 'Minion',
+  description: 'Choose and summon a minion for your DAO',
+  info: [
+    'Minions are smart contracts that allow your DAO to interact with other smart contracts.',
+    'Some minions are generic, meaning that they can be used for many boosts (add-ons), while others are specialized to work within a single protocol.',
+  ],
+};
 const minions = Object.entries(MINION_TYPES).map(([key, value]) => ({
   id: key,
   name: capitalizeWords(value),
@@ -45,9 +49,11 @@ const MinionTypeSelect = props => {
 
   return (
     <Flex flexDir='column'>
-      <Header mb={4}>Summon a {currentMinion?.title || 'Minion'}</Header>
-      <TextBox variant='body' size='sm' mb={2}>
-        {currentMinion.description}
+      <Header mb={4}>
+        Summon a {currentMinion?.title || noneSelected.title}
+      </Header>
+      <TextBox variant='body' size='sm' mb={4}>
+        {currentMinion?.description || noneSelected.description}
       </TextBox>
       <GenericSelect
         options={eligableMinions}
@@ -56,7 +62,7 @@ const MinionTypeSelect = props => {
         mb={6}
         {...props}
       />
-      <Paragraphs pars={currentMinion?.info || descrip} />
+      <Paragraphs pars={currentMinion?.info || noneSelected.info} />
     </Flex>
   );
 };

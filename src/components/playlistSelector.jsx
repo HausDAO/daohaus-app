@@ -34,7 +34,7 @@ const PlaylistSelector = ({
       }
       topListItem={
         <>
-          {devList && (
+          {devList?.forms?.length > 0 && (
             <ListSelectorItem
               lists={allForms?.forms}
               id='dev'

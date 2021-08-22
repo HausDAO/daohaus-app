@@ -17,11 +17,11 @@ export const BOOST_PLAYLISTS = {
     id: 'Neapolitan minion',
     forms: ['MINION_NEAPOLITAN_SIMPLE', 'PAYROLL_NEAPOLITAN'],
   },
-  RARIBLE: {
-    name: 'Rarible',
-    id: 'rarible',
-    forms: ['SELL_NFT_RARIBLE'],
-  },
+  // RARIBLE: {
+  //   name: 'Rarible',
+  //   id: 'rarible',
+  //   forms: ['SELL_NFT_RARIBLE'],
+  // },
   NIFTY_INK: {
     name: 'NiftyInk',
     id: 'nifty minion',
@@ -113,7 +113,7 @@ export const createPlaylist = ({
   forms,
 });
 export const devList = createPlaylist({
-  name: 'Rage Mode',
+  name: 'DEV Test List',
   id: 'dev',
   forms: Object.values(FORM).reduce((arr, form) => {
     if (form.dev) {

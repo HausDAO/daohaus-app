@@ -26,7 +26,9 @@ const ProposalTypes = () => {
   const { openConfirmation } = useConfirmation();
 
   const { playlists, allForms = {}, customData, devList } = daoProposals || {};
-  const [selectedListID, setListID] = useState(dev ? 'dev' : 'all');
+  const [selectedListID, setListID] = useState(
+    dev && devList?.forms?.length ? 'dev' : 'all',
+  );
   const [loading, setLoading] = useState(false);
   // console.log(daoProposals);
   const selectList = id => {

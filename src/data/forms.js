@@ -2,11 +2,6 @@ import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { TX } from './contractTX';
 
-const testPars = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
-  'Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.',
-];
-
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
     id: 'EDIT_PLAYLIST',

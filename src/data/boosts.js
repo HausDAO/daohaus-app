@@ -126,7 +126,7 @@ export const CONTENT = {
     ],
   },
   UBERHAUS: {
-    title: 'Uberhaus Boost',
+    title: 'Uberhaus',
     description:
       'Join and participate in UberHaus - the governance for DAOs of DAOs',
     publisher: PUBLISHERS.DAOHAUS,
@@ -205,18 +205,17 @@ export const BOOSTS = {
     networks: MINIONS[MINION_TYPES.NIFTY].networks,
     playlist: BOOST_PLAYLISTS.NIFTY_INK,
   },
-  SUPERFLUID: {
-    id: 'SUPERFLUID',
-    oldId: 'superfluid',
+  UBERHAUS: {
+    id: 'UBERHAUS',
     boostContent: CONTENT.UBERHAUS,
-    minionData: MINIONS[MINION_TYPES.UBERHAUS],
+    minionData: MINIONS[MINION_TYPES.UBER],
     categories: ['social', 'advanced'],
     steps: STEPS.MINION_BOOST,
-    networks: MINIONS[MINION_TYPES.UBERHAUS].networks,
+    networks: MINIONS[MINION_TYPES.UBER].networks,
+    playlist: BOOST_PLAYLISTS.UBERHAUS,
   },
-  UBERHAUS: {
+  SUPERFLUID: {
     id: 'SUPERFLUID',
-    oldId: 'superfluid',
     boostContent: CONTENT.SUPERFLUID,
     minionData: MINIONS[MINION_TYPES.SUPERFLUID],
     categories: ['token', 'tools'],
@@ -231,12 +230,12 @@ export const BOOSTS = {
     categories: ['ops', 'social'],
     networks: 'all',
   },
-  RARIBLE: {
-    name: 'Rarible',
-    id: 'rarible',
-    categories: ['nft'],
-    playlist: BOOST_PLAYLISTS.RARIBLE,
-  },
+  // RARIBLE: {
+  //   name: 'Rarible',
+  //   id: 'rarible',
+  //   categories: ['nft'],
+  //   playlist: BOOST_PLAYLISTS.RARIBLE,
+  // },
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',

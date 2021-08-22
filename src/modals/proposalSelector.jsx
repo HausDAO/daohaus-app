@@ -133,7 +133,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
           </option>
         ))}
       </Select>
-      {isMember && false && (
+      {isMember && (
         <RouterLink
           to={`/dao/${daochain}/${daoid}/settings/proposals`}
           onClick={handleClose}

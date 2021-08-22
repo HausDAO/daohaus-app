@@ -25,8 +25,7 @@ export const MINION_NETWORKS = {
 export const MINION_CONTENT = {
   [MINION_TYPES.VANILLA]: {
     title: 'Vanilla Minion',
-    description:
-      'Enable one-time interactions with other smart contracts via DAO proposals',
+    description: 'Enable one-time interactions with other smart contracts.',
     info: [
       'Want a simple way to execute smart contract calls automatically based on the outcome of your proposals? ',
       'A vanilla minion is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed.',
@@ -36,8 +35,7 @@ export const MINION_CONTENT = {
   },
   [MINION_TYPES.NIFTY]: {
     title: 'Nifty Minion',
-    description:
-      'Upgrade on the Vanilla Minion, enabling proposals to be executed early, if a certain quorum is met.',
+    description: 'For Nifty Ink. Enables Quorum.',
     info: [
       'Within 1 proposal, you are also able to fund your Minion Vault from your Treasury, saving on transaction fees and execution time.',
       'This legacy boost is used for the Nifty Ink Boost, but will soon be phased out to the neapolitan minion.',
@@ -47,8 +45,7 @@ export const MINION_CONTENT = {
   },
   [MINION_TYPES.UBER]: {
     title: 'Uberhaus Minion',
-    description:
-      'Join and participate in UberHaus - the governance for DAOs of DAOs',
+    description: 'Join and participate in UberHaus - the DAOs of DAOs',
     info: [
       'UberHaus is the DAO of DAOs - governing the ecosystem and roadmap of DAOhaus.',
       'As the gateway to UberHaus governance, the UberHaus Minion enables you to stake your HAUS tokens, manage delegates, withdraw funds and rage-quit from UberHaus.',
@@ -92,27 +89,28 @@ export const MINIONS = {
     summonForm: FORM.NEW_VANILLA_MINION,
   },
   [MINION_TYPES.NIFTY]: {
+    minionType: MINION_TYPES.NIFTY,
     content: MINION_CONTENT[MINION_TYPES.NIFTY],
     networks: MINION_NETWORKS[MINION_TYPES.NIFTY],
     summonForm: FORM.NEW_NIFTY_MINION,
   },
   [MINION_TYPES.UBER]: {
+    minionType: MINION_TYPES.UBER,
     content: MINION_CONTENT[MINION_TYPES.UBER],
     networks: MINION_NETWORKS[MINION_TYPES.UBER],
-    // summonForm: FORM.NEW_UBER_MINION,
     summonForm: null,
   },
   [MINION_TYPES.SUPERFLUID]: {
+    minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
     networks: MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
     summonForm: null,
-    // summonForm: FORM.NEW_NIFTY_MINION,
   },
   [MINION_TYPES.NEAPOLITAN]: {
+    minionType: MINION_TYPES.NEAPOLITAN,
     content: MINION_CONTENT[MINION_TYPES.NEAPOLITAN],
     networks: MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
     summonForm: FORM.NEW_NEAPOLITAN_MINION,
-    // summonForm: FORM.NEW_NIFTY_MINION,
   },
   // [MINION_TYPES.RARIBLE]: {
   //   content: MINION_CONTENT[MINION_TYPES.VANILLA],

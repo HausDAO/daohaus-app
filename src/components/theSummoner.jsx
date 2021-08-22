@@ -13,8 +13,6 @@ import Header from '../formBuilder/header';
 import TextBox from './TextBox';
 
 import { MINIONS } from '../data/minions';
-import { useCustomTheme } from '../contexts/CustomThemeContext';
-import { capitalizeWords } from '../utils/general';
 import ProgressIndicator from './progressIndicator';
 
 const minionFromDaoOverview = ({ searchBy, daoOverview, searchParam }) => {
