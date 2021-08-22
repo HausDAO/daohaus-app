@@ -51,6 +51,7 @@ const ProposalSelector = () => {
   const selectProposal = id => {
     if (!currentPlaylist) return;
     const selectedForm = FORM[id];
+
     handleClose();
     openFormModal({ lego: selectedForm });
   };

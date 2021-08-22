@@ -96,7 +96,7 @@ const TheSummoner = props => {
     beforeTx() {
       setMenuState('summoning');
     },
-    afterTx() {
+    onPollSuccess() {
       setMenuState('summoned');
     },
     onCatch() {
