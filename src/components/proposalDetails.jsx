@@ -235,7 +235,7 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         tooltip
         tooltipText={TIP_LABELS.UBER_PROPOSAL}
         link={UBER_LINK}
-        shouldFetchProfile={false}
+        shouldFetchProfile={true}
         name={minionName}
       />
     );
