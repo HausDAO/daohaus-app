@@ -132,6 +132,7 @@ const ProposalList = ({
                     )}
                   </Flex>
                 }
+                helperText={hasBeenEdited && 'edited'}
               />
             );
           })

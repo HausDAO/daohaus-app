@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Flex, Spinner, Input, InputGroup, Button } from '@chakra-ui/react';
+import { Flex, Spinner, Button } from '@chakra-ui/react';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useFormModal } from '../contexts/OverlayContext';
@@ -7,13 +7,13 @@ import { useDao } from '../contexts/DaoContext';
 import ListSelectorItem from '../components/ListSelectorItem';
 import TextBox from '../components/TextBox';
 import List from '../components/list';
+import NoListItem from '../components/NoListItem';
 import ListSelector from '../components/ListSelector';
 import ListItem from '../components/listItem';
 
 import { isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
 import { CORE_FORMS } from '../data/forms';
-import NoListItem from '../components/NoListItem';
 
 const dev = process.env.REACT_APP_DEV;
 

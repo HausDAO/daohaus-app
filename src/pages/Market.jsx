@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
-import { isRequiredInputField } from 'graphql';
+import { useParams } from 'react-router';
 import { useFormModal } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import ListSelectorItem from '../components/ListSelectorItem';
@@ -21,10 +21,11 @@ import List from '../components/list';
 import ListSelector from '../components/ListSelector';
 import ListItem from '../components/listItem';
 import TextBox from '../components/TextBox';
+import NoListItem from '../components/NoListItem';
 
 import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
-import NoListItem from '../components/NoListItem';
+import { validate } from '../utils/validation';
 
 const handleSearch = (boostsArr, str) => {
   if (!str) return boostsArr;
@@ -35,10 +36,22 @@ const handleSearch = (boostsArr, str) => {
 };
 const generateNoListMsg = (selectedListID, searchStr) => {
   if (selectedListID && !searchStr) return 'No Proposals Added';
-  if (selectedListID && !!searchStr)
+  if (selectedListID && searchStr)
     return `Could not find proposal with title ${searchStr}`;
   if (!selectedListID) return 'Select a Playlist';
   return 'Not Found';
+};
+const getActionText = (boost, isAvailable, installed) => {
+  if (!boost) return 'Not Found';
+  if (!isAvailable) return 'Details';
+  if (!installed) return 'Install';
+  return 'Settings';
+};
+const getHelperText = (boost, isAvailable, price, installed) => {
+  if (!boost) return;
+  if (!isAvailable) return 'Details';
+  if (!installed) return 'Install';
+  return 'Settings';
 };
 
 const Market = () => {
@@ -56,7 +69,7 @@ const Market = () => {
     }
   };
 
-  const openDetails = boost => openFormModal({ boost });
+  const installBoost = boost => openFormModal({ boost });
 
   return (
     <Flex flexDir='column' w='95%'>
@@ -70,7 +83,7 @@ const Market = () => {
           <BoostsList
             categoryID={categoryID}
             allBoosts={allBoosts}
-            openDetails={openDetails}
+            installBoost={installBoost}
           />
         </Flex>
       ) : (
@@ -110,8 +123,9 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   );
 };
 
-const BoostsList = ({ categoryID, openDetails }) => {
+const BoostsList = ({ categoryID, installBoost, details }) => {
   const [searchStr, setSearchStr] = useState(null);
+  const { daochain } = useParams();
 
   const currentCategory = useMemo(() => {
     if (categoryID && categories) {
@@ -145,7 +159,7 @@ const BoostsList = ({ categoryID, openDetails }) => {
               _hover={{ color: 'secondary.400' }}
               display='inline-block'
             >
-              Filter
+              Available
               <Icon as={RiArrowDropDownFill} color='secondary.500' />
             </MenuButton>
             <MenuList>
@@ -158,15 +172,18 @@ const BoostsList = ({ categoryID, openDetails }) => {
         currentCategory?.length > 0 ? (
           currentCategory.map(boostID => {
             const boost = BOOSTS[boostID];
-            const handleSteps = () => openDetails(boost);
+            const handleInstall = () => installBoost(boost);
+            const isAvailable =
+              boost.networks === 'all' ||
+              validate.address(boost.networks[daochain]);
             return (
               <ListItem
                 key={boostID}
                 title={boost?.boostContent?.title}
                 description={boost?.boostContent?.description}
                 menuSection={
-                  <Button variant='ghost' p={0} onClick={handleSteps}>
-                    <TextBox>Details</TextBox>
+                  <Button variant='ghost' p={0} onClick={handleInstall}>
+                    <TextBox>{getActionText(boost, isAvailable)}</TextBox>
                   </Button>
                 }
               />

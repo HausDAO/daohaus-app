@@ -242,6 +242,7 @@ export const BOOSTS = {
     steps: STEPS.ADD_SNAPSHOT,
     boostContent: CONTENT.DISCORD,
     categories: ['social'],
+    networks: 'all',
   },
   MINT_GATE: {
     id: 'MINT_GATE',
@@ -249,6 +250,7 @@ export const BOOSTS = {
     steps: STEPS.ADD_MINTGATE,
     boostContent: CONTENT.MINT_GATE,
     categories: ['nft', 'tools'],
+    networks: 'all',
   },
   DISCOURSE: {
     id: 'DISCOURSE',
@@ -256,6 +258,7 @@ export const BOOSTS = {
     steps: STEPS.DISCOURSE,
     boostContent: CONTENT.DISCOURSE,
     categories: ['social'],
+    networks: 'all',
   },
 };
 
