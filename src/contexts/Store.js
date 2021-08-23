@@ -121,28 +121,28 @@ const Store = ({ children, daoParam }) => {
     initCurrentUser();
   }, [currentUser, setDaoService, daoParam, web3Connect]);
 
-  useEffect(() => {
-    const fetchBoosts = async () => {
-      const boostRes = await get(`boosts/${daoParam}`);
+  // useEffect(() => {
+  //   const fetchBoosts = async () => {
+  //     const boostRes = await get(`boosts/${daoParam}`);
 
-      setBoosts(
-        boostRes.data.reduce((boosts, boostData) => {
-          const metadata = boostData.boostMetadata
-            ? JSON.parse(boostData.boostMetadata)
-            : null;
-          boosts[boostData.boostKey] = {
-            active: boostData.active,
-            metadata,
-          };
-          return boosts;
-        }, {}),
-      );
-    };
+  //     setBoosts(
+  //       boostRes.data.reduce((boosts, boostData) => {
+  //         const metadata = boostData.boostMetadata
+  //           ? JSON.parse(boostData.boostMetadata)
+  //           : null;
+  //         boosts[boostData.boostKey] = {
+  //           active: boostData.active,
+  //           metadata,
+  //         };
+  //         return boosts;
+  //       }, {}),
+  //     );
+  //   };
 
-    if (daoParam) {
-      fetchBoosts();
-    }
-  }, [daoParam]);
+  //   if (daoParam) {
+  //     // fetchBoosts();
+  //   }
+  // }, [daoParam]);
 
   // global polling service
   useEffect(() => {

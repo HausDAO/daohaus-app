@@ -14,7 +14,6 @@ export const GET_MOLOCH = gql`
     moloch(id: $contractAddr) {
       meta @client
       id
-      title
       summoner
       summoningTime
       newContract
