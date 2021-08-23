@@ -118,7 +118,9 @@ const MinionExecute = ({
   const getMinionAction = () => {
     if (hasRaribleAction) return <RaribleSellOrder proposal={proposal} />;
 
-    if (minionDetails?.executed) return <Box>Executed</Box>;
+    if (proposal.executed || minionDetails?.executed) {
+      return <Box>Executed</Box>;
+    }
 
     if (needsHausApproval) {
       return (

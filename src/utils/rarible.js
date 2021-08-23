@@ -172,3 +172,7 @@ export const compareSellOrder = (ipfsData, orderRes) => {
     return deepEqual(propOrderData, raribleOrderData)
   })
 }
+
+export const buildRaribleUrl = (orderData, daochain) => {
+  return `${supportedChains[daochain].rarible.base_url}/token/${orderData.make.assetType.contract}:${orderData.make.assetType.tokenId}`
+}

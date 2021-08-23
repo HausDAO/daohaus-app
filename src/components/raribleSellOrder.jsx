@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@chakra-ui/react';
+import { Box, Button, Flex, Link } from '@chakra-ui/react';
 import { useParams } from 'react-router';
+
 import {
+  buildRaribleUrl,
   compareSellOrder,
   createOrder,
   getOrderByItem,
@@ -11,6 +13,7 @@ import {
 const RaribleSellOrder = ({ proposal }) => {
   const { daochain } = useParams();
   const [needSellOrder, setNeedSellOrder] = useState(false);
+  const [orderUrl, setOrderUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -23,6 +26,7 @@ const RaribleSellOrder = ({ proposal }) => {
         daochain,
       );
 
+      setOrderUrl(buildRaribleUrl(orderData, daochain));
       setNeedSellOrder(!compareSellOrder(orderData, orderRes.orders));
     };
 
@@ -40,7 +44,16 @@ const RaribleSellOrder = ({ proposal }) => {
     setLoading(false);
   };
 
-  if (!needSellOrder) return null;
+  if (!needSellOrder) {
+    return (
+      <Flex direction='column' alignItems='center'>
+        <Box>Executed</Box>
+        <Link href={orderUrl} isExternal>
+          View order on Rarible
+        </Link>
+      </Flex>
+    );
+  }
 
   return (
     <Button disabled={loading} onClick={makeSellOrder}>
