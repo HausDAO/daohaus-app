@@ -5,7 +5,7 @@ export const BOOST_PLAYLISTS = {
   OLD_DEV_SUITE: {
     name: 'Vanilla Minion Classics',
     id: 'vanMinionClassics',
-    forms: ['VAN_MINION_GENERIC', 'PAYROLL'],
+    forms: ['MINION', 'PAYROLL'],
   },
   NFT: {
     name: 'NFT Suite',

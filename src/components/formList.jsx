@@ -23,6 +23,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { areAnyFields } from '../utils/general';
 import List from './list';
 import ListItem from './listItem';
+import NoListItem from './NoListItem';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
@@ -30,6 +31,14 @@ const handleSearch = (formsArr, str) => {
   return formsArr.filter(formId =>
     FORM[formId].title.toLowerCase().includes(str),
   );
+};
+
+const generateNoListMsg = (selectedListID, searchStr) => {
+  if (selectedListID && !searchStr) return 'No Proposals Added';
+  if (selectedListID && !!searchStr)
+    return `Could not find proposal with title ${searchStr}`;
+  if (!selectedListID) return 'Select a Playlist';
+  return 'Not Found';
 };
 
 const ProposalList = ({
@@ -80,6 +89,7 @@ const ProposalList = ({
     openFormModal({
       lego: form,
     });
+
   return (
     <List
       headerSection={
@@ -92,37 +102,45 @@ const ProposalList = ({
           </InputGroup>
         </>
       }
-      list={proposalList?.map(proposalID => {
-        const customFormData = customData?.[proposalID];
-        const hasBeenEdited =
-          customFormData && areAnyFields('truthy', customFormData);
-        const form = FORM?.[proposalID];
+      list={
+        proposalList?.length > 0 ? (
+          proposalList.map(proposalID => {
+            const customFormData = customData?.[proposalID];
+            const hasBeenEdited =
+              customFormData && areAnyFields('truthy', customFormData);
+            const form = FORM?.[proposalID];
 
-        return (
-          <ListItem
-            {...form}
-            customFormData={customFormData}
-            hasBeenEdited={hasBeenEdited}
-            key={proposalID}
-            menuSection={
-              <Flex flexDir='column' justifyContent='space-between'>
-                {form?.dev ? (
-                  <DevMenu form={form} handlePreview={handlePreview} />
-                ) : (
-                  <ProposalMenuList
-                    formId={proposalID}
-                    playlists={playlists}
-                    hasBeenEdited={hasBeenEdited}
-                    handleTogglePlaylist={handleTogglePlaylist}
-                    handleEditProposal={handleEditProposal}
-                    handleRestoreProposal={handleRestoreProposal}
-                  />
-                )}
-              </Flex>
-            }
-          />
-        );
-      })}
+            return (
+              <ListItem
+                {...form}
+                customFormData={customFormData}
+                hasBeenEdited={hasBeenEdited}
+                key={proposalID}
+                menuSection={
+                  <Flex flexDir='column' justifyContent='space-between'>
+                    {form?.dev ? (
+                      <DevMenu form={form} handlePreview={handlePreview} />
+                    ) : (
+                      <ProposalMenuList
+                        formId={proposalID}
+                        playlists={playlists}
+                        hasBeenEdited={hasBeenEdited}
+                        handleTogglePlaylist={handleTogglePlaylist}
+                        handleEditProposal={handleEditProposal}
+                        handleRestoreProposal={handleRestoreProposal}
+                      />
+                    )}
+                  </Flex>
+                }
+              />
+            );
+          })
+        ) : (
+          <NoListItem>
+            <TextBox>{generateNoListMsg(selectedListID, searchStr)}</TextBox>
+          </NoListItem>
+        )
+      }
     />
   );
 };

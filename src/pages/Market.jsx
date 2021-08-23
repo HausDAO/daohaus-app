@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
+import { isRequiredInputField } from 'graphql';
 import { useFormModal } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import ListSelectorItem from '../components/ListSelectorItem';
@@ -23,6 +24,22 @@ import TextBox from '../components/TextBox';
 
 import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
+import NoListItem from '../components/NoListItem';
+
+const handleSearch = (boostsArr, str) => {
+  if (!str) return boostsArr;
+  if (!boostsArr?.length) return [];
+  return boostsArr.filter(boostID =>
+    BOOSTS[boostID].boostContent.title.toLowerCase().includes(str),
+  );
+};
+const generateNoListMsg = (selectedListID, searchStr) => {
+  if (selectedListID && !searchStr) return 'No Proposals Added';
+  if (selectedListID && !!searchStr)
+    return `Could not find proposal with title ${searchStr}`;
+  if (!selectedListID) return 'Select a Playlist';
+  return 'Not Found';
+};
 
 const Market = () => {
   const { daoBoosts = {} } = useMetaData();
@@ -94,21 +111,29 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
 };
 
 const BoostsList = ({ categoryID, openDetails }) => {
+  const [searchStr, setSearchStr] = useState(null);
+
   const currentCategory = useMemo(() => {
     if (categoryID && categories) {
       if (categoryID === 'all') {
-        return allBoosts;
+        return handleSearch(allBoosts.boosts, searchStr);
       }
-      return categories.find(cat => cat.id === categoryID);
+      return handleSearch(
+        categories.find(cat => cat.id === categoryID)?.boosts,
+        searchStr,
+      );
     }
-  }, [categoryID, categories]);
+  }, [categoryID, categories, searchStr]);
+
+  const handleTypeSearch = e =>
+    setSearchStr(e.target.value.toLowerCase().trim());
 
   return (
     <List
       headerSection={
         <>
           <InputGroup w='250px' mr={6}>
-            <Input placeholder='Search Boosts' />
+            <Input placeholder='Search Boosts' onChange={handleTypeSearch} />
           </InputGroup>
           <TextBox p={2}>Sort By:</TextBox>
           <Menu isLazy>
@@ -129,22 +154,30 @@ const BoostsList = ({ categoryID, openDetails }) => {
           </Menu>
         </>
       }
-      list={currentCategory?.boosts?.map(boostID => {
-        const boost = BOOSTS[boostID];
-        const handleSteps = () => openDetails(boost);
-        return (
-          <ListItem
-            key={boostID}
-            title={boost?.boostContent?.title}
-            description={boost?.boostContent?.description}
-            menuSection={
-              <Button variant='ghost' p={0} onClick={handleSteps}>
-                <TextBox>Details</TextBox>
-              </Button>
-            }
-          />
-        );
-      })}
+      list={
+        currentCategory?.length > 0 ? (
+          currentCategory.map(boostID => {
+            const boost = BOOSTS[boostID];
+            const handleSteps = () => openDetails(boost);
+            return (
+              <ListItem
+                key={boostID}
+                title={boost?.boostContent?.title}
+                description={boost?.boostContent?.description}
+                menuSection={
+                  <Button variant='ghost' p={0} onClick={handleSteps}>
+                    <TextBox>Details</TextBox>
+                  </Button>
+                }
+              />
+            );
+          })
+        ) : (
+          <NoListItem>
+            <TextBox>{generateNoListMsg(categoryID, searchStr)}</TextBox>
+          </NoListItem>
+        )
+      }
     />
   );
 };

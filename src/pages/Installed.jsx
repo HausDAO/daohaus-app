@@ -13,6 +13,7 @@ import ListItem from '../components/listItem';
 import { isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
 import { CORE_FORMS } from '../data/forms';
+import NoListItem from '../components/NoListItem';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -82,21 +83,38 @@ const InstalledList = ({ listID, lists }) => {
     });
   };
 
-  const renderMinions = () =>
-    currentList?.types?.map(minion => (
-      <ListItem
-        {...minion}
-        key={minion.id}
-        menuSection={
-          <Button variant='ghost'>
-            <TextBox>Settings</TextBox>
-          </Button>
-        }
-      />
-    ));
+  const renderMinions = () => {
+    if (!currentList?.types?.length) {
+      return (
+        <NoListItem>
+          <TextBox>No Minions Installed</TextBox>
+        </NoListItem>
+      );
+    }
+    currentList?.types?.map(minion => {
+      return (
+        <ListItem
+          {...minion}
+          key={minion.id}
+          menuSection={
+            <Button variant='ghost'>
+              <TextBox>Settings</TextBox>
+            </Button>
+          }
+        />
+      );
+    });
+  };
 
-  const renderBoosts = () =>
-    currentList?.types?.map(boost => (
+  const renderBoosts = () => {
+    if (!currentList?.types?.length) {
+      return (
+        <NoListItem>
+          <TextBox>No Boosts Installed</TextBox>
+        </NoListItem>
+      );
+    }
+    return currentList?.types?.map(boost => (
       <ListItem
         title={boost.boostContent.title}
         description={boost.boostContent.description}
@@ -108,21 +126,20 @@ const InstalledList = ({ listID, lists }) => {
         }
       />
     ));
+  };
 
   return (
     <List
       headerSection={
-        <Flex w='100%' justifyContent='space-between'>
-          <InputGroup w='250px' mr={6}>
+        <Flex w='100%' justifyContent='flex-end'>
+          {/* <InputGroup w='250px' mr={6}>
             <Input
               placeholder={`Search ${currentList?.name || 'Installed'}...`}
             />
-          </InputGroup>
-          {listID === 'minion' && (
-            <Button variant='outline' onClick={handleClick}>
-              Summon Minion
-            </Button>
-          )}
+          </InputGroup> */}
+          <Button variant='outline' onClick={handleClick}>
+            Summon Minion
+          </Button>
         </Flex>
       }
       list={listID === 'minion' ? renderMinions() : renderBoosts()}

@@ -258,7 +258,7 @@ export const FORM = {
     required: ['title'], // Use name key from proposal type object
     fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
-  VAN_MINION_GENERIC: {
+  MINION: {
     id: 'VAN_MINION_GENERIC',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
