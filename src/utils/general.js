@@ -102,6 +102,10 @@ export const detailsToJSON = values => {
   if (values.minionType) {
     details.minionType = values.minionType;
   }
+  if (values.fundsRequested) {
+    details.fundsRequested = values.fundsRequested;
+    details.token = values.token;
+  }
   return JSON.stringify(details);
 };
 

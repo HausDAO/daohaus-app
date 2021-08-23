@@ -330,10 +330,10 @@ export const FORM = {
     description: 'Request funds as buyout',
     type: PROPOSAL_TYPES.MINION_BUYOUT,
     minionType: MINION_TYPES.NEAPOLITAN,
-    tx: TX.SELL_NFT_RARIBLE,
-    required: ['title', 'buyoutPaymentInput'],
+    tx: TX.SET_BUYOUT_NFT,
+    required: ['selectedMinion', 'title', 'paymentRequested'],
     fields: [
-      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [FIELD.BUYOUT_PAYMENT_REQUEST],
     ],
   },

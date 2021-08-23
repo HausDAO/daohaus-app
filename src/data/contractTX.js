@@ -126,7 +126,12 @@ export const CONTRACTS = {
   DAO_CONDITIONAL_HELPER: {
     location: 'local',
     abiName: 'DAO_CONDITIONAL_HELPER',
-    contractAddress: '.localValues.helperAddress',
+    contractAddress: '.contextData.chainConfig.dao_conditional_helper_addr',
+  },
+  PAYMENT_ERC_20: {
+    location: 'local',
+    abiName: 'ERC_20',
+    contractAddress: 'values.paymentToken',
   },
 };
 
@@ -204,6 +209,15 @@ export const DETAILS = {
     minionType: MINION_TYPES.NEAPOLITAN,
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
+  },
+  SET_BUYOUT_NFT: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.NEAPOLITAN,
+    fundsRequested: 'values.paymentRequested',
+    token: 'values.paymentToken',
   },
 };
 
@@ -962,14 +976,19 @@ export const TX = {
   },
   SET_BUYOUT_NFT: {
     contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
-    name: 'buyout',
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
     display: 'Submitting Buyout Proposal',
     errMsg: 'Error Submitting Buyout Proposal',
     successMsg: 'Buyout Proposal Submitted',
-    actionData: [
+    gatherArgs: [
       {
         type: 'nestedArgs',
-        gatherArgs: ['.localValues.helperAddress', '.values.paymentToken'],
+        gatherArgs: [
+          '.contextData.chainConfig.dao_conditional_helper_addr',
+          '.values.paymentToken',
+        ],
       },
       {
         type: 'nestedArgs',
@@ -982,24 +1001,23 @@ export const TX = {
             type: 'encodeHex',
             contract: CONTRACTS.DAO_CONDITIONAL_HELPER,
             fnName: 'isNotDaoMember',
-            gatherArgs: [
-              // NOTE: Is this the correct user's address and dao?
-              '.contextData.address',
-              '.contextData.daoid',
-            ],
+            gatherArgs: ['.contextData.address', '.contextData.daoid'],
           },
           {
             type: 'encodeHex',
-            contract: CONTRACTS.ERC_20,
+            contract: CONTRACTS.PAYMENT_ERC_20,
             fnName: 'transfer',
             gatherArgs: ['.contextData.address', '.values.paymentRequested'],
           },
         ],
       },
-      '.value.paymentToken',
+      '.values.paymentToken',
       '0',
-      'TEST',
-      false,
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.SET_BUYOUT_NFT,
+      },
+      'false',
     ],
   },
 };
