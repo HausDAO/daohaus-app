@@ -584,5 +584,8 @@ export const hasMinionActions = (prop, minionDeets) => {
   if (prop.minion.minionType === 'Neapolitan minion') {
     return prop.actions > 0;
   }
-  return minionDeets[1] === '0x0000000000000000000000000000000000000000';
+  return (
+    minionDeets &&
+    minionDeets[1] === '0x0000000000000000000000000000000000000000'
+  );
 };
