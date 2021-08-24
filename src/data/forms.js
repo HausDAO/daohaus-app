@@ -423,6 +423,22 @@ export const FORM = {
       ],
     ],
   },
+  MINION_SEND_ERC1155_TOKEN: {
+    title: 'ERC1155 Token Transfer',
+    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    type: PROPOSAL_TYPES.MINION_ERC1155,
+    required: ['applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_ERC1155_TOKEN,
+    fields: [
+      [
+        FIELD.NFT_SELECT,
+        FIELD.MINION_SELECT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
     subtitle: 'Make a proposal to set the price of the nft on nifty.ink',

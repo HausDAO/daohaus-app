@@ -14,13 +14,13 @@ const defaultConfig = {
     image: 'getMetadataImage',
   },
   actions: {
-    transfer721: {
+    transfer: {
       menuLabel: 'Transfer NFT',
       tooltTipLabel:
         'Make a proposal to tranfer this nft to the applicant address',
-      modalName: 'transfer721',
+      modalName: 'transfer',
       formLego: CORE_FORMS.MINION_SEND_ERC721_TOKEN,
-      localValues: ['tokenId', 'contractAddress'],
+      localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
       minionTypeOverride: true,
     },
     // REVIEW: Should this be under nftConfigs or default config?
@@ -83,7 +83,8 @@ export const hydrateNftCard = (nft, minionType) => {
       }, {});
     let { formLego } = action;
     if (action.minionTypeOverride) {
-      formLego = getMinionActionFormLego('erc721', minionType);
+      const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721s';
+      formLego = getMinionActionFormLego(nftType, minionType);
     }
     return {
       ...action,

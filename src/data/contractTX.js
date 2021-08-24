@@ -52,6 +52,11 @@ export const CONTRACTS = {
     abiName: 'ERC_721',
     contractAddress: '.localValues.contractAddress',
   },
+  LOCAL_ERC_1155: {
+    location: 'local',
+    abiName: 'ERC_1155',
+    contractAddress: '.localValues.contractAddress',
+  },
   LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -168,11 +173,10 @@ export const DETAILS = {
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },
-  MINION_ERC721_TRANSFER: {
+  MINION_NFT_TRANSFER: {
     title: 'Minion sends a NFT',
     description: '.values.description',
     proposalType: '.formData.type',
-    minionType: MINION_TYPES.VANILLA,
   },
   MINION_SELL_NIFTY: {
     title: 'Minion sets Nifty price',
@@ -691,7 +695,36 @@ export const TX = {
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
+      },
+    ],
+  },
+  MINION_SEND_ERC1155_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Transferring NFT',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.values.nftAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.LOCAL_ERC_1155,
+        fnName: 'safeTransferFrom',
+        gatherArgs: [
+          '.values.minionAddress',
+          '.values.applicant',
+          '.values.tokenId',
+          '.values.tokenBalance',
+          '',
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
       },
     ],
   },
@@ -704,21 +737,52 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
-      '.localValues.contractAddress',
+      '.values.nftAddress',
       0,
       {
         type: 'encodeHex',
         contract: CONTRACTS.LOCAL_ERC_721,
         fnName: 'safeTransferFrom',
         gatherArgs: [
-          '.localValues.minionAddress',
+          '.values.minionAddress',
           '.values.applicant',
-          '.localValues.tokenId',
+          '.values.tokenId',
         ],
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      0,
+    ],
+  },
+  MINION_SEND_ERC1155_TOKEN_NIFTY: {
+    contract: CONTRACTS.LOCAL_NIFTY_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Transferring NFT',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.values.nftAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.LOCAL_ERC_1155,
+        fnName: 'safeTransferFrom',
+        gatherArgs: [
+          '.values.minionAddress',
+          '.values.applicant',
+          '.values.tokenId',
+          '.values.tokenBalance',
+          '',
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
       },
       '.contextData.daoOverview.depositToken.tokenAddress',
       0,
@@ -735,7 +799,7 @@ export const TX = {
     gatherArgs: [
       {
         type: 'nestedArgs',
-        gatherArgs: ['.localValues.contractAddress'],
+        gatherArgs: ['.values.nftAddress'],
       },
       {
         type: 'nestedArgs',
@@ -749,9 +813,9 @@ export const TX = {
             contract: CONTRACTS.LOCAL_ERC_721,
             fnName: 'safeTransferFrom',
             gatherArgs: [
-              '.localValues.minionAddress',
+              '.values.minionAddress',
               '.values.applicant',
-              '.localValues.tokenId',
+              '.values.tokenId',
             ],
           },
         ],
@@ -760,7 +824,7 @@ export const TX = {
       0,
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
       },
       'true',
     ],
@@ -774,6 +838,9 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
+      // TODO: should be minion
+      // why some local and some not??
+      // check in nft card vs. playlist
       '.localValues.contractAddress',
       0,
       {
