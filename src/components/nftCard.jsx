@@ -21,8 +21,6 @@ const NftCard = ({ nft, minion, minionType, ...props }) => {
     setNftViewModal(hydratedNft || nft);
   };
 
-  console.log('hydratedNft', hydratedNft);
-
   return (
     <ContentBox mt={5} {...props}>
       <Flex

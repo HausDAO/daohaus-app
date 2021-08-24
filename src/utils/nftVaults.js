@@ -10,9 +10,7 @@ import { getMinionActionFormLego } from './vaults';
 
 const defaultConfig = {
   platform: 'unknown',
-  fields: {
-    image: 'getMetadataImage',
-  },
+  fields: {},
   actions: {
     transfer: {
       menuLabel: 'Transfer NFT',
@@ -58,20 +56,6 @@ const nftConfigs = {
 };
 
 export const attributeModifiers = Object.freeze({
-  getMetadataImage(nft) {
-    let imgUrl = nft.metadata.image_url
-      ? nft.metadata.image_url
-      : nft.metadata.image;
-
-    if (imgUrl.indexOf('ipfs://ipfs/') === 0) {
-      imgUrl = imgUrl.replace(
-        'ipfs://ipfs/',
-        'https://daohaus.mypinata.cloud/ipfs/',
-      );
-    }
-
-    return imgUrl;
-  },
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
     if (!description) {

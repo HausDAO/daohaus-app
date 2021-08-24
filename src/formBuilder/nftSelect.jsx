@@ -75,6 +75,7 @@ const NftSelect = props => {
 
   useEffect(() => {
     const setUpNftValues = async () => {
+      console.log('selected', selected);
       setValue(name, selected.contractAddress);
       setValue('tokenId', selected.tokenId);
       setValue('tokenBalance', selected.tokenBalance);
@@ -86,7 +87,8 @@ const NftSelect = props => {
       );
       setValue(
         'image',
-        selected.metadata?.image_url || selected.metadata?.image,
+        // selected.metadata?.image_url || selected.metadata?.image,
+        selected.image,
       );
     };
     if (selected && selectedMinion) {
@@ -153,7 +155,7 @@ const NftSelect = props => {
                 Select
               </Button>
             </Flex>
-            <Image src={nft.metadata.image} />
+            <Image src={nft.image} />
           </Box>
         ))}
       </Box>
@@ -182,7 +184,7 @@ const NftSelect = props => {
                 opacity: 0.5,
                 cursor: 'pointer',
               }}
-              src={selected.metadata.image}
+              src={selected.image}
             />
           ) : (
             <Button variant='nftSelect' onClick={openModal}>
