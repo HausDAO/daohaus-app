@@ -1,5 +1,6 @@
 import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
+import { addBoostPlaylist } from './playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 const ccoApiUrl = 'https://cco.daohaus.club';
@@ -352,4 +353,74 @@ export const getNftMeta = async url => {
   } catch (error) {
     throw new Error(error);
   }
+};
+
+export const updateProposalConfig = async (state, params) => {
+  const { meta, injectedProvider, address, network } = params;
+
+  if (!meta || !injectedProvider || !state || !network)
+    throw new Error('proposalConfig => handlePostNewConfig');
+  try {
+    const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
+    const signature = await injectedProvider.eth.personal.sign(
+      messageHash,
+      address,
+    );
+    const updateData = {
+      proposalConfig: state,
+      contractAddress: meta.contractAddress,
+      network,
+      signature,
+    };
+    const res = await put('dao/update', updateData);
+    if (res.error) throw new Error(res.error);
+    return true;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addBoost = async ({
+  meta,
+  injectedProvider,
+  address,
+  network,
+  boostData,
+  proposalConfig,
+  extraMetaData = {},
+}) => {
+  if (!meta || !injectedProvider || !address || !network)
+    throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
+
+  const newPropConfig = addBoostPlaylist(proposalConfig, boostData.playlist);
+
+  try {
+    const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
+    const signature = await injectedProvider.eth.personal.sign(
+      messageHash,
+      address,
+    );
+    console.log(`contractAddress`, meta.contractAddress);
+    console.log(`network`, network);
+    console.log(`boostData.id`, boostData.id);
+    console.log(`newPropConfig`, newPropConfig);
+    console.log(`signature`, signature);
+    const updateData = {
+      contractAddress: meta.contractAddress,
+      network,
+      boostKey: boostData.id,
+      metadata: {},
+      proposalConfig: newPropConfig,
+      signature,
+    };
+    const res = await boostPost('dao/boost', updateData);
+    if (res.error) throw new Error(res.error);
+    return true;
+  } catch (error) {
+    console.error(error);
+  }
+  //   create new allProposal playlist
+  //   add new playlist
+  //   copy rest
+  //
 };

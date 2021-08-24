@@ -52,6 +52,7 @@ const ProposalSelector = () => {
   const selectProposal = id => {
     if (!currentPlaylist) return;
     const selectedForm = FORM[id];
+
     handleClose();
     openFormModal({ lego: selectedForm });
   };
@@ -132,7 +133,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
           </option>
         ))}
       </Select>
-      {isMember && false && (
+      {isMember && (
         <RouterLink
           to={`/dao/${daochain}/${daoid}/settings/proposals`}
           onClick={handleClose}
@@ -150,7 +151,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
 };
 
 const ProposalOption = ({ form, selectProposal, customFormData }) => {
-  const { title, description, id } = form;
+  const { title, description, id } = form || {};
   const handleClick = () => selectProposal(id);
   return (
     <>

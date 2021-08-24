@@ -5,6 +5,7 @@ import { validate } from './validation';
 
 export const HASH = {
   EMPTY_FIELD: 'e3bb180f-dda4-46e0-8ba5-7b24e7b00855',
+  AWAITING_VALUE: '13345e28-135b-46ed-8047-716324197a6b',
 };
 
 export const SECONDS = {
@@ -211,6 +212,14 @@ export const capitalize = string => {
     return string[0].toUpperCase() + string.slice(1);
   }
 };
+export const capitalizeWords = string => {
+  if (!string) return null;
+  const words = string.split(' ');
+  if (words?.length <= 1) {
+    return capitalize(words);
+  }
+  return words.map(word => capitalize(word)).join(' ');
+};
 
 export const daoConnectedAndSameChain = (
   address,
@@ -303,3 +312,6 @@ export const getKeyedArray = (obj, keyName = 'field') => {
   }
   return Object.entries(obj).map(item => ({ ...item[1], [keyName]: item[0] }));
 };
+
+export const isLastItem = (list, index) => index === list?.length - 1;
+export const isFirstItem = (list, index) => index === 0;

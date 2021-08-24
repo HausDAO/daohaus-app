@@ -141,7 +141,7 @@ export const ACTIONS = {
   GENERIC_MODAL: ['closeGenericModal', 'openTxModal'],
 };
 
-//  HASH.EMPTY_FIELD allows the search to turn up
+//  HASH.EMPTY_FIELD with '||' allows the search to turn up
 //  falsy without crashing searchFields()
 
 //  buildJSONdetails simply filters any values that are HASH.EMPTY_FIELD
@@ -161,13 +161,6 @@ export const DETAILS = {
     minionType: MINION_TYPES.VANILLA,
   },
   PAYROLL_PROPOSAL: {
-    title: '{minionName} sends a token',
-    description:
-      '{minionName} would like to send {tokenAmount} {tokenSymbol} to {recipient}',
-    proposalType: '.formData.type',
-    minionType: MINION_TYPES.VANILLA,
-  },
-  PAYROLL_PROPOSAL_TEMPORARY: {
     title: 'Minion sends a token',
     description: '.values.description',
     proposalType: '.formData.type',
@@ -444,7 +437,7 @@ export const TX = {
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+        gatherFields: DETAILS.PAYROLL_PROPOSAL,
       },
     ],
   },
@@ -467,7 +460,7 @@ export const TX = {
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+        gatherFields: DETAILS.PAYROLL_PROPOSAL,
       },
       '.contextData.daoOverview.depositToken.tokenAddress',
       0,
@@ -636,7 +629,7 @@ export const TX = {
       '.localValues.tokenAddress',
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+        gatherFields: DETAILS.PAYROLL_PROPOSAL,
       },
       '.contextData.daoOverview.depositToken.tokenAddress',
       0,
@@ -985,7 +978,6 @@ export const TX = {
     contract: CONTRACTS.VANILLA_MINION_FACTORY,
     name: 'summonMinion',
     poll: 'subgraph',
-    onTxHash: ACTIONS.BASIC,
     display: 'Summoning Minion',
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',

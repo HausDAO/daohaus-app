@@ -227,6 +227,7 @@ export const FIELD = {
     type: 'input',
     label: 'Minion Name',
     name: 'minionName',
+    helperText: 'All minions get a name',
     htmlFor: 'minionName',
     placeholder: 'Sally',
     expectType: 'any',
@@ -255,6 +256,20 @@ export const FIELD = {
     htmlFor: 'targetInk',
     name: 'targetInk',
     label: 'Target NiftyInk Url',
+    expectType: 'any',
+  },
+  // PARAGRAPHS: {
+  //   type: 'paragraphs',
+  //   pars: [] /* Overwrite with customCopy */,
+  // },
+  // HEADER: {
+  //   type: 'header',
+  //   headerText: 'Empty' /* Overwrite with custom Copy */,
+  // },
+  MINION_TYPE_SELECT: {
+    type: 'minionTypeSelect',
+    name: 'minionType',
+    label: 'Choose a Minion Type',
     expectType: 'any',
   },
   SUPERFLUID_RATE: {

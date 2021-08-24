@@ -30,18 +30,35 @@ export const ToolTipWrapper = ({
   link,
   layoutProps,
   href,
+  onClick,
 }) => {
+  const handleClick = () => {
+    console.log('test');
+    onClick?.();
+  };
   const getLinkBox = () => {
     if (href) {
       return (
-        <Box as={Link} href={href} display='inline-block' {...layoutProps}>
+        <Box
+          as={Link}
+          href={href}
+          display='inline-block'
+          {...layoutProps}
+          onClick={handleClick}
+        >
           {children}
         </Box>
       );
     }
     if (link) {
       return (
-        <Box as={RouterLink} to={link} display='inline-block' {...layoutProps}>
+        <Box
+          as={RouterLink}
+          to={link}
+          display='inline-block'
+          {...layoutProps}
+          onClick={handleClick}
+        >
           {children}
         </Box>
       );

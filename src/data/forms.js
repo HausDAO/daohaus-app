@@ -100,6 +100,12 @@ export const CORE_FORMS = {
     tx: TX.MINION_NIFTY_SET_PRICE,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
+  SUMMON_MINION_SELECTOR: {
+    id: 'SUMMON_MINION_SELECTOR',
+    title: 'Minion Summon Selector',
+    required: ['minionType'],
+    fields: [[FIELD.MINION_TYPE_SELECT]],
+  },
   RAGE_QUIT: {
     customValidations: ['rageQuitMinimum', 'rageQuitMax'],
     id: 'RAGE_QUIT',
@@ -253,7 +259,7 @@ export const FORM = {
     fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
   MINION: {
-    id: 'MINION',
+    id: 'VAN_MINION_GENERIC',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
@@ -460,6 +466,7 @@ export const FORM = {
   },
   NEW_VANILLA_MINION: {
     required: ['minionName'],
+    minionType: MINION_TYPES.VANILLA,
     tx: TX.SUMMON_MINION_VANILLA,
     fields: [[FIELD.MINION_NAME]],
   },

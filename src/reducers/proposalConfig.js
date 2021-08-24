@@ -1,11 +1,16 @@
-import { put } from '../utils/metadata';
-import { createPlaylist, generateNewConfig } from '../utils/playlists';
+import { devList, createPlaylist, generateNewConfig } from '../utils/playlists';
+
+const handleDevForms = (data = {}) => {
+  const isDev = process.env.REACT_APP_DEV;
+
+  return isDev ? { ...data, devList } : data;
+};
 
 const handleInit = payload => {
   if (payload?.proposalConfig) {
-    return payload.proposalConfig;
+    return handleDevForms(payload.proposalConfig);
   }
-  return generateNewConfig(payload);
+  return handleDevForms(generateNewConfig({ daoMetaData: payload }));
 };
 
 const handleEditPlaylist = (state, params) => {
@@ -44,7 +49,6 @@ const handleRemoveCustomData = (state, params) => ({
 });
 const handleAddToPlaylist = (state, params) => {
   const newPlaylists = state.playlists.map(list => {
-    console.log(`list`, list);
     if (list.id === params.listId) {
       return {
         ...list,
@@ -55,35 +59,10 @@ const handleAddToPlaylist = (state, params) => {
     }
     return list;
   });
-  console.log(`newPlaylists`, newPlaylists);
   return {
     ...state,
     playlists: newPlaylists,
   };
-};
-export const handleUpdateChanges = async (state, params) => {
-  const { meta, injectedProvider, address, network } = params;
-
-  if (!meta || !injectedProvider || !state || !network)
-    throw new Error('proposalConfig => handlePostNewConfig');
-  try {
-    const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
-    const signature = await injectedProvider.eth.personal.sign(
-      messageHash,
-      address,
-    );
-    const updateData = {
-      proposalConfig: state,
-      contractAddress: meta.contractAddress,
-      network,
-      signature,
-    };
-    const res = await put('dao/update', updateData);
-    if (res.error) throw new Error(res.error);
-    return res;
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 export const proposalConfigReducer = (state, params) => {
