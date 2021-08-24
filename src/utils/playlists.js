@@ -15,7 +15,11 @@ const BOOST_PLAYLISTS = [
   {
     name: 'Neapolitan Minion',
     id: 'Neapolitan minion',
-    forms: ['MINION_NEAPOLITAN_SIMPLE', 'PAYROLL_NEAPOLITAN'],
+    forms: [
+      'MINION_NEAPOLITAN_SIMPLE',
+      'PAYROLL_NEAPOLITAN',
+      'MINION_BUYOUT_ERC721_TOKEN',
+    ],
   },
   {
     name: 'Rarible',
