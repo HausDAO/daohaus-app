@@ -42,7 +42,7 @@ export const validate = {
 export const checkFormTypes = (values, fields) => {
   if (!values || !fields) {
     throw new Error(
-      `Did not recieve truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,
+      `Did not receive truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,
     );
   }
   const errors = fields.reduce((arr, field) => {
@@ -118,6 +118,31 @@ export const customValidations = {
         name: 'applicant',
         message:
           "There's an active stream for the selected recipient and token",
+      };
+    }
+    return false;
+  },
+  rageQuitMinimum({ values }) {
+    if (!Number(values.shares) && !Number(values.loot)) {
+      return {
+        name: 'shares',
+        message: 'Set loot or shares to Rage Quit',
+      };
+    }
+    return false;
+  },
+  rageQuitMax({ appState, values }) {
+    if (values.shares > appState.daoMember.shares) {
+      return {
+        name: 'shares',
+        message: `Shares to Rage Quit may not exceed ${appState.daoMember.shares}.`,
+      };
+    }
+
+    if (values.loot > appState.daoMember.loot) {
+      return {
+        name: 'loot',
+        message: `Loot to Rage Quit may not exceed ${appState.daoMember.loot} loot.`,
       };
     }
     return false;

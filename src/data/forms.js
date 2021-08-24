@@ -100,6 +100,24 @@ export const CORE_FORMS = {
     tx: TX.MINION_NIFTY_SET_PRICE,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
+  RAGE_QUIT: {
+    customValidations: ['rageQuitMinimum', 'rageQuitMax'],
+    id: 'RAGE_QUIT',
+    title: 'RAGE QUIT',
+    required: [],
+    tx: TX.RAGE_QUIT,
+    fields: [
+      [
+        FIELD.RAGE_QUIT_INPUT,
+        {
+          ...FIELD.RAGE_QUIT_INPUT,
+          htmlFor: 'loot',
+          label: 'Loot to Rage',
+          name: 'loot',
+        },
+      ],
+    ],
+  },
 };
 
 export const FORM = {
@@ -239,7 +257,7 @@ export const FORM = {
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
-    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    required: ['targetContract', 'title', 'selectedMinion'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_PROPOSE_ACTION,
     fields: [
@@ -247,19 +265,51 @@ export const FORM = {
         FIELD.TITLE,
         FIELD.MINION_SELECT,
         FIELD.TARGET_CONTRACT,
-        FIELD.ABI_INPUT,
+        FIELD.MINION_VALUE,
+        FIELD.DESCRIPTION,
       ],
-    ],
-    additionalOptions: [
-      FIELD.MINION_PAYMENT,
-      { ...FIELD.DESCRIPTION, h: '10' },
+      [FIELD.ABI_INPUT],
     ],
   },
-  UPDATE_DELEGATE: {
-    title: 'UPDATE DELEGATE ADDRESS',
-    required: ['delegateAddress'],
-    tx: TX.UPDATE_DELEGATE,
-    fields: [[FIELD.DELEGATE_ADDRESS]],
+  MINION_NIFTY: {
+    id: 'MINION_NIFTY',
+    title: 'Minion Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.DESCRIPTION,
+      ],
+      [FIELD.ABI_INPUT],
+    ],
+  },
+  MINION_NEAPOLITAN_SIMPLE: {
+    id: 'MINION_NEAPOLITAN_SIMPLE',
+    title: 'Minion Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.DESCRIPTION,
+      ],
+      [FIELD.ABI_INPUT],
+    ],
   },
   LOOT_GRAB: {
     id: 'LOOT_GRAB',
@@ -277,6 +327,40 @@ export const FORM = {
     required: ['selectedMinion', 'minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NIFTY: {
+    id: 'PAYROLL_NIFTY',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.PAYROLL_NIFTY,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NEAPOLITAN: {
+    id: 'PAYROLL_NEAPOLITAN',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.PAYROLL_NEAPOLITAN,
     fields: [
       [
         FIELD.MINION_SELECT,

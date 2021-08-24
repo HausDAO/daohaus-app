@@ -8,9 +8,14 @@ const BOOST_PLAYLISTS = [
     forms: ['MINION', 'PAYROLL'],
   },
   {
-    name: 'Test',
-    id: 'test',
-    forms: ['CRASH', 'CAT'],
+    name: 'Nifty Minion',
+    id: 'nifty minion',
+    forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
+  },
+  {
+    name: 'Neapolitan Minion',
+    id: 'Neapolitan minion',
+    forms: ['MINION_NEAPOLITAN_SIMPLE', 'PAYROLL_NEAPOLITAN'],
   },
   {
     name: 'Rarible',
@@ -18,20 +23,15 @@ const BOOST_PLAYLISTS = [
     forms: ['SELL_NFT_RARIBLE'],
   },
   {
-    name: 'NiftyInk',
-    id: 'nifty minion',
-    forms: ['BUY_NIFTY_INK'],
-  },
-  {
     name: 'Superfluid',
     id: 'Superfluid minion',
     forms: ['SUPERFLUID_STREAM'],
   },
-  {
-    name: 'MintGate',
-    id: 'mintGate',
-    forms: ['PAYROLL'],
-  },
+  // {
+  //   name: 'MintGate',
+  //   id: 'mintGate',
+  //   forms: ['PAYROLL'],
+  // },
 ];
 
 export const defaultProposals = {
