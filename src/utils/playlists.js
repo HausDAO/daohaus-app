@@ -15,7 +15,11 @@ export const BOOST_PLAYLISTS = {
   DEV_SUITE: {
     name: 'Dev Suite',
     id: 'Neapolitan minion',
-    forms: ['MINION_NEAPOLITAN_SIMPLE', 'PAYROLL_NEAPOLITAN'],
+    forms: [
+      'MINION_NEAPOLITAN_SIMPLE',
+      'PAYROLL_NEAPOLITAN',
+      'MINION_BUYOUT_ERC721_TOKEN',
+    ],
   },
   // RARIBLE: {
   //   name: 'Rarible',

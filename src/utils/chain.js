@@ -79,6 +79,7 @@ export const supportedChains = {
       nft_transfer_proxy: '0x7d47126a2600E22eab9eD6CF0e515678727779A6',
       base_url: 'https://rinkeby.rarible.com',
     },
+    dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
   },
   '0x2a': {
     name: 'Ethereum Kovan',

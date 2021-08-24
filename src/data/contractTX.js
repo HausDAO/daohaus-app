@@ -133,6 +133,16 @@ export const CONTRACTS = {
     abiName: 'WRAP_N_ZAP',
     contractAddress: '.localValues.contractAddress',
   },
+  DAO_CONDITIONAL_HELPER: {
+    location: 'local',
+    abiName: 'DAO_CONDITIONAL_HELPER',
+    contractAddress: '.contextData.chainConfig.dao_conditional_helper_addr',
+  },
+  PAYMENT_ERC_20: {
+    location: 'local',
+    abiName: 'ERC_20',
+    contractAddress: 'values.paymentToken',
+  },
 };
 
 export const ACTIONS = {
@@ -201,6 +211,15 @@ export const DETAILS = {
     minionType: MINION_TYPES.NEAPOLITAN,
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
+  },
+  SET_BUYOUT_NFT: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.NEAPOLITAN,
+    fundsRequested: 'values.paymentRequested',
+    token: 'values.paymentToken',
   },
 };
 
@@ -1111,6 +1130,52 @@ export const TX = {
         gatherFields: DETAILS.SELL_NFT_RARIBLE,
       },
       'true',
+    ],
+  },
+  SET_BUYOUT_NFT: {
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting Buyout Proposal',
+    errMsg: 'Error Submitting Buyout Proposal',
+    successMsg: 'Buyout Proposal Submitted',
+    gatherArgs: [
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          '.contextData.chainConfig.dao_conditional_helper_addr',
+          '.values.paymentToken',
+        ],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['0', '0'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.DAO_CONDITIONAL_HELPER,
+            fnName: 'isNotDaoMember',
+            gatherArgs: ['.contextData.address', '.contextData.daoid'],
+          },
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.PAYMENT_ERC_20,
+            fnName: 'transfer',
+            gatherArgs: ['.contextData.address', '.values.paymentRequested'],
+          },
+        ],
+      },
+      '.values.paymentToken',
+      '0',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.SET_BUYOUT_NFT,
+      },
+      'false',
     ],
   },
 };
