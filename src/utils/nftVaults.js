@@ -59,7 +59,18 @@ const nftConfigs = {
 
 export const attributeModifiers = Object.freeze({
   getMetadataImage(nft) {
-    return nft.metadata.image_url ? nft.metadata.image_url : nft.metadata.image;
+    let imgUrl = nft.metadata.image_url
+      ? nft.metadata.image_url
+      : nft.metadata.image;
+
+    if (imgUrl.indexOf('ipfs://ipfs/') === 0) {
+      imgUrl = imgUrl.replace(
+        'ipfs://ipfs/',
+        'https://daohaus.mypinata.cloud/ipfs/',
+      );
+    }
+
+    return imgUrl;
   },
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
@@ -83,7 +94,7 @@ export const hydrateNftCard = (nft, minionType) => {
       }, {});
     let { formLego } = action;
     if (action.minionTypeOverride) {
-      const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721s';
+      const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
       formLego = getMinionActionFormLego(nftType, minionType);
     }
     return {

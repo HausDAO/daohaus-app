@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, Link } from '@chakra-ui/react';
+import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 
 import {
@@ -18,6 +18,7 @@ const RaribleSellOrder = ({ proposal }) => {
 
   useEffect(() => {
     const getOrder = async () => {
+      setLoading(true);
       const orderData = await getOrderDataFromProposal(proposal);
       const orderRes = await getOrderByItem(
         orderData.make.assetType.contract,
@@ -28,6 +29,7 @@ const RaribleSellOrder = ({ proposal }) => {
 
       setOrderUrl(buildRaribleUrl(orderData, daochain));
       setNeedSellOrder(!compareSellOrder(orderData, orderRes.orders));
+      setLoading(false);
     };
 
     getOrder();
@@ -43,6 +45,10 @@ const RaribleSellOrder = ({ proposal }) => {
     setNeedSellOrder(false);
     setLoading(false);
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   if (!needSellOrder) {
     return (
