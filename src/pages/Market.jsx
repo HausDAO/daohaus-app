@@ -34,6 +34,33 @@ const handleSearch = (boostsArr, str) => {
     BOOSTS[boostID].boostContent.title.toLowerCase().includes(str),
   );
 };
+
+const checkAvailable = (boostData, daochain) =>
+  boostData.networks === 'all' ||
+  validate.address(boostData.networks[daochain]);
+
+const checkBoostInstalled = (boostData, daoMetaData) => {
+  console.log(`daoMetaData`, daoMetaData);
+  return daoMetaData.boosts[boostData.id || boostData.oldId];
+};
+
+const processBoosts = ({
+  daoMetaData,
+  boostsKeyArray,
+  searchStr,
+  daochain,
+}) => {
+  if (!Array.isArray(boostsKeyArray) || !daoMetaData || !daochain) return;
+  return handleSearch(boostsKeyArray, searchStr).map(boostKey => {
+    const boostData = BOOSTS[boostKey];
+    return {
+      ...BOOSTS[boostKey],
+      isAvailable: checkAvailable(boostData, daochain),
+      isInstalled: checkBoostInstalled(boostData, daoMetaData),
+    };
+  });
+};
+
 const generateNoListMsg = (selectedListID, searchStr) => {
   if (selectedListID && !searchStr) return 'No Proposals Added';
   if (selectedListID && searchStr)
@@ -41,22 +68,9 @@ const generateNoListMsg = (selectedListID, searchStr) => {
   if (!selectedListID) return 'Select a Playlist';
   return 'Not Found';
 };
-const getActionText = (boost, isAvailable, installed) => {
-  if (!boost) return 'Not Found';
-  if (!isAvailable) return 'Details';
-  if (!installed) return 'Install';
-  return 'Settings';
-};
-const getHelperText = (boost, isAvailable, price, installed) => {
-  if (!boost) return;
-  if (!isAvailable) return 'Details';
-  if (!installed) return 'Install';
-  return 'Settings';
-};
 
 const Market = () => {
-  const { daoBoosts = {} } = useMetaData();
-  const { openFormModal } = useFormModal();
+  const { daoMetaData } = useMetaData();
 
   const [categoryID, setID] = useState('all');
 
@@ -69,22 +83,16 @@ const Market = () => {
     }
   };
 
-  const installBoost = boost => openFormModal({ boost });
-
   return (
     <Flex flexDir='column' w='95%'>
-      {daoBoosts ? (
+      {daoMetaData ? (
         <Flex>
           <CategorySelector
             categoryID={categoryID}
             selectList={selectCategory}
             allBoosts={allBoosts}
           />
-          <BoostsList
-            categoryID={categoryID}
-            allBoosts={allBoosts}
-            installBoost={installBoost}
-          />
+          <BoostsList categoryID={categoryID} allBoosts={allBoosts} />
         </Flex>
       ) : (
         <Spinner />
@@ -123,24 +131,39 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   );
 };
 
-const BoostsList = ({ categoryID, installBoost, details }) => {
+const BoostsList = ({ categoryID, installed }) => {
+  const { openFormModal } = useFormModal();
+  const { daoMetaData } = useMetaData();
+
   const [searchStr, setSearchStr] = useState(null);
   const { daochain } = useParams();
 
   const currentCategory = useMemo(() => {
-    if (categoryID && categories) {
-      if (categoryID === 'all') {
-        return handleSearch(allBoosts.boosts, searchStr);
-      }
-      return handleSearch(
-        categories.find(cat => cat.id === categoryID)?.boosts,
+    if (!categoryID || !categories || !daoMetaData) return;
+    if (categoryID === 'all') {
+      return processBoosts({
+        daochain,
+        boostsKeyArray: allBoosts.boosts,
         searchStr,
-      );
+        daoMetaData,
+      });
     }
-  }, [categoryID, categories, searchStr]);
+    const boostList = categories.find(cat => cat.id === categoryID)?.boosts;
+    return processBoosts({
+      daochain,
+      boostsKeyArray: boostList,
+      searchStr,
+      daoMetaData,
+    });
+  }, [categoryID, categories, searchStr, daoMetaData]);
 
   const handleTypeSearch = e =>
     setSearchStr(e.target.value.toLowerCase().trim());
+  const installBoost = boost => openFormModal({ boost });
+  const openDetails = boost => openFormModal({ steps: 'bort' });
+  const goToSettings = boost => {
+    console.log(boost);
+  };
 
   return (
     <List
@@ -170,22 +193,21 @@ const BoostsList = ({ categoryID, installBoost, details }) => {
       }
       list={
         currentCategory?.length > 0 ? (
-          currentCategory.map(boostID => {
-            const boost = BOOSTS[boostID];
-            const handleInstall = () => installBoost(boost);
-            const isAvailable =
-              boost.networks === 'all' ||
-              validate.address(boost.networks[daochain]);
+          currentCategory.map(boost => {
             return (
               <ListItem
-                key={boostID}
+                key={boost.id}
                 title={boost?.boostContent?.title}
                 description={boost?.boostContent?.description}
                 menuSection={
-                  <Button variant='ghost' p={0} onClick={handleInstall}>
-                    <TextBox>{getActionText(boost, isAvailable)}</TextBox>
-                  </Button>
+                  <BoostItemButton
+                    boost={boost}
+                    installBoost={installBoost}
+                    goToSettings={goToSettings}
+                    openDetails={openDetails}
+                  />
                 }
+                // helperText={getHelperText(boost)}
               />
             );
           })
@@ -200,3 +222,64 @@ const BoostsList = ({ categoryID, installBoost, details }) => {
 };
 
 export default Market;
+
+const BoostItemButton = ({
+  boost,
+  openDetails,
+  installBoost,
+  goToSettings,
+}) => {
+  const cost = boost?.cost?.toUpperCase();
+  if (!boost.isAvailable) {
+    const handleClick = () => openDetails(boost);
+    return (
+      <Flex flexDir='column' alignItems='flex-end'>
+        <Button variant='ghost' p={0} onClick={handleClick}>
+          <TextBox color='secondary.500'>Details</TextBox>
+        </Button>
+        <TextBox
+          variant='body'
+          mt={3}
+          opacity='0.8'
+          size='sm'
+          fontStyle='italic'
+        >
+          Unavailable on network - {cost}
+        </TextBox>
+      </Flex>
+    );
+  }
+  if (!boost.isInstalled) {
+    const handleClick = () => installBoost(boost);
+    return (
+      <Flex flexDir='column' alignItems='flex-end'>
+        <Button variant='ghost' onClick={handleClick} p={0}>
+          <TextBox color='secondary.500'>Install</TextBox>
+        </Button>
+        <TextBox variant='body' mt={3} opacity='0.8' size='sm'>
+          {cost}
+        </TextBox>
+      </Flex>
+    );
+  }
+  if (boost.isInstalled) {
+    const handleClick = () => goToSettings(boost);
+    return (
+      <Flex flexDir='column' alignItems='flex-end'>
+        <Button variant='ghost' p={0} onClick={handleClick} color='red'>
+          <TextBox color='secondary.500'>Settings</TextBox>
+        </Button>
+        <TextBox
+          variant='body'
+          mt={3}
+          opacity='0.8'
+          fontStyle='italic'
+          size='sm'
+        >
+          installed
+        </TextBox>
+      </Flex>
+    );
+  }
+  return null;
+};

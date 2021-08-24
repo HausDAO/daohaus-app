@@ -387,7 +387,6 @@ export const addBoost = async ({
   network,
   boostData,
   proposalConfig,
-  extraMetaData = {},
 }) => {
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
@@ -400,11 +399,6 @@ export const addBoost = async ({
       messageHash,
       address,
     );
-    console.log(`contractAddress`, meta.contractAddress);
-    console.log(`network`, network);
-    console.log(`boostData.id`, boostData.id);
-    console.log(`newPropConfig`, newPropConfig);
-    console.log(`signature`, signature);
     const updateData = {
       contractAddress: meta.contractAddress,
       network,

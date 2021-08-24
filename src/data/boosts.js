@@ -167,10 +167,10 @@ const STEPS = {
       isUserStep: true,
     },
   },
-  ADD_DISCORD: {},
-  ADD_DISCOURSE: {},
-  ADD_SNAPSHOT: {},
-  ADD_MINTGATE: {},
+  DISCORD: {},
+  DISCOURSE: {},
+  SNAPSHOT: {},
+  MINTGATE: {},
 };
 
 export const BOOSTS = {
@@ -204,16 +204,17 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     networks: MINIONS[MINION_TYPES.NIFTY].networks,
     playlist: BOOST_PLAYLISTS.NIFTY_INK,
+    cost: 'free',
   },
-  UBERHAUS: {
-    id: 'UBERHAUS',
-    boostContent: CONTENT.UBERHAUS,
-    minionData: MINIONS[MINION_TYPES.UBER],
-    categories: ['social', 'advanced'],
-    steps: STEPS.MINION_BOOST,
-    networks: MINIONS[MINION_TYPES.UBER].networks,
-    playlist: BOOST_PLAYLISTS.UBERHAUS,
-  },
+  // UBERHAUS: {
+  //   id: 'UBERHAUS',
+  //   boostContent: CONTENT.UBERHAUS,
+  //   minionData: MINIONS[MINION_TYPES.UBER],
+  //   categories: ['social', 'advanced'],
+  //   steps: STEPS.MINION_BOOST,
+  //   networks: MINIONS[MINION_TYPES.UBER].networks,
+  //   playlist: BOOST_PLAYLISTS.UBERHAUS,
+  // },
   SUPERFLUID: {
     id: 'SUPERFLUID',
     boostContent: CONTENT.SUPERFLUID,
@@ -221,6 +222,7 @@ export const BOOSTS = {
     categories: ['token', 'tools'],
     steps: STEPS.MINION_BOOST,
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
+    cost: 'free',
   },
   SNAPSHOT: {
     id: 'SNAPSHOT',
@@ -229,6 +231,7 @@ export const BOOSTS = {
     steps: STEPS.ADD_SNAPSHOT,
     categories: ['ops', 'social'],
     networks: 'all',
+    cost: 'free',
   },
   // RARIBLE: {
   //   name: 'Rarible',
@@ -243,6 +246,7 @@ export const BOOSTS = {
     boostContent: CONTENT.DISCORD,
     categories: ['social'],
     networks: 'all',
+    cost: 'free',
   },
   MINT_GATE: {
     id: 'MINT_GATE',
@@ -251,6 +255,7 @@ export const BOOSTS = {
     boostContent: CONTENT.MINT_GATE,
     categories: ['nft', 'tools'],
     networks: 'all',
+    cost: 'free',
   },
   DISCOURSE: {
     id: 'DISCOURSE',
@@ -259,6 +264,7 @@ export const BOOSTS = {
     boostContent: CONTENT.DISCOURSE,
     categories: ['social'],
     networks: 'all',
+    cost: 'free',
   },
 };
 

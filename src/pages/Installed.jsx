@@ -91,7 +91,7 @@ const InstalledList = ({ listID, lists }) => {
         </NoListItem>
       );
     }
-    currentList?.types?.map(minion => {
+    return currentList?.types?.map(minion => {
       return (
         <ListItem
           {...minion}
