@@ -38,6 +38,7 @@ export const PROPOSAL_TYPES = {
   MINION_NATIVE: 'Minion Native Token Transfer Proposal',
   MINION_ERC20: 'Minion Erc20 Token Transfer Proposal',
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
+  MINION_ERC1155: 'Minion Erc1155 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
   SELL_NFT: 'Sell NFT',
