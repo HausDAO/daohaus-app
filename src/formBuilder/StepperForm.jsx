@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useFormModal, useOverlay } from '../contexts/OverlayContext';
@@ -16,6 +16,7 @@ const StepperForm = props => {
   const [currentStep, setCurrentStep] = useState(
     Object.values(steps).find(step => step.start),
   );
+  const [position, setPosition] = useState(0);
 
   //  User steps are the amount of percieved steps to finish a given tasl
   //  regular steps tell the app which frame to render, (ex. BoostDetails)
@@ -24,11 +25,18 @@ const StepperForm = props => {
 
   const userSteps = useMemo(() => {
     if (steps) {
-      const userSteps = Object.values(steps).filter(step => step.isUserStep);
-      return userSteps;
+      return Object.values(steps)
+        .filter(step => step.isUserStep)
+        .map((step, index) => ({ position: index }));
     }
     return [];
   }, [steps]);
+
+  useEffect(() => {
+    if (currentStep && userSteps) {
+      console.log('hi');
+    }
+  }, [currentStep, userSteps]);
 
   const goToNext = () => {
     if (currentStep.finish) {
@@ -51,53 +59,55 @@ const StepperForm = props => {
     }
   };
 
-  if (currentStep?.type === 'form') {
-    return (
-      <FormBuilder
-        {...currentStep.lego}
-        parentForm={parentForm}
-        goToNext={goToNext}
-        next={currentStep.next}
-        ctaText={currentStep.ctaText || 'Next'}
-      />
-    );
-  }
-  if (currentStep?.type === 'boostDetails') {
-    return (
-      <BoostDetails
-        content={boostContent}
-        isAvailable={isAvailable}
-        goToNext={goToNext}
-        next={currentStep.next}
-        userSteps={userSteps}
-        steps={steps}
-      />
-    );
-  }
-  if (currentStep?.type === 'summoner') {
-    return (
-      <TheSummoner
-        {...currentStep}
-        localForm={parentForm}
-        next={currentStep.next}
-        minionData={minionData}
-        goToNext={goToNext}
-        boostContent={boostContent}
-      />
-    );
-  }
-  if (currentStep?.type === 'signer') {
-    return (
-      <Signer
-        {...currentStep}
-        boostData={props}
-        next={currentStep.next}
-        goToNext={goToNext}
-        playlist={playlist}
-      />
-    );
-  }
-  return null;
+  const getFrame = () => {
+    if (currentStep?.type === 'form') {
+      return (
+        <FormBuilder
+          {...currentStep.lego}
+          parentForm={parentForm}
+          goToNext={goToNext}
+          next={currentStep.next}
+          ctaText={currentStep.ctaText || 'Next'}
+        />
+      );
+    }
+    if (currentStep?.type === 'boostDetails') {
+      return (
+        <BoostDetails
+          content={boostContent}
+          isAvailable={isAvailable}
+          goToNext={goToNext}
+          next={currentStep.next}
+          userSteps={userSteps}
+          steps={steps}
+        />
+      );
+    }
+    if (currentStep?.type === 'summoner') {
+      return (
+        <TheSummoner
+          {...currentStep}
+          localForm={parentForm}
+          next={currentStep.next}
+          minionData={minionData}
+          goToNext={goToNext}
+          boostContent={boostContent}
+        />
+      );
+    }
+    if (currentStep?.type === 'signer') {
+      return (
+        <Signer
+          {...currentStep}
+          boostData={props}
+          next={currentStep.next}
+          goToNext={goToNext}
+          playlist={playlist}
+        />
+      );
+    }
+    return null;
+  };
 };
 
 export default StepperForm;
