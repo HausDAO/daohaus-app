@@ -157,7 +157,6 @@ const STEPS = {
       type: 'summoner',
       next: 'STEP2',
       stepLabel: 'Deploy Minion',
-      isForBoost: true,
       isUserStep: true,
     },
     STEP2: {
@@ -181,9 +180,9 @@ export const BOOSTS = {
     categories: ['advanced', 'ops'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
+    settings: 'none',
     networks: 'all',
     cost: 'free',
-    createConfig: false,
   },
   DEV_SUITE: {
     id: 'DEV_SUITE',

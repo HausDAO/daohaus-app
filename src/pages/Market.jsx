@@ -26,6 +26,8 @@ import NoListItem from '../components/NoListItem';
 import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { validate } from '../utils/validation';
+import BoostDetails from '../components/boostDetails';
+import { useTX } from '../contexts/TXContext';
 
 const handleSearch = (boostsArr, str) => {
   if (!str) return boostsArr;
@@ -39,10 +41,8 @@ const checkAvailable = (boostData, daochain) =>
   boostData.networks === 'all' ||
   validate.address(boostData.networks[daochain]);
 
-const checkBoostInstalled = (boostData, daoMetaData) => {
-  console.log(`daoMetaData`, daoMetaData);
-  return daoMetaData.boosts[boostData.id || boostData.oldId];
-};
+const checkBoostInstalled = (boostData, daoMetaData) =>
+  daoMetaData.boosts[boostData.id || boostData.oldId];
 
 const processBoosts = ({
   daoMetaData,
@@ -131,12 +131,13 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   );
 };
 
-const BoostsList = ({ categoryID, installed }) => {
+const BoostsList = ({ categoryID }) => {
   const { openFormModal } = useFormModal();
   const { daoMetaData } = useMetaData();
+  const { hydrateString } = useTX();
 
   const [searchStr, setSearchStr] = useState(null);
-  const { daochain } = useParams();
+  const { daochain, daoid } = useParams();
 
   const currentCategory = useMemo(() => {
     if (!categoryID || !categories || !daoMetaData) return;
@@ -160,10 +161,18 @@ const BoostsList = ({ categoryID, installed }) => {
   const handleTypeSearch = e =>
     setSearchStr(e.target.value.toLowerCase().trim());
   const installBoost = boost => openFormModal({ boost });
-  const openDetails = boost => openFormModal({ steps: 'bort' });
-  const goToSettings = boost => {
-    console.log(boost);
+  const openDetails = boost => {
+    openFormModal({
+      body: (
+        <BoostDetails
+          content={boost.boostContent}
+          isAvailable={boost.isAvailable}
+        />
+      ),
+    });
   };
+  //  For boosts that require non-minion settings.
+  const goToSettings = () => {};
 
   return (
     <List
@@ -263,11 +272,19 @@ const BoostItemButton = ({
     );
   }
   if (boost.isInstalled) {
-    const handleClick = () => goToSettings(boost);
+    const handleClick = () => {
+      if (boost.settings === 'none') {
+        openDetails(boost);
+      } else {
+        goToSettings();
+      }
+    };
     return (
       <Flex flexDir='column' alignItems='flex-end'>
         <Button variant='ghost' p={0} onClick={handleClick} color='red'>
-          <TextBox color='secondary.500'>Settings</TextBox>
+          <TextBox color='secondary.500'>
+            {boost.settings === 'none' ? 'Details' : 'Settings'}
+          </TextBox>
         </Button>
         <TextBox
           variant='body'

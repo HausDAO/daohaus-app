@@ -5,13 +5,21 @@ import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 import { BsArrowReturnRight } from 'react-icons/bs';
+import { useParams } from 'react-router';
 import { useFormModal } from '../contexts/OverlayContext';
 import MemberIndicator from './memberIndicator';
 import TextBox from './TextBox';
 import TextIndicator from './textIndicator';
 
-const BoostDetails = ({ content = {}, goToNext, next, steps }) => {
+const BoostDetails = ({
+  content = {},
+  goToNext,
+  next,
+  userSteps,
+  isAvailable,
+}) => {
   const { closeModal } = useFormModal();
+  const { daochain } = useParams();
   const {
     publisher = {},
     version,
@@ -21,19 +29,15 @@ const BoostDetails = ({ content = {}, goToNext, next, steps }) => {
     title,
   } = content;
   const { name, daoData } = publisher;
-  const handleGoTo = () => {
-    if (typeof next === 'string') {
+
+  const handleNext = () => {
+    if (next && goToNext) {
       goToNext(next);
+    } else {
+      closeModal();
     }
   };
 
-  const userSteps = useMemo(() => {
-    if (steps) {
-      const userSteps = Object.values(steps).filter(step => step.isUserStep);
-      return userSteps;
-    }
-    return [];
-  }, [steps]);
   return (
     <Flex flexDirection='column'>
       <TextBox mb={6} size='lg'>
@@ -49,7 +53,12 @@ const BoostDetails = ({ content = {}, goToNext, next, steps }) => {
           shouldFetchProfile={false}
           onClick={closeModal}
         />
-        <TextIndicator label='Network' value='Available' size='sm' mb={3} />
+        <TextIndicator
+          label='Network'
+          value={isAvailable ? 'Available' : 'Not Available'}
+          size='sm'
+          mb={3}
+        />
         <TextIndicator
           label='Version'
           value={version}
@@ -96,8 +105,8 @@ const BoostDetails = ({ content = {}, goToNext, next, steps }) => {
       <Box>
         <Flex alignItems='flex-end' flexDir='column'>
           <Flex mb={2}>
-            <Button onClick={handleGoTo} loadingText='Submitting'>
-              Install
+            <Button onClick={handleNext} loadingText='Submitting'>
+              {goToNext && next ? 'Next >' : 'Close'}
             </Button>
           </Flex>
         </Flex>

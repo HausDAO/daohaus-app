@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BoostDetails from '../components/boostDetails';
 import Signer from '../components/signer';
@@ -7,7 +7,7 @@ import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import FormBuilder from './formBuilder';
 
 const StepperForm = props => {
-  const { steps = {}, minionData, boostContent, playlist } = props;
+  const { steps = {}, minionData, boostContent, playlist, isAvailable } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
   const { errorToast } = useOverlay();
@@ -15,6 +15,19 @@ const StepperForm = props => {
   const [currentStep, setCurrentStep] = useState(
     Object.values(steps).find(step => step.start),
   );
+
+  //  User steps are the amount of percieved steps to finish a given tasl
+  //  regular steps tell the app which frame to render, (ex. BoostDetails)
+  //  userSteps tell the users the steps they will have to perform
+  //  (ex. form, summoner, or signer)
+
+  const userSteps = useMemo(() => {
+    if (steps) {
+      const userSteps = Object.values(steps).filter(step => step.isUserStep);
+      return userSteps;
+    }
+    return [];
+  }, [steps]);
 
   const goToNext = () => {
     if (currentStep.finish) {
@@ -52,8 +65,10 @@ const StepperForm = props => {
     return (
       <BoostDetails
         content={boostContent}
+        isAvailable={isAvailable}
         goToNext={goToNext}
         next={currentStep.next}
+        userSteps={userSteps}
         steps={steps}
       />
     );

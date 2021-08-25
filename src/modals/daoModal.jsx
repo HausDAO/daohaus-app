@@ -73,7 +73,7 @@ const DaoModal = () => {
         maxWidth={getMaxWidth(modal)}
         p={3}
       >
-        <ModalHeader pb={0}>
+        <ModalHeader p b={0}>
           <Box
             fontFamily='heading'
             textTransform='uppercase'

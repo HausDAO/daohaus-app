@@ -77,7 +77,6 @@ const InstalledList = ({ listID, lists }) => {
         STEP2: {
           type: 'summoner',
           finish: true,
-          isForBoost: false,
         },
       },
     });
