@@ -61,6 +61,10 @@ export const supportedChains = {
     wrapper_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://rinkeby.etherscan.io',
+    neapolitanMinion: {
+      minion_factory_addr: '0x4050E747Ed393e1Fd89783662C48373421fD0647',
+      // version: 'v1',
+    },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
       resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
@@ -75,7 +79,6 @@ export const supportedChains = {
       api_url:
         // 'https://ethereum-api-staging.rarible.org/protocol/v0.1/ethereum',
         'https://api-staging.rarible.com/protocol/v0.1/ethereum',
-
       nft_transfer_proxy: '0x7d47126a2600E22eab9eD6CF0e515678727779A6',
       base_url: 'https://rinkeby.rarible.com',
     },
