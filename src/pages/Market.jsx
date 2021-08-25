@@ -71,10 +71,6 @@ const Market = () => {
 
   const installBoost = boost => openFormModal({ boost });
 
-  // there is no daoBoosts
-  // so playlists can't update on existing boosts
-  console.log('daoBoosts', daoBoosts, allBoosts);
-
   return (
     <Flex flexDir='column' w='95%'>
       {daoBoosts ? (
