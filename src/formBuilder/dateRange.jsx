@@ -28,7 +28,7 @@ const DateRange = props => {
           width='48%'
           placeholderText='End DateTime'
           showTimeSelect
-          minDate={new Date(startDate)}
+          minDate={new Date(startDate * 1000)}
         />
       </Flex>
     </FieldWrapper>

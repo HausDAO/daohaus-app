@@ -1,38 +1,37 @@
 import { v4 as uuid } from 'uuid';
 import { FORM } from '../data/forms';
 
-const BOOST_PLAYLISTS = [
-  {
-    name: 'Vanilla Minion',
-    id: 'vanilla minion',
+export const BOOST_PLAYLISTS = {
+  OLD_DEV_SUITE: {
+    name: 'Vanilla Minion Classics',
+    id: 'vanMinionClassics',
     forms: ['MINION', 'PAYROLL'],
   },
-  {
-    name: 'Test',
-    id: 'test',
-    forms: ['CRASH', 'CAT'],
+  NFT: {
+    name: 'NFT Suite',
+    id: 'nifty minion',
+    forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
   },
-  {
-    name: 'Rarible',
-    id: 'rarible',
-    forms: ['SELL_NFT'],
+  DEV_SUITE: {
+    name: 'Dev Suite',
+    id: 'Neapolitan minion',
+    forms: [
+      'MINION_NEAPOLITAN_SIMPLE',
+      'PAYROLL_NEAPOLITAN',
+      'MINION_BUYOUT_ERC721_TOKEN',
+    ],
   },
-  {
+  // RARIBLE: {
+  //   name: 'Rarible',
+  //   id: 'rarible',
+  //   forms: ['SELL_NFT_RARIBLE'],
+  // },
+  NIFTY_INK: {
     name: 'NiftyInk',
     id: 'nifty minion',
     forms: ['BUY_NIFTY_INK'],
   },
-  {
-    name: 'Superfluid',
-    id: 'Superfluid minion',
-    forms: ['SUPERFLUID_STREAM'],
-  },
-  {
-    name: 'MintGate',
-    id: 'mintGate',
-    forms: ['PAYROLL'],
-  },
-];
+};
 
 export const defaultProposals = {
   name: 'All Proposals',
@@ -60,25 +59,26 @@ export const PLAYLISTS = [
   },
 ];
 
-export const generateNewConfig = daoMetaData => {
-  const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
-  const { boosts } = daoMetaData;
-
-  const playlists = boostIDs.reduce((acc, boostID) => {
-    if (boosts?.[boostID]) {
-      return [...acc, BOOST_PLAYLISTS.find(list => list.id === boostID)];
-    }
-    return acc;
-  }, PLAYLISTS);
+export const generateNewConfig = ({ daoMetaData }) => {
+  // const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
+  // const { boosts } = daoMetaData;
+  // const playlists = boostIDs.reduce((acc, boostID) => {
+  console.log('GENERATING NEW CONFIG');
+  console.log(`daoMetaData`, daoMetaData);
+  //   if (boosts?.[boostID]) {
+  //     return [...acc, BOOST_PLAYLISTS.find(list => list.id === boostID)];
+  //   }
+  //   return acc;
+  // }, PLAYLISTS);
 
   return {
-    playlists,
+    playlists: PLAYLISTS,
     allForms: {
       name: 'All Proposals',
       id: 'all',
       forms: [
         ...new Set(
-          playlists.reduce((acc, list) => [...acc, ...list.forms], []),
+          PLAYLISTS.reduce((acc, list) => [...acc, ...list.forms], []),
         ),
       ],
     },
@@ -116,3 +116,31 @@ export const createPlaylist = ({
   id,
   forms,
 });
+export const devList = createPlaylist({
+  name: 'DEV Test List',
+  id: 'dev',
+  forms: Object.values(FORM).reduce((arr, form) => {
+    if (form.dev) {
+      return [...arr, form.id];
+    }
+    return arr;
+  }, []),
+});
+
+const createNewAllForms = (allForms, newPlaylistForms) => {
+  return {
+    name: 'All Proposals',
+    id: 'all',
+    forms: [...new Set([...allForms.forms, ...newPlaylistForms])],
+  };
+};
+export const addBoostPlaylist = (proposalConfig, newPlaylist) => {
+  const { playlists, allForms } = proposalConfig;
+  if (!playlists || !allForms)
+    throw new Error(
+      'playlists.js => addBoostPlaylist(): Playlists or allForms is falsy',
+    );
+  const newAllForms = createNewAllForms(allForms, newPlaylist.forms);
+  const newPlaylists = [...playlists, newPlaylist];
+  return { ...proposalConfig, playlists: newPlaylists, allForms: newAllForms };
+};

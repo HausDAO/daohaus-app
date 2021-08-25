@@ -91,20 +91,20 @@ export const boostList = [
       all: true,
     },
   },
-  {
-    name: 'Snapshot Proposals',
-    key: 'snapshot',
-    description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
-    price: '0',
-    modalName: 'snapshot',
-    successRoute: '',
-    link: 'snapshot',
-    settings: true,
-    networks: {
-      all: true,
-    },
-  },
+  // {
+  //   name: 'Snapshot Proposals',
+  //   key: 'snapshot',
+  //   description:
+  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
+  //   price: '0',
+  //   modalName: 'snapshot',
+  //   successRoute: '',
+  //   link: 'snapshot',
+  //   settings: true,
+  //   networks: {
+  //     all: true,
+  //   },
+  // },
   {
     name: 'Wrap-N-Zap',
     key: 'wrapNZap',
@@ -198,6 +198,7 @@ export const boostList = [
     networks: {
       '0x64': true,
       '0x89': true,
+      '0x1': true,
     },
   },
 ];
@@ -287,9 +288,9 @@ export const superpowerLinks = [
     label: 'Minion Safe',
     link: 'settings/minion-safe',
   },
-  {
-    boostKey: 'snapshot',
-    label: 'Snapshot',
-    modal: 'snapshot',
-  },
+  // {
+  //   boostKey: 'snapshot',
+  //   label: 'Snapshot',
+  //   modal: 'snapshot',
+  // },
 ];

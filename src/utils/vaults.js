@@ -91,6 +91,7 @@ export const formatNativeData = (daochain, balance) => {
 const tokenFormsString = {
   erc20: 'MINION_SEND_ERC20_TOKEN',
   erc721: 'MINION_SEND_ERC721_TOKEN',
+  erc1155: 'MINION_SEND_ERC155_TOKEN',
   network: 'MINION_SEND_NETWORK_TOKEN',
   sellNifty: 'MINION_SELL_NIFTY',
 };
@@ -105,8 +106,8 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
   }
 
   if (vaultMinionType === 'Neapolitan minion') {
-    // minionType = MINION_TYPES.NEAPOLITAN;
-    // tx = TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
+    minionType = MINION_TYPES.NEAPOLITAN;
+    tx = TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
   }
 
   return {

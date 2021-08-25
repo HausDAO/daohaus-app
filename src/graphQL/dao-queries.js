@@ -65,6 +65,7 @@ export const DAO_ACTIVITIES = gql`
         createdAt
         details
         didPass
+        executed
         gracePeriodEnds
         guildkick
         isMinion
@@ -104,6 +105,11 @@ export const DAO_ACTIVITIES = gql`
         minion {
           minionType
           minQuorum
+        }
+        actions {
+          target
+          value
+          data
         }
         moloch {
           gracePeriodLength

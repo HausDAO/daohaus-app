@@ -100,6 +100,30 @@ export const CORE_FORMS = {
     tx: TX.MINION_NIFTY_SET_PRICE,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
+  SUMMON_MINION_SELECTOR: {
+    id: 'SUMMON_MINION_SELECTOR',
+    title: 'Minion Summon Selector',
+    required: ['minionType'],
+    fields: [[FIELD.MINION_TYPE_SELECT]],
+  },
+  RAGE_QUIT: {
+    customValidations: ['rageQuitMinimum', 'rageQuitMax'],
+    id: 'RAGE_QUIT',
+    title: 'RAGE QUIT',
+    required: [],
+    tx: TX.RAGE_QUIT,
+    fields: [
+      [
+        FIELD.RAGE_QUIT_INPUT,
+        {
+          ...FIELD.RAGE_QUIT_INPUT,
+          htmlFor: 'loot',
+          label: 'Loot to Rage',
+          name: 'loot',
+        },
+      ],
+    ],
+  },
 };
 
 export const FORM = {
@@ -235,11 +259,11 @@ export const FORM = {
     fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
   MINION: {
-    id: 'MINION',
+    id: 'VAN_MINION_GENERIC',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
-    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    required: ['targetContract', 'title', 'selectedMinion'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_PROPOSE_ACTION,
     fields: [
@@ -247,19 +271,51 @@ export const FORM = {
         FIELD.TITLE,
         FIELD.MINION_SELECT,
         FIELD.TARGET_CONTRACT,
-        FIELD.ABI_INPUT,
+        FIELD.MINION_VALUE,
+        FIELD.DESCRIPTION,
       ],
-    ],
-    additionalOptions: [
-      FIELD.MINION_PAYMENT,
-      { ...FIELD.DESCRIPTION, h: '10' },
+      [FIELD.ABI_INPUT],
     ],
   },
-  UPDATE_DELEGATE: {
-    title: 'UPDATE DELEGATE ADDRESS',
-    required: ['delegateAddress'],
-    tx: TX.UPDATE_DELEGATE,
-    fields: [[FIELD.DELEGATE_ADDRESS]],
+  MINION_NIFTY: {
+    id: 'MINION_NIFTY',
+    title: 'Minion Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.DESCRIPTION,
+      ],
+      [FIELD.ABI_INPUT],
+    ],
+  },
+  MINION_NEAPOLITAN_SIMPLE: {
+    id: 'MINION_NEAPOLITAN_SIMPLE',
+    title: 'Minion Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.MINION_VALUE,
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.DESCRIPTION,
+      ],
+      [FIELD.ABI_INPUT],
+    ],
   },
   LOOT_GRAB: {
     id: 'LOOT_GRAB',
@@ -277,6 +333,40 @@ export const FORM = {
     required: ['selectedMinion', 'minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NIFTY: {
+    id: 'PAYROLL_NIFTY',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NIFTY,
+    tx: TX.PAYROLL_NIFTY,
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  PAYROLL_NEAPOLITAN: {
+    id: 'PAYROLL_NEAPOLITAN',
+    title: 'Payroll Proposal',
+    description: 'Pay Members with a minion',
+    type: PROPOSAL_TYPES.PAYROLL,
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.PAYROLL_NEAPOLITAN,
     fields: [
       [
         FIELD.MINION_SELECT,
@@ -304,15 +394,38 @@ export const FORM = {
     tx: TX.MINION_SEND_ERC20_TOKEN,
     fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
-  SELL_NFT: {
-    id: 'SELL_NFT',
+  SELL_NFT_RARIBLE: {
+    id: 'SELL_NFT_RARIBLE',
     title: 'Sell NFT on Rarible',
     subtitle: 'Post an NFT for sale on Rarible',
     description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT,
-    minionType: MINION_TYPES.RARIBLE,
-    tx: null,
-    fields: [[FIELD.NFT_SELECT], [FIELD.DATE_RANGE, FIELD.SET_PRICE]],
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.SELL_NFT_RARIBLE,
+    required: ['selectedMinion', 'sellPrice', 'raribleNftData'],
+    fields: [
+      [FIELD.NFT_SELECT],
+      [
+        FIELD.MINION_SELECT,
+        FIELD.DATE_RANGE,
+        FIELD.SET_PRICE,
+        FIELD.RARIBLE_NFT_DATA,
+      ],
+    ],
+  },
+  MINION_BUYOUT_ERC721_TOKEN: {
+    id: 'MINION_BUYOUT_ERC721_TOKEN',
+    title: 'Buyout Proposal',
+    subtitle: 'Request funds as buyout',
+    description: 'Request funds as buyout',
+    type: PROPOSAL_TYPES.MINION_BUYOUT,
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.SET_BUYOUT_NFT,
+    required: ['selectedMinion', 'title', 'paymentRequested'],
+    fields: [
+      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.BUYOUT_PAYMENT_REQUEST],
+    ],
   },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
@@ -321,7 +434,30 @@ export const FORM = {
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_ERC721_TOKEN,
-    fields: [[FIELD.APPLICANT, FIELD.DESCRIPTION]],
+    fields: [
+      [
+        FIELD.NFT_SELECT,
+        FIELD.MINION_SELECT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  MINION_SEND_ERC1155_TOKEN: {
+    title: 'ERC1155 Token Transfer',
+    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    type: PROPOSAL_TYPES.MINION_ERC1155,
+    required: ['applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_ERC1155_TOKEN,
+    fields: [
+      [
+        FIELD.NFT_SELECT,
+        FIELD.MINION_SELECT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
   },
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
@@ -344,6 +480,7 @@ export const FORM = {
   },
   NEW_VANILLA_MINION: {
     required: ['minionName'],
+    minionType: MINION_TYPES.VANILLA,
     tx: TX.SUMMON_MINION_VANILLA,
     fields: [[FIELD.MINION_NAME]],
   },

@@ -35,7 +35,7 @@ const CustomWrapper = styled(Box)`
   .react-datepicker-popper {
     z-index: 3;
     padding: var(--chakra-space-1);
-    margin-top: var(--chakra-space-3);
+    offset-top: var(--chakra-space-3);
     background: var(--chakra-colors-blackAlpha-900);
     border-radius: var(--chakra-radii-md);
     border: 1px solid var(--chakra-colors-whiteAlpha-200);
@@ -172,12 +172,13 @@ const DateSelect = props => {
     localForm,
     name,
     htmlFor,
+    width,
   } = props;
   const { register, setValue } = localForm;
 
   const [selected, setSelected] = useState();
   useEffect(() => {
-    setValue(name, selected);
+    setValue(name, parseInt(new Date(selected).getTime() / 1000));
   }, [selected]);
 
   const renderHeader = ({
@@ -216,7 +217,7 @@ const DateSelect = props => {
   );
 
   return (
-    <CustomWrapper {...props}>
+    <CustomWrapper width={width}>
       <Input type='hidden' htmlFor={htmlFor} name={name} ref={register} />
       <DatePicker
         placeholderText={placeholderText}

@@ -5,7 +5,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter,
   ModalOverlay,
   Box,
   Flex,
@@ -17,8 +16,10 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import FormBuilder from '../formBuilder/formBuilder';
 import TextBox from '../components/TextBox';
+import StepperForm from '../formBuilder/StepperForm';
 
 const getMaxWidth = modal => {
+  // if (modal.steps) return '500px';
   if (modal?.lego?.fields) {
     if (modal?.lego.fields?.length > 1) {
       return '800px';
@@ -30,7 +31,7 @@ const getMaxWidth = modal => {
   if (modal?.width === 'lg') return '650px';
   if (modal?.width === 'xl') return '600px';
   if (modal?.width?.includes('px')) return modal?.width;
-  return '500px';
+  return '600px';
 };
 
 const DaoModal = () => {
@@ -46,10 +47,13 @@ const DaoModal = () => {
     onCancel,
     isConfirmation,
     loading,
+    prependBody,
+    appendBody,
+    steps,
+    boost,
   } = modal;
-
   const handleClose = () => setModal(false);
-
+  console.log(`modal`, modal);
   return (
     <Modal
       isOpen={modal}
@@ -69,33 +73,37 @@ const DaoModal = () => {
         maxWidth={getMaxWidth(modal)}
         p={3}
       >
-        <ModalHeader>
+        <ModalHeader pb={0}>
           <Box
             fontFamily='heading'
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}
             color='#7579C5'
-            mb={4}
+            mb={2}
           >
-            {lego?.title || title}
+            {steps?.title || lego?.title || title}
           </Box>
           {header && <TextBox>{header}</TextBox>}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {lego ? <FormBuilder {...lego} onSubmit={onSubmit} /> : body}
+          {prependBody}
+          {steps && <StepperForm steps={steps} />}
+          {boost && <StepperForm {...boost} />}
+          {lego && <FormBuilder {...lego} onSubmit={onSubmit} />}
+          {body}
+          {appendBody}
         </ModalBody>
-        <ModalFooter>
-          {footer}
-          {isConfirmation && (
-            <ConfirmationFooter
-              onSubmit={onSubmit}
-              onCancel={onCancel || handleClose}
-              loading={loading}
-            />
-          )}
-        </ModalFooter>
+
+        {footer}
+        {isConfirmation && (
+          <ConfirmationFooter
+            onSubmit={onSubmit}
+            onCancel={onCancel || handleClose}
+            loading={loading}
+          />
+        )}
       </ModalContent>
     </Modal>
   );
@@ -104,6 +112,7 @@ const DaoModal = () => {
 export default DaoModal;
 
 const ConfirmationFooter = ({ onCancel, onSubmit, loading }) => {
+  const handleCancel = () => onCancel?.();
   return (
     <Box>
       <Flex alignItems='flex-end' flexDir='column'>
@@ -112,7 +121,7 @@ const ConfirmationFooter = ({ onCancel, onSubmit, loading }) => {
             variant='outline'
             borderTopRightRadius='0'
             borderBottomRightRadius='0'
-            onClick={onCancel}
+            onClick={handleCancel}
           >
             Cancel
           </Button>

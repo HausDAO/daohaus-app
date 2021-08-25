@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { v4 as uuid } from 'uuid';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
@@ -25,12 +26,17 @@ const FormBuilder = props => {
     additionalOptions = null,
     required = [],
     localValues,
+    parentForm,
+    next,
+    goToNext,
+    ctaText,
   } = props;
+
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
 
   const [options, setOptions] = useState(additionalOptions);
-  const localForm = useForm();
+  const localForm = parentForm || useForm();
   const { handleSubmit } = localForm;
 
   const addOption = e => {
@@ -52,7 +58,14 @@ const FormBuilder = props => {
       setFields(originalFields);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      setFields([...originalFields, ...inputDataFromABI(abiInputs)]);
+      let updatedFields = [
+        ...originalFields[originalFields.length - 1],
+        ...inputDataFromABI(abiInputs),
+      ];
+      if (originalFields.length > 1) {
+        updatedFields = [originalFields[0], updatedFields];
+      }
+      setFields(updatedFields);
     }
   };
 
@@ -78,6 +91,7 @@ const FormBuilder = props => {
     });
   };
 
+  //  TODO: REFACTOR ALL THIS SHIT
   const onSubmit = async values => {
     clearErrors();
 
@@ -104,7 +118,6 @@ const FormBuilder = props => {
       return;
     }
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-
     const modifiedValues = modifyFields({
       values: collapsedValues,
       // REVIEW
@@ -114,53 +127,81 @@ const FormBuilder = props => {
       tx: props.tx,
     });
     //  Checks for custom validation
-    console.log('before customValErrors');
 
     const customValErrors = handleCustomValidation({
       values: modifiedValues,
       formData: props,
     });
 
-    console.log('customValErrors likely not async', customValErrors);
     if (customValErrors) {
       updateErrors(customValErrors);
       return;
     }
 
-    console.log('after customValErrors');
-
-    //  checks if submit is not a contract interaction and is a callback
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+    const handleSubmitCallback = async () => {
+      //  checks if submit is not a contract interaction and is a callback
+      if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+        try {
+          setLoading(true);
+          const res = await submitCallback({
+            values: modifiedValues,
+            formData: props,
+            onSubmit: props.onSubmit,
+          });
+          return res;
+        } catch (error) {
+          console.error(error);
+          setLoading(false);
+        }
+      }
+    };
+    const handleSubmitTX = async () => {
       try {
-        return await submitCallback({
+        setLoading(true);
+        const res = await submitTransaction({
           values: modifiedValues,
           formData: props,
-          onSubmit: props.onSubmit,
+          localValues,
+          tx: props.tx,
+          lifeCycleFns: {
+            ...props?.lifeCycleFns,
+            onCatch() {
+              setLoading(false);
+              props?.lifeCycleFns?.onCatch?.();
+            },
+            afterTx() {
+              props?.lifeCycleFns?.afterTx?.();
+            },
+          },
         });
+        setLoading(false);
+        return res;
       } catch (error) {
         console.error(error);
         setLoading(false);
       }
-    }
+    };
 
-    try {
-      setLoading(true);
-      await submitTransaction({
-        values: modifiedValues,
-        formData: props,
-        localValues,
-        tx: props.tx,
-        lifeCycleFns: {
-          onCatch() {
-            setLoading(false);
-          },
-          ...props.lifeCycleFns,
-        },
-      });
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
+    // const handleConditional = async choice => {
+    //   if (choice.tx && choice.then)
+    //     return () => handleSubmitTX(handleConditional(choice.then));
+    //   if (choice.tx) return () => handleSubmitTX();
+    //   if (choice.callback) return () => handleSubmitCallback();
+    //   if (choice.goTo) return () => goToNext(choice.goTo);
+    // };
+
+    if (next && typeof goToNext === 'function') {
+      return goToNext(next);
+
+      // const choice = next[condition];
+      // return handleConditional(choice)();
     }
+    //  HANDLE CALLBACK ON SUBMIT
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+      return handleSubmitCallback();
+    }
+    //  HANDLE CONTRACT TX ON SUBMIT
+    return handleSubmitTX();
   };
 
   const renderInputs = (fields, depth = 0) =>
@@ -176,7 +217,7 @@ const FormBuilder = props => {
         </Flex>
       ) : (
         <InputFactory
-          key={field?.htmlFor || field?.name}
+          key={field?.htmlFor || field?.name || uuid()}
           {...field}
           minionType={props.minionType}
           layout={props.layout}
@@ -199,7 +240,14 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <FormFooter options={options} addOption={addOption} loading={loading} />
+        <FormFooter
+          options={options}
+          addOption={addOption}
+          loading={loading}
+          ctaText={ctaText}
+          next={next}
+          goToNext={goToNext}
+        />
       </Flex>
     </form>
   );

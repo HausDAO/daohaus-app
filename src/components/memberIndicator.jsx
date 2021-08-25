@@ -12,8 +12,17 @@ const MemberIndicator = ({
   link,
   shouldFetchProfile,
   name,
+  avatarImg,
+  layoutProps,
+  onClick,
 }) => (
-  <ToolTipWrapper tooltip={tooltip} tooltipText={tooltipText} link={link}>
+  <ToolTipWrapper
+    tooltip={tooltip}
+    tooltipText={tooltipText}
+    link={link}
+    layoutProps={layoutProps}
+    onClick={onClick}
+  >
     <TextBox size='xs' mb={2}>
       {label}
     </TextBox>
@@ -21,7 +30,7 @@ const MemberIndicator = ({
       (shouldFetchProfile ? (
         <AddressAvatar addr={address} alwaysShowName />
       ) : (
-        <StaticAvatar name={name} address={address} />
+        <StaticAvatar name={name} address={address} avatarImg={avatarImg} />
       ))}
   </ToolTipWrapper>
 );

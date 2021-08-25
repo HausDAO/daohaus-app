@@ -19,8 +19,12 @@ import MinionPayment from './minionPayment';
 import DateRange from './dateRange';
 import PriceInput from './priceInput';
 import NiftyInkUrl from './niftyInkUrl';
+import MinionTypeSelect from './minionTypeSelect';
 import SuperfluidRate from './superfluidRate';
 import SuperfluidPaymentInput from './superfluidPaymentInput';
+import BuyoutPaymentInput from './buyoutPaymentInput';
+import RageInput from './rageInput';
+import RaribleNftSelect from './raribleNftData';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -86,6 +90,18 @@ export const InputFactory = props => {
   }
   if (type === 'superfluidPaymentInput') {
     return <SuperfluidPaymentInput {...props} />;
+  }
+  if (type === 'buyoutPaymentInput') {
+    return <BuyoutPaymentInput {...props} />;
+  }
+  if (type === 'rageInput') {
+    return <RageInput {...props} />;
+  }
+  if (type === 'raribleNftData') {
+    return <RaribleNftSelect {...props} />;
+  }
+  if (type === 'minionTypeSelect') {
+    return <MinionTypeSelect {...props} />;
   }
   return null;
 };

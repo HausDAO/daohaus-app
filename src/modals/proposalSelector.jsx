@@ -29,14 +29,12 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 // PLAYLISTS.find(list => list.id === 'favorites');
 
 const ProposalSelector = () => {
-  const { daoProposals, daoMetaData } = useMetaData();
+  const { daoProposals } = useMetaData();
   const { proposalSelector, setProposalSelector } = useOverlay();
   const { openFormModal } = useFormModal();
   const { theme } = useCustomTheme();
 
   const { playlists, customData } = daoProposals || {};
-
-  console.log('daoMetaData', daoMetaData);
 
   const [currentPlaylist, setCurrentPlaylist] = useState(null);
 
@@ -54,6 +52,7 @@ const ProposalSelector = () => {
   const selectProposal = id => {
     if (!currentPlaylist) return;
     const selectedForm = FORM[id];
+
     handleClose();
     openFormModal({ lego: selectedForm });
   };
@@ -125,7 +124,6 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
     selectPlaylist(e.target.value);
   };
 
-  console.log('isMember', isMember);
   return (
     <Flex alignItems='top'>
       <Select mb={8} width='60%' onChange={handleChange} fontFamily='accessory'>
@@ -135,7 +133,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
           </option>
         ))}
       </Select>
-      {isMember && false && (
+      {isMember && (
         <RouterLink
           to={`/dao/${daochain}/${daoid}/settings/proposals`}
           onClick={handleClose}
@@ -153,7 +151,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
 };
 
 const ProposalOption = ({ form, selectProposal, customFormData }) => {
-  const { title, description, id } = form;
+  const { title, description, id } = form || {};
   const handleClick = () => selectProposal(id);
   return (
     <>
