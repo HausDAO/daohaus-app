@@ -387,7 +387,7 @@ export const addBoost = async ({
   network,
   boostData,
   proposalConfig,
-  // extraMetaData = {},
+  extraMetaData = {},
 }) => {
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
@@ -409,10 +409,11 @@ export const addBoost = async ({
       contractAddress: meta.contractAddress,
       network,
       boostKey: boostData.id,
-      metadata: {},
+      metadata: extraMetaData,
       proposalConfig: newPropConfig,
       signature,
     };
+
     const res = await boostPost('dao/boost', updateData);
     if (res.error) throw new Error(res.error);
     return true;

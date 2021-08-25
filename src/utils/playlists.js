@@ -7,6 +7,11 @@ export const BOOST_PLAYLISTS = {
     id: 'vanMinionClassics',
     forms: ['MINION', 'PAYROLL'],
   },
+  NIFTY_DEV_SUITE: {
+    name: 'Nifty Minion Classics',
+    id: 'niftyMinionClassics',
+    forms: ['MINION_NIFTY', 'PAYROLL_NIFTY'],
+  },
   NFT: {
     name: 'NFT Suite',
     id: 'nifty minion',

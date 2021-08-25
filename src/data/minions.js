@@ -19,7 +19,6 @@ export const MINION_NETWORKS = {
   [MINION_TYPES.NEAPOLITAN]: {
     '0x64': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
   },
-  [MINION_TYPES.RARIBLE]: null,
 };
 
 export const MINION_CONTENT = {
