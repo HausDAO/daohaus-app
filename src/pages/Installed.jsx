@@ -26,6 +26,8 @@ const Installed = () => {
   useEffect(() => {
     if (daoMetaData && daoOverview) {
       const generatedLists = generateLists(daoMetaData, daoOverview, dev);
+
+      console.log('generatedLists', generatedLists);
       setLists(generatedLists);
     }
   }, [daoMetaData, daoOverview, dev]);
@@ -64,6 +66,8 @@ const InstalledList = ({ listID, lists }) => {
       return lists?.find(list => list.id === listID);
     }
   }, [listID, lists]);
+
+  console.log('currentList', currentList);
 
   const handleClick = () => {
     openFormModal({
@@ -115,8 +119,8 @@ const InstalledList = ({ listID, lists }) => {
     }
     return currentList?.types?.map(boost => (
       <ListItem
-        title={boost.boostContent.title}
-        description={boost.boostContent.description}
+        title={boost.boostContent?.title}
+        description={boost.boostContent?.description}
         key={boost.id}
         menuSection={
           <Button variant='ghost'>

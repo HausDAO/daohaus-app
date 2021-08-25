@@ -3,8 +3,7 @@ import { Button, Tooltip } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
-import GenericModal from '../modals/genericModal';
+import { useFormModal } from '../contexts/OverlayContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getMinionActionFormLego } from '../utils/vaults';
 

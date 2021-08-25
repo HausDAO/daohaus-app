@@ -413,6 +413,20 @@ export const FORM = {
       ],
     ],
   },
+  MINION_BUYOUT_ERC721_TOKEN: {
+    id: 'MINION_BUYOUT_ERC721_TOKEN',
+    title: 'Buyout Proposal',
+    subtitle: 'Request funds as buyout',
+    description: 'Request funds as buyout',
+    type: PROPOSAL_TYPES.MINION_BUYOUT,
+    minionType: MINION_TYPES.NEAPOLITAN,
+    tx: TX.SET_BUYOUT_NFT,
+    required: ['selectedMinion', 'title', 'paymentRequested'],
+    fields: [
+      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.BUYOUT_PAYMENT_REQUEST],
+    ],
+  },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
     subtitle: 'Make a proposal to transfer the nft out of the minion',
@@ -420,6 +434,22 @@ export const FORM = {
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_ERC721_TOKEN,
+    fields: [
+      [
+        FIELD.NFT_SELECT,
+        FIELD.MINION_SELECT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  MINION_SEND_ERC1155_TOKEN: {
+    title: 'ERC1155 Token Transfer',
+    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    type: PROPOSAL_TYPES.MINION_ERC1155,
+    required: ['applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_ERC1155_TOKEN,
     fields: [
       [
         FIELD.NFT_SELECT,

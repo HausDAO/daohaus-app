@@ -133,7 +133,6 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
 const BoostsList = ({ categoryID }) => {
   const { openFormModal } = useFormModal();
   const { daoMetaData } = useMetaData();
-
   const [searchStr, setSearchStr] = useState(null);
   const { daochain } = useParams();
 

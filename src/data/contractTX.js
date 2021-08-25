@@ -52,6 +52,11 @@ export const CONTRACTS = {
     abiName: 'ERC_721',
     contractAddress: '.localValues.contractAddress',
   },
+  LOCAL_ERC_1155: {
+    location: 'local',
+    abiName: 'ERC_1155',
+    contractAddress: '.localValues.contractAddress',
+  },
   LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -128,6 +133,16 @@ export const CONTRACTS = {
     abiName: 'WRAP_N_ZAP',
     contractAddress: '.localValues.contractAddress',
   },
+  DAO_CONDITIONAL_HELPER: {
+    location: 'local',
+    abiName: 'DAO_CONDITIONAL_HELPER',
+    contractAddress: '.contextData.chainConfig.dao_conditional_helper_addr',
+  },
+  PAYMENT_ERC_20: {
+    location: 'local',
+    abiName: 'ERC_20',
+    contractAddress: 'values.paymentToken',
+  },
 };
 
 export const ACTIONS = {
@@ -161,11 +176,10 @@ export const DETAILS = {
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },
-  MINION_ERC721_TRANSFER: {
+  MINION_NFT_TRANSFER: {
     title: 'Minion sends a NFT',
     description: '.values.description',
     proposalType: '.formData.type',
-    minionType: MINION_TYPES.VANILLA,
   },
   MINION_SELL_NIFTY: {
     title: 'Minion sets Nifty price',
@@ -197,6 +211,13 @@ export const DETAILS = {
     minionType: MINION_TYPES.NEAPOLITAN,
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
+  },
+  SET_BUYOUT_NFT: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.NEAPOLITAN,
   },
 };
 
@@ -684,7 +705,36 @@ export const TX = {
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
+      },
+    ],
+  },
+  MINION_SEND_ERC1155_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Transferring NFT',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.values.nftAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.LOCAL_ERC_1155,
+        fnName: 'safeTransferFrom',
+        gatherArgs: [
+          '.values.minionAddress',
+          '.values.applicant',
+          '.values.tokenId',
+          '.values.tokenBalance',
+          '',
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
       },
     ],
   },
@@ -697,21 +747,52 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
-      '.localValues.contractAddress',
+      '.values.nftAddress',
       0,
       {
         type: 'encodeHex',
         contract: CONTRACTS.LOCAL_ERC_721,
         fnName: 'safeTransferFrom',
         gatherArgs: [
-          '.localValues.minionAddress',
+          '.values.minionAddress',
           '.values.applicant',
-          '.localValues.tokenId',
+          '.values.tokenId',
         ],
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      0,
+    ],
+  },
+  MINION_SEND_ERC1155_TOKEN_NIFTY: {
+    contract: CONTRACTS.LOCAL_NIFTY_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Transferring NFT',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.values.nftAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.LOCAL_ERC_1155,
+        fnName: 'safeTransferFrom',
+        gatherArgs: [
+          '.values.minionAddress',
+          '.values.applicant',
+          '.values.tokenId',
+          '.values.tokenBalance',
+          '',
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
       },
       '.contextData.daoOverview.depositToken.tokenAddress',
       0,
@@ -728,7 +809,7 @@ export const TX = {
     gatherArgs: [
       {
         type: 'nestedArgs',
-        gatherArgs: ['.localValues.contractAddress'],
+        gatherArgs: ['.values.nftAddress'],
       },
       {
         type: 'nestedArgs',
@@ -742,9 +823,9 @@ export const TX = {
             contract: CONTRACTS.LOCAL_ERC_721,
             fnName: 'safeTransferFrom',
             gatherArgs: [
-              '.localValues.minionAddress',
+              '.values.minionAddress',
               '.values.applicant',
-              '.localValues.tokenId',
+              '.values.tokenId',
             ],
           },
         ],
@@ -753,7 +834,7 @@ export const TX = {
       0,
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+        gatherFields: DETAILS.MINION_NFT_TRANSFER,
       },
       'true',
     ],
@@ -767,6 +848,9 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
+      // TODO: should be minion
+      // why some local and some not??
+      // check in nft card vs. playlist
       '.localValues.contractAddress',
       0,
       {
@@ -1044,6 +1128,52 @@ export const TX = {
         gatherFields: DETAILS.SELL_NFT_RARIBLE,
       },
       'true',
+    ],
+  },
+  SET_BUYOUT_NFT: {
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting Buyout Proposal',
+    errMsg: 'Error Submitting Buyout Proposal',
+    successMsg: 'Buyout Proposal Submitted',
+    gatherArgs: [
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          '.contextData.chainConfig.dao_conditional_helper_addr',
+          '.values.paymentToken',
+        ],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['0', '0'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.DAO_CONDITIONAL_HELPER,
+            fnName: 'isNotDaoMember',
+            gatherArgs: ['.contextData.address', '.contextData.daoid'],
+          },
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.PAYMENT_ERC_20,
+            fnName: 'transfer',
+            gatherArgs: ['.contextData.address', '.values.paymentRequested'],
+          },
+        ],
+      },
+      '.values.paymentToken',
+      '0',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.SET_BUYOUT_NFT,
+      },
+      'false',
     ],
   },
 };
