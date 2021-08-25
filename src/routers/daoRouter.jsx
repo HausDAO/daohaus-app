@@ -19,7 +19,7 @@ import Proposal from '../pages/Proposal';
 import NewProposal from '../pages/NewProposal';
 import Settings from '../pages/Settings';
 import Allies from '../pages/Allies';
-import Boosts from '../pages/Boosts';
+// import Boosts from '../pages/Boosts';
 import ThemeBuilder from '../pages/ThemeBuilder';
 import Layout from '../components/layout';
 import Meta from '../pages/Meta';
