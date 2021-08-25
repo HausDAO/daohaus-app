@@ -1,15 +1,15 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+import { BsArrowReturnRight } from 'react-icons/bs';
 import { Button } from '@chakra-ui/button';
 import Icon from '@chakra-ui/icon';
 import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
-import { BsArrowReturnRight } from 'react-icons/bs';
-import { useParams } from 'react-router';
 import { useFormModal } from '../contexts/OverlayContext';
+
 import MemberIndicator from './memberIndicator';
-import TextBox from './TextBox';
 import TextIndicator from './textIndicator';
+import TextBox from './TextBox';
 
 const BoostDetails = ({
   content = {},
@@ -19,7 +19,7 @@ const BoostDetails = ({
   isAvailable,
 }) => {
   const { closeModal } = useFormModal();
-  const { daochain } = useParams();
+
   const {
     publisher = {},
     version,

@@ -11,8 +11,6 @@ import { PROPOSAL_TYPES } from './proposalUtils';
 import { TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
-const testString =
-  '/dao/{.contextData.daochain}/{.context.daoid}/vaults/minion/{.contextData.minion}';
 const getPath = pathString =>
   pathString
     .slice(1)

@@ -188,7 +188,7 @@ export const useConfirmation = () => {
 };
 
 export const useFormModal = () => {
-  const { setModal, errorToast, closeModal } = useContext(OverlayContext);
+  const { setModal, closeModal } = useContext(OverlayContext);
   return {
     openFormModal(params) {
       //  TODO once TX Context is ready on Hub level

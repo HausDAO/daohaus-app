@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+import FormBuilder from './formBuilder';
 import BoostDetails from '../components/boostDetails';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
-import FormBuilder from './formBuilder';
 
 const StepperForm = props => {
   const { steps = {}, minionData, boostContent, playlist, isAvailable } = props;

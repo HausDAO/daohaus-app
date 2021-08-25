@@ -27,7 +27,6 @@ import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { validate } from '../utils/validation';
 import BoostDetails from '../components/boostDetails';
-import { useTX } from '../contexts/TXContext';
 
 const handleSearch = (boostsArr, str) => {
   if (!str) return boostsArr;
@@ -134,10 +133,9 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
 const BoostsList = ({ categoryID }) => {
   const { openFormModal } = useFormModal();
   const { daoMetaData } = useMetaData();
-  const { hydrateString } = useTX();
 
   const [searchStr, setSearchStr] = useState(null);
-  const { daochain, daoid } = useParams();
+  const { daochain } = useParams();
 
   const currentCategory = useMemo(() => {
     if (!categoryID || !categories || !daoMetaData) return;
