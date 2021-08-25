@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BoostDetails from '../components/boostDetails';
 import Signer from '../components/signer';

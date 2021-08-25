@@ -47,12 +47,12 @@ const getActionText = (boost, isAvailable, installed) => {
   if (!installed) return 'Install';
   return 'Settings';
 };
-const getHelperText = (boost, isAvailable, price, installed) => {
-  if (!boost) return;
-  if (!isAvailable) return 'Details';
-  if (!installed) return 'Install';
-  return 'Settings';
-};
+// const getHelperText = (boost, isAvailable, price, installed) => {
+//   if (!boost) return;
+//   if (!isAvailable) return 'Details';
+//   if (!installed) return 'Install';
+//   return 'Settings';
+// };
 
 const Market = () => {
   const { daoBoosts = {} } = useMetaData();
@@ -123,7 +123,7 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   );
 };
 
-const BoostsList = ({ categoryID, installBoost, details }) => {
+const BoostsList = ({ categoryID, installBoost }) => {
   const [searchStr, setSearchStr] = useState(null);
   const { daochain } = useParams();
 
