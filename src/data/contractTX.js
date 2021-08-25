@@ -218,8 +218,6 @@ export const DETAILS = {
     link: '.values.link',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.NEAPOLITAN,
-    fundsRequested: 'values.paymentRequested',
-    token: 'values.paymentToken',
   },
 };
 
