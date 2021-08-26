@@ -53,7 +53,7 @@ const DaoModal = () => {
     boost,
   } = modal;
   const handleClose = () => setModal(false);
-  console.log(`modal`, modal);
+  const modalHeader = lego?.title || title;
   return (
     <Modal
       isOpen={modal}
@@ -73,19 +73,21 @@ const DaoModal = () => {
         maxWidth={getMaxWidth(modal)}
         p={3}
       >
-        <ModalHeader p b={0}>
-          <Box
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-            color='#7579C5'
-            mb={2}
-          >
-            {steps?.title || lego?.title || title}
-          </Box>
-          {header && <TextBox>{header}</TextBox>}
-        </ModalHeader>
+        {modalHeader && (
+          <ModalHeader p b={0}>
+            <Box
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+              color='#7579C5'
+              mb={2}
+            >
+              {modalHeader}
+            </Box>
+            {header && <TextBox>{header}</TextBox>}
+          </ModalHeader>
+        )}
         <ModalCloseButton />
         <ModalBody>
           {prependBody}

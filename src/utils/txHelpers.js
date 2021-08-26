@@ -131,13 +131,6 @@ const argBuilderCallback = Object.freeze({
   },
 });
 
-const handleSearchPath = (data, arg) => {
-  const path = getPath(arg);
-  if (!path.length)
-    throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
-  return searchData(data, path);
-};
-
 const gatherArgs = data => {
   const { tx } = data;
   return tx.gatherArgs.map(arg => {
@@ -152,7 +145,10 @@ const gatherArgs = data => {
     }
     //  takes in search notation. Performs recursive search for application data
     if (arg[0] === '.') {
-      return handleSearchPath(data, arg);
+      const path = getPath(arg);
+      if (!path.length)
+        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+      return searchData(data, path);
     }
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
@@ -213,9 +209,9 @@ export const createHydratedString = data => {
     );
   const fragments = splitByTemplates(string);
   console.log(`fragments`, fragments);
-  return fragments
-    .map(str => (str[0] === '.' ? handleSearchPath(data, str) : str))
-    .join();
+  // return fragments
+  //   .map(str => (str[0] === '.' ? handleSearchPath(data, str) : str))
+  //   .join();
 };
 
 export const getContractAddress = data => {

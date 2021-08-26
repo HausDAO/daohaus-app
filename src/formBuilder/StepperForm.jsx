@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { Box, Flex } from '@chakra-ui/layout';
 import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import FormBuilder from './formBuilder';
 import BoostDetails from '../components/boostDetails';
@@ -27,14 +28,18 @@ const StepperForm = props => {
     if (steps) {
       return Object.values(steps)
         .filter(step => step.isUserStep)
-        .map((step, index) => ({ position: index }));
+        .map((step, index) => ({ ...step, position: index + 1 }));
     }
     return [];
   }, [steps]);
 
   useEffect(() => {
-    if (currentStep && userSteps) {
-      console.log('hi');
+    if (!currentStep || !userSteps) return;
+    if (currentStep.isUserStep) {
+      setPosition(
+        userSteps.find(step => step.stepLabel === currentStep.stepLabel)
+          ?.position,
+      );
     }
   }, [currentStep, userSteps]);
 
@@ -108,6 +113,21 @@ const StepperForm = props => {
     }
     return null;
   };
+  return (
+    <Flex flexDir='column'>
+      <Box
+        fontFamily='heading'
+        textTransform='uppercase'
+        fontSize='xs'
+        fontWeight={700}
+        color='#7579C5'
+        my={4}
+      >
+        Step {position} of {userSteps.length}
+      </Box>
+      {getFrame()}
+    </Flex>
+  );
 };
 
 export default StepperForm;

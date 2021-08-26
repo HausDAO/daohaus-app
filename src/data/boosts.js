@@ -178,27 +178,6 @@ const STEPS = {
   ADD_DISCOURSE: {},
   ADD_SNAPSHOT: {},
   ADD_MINTGATE: {},
-  ADD_RARIBLE: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
-    STEP1: {
-      type: 'summoner',
-      next: 'STEP2',
-      stepLabel: 'Deploy Minion',
-      isForBoost: true,
-      isUserStep: true,
-    },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Proposals & Sign',
-      finish: true,
-      isUserStep: true,
-    },
-  },
   ADD_WRAP_N_ZAP: {},
 };
 
@@ -221,7 +200,7 @@ export const BOOSTS = {
     categories: ['devTools'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
-    networks: 'all',
+    networks: MINIONS[MINION_TYPES.NIFTY].networks,
     cost: 'free',
   },
   // TODO: coming later with neapolitan minion
@@ -239,7 +218,7 @@ export const BOOSTS = {
     id: 'RARIBLE',
     oldId: 'rarible',
     minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
-    steps: STEPS.ADD_RARIBLE,
+    steps: STEPS.MINION_BOOST,
     boostContent: CONTENT.RARIBLE,
     categories: ['nft'],
     networks: { '0x4': true },
