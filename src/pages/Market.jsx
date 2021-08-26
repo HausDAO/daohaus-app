@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Flex,
   Spinner,
@@ -23,7 +23,7 @@ import ListItem from '../components/listItem';
 import TextBox from '../components/TextBox';
 import NoListItem from '../components/NoListItem';
 
-import { isLastItem, pipe } from '../utils/general';
+import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { validate } from '../utils/validation';
 import BoostDetails from '../components/boostDetails';

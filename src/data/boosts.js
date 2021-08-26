@@ -151,19 +151,6 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-<<<<<<< HEAD
-  // CUSTOM_THEME: {
-  //   title: 'Custom Theme',
-  //   description: 'Customize the visual theme of your community.',
-  //   publisher: PUBLISHERS.DAOHAUS,
-  //   version: '1.0',
-  //   pars: ['Edit the colors, fonts, images and wording in your DAO UI.'],
-  //   externalLinks: [
-  //     { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-  //   ],
-  // },
-=======
->>>>>>> 42c6c5e1146d6a4d5ec6008e2cf75d7ccff257d8
 };
 
 const STEPS = {
@@ -191,8 +178,6 @@ const STEPS = {
   ADD_DISCOURSE: {},
   ADD_SNAPSHOT: {},
   ADD_WRAP_N_ZAP: {},
-<<<<<<< HEAD
-=======
   ADD_MINTGATE: {
     DISPLAY: {
       type: 'boostDetails',
@@ -207,7 +192,6 @@ const STEPS = {
       isUserStep: true,
     },
   },
->>>>>>> 42c6c5e1146d6a4d5ec6008e2cf75d7ccff257d8
 };
 
 export const BOOSTS = {
