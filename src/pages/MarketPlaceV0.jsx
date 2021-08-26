@@ -18,11 +18,11 @@ const MarketPlaceV0 = () => (
           }}
           _hover={{
             color: 'white',
-            borderBottom: '2px solid rgba(255,255,255,0.4)',
+            borderBottom: '2px solid rgba(255,255,255,0.3)',
           }}
           borderBottom='2px solid transparent'
         >
-          Market
+          Installed
         </Tab>
         <Tab
           px={6}
@@ -33,19 +33,19 @@ const MarketPlaceV0 = () => (
           }}
           _hover={{
             color: 'white',
-            borderBottom: '2px solid rgba(255,255,255,0.3)',
+            borderBottom: '2px solid rgba(255,255,255,0.4)',
           }}
           borderBottom='2px solid transparent'
         >
-          Installed
+          Market
         </Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
-          <Market />
+          <Installed />
         </TabPanel>
         <TabPanel>
-          <Installed />
+          <Market />
         </TabPanel>
       </TabPanels>
     </Tabs>
