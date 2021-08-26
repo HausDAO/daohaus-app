@@ -151,6 +151,16 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
+  // CUSTOM_THEME: {
+  //   title: 'Custom Theme',
+  //   description: 'Customize the visual theme of your community.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '1.0',
+  //   pars: ['Edit the colors, fonts, images and wording in your DAO UI.'],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+  //   ],
+  // },
 };
 
 const STEPS = {
@@ -172,6 +182,7 @@ const STEPS = {
       stepLabel: 'Add Proposals & Sign',
       finish: true,
       isUserStep: true,
+      skipPlaylist: true,
     },
   },
   ADD_DISCORD: {},
@@ -286,6 +297,14 @@ export const BOOSTS = {
     categories: ['payments'],
     networks: 'all',
     cost: 'free',
+  },
+  CUSTOM_THEME: {
+    id: 'CUSTOM_THEME',
+    oldId: 'customTheme',
+    steps: STEPS.ADD_CUSTOM_THEME,
+    boostContent: CONTENT.CUSTOM_THEME,
+    categories: ['community'],
+    networks: 'all',
   },
 };
 
