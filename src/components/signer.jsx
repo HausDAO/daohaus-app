@@ -27,7 +27,7 @@ const Signer = props => {
       address,
       network: chainByID(daochain).network,
       boostData,
-      proposalConfig: daoProposals,
+      proposalConfig: playlist && daoProposals,
     });
     setState('signed');
     refetchMetaData();
@@ -36,44 +36,56 @@ const Signer = props => {
   return (
     <Flex flexDirection='column'>
       <Header>Member Signature</Header>
-      <TextBox variant='body' mb={6}>
-        This boost adds a proposal playlist.{' '}
-        <Link
-          href='https://daohaus.club/docs/users/minion-faq'
-          color='secondary.400'
-          isExternal
-        >
-          Learn more about playlists here.
-        </Link>
-      </TextBox>
-      <TextBox size='xs' mb={2}>
-        Playlist Name
-      </TextBox>
-      <TextBox variant='body' mb={6}>
-        {playlist.name}
-      </TextBox>
-      <TextBox size='xs' mb={4}>
-        Proposals ({playlist?.forms?.length})
-      </TextBox>
-      {playlist?.forms.map(formID => {
-        const form = FORM[formID];
-        return (
-          <Box key={formID}>
-            <Flex mb={4} flexDir='column'>
-              <TextBox mb={2}>{form.title}</TextBox>
-              <TextBox variant='body' size='sm'>
-                {form.description}
-              </TextBox>
-            </Flex>
-            <Divider mb={2} />
-          </Box>
-        );
-      })}
+
+      {!playlist && (
+        <TextBox variant='body' mb={6}>
+          This boost is ready to launch. Sign with metamask to prove DAO
+          membership.
+        </TextBox>
+      )}
+
+      {playlist && (
+        <>
+          <TextBox variant='body' mb={6}>
+            This boost adds a proposal playlist.{' '}
+            <Link
+              href='https://daohaus.club/docs/users/minion-faq'
+              color='secondary.400'
+              isExternal
+            >
+              Learn more about playlists here.
+            </Link>
+          </TextBox>
+          <TextBox size='xs' mb={2}>
+            Playlist Name
+          </TextBox>
+          <TextBox variant='body' mb={6}>
+            {playlist.name}
+          </TextBox>
+          <TextBox size='xs' mb={4}>
+            Proposals ({playlist?.forms?.length})
+          </TextBox>
+          {playlist?.forms.map(formID => {
+            const form = FORM[formID];
+            return (
+              <Box key={formID}>
+                <Flex mb={4} flexDir='column'>
+                  <TextBox mb={2}>{form.title}</TextBox>
+                  <TextBox variant='body' size='sm'>
+                    {form.description}
+                  </TextBox>
+                </Flex>
+                <Divider mb={2} />
+              </Box>
+            );
+          })}
+        </>
+      )}
       {state === 'signing' && (
         <ProgressIndicator prepend={<Spinner mr={3} />} text='Processing...' />
       )}
       {state === 'signed' && (
-        <ProgressIndicator icon={BsCheckCircle} text='Playlist Added!' />
+        <ProgressIndicator icon={BsCheckCircle} text='Boost Added!' />
       )}
       <Flex mt={6} justifyContent='flex-end'>
         {state === 'signed' ? (

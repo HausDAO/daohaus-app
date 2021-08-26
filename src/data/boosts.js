@@ -99,8 +99,8 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  MINT_GATE: {
-    title: 'Mint Gate',
+  MINTGATE: {
+    title: 'MintGate',
     description: 'Gate links to restrict view access to DAO members only',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',
@@ -151,6 +151,7 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
+<<<<<<< HEAD
   // CUSTOM_THEME: {
   //   title: 'Custom Theme',
   //   description: 'Customize the visual theme of your community.',
@@ -161,6 +162,8 @@ export const CONTENT = {
   //     { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
   //   ],
   // },
+=======
+>>>>>>> 42c6c5e1146d6a4d5ec6008e2cf75d7ccff257d8
 };
 
 const STEPS = {
@@ -182,14 +185,29 @@ const STEPS = {
       stepLabel: 'Add Proposals & Sign',
       finish: true,
       isUserStep: true,
-      skipPlaylist: true,
     },
   },
   ADD_DISCORD: {},
   ADD_DISCOURSE: {},
   ADD_SNAPSHOT: {},
-  ADD_MINTGATE: {},
   ADD_WRAP_N_ZAP: {},
+<<<<<<< HEAD
+=======
+  ADD_MINTGATE: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+      isUserStep: false,
+    },
+    STEP1: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
+>>>>>>> 42c6c5e1146d6a4d5ec6008e2cf75d7ccff257d8
 };
 
 export const BOOSTS = {
@@ -273,11 +291,11 @@ export const BOOSTS = {
     networks: 'all',
     cost: 'free',
   },
-  MINT_GATE: {
-    id: 'MINT_GATE',
+  MINTGATE: {
+    id: 'MINTGATE',
     oldId: 'mintGate',
     steps: STEPS.ADD_MINTGATE,
-    boostContent: CONTENT.MINT_GATE,
+    boostContent: CONTENT.MINTGATE,
     categories: ['community'],
     networks: 'all',
     cost: 'free',
@@ -298,14 +316,6 @@ export const BOOSTS = {
     networks: 'all',
     cost: 'free',
   },
-  CUSTOM_THEME: {
-    id: 'CUSTOM_THEME',
-    oldId: 'customTheme',
-    steps: STEPS.ADD_CUSTOM_THEME,
-    boostContent: CONTENT.CUSTOM_THEME,
-    categories: ['community'],
-    networks: 'all',
-  },
 };
 
 export const allBoosts = {
@@ -317,10 +327,11 @@ const categoryStarter = [
   { name: 'Payments', id: 'payments' },
   { name: 'Community', id: 'community' },
   { name: 'Governance', id: 'governance' },
-  // { name: 'Membership', id: 'membership' },
-  // { name: 'Finance', id: 'finance' },
   { name: 'NFTs', id: 'nft' },
   { name: 'Dev Tools', id: 'devTools' },
+  // TODO: future categories
+  // { name: 'Membership', id: 'membership' },
+  // { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({
   ...cat,
