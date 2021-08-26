@@ -202,6 +202,7 @@ export const BOOSTS = {
     categories: ['devTools'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
+    settings: 'none',
     networks: 'all',
     cost: 'free',
   },
@@ -212,7 +213,7 @@ export const BOOSTS = {
     categories: ['devTools'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
-    networks: 'all',
+    networks: MINIONS[MINION_TYPES.NIFTY].networks,
     cost: 'free',
   },
   // TODO: coming later with neapolitan minion
@@ -245,6 +246,7 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     networks: { '0x64': true },
     playlist: BOOST_PLAYLISTS.NIFTY_INK,
+    cost: 'free',
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',
@@ -253,6 +255,7 @@ export const BOOSTS = {
     categories: ['payments'],
     steps: STEPS.MINION_BOOST,
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
+    cost: 'free',
   },
   SNAPSHOT: {
     id: 'SNAPSHOT',
@@ -261,6 +264,7 @@ export const BOOSTS = {
     steps: STEPS.ADD_SNAPSHOT,
     categories: ['governance'],
     networks: 'all',
+    cost: 'free',
   },
   DISCORD: {
     id: 'DISCORD',
@@ -269,6 +273,7 @@ export const BOOSTS = {
     boostContent: CONTENT.DISCORD,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
   },
   MINTGATE: {
     id: 'MINTGATE',
@@ -277,6 +282,7 @@ export const BOOSTS = {
     boostContent: CONTENT.MINTGATE,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
   },
   DISCOURSE: {
     id: 'DISCOURSE',
@@ -292,6 +298,7 @@ export const BOOSTS = {
     boostContent: CONTENT.WRAP_N_ZAP,
     categories: ['payments'],
     networks: 'all',
+    cost: 'free',
   },
 };
 

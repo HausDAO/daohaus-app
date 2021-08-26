@@ -398,10 +398,6 @@ export const addBoost = async ({
       messageHash,
       address,
     );
-    console.log(`contractAddress`, meta.contractAddress);
-    console.log(`network`, network);
-    console.log(`boostData.id`, boostData.id);
-    console.log(`signature`, signature);
     const updateData = {
       contractAddress: meta.contractAddress,
       network,

@@ -135,12 +135,6 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/settings/boosts`}>
           <MarketPlaceV0 />
-          {/* <Boosts
-            daoOverview={daoOverview}
-            daoMetaData={daoMetaData}
-            customTerms={customTerms}
-            daoMember={daoMember}
-          /> */}
         </Route>
         <Route exact path={`${path}/staking`}>
           <Redirect to='/' />
@@ -215,13 +209,6 @@ const DaoRouter = () => {
             daoMembers={daoMembers}
           />
         </Route>
-        {/* <Route exact path={`${path}/proposals/new/:proposalType`}>
-          <NewProposal
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
-            daoOverview={daoOverview}
-          />
-        </Route> */}
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal
             overview={daoOverview}
