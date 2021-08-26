@@ -8,6 +8,7 @@ import { handleDecimals } from '../utils/general';
 
 const getMaxBalance = (tokenData, tokenAddress) => {
   //  Uses token select data structure
+
   const token = tokenData.find(t => t.value === tokenAddress);
 
   if (token) {
@@ -58,6 +59,7 @@ const PaymentInput = props => {
     const tokenAddr = paymentToken || getValues('paymentToken');
     if (daoTokens?.length && tokenAddr) {
       const bal = getMaxBalance(daoTokens, tokenAddr);
+
       setBalance(bal);
     }
   }, [daoTokens, paymentToken]);
