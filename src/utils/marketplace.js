@@ -59,3 +59,9 @@ export const generateLists = (daoMetaData, daoOverview, dev) => {
 
   return dev ? [devBoostList, ...lists] : lists;
 };
+
+export const getSettingsLink = (settings, params) => {
+  if (settings.appendToDaoPath) {
+    return `/dao/${params.daochain}/${params.daoid}/${settings.appendToDaoPath}`;
+  }
+};

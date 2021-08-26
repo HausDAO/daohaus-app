@@ -4,7 +4,6 @@ import {
   Spinner,
   Input,
   InputGroup,
-  Button,
   Icon,
   Menu,
   MenuButton,
@@ -14,7 +13,6 @@ import {
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import { useParams } from 'react-router';
-import { useFormModal } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import ListSelectorItem from '../components/ListSelectorItem';
 import List from '../components/list';
@@ -26,7 +24,7 @@ import NoListItem from '../components/NoListItem';
 import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { validate } from '../utils/validation';
-import BoostDetails from '../components/boostDetails';
+import BoostItemButton from '../components/boostItemButton';
 
 const checkAvailable = (boostData, daochain) =>
   boostData.networks === 'all' ||
@@ -113,7 +111,7 @@ const generateNoListMsg = (selectedListID, searchStr) => {
   return 'Not Found';
 };
 
-const Market = () => {
+const Market = ({ installBoost, openDetails, goToSettings }) => {
   const { daoMetaData } = useMetaData();
 
   const [categoryID, setID] = useState('all');
@@ -136,7 +134,13 @@ const Market = () => {
             selectList={selectCategory}
             allBoosts={allBoosts}
           />
-          <BoostsList categoryID={categoryID} allBoosts={allBoosts} />
+          <BoostsList
+            categoryID={categoryID}
+            allBoosts={allBoosts}
+            installBoost={installBoost}
+            openDetails={openDetails}
+            goToSettings={goToSettings}
+          />
         </Flex>
       ) : (
         <Spinner />
@@ -175,8 +179,13 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
   );
 };
 
-const BoostsList = ({ categoryID }) => {
-  const { openFormModal } = useFormModal();
+const BoostsList = ({
+  categoryID,
+  openDetails,
+  goToSettings,
+  allBoosts,
+  installBoost,
+}) => {
   const { daoMetaData } = useMetaData();
   const { daochain } = useParams();
 
@@ -185,7 +194,6 @@ const BoostsList = ({ categoryID }) => {
 
   const currentCategory = useMemo(() => {
     if (!categoryID || !categories || !daoMetaData) return;
-
     if (categoryID === 'all') {
       return processBoosts({
         daochain,
@@ -195,10 +203,9 @@ const BoostsList = ({ categoryID }) => {
         sortBy,
       });
     }
-    const boostList = categories.find(cat => cat.id === categoryID)?.boosts;
     return processBoosts({
       daochain,
-      boostsKeyArray: boostList,
+      boostsKeyArray: categories.find(cat => cat.id === categoryID)?.boosts,
       searchStr,
       daoMetaData,
       sortBy,
@@ -207,22 +214,8 @@ const BoostsList = ({ categoryID }) => {
 
   const handleTypeSearch = e =>
     setSearchStr(e.target.value.toLowerCase().trim());
-  const installBoost = boost => openFormModal({ boost });
-  const openDetails = boost => {
-    openFormModal({
-      body: (
-        <BoostDetails
-          content={boost.boostContent}
-          isAvailable={boost.isAvailable}
-        />
-      ),
-    });
-  };
-  //  For boosts that require non-minion settings.
-  const goToSettings = () => {};
-  const handleSetSort = e => {
-    setSortBy(e.target.value);
-  };
+  const handleSetSort = e => setSortBy(e.target.value);
+
   return (
     <List
       headerSection={
@@ -270,7 +263,6 @@ const BoostsList = ({ categoryID }) => {
                     openDetails={openDetails}
                   />
                 }
-                // helperText={getHelperText(boost)}
               />
             );
           })
@@ -285,72 +277,3 @@ const BoostsList = ({ categoryID }) => {
 };
 
 export default Market;
-
-const BoostItemButton = ({
-  boost,
-  openDetails,
-  installBoost,
-  goToSettings,
-}) => {
-  const cost = boost?.cost?.toUpperCase();
-  if (!boost.isAvailable) {
-    const handleClick = () => openDetails(boost);
-    return (
-      <Flex flexDir='column' alignItems='flex-end'>
-        <Button variant='ghost' p={0} onClick={handleClick}>
-          <TextBox color='secondary.500'>Details</TextBox>
-        </Button>
-        <TextBox
-          variant='body'
-          mt={3}
-          opacity='0.8'
-          size='sm'
-          fontStyle='italic'
-        >
-          Unavailable on network - {cost}
-        </TextBox>
-      </Flex>
-    );
-  }
-  if (!boost.isInstalled) {
-    const handleClick = () => installBoost(boost);
-    return (
-      <Flex flexDir='column' alignItems='flex-end'>
-        <Button variant='ghost' onClick={handleClick} p={0}>
-          <TextBox color='secondary.500'>Install</TextBox>
-        </Button>
-        <TextBox variant='body' mt={3} opacity='0.8' size='sm'>
-          {cost}
-        </TextBox>
-      </Flex>
-    );
-  }
-  if (boost.isInstalled) {
-    const handleClick = () => {
-      if (boost.settings === 'none') {
-        openDetails(boost);
-      } else {
-        goToSettings();
-      }
-    };
-    return (
-      <Flex flexDir='column' alignItems='flex-end'>
-        <Button variant='ghost' p={0} onClick={handleClick} color='red'>
-          <TextBox color='secondary.500'>
-            {boost.settings === 'none' ? 'Details' : 'Settings'}
-          </TextBox>
-        </Button>
-        <TextBox
-          variant='body'
-          mt={3}
-          opacity='0.8'
-          fontStyle='italic'
-          size='sm'
-        >
-          installed
-        </TextBox>
-      </Flex>
-    );
-  }
-  return null;
-};

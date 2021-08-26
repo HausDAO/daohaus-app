@@ -14,10 +14,11 @@ import ListItem from '../components/listItem';
 import { isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
 import { CORE_FORMS } from '../data/forms';
+import BoostItemButton from '../components/boostItemButton';
 
 const dev = process.env.REACT_APP_DEV;
 
-const Installed = () => {
+const Installed = ({ installBoost, openDetails, goToSettings }) => {
   const { daoMetaData } = useMetaData();
   const { daoOverview } = useDao();
   const [lists, setLists] = useState(null);
@@ -49,7 +50,13 @@ const Installed = () => {
             listID={listID}
             lists={lists}
           />
-          <InstalledList listID={listID} lists={lists} />
+          <InstalledList
+            listID={listID}
+            lists={lists}
+            installBoost={installBoost}
+            openDetails={openDetails}
+            goToSettings={goToSettings}
+          />
         </Flex>
       ) : (
         <Spinner />
@@ -58,7 +65,13 @@ const Installed = () => {
   );
 };
 
-const InstalledList = ({ listID, lists }) => {
+const InstalledList = ({
+  listID,
+  lists,
+  installBoost,
+  openDetails,
+  goToSettings,
+}) => {
   const { openFormModal } = useFormModal();
   const currentList = useMemo(() => {
     if (listID && lists) {
@@ -120,9 +133,12 @@ const InstalledList = ({ listID, lists }) => {
         description={boost.boostContent?.description}
         key={boost.id}
         menuSection={
-          <Button variant='ghost'>
-            <TextBox>Details</TextBox>
-          </Button>
+          <BoostItemButton
+            boost={{ ...boost, isAvailable: true, isInstalled: true }}
+            installBoost={installBoost}
+            openDetails={openDetails}
+            goToSettings={goToSettings}
+          />
         }
       />
     ));

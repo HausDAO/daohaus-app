@@ -215,6 +215,7 @@ export const BOOSTS = {
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
     networks: MINIONS[MINION_TYPES.NIFTY].networks,
     cost: 'free',
+    settings: 'none',
   },
   // TODO: coming later with neapolitan minion
   // DEV_SUITE: {
@@ -283,6 +284,7 @@ export const BOOSTS = {
     categories: ['community'],
     networks: 'all',
     cost: 'free',
+    settings: { type: 'internalLink', appendToDaoPath: 'boost/mintgate' },
   },
   DISCOURSE: {
     id: 'DISCOURSE',
