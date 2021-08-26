@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   Flex,
   Spinner,
@@ -23,18 +23,10 @@ import ListItem from '../components/listItem';
 import TextBox from '../components/TextBox';
 import NoListItem from '../components/NoListItem';
 
-import { isLastItem } from '../utils/general';
+import { isLastItem, pipe } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
 import { validate } from '../utils/validation';
 import BoostDetails from '../components/boostDetails';
-
-const handleSearch = (boostsArr, str) => {
-  if (!str) return boostsArr;
-  if (!boostsArr?.length) return [];
-  return boostsArr.filter(boostID =>
-    BOOSTS[boostID].boostContent.title.toLowerCase().includes(str),
-  );
-};
 
 const checkAvailable = (boostData, daochain) =>
   boostData.networks === 'all' ||
@@ -43,21 +35,74 @@ const checkAvailable = (boostData, daochain) =>
 const checkBoostInstalled = (boostData, daoMetaData) =>
   daoMetaData.boosts[boostData.id || boostData.oldId];
 
-const processBoosts = ({
-  daoMetaData,
-  boostsKeyArray,
-  searchStr,
-  daochain,
-}) => {
-  if (!Array.isArray(boostsKeyArray) || !daoMetaData || !daochain) return;
-  return handleSearch(boostsKeyArray, searchStr).map(boostKey => {
-    const boostData = BOOSTS[boostKey];
-    return {
-      ...BOOSTS[boostKey],
-      isAvailable: checkAvailable(boostData, daochain),
-      isInstalled: checkBoostInstalled(boostData, daoMetaData),
-    };
-  });
+const handleSearch = data => {
+  const { boostsKeyArray, searchStr } = data;
+  if (!searchStr) return data;
+  if (!boostsKeyArray?.length) return [];
+  return {
+    ...data,
+    boostsKeyArray: boostsKeyArray.filter(boostID =>
+      BOOSTS[boostID].boostContent.title.toLowerCase().includes(searchStr),
+    ),
+  };
+};
+const handleDaoRelation = data => {
+  const { boostsKeyArray, daochain, daoMetaData } = data;
+  return {
+    ...data,
+    boostsArray: boostsKeyArray.map(boostKey => {
+      const boostData = BOOSTS[boostKey];
+      return {
+        ...BOOSTS[boostKey],
+        isAvailable: checkAvailable(boostData, daochain),
+        isInstalled: checkBoostInstalled(boostData, daoMetaData),
+      };
+    }),
+  };
+};
+const handleSort = ({ boostsArray, sortBy }) => {
+  if (sortBy === 'SKIP') {
+    return boostsArray;
+  }
+  if (sortBy === 'Available') {
+    return boostsArray.sort((boostA, boostB) => {
+      if (boostA.isAvailable && boostB.isAvailable) {
+        if (
+          boostA.boostContent.title.toUpperCase() >
+          boostB.boostContent.title.toUpperCase()
+        ) {
+          return 1;
+        }
+        if (
+          boostA.boostContent.title.toUpperCase() <
+          boostB.boostContent.title.toUpperCase()
+        ) {
+          return -1;
+        }
+        return 0;
+      }
+      if (!boostA.isAvailable && boostB.isAvailable) {
+        return 1;
+      }
+      return -1;
+    });
+  }
+  if (sortBy === 'Title (A-Z)') {
+    const sorted = boostsArray.sort((boostA, boostB) =>
+      boostA.boostContent.title.toUpperCase() >
+      boostB.boostContent.title.toUpperCase()
+        ? 1
+        : -1,
+    );
+    return sorted;
+  }
+};
+
+const processBoosts = data => {
+  const { daoMetaData, boostsKeyArray, daochain, sortBy } = data;
+  if (!Array.isArray(boostsKeyArray) || !daoMetaData || !daochain || !sortBy)
+    return;
+  return handleSort(handleDaoRelation(handleSearch(data)));
 };
 
 const generateNoListMsg = (selectedListID, searchStr) => {
@@ -133,17 +178,21 @@ const CategorySelector = ({ selectList, categoryID, allBoosts }) => {
 const BoostsList = ({ categoryID }) => {
   const { openFormModal } = useFormModal();
   const { daoMetaData } = useMetaData();
-  const [searchStr, setSearchStr] = useState(null);
   const { daochain } = useParams();
+
+  const [searchStr, setSearchStr] = useState(null);
+  const [sortBy, setSortBy] = useState('Available');
 
   const currentCategory = useMemo(() => {
     if (!categoryID || !categories || !daoMetaData) return;
+
     if (categoryID === 'all') {
       return processBoosts({
         daochain,
         boostsKeyArray: allBoosts.boosts,
         searchStr,
         daoMetaData,
+        sortBy,
       });
     }
     const boostList = categories.find(cat => cat.id === categoryID)?.boosts;
@@ -152,8 +201,9 @@ const BoostsList = ({ categoryID }) => {
       boostsKeyArray: boostList,
       searchStr,
       daoMetaData,
+      sortBy,
     });
-  }, [categoryID, categories, searchStr, daoMetaData]);
+  }, [categoryID, categories, searchStr, daoMetaData, sortBy]);
 
   const handleTypeSearch = e =>
     setSearchStr(e.target.value.toLowerCase().trim());
@@ -170,7 +220,9 @@ const BoostsList = ({ categoryID }) => {
   };
   //  For boosts that require non-minion settings.
   const goToSettings = () => {};
-
+  const handleSetSort = e => {
+    setSortBy(e.target.value);
+  };
   return (
     <List
       headerSection={
@@ -179,7 +231,7 @@ const BoostsList = ({ categoryID }) => {
             <Input placeholder='Search Boosts' onChange={handleTypeSearch} />
           </InputGroup>
           <TextBox p={2}>Sort By:</TextBox>
-          <Menu isLazy>
+          <Menu value={sortBy}>
             <MenuButton
               textTransform='uppercase'
               fontFamily='heading'
@@ -188,11 +240,16 @@ const BoostsList = ({ categoryID }) => {
               _hover={{ color: 'secondary.400' }}
               display='inline-block'
             >
-              Available
+              {sortBy}
               <Icon as={RiArrowDropDownFill} color='secondary.500' />
             </MenuButton>
             <MenuList>
-              <MenuItem>Title</MenuItem>
+              <MenuItem value='Available' onClick={handleSetSort}>
+                Available
+              </MenuItem>
+              <MenuItem value='Title (A-Z)' onClick={handleSetSort}>
+                Title (A-Z)
+              </MenuItem>
             </MenuList>
           </Menu>
         </>

@@ -27,7 +27,6 @@ const Installed = () => {
     if (daoMetaData && daoOverview) {
       const generatedLists = generateLists(daoMetaData, daoOverview, dev);
 
-      console.log('generatedLists', generatedLists);
       setLists(generatedLists);
     }
   }, [daoMetaData, daoOverview, dev]);
@@ -66,8 +65,6 @@ const InstalledList = ({ listID, lists }) => {
       return lists?.find(list => list.id === listID);
     }
   }, [listID, lists]);
-
-  console.log('currentList', currentList);
 
   const handleClick = () => {
     openFormModal({
