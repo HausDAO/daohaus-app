@@ -74,17 +74,17 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  SNAPSHOT: {
-    title: 'Snapshot Proposals',
-    description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '0.5',
-    pars: ['AWAITING CONTENT'],
-    externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-    ],
-  },
+  // SNAPSHOT: {
+  //   title: 'Snapshot Proposals',
+  //   description:
+  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '0.5',
+  //   pars: ['AWAITING CONTENT'],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+  //   ],
+  // },
   DISCORD: {
     title: 'Discord Notifications',
     description:
@@ -254,14 +254,15 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
   },
-  SNAPSHOT: {
-    id: 'SNAPSHOT',
-    oldId: 'snapshot',
-    boostContent: CONTENT.SNAPSHOT,
-    steps: STEPS.ADD_SNAPSHOT,
-    categories: ['governance'],
-    networks: 'all',
-  },
+  // TODO: snapshot boost is broken atm
+  // SNAPSHOT: {
+  //   id: 'SNAPSHOT',
+  //   oldId: 'snapshot',
+  //   boostContent: CONTENT.SNAPSHOT,
+  //   steps: STEPS.ADD_SNAPSHOT,
+  //   categories: ['governance'],
+  //   networks: 'all',
+  // },
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',
