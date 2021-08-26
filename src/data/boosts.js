@@ -151,6 +151,16 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
+  CUSTOM_THEME: {
+    title: 'Custom Theme',
+    description: 'Customize the visual theme of your community.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.0',
+    pars: ['Edit the colors, fonts, images and wording in your DAO UI.'],
+    externalLinks: [
+      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+    ],
+  },
 };
 
 const STEPS = {
@@ -173,13 +183,15 @@ const STEPS = {
       stepLabel: 'Add Proposals & Sign',
       finish: true,
       isUserStep: true,
+      skipPlaylist: true,
     },
   },
   ADD_DISCORD: {},
   ADD_DISCOURSE: {},
   ADD_SNAPSHOT: {},
   ADD_MINTGATE: {},
-  ADD_RARIBLE: {
+  ADD_WRAP_N_ZAP: {},
+  ADD_CUSTOM_THEME: {
     DISPLAY: {
       type: 'boostDetails',
       next: 'STEP1',
@@ -187,20 +199,12 @@ const STEPS = {
       isUserStep: false,
     },
     STEP1: {
-      type: 'summoner',
-      next: 'STEP2',
-      stepLabel: 'Deploy Minion',
-      isForBoost: true,
-      isUserStep: true,
-    },
-    STEP2: {
       type: 'signer',
-      stepLabel: 'Add Proposals & Sign',
+      stepLabel: 'Add Boost and Sign',
       finish: true,
       isUserStep: true,
     },
   },
-  ADD_WRAP_N_ZAP: {},
 };
 
 export const BOOSTS = {
@@ -239,7 +243,7 @@ export const BOOSTS = {
     id: 'RARIBLE',
     oldId: 'rarible',
     minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
-    steps: STEPS.ADD_RARIBLE,
+    steps: STEPS.MINION_BOOST,
     boostContent: CONTENT.RARIBLE,
     categories: ['nft'],
     networks: { '0x4': true },
@@ -300,6 +304,14 @@ export const BOOSTS = {
     steps: STEPS.ADD_WRAP_N_ZAP,
     boostContent: CONTENT.WRAP_N_ZAP,
     categories: ['payments'],
+    networks: 'all',
+  },
+  CUSTOM_THEME: {
+    id: 'CUSTOM_THEME',
+    oldId: 'customTheme',
+    steps: STEPS.ADD_CUSTOM_THEME,
+    boostContent: CONTENT.CUSTOM_THEME,
+    categories: ['community'],
     networks: 'all',
   },
 };
