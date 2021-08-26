@@ -63,7 +63,6 @@ export const supportedChains = {
     block_explorer: 'https://rinkeby.etherscan.io',
     neapolitanMinion: {
       minion_factory_addr: '0x4050E747Ed393e1Fd89783662C48373421fD0647',
-      // version: 'v1',
     },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
