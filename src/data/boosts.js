@@ -99,8 +99,8 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  MINT_GATE: {
-    title: 'Mint Gate',
+  MINTGATE: {
+    title: 'MintGate',
     description: 'Gate links to restrict view access to DAO members only',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',
@@ -151,16 +151,6 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  CUSTOM_THEME: {
-    title: 'Custom Theme',
-    description: 'Customize the visual theme of your community.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '1.0',
-    pars: ['Edit the colors, fonts, images and wording in your DAO UI.'],
-    externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-    ],
-  },
 };
 
 const STEPS = {
@@ -175,7 +165,6 @@ const STEPS = {
       type: 'summoner',
       next: 'STEP2',
       stepLabel: 'Deploy Minion',
-      isForBoost: true,
       isUserStep: true,
     },
     STEP2: {
@@ -183,15 +172,13 @@ const STEPS = {
       stepLabel: 'Add Proposals & Sign',
       finish: true,
       isUserStep: true,
-      skipPlaylist: true,
     },
   },
   ADD_DISCORD: {},
   ADD_DISCOURSE: {},
   ADD_SNAPSHOT: {},
-  ADD_MINTGATE: {},
   ADD_WRAP_N_ZAP: {},
-  ADD_CUSTOM_THEME: {
+  ADD_MINTGATE: {
     DISPLAY: {
       type: 'boostDetails',
       next: 'STEP1',
@@ -283,11 +270,11 @@ export const BOOSTS = {
     categories: ['community'],
     networks: 'all',
   },
-  MINT_GATE: {
-    id: 'MINT_GATE',
+  MINTGATE: {
+    id: 'MINTGATE',
     oldId: 'mintGate',
     steps: STEPS.ADD_MINTGATE,
-    boostContent: CONTENT.MINT_GATE,
+    boostContent: CONTENT.MINTGATE,
     categories: ['community'],
     networks: 'all',
   },
@@ -306,14 +293,6 @@ export const BOOSTS = {
     categories: ['payments'],
     networks: 'all',
   },
-  CUSTOM_THEME: {
-    id: 'CUSTOM_THEME',
-    oldId: 'customTheme',
-    steps: STEPS.ADD_CUSTOM_THEME,
-    boostContent: CONTENT.CUSTOM_THEME,
-    categories: ['community'],
-    networks: 'all',
-  },
 };
 
 export const allBoosts = {
@@ -325,10 +304,11 @@ const categoryStarter = [
   { name: 'Payments', id: 'payments' },
   { name: 'Community', id: 'community' },
   { name: 'Governance', id: 'governance' },
-  // { name: 'Membership', id: 'membership' },
-  // { name: 'Finance', id: 'finance' },
   { name: 'NFTs', id: 'nft' },
   { name: 'Dev Tools', id: 'devTools' },
+  // TODO: future categories
+  // { name: 'Membership', id: 'membership' },
+  // { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({
   ...cat,
