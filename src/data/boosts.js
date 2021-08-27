@@ -189,7 +189,6 @@ const STEPS = {
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
-      metaFields: ['name', 'color', 'autoProposal'],
     },
     STEP2: {
       type: 'signer',
@@ -313,6 +312,7 @@ export const BOOSTS = {
     boostContent: CONTENT.DISCOURSE,
     categories: ['community'],
     networks: 'all',
+    metaFields: ['name', 'color', 'autoProposal'],
   },
   WRAP_N_ZAP: {
     id: 'WRAP_N_ZAP',

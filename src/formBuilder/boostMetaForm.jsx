@@ -2,12 +2,18 @@ import React from 'react';
 import FormBuilder from './formBuilder';
 
 const BoostMetaForm = props => {
-  const { currentStep, parentForm, goToNext, setStepperStorage } = props;
+  const {
+    currentStep,
+    parentForm,
+    goToNext,
+    setStepperStorage,
+    metaFields,
+  } = props;
   const { getValues } = parentForm;
 
   const handleGoToNext = () => {
     const formValues = getValues();
-    const metaUpdate = currentStep.metaFields.reduce((update, fieldName) => {
+    const metaUpdate = metaFields.reduce((update, fieldName) => {
       update[fieldName] = formValues[fieldName];
       return update;
     }, {});

@@ -10,7 +10,14 @@ import TheSummoner from '../components/theSummoner';
 import BoostMetaForm from './boostMetaForm';
 
 const StepperForm = props => {
-  const { steps = {}, minionData, boostContent, playlist, isAvailable } = props;
+  const {
+    steps = {},
+    minionData,
+    boostContent,
+    playlist,
+    isAvailable,
+    metaFields,
+  } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
   const { errorToast } = useOverlay();
@@ -83,6 +90,7 @@ const StepperForm = props => {
         <BoostMetaForm
           currentStep={currentStep}
           parentForm={parentForm}
+          metaFields={metaFields}
           goToNext={goToNext}
           setStepperStorage={setStepperStorage}
         />
