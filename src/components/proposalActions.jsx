@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Button, Flex, Icon, Skeleton, Tooltip } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Skeleton,
+  Tooltip,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
 import { motion } from 'framer-motion';
 import { MaxUint256 } from '@ethersproject/constants';
+import { utils } from 'ethers';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -65,6 +75,7 @@ const ProposalVote = ({
   const [enoughDeposit, setEnoughDeposit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nextProposalToProcess, setNextProposal] = useState(null);
+  const [quorumNeeded, setQuorumNeeded] = useState(false);
 
   const currentlyVoting = proposal => {
     return (
@@ -117,6 +128,9 @@ const ProposalVote = ({
     };
     if (overview?.depositToken && address) {
       getDepositTokenBalance();
+      setQuorumNeeded(
+        (overview?.totalShares * proposal?.minion?.minQuorum) / 100,
+      );
     }
     () => {
       shouldUpdate = false;
@@ -373,23 +387,7 @@ const ProposalVote = ({
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
                           {+proposal?.yesShares > +proposal?.noShares && (
-                            <Box>
-                              Currently Passing
-                              {proposal?.minion?.minionType ===
-                                MINION_TYPES.NIFTY && (
-                                <>
-                                  {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
-                                  <MinionExecute
-                                    hideMinionExecuteButton={
-                                      hideMinionExecuteButton
-                                    }
-                                    minionAction={minionAction}
-                                    proposal={proposal}
-                                    early
-                                  />
-                                </>
-                              )}
-                            </Box>
+                            <Box>Currently Passing</Box>
                           )}
                           {+proposal?.yesShares === 0 &&
                             +proposal?.noShares === 0 &&
@@ -493,42 +491,63 @@ const ProposalVote = ({
               </Flex>
             </>
           )}
+        <Stack>
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainId,
+          ) &&
+            proposal?.status === 'ReadyForProcessing' &&
+            !injectedProvider?.currentProvider?.safe &&
+            (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
+              <Flex justify='center' pt='10px'>
+                <Flex direction='column'>
+                  <Button
+                    onClick={() => processProposal(proposal)}
+                    isLoading={loading}
+                  >
+                    Process
+                  </Button>
+                </Flex>
+              </Flex>
+            ) : (
+              <Flex justify='center' pt='10px'>
+                <Flex direction='column'>
+                  <Button
+                    as={Link}
+                    to={`/dao/${daochain}/${daoid}/proposals/${nextProposalToProcess?.proposalId}`}
+                    variant='outline'
+                    onClick={() => setNextProposal(nextProposalToProcess)}
+                  >
+                    {`Proposal ${nextProposalToProcess?.proposalId} Needs Processing Next`}
+                  </Button>
+                </Flex>
+              </Flex>
+            ))}
 
-        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
-          proposal?.status === 'ReadyForProcessing' &&
-          !injectedProvider?.currentProvider?.safe &&
-          (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
-            <Flex justify='center' pt='10px'>
-              <Flex direction='column'>
-                <Button
-                  onClick={() => processProposal(proposal)}
-                  isLoading={loading}
-                >
-                  Process
-                </Button>
-              </Flex>
-            </Flex>
-          ) : (
-            <Flex justify='center' pt='10px'>
-              <Flex direction='column'>
-                <Button
-                  as={Link}
-                  to={`/dao/${daochain}/${daoid}/proposals/${nextProposalToProcess?.proposalId}`}
-                  variant='outline'
-                  onClick={() => setNextProposal(nextProposalToProcess)}
-                >
-                  {`Proposal ${nextProposalToProcess?.proposalId} Needs Processing Next`}
-                </Button>
-              </Flex>
-            </Flex>
-          ))}
-        {proposal?.status === 'Passed' && proposal?.minionAddress && (
-          <MinionExecute
-            hideMinionExecuteButton={hideMinionExecuteButton}
-            minionAction={minionAction}
-            proposal={proposal}
-          />
-        )}
+          {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
+            (proposal?.minion?.minionType === MINION_TYPES.NIFTY && (
+              <Stack mt='15px' justify='center'>
+                {proposal.yesShares >= quorumNeeded ? (
+                  <MinionExecute
+                    hideMinionExecuteButton={hideMinionExecuteButton}
+                    minionAction={minionAction}
+                    proposal={proposal}
+                    early={
+                      proposal?.minion?.minionType === MINION_TYPES.NIFTY &&
+                      proposal.yesShares >= quorumNeeded
+                    }
+                  />
+                ) : (
+                  <Text size='sm' textAlign='center' maxW='60%' m='auto'>
+                    {proposal?.minion?.minQuorum}% quorum or{' '}
+                    {utils.commify(quorumNeeded)} shares needed for Early
+                    Execution
+                  </Text>
+                )}
+              </Stack>
+            ))}
+        </Stack>
       </ContentBox>
     </>
   );
