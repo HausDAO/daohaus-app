@@ -26,6 +26,7 @@ const Installed = () => {
   useEffect(() => {
     if (daoMetaData && daoOverview) {
       const generatedLists = generateLists(daoMetaData, daoOverview, dev);
+
       setLists(generatedLists);
     }
   }, [daoMetaData, daoOverview, dev]);
@@ -77,7 +78,6 @@ const InstalledList = ({ listID, lists }) => {
         STEP2: {
           type: 'summoner',
           finish: true,
-          isForBoost: false,
         },
       },
     });
@@ -91,7 +91,7 @@ const InstalledList = ({ listID, lists }) => {
         </NoListItem>
       );
     }
-    currentList?.types?.map(minion => {
+    return currentList?.types?.map(minion => {
       return (
         <ListItem
           {...minion}
@@ -116,8 +116,8 @@ const InstalledList = ({ listID, lists }) => {
     }
     return currentList?.types?.map(boost => (
       <ListItem
-        title={boost.boostContent.title}
-        description={boost.boostContent.description}
+        title={boost.boostContent?.title}
+        description={boost.boostContent?.description}
         key={boost.id}
         menuSection={
           <Button variant='ghost'>

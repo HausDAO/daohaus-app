@@ -392,27 +392,29 @@ export const addBoost = async ({
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
 
-  const newPropConfig = addBoostPlaylist(proposalConfig, boostData.playlist);
-
   try {
     const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
     const signature = await injectedProvider.eth.personal.sign(
       messageHash,
       address,
     );
-    console.log(`contractAddress`, meta.contractAddress);
-    console.log(`network`, network);
-    console.log(`boostData.id`, boostData.id);
-    console.log(`newPropConfig`, newPropConfig);
-    console.log(`signature`, signature);
     const updateData = {
       contractAddress: meta.contractAddress,
       network,
       boostKey: boostData.id,
-      metadata: {},
-      proposalConfig: newPropConfig,
+      metadata: extraMetaData,
       signature,
     };
+
+    if (proposalConfig) {
+      const newPropConfig = addBoostPlaylist(
+        proposalConfig,
+        boostData.playlist,
+      );
+      updateData.proposalConfig = newPropConfig;
+      console.log(`newPropConfig`, newPropConfig);
+    }
+
     const res = await boostPost('dao/boost', updateData);
     if (res.error) throw new Error(res.error);
     return true;

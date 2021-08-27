@@ -15,13 +15,27 @@ export const CONTENT = {
     externalLinks: [{ href: 'https://daohaus.club/', label: 'Boost Support' }],
   },
   OLD_DEV_SUITE: {
-    title: 'Old DEV Suite',
+    title: 'Basic Minion DEV Suite',
     description:
-      'Developer tools to prototype, build and test your own boosts. Oldschool.',
+      'Enable one-time interactions with other smart contracts via DAO proposals.',
     publisher: PUBLISHERS.DAOHAUS,
     version: '1.00',
     pars: [
-      'The DEV Suite is an all-in-one developer toolset for advanced builders to prototype, build and test their own Minions and Boosts.',
+      'Want a simple way to execute smart contract calls automatically based on the outcome of your proposals?',
+      'Also known as a vanilla minion, it is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed. ',
+      'This way, you can upgrade your DAO experience by seamlessly go from voting to execution without any coordination lags.',
+    ],
+    externalLinks: [{ href: 'https://daohaus.club/', label: 'Boost Support' }],
+  },
+  NIFTY_DEV_SUITE: {
+    title: 'Advanced Minion DEV Suite',
+    description:
+      'Enable one-time interactions with other smart contracts via DAO proposals with early execution capabilites.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.00',
+    pars: [
+      'The Advanced Minion is similar to the vanilla minion with the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met',
+      'Also know as a Nifty Minion',
     ],
     externalLinks: [{ href: 'https://daohaus.club/', label: 'Boost Support' }],
   },
@@ -85,8 +99,8 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  MINT_GATE: {
-    title: 'Mint Gate',
+  MINTGATE: {
+    title: 'MintGate',
     description: 'Gate links to restrict view access to DAO members only',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',
@@ -125,22 +139,16 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  UBERHAUS: {
-    title: 'Uberhaus',
-    description:
-      'Join and participate in UberHaus - the governance for DAOs of DAOs',
+  RARIBLE: {
+    title: 'Rarible',
+    description: 'Buy and sell NFTs on Rarible from your DAO.',
     publisher: PUBLISHERS.DAOHAUS,
-    version: '0.5',
+    version: '1.0',
     pars: [
-      'UberHaus is a DAO of DAOs - governing the ecosystem and roadmap of DAOhaus.',
-      'As the gateway to UberHaus governance, the UberHaus Minion enables you to stake your HAUS tokens, manage delegates, withdraw funds and rage-quit from UberHaus.',
+      'This boost helps your DAO create NFT sell and buy orders on the Rarible marketplace.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-      {
-        href: 'https://github.com/HausDAO/UberHaus-Minion',
-        label: 'Minion Contract',
-      },
     ],
   },
 };
@@ -157,7 +165,6 @@ const STEPS = {
       type: 'summoner',
       next: 'STEP2',
       stepLabel: 'Deploy Minion',
-      isForBoost: true,
       isUserStep: true,
     },
     STEP2: {
@@ -170,7 +177,21 @@ const STEPS = {
   ADD_DISCORD: {},
   ADD_DISCOURSE: {},
   ADD_SNAPSHOT: {},
-  ADD_MINTGATE: {},
+  ADD_WRAP_N_ZAP: {},
+  ADD_MINTGATE: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+      isUserStep: false,
+    },
+    STEP1: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
 };
 
 export const BOOSTS = {
@@ -178,22 +199,43 @@ export const BOOSTS = {
     id: 'OLD_DEV_SUITE',
     boostContent: CONTENT.OLD_DEV_SUITE,
     minionData: MINIONS[MINION_TYPES.VANILLA],
-    categories: ['advanced', 'ops'],
+    categories: ['devTools'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
+    settings: 'none',
     networks: 'all',
     cost: 'free',
-    createConfig: false,
   },
-  DEV_SUITE: {
-    id: 'DEV_SUITE',
-    boostContent: CONTENT.DEV_SUITE,
-    minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
-    categories: ['advanced', 'ops'],
+  NIFTY_DEV_SUITE: {
+    id: 'NIFTY_DEV_SUITE',
+    boostContent: CONTENT.NIFTY_DEV_SUITE,
+    minionData: MINIONS[MINION_TYPES.NIFTY],
+    categories: ['devTools'],
     steps: STEPS.MINION_BOOST,
-    playlist: BOOST_PLAYLISTS.DEV_SUITE,
-    networks: MINIONS[MINION_TYPES.NEAPOLITAN].networks,
+    playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
+    networks: MINIONS[MINION_TYPES.NIFTY].networks,
     cost: 'free',
+  },
+  // TODO: coming later with neapolitan minion
+  // DEV_SUITE: {
+  //   id: 'DEV_SUITE',
+  //   boostContent: CONTENT.DEV_SUITE,
+  //   minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
+  //   categories: ['devTools'],
+  //   steps: STEPS.MINION_BOOST,
+  //   playlist: BOOST_PLAYLISTS.DEV_SUITE,
+  //   networks: MINIONS[MINION_TYPES.NEAPOLITAN].networks,
+  //   cost: 'free',
+  // },
+  RARIBLE: {
+    id: 'RARIBLE',
+    oldId: 'rarible',
+    minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
+    steps: STEPS.MINION_BOOST,
+    boostContent: CONTENT.RARIBLE,
+    categories: ['nft'],
+    networks: { '0x4': true },
+    playlist: BOOST_PLAYLISTS.RARIBLE,
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
@@ -202,63 +244,61 @@ export const BOOSTS = {
     minionData: MINIONS[MINION_TYPES.NIFTY],
     categories: ['nft'],
     steps: STEPS.MINION_BOOST,
-    networks: MINIONS[MINION_TYPES.NIFTY].networks,
+    networks: { '0x64': true },
     playlist: BOOST_PLAYLISTS.NIFTY_INK,
-  },
-  UBERHAUS: {
-    id: 'UBERHAUS',
-    boostContent: CONTENT.UBERHAUS,
-    minionData: MINIONS[MINION_TYPES.UBER],
-    categories: ['social', 'advanced'],
-    steps: STEPS.MINION_BOOST,
-    networks: MINIONS[MINION_TYPES.UBER].networks,
-    playlist: BOOST_PLAYLISTS.UBERHAUS,
+    cost: 'free',
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',
     boostContent: CONTENT.SUPERFLUID,
     minionData: MINIONS[MINION_TYPES.SUPERFLUID],
-    categories: ['token', 'tools'],
+    categories: ['payments'],
     steps: STEPS.MINION_BOOST,
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
+    cost: 'free',
   },
   SNAPSHOT: {
     id: 'SNAPSHOT',
     oldId: 'snapshot',
     boostContent: CONTENT.SNAPSHOT,
     steps: STEPS.ADD_SNAPSHOT,
-    categories: ['ops', 'social'],
+    categories: ['governance'],
     networks: 'all',
+    cost: 'free',
   },
-  // RARIBLE: {
-  //   name: 'Rarible',
-  //   id: 'rarible',
-  //   categories: ['nft'],
-  //   playlist: BOOST_PLAYLISTS.RARIBLE,
-  // },
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',
     steps: STEPS.ADD_SNAPSHOT,
     boostContent: CONTENT.DISCORD,
-    categories: ['social'],
+    categories: ['community'],
     networks: 'all',
+    cost: 'free',
   },
-  MINT_GATE: {
-    id: 'MINT_GATE',
+  MINTGATE: {
+    id: 'MINTGATE',
     oldId: 'mintGate',
     steps: STEPS.ADD_MINTGATE,
-    boostContent: CONTENT.MINT_GATE,
-    categories: ['nft', 'tools'],
+    boostContent: CONTENT.MINTGATE,
+    categories: ['community'],
     networks: 'all',
+    cost: 'free',
   },
   DISCOURSE: {
     id: 'DISCOURSE',
     oldId: 'discourse',
-    steps: STEPS.DISCOURSE,
+    steps: STEPS.ADD_DISCOURSE,
     boostContent: CONTENT.DISCOURSE,
-    categories: ['social'],
+    categories: ['community'],
     networks: 'all',
+  },
+  WRAP_N_ZAP: {
+    id: 'WRAP_N_ZAP',
+    steps: STEPS.ADD_WRAP_N_ZAP,
+    boostContent: CONTENT.WRAP_N_ZAP,
+    categories: ['payments'],
+    networks: 'all',
+    cost: 'free',
   },
 };
 
@@ -268,12 +308,14 @@ export const allBoosts = {
   boosts: Object.values(BOOSTS).map(boost => boost.id),
 };
 const categoryStarter = [
-  { name: 'NFT', id: 'nft' },
-  { name: 'Advanced', id: 'advanced' },
-  { name: 'Social', id: 'social' },
-  { name: 'DAO Ops', id: 'ops' },
-  { name: 'Defi', id: 'defi' },
-  { name: 'Token', id: 'token' },
+  { name: 'Payments', id: 'payments' },
+  { name: 'Community', id: 'community' },
+  { name: 'Governance', id: 'governance' },
+  { name: 'NFTs', id: 'nft' },
+  { name: 'Dev Tools', id: 'devTools' },
+  // TODO: future categories
+  // { name: 'Membership', id: 'membership' },
+  // { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({
   ...cat,

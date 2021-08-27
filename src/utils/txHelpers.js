@@ -11,7 +11,6 @@ import { PROPOSAL_TYPES } from './proposalUtils';
 import { TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
-
 const getPath = pathString =>
   pathString
     .slice(1)
@@ -20,6 +19,8 @@ const getPath = pathString =>
 
 const getConditions = pathString =>
   pathString.split(' || ').filter(str => str !== '' || str !== ' ');
+
+const splitByTemplates = string => string.split(/{|}/g).filter(Boolean);
 
 const searchData = (data, fields, shouldThrow = true) => {
   if (data == null || fields == null) {
@@ -198,6 +199,19 @@ export const getArgs = data => {
   throw new Error(
     'Error at getArgs() in txHelpers.js. TX data did not include a method to collect arguments. Check transaction data in contractTX.js.',
   );
+};
+
+export const createHydratedString = data => {
+  const { string } = data;
+  if (!string)
+    throw new Error(
+      'txHelpers.js => createHydratedString: string does not exist',
+    );
+  const fragments = splitByTemplates(string);
+  console.log(`fragments`, fragments);
+  // return fragments
+  //   .map(str => (str[0] === '.' ? handleSearchPath(data, str) : str))
+  //   .join();
 };
 
 export const getContractAddress = data => {

@@ -7,6 +7,11 @@ export const BOOST_PLAYLISTS = {
     id: 'vanMinionClassics',
     forms: ['MINION', 'PAYROLL'],
   },
+  NIFTY_DEV_SUITE: {
+    name: 'Nifty Minion Classics',
+    id: 'niftyMinionClassics',
+    forms: ['MINION_NIFTY', 'PAYROLL_NIFTY'],
+  },
   NFT: {
     name: 'NFT Suite',
     id: 'nifty minion',
@@ -21,11 +26,11 @@ export const BOOST_PLAYLISTS = {
       'MINION_BUYOUT_ERC721_TOKEN',
     ],
   },
-  // RARIBLE: {
-  //   name: 'Rarible',
-  //   id: 'rarible',
-  //   forms: ['SELL_NFT_RARIBLE'],
-  // },
+  RARIBLE: {
+    name: 'Rarible',
+    id: 'rarible',
+    forms: ['SELL_NFT_RARIBLE'],
+  },
   NIFTY_INK: {
     name: 'NiftyInk',
     id: 'nifty minion',
@@ -60,19 +65,23 @@ export const PLAYLISTS = [
 ];
 
 export const generateNewConfig = ({ daoMetaData }) => {
-  // const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
-  // const { boosts } = daoMetaData;
-  // const playlists = boostIDs.reduce((acc, boostID) => {
+  const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
+  const { boosts } = daoMetaData;
   console.log('GENERATING NEW CONFIG');
   console.log(`daoMetaData`, daoMetaData);
-  //   if (boosts?.[boostID]) {
-  //     return [...acc, BOOST_PLAYLISTS.find(list => list.id === boostID)];
-  //   }
-  //   return acc;
-  // }, PLAYLISTS);
+  const playlists = boostIDs.reduce((acc, boostID) => {
+    if (boosts?.[boostID]) {
+      return [
+        ...acc,
+        Object.values(BOOST_PLAYLISTS).find(list => list.id === boostID),
+      ];
+    }
+    return acc;
+  }, PLAYLISTS);
 
   return {
-    playlists: PLAYLISTS,
+    // playlists: PLAYLISTS,
+    playlists,
     allForms: {
       name: 'All Proposals',
       id: 'all',

@@ -41,7 +41,7 @@ export const calcSeconds = (val, unit) => {
   return false;
 };
 
-export const pipe = (...fns) => x => fns.reduce((prev, func) => func(prev), x);
+export const pipe = fns => x => fns.reduce((prev, func) => () => func(prev), x);
 
 export const parseIfJSON = data => {
   try {
