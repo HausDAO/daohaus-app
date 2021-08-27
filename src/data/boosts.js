@@ -183,15 +183,13 @@ const STEPS = {
       start: true,
       isUserStep: false,
     },
-    // TODO: is form good?
-    // would require a map of values to extrametadata...
-    // maybe ok - only use values if using tx?
     STEP1: {
       type: 'boostMetaForm',
       lego: FORM.DISCOURSE_FORUM_COLOR,
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
+      metaFields: ['name', 'color', 'autoProposal'],
     },
     STEP2: {
       type: 'signer',
