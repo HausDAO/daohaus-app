@@ -25,7 +25,7 @@ const handleSearch = (list, listID, searchStr) => {
   if (!searchStr) return list;
   if (!list?.length) return [];
   return list.filter(item => {
-    if (listID === 'minion') {
+    if (listID === 'minions') {
       return item?.title.toLowerCase().includes(searchStr);
     }
     return item?.boostContent?.title.toLowerCase().includes(searchStr);
@@ -36,13 +36,17 @@ const Installed = ({ installBoost, openDetails, goToSettings }) => {
   const { daoMetaData } = useMetaData();
   const { daoOverview } = useDao();
   const [lists, setLists] = useState(null);
-  const [listID, setListID] = useState(dev ? 'dev' : 'boosts');
+  const [listID, setListID] = useState(null);
 
   useEffect(() => {
     if (daoMetaData && daoOverview) {
       const generatedLists = generateLists(daoMetaData, daoOverview, dev);
-
       setLists(generatedLists);
+      if (generatedLists[0].id === 'dev' && dev) {
+        setListID('dev');
+      } else {
+        setListID('boosts');
+      }
     }
   }, [daoMetaData, daoOverview, dev]);
 
@@ -190,7 +194,7 @@ const InstalledList = ({
           <InputGroup w='250px' mr={6}>
             <Input
               onChange={handleChange}
-              placeholder={`Search ${currentList?.name || 'Installed'}...`}
+              placeholder={`Search ${listID || 'Installed'}...`}
             />
           </InputGroup>
           <Button variant='outline' onClick={handleClick}>
@@ -198,7 +202,7 @@ const InstalledList = ({
           </Button>
         </Flex>
       }
-      list={listID === 'minion' ? renderMinions() : renderBoosts()}
+      list={listID === 'minions' ? renderMinions() : renderBoosts()}
     />
   );
 };

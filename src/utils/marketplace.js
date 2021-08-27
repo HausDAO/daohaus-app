@@ -43,12 +43,12 @@ export const generateLists = (daoMetaData, daoOverview, dev) => {
   const lists = [
     {
       name: 'Boosts',
-      id: 'boost',
+      id: 'boosts',
       types: isObjectEmpty(daoMetaData?.boosts || {}) ? [] : boostTypes,
     },
     {
       name: 'Minions',
-      id: 'minion',
+      id: 'minions',
       types:
         daoOverview?.minions.map(minion => ({
           title: minion.details,
@@ -58,8 +58,10 @@ export const generateLists = (daoMetaData, daoOverview, dev) => {
         })) || [],
     },
   ];
-
-  return dev ? [devBoostList, ...lists] : lists;
+  if (dev && devBoostList.types.length) {
+    return [devBoostList, ...lists];
+  }
+  return lists;
 };
 
 export const getSettingsLink = (settings, params) => {
