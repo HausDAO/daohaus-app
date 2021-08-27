@@ -21,6 +21,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.PAYMENT_REQUEST,
     ],
+    customValidations: ['enoughBalance', 'enoughAllowance'], // opt. 'nonDaoApplicant', 'enoughDaoBalance'
   },
   FUNDING: {
     title: 'Funding',
@@ -40,7 +41,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.TRIBUTE,
     ],
-    customValidations: ['nonDaoApplicant'],
+    customValidations: ['nonDaoApplicant', 'enoughDaoBalance'], // opt. 'enoughBalance', 'enoughAllowance'
   },
   TOKEN: {
     title: 'Token',
