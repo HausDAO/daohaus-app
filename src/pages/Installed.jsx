@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Flex, Spinner, Button } from '@chakra-ui/react';
+import { Flex, Spinner, Button, InputGroup, Input } from '@chakra-ui/react';
+import { useHistory, useParams } from 'react-router';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useFormModal } from '../contexts/OverlayContext';
@@ -15,8 +16,21 @@ import { isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
 import { CORE_FORMS } from '../data/forms';
 import BoostItemButton from '../components/boostItemButton';
+import ListItemButton from '../components/listItemButton';
+import { useTX } from '../contexts/TXContext';
 
 const dev = process.env.REACT_APP_DEV;
+
+const handleSearch = (list, listID, searchStr) => {
+  if (!searchStr) return list;
+  if (!list?.length) return [];
+  return list.filter(item => {
+    if (listID === 'minion') {
+      return item?.title.toLowerCase().includes(searchStr);
+    }
+    return item?.boostContent?.title.toLowerCase().includes(searchStr);
+  });
+};
 
 const Installed = ({ installBoost, openDetails, goToSettings }) => {
   const { daoMetaData } = useMetaData();
@@ -72,12 +86,22 @@ const InstalledList = ({
   openDetails,
   goToSettings,
 }) => {
+  const { daoid, daochain } = useParams();
+  const history = useHistory();
   const { openFormModal } = useFormModal();
+  const { hydrateString } = useTX();
+
+  const [searchStr, setSearchStr] = useState(null);
+
   const currentList = useMemo(() => {
     if (listID && lists) {
-      return lists?.find(list => list.id === listID);
+      return handleSearch(
+        lists?.find(list => list.id === listID).types,
+        listID,
+        searchStr,
+      );
     }
-  }, [listID, lists]);
+  }, [listID, lists, searchStr]);
 
   const handleClick = () => {
     openFormModal({
@@ -96,23 +120,37 @@ const InstalledList = ({
     });
   };
 
+  const handleMinionSettings = ({ data, id }) => {
+    if (data.settings.localUrl) {
+      const url = hydrateString({
+        string: data.settings.localUrl,
+        daoid,
+        daochain,
+        minionAddress: id,
+      });
+      history.push(url);
+    }
+  };
+
   const renderMinions = () => {
-    if (!currentList?.types?.length) {
+    if (!currentList?.length) {
       return (
         <NoListItem>
           <TextBox>No Minions Installed</TextBox>
         </NoListItem>
       );
     }
-    return currentList?.types?.map(minion => {
+    return currentList?.map(minion => {
       return (
         <ListItem
           {...minion}
           key={minion.id}
           menuSection={
-            <Button variant='ghost'>
-              <TextBox>Settings</TextBox>
-            </Button>
+            <ListItemButton
+              value={minion}
+              onClick={handleMinionSettings}
+              mainText='Settings'
+            />
           }
         />
       );
@@ -120,14 +158,14 @@ const InstalledList = ({
   };
 
   const renderBoosts = () => {
-    if (!currentList?.types?.length) {
+    if (!currentList?.length) {
       return (
         <NoListItem>
           <TextBox>No Boosts Installed</TextBox>
         </NoListItem>
       );
     }
-    return currentList?.types?.map(boost => (
+    return currentList?.map(boost => (
       <ListItem
         title={boost.boostContent?.title}
         description={boost.boostContent?.description}
@@ -144,15 +182,17 @@ const InstalledList = ({
     ));
   };
 
+  const handleChange = e => setSearchStr(e.target.value.toLowerCase().trim());
   return (
     <List
       headerSection={
-        <Flex w='100%' justifyContent='flex-end'>
-          {/* <InputGroup w='250px' mr={6}>
+        <Flex w='100%' justifyContent='space-between'>
+          <InputGroup w='250px' mr={6}>
             <Input
+              onChange={handleChange}
               placeholder={`Search ${currentList?.name || 'Installed'}...`}
             />
-          </InputGroup> */}
+          </InputGroup>
           <Button variant='outline' onClick={handleClick}>
             Summon Minion
           </Button>

@@ -237,6 +237,7 @@ export const BOOSTS = {
     categories: ['nft'],
     networks: { '0x4': true },
     playlist: BOOST_PLAYLISTS.RARIBLE,
+    cost: 'free',
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
@@ -293,6 +294,7 @@ export const BOOSTS = {
     boostContent: CONTENT.DISCOURSE,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
   },
   WRAP_N_ZAP: {
     id: 'WRAP_N_ZAP',

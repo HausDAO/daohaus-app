@@ -79,6 +79,17 @@ export const MINION_CONTENT = {
   //    { '0x1': true, '0x4': true },
   // },
 };
+const SETTINGS_LINKS = {
+  VAULT_LINK: {
+    localUrl: '/dao/{.daochain}/{.daoid}/vaults/minion/{.minionAddress}',
+  },
+  UBER_LINK: {
+    localUrl: '/dao/{.daochain}/{.daoid}/allies',
+  },
+  SF_LINK: {
+    localUrl: `/dao/{.daochain}/{.daoid}/settings/superfluid-minion/{.minionAddress}`,
+  },
+};
 
 export const MINIONS = {
   [MINION_TYPES.VANILLA]: {
@@ -86,34 +97,34 @@ export const MINIONS = {
     content: MINION_CONTENT[MINION_TYPES.VANILLA],
     networks: MINION_NETWORKS[MINION_TYPES.VANILLA],
     summonForm: FORM.NEW_VANILLA_MINION,
+    settings: SETTINGS_LINKS.VAULT_LINK,
   },
   [MINION_TYPES.NIFTY]: {
     minionType: MINION_TYPES.NIFTY,
     content: MINION_CONTENT[MINION_TYPES.NIFTY],
     networks: MINION_NETWORKS[MINION_TYPES.NIFTY],
     summonForm: FORM.NEW_NIFTY_MINION,
+    settings: SETTINGS_LINKS.VAULT_LINK,
   },
   [MINION_TYPES.UBER]: {
     minionType: MINION_TYPES.UBER,
     content: MINION_CONTENT[MINION_TYPES.UBER],
     networks: MINION_NETWORKS[MINION_TYPES.UBER],
     summonForm: null,
+    settings: SETTINGS_LINKS.UBER_LINK,
   },
   [MINION_TYPES.SUPERFLUID]: {
     minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
     networks: MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
     summonForm: null,
+    settings: SETTINGS_LINKS.SF_LINK,
   },
   [MINION_TYPES.NEAPOLITAN]: {
     minionType: MINION_TYPES.NEAPOLITAN,
     content: MINION_CONTENT[MINION_TYPES.NEAPOLITAN],
     networks: MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
     summonForm: FORM.NEW_NEAPOLITAN_MINION,
+    settings: SETTINGS_LINKS.VAULT_LINK,
   },
-  // [MINION_TYPES.RARIBLE]: {
-  //   content: MINION_CONTENT[MINION_TYPES.VANILLA],
-  //   networks: MINION_NETWORKS[MINION_TYPES.VANILLA],
-  //   summonForm: null,
-  // },
 };

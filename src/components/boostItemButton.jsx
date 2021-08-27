@@ -1,6 +1,5 @@
 import React from 'react';
-import { Flex, Button } from '@chakra-ui/react';
-import TextBox from './TextBox';
+import ListItemButton from './listItemButton';
 
 const BoostItemButton = ({
   boost,
@@ -9,65 +8,42 @@ const BoostItemButton = ({
   goToSettings,
 }) => {
   const cost = boost?.cost?.toUpperCase();
-  if (!boost.isAvailable) {
-    const handleClick = () => openDetails(boost);
+  if (!boost.isAvailable)
     return (
-      <Flex flexDir='column' alignItems='flex-end'>
-        <Button variant='ghost' p={0} onClick={handleClick}>
-          <TextBox color='secondary.500'>Details</TextBox>
-        </Button>
-        <TextBox
-          variant='body'
-          mt={3}
-          opacity='0.8'
-          size='sm'
-          fontStyle='italic'
-        >
-          Unavailable on network - {cost}
-        </TextBox>
-      </Flex>
+      <ListItemButton
+        onClick={openDetails}
+        helperText={`Unavailable on network - ${cost}`}
+        value={boost}
+        mainText='Details'
+      />
     );
-  }
-  if (!boost.isInstalled) {
-    const handleClick = () => installBoost(boost);
+  if (!boost.isInstalled)
     return (
-      <Flex flexDir='column' alignItems='flex-end'>
-        <Button variant='ghost' onClick={handleClick} p={0}>
-          <TextBox color='secondary.500'>Install</TextBox>
-        </Button>
-        <TextBox variant='body' mt={3} opacity='0.8' size='sm'>
-          {cost}
-        </TextBox>
-      </Flex>
+      <ListItemButton
+        onClick={installBoost}
+        helperText={cost}
+        value={boost}
+        mainText='Install'
+      />
     );
-  }
-  if (boost.isInstalled) {
-    const handleClick = () => {
-      if (boost.settings === 'none') {
-        openDetails(boost);
-      } else {
-        goToSettings(boost);
-      }
-    };
+  if (boost.isInstalled && boost.settings === 'none')
     return (
-      <Flex flexDir='column' alignItems='flex-end'>
-        <Button variant='ghost' p={0} onClick={handleClick} color='red'>
-          <TextBox color='secondary.500'>
-            {boost.settings === 'none' ? 'Details' : 'Settings'}
-          </TextBox>
-        </Button>
-        <TextBox
-          variant='body'
-          mt={3}
-          opacity='0.8'
-          fontStyle='italic'
-          size='sm'
-        >
-          installed
-        </TextBox>
-      </Flex>
+      <ListItemButton
+        onClick={openDetails}
+        helperText={cost}
+        value={boost}
+        mainText='Details'
+      />
     );
-  }
+  if (boost.isInstalled)
+    return (
+      <ListItemButton
+        onClick={goToSettings}
+        helperText='installed'
+        value={boost}
+        mainText='Settings'
+      />
+    );
   return null;
 };
 

@@ -1,6 +1,7 @@
 import { isObjectEmpty } from './general';
 import { MINION_TYPES } from './proposalUtils';
 import { BOOSTS } from '../data/boosts';
+import { MINIONS } from '../data/minions';
 
 const boostsBanList = [
   ...Object.values(MINION_TYPES),
@@ -53,6 +54,7 @@ export const generateLists = (daoMetaData, daoOverview, dev) => {
           title: minion.details,
           description: minion.minionType,
           id: minion.minionAddress,
+          data: MINIONS[minion.minionType],
         })) || [],
     },
   ];
