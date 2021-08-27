@@ -114,9 +114,9 @@ const MinionProposalForm = () => {
         if (param.indexOf('xparam') > -1) {
           console.log(param);
           try {
-            inputValues.push(JSON.parse(values[param]));
+            inputValues.push(String(JSON.parse(values[param])));
           } catch {
-            inputValues.push(values[param]);
+            inputValues.push(String(values[param]));
           }
         }
       });
@@ -528,7 +528,7 @@ const MinionProposalForm = () => {
               onClick={requestWallet}
               isDisabled={injectedChain && daochain !== injectedChain?.chainId}
             >
-              {`Connect 
+              {`Connect
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
