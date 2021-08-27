@@ -1,5 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { FORM } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -175,7 +176,30 @@ const STEPS = {
     },
   },
   ADD_DISCORD: {},
-  ADD_DISCOURSE: {},
+  ADD_DISCOURSE: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+      isUserStep: false,
+    },
+    // TODO: is form good?
+    // would require a map of values to extrametadata...
+    // maybe ok - only use values if using tx?
+    STEP1: {
+      type: 'boostMetaForm',
+      lego: FORM.DISCOURSE_FORUM_COLOR,
+      next: 'STEP2',
+      stepLabel: 'Choose Forum Color',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
   ADD_SNAPSHOT: {},
   ADD_WRAP_N_ZAP: {},
   ADD_MINTGATE: {
@@ -269,7 +293,7 @@ export const BOOSTS = {
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',
-    steps: STEPS.ADD_SNAPSHOT,
+    steps: STEPS.ADD_DISCORD,
     boostContent: CONTENT.DISCORD,
     categories: ['community'],
     networks: 'all',

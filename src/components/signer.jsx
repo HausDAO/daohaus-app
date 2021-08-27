@@ -13,7 +13,7 @@ import { addBoost } from '../utils/metadata';
 import { chainByID } from '../utils/chain';
 
 const Signer = props => {
-  const { playlist, boostData, goToNext, finish } = props;
+  const { playlist, boostData, goToNext, finish, stepperStorage } = props;
   const { daochain } = useParams();
   const { daoProposals, daoMetaData, refetchMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
@@ -28,6 +28,7 @@ const Signer = props => {
       network: chainByID(daochain).network,
       boostData,
       proposalConfig: playlist && daoProposals,
+      extraMetaData: stepperStorage,
     });
     setState('signed');
     refetchMetaData();

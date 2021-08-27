@@ -25,6 +25,8 @@ import SuperfluidPaymentInput from './superfluidPaymentInput';
 import BuyoutPaymentInput from './buyoutPaymentInput';
 import RageInput from './rageInput';
 import RaribleNftSelect from './raribleNftData';
+import ColorPicker from './colorPicker';
+import DiscourseMeta from './discourseMeta';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -102,6 +104,12 @@ export const InputFactory = props => {
   }
   if (type === 'minionTypeSelect') {
     return <MinionTypeSelect {...props} />;
+  }
+  if (type === 'colorPicker') {
+    return <ColorPicker {...props} />;
+  }
+  if (type === 'discourseMeta') {
+    return <DiscourseMeta {...props} />;
   }
   return null;
 };
