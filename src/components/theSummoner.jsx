@@ -60,6 +60,7 @@ const MinionNotFound = ({ minionType = 'Minion' }) => {
 
 const TheSummoner = props => {
   const { localForm, goToNext, minionData, next } = props;
+
   const { daoOverview } = useDao();
   const { daoid, daochain } = useParams();
 

@@ -195,6 +195,7 @@ const BoostsList = ({
   const currentCategory = useMemo(() => {
     if (!categoryID || !categories || !daoMetaData) return;
     if (categoryID === 'all') {
+      console.log('Fired');
       return processBoosts({
         daochain,
         boostsKeyArray: allBoosts.boosts,

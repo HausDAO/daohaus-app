@@ -30,7 +30,7 @@ const BoostItemButton = ({
     return (
       <ListItemButton
         onClick={openDetails}
-        helperText={cost}
+        helperText='installed'
         value={boost}
         mainText='Details'
       />
