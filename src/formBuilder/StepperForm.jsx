@@ -7,9 +7,17 @@ import FormBuilder from './formBuilder';
 import BoostDetails from '../components/boostDetails';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
+import BoostMetaForm from './boostMetaForm';
 
 const StepperForm = props => {
-  const { steps = {}, minionData, boostContent, playlist, isAvailable } = props;
+  const {
+    steps = {},
+    minionData,
+    boostContent,
+    playlist,
+    isAvailable,
+    metaFields,
+  } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
   const { errorToast } = useOverlay();
@@ -18,6 +26,7 @@ const StepperForm = props => {
     Object.values(steps).find(step => step.start),
   );
   const [position, setPosition] = useState(0);
+  const [stepperStorage, setStepperStorage] = useState();
 
   //  User steps are the amount of percieved steps to finish a given tasl
   //  regular steps tell the app which frame to render, (ex. BoostDetails)
@@ -76,6 +85,17 @@ const StepperForm = props => {
         />
       );
     }
+    if (currentStep?.type === 'boostMetaForm') {
+      return (
+        <BoostMetaForm
+          currentStep={currentStep}
+          parentForm={parentForm}
+          metaFields={metaFields}
+          goToNext={goToNext}
+          setStepperStorage={setStepperStorage}
+        />
+      );
+    }
     if (currentStep?.type === 'boostDetails') {
       return (
         <BoostDetails
@@ -105,6 +125,8 @@ const StepperForm = props => {
         <Signer
           {...currentStep}
           boostData={props}
+          stepperStorage={stepperStorage}
+          parentForm={parentForm}
           next={currentStep.next}
           goToNext={goToNext}
           playlist={playlist}
