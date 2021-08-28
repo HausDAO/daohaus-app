@@ -93,7 +93,7 @@ export const customValidations = {
     const { apiData } = appState;
     const { applicant } = values;
 
-    if (apiData?.[applicant] || apiData?.[applicant.toLowerCase()]) {
+    if (apiData?.[applicant] || apiData?.[applicant?.toLowerCase()]) {
       return { name: 'applicant', message: 'Applicant cannot be another DAO.' };
     }
     return false;
