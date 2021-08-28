@@ -1,5 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { FORM } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -74,17 +75,17 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  SNAPSHOT: {
-    title: 'Snapshot Proposals',
-    description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '0.5',
-    pars: ['AWAITING CONTENT'],
-    externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-    ],
-  },
+  // SNAPSHOT: {
+  //   title: 'Snapshot Proposals',
+  //   description:
+  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '0.5',
+  //   pars: ['AWAITING CONTENT'],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+  //   ],
+  // },
   DISCORD: {
     title: 'Discord Notifications',
     description:
@@ -175,7 +176,27 @@ const STEPS = {
     },
   },
   ADD_DISCORD: {},
-  ADD_DISCOURSE: {},
+  ADD_DISCOURSE: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+      isUserStep: false,
+    },
+    STEP1: {
+      type: 'boostMetaForm',
+      lego: FORM.DISCOURSE_FORUM_COLOR,
+      next: 'STEP2',
+      stepLabel: 'Choose Forum Color',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
   ADD_SNAPSHOT: {},
   ADD_WRAP_N_ZAP: {},
   ADD_MINTGATE: {
@@ -259,19 +280,19 @@ export const BOOSTS = {
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
     cost: 'free',
   },
-  SNAPSHOT: {
-    id: 'SNAPSHOT',
-    oldId: 'snapshot',
-    boostContent: CONTENT.SNAPSHOT,
-    steps: STEPS.ADD_SNAPSHOT,
-    categories: ['governance'],
-    networks: 'all',
-    cost: 'free',
-  },
+  // SNAPSHOT: {
+  //   id: 'SNAPSHOT',
+  //   oldId: 'snapshot',
+  //   boostContent: CONTENT.SNAPSHOT,
+  //   steps: STEPS.ADD_SNAPSHOT,
+  //   categories: ['governance'],
+  //   networks: 'all',
+  //   cost: 'free',
+  // },
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',
-    steps: STEPS.ADD_SNAPSHOT,
+    steps: STEPS.ADD_DISCORD,
     boostContent: CONTENT.DISCORD,
     categories: ['community'],
     networks: 'all',
@@ -295,6 +316,7 @@ export const BOOSTS = {
     categories: ['community'],
     networks: 'all',
     cost: 'free',
+    metaFields: ['name', 'color', 'autoProposal'],
   },
   WRAP_N_ZAP: {
     id: 'WRAP_N_ZAP',

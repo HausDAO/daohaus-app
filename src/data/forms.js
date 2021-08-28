@@ -522,4 +522,10 @@ export const FORM = {
     ],
     customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
   },
+  DISCOURSE_FORUM_COLOR: {
+    id: 'DISCOURSE_FORUM_COLOR',
+    title: 'Discourse Forum Color',
+    required: ['color'],
+    fields: [[FIELD.COLOR_PICKER, FIELD.DISCOURSE_META]],
+  },
 };

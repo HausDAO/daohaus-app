@@ -307,6 +307,19 @@ export const FIELD = {
     info: INFO_TEXT.RAGE_QUIT_INPUT,
     expectType: 'integer',
   },
+  COLOR_PICKER: {
+    type: 'colorPicker',
+    label: 'Color',
+    name: 'color',
+    htmlFor: 'color',
+    expectType: 'any',
+  },
+  DISCOURSE_META: {
+    type: 'discourseMeta',
+    name: 'discourseMeta',
+    htmlFor: 'discourseMeta',
+    expectType: 'any',
+  },
 };
 
 export const FORM_DISPLAY = {

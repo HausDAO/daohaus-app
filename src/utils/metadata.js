@@ -412,7 +412,6 @@ export const addBoost = async ({
         boostData.playlist,
       );
       updateData.proposalConfig = newPropConfig;
-      console.log(`newPropConfig`, newPropConfig);
     }
 
     const res = await boostPost('dao/boost', updateData);
