@@ -75,7 +75,7 @@ const ProposalVote = ({
   const [enoughDeposit, setEnoughDeposit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nextProposalToProcess, setNextProposal] = useState(null);
-  const [quorumNeeded, setQuorumNeeded] = useState(false);
+  const [quorumNeeded, setQuorumNeeded] = useState(null);
 
   const currentlyVoting = proposal => {
     return (
@@ -528,22 +528,26 @@ const ProposalVote = ({
           {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
             (proposal?.minion?.minionType === MINION_TYPES.NIFTY && (
               <Stack mt='15px' justify='center'>
-                {proposal.yesShares >= quorumNeeded ? (
+                {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
+                proposal.yesShares >= quorumNeeded ? (
                   <MinionExecute
                     hideMinionExecuteButton={hideMinionExecuteButton}
                     minionAction={minionAction}
                     proposal={proposal}
                     early={
                       proposal?.minion?.minionType === MINION_TYPES.NIFTY &&
-                      proposal.yesShares >= quorumNeeded
+                      proposal.yesShares >= quorumNeeded &&
+                      !proposal?.status === 'Passed'
                     }
                   />
                 ) : (
-                  <Text size='sm' textAlign='center' maxW='60%' m='auto'>
-                    {proposal?.minion?.minQuorum}% quorum or{' '}
-                    {utils.commify(quorumNeeded)} shares needed for Early
-                    Execution
-                  </Text>
+                  quorumNeeded && (
+                    <Text size='sm' textAlign='center' maxW='60%' m='auto'>
+                      {proposal?.minion?.minQuorum}% quorum or{' '}
+                      {utils.commify(quorumNeeded)} shares needed for Early
+                      Execution
+                    </Text>
+                  )
                 )}
               </Stack>
             ))}
