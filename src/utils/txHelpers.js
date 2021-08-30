@@ -26,6 +26,7 @@ const searchData = (data, fields, shouldThrow = true) => {
   if (data == null || fields == null) {
     throw new Error('txHelpers => searchData(): data or fields is empty');
   }
+
   if (!fields?.length) return data;
   const newData = data[fields[0]];
   if (newData == null) {
@@ -131,6 +132,14 @@ const argBuilderCallback = Object.freeze({
   },
 });
 
+const handleSearch = (data, arg) => {
+  const path = getPath(arg);
+  console.log(path);
+  if (!path.length)
+    throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+  return searchData(data, path);
+};
+
 const gatherArgs = data => {
   const { tx } = data;
   return tx.gatherArgs.map(arg => {
@@ -145,10 +154,7 @@ const gatherArgs = data => {
     }
     //  takes in search notation. Performs recursive search for application data
     if (arg[0] === '.') {
-      const path = getPath(arg);
-      if (!path.length)
-        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
-      return searchData(data, path);
+      return handleSearch(data, arg);
     }
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
@@ -209,9 +215,14 @@ export const createHydratedString = data => {
     );
   const fragments = splitByTemplates(string);
   console.log(`fragments`, fragments);
-  // return fragments
-  //   .map(str => (str[0] === '.' ? handleSearchPath(data, str) : str))
-  //   .join();
+  return fragments
+    .map(fragment => {
+      if (fragment[0] === '.') {
+        return handleSearch(data, fragment);
+      }
+      return fragment;
+    })
+    .join('');
 };
 
 export const getContractAddress = data => {
@@ -237,7 +248,7 @@ export const Transaction = async data => {
   });
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
-  console.log('contextData', contextData, data);
+
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
     .on('transactionHash', txHash => {

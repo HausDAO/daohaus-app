@@ -175,13 +175,31 @@ const STEPS = {
       isUserStep: true,
     },
   },
-  ADD_DISCORD: {},
+  ADD_DISCORD: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+    },
+    STEP1: {
+      type: 'boostMetaForm',
+      lego: FORM.DISCOURSE_FORUM_COLOR,
+      next: 'STEP2',
+      stepLabel: 'Choose Forum Color',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
   ADD_DISCOURSE: {
     DISPLAY: {
       type: 'boostDetails',
       next: 'STEP1',
       start: true,
-      isUserStep: false,
     },
     STEP1: {
       type: 'boostMetaForm',
@@ -236,6 +254,7 @@ export const BOOSTS = {
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
     networks: MINIONS[MINION_TYPES.NIFTY].networks,
     cost: 'free',
+    settings: 'none',
   },
   // TODO: coming later with neapolitan minion
   // DEV_SUITE: {
@@ -257,6 +276,7 @@ export const BOOSTS = {
     categories: ['nft'],
     networks: { '0x4': true },
     playlist: BOOST_PLAYLISTS.RARIBLE,
+    cost: 'free',
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
@@ -304,6 +324,7 @@ export const BOOSTS = {
     categories: ['community'],
     networks: 'all',
     cost: 'free',
+    settings: { type: 'internalLink', appendToDaoPath: 'boost/mintgate' },
   },
   DISCOURSE: {
     id: 'DISCOURSE',
@@ -312,7 +333,9 @@ export const BOOSTS = {
     boostContent: CONTENT.DISCOURSE,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
     metaFields: ['name', 'color', 'autoProposal'],
+    settings: { type: 'internalLink', appendToDaoPath: 'settings/discourse' },
   },
   WRAP_N_ZAP: {
     id: 'WRAP_N_ZAP',
