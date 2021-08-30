@@ -409,24 +409,6 @@ const ProposalVote = ({
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.noShares > +proposal?.yesShares &&
                             'Failed'}
-                          {/* TODO use const */}
-                          {(proposal?.status === 'GracePeriod' ||
-                            proposal?.status === 'ReadyForProcessing') &&
-                            +proposal?.yesShares > +proposal?.noShares &&
-                            proposal?.minion?.minionType ===
-                              MINION_TYPES.NIFTY && (
-                              <>
-                                {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
-                                <MinionExecute
-                                  minionAction={minionAction}
-                                  hideMinionExecuteButton={
-                                    hideMinionExecuteButton
-                                  }
-                                  proposal={proposal}
-                                  early
-                                />
-                              </>
-                            )}
                         </TextBox>
                       </Flex>
                     </>
