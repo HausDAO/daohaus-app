@@ -98,7 +98,7 @@ const MinionExecute = ({
   };
 
   const getMinionAction = () => {
-    if (minionDetails?.executed) return <Box>Executed</Box>;
+    if (minionAction?.executed) return <Box>Executed</Box>;
 
     if (needsHausApproval) {
       return (
