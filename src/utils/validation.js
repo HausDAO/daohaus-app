@@ -113,29 +113,36 @@ export const customValidations = {
   enoughBalance({ appState, values }) {
     const { daoMember } = appState;
     const { tributeOffered, tributeToken } = values;
-    const token = daoMember.tokenBalances.find(
-      t => t.token.tokenAddress === tributeToken,
-    );
-    if (+tributeOffered > +token.tokenBalance) {
-      return {
-        name: 'tributeOffered',
-        message: 'Tribute must be less than your balance.',
-      };
+    if (+tributeOffered > 0) {
+      const token = daoMember.tokenBalances.find(
+        t => t.token.tokenAddress === tributeToken,
+      );
+      if (+tributeOffered > +token.tokenBalance) {
+        return {
+          name: 'tributeOffered',
+          message: 'Tribute must be less than your balance.',
+        };
+      }
     }
+
     return false;
   },
   enoughDaoBalance({ appState, values }) {
     const { daoOverview } = appState;
     const { paymentRequested, paymentToken } = values;
-    const token = daoOverview.tokenBalances.find(
-      t => t.token.tokenAddress === paymentToken,
-    );
-    if (+paymentRequested > +token.tokenBalance) {
-      return {
-        name: 'paymentRequested',
-        message: 'Payment must be less than the DAO balance.',
-      };
+    if (+paymentRequested > 0) {
+      const token = daoOverview.tokenBalances.find(
+        t => t.token.tokenAddress === paymentToken,
+      );
+      console.log(token);
+      if (+paymentRequested > +token.tokenBalance) {
+        return {
+          name: 'paymentRequested',
+          message: 'Payment must be less than the DAO balance.',
+        };
+      }
     }
+
     return false;
   },
 };
