@@ -522,10 +522,19 @@ export const FORM = {
     ],
     customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
   },
+};
+
+export const BOOST_FORMS = {
   DISCOURSE_FORUM_COLOR: {
     id: 'DISCOURSE_FORUM_COLOR',
     title: 'Discourse Forum Color',
     required: ['color'],
     fields: [[FIELD.COLOR_PICKER, FIELD.DISCOURSE_META]],
+  },
+  DISCORD_CHANNEL: {
+    id: 'DISCORD_CHANNEL',
+    title: 'Discord Notifications',
+    required: ['channelId'],
+    fields: [[FIELD.DISCORD_CHANNEL_LAUNCH]],
   },
 };
