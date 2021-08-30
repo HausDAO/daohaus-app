@@ -21,12 +21,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.PAYMENT_REQUEST,
     ],
-    customValidations: [
-      'enoughBalance',
-      'enoughAllowance',
-      'nonDaoApplicant',
-      'enoughDaoBalance',
-    ],
+    customValidations: ['nonDaoApplicant'],
   },
   FUNDING: {
     title: 'Funding',
@@ -46,12 +41,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.TRIBUTE,
     ],
-    customValidations: [
-      'nonDaoApplicant',
-      'enoughDaoBalance',
-      'enoughBalance',
-      'enoughAllowance',
-    ],
+    customValidations: ['nonDaoApplicant'],
   },
   TOKEN: {
     title: 'Token',
@@ -84,12 +74,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.SHARES_REQUEST,
     ],
-    customValidations: [
-      'enoughBalance',
-      'enoughAllowance',
-      'nonDaoApplicant',
-      'enoughDaoBalance',
-    ],
+    customValidations: ['nonDaoApplicant'],
   },
   GUILDKICK: {
     title: 'Guild Kick',
