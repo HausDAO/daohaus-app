@@ -74,12 +74,11 @@ export const InjectedProvider = ({ children }) => {
       console.log(provider?.safe);
       if (provider?.safe) {
         connectProvider();
+      } else if (window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER')) {
+        connectProvider();
       }
     };
     attemptSafeConnection();
-    if (window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER')) {
-      connectProvider();
-    }
   }, []);
 
   // This useEffect handles the initialization of EIP-1193 listeners
