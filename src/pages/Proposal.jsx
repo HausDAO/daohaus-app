@@ -3,7 +3,6 @@ import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Flex, Box, Stack, Link, Icon, IconButton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ActivitiesFeed from '../components/activitiesFeed';
 import MainViewLayout from '../components/mainViewLayout';
@@ -26,7 +25,6 @@ const Proposal = ({
   overview,
 }) => {
   const { refreshDao } = useTX();
-  const { injectedProvider } = useInjectedProvider();
   const { propid, daochain, daoid } = useParams();
 
   const [minionAction, setMinionAction] = useState(null);
@@ -49,7 +47,6 @@ const Proposal = ({
           address: currentProposal.minionAddress,
           abi,
           chainID: daochain,
-          web3: injectedProvider,
         });
         const action = await web3Contract.methods[
           MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
