@@ -51,7 +51,6 @@ const Proposal = ({
           chainID: daochain,
           web3: injectedProvider,
         });
-
         const action = await web3Contract.methods[
           MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
         ](currentProposal.proposalId).call();
@@ -59,10 +58,7 @@ const Proposal = ({
 
         // hides execute minion button on funding and payroll proposals
         // hides execute minion button on executed proposals
-        if (
-          action[1] === '0x0000000000000000000000000000000000000000' ||
-          action.executed === true
-        ) {
+        if (action[1] === '0x0000000000000000000000000000000000000000') {
           setHideMinionExecuteButton(true);
         } else {
           setHideMinionExecuteButton(false);
@@ -72,8 +68,9 @@ const Proposal = ({
       }
     };
 
-    if (currentProposal && currentProposal.minion)
+    if (currentProposal && currentProposal.minion) {
       getMinionAction(currentProposal);
+    }
   }, [currentProposal, daochain]);
 
   return (
