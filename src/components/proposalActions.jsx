@@ -126,7 +126,7 @@ const ProposalVote = ({
         );
       }
     };
-    if (overview?.depositToken && address) {
+    if (overview?.depositToken && address && proposal) {
       getDepositTokenBalance();
       setQuorumNeeded(
         (overview?.totalShares * proposal?.minion?.minQuorum) / 100,
@@ -135,7 +135,7 @@ const ProposalVote = ({
     () => {
       shouldUpdate = false;
     };
-  }, [overview, address, injectedChain]);
+  }, [overview, address, proposal, injectedChain]);
 
   useEffect(() => {
     if (daoProposals) {

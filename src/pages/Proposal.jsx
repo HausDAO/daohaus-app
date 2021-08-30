@@ -57,7 +57,6 @@ const Proposal = ({
         setMinionAction(action);
 
         // hides execute minion button on funding and payroll proposals
-        // hides execute minion button on executed proposals
         if (action[1] === '0x0000000000000000000000000000000000000000') {
           setHideMinionExecuteButton(true);
         } else {
