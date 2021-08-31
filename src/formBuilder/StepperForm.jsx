@@ -8,6 +8,7 @@ import BoostDetails from '../components/boostDetails';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
 import BoostMetaForm from './boostMetaForm';
+import TheLauncher from '../components/theLauncher';
 
 const StepperForm = props => {
   const {
@@ -115,6 +116,17 @@ const StepperForm = props => {
           localForm={parentForm}
           next={currentStep.next}
           minionData={minionData}
+          goToNext={goToNext}
+          boostContent={boostContent}
+        />
+      );
+    }
+    if (currentStep?.type === 'launcher') {
+      return (
+        <TheLauncher
+          {...currentStep}
+          localForm={parentForm}
+          next={currentStep.next}
           goToNext={goToNext}
           boostContent={boostContent}
         />

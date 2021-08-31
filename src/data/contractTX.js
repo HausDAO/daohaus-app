@@ -126,7 +126,7 @@ export const CONTRACTS = {
   WRAP_N_ZAP_FACTORY: {
     location: 'local',
     abiName: 'WRAP_N_ZAP_FACTORY',
-    contractAddress: '.localValues.contractAddress',
+    contractAddress: '.contextData.chainConfig.wrap_n_zap_factory_addr',
   },
   WRAP_N_ZAP: {
     location: 'local',
@@ -1068,6 +1068,10 @@ export const TX = {
     display: 'Create Wrap-N-Zap',
     errMsg: 'Error creating Wrap-N-Zap',
     successMsg: 'Wrap-N-Zap added!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.contextData.chainConfig.wrapper_contract',
+    ],
   },
   POKE_WRAP_N_ZAP: {
     contract: CONTRACTS.WRAP_N_ZAP,
