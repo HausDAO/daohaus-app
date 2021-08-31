@@ -71,7 +71,9 @@ const Signer = props => {
             return (
               <Box key={formID}>
                 <Flex mb={4} flexDir='column'>
-                  <TextBox mb={2}>{form.title}</TextBox>
+                  <TextBox mb={2} variant='body'>
+                    {form.title}
+                  </TextBox>
                   <TextBox variant='body' size='sm'>
                     {form.description}
                   </TextBox>

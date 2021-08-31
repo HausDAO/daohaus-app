@@ -127,7 +127,6 @@ const StepperForm = props => {
           {...currentStep}
           localForm={parentForm}
           next={currentStep.next}
-          minionData={minionData}
           goToNext={goToNext}
           boostContent={boostContent}
         />

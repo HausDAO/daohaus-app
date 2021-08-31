@@ -537,4 +537,10 @@ export const BOOST_FORMS = {
     required: ['channelId'],
     fields: [[FIELD.DISCORD_CHANNEL_LAUNCH]],
   },
+  WRAP_N_ZAP_LAUNCH: {
+    id: 'WRAP_N_ZAP_LAUNCH',
+    title: 'Wrap n Zap',
+    fields: [[]],
+    tx: TX.CREATE_WRAP_N_ZAP,
+  },
 };

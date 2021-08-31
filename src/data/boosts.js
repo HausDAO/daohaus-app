@@ -201,7 +201,6 @@ const STEPS = {
       type: 'boostDetails',
       next: 'STEP1',
       start: true,
-      isUserStep: false,
     },
     STEP1: {
       type: 'boostMetaForm',
@@ -226,6 +225,7 @@ const STEPS = {
     },
     STEP1: {
       type: 'launcher',
+      lego: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
       next: 'STEP2',
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
@@ -246,7 +246,6 @@ const STEPS = {
     },
     STEP1: {
       type: 'form',
-      // lego: ,
       next: 'STEP2',
       stepLabel: 'Deploy Wrap-N-Zap',
       isUserStep: true,
@@ -281,6 +280,7 @@ export const BOOSTS = {
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
     networks: MINIONS[MINION_TYPES.NIFTY].networks,
     cost: 'free',
+    settings: 'none',
   },
   // TODO: coming later with neapolitan minion
   // DEV_SUITE: {
@@ -302,6 +302,7 @@ export const BOOSTS = {
     categories: ['nft'],
     networks: { '0x4': true },
     playlist: BOOST_PLAYLISTS.RARIBLE,
+    cost: 'free',
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
@@ -332,6 +333,10 @@ export const BOOSTS = {
     networks: 'all',
     cost: 'free',
     metaFields: ['channelId', 'type', 'active', 'actions'],
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'settings/notifications',
+    },
   },
   MINTGATE: {
     id: 'MINTGATE',
@@ -341,6 +346,7 @@ export const BOOSTS = {
     categories: ['community'],
     networks: 'all',
     cost: 'free',
+    settings: { type: 'internalLink', appendToDaoPath: 'boost/mintgate' },
   },
   DISCOURSE: {
     id: 'DISCOURSE',
@@ -349,7 +355,9 @@ export const BOOSTS = {
     boostContent: CONTENT.DISCOURSE,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
     metaFields: ['name', 'color', 'autoProposal'],
+    settings: { type: 'internalLink', appendToDaoPath: 'settings/discourse' },
   },
   WRAP_N_ZAP: {
     id: 'WRAP_N_ZAP',
@@ -358,6 +366,10 @@ export const BOOSTS = {
     categories: ['payments'],
     networks: 'all',
     cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'settings',
+    },
   },
   // SNAPSHOT: {
   //   id: 'SNAPSHOT',

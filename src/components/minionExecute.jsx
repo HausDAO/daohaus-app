@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Button, Flex, Spinner } from '@chakra-ui/react';
 
@@ -25,7 +25,8 @@ const MinionExecute = ({
   const { daochain } = useParams();
   const { injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
-  const { refreshMinionVault } = useDao();
+  const { refreshMinionVault, daoMembers } = useDao();
+  const proposalDetails = useMemo(() => JSON.parse(proposal.details), proposal);
 
   const [loading, setLoading] = useState(false);
   const [minionDetails, setMinionDetails] = useState(null);
@@ -134,6 +135,23 @@ const MinionExecute = ({
 
     if (hideMinionExecuteButton) {
       return null;
+    }
+    if (proposalDetails.proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
+      const isMember =
+        daoMembers.filter(member => member.memberAddress === proposal.proposer)
+          .length > 0;
+      return (
+        <Flex alignItems='center' flexDir='column'>
+          <Button onClick={handleExecute} mb={4} disabled={isMember}>
+            Execute Minion
+          </Button>
+          <Box>
+            {isMember
+              ? 'Proposer Must Rage Quit Before This Minion Can Be Executed.'
+              : null}
+          </Box>
+        </Flex>
+      );
     }
 
     if (
