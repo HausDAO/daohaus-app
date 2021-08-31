@@ -32,7 +32,6 @@ const TributeInput = props => {
 
   const tributeToken = watch('tributeToken');
 
-  // console.log(tributeToken);
   const tributeOffered = watch('tributeOffered');
 
   const displayBalance = useMemo(() => {

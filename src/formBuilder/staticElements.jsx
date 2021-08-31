@@ -10,9 +10,11 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import TextBox from '../components/TextBox';
 
 export const SubmitErrList = ({ errors = [] }) => {
   //  determine which errors are submit errors
+
   return (
     <Flex flexDirection='column' alignItems='flex-start'>
       {errors.map((error, index) => (
@@ -64,7 +66,7 @@ export const FormFooter = ({
               type='submit'
               loadingText='Submitting'
               isLoading={loading}
-              disabled={loading}
+              disabled={loading || errors?.length}
               borderBottomLeftRadius='0'
               borderTopLeftRadius='0'
             >
@@ -77,16 +79,18 @@ export const FormFooter = ({
     );
   }
   return (
-    <Flex justifyContent='flex-end'>
-      <Button
-        type='submit'
-        loadingText='Submitting'
-        isLoading={loading}
-        disabled={loading}
-      >
-        {ctaText || 'Submit'}
-      </Button>
-    </Flex>
+    <Box>
+      <Flex justifyContent='space-between'>
+        <Button
+          type='submit'
+          loadingText='Submitting'
+          isLoading={loading}
+          disabled={loading || errors?.length}
+        >
+          {ctaText || 'Submit'}
+        </Button>
+      </Flex>
+    </Box>
   );
 };
 
@@ -120,4 +124,12 @@ export const AdditionalOptions = ({ options = [], addOption }) => {
       </Menu>
     </Box>
   );
+};
+
+const FormErrorList = formErrorStore => {
+  return formErrorStore.map(error => (
+    <TextBox key='error' variant='body'>
+      {error}
+    </TextBox>
+  ));
 };
