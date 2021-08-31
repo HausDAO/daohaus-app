@@ -13,6 +13,7 @@ import {
   inputDataFromABI,
   mapInRequired,
 } from '../utils/formBuilder';
+import { omit } from '../utils/general';
 
 const FormBuilder = props => {
   const {
@@ -34,7 +35,7 @@ const FormBuilder = props => {
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
-
+  const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm();
   const { handleSubmit } = localForm;
@@ -91,7 +92,6 @@ const FormBuilder = props => {
     });
   };
 
-  //  TODO: REFACTOR ALL THIS SHIT
   const onSubmit = async values => {
     clearErrors();
 
@@ -204,6 +204,15 @@ const FormBuilder = props => {
     return handleSubmitTX();
   };
 
+  const useFormError = () => ({
+    removeError(fieldName) {
+      setFormErrors(prevState => omit(fieldName, prevState));
+    },
+    addError(fieldName, error) {
+      setFormErrors(prevState => ({ ...prevState, [fieldName]: error }));
+    },
+  });
+
   const renderInputs = (fields, depth = 0) =>
     fields.map((field, index) =>
       Array.isArray(field) ? (
@@ -224,6 +233,7 @@ const FormBuilder = props => {
           localForm={localForm}
           localValues={localValues}
           buildABIOptions={buildABIOptions}
+          useFormError={useFormError}
         />
       ),
     );
@@ -247,6 +257,7 @@ const FormBuilder = props => {
           ctaText={ctaText}
           next={next}
           goToNext={goToNext}
+          errors={Object.values(formErrors)}
         />
       </Flex>
     </form>

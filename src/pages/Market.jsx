@@ -27,11 +27,16 @@ import { validate } from '../utils/validation';
 import BoostItemButton from '../components/boostItemButton';
 
 const checkAvailable = (boostData, daochain) =>
-  boostData.networks === 'all' ||
-  validate.address(boostData.networks[daochain]);
+  boostData.networks === 'all' || boostData.networks[daochain];
 
-const checkBoostInstalled = (boostData, daoMetaData) =>
-  daoMetaData.boosts[boostData.id || boostData.oldId];
+const checkBoostInstalled = (boostData, daoMetaData) => {
+  if (boostData.id === 'OLD_DEV_SUITE') {
+    console.log(daoMetaData.boosts[boostData.oldId]);
+  }
+  return (
+    daoMetaData.boosts[boostData.id] || daoMetaData.boosts[boostData.oldId]
+  );
+};
 
 const handleSearch = data => {
   const { boostsKeyArray, searchStr } = data;
@@ -195,7 +200,6 @@ const BoostsList = ({
   const currentCategory = useMemo(() => {
     if (!categoryID || !categories || !daoMetaData) return;
     if (categoryID === 'all') {
-      console.log('Fired');
       return processBoosts({
         daochain,
         boostsKeyArray: allBoosts.boosts,
@@ -213,6 +217,7 @@ const BoostsList = ({
     });
   }, [categoryID, categories, searchStr, daoMetaData, sortBy]);
 
+  console.log(`currentCategory`, currentCategory);
   const handleTypeSearch = e =>
     setSearchStr(e.target.value.toLowerCase().trim());
   const handleSetSort = e => setSortBy(e.target.value);
