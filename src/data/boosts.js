@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { BOOST_FORMS, FORM } from './forms';
+import { BOOST_FORMS } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -223,6 +223,12 @@ const STEPS = {
       next: 'STEP1',
       start: true,
       isUserStep: false,
+    },
+    STEP1: {
+      type: 'launcher',
+      next: 'STEP2',
+      stepLabel: 'Deploy Wrap n Zap',
+      isUserStep: true,
     },
     STEP2: {
       type: 'signer',
