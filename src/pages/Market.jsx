@@ -27,8 +27,7 @@ import { validate } from '../utils/validation';
 import BoostItemButton from '../components/boostItemButton';
 
 const checkAvailable = (boostData, daochain) =>
-  boostData.networks === 'all' ||
-  validate.address(boostData.networks[daochain]);
+  boostData.networks === 'all' || boostData.networks[daochain];
 
 const checkBoostInstalled = (boostData, daoMetaData) => {
   if (boostData.id === 'OLD_DEV_SUITE') {
