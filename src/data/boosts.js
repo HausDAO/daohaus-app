@@ -236,6 +236,7 @@ const STEPS = {
 export const BOOSTS = {
   OLD_DEV_SUITE: {
     id: 'OLD_DEV_SUITE',
+    oldId: MINION_TYPES.VANILLA,
     boostContent: CONTENT.OLD_DEV_SUITE,
     minionData: MINIONS[MINION_TYPES.VANILLA],
     categories: ['devTools'],

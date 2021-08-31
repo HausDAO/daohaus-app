@@ -1,14 +1,15 @@
-import { isObjectEmpty } from './general';
+import { isObjectEmpty, omit } from './general';
 import { MINION_TYPES } from './proposalUtils';
 import { BOOSTS } from '../data/boosts';
 import { MINIONS } from '../data/minions';
 
 const boostsBanList = [
-  ...Object.values(MINION_TYPES),
+  ...Object.values(omit('VANILLA', MINION_TYPES)),
   'cco',
   'proposalTypes',
   'customTheme',
   'transmutation',
+  'snapshot',
 ];
 const findByOldID = id => {
   if (!id) return;
