@@ -122,7 +122,7 @@ const NotificationsLaunch = ({
             </Heading>
           )}
           <Text mb={3} fontSize='xs'>
-            In Discord, open your User Settings &gt; Advanced &gt; Enable
+            In Discord, open your user Settings &gt; Advanced and enable
             Developer Mode. Right click on the Discord text channel you want the
             bot to interact with and press “Copy ID”.
           </Text>
