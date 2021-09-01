@@ -507,12 +507,10 @@ const ProposalVote = ({
               </Flex>
             ))}
 
-          {((proposal?.status === 'Passed' &&
-            proposal?.minionAddress !== undefined) ||
+          {((proposal?.status === 'Passed' && proposal?.minionAddress) ||
             proposal?.minion?.minionType === MINION_TYPES.NIFTY) && (
             <Stack mt='15px' justify='center'>
-              {(proposal?.status === 'Passed' &&
-                proposal?.minionAddress !== undefined) ||
+              {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
               proposal.yesShares >= quorumNeeded ? (
                 <MinionExecute
                   hideMinionExecuteButton={hideMinionExecuteButton}
