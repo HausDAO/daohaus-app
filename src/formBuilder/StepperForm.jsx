@@ -9,6 +9,7 @@ import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
 import BoostMetaForm from './boostMetaForm';
 import TheLauncher from '../components/theLauncher';
+import DiscordNotificationsLaunch from './discordLaunchForm';
 
 const StepperForm = props => {
   const {
@@ -142,6 +143,17 @@ const StepperForm = props => {
           next={currentStep.next}
           goToNext={goToNext}
           playlist={playlist}
+        />
+      );
+    }
+    if (currentStep?.type === 'discordForm') {
+      return (
+        <DiscordNotificationsLaunch
+          currentStep={currentStep}
+          // parentForm={parentForm}
+          metaFields={metaFields}
+          goToNext={goToNext}
+          setStepperStorage={setStepperStorage}
         />
       );
     }

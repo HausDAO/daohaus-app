@@ -320,13 +320,6 @@ export const FIELD = {
     htmlFor: 'discourseMeta',
     expectType: 'any',
   },
-  DISCORD_CHANNEL_LAUNCH: {
-    type: 'discordChannelLaunch',
-    label: 'Discord Channel ID',
-    name: 'channelId',
-    htmlFor: 'channelId',
-    expectType: 'any',
-  },
 };
 
 export const FORM_DISPLAY = {

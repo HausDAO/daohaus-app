@@ -533,12 +533,6 @@ export const BOOST_FORMS = {
     required: ['color'],
     fields: [[FIELD.COLOR_PICKER, FIELD.DISCOURSE_META]],
   },
-  DISCORD_CHANNEL: {
-    id: 'DISCORD_CHANNEL',
-    title: 'Discord Notifications',
-    required: ['channelId'],
-    fields: [[FIELD.DISCORD_CHANNEL_LAUNCH]],
-  },
   WRAP_N_ZAP_LAUNCH: {
     id: 'WRAP_N_ZAP_LAUNCH',
     title: 'Wrap n Zap',

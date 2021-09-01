@@ -183,8 +183,7 @@ const STEPS = {
       isUserStep: false,
     },
     STEP1: {
-      type: 'boostMetaForm',
-      lego: BOOST_FORMS.DISCORD_CHANNEL,
+      type: 'discordForm',
       next: 'STEP2',
       stepLabel: 'Setup Discord Bot',
       isUserStep: true,
