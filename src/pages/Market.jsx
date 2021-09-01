@@ -217,7 +217,6 @@ const BoostsList = ({
     });
   }, [categoryID, categories, searchStr, daoMetaData, sortBy]);
 
-  console.log(`currentCategory`, currentCategory);
   const handleTypeSearch = e =>
     setSearchStr(e.target.value.toLowerCase().trim());
   const handleSetSort = e => setSortBy(e.target.value);

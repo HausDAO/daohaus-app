@@ -11,6 +11,7 @@ const boostsBanList = [
   'transmutation',
   'snapshot',
 ];
+
 const findByOldID = id => {
   if (!id) return;
   return Object.values(BOOSTS).find(boost => boost.oldId === id) || null;
@@ -28,19 +29,23 @@ export const devBoostList = {
 };
 
 export const generateLists = (daoMetaData, daoOverview, dev) => {
-  const boostTypes = Object.entries(daoMetaData?.boosts)
-    .filter(([key]) => !boostsBanList.includes(key))
-    .map(([key, value]) => {
+  const boostTypes = Object.entries(daoMetaData?.boosts).reduce(
+    (array, [key, value]) => {
+      if (boostsBanList.includes(key)) return array;
       if (BOOSTS[key]) {
-        return { ...value, ...BOOSTS[key] };
+        return [...array, { ...value, ...BOOSTS[key] }];
       }
-      const hasOldID = findByOldID(key);
-      if (hasOldID) {
-        return { ...value, ...hasOldID };
+      const legacyBoost = findByOldID(key);
+      if (legacyBoost) {
+        const hasDuplicate = array.some(boost => boost.id === legacyBoost.id);
+        if (!hasDuplicate) return [{ ...value, ...legacyBoost }];
+        return array;
       }
-      return { ...value, id: key };
-    });
-
+      return array;
+    },
+    [],
+  );
+  console.log(boostTypes);
   const lists = [
     {
       name: 'Boosts',
