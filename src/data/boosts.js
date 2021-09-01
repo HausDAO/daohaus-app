@@ -322,7 +322,9 @@ export const BOOSTS = {
     categories: ['payments'],
     steps: STEPS.MINION_BOOST,
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
+    playlist: BOOST_PLAYLISTS.SUPERFLUID,
     cost: 'free',
+    settings: 'none',
   },
   DISCORD: {
     id: 'DISCORD',

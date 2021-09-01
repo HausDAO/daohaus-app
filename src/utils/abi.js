@@ -20,6 +20,7 @@ import NIFTY_MINION from '../contracts/minionNifty.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import DAO_CONDITIONAL_HELPER from '../contracts/daoConditionalHelper.json';
+import SUPERFLUID_MINION_FACTORY from '../contracts/superfluidMinionFactory.json';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -31,6 +32,7 @@ export const LOCAL_ABI = Object.freeze({
   NIFTY_INK,
   UBERHAUS_MINION,
   SUPERFLUID_MINION,
+  SUPERFLUID_MINION_FACTORY,
   NEAPOLITAN_MINION_FACTORY,
   NEAPOLITAN_MINION,
   VANILLA_MINION_FACTORY,

@@ -117,7 +117,7 @@ export const MINIONS = {
     minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
     networks: MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
-    summonForm: null,
+    summonForm: FORM.NEW_SUPERFLUID_MINION,
     settings: SETTINGS_LINKS.SF_LINK,
   },
   [MINION_TYPES.NEAPOLITAN]: {

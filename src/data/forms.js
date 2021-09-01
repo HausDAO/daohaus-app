@@ -486,6 +486,12 @@ export const FORM = {
     tx: TX.SUMMON_MINION_VANILLA,
     fields: [[FIELD.MINION_NAME]],
   },
+  NEW_SUPERFLUID_MINION: {
+    required: ['minionName'],
+    minionType: MINION_TYPES.SUPERFLUID,
+    tx: TX.SUMMON_MINION_SUPERFLUID,
+    fields: [[FIELD.MINION_NAME]],
+  },
   BUY_NIFTY_INK: {
     id: 'BUY_NIFTY_INK',
     title: 'Buy a NiftyInk',

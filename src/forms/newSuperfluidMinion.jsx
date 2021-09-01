@@ -159,7 +159,9 @@ const NewSuperfluidMinionForm = () => {
                   onChange={updateAgreementType}
                 >
                   <option value='cfa'>Constant Flow (CFA)</option>
-                  {/* <option value='ida'>Instant Distribution (IDA)</option> */}
+                  {/* <option value='ida'>
+                    Instant Distribution (IDA)
+                  </option> */}
                 </Select>
               </FormControl>
             </Box>
