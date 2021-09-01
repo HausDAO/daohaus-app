@@ -10,6 +10,7 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+// import TextBox from '../components/TextBox';
 
 export const SubmitErrList = ({ errors = [] }) => {
   //  determine which errors are submit errors
@@ -124,3 +125,11 @@ export const AdditionalOptions = ({ options = [], addOption }) => {
     </Box>
   );
 };
+
+// const FormErrorList = formErrorStore => {
+//   return formErrorStore.map(error => (
+//     <TextBox key='error' variant='body'>
+//       {error}
+//     </TextBox>
+//   ));
+// };

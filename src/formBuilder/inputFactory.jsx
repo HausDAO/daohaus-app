@@ -27,7 +27,6 @@ import RageInput from './rageInput';
 import RaribleNftSelect from './raribleNftData';
 import ColorPicker from './colorPicker';
 import DiscourseMeta from './discourseMeta';
-import DiscordChannelLaunch from './discordChannelLaunch';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -111,9 +110,6 @@ export const InputFactory = props => {
   }
   if (type === 'discourseMeta') {
     return <DiscourseMeta {...props} />;
-  }
-  if (type === 'discordChannelLaunch') {
-    return <DiscordChannelLaunch {...props} />;
   }
   return null;
 };

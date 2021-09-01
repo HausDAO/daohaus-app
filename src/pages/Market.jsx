@@ -23,6 +23,7 @@ import NoListItem from '../components/NoListItem';
 
 import { isLastItem } from '../utils/general';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
+// import { validate } from '../utils/validation';
 import BoostItemButton from '../components/boostItemButton';
 
 const checkAvailable = (boostData, daochain) =>

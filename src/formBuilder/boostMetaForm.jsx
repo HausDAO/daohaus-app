@@ -17,7 +17,7 @@ const BoostMetaForm = props => {
       update[fieldName] = formValues[fieldName];
       return update;
     }, {});
-    setStepperStorage(metaUpdate);
+    setStepperStorage(prevState => ({ ...prevState, ...metaUpdate }));
     goToNext();
   };
 
