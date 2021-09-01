@@ -23,6 +23,7 @@ import TextBox from '../components/TextBox';
 import MainViewLayout from '../components/mainViewLayout';
 
 const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
+  console.log(daoMetaData);
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
   const { daoid } = useParams();
   const { successToast, errorToast } = useOverlay();
@@ -32,14 +33,17 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
   const [loading, setLoading] = useState();
 
   useEffect(() => {
-    if (daoMetaData?.boosts?.discourse?.active) {
+    if (daoMetaData?.boosts?.discourse?.metadata) {
       setLocalMetadata(daoMetaData.boosts.discourse.metadata);
+    } else if (daoMetaData?.boosts?.DISCOURSE?.metadata) {
+      console.log(daoMetaData?.boosts?.DISCOURSE);
+      setLocalMetadata(daoMetaData.boosts.DISCOURSE.metadata);
     }
   }, [daoMetaData]);
 
   const handleSave = async () => {
     setLoading(true);
-
+    const boostKey = daoMetaData?.boosts?.DISCOURSE ? 'DISCOURSE' : 'discourse';
     try {
       const messageHash = injectedProvider.utils.sha3(daoid);
       const signature = await injectedProvider.eth.personal.sign(
@@ -49,7 +53,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
 
       const updatedBoost = {
         contractAddress: daoid,
-        boostKey: 'discourse',
+        boostKey,
         metadata: localMetadata,
         network: injectedChain.network,
         signature,
