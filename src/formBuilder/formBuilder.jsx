@@ -33,6 +33,8 @@ const FormBuilder = props => {
     ctaText,
   } = props;
 
+  console.log('form props', props);
+
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});

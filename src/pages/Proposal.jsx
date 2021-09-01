@@ -3,7 +3,6 @@ import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Flex, Box, Stack, Link, Icon, IconButton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ActivitiesFeed from '../components/activitiesFeed';
 import MainViewLayout from '../components/mainViewLayout';
@@ -26,7 +25,6 @@ const Proposal = ({
   overview,
 }) => {
   const { refreshDao } = useTX();
-  const { injectedProvider } = useInjectedProvider();
   const { propid, daochain, daoid } = useParams();
 
   const [minionAction, setMinionAction] = useState(null);
@@ -51,9 +49,7 @@ const Proposal = ({
           address: currentProposal.minionAddress,
           abi,
           chainID: daochain,
-          web3: injectedProvider,
         });
-
         const action = await web3Contract.methods[
           MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
         ](currentProposal.proposalId).call();
@@ -61,11 +57,7 @@ const Proposal = ({
         setMinionAction(action);
 
         // hides execute minion button on funding and payroll proposals
-        // hides execute minion button on executed proposals
-        if (
-          action[1] === '0x0000000000000000000000000000000000000000' ||
-          action.executed === true
-        ) {
+        if (action[1] === '0x0000000000000000000000000000000000000000') {
           setHideMinionExecuteButton(true);
         } else {
           setHideMinionExecuteButton(false);
@@ -75,8 +67,9 @@ const Proposal = ({
       }
     };
 
-    if (currentProposal && currentProposal.minion)
+    if (currentProposal && currentProposal.minion) {
       getMinionAction(currentProposal);
+    }
   }, [currentProposal, daochain]);
 
   return (

@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { FORM } from './forms';
+import { BOOST_FORMS } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -180,12 +180,13 @@ const STEPS = {
       type: 'boostDetails',
       next: 'STEP1',
       start: true,
+      isUserStep: false,
     },
     STEP1: {
       type: 'boostMetaForm',
-      lego: FORM.DISCOURSE_FORUM_COLOR,
+      lego: BOOST_FORMS.DISCORD_CHANNEL,
       next: 'STEP2',
-      stepLabel: 'Choose Forum Color',
+      stepLabel: 'Setup Discord Bot',
       isUserStep: true,
     },
     STEP2: {
@@ -203,7 +204,7 @@ const STEPS = {
     },
     STEP1: {
       type: 'boostMetaForm',
-      lego: FORM.DISCOURSE_FORUM_COLOR,
+      lego: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
@@ -215,8 +216,27 @@ const STEPS = {
       isUserStep: true,
     },
   },
-  ADD_SNAPSHOT: {},
-  ADD_WRAP_N_ZAP: {},
+  ADD_WRAP_N_ZAP: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+      isUserStep: false,
+    },
+    STEP1: {
+      type: 'launcher',
+      lego: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
+      next: 'STEP2',
+      stepLabel: 'Deploy Wrap n Zap',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
   ADD_MINTGATE: {
     DISPLAY: {
       type: 'boostDetails',
@@ -225,6 +245,12 @@ const STEPS = {
       isUserStep: false,
     },
     STEP1: {
+      type: 'form',
+      next: 'STEP2',
+      stepLabel: 'Deploy Wrap-N-Zap',
+      isUserStep: true,
+    },
+    STEP2: {
       type: 'signer',
       stepLabel: 'Add Boost and Sign',
       finish: true,
@@ -299,15 +325,6 @@ export const BOOSTS = {
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
     cost: 'free',
   },
-  // SNAPSHOT: {
-  //   id: 'SNAPSHOT',
-  //   oldId: 'snapshot',
-  //   boostContent: CONTENT.SNAPSHOT,
-  //   steps: STEPS.ADD_SNAPSHOT,
-  //   categories: ['governance'],
-  //   networks: 'all',
-  //   cost: 'free',
-  // },
   DISCORD: {
     id: 'DISCORD',
     oldId: 'notificationsLevel1',
@@ -316,6 +333,11 @@ export const BOOSTS = {
     categories: ['community'],
     networks: 'all',
     cost: 'free',
+    metaFields: ['channelId', 'type', 'active', 'actions'],
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'settings/notifications',
+    },
   },
   MINTGATE: {
     id: 'MINTGATE',
@@ -345,7 +367,20 @@ export const BOOSTS = {
     categories: ['payments'],
     networks: 'all',
     cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'settings',
+    },
   },
+  // SNAPSHOT: {
+  //   id: 'SNAPSHOT',
+  //   oldId: 'snapshot',
+  //   boostContent: CONTENT.SNAPSHOT,
+  //   steps: STEPS.ADD_SNAPSHOT,
+  //   categories: ['governance'],
+  //   networks: 'all',
+  //   cost: 'free',
+  // },
 };
 
 export const allBoosts = {
