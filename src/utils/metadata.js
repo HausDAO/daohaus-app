@@ -439,10 +439,6 @@ export const handleExtractBoosts = ({ daoMetaData, returnIDs = false }) => {
         if (BOOSTS[boostKey]) {
           return [...array, BOOSTS[boostKey].id];
         }
-        const legacyBoost = findByOldID(boostKey);
-        if (legacyBoost) {
-          return [...array, legacyBoost.id];
-        }
         return array;
       }, []),
     ),

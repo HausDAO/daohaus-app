@@ -29,14 +29,8 @@ import BoostItemButton from '../components/boostItemButton';
 const checkAvailable = (boostData, daochain) =>
   boostData.networks === 'all' || boostData.networks[daochain];
 
-const checkBoostInstalled = (boostData, daoMetaData) => {
-  if (boostData.id === 'OLD_DEV_SUITE') {
-    console.log(daoMetaData.boosts[boostData.oldId]);
-  }
-  return (
-    daoMetaData.boosts[boostData.id] || daoMetaData.boosts[boostData.oldId]
-  );
-};
+const checkBoostInstalled = (boostData, daoMetaData) =>
+  daoMetaData.boosts[boostData.id];
 
 const handleSearch = data => {
   const { boostsKeyArray, searchStr } = data;
