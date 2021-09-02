@@ -427,11 +427,6 @@ export const addBoost = async ({
   //
 };
 
-const findByOldID = id => {
-  if (!id) return;
-  return Object.values(BOOSTS).find(boost => boost.oldId === id) || null;
-};
-
 export const handleExtractBoosts = ({ daoMetaData, returnIDs = false }) => {
   const IDs = [
     ...new Set(

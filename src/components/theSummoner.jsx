@@ -103,8 +103,6 @@ const TheSummoner = props => {
     },
   };
 
-  console.log('summonData', summonData);
-
   if (menuState === 'displayExisting') {
     return (
       <Flex flexDirection='column'>

@@ -112,7 +112,6 @@ const generateNoListMsg = (selectedListID, searchStr) => {
 
 const Market = ({ installBoost, openDetails, goToSettings }) => {
   const { daoMetaData } = useMetaData();
-
   const [categoryID, setID] = useState('all');
 
   const selectCategory = id => {

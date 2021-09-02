@@ -19,6 +19,7 @@ const StepperForm = props => {
     playlist,
     isAvailable,
     metaFields,
+    title,
   } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
@@ -159,21 +160,24 @@ const StepperForm = props => {
     }
     return null;
   };
-  return (
-    <Flex flexDir='column'>
-      <Box
-        fontFamily='heading'
-        textTransform='uppercase'
-        fontSize='xs'
-        fontWeight={700}
-        color='#7579C5'
-        my={4}
-      >
-        Step {position} of {userSteps.length}
-      </Box>
-      {getFrame()}
-    </Flex>
-  );
+  if (userSteps?.length)
+    return (
+      <Flex flexDir='column' p={2}>
+        <Box
+          fontFamily='heading'
+          textTransform='uppercase'
+          fontSize='sm'
+          fontWeight={700}
+          color='secondary.400'
+          my={4}
+        >
+          Step {position} of {userSteps.length}
+        </Box>
+        {getFrame()}
+      </Flex>
+    );
+
+  return <Flex p={2}>{getFrame()}</Flex>;
 };
 
 export default StepperForm;
