@@ -160,24 +160,26 @@ const StepperForm = props => {
     }
     return null;
   };
-  if (userSteps?.length)
+
+  if (userSteps?.length && position > 0)
     return (
-      <Flex flexDir='column' p={2}>
+      <Flex flexDir='column' p={3}>
         <Box
           fontFamily='heading'
           textTransform='uppercase'
           fontSize='sm'
           fontWeight={700}
           color='secondary.400'
-          my={4}
+          mb={2}
         >
-          Step {position} of {userSteps.length}
+          {`Step ${position} of ${userSteps.length}`}
+          {currentStep?.stepLabel && `: ${currentStep.stepLabel}`}
         </Box>
         {getFrame()}
       </Flex>
     );
 
-  return <Flex p={2}>{getFrame()}</Flex>;
+  return <Flex p={3}>{getFrame()}</Flex>;
 };
 
 export default StepperForm;
