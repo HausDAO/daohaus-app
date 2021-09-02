@@ -244,12 +244,6 @@ const STEPS = {
       isUserStep: false,
     },
     STEP1: {
-      type: 'form',
-      next: 'STEP2',
-      stepLabel: 'Deploy Wrap-N-Zap',
-      isUserStep: true,
-    },
-    STEP2: {
       type: 'signer',
       stepLabel: 'Add Boost and Sign',
       finish: true,
