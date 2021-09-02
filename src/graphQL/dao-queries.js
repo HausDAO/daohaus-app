@@ -108,7 +108,6 @@ export const DAO_ACTIVITIES = gql`
         }
         actions {
           target
-          value
           data
         }
         moloch {
