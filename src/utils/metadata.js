@@ -1,3 +1,4 @@
+import { BOOSTS } from '../data/boosts';
 import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
 import { addBoostPlaylist } from './playlists';
@@ -424,4 +425,28 @@ export const addBoost = async ({
   //   add new playlist
   //   copy rest
   //
+};
+
+const findByOldID = id => {
+  if (!id) return;
+  return Object.values(BOOSTS).find(boost => boost.oldId === id) || null;
+};
+
+export const handleExtractBoosts = ({ daoMetaData, returnIDs = false }) => {
+  const IDs = [
+    ...new Set(
+      Object.keys(daoMetaData.boosts).reduce((array, boostKey) => {
+        if (BOOSTS[boostKey]) {
+          return [...array, BOOSTS[boostKey].id];
+        }
+        const legacyBoost = findByOldID(boostKey);
+        if (legacyBoost) {
+          return [...array, legacyBoost.id];
+        }
+        return array;
+      }, []),
+    ),
+  ];
+  if (returnIDs) return IDs;
+  return IDs.map(boostKey => BOOSTS[boostKey]);
 };
