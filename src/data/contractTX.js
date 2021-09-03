@@ -1081,7 +1081,6 @@ export const TX = {
   CREATE_WRAP_N_ZAP: {
     contract: CONTRACTS.WRAP_N_ZAP_FACTORY,
     name: 'create',
-    onTxHash: ACTIONS.GENERIC_MODAL,
     poll: 'boostSubgraph',
     display: 'Create Wrap-N-Zap',
     errMsg: 'Error creating Wrap-N-Zap',

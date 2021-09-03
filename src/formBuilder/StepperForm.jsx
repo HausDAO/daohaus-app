@@ -153,6 +153,7 @@ const StepperForm = props => {
           next={currentStep.next}
           goToNext={goToNext}
           playlist={playlist}
+          secondaryBtn={secondaryBtn}
         />
       );
     }

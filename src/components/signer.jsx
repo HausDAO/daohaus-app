@@ -97,11 +97,7 @@ const Signer = props => {
       )}
       <Flex mt={6} justifyContent='flex-end'>
         {state === 'signed' ? (
-          <Flex>
-            <Button onClick={goToNext}>{finish ? 'Finish' : 'Next >'}</Button>
-
-            <Button onClick={goToNext}>{finish ? 'Finish' : 'Next >'}</Button>
-          </Flex>
+          <Button onClick={goToNext}>{finish ? 'Finish' : 'Next >'}</Button>
         ) : (
           <Button
             onClick={handleAddBoost}
