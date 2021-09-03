@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Flex, Spinner } from '@chakra-ui/react';
 
+import { useParams } from 'react-router-dom';
 import {
   useConfirmation,
   useFormModal,
@@ -15,6 +16,7 @@ import ProposalList from '../components/formList';
 import SaveButton from '../components/saveButton';
 import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
+import { chainByID } from '../utils/chain';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -24,8 +26,9 @@ const ProposalTypes = () => {
   const { openFormModal, closeModal } = useFormModal();
   const { successToast, errorToast } = useOverlay();
   const { openConfirmation } = useConfirmation();
-
   const { playlists, allForms = {}, customData, devList } = daoProposals || {};
+
+  const { daochain } = useParams();
   const [selectedListID, setListID] = useState(
     dev && devList?.forms?.length ? 'dev' : 'all',
   );
@@ -46,7 +49,7 @@ const ProposalTypes = () => {
       injectedProvider,
       meta: daoMetaData,
       address,
-      network: injectedChain.network,
+      network: chainByID(daochain).network,
     });
     if (res?.error) {
       errorToast({ title: 'Error saving Proposal Data' });

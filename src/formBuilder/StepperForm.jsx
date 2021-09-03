@@ -108,8 +108,7 @@ const StepperForm = props => {
     if (currentStep?.type === 'boostDetails') {
       return (
         <BoostDetails
-          content={boostContent}
-          isAvailable={isAvailable}
+          {...props}
           goToNext={goToNext}
           next={currentStep.next}
           userSteps={userSteps}

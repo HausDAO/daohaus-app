@@ -1,7 +1,7 @@
-import { BOOSTS } from '../data/boosts';
+import { allBoosts, BOOSTS } from '../data/boosts';
 import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
-import { addBoostPlaylist } from './playlists';
+import { addBoostPlaylist, checkIsPlaylist, hasPlaylist } from './playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 const ccoApiUrl = 'https://cco.daohaus.club';
@@ -356,10 +356,20 @@ export const getNftMeta = async url => {
   }
 };
 
-export const updateProposalConfig = async (state, params) => {
-  const { meta, injectedProvider, address, network } = params;
-
-  if (!meta || !injectedProvider || !state || !network)
+export const updateProposalConfig = async (proposalConfig, params) => {
+  const {
+    meta,
+    injectedProvider,
+    address,
+    network,
+    onError,
+    onSuccess,
+  } = params;
+  console.log(`meta`, meta);
+  console.log(`injectedProvider`, injectedProvider);
+  console.log(`address`, address);
+  console.log(`network`, network);
+  if (!meta || !injectedProvider || !proposalConfig || !network)
     throw new Error('proposalConfig => handlePostNewConfig');
   try {
     const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
@@ -368,15 +378,18 @@ export const updateProposalConfig = async (state, params) => {
       address,
     );
     const updateData = {
-      proposalConfig: state,
+      proposalConfig,
       contractAddress: meta.contractAddress,
       network,
       signature,
     };
     const res = await put('dao/update', updateData);
+
     if (res.error) throw new Error(res.error);
+    onSuccess?.(res, params);
     return true;
   } catch (error) {
+    onError?.(error, params);
     console.error(error);
   }
 };
@@ -445,4 +458,28 @@ export const handleExtractBoosts = ({ daoMetaData, returnIDs = false }) => {
   ];
   if (returnIDs) return IDs;
   return IDs.map(boostKey => BOOSTS[boostKey]);
+};
+
+export const handleRestorePlaylist = async params => {
+  const { meta, playlist, proposalConfig, onError } = params;
+  const isPlaylistType = checkIsPlaylist(playlist);
+  const isMissingPlaylist = hasPlaylist(meta, playlist) === false;
+  console.log(proposalConfig);
+  if (isPlaylistType && isMissingPlaylist) {
+    const newProposalConfig = {
+      ...proposalConfig,
+      playlists: [...proposalConfig.playlists, playlist],
+    };
+    return updateProposalConfig(newProposalConfig, params);
+  }
+  if (!isPlaylistType) {
+    console.log('Is Playlist:', checkIsPlaylist(playlist));
+    console.log('params: ', params);
+    onError?.('Playlist data does not match playlist model', params);
+  }
+  if (!isMissingPlaylist) {
+    console.log('Has Playlist', hasPlaylist(meta, playlist));
+    console.log('params: ', params);
+    onError?.('DAO already has playlist', params);
+  }
 };

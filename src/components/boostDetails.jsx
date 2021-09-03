@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BsArrowReturnRight } from 'react-icons/bs';
 import { Button } from '@chakra-ui/button';
 import Icon from '@chakra-ui/icon';
 import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
-import { useFormModal } from '../contexts/OverlayContext';
+import { useParams } from 'react-router-dom';
+import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 
 import MemberIndicator from './memberIndicator';
 import TextIndicator from './textIndicator';
 import TextBox from './TextBox';
+import { handleRestorePlaylist } from '../utils/metadata';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { chainByID } from '../utils/chain';
 
 const BoostDetails = ({
-  content = {},
+  boostContent = {},
   goToNext,
   next,
   userSteps,
   isAvailable,
   secondaryBtn,
+  playlist,
 }) => {
   const { closeModal } = useFormModal();
   const {
@@ -27,8 +33,16 @@ const BoostDetails = ({
     externalLinks = [],
     header,
     title,
-  } = content;
+  } = boostContent;
   const { name, daoData } = publisher;
+
+  const [loading, setLoading] = useState(false);
+  const { successToast, errorToast } = useOverlay();
+  const { daochain } = useParams();
+  const { address, injectedProvider } = useInjectedProvider();
+  const { daoMetaData, daoProposals, refetchMetaData } = useMetaData();
+
+  console.log(daoProposals);
 
   const handleNext = () => {
     if (next && goToNext) {
@@ -37,13 +51,37 @@ const BoostDetails = ({
       closeModal();
     }
   };
+
+  const restorePlaylist = {
+    text: 'Restore Playlist',
+    fn: async () => {
+      setLoading(true);
+      await handleRestorePlaylist({
+        playlist,
+        injectedProvider,
+        meta: daoMetaData,
+        address,
+        network: chainByID(daochain).network,
+        proposalConfig: daoProposals,
+        onSuccess: () => {
+          successToast({
+            title: 'Playlist Restored',
+          });
+          setLoading(false);
+          refetchMetaData();
+        },
+        onError: errorMsg => {
+          errorToast({
+            title: 'Error Restoring Playlist',
+            description: errorMsg || '',
+          });
+          setLoading(false);
+        },
+      });
+    },
+  };
   const canRestore = !userSteps;
-  const secondBtn = canRestore
-    ? {
-        text: 'Restore Playlist',
-        fn: () => console.log('restore'),
-      }
-    : secondaryBtn;
+  const secondBtn = canRestore ? restorePlaylist : secondaryBtn;
   return (
     <Flex flexDirection='column'>
       <TextBox mb={6} size='lg'>
@@ -111,18 +149,23 @@ const BoostDetails = ({
       <Box>
         <Flex alignItems='flex-end' flexDir='column'>
           <Flex>
-            {isAvailable && (
+            {isAvailable && playlist && (
               <Button
                 type='button'
                 variant='outline'
                 onClick={secondBtn.fn}
                 mr={4}
+                isLoading={loading}
               >
                 {secondBtn.text}
               </Button>
             )}
 
-            <Button onClick={handleNext} loadingText='Submitting'>
+            <Button
+              onClick={handleNext}
+              loadingText='Submitting'
+              isLoading={loading}
+            >
               {goToNext && next ? 'Next >' : 'Close'}
             </Button>
           </Flex>
