@@ -31,9 +31,8 @@ const FormBuilder = props => {
     next,
     goToNext,
     ctaText,
+    secondaryBtn,
   } = props;
-
-  console.log('form props', props);
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
@@ -260,6 +259,7 @@ const FormBuilder = props => {
           next={next}
           goToNext={goToNext}
           errors={Object.values(formErrors)}
+          secondaryBtn={secondaryBtn}
         />
       </Flex>
     </form>

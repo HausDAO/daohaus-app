@@ -1,3 +1,4 @@
+import { BOOSTS } from '../data/boosts';
 import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
 import { addBoostPlaylist } from './playlists';
@@ -388,6 +389,8 @@ export const addBoost = async ({
   boostData,
   proposalConfig,
   extraMetaData = {},
+  onError,
+  onSuccess,
 }) => {
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
@@ -415,13 +418,31 @@ export const addBoost = async ({
     }
 
     const res = await boostPost('dao/boost', updateData);
+
     if (res.error) throw new Error(res.error);
+    onSuccess?.(res);
     return true;
   } catch (error) {
     console.error(error);
+    onError?.(error);
   }
   //   create new allProposal playlist
   //   add new playlist
   //   copy rest
   //
+};
+
+export const handleExtractBoosts = ({ daoMetaData, returnIDs = false }) => {
+  const IDs = [
+    ...new Set(
+      Object.keys(daoMetaData.boosts).reduce((array, boostKey) => {
+        if (BOOSTS[boostKey]) {
+          return [...array, BOOSTS[boostKey].id];
+        }
+        return array;
+      }, []),
+    ),
+  ];
+  if (returnIDs) return IDs;
+  return IDs.map(boostKey => BOOSTS[boostKey]);
 };

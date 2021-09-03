@@ -17,9 +17,9 @@ const BoostDetails = ({
   next,
   userSteps,
   isAvailable,
+  secondaryBtn,
 }) => {
   const { closeModal } = useFormModal();
-
   const {
     publisher = {},
     version,
@@ -37,7 +37,13 @@ const BoostDetails = ({
       closeModal();
     }
   };
-
+  const canRestore = !userSteps;
+  const secondBtn = canRestore
+    ? {
+        text: 'Restore Playlist',
+        fn: () => console.log('restore'),
+      }
+    : secondaryBtn;
   return (
     <Flex flexDirection='column'>
       <TextBox mb={6} size='lg'>
@@ -104,7 +110,18 @@ const BoostDetails = ({
       )}
       <Box>
         <Flex alignItems='flex-end' flexDir='column'>
-          <Flex mb={2}>
+          <Flex>
+            {isAvailable && (
+              <Button
+                type='button'
+                variant='outline'
+                onClick={secondBtn.fn}
+                mr={4}
+              >
+                {secondBtn.text}
+              </Button>
+            )}
+
             <Button onClick={handleNext} loadingText='Submitting'>
               {goToNext && next ? 'Next >' : 'Close'}
             </Button>

@@ -29,14 +29,8 @@ import BoostItemButton from '../components/boostItemButton';
 const checkAvailable = (boostData, daochain) =>
   boostData.networks === 'all' || boostData.networks[daochain];
 
-const checkBoostInstalled = (boostData, daoMetaData) => {
-  if (boostData.id === 'OLD_DEV_SUITE') {
-    console.log(daoMetaData.boosts[boostData.oldId]);
-  }
-  return (
-    daoMetaData.boosts[boostData.id] || daoMetaData.boosts[boostData.oldId]
-  );
-};
+const checkBoostInstalled = (boostData, daoMetaData) =>
+  daoMetaData.boosts[boostData.id];
 
 const handleSearch = data => {
   const { boostsKeyArray, searchStr } = data;
@@ -118,7 +112,6 @@ const generateNoListMsg = (selectedListID, searchStr) => {
 
 const Market = ({ installBoost, openDetails, goToSettings }) => {
   const { daoMetaData } = useMetaData();
-
   const [categoryID, setID] = useState('all');
 
   const selectCategory = id => {
@@ -217,7 +210,6 @@ const BoostsList = ({
     });
   }, [categoryID, categories, searchStr, daoMetaData, sortBy]);
 
-  console.log(`currentCategory`, currentCategory);
   const handleTypeSearch = e =>
     setSearchStr(e.target.value.toLowerCase().trim());
   const handleSetSort = e => setSortBy(e.target.value);

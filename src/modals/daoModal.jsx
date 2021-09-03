@@ -94,7 +94,7 @@ const DaoModal = () => {
           {steps && <StepperForm steps={steps} />}
           {boost && <StepperForm {...boost} />}
           {lego && <FormBuilder {...lego} onSubmit={onSubmit} />}
-          {body}
+          {body && <Flex p={3}>{body}</Flex>}
           {appendBody}
         </ModalBody>
 

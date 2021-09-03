@@ -59,7 +59,7 @@ const MinionNotFound = ({ minionType = 'Minion' }) => {
 };
 
 const TheSummoner = props => {
-  const { localForm, goToNext, minionData, next } = props;
+  const { localForm, goToNext, minionData, next, secondaryBtn } = props;
 
   const { daoOverview } = useDao();
   const { daoid, daochain } = useParams();
@@ -102,8 +102,6 @@ const TheSummoner = props => {
       setMenuState('summon');
     },
   };
-
-  console.log('summonData', summonData);
 
   if (menuState === 'displayExisting') {
     return (
@@ -150,7 +148,17 @@ const TheSummoner = props => {
           Summon Another
         </Button>
         <Flex mt={6} justifyContent='flex-end'>
-          <Button onClick={handleNext}>{'Next >'}</Button>
+          <Flex>
+            <Button
+              type='button'
+              variant='outline'
+              onClick={secondaryBtn.fn}
+              mr={4}
+            >
+              {secondaryBtn.text}
+            </Button>
+            <Button onClick={handleNext}>{'Next >'}</Button>
+          </Flex>
         </Flex>
       </Flex>
     );
@@ -171,6 +179,7 @@ const TheSummoner = props => {
             {...summonData.summonForm}
             lifeCycleFns={lifeCycleFns}
             ctaText='Deploy'
+            secondaryBtn={secondaryBtn}
           />
         )}
         {menuState === 'summoning' && (

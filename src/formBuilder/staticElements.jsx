@@ -12,7 +12,7 @@ import {
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 // import TextBox from '../components/TextBox';
 
-export const SubmitErrList = ({ errors = [] }) => {
+export const ErrorList = ({ errors = [] }) => {
   //  determine which errors are submit errors
 
   return (
@@ -51,6 +51,7 @@ export const FormFooter = ({
   addOption,
   errors,
   ctaText,
+  secondaryBtn,
 }) => {
   if (options?.length) {
     return (
@@ -73,22 +74,35 @@ export const FormFooter = ({
               {ctaText || 'Submit'}
             </Button>
           </Flex>
-          <SubmitErrList errors={errors} />
+          <ErrorList errors={errors} />
         </Flex>
       </Box>
     );
   }
   return (
     <Box>
-      <Flex justifyContent='space-between'>
-        <Button
-          type='submit'
-          loadingText='Submitting'
-          isLoading={loading}
-          disabled={loading || errors?.length}
-        >
-          {ctaText || 'Submit'}
-        </Button>
+      <Flex justifyContent='flex-end'>
+        <Flex>
+          {secondaryBtn && (
+            <Button
+              type='button'
+              variant='outline'
+              disabled={loading}
+              onClick={secondaryBtn.fn}
+              mr={4}
+            >
+              {secondaryBtn.text}
+            </Button>
+          )}
+          <Button
+            type='submit'
+            loadingText='Submitting'
+            isLoading={loading}
+            disabled={loading || errors?.length}
+          >
+            {ctaText || 'Submit'}
+          </Button>
+        </Flex>
       </Flex>
     </Box>
   );

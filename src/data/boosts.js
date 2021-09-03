@@ -244,12 +244,6 @@ const STEPS = {
       isUserStep: false,
     },
     STEP1: {
-      type: 'form',
-      next: 'STEP2',
-      stepLabel: 'Deploy Wrap-N-Zap',
-      isUserStep: true,
-    },
-    STEP2: {
       type: 'signer',
       stepLabel: 'Add Boost and Sign',
       finish: true,
@@ -261,7 +255,6 @@ const STEPS = {
 export const BOOSTS = {
   OLD_DEV_SUITE: {
     id: 'OLD_DEV_SUITE',
-    oldId: MINION_TYPES.VANILLA,
     boostContent: CONTENT.OLD_DEV_SUITE,
     minionData: MINIONS[MINION_TYPES.VANILLA],
     categories: ['devTools'],
@@ -295,7 +288,6 @@ export const BOOSTS = {
   // },
   RARIBLE: {
     id: 'RARIBLE',
-    oldId: 'rarible',
     minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
     steps: STEPS.MINION_BOOST,
     boostContent: CONTENT.RARIBLE,
@@ -303,10 +295,10 @@ export const BOOSTS = {
     networks: { '0x4': true },
     playlist: BOOST_PLAYLISTS.RARIBLE,
     cost: 'free',
+    settings: 'none',
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
-    oldId: 'niftyInk',
     boostContent: CONTENT.NIFTY_INK,
     minionData: MINIONS[MINION_TYPES.NIFTY],
     categories: ['nft'],
@@ -314,6 +306,7 @@ export const BOOSTS = {
     networks: { '0x64': true },
     playlist: BOOST_PLAYLISTS.NIFTY_INK,
     cost: 'free',
+    settings: 'none',
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',
@@ -328,7 +321,6 @@ export const BOOSTS = {
   },
   DISCORD: {
     id: 'DISCORD',
-    oldId: 'notificationsLevel1',
     steps: STEPS.ADD_DISCORD,
     boostContent: CONTENT.DISCORD,
     categories: ['community'],
@@ -342,7 +334,6 @@ export const BOOSTS = {
   },
   MINTGATE: {
     id: 'MINTGATE',
-    oldId: 'mintGate',
     steps: STEPS.ADD_MINTGATE,
     boostContent: CONTENT.MINTGATE,
     categories: ['community'],
@@ -352,7 +343,6 @@ export const BOOSTS = {
   },
   DISCOURSE: {
     id: 'DISCOURSE',
-    oldId: 'discourse',
     steps: STEPS.ADD_DISCOURSE,
     boostContent: CONTENT.DISCOURSE,
     categories: ['community'],
@@ -375,7 +365,6 @@ export const BOOSTS = {
   },
   // SNAPSHOT: {
   //   id: 'SNAPSHOT',
-  //   oldId: 'snapshot',
   //   boostContent: CONTENT.SNAPSHOT,
   //   steps: STEPS.ADD_SNAPSHOT,
   //   categories: ['governance'],

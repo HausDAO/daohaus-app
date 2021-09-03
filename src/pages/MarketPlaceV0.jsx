@@ -16,12 +16,13 @@ const MarketPlaceV0 = () => {
   const history = useHistory();
 
   const installBoost = boost => openFormModal({ boost });
-  const openDetails = boost => {
+  const openDetails = (boost, canRestore) => {
     openFormModal({
       body: (
         <BoostDetails
           content={boost.boostContent}
           isAvailable={boost.isAvailable}
+          canRestore={canRestore}
         />
       ),
     });

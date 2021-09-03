@@ -75,6 +75,11 @@ const StepperForm = props => {
     }
   };
 
+  const secondaryBtn = {
+    text: 'Cancel',
+    fn: () => closeModal(),
+  };
+
   const getFrame = () => {
     if (currentStep?.type === 'form') {
       return (
@@ -84,6 +89,7 @@ const StepperForm = props => {
           goToNext={goToNext}
           next={currentStep.next}
           ctaText={currentStep.ctaText || 'Next'}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -95,6 +101,7 @@ const StepperForm = props => {
           metaFields={metaFields}
           goToNext={goToNext}
           setStepperStorage={setStepperStorage}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -107,6 +114,7 @@ const StepperForm = props => {
           next={currentStep.next}
           userSteps={userSteps}
           steps={steps}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -119,6 +127,7 @@ const StepperForm = props => {
           minionData={minionData}
           goToNext={goToNext}
           boostContent={boostContent}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -130,6 +139,7 @@ const StepperForm = props => {
           next={currentStep.next}
           goToNext={goToNext}
           boostContent={boostContent}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -143,6 +153,7 @@ const StepperForm = props => {
           next={currentStep.next}
           goToNext={goToNext}
           playlist={playlist}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -154,26 +165,32 @@ const StepperForm = props => {
           metaFields={metaFields}
           goToNext={goToNext}
           setStepperStorage={setStepperStorage}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
     return null;
   };
-  return (
-    <Flex flexDir='column'>
-      <Box
-        fontFamily='heading'
-        textTransform='uppercase'
-        fontSize='xs'
-        fontWeight={700}
-        color='#7579C5'
-        my={4}
-      >
-        Step {position} of {userSteps.length}
-      </Box>
-      {getFrame()}
-    </Flex>
-  );
+
+  if (userSteps?.length && position > 0)
+    return (
+      <Flex flexDir='column' p={3}>
+        <Box
+          fontFamily='heading'
+          textTransform='uppercase'
+          fontSize='sm'
+          fontWeight={700}
+          color='secondary.400'
+          mb={2}
+        >
+          {`Step ${position} of ${userSteps.length}`}
+          {currentStep?.stepLabel && `: ${currentStep.stepLabel}`}
+        </Box>
+        {getFrame()}
+      </Flex>
+    );
+
+  return <Flex p={3}>{getFrame()}</Flex>;
 };
 
 export default StepperForm;
