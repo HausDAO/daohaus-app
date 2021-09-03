@@ -12,14 +12,7 @@ import TheLauncher from '../components/theLauncher';
 import DiscordNotificationsLaunch from './discordLaunchForm';
 
 const StepperForm = props => {
-  const {
-    steps = {},
-    minionData,
-    boostContent,
-    playlist,
-    isAvailable,
-    metaFields,
-  } = props;
+  const { steps = {}, minionData, boostContent, playlist, metaFields } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
   const { errorToast } = useOverlay();

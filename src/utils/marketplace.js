@@ -1,17 +1,6 @@
-import { isObjectEmpty, omit } from './general';
-import { MINION_TYPES } from './proposalUtils';
 import { BOOSTS } from '../data/boosts';
 import { MINIONS } from '../data/minions';
 import { handleExtractBoosts } from './metadata';
-
-const boostsBanList = [
-  ...Object.values(MINION_TYPES),
-  'cco',
-  'proposalTypes',
-  'customTheme',
-  'transmutation',
-  'snapshot',
-];
 
 export const devBoostList = {
   name: 'DEV Boosts',

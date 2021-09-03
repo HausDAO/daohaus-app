@@ -1,4 +1,4 @@
-import { allBoosts, BOOSTS } from '../data/boosts';
+import { BOOSTS } from '../data/boosts';
 import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
 import { addBoostPlaylist, checkIsPlaylist, hasPlaylist } from './playlists';
@@ -365,10 +365,7 @@ export const updateProposalConfig = async (proposalConfig, params) => {
     onError,
     onSuccess,
   } = params;
-  console.log(`meta`, meta);
-  console.log(`injectedProvider`, injectedProvider);
-  console.log(`address`, address);
-  console.log(`network`, network);
+
   if (!meta || !injectedProvider || !proposalConfig || !network)
     throw new Error('proposalConfig => handlePostNewConfig');
   try {
@@ -402,8 +399,8 @@ export const addBoost = async ({
   boostData,
   proposalConfig,
   extraMetaData = {},
-  onError,
   onSuccess,
+  onError,
 }) => {
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
@@ -432,17 +429,17 @@ export const addBoost = async ({
 
     const res = await boostPost('dao/boost', updateData);
 
-    if (res.error) throw new Error(res.error);
+    if (res.error)
+      throw new Error(
+        typeof res.error === 'string'
+          ? res.error
+          : 'API rejected playlist update',
+      );
     onSuccess?.(res);
     return true;
   } catch (error) {
-    console.error(error);
     onError?.(error);
   }
-  //   create new allProposal playlist
-  //   add new playlist
-  //   copy rest
-  //
 };
 
 export const handleExtractBoosts = ({ daoMetaData, returnIDs = false }) => {
@@ -464,7 +461,6 @@ export const handleRestorePlaylist = async params => {
   const { meta, playlist, proposalConfig, onError } = params;
   const isPlaylistType = checkIsPlaylist(playlist);
   const isMissingPlaylist = hasPlaylist(meta, playlist) === false;
-  console.log(proposalConfig);
   if (isPlaylistType && isMissingPlaylist) {
     const newProposalConfig = {
       ...proposalConfig,
@@ -475,11 +471,12 @@ export const handleRestorePlaylist = async params => {
   if (!isPlaylistType) {
     console.log('Is Playlist:', checkIsPlaylist(playlist));
     console.log('params: ', params);
-    onError?.('Playlist data does not match playlist model', params);
+
+    onError?.(new Error('Playlist data does not match playlist model'), params);
   }
   if (!isMissingPlaylist) {
     console.log('Has Playlist', hasPlaylist(meta, playlist));
     console.log('params: ', params);
-    onError?.('DAO already has playlist', params);
+    onError?.(new Error('DAO already has playlist'), params);
   }
 };

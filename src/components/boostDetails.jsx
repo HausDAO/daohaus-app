@@ -15,6 +15,7 @@ import { handleRestorePlaylist } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { chainByID } from '../utils/chain';
+import { hasPlaylist } from '../utils/playlists';
 
 const BoostDetails = ({
   boostContent = {},
@@ -70,16 +71,18 @@ const BoostDetails = ({
           setLoading(false);
           refetchMetaData();
         },
-        onError: errorMsg => {
+        onError: error => {
+          console.log(`errorMsg`, error.message);
           errorToast({
             title: 'Error Restoring Playlist',
-            description: errorMsg || '',
+            description: error.message,
           });
           setLoading(false);
         },
       });
     },
   };
+  const daoHasPlaylist = hasPlaylist(daoMetaData, playlist);
   const canRestore = !userSteps;
   const secondBtn = canRestore ? restorePlaylist : secondaryBtn;
   return (
@@ -156,6 +159,8 @@ const BoostDetails = ({
                 onClick={secondBtn.fn}
                 mr={4}
                 isLoading={loading}
+                loadingText='Restoring...'
+                disabled={daoHasPlaylist}
               >
                 {secondBtn.text}
               </Button>

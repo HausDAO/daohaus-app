@@ -21,8 +21,13 @@ import { chainByID } from '../utils/chain';
 const dev = process.env.REACT_APP_DEV;
 
 const ProposalTypes = () => {
-  const { daoProposals, daoMetaData, dispatchPropConfig } = useMetaData();
-  const { injectedProvider, address, injectedChain } = useInjectedProvider();
+  const {
+    daoProposals,
+    daoMetaData,
+    dispatchPropConfig,
+    refetchMetaData,
+  } = useMetaData();
+  const { injectedProvider, address } = useInjectedProvider();
   const { openFormModal, closeModal } = useFormModal();
   const { successToast, errorToast } = useOverlay();
   const { openConfirmation } = useConfirmation();
@@ -45,19 +50,24 @@ const ProposalTypes = () => {
 
   const saveConfig = async () => {
     setLoading(true);
-    const res = await updateProposalConfig(daoProposals, {
+    await updateProposalConfig(daoProposals, {
       injectedProvider,
       meta: daoMetaData,
       address,
       network: chainByID(daochain).network,
+      onSuccess: () => {
+        successToast({ title: 'Proposal data updated!' });
+        refetchMetaData();
+        setLoading(false);
+      },
+      onError: error => {
+        errorToast({
+          title: 'Error saving Proposal Data',
+          description: error.message || '',
+        });
+        setLoading(false);
+      },
     });
-    if (res?.error) {
-      errorToast({ title: 'Error saving Proposal Data' });
-    } else {
-      successToast({ title: 'Proposal data updated!' });
-    }
-
-    setLoading(false);
   };
 
   const handleSaveConfig = () => {
