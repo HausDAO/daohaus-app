@@ -20,9 +20,10 @@ export const OverlayProvider = ({ children }) => {
   const [genericModal, setGenericModal] = useState({});
 
   const errorToast = content => {
+    console.log(content);
     toast({
-      title: content.title,
-      description: content.description,
+      title: content?.title,
+      description: content?.description,
       position: 'top-right',
       status: 'error',
       duration: 7000,
@@ -31,8 +32,8 @@ export const OverlayProvider = ({ children }) => {
   };
   const successToast = content => {
     toast({
-      title: content.title,
-      description: content.description,
+      title: content?.title,
+      description: content?.description,
       position: 'top-right',
       status: 'success',
       duration: 3000,

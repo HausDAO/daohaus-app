@@ -158,3 +158,16 @@ export const addBoostPlaylist = (proposalConfig, newPlaylist) => {
   const newPlaylists = [...playlists, newPlaylist];
   return { ...proposalConfig, playlists: newPlaylists, allForms: newAllForms };
 };
+
+export const checkIsPlaylist = playlist =>
+  typeof playlist?.id === 'string' &&
+  typeof playlist?.name === 'string' &&
+  Array.isArray(playlist?.forms);
+
+export const hasPlaylist = (daoMetaData, playlist) => {
+  if (!Array.isArray(daoMetaData?.proposalConfig?.playlists) || !playlist?.id)
+    return;
+  return daoMetaData.proposalConfig.playlists.some(
+    list => list.id === playlist.id,
+  );
+};
