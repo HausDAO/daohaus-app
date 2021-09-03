@@ -389,6 +389,8 @@ export const addBoost = async ({
   boostData,
   proposalConfig,
   extraMetaData = {},
+  onError,
+  onSuccess,
 }) => {
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
@@ -416,10 +418,13 @@ export const addBoost = async ({
     }
 
     const res = await boostPost('dao/boost', updateData);
+
     if (res.error) throw new Error(res.error);
+    onSuccess?.(res);
     return true;
   } catch (error) {
     console.error(error);
+    onError?.(error);
   }
   //   create new allProposal playlist
   //   add new playlist

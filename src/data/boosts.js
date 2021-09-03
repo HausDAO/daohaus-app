@@ -306,6 +306,7 @@ export const BOOSTS = {
     networks: { '0x64': true },
     playlist: BOOST_PLAYLISTS.NIFTY_INK,
     cost: 'free',
+    settings: 'none',
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',

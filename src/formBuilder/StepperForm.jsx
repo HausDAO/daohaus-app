@@ -19,7 +19,6 @@ const StepperForm = props => {
     playlist,
     isAvailable,
     metaFields,
-    title,
   } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
@@ -76,6 +75,11 @@ const StepperForm = props => {
     }
   };
 
+  const secondaryBtn = {
+    text: 'Cancel',
+    fn: () => closeModal(),
+  };
+
   const getFrame = () => {
     if (currentStep?.type === 'form') {
       return (
@@ -85,6 +89,7 @@ const StepperForm = props => {
           goToNext={goToNext}
           next={currentStep.next}
           ctaText={currentStep.ctaText || 'Next'}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -96,6 +101,7 @@ const StepperForm = props => {
           metaFields={metaFields}
           goToNext={goToNext}
           setStepperStorage={setStepperStorage}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -108,6 +114,7 @@ const StepperForm = props => {
           next={currentStep.next}
           userSteps={userSteps}
           steps={steps}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -120,6 +127,7 @@ const StepperForm = props => {
           minionData={minionData}
           goToNext={goToNext}
           boostContent={boostContent}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -131,6 +139,7 @@ const StepperForm = props => {
           next={currentStep.next}
           goToNext={goToNext}
           boostContent={boostContent}
+          secondaryBtn={secondaryBtn}
         />
       );
     }
@@ -155,6 +164,7 @@ const StepperForm = props => {
           metaFields={metaFields}
           goToNext={goToNext}
           setStepperStorage={setStepperStorage}
+          secondaryBtn={secondaryBtn}
         />
       );
     }

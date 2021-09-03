@@ -17,8 +17,8 @@ const Signer = props => {
   const { daochain } = useParams();
   const { daoProposals, daoMetaData, refetchMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
-
   const [state, setState] = useState(null);
+
   const handleAddBoost = async () => {
     setState('signing');
     await addBoost({
@@ -29,9 +29,14 @@ const Signer = props => {
       boostData,
       proposalConfig: playlist && daoProposals,
       extraMetaData: stepperStorage,
+      onError() {
+        setState(null);
+      },
+      onSuccess() {
+        setState('signed');
+        refetchMetaData();
+      },
     });
-    setState('signed');
-    refetchMetaData();
   };
 
   return (
@@ -92,7 +97,11 @@ const Signer = props => {
       )}
       <Flex mt={6} justifyContent='flex-end'>
         {state === 'signed' ? (
-          <Button onClick={goToNext}>{finish ? 'Finish' : 'Next >'}</Button>
+          <Flex>
+            <Button onClick={goToNext}>{finish ? 'Finish' : 'Next >'}</Button>
+
+            <Button onClick={goToNext}>{finish ? 'Finish' : 'Next >'}</Button>
+          </Flex>
         ) : (
           <Button
             onClick={handleAddBoost}
