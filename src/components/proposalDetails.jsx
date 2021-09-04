@@ -243,7 +243,7 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         tooltip
         tooltipText={TIP_LABELS.UBER_PROPOSAL}
         link={UBER_LINK}
-        shouldFetchProfile={false}
+        shouldFetchProfile
         name={minionName}
       />
     );
@@ -264,7 +264,7 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         tooltip
         tooltipText={TIP_LABELS.FUNDING_MINION_PROPOSAL}
         link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
-        shouldFetchProfile={false}
+        shouldFetchProfile
         name={minionName}
       />
     );
@@ -283,7 +283,7 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         tooltip
         tooltipText={TIP_LABELS.MINION_PROPOSAL}
         link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
-        shouldFetchProfile={false}
+        shouldFetchProfile
         name={minionName}
       />
     );
@@ -296,7 +296,7 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         tooltip
         tooltipText={generateSFLabels(proposal)}
         link={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${proposal.minionAddress}`}
-        shouldFetchProfile={false}
+        shouldFetchProfile
         name={minionName}
       />
     );

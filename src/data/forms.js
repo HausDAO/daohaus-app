@@ -169,6 +169,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.PAYMENT_REQUEST,
     ],
+    customValidations: ['nonDaoApplicant'],
   },
   FUNDING: {
     id: 'FUNDING',
@@ -227,6 +228,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.SHARES_REQUEST,
     ],
+    customValidations: ['nonDaoApplicant'],
   },
   GUILDKICK: {
     id: 'GUILDKICK',
@@ -484,6 +486,12 @@ export const FORM = {
     tx: TX.SUMMON_MINION_VANILLA,
     fields: [[FIELD.MINION_NAME]],
   },
+  NEW_SUPERFLUID_MINION: {
+    required: ['minionName'],
+    minionType: MINION_TYPES.SUPERFLUID,
+    tx: TX.SUMMON_MINION_SUPERFLUID,
+    fields: [[FIELD.MINION_NAME]],
+  },
   BUY_NIFTY_INK: {
     id: 'BUY_NIFTY_INK',
     title: 'Buy a NiftyInk',
@@ -521,5 +529,20 @@ export const FORM = {
       ],
     ],
     customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
+  },
+};
+
+export const BOOST_FORMS = {
+  DISCOURSE_FORUM_COLOR: {
+    id: 'DISCOURSE_FORUM_COLOR',
+    title: 'Discourse Forum Color',
+    required: ['color'],
+    fields: [[FIELD.COLOR_PICKER, FIELD.DISCOURSE_META]],
+  },
+  WRAP_N_ZAP_LAUNCH: {
+    id: 'WRAP_N_ZAP_LAUNCH',
+    title: 'Wrap n Zap',
+    fields: [[]],
+    tx: TX.CREATE_WRAP_N_ZAP,
   },
 };

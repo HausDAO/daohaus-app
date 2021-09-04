@@ -12,20 +12,20 @@ export const BOOST_PLAYLISTS = {
     id: 'niftyMinionClassics',
     forms: ['MINION_NIFTY', 'PAYROLL_NIFTY'],
   },
-  NFT: {
-    name: 'NFT Suite',
-    id: 'nifty minion',
-    forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
-  },
-  DEV_SUITE: {
-    name: 'Dev Suite',
-    id: 'Neapolitan minion',
-    forms: [
-      'MINION_NEAPOLITAN_SIMPLE',
-      'PAYROLL_NEAPOLITAN',
-      'MINION_BUYOUT_ERC721_TOKEN',
-    ],
-  },
+  // NFT: {
+  //   name: 'NFT Suite',
+  //   id: 'nifty minion',
+  //   forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
+  // },
+  // DEV_SUITE: {
+  //   name: 'Dev Suite',
+  //   id: 'Neapolitan minion',
+  //   forms: [
+  //     'MINION_NEAPOLITAN_SIMPLE',
+  //     'PAYROLL_NEAPOLITAN',
+  //     'MINION_BUYOUT_ERC721_TOKEN',
+  //   ],
+  // },
   RARIBLE: {
     name: 'Rarible',
     id: 'rarible',
@@ -35,6 +35,11 @@ export const BOOST_PLAYLISTS = {
     name: 'NiftyInk',
     id: 'nifty minion',
     forms: ['BUY_NIFTY_INK'],
+  },
+  SUPERFLUID: {
+    name: 'Superfluid',
+    id: 'Superfluid minion',
+    forms: ['SUPERFLUID_STREAM'],
   },
 };
 
@@ -152,4 +157,17 @@ export const addBoostPlaylist = (proposalConfig, newPlaylist) => {
   const newAllForms = createNewAllForms(allForms, newPlaylist.forms);
   const newPlaylists = [...playlists, newPlaylist];
   return { ...proposalConfig, playlists: newPlaylists, allForms: newAllForms };
+};
+
+export const checkIsPlaylist = playlist =>
+  typeof playlist?.id === 'string' &&
+  typeof playlist?.name === 'string' &&
+  Array.isArray(playlist?.forms);
+
+export const hasPlaylist = (daoMetaData, playlist) => {
+  if (!Array.isArray(daoMetaData?.proposalConfig?.playlists) || !playlist?.id)
+    return;
+  return daoMetaData.proposalConfig.playlists.some(
+    list => list.id === playlist.id,
+  );
 };

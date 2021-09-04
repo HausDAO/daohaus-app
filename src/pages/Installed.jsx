@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Flex, Spinner, Button } from '@chakra-ui/react';
+import { Flex, Spinner, Button, InputGroup, Input } from '@chakra-ui/react';
+import { useHistory, useParams } from 'react-router';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useFormModal } from '../contexts/OverlayContext';
@@ -11,24 +12,43 @@ import NoListItem from '../components/NoListItem';
 import ListSelector from '../components/ListSelector';
 import ListItem from '../components/listItem';
 
-import { isLastItem } from '../utils/general';
+import { daoConnectedAndSameChain, isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
 import { CORE_FORMS } from '../data/forms';
+import BoostItemButton from '../components/boostItemButton';
+import ListItemButton from '../components/listItemButton';
+import { useTX } from '../contexts/TXContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const dev = process.env.REACT_APP_DEV;
 
-const Installed = () => {
+const handleSearch = (list, listID, searchStr) => {
+  if (!searchStr) return list;
+  if (!list?.length) return [];
+  return list.filter(item => {
+    if (listID === 'minions') {
+      return item?.title.toLowerCase().includes(searchStr);
+    }
+    return item?.boostContent?.title.toLowerCase().includes(searchStr);
+  });
+};
+
+const Installed = ({ installBoost, openDetails, goToSettings }) => {
   const { daoMetaData } = useMetaData();
   const { daoOverview } = useDao();
   const [lists, setLists] = useState(null);
-  const [listID, setListID] = useState(dev ? 'dev' : 'boosts');
+  const [listID, setListID] = useState(null);
 
   useEffect(() => {
     if (daoMetaData && daoOverview) {
       const generatedLists = generateLists(daoMetaData, daoOverview, dev);
-
-      console.log('generatedLists', generatedLists);
       setLists(generatedLists);
+      if (generatedLists[0].id === 'dev' && dev) {
+        setListID('dev');
+      } else {
+        setListID('boosts');
+      }
     }
   }, [daoMetaData, daoOverview, dev]);
 
@@ -50,7 +70,13 @@ const Installed = () => {
             listID={listID}
             lists={lists}
           />
-          <InstalledList listID={listID} lists={lists} />
+          <InstalledList
+            listID={listID}
+            lists={lists}
+            installBoost={installBoost}
+            openDetails={openDetails}
+            goToSettings={goToSettings}
+          />
         </Flex>
       ) : (
         <Spinner />
@@ -59,15 +85,36 @@ const Installed = () => {
   );
 };
 
-const InstalledList = ({ listID, lists }) => {
+const InstalledList = ({
+  listID,
+  lists,
+  installBoost,
+  openDetails,
+  goToSettings,
+}) => {
+  const { daoid, daochain } = useParams();
+  const history = useHistory();
   const { openFormModal } = useFormModal();
-  const currentList = useMemo(() => {
-    if (listID && lists) {
-      return lists?.find(list => list.id === listID);
-    }
-  }, [listID, lists]);
+  const { hydrateString } = useTX();
+  const { address, injectedChain } = useInjectedProvider();
+  const { daoMember } = useDaoMember();
 
-  console.log('currentList', currentList);
+  const [searchStr, setSearchStr] = useState(null);
+
+  const canInteract =
+    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
+    +daoMember?.shares > 0;
+
+  const currentList = useMemo(() => {
+    console.log(`lists`, lists);
+    if (listID && lists) {
+      return handleSearch(
+        lists?.find(list => list.id === listID).types,
+        listID,
+        searchStr,
+      );
+    }
+  }, [listID, lists, searchStr]);
 
   const handleClick = () => {
     openFormModal({
@@ -81,29 +128,42 @@ const InstalledList = ({ listID, lists }) => {
         STEP2: {
           type: 'summoner',
           finish: true,
-          isForBoost: false,
         },
       },
     });
   };
 
+  const handleMinionSettings = ({ data, id }) => {
+    if (data.settings.localUrl) {
+      const url = hydrateString({
+        string: data.settings.localUrl,
+        daoid,
+        daochain,
+        minionAddress: id,
+      });
+      history.push(url);
+    }
+  };
+
   const renderMinions = () => {
-    if (!currentList?.types?.length) {
+    if (!currentList?.length) {
       return (
         <NoListItem>
           <TextBox>No Minions Installed</TextBox>
         </NoListItem>
       );
     }
-    currentList?.types?.map(minion => {
+    return currentList?.map(minion => {
       return (
         <ListItem
           {...minion}
           key={minion.id}
           menuSection={
-            <Button variant='ghost'>
-              <TextBox>Settings</TextBox>
-            </Button>
+            <ListItemButton
+              value={minion}
+              onClick={handleMinionSettings}
+              mainText='Settings'
+            />
           }
         />
       );
@@ -111,42 +171,49 @@ const InstalledList = ({ listID, lists }) => {
   };
 
   const renderBoosts = () => {
-    if (!currentList?.types?.length) {
+    if (!currentList?.length) {
       return (
         <NoListItem>
           <TextBox>No Boosts Installed</TextBox>
         </NoListItem>
       );
     }
-    return currentList?.types?.map(boost => (
+    return currentList?.map(boost => (
       <ListItem
         title={boost.boostContent?.title}
         description={boost.boostContent?.description}
         key={boost.id}
         menuSection={
-          <Button variant='ghost'>
-            <TextBox>Details</TextBox>
-          </Button>
+          <BoostItemButton
+            boost={{ ...boost, isAvailable: true, isInstalled: true }}
+            installBoost={installBoost}
+            openDetails={openDetails}
+            goToSettings={goToSettings}
+          />
         }
       />
     ));
   };
 
+  const handleChange = e => setSearchStr(e.target.value.toLowerCase().trim());
   return (
     <List
       headerSection={
-        <Flex w='100%' justifyContent='flex-end'>
-          {/* <InputGroup w='250px' mr={6}>
+        <Flex w='100%' justifyContent='space-between'>
+          <InputGroup w='250px' mr={6}>
             <Input
-              placeholder={`Search ${currentList?.name || 'Installed'}...`}
+              onChange={handleChange}
+              placeholder={`Search ${listID || 'Installed'}...`}
             />
-          </InputGroup> */}
-          <Button variant='outline' onClick={handleClick}>
-            Summon Minion
-          </Button>
+          </InputGroup>
+          {canInteract && (
+            <Button variant='outline' onClick={handleClick}>
+              Summon Minion
+            </Button>
+          )}
         </Flex>
       }
-      list={listID === 'minion' ? renderMinions() : renderBoosts()}
+      list={listID === 'minions' ? renderMinions() : renderBoosts()}
     />
   );
 };

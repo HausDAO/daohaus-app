@@ -16,6 +16,7 @@ import {
   exposeValues,
   getArgs,
   handleFieldModifiers,
+  createHydratedString,
   // handleFormError,
   Transaction,
 } from '../utils/txHelpers';
@@ -59,7 +60,7 @@ export const TXProvider = ({ children }) => {
     daoMember,
   } = useDaoMember();
 
-  const { daoid, daochain } = useParams();
+  const { daoid, daochain, minion } = useParams();
   const chainConfig = supportedChains[daochain];
 
   const contextData = {
@@ -67,6 +68,7 @@ export const TXProvider = ({ children }) => {
     daoOverview,
     daoid,
     daochain,
+    minion,
     daoMetaData,
     daoMembers,
     daoProposals,
@@ -253,6 +255,13 @@ export const TXProvider = ({ children }) => {
     return formState.onSubmit({ ...formState, contextData, injectedProvider });
   };
 
+  const hydrateString = data =>
+    createHydratedString({
+      ...data,
+      contextData,
+      injectedProvider,
+    });
+
   return (
     <TXContext.Provider
       value={{
@@ -261,6 +270,7 @@ export const TXProvider = ({ children }) => {
         handleCustomValidation,
         modifyFields,
         submitCallback,
+        hydrateString,
       }}
     >
       {children}
@@ -275,6 +285,7 @@ export const useTX = () => {
     handleCustomValidation,
     modifyFields,
     submitCallback,
+    hydrateString,
   } = useContext(TXContext);
   return {
     refreshDao,
@@ -282,5 +293,6 @@ export const useTX = () => {
     handleCustomValidation,
     modifyFields,
     submitCallback,
+    hydrateString,
   };
 };

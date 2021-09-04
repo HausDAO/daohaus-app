@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -8,7 +7,6 @@ import {
   Heading,
   Input,
   Link,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
@@ -16,35 +14,41 @@ import { useForm } from 'react-hook-form';
 import { notificationBoostContent } from '../content/boost-content';
 import { get } from '../utils/requests';
 
-const NotificationsLaunch = ({
-  handleLaunch,
-  loading,
-  setLoading,
-  stepOverride,
-}) => {
+const DiscordNotificationsLaunch = props => {
+  const { stepOverride, goToNext, setStepperStorage } = props;
+
   const { handleSubmit, register, getValues, watch } = useForm();
-  const { daoid, daochain } = useParams();
   const [connectionError, setConnectionError] = useState();
+  const [loading, setLoading] = useState();
   const [isConnected, setIsConnected] = useState();
-  const [step, setStep] = useState(stepOverride || 'intro');
+  const [step, setStep] = useState(stepOverride || 'directions1');
+
   const watchChannel = watch('channelId');
 
   const onSubmit = async values => {
-    setLoading(true);
-    const boostMetadata = [
+    if (stepOverride) {
+      console.log('step override');
+      // TODO: can this be used in settings? update the meta here
+      // const boostMetadata = [
+      //   {
+      //     type: 'discord',
+      //     channelId: values.channelId,
+      //     active: true,
+      //     actions: ['votingPeriod', 'rageQuit', 'newProposal'],
+      //   },
+      // ];
+      // const success = await handleLaunch(boostMetadata);
+      return;
+    }
+    setStepperStorage([
       {
         type: 'discord',
         channelId: values.channelId,
         active: true,
         actions: ['votingPeriod', 'rageQuit', 'newProposal'],
       },
-    ];
-    const success = await handleLaunch(boostMetadata);
-    console.log('success', success);
-
-    if (success) {
-      setStep('success');
-    }
+    ]);
+    goToNext();
   };
 
   const testConnection = async () => {
@@ -64,19 +68,7 @@ const NotificationsLaunch = ({
 
   return (
     <>
-      {step === 'intro' ? (
-        <>
-          <Heading as='h4' size='md' fontWeight='100'>
-            Add Discord Notifications
-          </Heading>
-          <Text my={6}>
-            Hook up dao activity notifications to your Discord server.
-          </Text>
-          <Button onClick={() => setStep('directions1')}>Get Started</Button>
-        </>
-      ) : null}
-
-      {step === 'directions1' ? (
+      {step === 'directions1' && (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
             Discord Notifications - Setup Instructions
@@ -100,11 +92,13 @@ const NotificationsLaunch = ({
             indicated.
           </Text>
 
-          <Button onClick={() => setStep('directions2')}>Next</Button>
+          <Button onClick={() => setStep('directions2')} w='20%'>
+            Next
+          </Button>
         </>
-      ) : null}
+      )}
 
-      {step === 'directions2' ? (
+      {step === 'directions2' && (
         <>
           {!stepOverride ? (
             <>
@@ -168,42 +162,15 @@ const NotificationsLaunch = ({
               <>
                 <Text mb={2}>Success!</Text>
                 <Button type='submit' isLoading={loading}>
-                  {stepOverride
-                    ? 'Update Notifications'
-                    : 'Launch Notifications'}
+                  {stepOverride ? 'Update Notifications' : 'Next'}
                 </Button>
               </>
             )}
           </form>
         </>
-      ) : null}
-
-      {step === 'success' ? (
-        <>
-          {loading ? (
-            <Spinner />
-          ) : (
-            <>
-              <Heading as='h4' size='md' fontWeight='100'>
-                Discord Notifications Added
-              </Heading>
-              <Text my={6}>
-                We have turned on a couple notifications for you. You can edit
-                these later in Settings &gt; Notifications.
-              </Text>
-
-              <Button
-                as={RouterLink}
-                to={`/dao/${daochain}/${daoid}/settings/notifications`}
-              >
-                Manage Settings
-              </Button>
-            </>
-          )}
-        </>
-      ) : null}
+      )}
     </>
   );
 };
 
-export default NotificationsLaunch;
+export default DiscordNotificationsLaunch;

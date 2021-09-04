@@ -23,15 +23,17 @@ const ListItem = ({
           </Box>
           <Flex flexDir='column' alignItems='flex-end'>
             {menuSection}
-            <TextBox
-              variant='body'
-              mt={3}
-              fontStyle='italic'
-              opacity='0.8'
-              size='sm'
-            >
-              {helperText}
-            </TextBox>
+            {helperText && (
+              <TextBox
+                variant='body'
+                mt={3}
+                fontStyle='italic'
+                opacity='0.8'
+                size='sm'
+              >
+                {helperText}
+              </TextBox>
+            )}
           </Flex>
         </Flex>
       </ContentBox>

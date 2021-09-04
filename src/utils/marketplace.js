@@ -1,18 +1,6 @@
-import { isObjectEmpty } from './general';
-import { MINION_TYPES } from './proposalUtils';
 import { BOOSTS } from '../data/boosts';
-
-const boostsBanList = [
-  ...Object.values(MINION_TYPES),
-  'cco',
-  'proposalTypes',
-  'customTheme',
-  'transmutation',
-];
-const findByOldID = id => {
-  if (!id) return;
-  return Object.values(BOOSTS).find(boost => boost.oldId === id) || null;
-};
+import { MINIONS } from '../data/minions';
+import { handleExtractBoosts } from './metadata';
 
 export const devBoostList = {
   name: 'DEV Boosts',
@@ -26,36 +14,35 @@ export const devBoostList = {
 };
 
 export const generateLists = (daoMetaData, daoOverview, dev) => {
-  const boostTypes = Object.entries(daoMetaData?.boosts)
-    .filter(([key]) => !boostsBanList.includes(key))
-    .map(([key, value]) => {
-      if (BOOSTS[key]) {
-        return { ...value, ...BOOSTS[key] };
-      }
-      const hasOldID = findByOldID(key);
-      if (hasOldID) {
-        return { ...value, ...hasOldID };
-      }
-      return { ...value, id: key };
-    });
+  const daoBoosts = handleExtractBoosts({ daoMetaData });
 
+  console.log('daoBoosts', daoBoosts);
   const lists = [
     {
       name: 'Boosts',
-      id: 'boost',
-      types: isObjectEmpty(daoMetaData?.boosts || {}) ? [] : boostTypes,
+      id: 'boosts',
+      types: daoBoosts,
     },
     {
       name: 'Minions',
-      id: 'minion',
+      id: 'minions',
       types:
         daoOverview?.minions.map(minion => ({
           title: minion.details,
           description: minion.minionType,
           id: minion.minionAddress,
+          data: MINIONS[minion.minionType],
         })) || [],
     },
   ];
+  if (dev && devBoostList.types.length) {
+    return [devBoostList, ...lists];
+  }
+  return lists;
+};
 
-  return dev ? [devBoostList, ...lists] : lists;
+export const getSettingsLink = (settings, params) => {
+  if (settings.appendToDaoPath) {
+    return `/dao/${params.daochain}/${params.daoid}/${settings.appendToDaoPath}`;
+  }
 };

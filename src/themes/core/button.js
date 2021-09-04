@@ -41,6 +41,9 @@ const Button = {
       height: '300px',
       width: '300px',
     },
+    // ghost: props => ({
+    //   color: props.color || 'white',
+    // }),
     // 4. Override existing variants
     solid: () => ({
       bg: 'secondary.400',

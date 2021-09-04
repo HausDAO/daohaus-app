@@ -107,6 +107,11 @@ export const CONTRACTS = {
     abiName: 'SUPERFLUID_MINION',
     contractAddress: '.values.selectedMinion',
   },
+  SUPERFLUID_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'SUPERFLUID_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.superfluid.minion_factory_addr',
+  },
   NEAPOLITAN_MINION_FACTORY: {
     location: 'local',
     abiName: 'NEAPOLITAN_MINION_FACTORY',
@@ -126,7 +131,7 @@ export const CONTRACTS = {
   WRAP_N_ZAP_FACTORY: {
     location: 'local',
     abiName: 'WRAP_N_ZAP_FACTORY',
-    contractAddress: '.localValues.contractAddress',
+    contractAddress: '.contextData.chainConfig.wrap_n_zap_factory_addr',
   },
   WRAP_N_ZAP: {
     location: 'local',
@@ -967,7 +972,6 @@ export const TX = {
     contract: CONTRACTS.NEAPOLITAN_MINION_FACTORY,
     name: 'summonMinion',
     poll: 'subgraph',
-    onTxHash: ACTIONS.BASIC,
     display: 'Summoning Minion',
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',
@@ -981,7 +985,6 @@ export const TX = {
     contract: CONTRACTS.NIFTY_MINION_FACTORY,
     name: 'summonMinion',
     poll: 'subgraph',
-    onTxHash: ACTIONS.BASIC,
     display: 'Summoning Minion',
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',
@@ -999,6 +1002,19 @@ export const TX = {
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',
     gatherArgs: ['.contextData.daoid', '.values.minionName'],
+  },
+  SUMMON_MINION_SUPERFLUID: {
+    contract: CONTRACTS.SUPERFLUID_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.contextData.chainConfig.superfluid.superapp_addr.v1',
+      '.values.minionName',
+    ],
   },
   MINION_BUY_NIFTY_INK: {
     contract: CONTRACTS.SELECTED_MINION_NIFTY,
@@ -1065,11 +1081,14 @@ export const TX = {
   CREATE_WRAP_N_ZAP: {
     contract: CONTRACTS.WRAP_N_ZAP_FACTORY,
     name: 'create',
-    onTxHash: ACTIONS.GENERIC_MODAL,
     poll: 'boostSubgraph',
     display: 'Create Wrap-N-Zap',
     errMsg: 'Error creating Wrap-N-Zap',
     successMsg: 'Wrap-N-Zap added!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.contextData.chainConfig.wrapper_contract',
+    ],
   },
   POKE_WRAP_N_ZAP: {
     contract: CONTRACTS.WRAP_N_ZAP,

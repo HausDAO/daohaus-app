@@ -6,19 +6,21 @@ export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: 'all',
   [MINION_TYPES.NIFTY]: {
     '0x64': '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
-  },
-  [MINION_TYPES.UBER]: {
-    '0x2a': '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
-    '0x64': '0xf5106077892992B84c33C35CA8763895eb80B298',
+    '0x1': '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
+    '0x89': '0x4CCaDF3f5734436B28869c27A11B6D0F4776bc8E',
   },
   [MINION_TYPES.SUPERFLUID]: {
     '0x64': '0xfC86DfDd3b2e560729c78b51dF200384cfe87438',
     '0x89': '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
     '0x4': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
   },
-  [MINION_TYPES.NEAPOLITAN]: {
-    '0x64': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
-  },
+  // [MINION_TYPES.NEAPOLITAN]: {
+  //   '0x64': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
+  // },
+  // [MINION_TYPES.UBER]: {
+  //   '0x2a': '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
+  //   '0x64': '0xf5106077892992B84c33C35CA8763895eb80B298',
+  // },
 };
 
 export const MINION_CONTENT = {
@@ -79,6 +81,17 @@ export const MINION_CONTENT = {
   //    { '0x1': true, '0x4': true },
   // },
 };
+const SETTINGS_LINKS = {
+  VAULT_LINK: {
+    localUrl: '/dao/{.daochain}/{.daoid}/vaults/minion/{.minionAddress}',
+  },
+  UBER_LINK: {
+    localUrl: '/dao/{.daochain}/{.daoid}/allies',
+  },
+  SF_LINK: {
+    localUrl: `/dao/{.daochain}/{.daoid}/settings/superfluid-minion/{.minionAddress}`,
+  },
+};
 
 export const MINIONS = {
   [MINION_TYPES.VANILLA]: {
@@ -86,34 +99,34 @@ export const MINIONS = {
     content: MINION_CONTENT[MINION_TYPES.VANILLA],
     networks: MINION_NETWORKS[MINION_TYPES.VANILLA],
     summonForm: FORM.NEW_VANILLA_MINION,
+    settings: SETTINGS_LINKS.VAULT_LINK,
   },
   [MINION_TYPES.NIFTY]: {
     minionType: MINION_TYPES.NIFTY,
     content: MINION_CONTENT[MINION_TYPES.NIFTY],
     networks: MINION_NETWORKS[MINION_TYPES.NIFTY],
     summonForm: FORM.NEW_NIFTY_MINION,
+    settings: SETTINGS_LINKS.VAULT_LINK,
   },
   [MINION_TYPES.UBER]: {
     minionType: MINION_TYPES.UBER,
     content: MINION_CONTENT[MINION_TYPES.UBER],
     networks: MINION_NETWORKS[MINION_TYPES.UBER],
     summonForm: null,
+    settings: SETTINGS_LINKS.UBER_LINK,
   },
   [MINION_TYPES.SUPERFLUID]: {
     minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
     networks: MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
-    summonForm: null,
+    summonForm: FORM.NEW_SUPERFLUID_MINION,
+    settings: SETTINGS_LINKS.SF_LINK,
   },
   [MINION_TYPES.NEAPOLITAN]: {
     minionType: MINION_TYPES.NEAPOLITAN,
     content: MINION_CONTENT[MINION_TYPES.NEAPOLITAN],
     networks: MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
     summonForm: FORM.NEW_NEAPOLITAN_MINION,
+    settings: SETTINGS_LINKS.VAULT_LINK,
   },
-  // [MINION_TYPES.RARIBLE]: {
-  //   content: MINION_CONTENT[MINION_TYPES.VANILLA],
-  //   networks: MINION_NETWORKS[MINION_TYPES.VANILLA],
-  //   summonForm: null,
-  // },
 };

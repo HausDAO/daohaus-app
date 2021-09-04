@@ -1,5 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { BOOST_FORMS } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -74,17 +75,17 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  SNAPSHOT: {
-    title: 'Snapshot Proposals',
-    description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '0.5',
-    pars: ['AWAITING CONTENT'],
-    externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-    ],
-  },
+  // SNAPSHOT: {
+  //   title: 'Snapshot Proposals',
+  //   description:
+  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '0.5',
+  //   pars: ['AWAITING CONTENT'],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+  //   ],
+  // },
   DISCORD: {
     title: 'Discord Notifications',
     description:
@@ -99,8 +100,8 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  MINT_GATE: {
-    title: 'Mint Gate',
+  MINTGATE: {
+    title: 'MintGate',
     description: 'Gate links to restrict view access to DAO members only',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',
@@ -151,16 +152,6 @@ export const CONTENT = {
       { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
     ],
   },
-  CUSTOM_THEME: {
-    title: 'Custom Theme',
-    description: 'Customize the visual theme of your community.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '1.0',
-    pars: ['Edit the colors, fonts, images and wording in your DAO UI.'],
-    externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-    ],
-  },
 };
 
 const STEPS = {
@@ -175,7 +166,6 @@ const STEPS = {
       type: 'summoner',
       next: 'STEP2',
       stepLabel: 'Deploy Minion',
-      isForBoost: true,
       isUserStep: true,
     },
     STEP2: {
@@ -183,15 +173,70 @@ const STEPS = {
       stepLabel: 'Add Proposals & Sign',
       finish: true,
       isUserStep: true,
-      skipPlaylist: true,
     },
   },
-  ADD_DISCORD: {},
-  ADD_DISCOURSE: {},
-  ADD_SNAPSHOT: {},
-  ADD_MINTGATE: {},
-  ADD_WRAP_N_ZAP: {},
-  ADD_CUSTOM_THEME: {
+  ADD_DISCORD: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+      isUserStep: false,
+    },
+    STEP1: {
+      type: 'discordForm',
+      next: 'STEP2',
+      stepLabel: 'Setup Discord Bot',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
+  ADD_DISCOURSE: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+    },
+    STEP1: {
+      type: 'boostMetaForm',
+      lego: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
+      next: 'STEP2',
+      stepLabel: 'Choose Forum Color',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
+  ADD_WRAP_N_ZAP: {
+    DISPLAY: {
+      type: 'boostDetails',
+      next: 'STEP1',
+      start: true,
+      isUserStep: false,
+    },
+    STEP1: {
+      type: 'launcher',
+      lego: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
+      next: 'STEP2',
+      stepLabel: 'Deploy Wrap n Zap',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'signer',
+      stepLabel: 'Add Boost and Sign',
+      finish: true,
+      isUserStep: true,
+    },
+  },
+  ADD_MINTGATE: {
     DISPLAY: {
       type: 'boostDetails',
       next: 'STEP1',
@@ -215,6 +260,7 @@ export const BOOSTS = {
     categories: ['devTools'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
+    settings: 'none',
     networks: 'all',
     cost: 'free',
   },
@@ -225,8 +271,9 @@ export const BOOSTS = {
     categories: ['devTools'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
-    networks: 'all',
+    networks: MINIONS[MINION_TYPES.NIFTY].networks,
     cost: 'free',
+    settings: 'none',
   },
   // TODO: coming later with neapolitan minion
   // DEV_SUITE: {
@@ -241,23 +288,25 @@ export const BOOSTS = {
   // },
   RARIBLE: {
     id: 'RARIBLE',
-    oldId: 'rarible',
     minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
     steps: STEPS.MINION_BOOST,
     boostContent: CONTENT.RARIBLE,
     categories: ['nft'],
     networks: { '0x4': true },
     playlist: BOOST_PLAYLISTS.RARIBLE,
+    cost: 'free',
+    settings: 'none',
   },
   NIFTY_INK: {
     id: 'NIFTY_INK',
-    oldId: 'niftyInk',
     boostContent: CONTENT.NIFTY_INK,
     minionData: MINIONS[MINION_TYPES.NIFTY],
     categories: ['nft'],
     steps: STEPS.MINION_BOOST,
     networks: { '0x64': true },
     playlist: BOOST_PLAYLISTS.NIFTY_INK,
+    cost: 'free',
+    settings: 'none',
   },
   SUPERFLUID: {
     id: 'SUPERFLUID',
@@ -266,38 +315,41 @@ export const BOOSTS = {
     categories: ['payments'],
     steps: STEPS.MINION_BOOST,
     networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
-  },
-  SNAPSHOT: {
-    id: 'SNAPSHOT',
-    oldId: 'snapshot',
-    boostContent: CONTENT.SNAPSHOT,
-    steps: STEPS.ADD_SNAPSHOT,
-    categories: ['governance'],
-    networks: 'all',
+    playlist: BOOST_PLAYLISTS.SUPERFLUID,
+    cost: 'free',
+    settings: 'none',
   },
   DISCORD: {
     id: 'DISCORD',
-    oldId: 'notificationsLevel1',
-    steps: STEPS.ADD_SNAPSHOT,
+    steps: STEPS.ADD_DISCORD,
     boostContent: CONTENT.DISCORD,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
+    metaFields: ['channelId', 'type', 'active', 'actions'],
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'settings/notifications',
+    },
   },
-  MINT_GATE: {
-    id: 'MINT_GATE',
-    oldId: 'mintGate',
+  MINTGATE: {
+    id: 'MINTGATE',
     steps: STEPS.ADD_MINTGATE,
-    boostContent: CONTENT.MINT_GATE,
+    boostContent: CONTENT.MINTGATE,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
+    settings: { type: 'internalLink', appendToDaoPath: 'boost/mintgate' },
   },
   DISCOURSE: {
     id: 'DISCOURSE',
-    oldId: 'discourse',
     steps: STEPS.ADD_DISCOURSE,
     boostContent: CONTENT.DISCOURSE,
     categories: ['community'],
     networks: 'all',
+    cost: 'free',
+    metaFields: ['name', 'color', 'autoProposal'],
+    settings: { type: 'internalLink', appendToDaoPath: 'settings/discourse' },
   },
   WRAP_N_ZAP: {
     id: 'WRAP_N_ZAP',
@@ -305,15 +357,20 @@ export const BOOSTS = {
     boostContent: CONTENT.WRAP_N_ZAP,
     categories: ['payments'],
     networks: 'all',
+    cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'settings',
+    },
   },
-  CUSTOM_THEME: {
-    id: 'CUSTOM_THEME',
-    oldId: 'customTheme',
-    steps: STEPS.ADD_CUSTOM_THEME,
-    boostContent: CONTENT.CUSTOM_THEME,
-    categories: ['community'],
-    networks: 'all',
-  },
+  // SNAPSHOT: {
+  //   id: 'SNAPSHOT',
+  //   boostContent: CONTENT.SNAPSHOT,
+  //   steps: STEPS.ADD_SNAPSHOT,
+  //   categories: ['governance'],
+  //   networks: 'all',
+  //   cost: 'free',
+  // },
 };
 
 export const allBoosts = {
@@ -325,10 +382,11 @@ const categoryStarter = [
   { name: 'Payments', id: 'payments' },
   { name: 'Community', id: 'community' },
   { name: 'Governance', id: 'governance' },
-  // { name: 'Membership', id: 'membership' },
-  // { name: 'Finance', id: 'finance' },
   { name: 'NFTs', id: 'nft' },
   { name: 'Dev Tools', id: 'devTools' },
+  // TODO: future categories
+  // { name: 'Membership', id: 'membership' },
+  // { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({
   ...cat,

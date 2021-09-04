@@ -11,7 +11,6 @@ import { PROPOSAL_TYPES } from './proposalUtils';
 import { TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
-
 const getPath = pathString =>
   pathString
     .slice(1)
@@ -21,10 +20,13 @@ const getPath = pathString =>
 const getConditions = pathString =>
   pathString.split(' || ').filter(str => str !== '' || str !== ' ');
 
+const splitByTemplates = string => string.split(/{|}/g).filter(Boolean);
+
 const searchData = (data, fields, shouldThrow = true) => {
   if (data == null || fields == null) {
     throw new Error('txHelpers => searchData(): data or fields is empty');
   }
+
   if (!fields?.length) return data;
   const newData = data[fields[0]];
   if (newData == null) {
@@ -130,6 +132,14 @@ const argBuilderCallback = Object.freeze({
   },
 });
 
+const handleSearch = (data, arg) => {
+  const path = getPath(arg);
+  console.log(path);
+  if (!path.length)
+    throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+  return searchData(data, path);
+};
+
 const gatherArgs = data => {
   const { tx } = data;
   return tx.gatherArgs.map(arg => {
@@ -144,10 +154,7 @@ const gatherArgs = data => {
     }
     //  takes in search notation. Performs recursive search for application data
     if (arg[0] === '.') {
-      const path = getPath(arg);
-      if (!path.length)
-        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
-      return searchData(data, path);
+      return handleSearch(data, arg);
     }
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
@@ -200,6 +207,24 @@ export const getArgs = data => {
   );
 };
 
+export const createHydratedString = data => {
+  const { string } = data;
+  if (!string)
+    throw new Error(
+      'txHelpers.js => createHydratedString: string does not exist',
+    );
+  const fragments = splitByTemplates(string);
+  console.log(`fragments`, fragments);
+  return fragments
+    .map(fragment => {
+      if (fragment[0] === '.') {
+        return handleSearch(data, fragment);
+      }
+      return fragment;
+    })
+    .join('');
+};
+
 export const getContractAddress = data => {
   const { contractAddress } = data.tx.contract;
   if (contractAddress[0] === '.') {
@@ -223,7 +248,7 @@ export const Transaction = async data => {
   });
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
-  console.log('contextData', contextData, data);
+
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
     .on('transactionHash', txHash => {
