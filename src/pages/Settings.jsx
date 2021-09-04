@@ -3,11 +3,11 @@ import { Box, Flex, Link, Stack } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
 // import BoostStatus from '../components/boostStatus';
-import Superpowers from '../components/daoSuperpowers';
+// import Superpowers from '../components/daoSuperpowers';
 import DaoContractSettings from '../components/daoContractSettings';
 import DaoMetaOverview from '../components/daoMetaOverview';
 import TextBox from '../components/TextBox';
-import Minions from '../components/minionList';
+// import Minions from '../components/minionList';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
