@@ -38,6 +38,8 @@ const Installed = ({ installBoost, openDetails, goToSettings }) => {
   const [lists, setLists] = useState(null);
   const [listID, setListID] = useState(null);
 
+  console.log('daoMetaData', daoMetaData);
+
   useEffect(() => {
     if (daoMetaData && daoOverview) {
       const generatedLists = generateLists(daoMetaData, daoOverview, dev);

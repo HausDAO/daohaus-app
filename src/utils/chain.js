@@ -64,10 +64,6 @@ export const supportedChains = {
     neapolitanMinion: {
       minion_factory_addr: '0x4050E747Ed393e1Fd89783662C48373421fD0647',
     },
-    // niftyMinion: {
-    //   minion_factory_addr: '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
-    //   version: 'v1',
-    // },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
       resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
