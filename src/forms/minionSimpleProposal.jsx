@@ -32,7 +32,11 @@ import PaymentInput from './paymentInput';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
-import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
+import {
+  detailsToJSON,
+  daoConnectedAndSameChain,
+  IsJsonString,
+} from '../utils/general';
 import { createForumTopic } from '../utils/discourse';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
@@ -112,9 +116,17 @@ const MinionProposalForm = () => {
     if (selectedFunction) {
       Object.keys(values).forEach(param => {
         if (param.indexOf('xparam') > -1) {
-          console.log(param);
           try {
-            inputValues.push(String(JSON.parse(values[param])));
+            if (IsJsonString(values[param])) {
+              const v = JSON.parse(values[param]);
+              if (typeof v === 'number') {
+                inputValues.push(String(v));
+              } else {
+                inputValues.push(v);
+              }
+            } else {
+              inputValues.push(String(values[param]));
+            }
           } catch {
             inputValues.push(String(values[param]));
           }
