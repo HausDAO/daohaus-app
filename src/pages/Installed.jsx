@@ -12,12 +12,14 @@ import NoListItem from '../components/NoListItem';
 import ListSelector from '../components/ListSelector';
 import ListItem from '../components/listItem';
 
-import { isLastItem } from '../utils/general';
+import { daoConnectedAndSameChain, isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
 import { CORE_FORMS } from '../data/forms';
 import BoostItemButton from '../components/boostItemButton';
 import ListItemButton from '../components/listItemButton';
 import { useTX } from '../contexts/TXContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -37,8 +39,6 @@ const Installed = ({ installBoost, openDetails, goToSettings }) => {
   const { daoOverview } = useDao();
   const [lists, setLists] = useState(null);
   const [listID, setListID] = useState(null);
-
-  console.log('daoMetaData', daoMetaData);
 
   useEffect(() => {
     if (daoMetaData && daoOverview) {
@@ -96,8 +96,14 @@ const InstalledList = ({
   const history = useHistory();
   const { openFormModal } = useFormModal();
   const { hydrateString } = useTX();
+  const { address, injectedChain } = useInjectedProvider();
+  const { daoMember } = useDaoMember();
 
   const [searchStr, setSearchStr] = useState(null);
+
+  const canInteract =
+    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
+    +daoMember?.shares > 0;
 
   const currentList = useMemo(() => {
     console.log(`lists`, lists);
@@ -200,9 +206,11 @@ const InstalledList = ({
               placeholder={`Search ${listID || 'Installed'}...`}
             />
           </InputGroup>
-          <Button variant='outline' onClick={handleClick}>
-            Summon Minion
-          </Button>
+          {canInteract && (
+            <Button variant='outline' onClick={handleClick}>
+              Summon Minion
+            </Button>
+          )}
         </Flex>
       }
       list={listID === 'minions' ? renderMinions() : renderBoosts()}
