@@ -39,9 +39,11 @@ const DesktopNav = ({ dao }) => {
       socialLinks: dao?.daoMetaData?.links
         ? generateDaoSocials(dao?.daoMetaData?.links)
         : defaultSocialLinks,
-      discourseLinkData: dao?.daoMetaData?.boosts?.discourse?.active
-        ? generateDiscourseLink(dao.daoMetaData.boosts.discourse.metadata)
-        : null,
+      discourseLinkData: dao?.daoMetaData?.boosts?.DISCOURSE?.active
+        ? generateDiscourseLink(dao.daoMetaData.boosts.DISCOURSE.metadata)
+        : // discourseLinkData: dao?.daoMetaData?.boosts?.discourse?.active
+          // ? generateDiscourseLink(dao.daoMetaData.boosts.discourse.metadata)
+          null,
     };
   }, [dao]);
 

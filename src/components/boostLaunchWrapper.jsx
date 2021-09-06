@@ -98,7 +98,8 @@ const BoostLaunchWrapper = ({ boost }) => {
       case 'minionSafe': {
         return <NewMinionSafe />;
       }
-      case 'discourse': {
+      // case 'discourse': {
+      case 'DISCOURSE': {
         return (
           <DiscourseLaunch
             handleLaunch={handleLaunch}
@@ -107,7 +108,8 @@ const BoostLaunchWrapper = ({ boost }) => {
           />
         );
       }
-      case 'notificationsLevel1': {
+      // case 'notificationsLevel1': {
+      case 'DISCORD': {
         return (
           <NotificationsLaunch
             handleLaunch={handleLaunch}
@@ -125,7 +127,8 @@ const BoostLaunchWrapper = ({ boost }) => {
           />
         );
       }
-      case 'mintGate': {
+      // case 'mintGate': {
+      case 'MINTGATE': {
         return (
           <GenericBoostLaunch
             boostName='MintGate'

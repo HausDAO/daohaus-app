@@ -35,7 +35,8 @@ const MintGate = ({ daoMetaData }) => {
       }
       setLoading(false);
     };
-    if (daoid && daoMetaData && 'mintGate' in daoMetaData?.boosts) {
+    // if (daoid && daoMetaData && 'mintGate' in daoMetaData?.boosts) {
+    if (daoid && daoMetaData && 'MINTGATE' in daoMetaData?.boosts) {
       fetchGates();
     }
   }, [daoid, daoMetaData]);
@@ -61,7 +62,8 @@ const MintGate = ({ daoMetaData }) => {
     <MainViewLayout header='MintGates' headerEl={newGateButton} isDao>
       <Flex wrap='wrap' justify='space-around'>
         {!loading ? (
-          daoMetaData && 'mintGate' in daoMetaData?.boosts ? (
+          // daoMetaData && 'mintGate' in daoMetaData?.boosts ? (
+          daoMetaData && 'MINTGATE' in daoMetaData?.boosts ? (
             gates.length > 0 ? (
               gates.map(gate => <MintGateCard key={gate.title} gate={gate} />)
             ) : (
