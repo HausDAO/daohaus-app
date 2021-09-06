@@ -32,8 +32,10 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
   const [loading, setLoading] = useState();
 
   useEffect(() => {
-    if (daoMetaData?.boosts?.discourse?.active) {
-      setLocalMetadata(daoMetaData.boosts.discourse.metadata);
+    // if (daoMetaData?.boosts?.discourse?.active) {
+    // setLocalMetadata(daoMetaData.boosts.discourse.metadata);
+    if (daoMetaData?.boosts?.DISCOURSE?.active) {
+      setLocalMetadata(daoMetaData.boosts.DISCOURSE.metadata);
     }
   }, [daoMetaData]);
 

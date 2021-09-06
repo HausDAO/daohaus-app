@@ -26,7 +26,8 @@ export const boostList = [
   },
   {
     name: 'Discord Notificatons',
-    key: 'notificationsLevel1',
+    // key: 'notificationsLevel1',
+    key: 'DISCORD',
     description:
       'Customize and send notifications of DAO activity to your discord server',
     price: '0',
@@ -39,7 +40,8 @@ export const boostList = [
   },
   {
     name: 'Discourse Forum',
-    key: 'discourse',
+    // key: 'discourse',
+    key: 'DISCOURSE',
     comingSoon: false,
     description:
       'Launch a new category for your DAO in the DAOhaus Discourse forum and enable topic creation for discussing all of your proposals.',
@@ -66,7 +68,8 @@ export const boostList = [
   },
   {
     name: 'MintGate',
-    key: 'mintGate',
+    // key: 'mintGate',
+    key: 'MINTGATE',
     description: 'Gate content for your dao to allow private access',
     price: '0',
     modalName: 'genericBoostLaunch',
@@ -80,6 +83,7 @@ export const boostList = [
   // {
   //   name: 'Snapshot Proposals',
   //   key: 'snapshot',
+  //   key: 'SNAPSHOT',
   //   description:
   //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
   //   price: '0',
@@ -252,12 +256,14 @@ export const proposalTypesContent = [
 export const superpowerLinks = [
   { boostKey: 'customTheme', label: 'Custom Theme', link: 'settings/theme' },
   {
-    boostKey: 'notificationsLevel1',
+    // boostKey: 'notificationsLevel1',
+    boostKey: 'DISCORD',
     label: 'Notifications',
     link: 'settings/notifications',
   },
   {
-    boostKey: 'discourse',
+    // boostKey: 'discourse',
+    boostKey: 'DISCOURSE',
     label: 'Discourse Forum',
     link: 'settings/discourse',
   },
@@ -273,6 +279,7 @@ export const superpowerLinks = [
   },
   // {
   //   boostKey: 'snapshot',
+  //   boostKey: 'SNAPSHOT',
   //   label: 'Snapshot',
   //   modal: 'snapshot',
   // },
