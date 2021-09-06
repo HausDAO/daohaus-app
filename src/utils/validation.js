@@ -90,13 +90,59 @@ export const validateRequired = (values, required) => {
 
 export const customValidations = {
   nonDaoApplicant({ appState, values }) {
-    console.log('appState', appState);
     const { apiData } = appState;
     const { applicant } = values;
 
-    if (apiData?.[applicant] || apiData?.[applicant.toLowerCase()]) {
+    if (apiData?.[applicant] || apiData?.[applicant?.toLowerCase()]) {
       return { name: 'applicant', message: 'Applicant cannot be another DAO.' };
     }
+    return false;
+  },
+  enoughAllowance({ appState, values }) {
+    const { daoMember } = appState;
+    const { tributeOffered } = values;
+    // TODO allowance should be tracked by token. but lazy check based on dropdown?
+    if (+tributeOffered > +daoMember.allowance) {
+      return {
+        name: 'tributeOffered',
+        message: 'Please unlock the tribute token.',
+      };
+    }
+    return false;
+  },
+  enoughBalance({ appState, values }) {
+    const { daoMember } = appState;
+    const { tributeOffered, tributeToken } = values;
+    if (+tributeOffered > 0) {
+      const token = daoMember.tokenBalances.find(
+        t => t.token.tokenAddress === tributeToken,
+      );
+      if (+tributeOffered > +token.tokenBalance) {
+        return {
+          name: 'tributeOffered',
+          message: 'Tribute must be less than your balance.',
+        };
+      }
+    }
+
+    return false;
+  },
+  enoughDaoBalance({ appState, values }) {
+    const { daoOverview } = appState;
+    const { paymentRequested, paymentToken } = values;
+    if (+paymentRequested > 0) {
+      const token = daoOverview.tokenBalances.find(
+        t => t.token.tokenAddress === paymentToken,
+      );
+      console.log(token);
+      if (+paymentRequested > +token.tokenBalance) {
+        return {
+          name: 'paymentRequested',
+          message: 'Payment must be less than the DAO balance.',
+        };
+      }
+    }
+
     return false;
   },
 };

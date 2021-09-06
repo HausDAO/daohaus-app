@@ -21,6 +21,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.PAYMENT_REQUEST,
     ],
+    customValidations: ['nonDaoApplicant'],
   },
   FUNDING: {
     title: 'Funding',
@@ -73,6 +74,7 @@ export const FORM = {
       FIELD.LOOT_REQUEST,
       FIELD.SHARES_REQUEST,
     ],
+    customValidations: ['nonDaoApplicant'],
   },
   GUILDKICK: {
     title: 'Guild Kick',
