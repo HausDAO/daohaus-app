@@ -2,10 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
-
-import DaoContractSettings from '../components/daoContractSettings';
-import DaoMetaOverview from '../components/daoMetaOverview';
-import TextBox from '../components/TextBox';
 import DaoContractSettings from '../components/daoContractSettings';
 import DaoMetaOverview from '../components/daoMetaOverview';
 import TextBox from '../components/TextBox';
