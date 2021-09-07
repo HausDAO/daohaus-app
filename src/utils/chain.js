@@ -196,7 +196,7 @@ export const supportedChains = {
     minion_factory_addr: '0xaD791Ef059A25b6C82e56977C6489974333C5A0C',
     moloch_factory_addr: '0x9100A2489B2998B1331Fd33714187d895c919075', // moloch v2.1.sol
     dai_contract: '0x765DE816845861e75A25fCA122bb6898B8B1282a', // This is cUSD for Celo
-    wrapper_contract: '',
+    wrapper_contract: '0x471EcE3750Da237f93B8E339c536989b8978a438',
     wrap_n_zap_factory_addr: '0x07269699bc441FC97d12d5478Cb09522EF32f76A',
     block_explorer: 'https://explorer.celo.org',
   },
