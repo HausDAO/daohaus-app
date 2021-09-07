@@ -93,14 +93,19 @@ const ProposalList = ({
   return (
     <List
       headerSection={
-        <>
-          <TextBox p={2} mr='auto'>
+        <Flex
+          w='100%'
+          flexDir={['column', 'column', 'row']}
+          justifyContent='space-between'
+          alignItems='flex-start'
+        >
+          <TextBox mr={2} mb={3}>
             Proposals
           </TextBox>
           <InputGroup w='200px'>
             <Input onChange={handleTypeSearch} placeholder='Search Proposals' />
           </InputGroup>
-        </>
+        </Flex>
       }
       list={
         proposalList?.length > 0 ? (
