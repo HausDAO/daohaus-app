@@ -1,9 +1,26 @@
-import { Flex } from '@chakra-ui/layout';
-import React from 'react';
+import React, { useState } from 'react';
+import { useBreakpointValue, Flex, IconButton } from '@chakra-ui/react';
+
+import { HiOutlineChevronDown } from 'react-icons/hi';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 
-const ListSelector = ({ lists, topListItem, divider, headerSection }) => {
+const ListSelector = props => {
+  const viewport = useBreakpointValue({
+    base: <DropdownSelector {...props} />,
+    sm: <StaticSelector {...props} />,
+  });
+
+  return <>{viewport}</>;
+};
+
+export default ListSelector;
+
+const DropdownSelector = ({ headerSection, topListItem, divider, lists }) => {
+  const [expanded, setExpanded] = useState(false);
+  const handleToggle = () => {
+    setExpanded(prevState => !prevState);
+  };
   return (
     <Flex
       minW='250px'
@@ -18,7 +35,43 @@ const ListSelector = ({ lists, topListItem, divider, headerSection }) => {
         <Flex flexDir='column'>
           {topListItem}
           {divider && (
-            <TextBox ml={6} my={6}>
+            <Flex justifyContent='space-between' alignItems='center'>
+              <TextBox ml={6} my={6} size='xs'>
+                {divider}
+              </TextBox>
+              <IconButton
+                icon={<HiOutlineChevronDown />}
+                variant='link'
+                isRound='true'
+                mr={3}
+                p={3}
+                height='fit-content'
+                onClick={handleToggle}
+              />
+            </Flex>
+          )}
+          {expanded && lists}
+        </Flex>
+      </ContentBox>
+    </Flex>
+  );
+};
+const StaticSelector = ({ headerSection, topListItem, divider, lists }) => {
+  return (
+    <Flex
+      minW='250px'
+      maxW='400px'
+      w='100%'
+      height='fit-content'
+      flexDir='column'
+      mr={12}
+    >
+      {headerSection}
+      <ContentBox p='0' border='none' mb={6} w='100%'>
+        <Flex flexDir='column'>
+          {topListItem}
+          {divider && (
+            <TextBox ml={6} my={6} size='xs'>
               {divider}
             </TextBox>
           )}
@@ -28,5 +81,3 @@ const ListSelector = ({ lists, topListItem, divider, headerSection }) => {
     </Flex>
   );
 };
-
-export default ListSelector;

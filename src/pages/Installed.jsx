@@ -221,6 +221,7 @@ const InstalledList = ({
 const ListTypeSelector = ({ selectList, listID, lists }) => {
   return (
     <ListSelector
+      divider='categories'
       lists={lists?.map((type, index) => (
         <ListSelectorItem
           key={type.id}
