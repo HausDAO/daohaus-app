@@ -124,9 +124,9 @@ const Market = ({ installBoost, openDetails, goToSettings }) => {
   };
 
   return (
-    <Flex flexDir='column' w='95%'>
+    <Flex flexDir='column'>
       {daoMetaData ? (
-        <Flex>
+        <Flex flexDir={['column', 'column', 'row']}>
           <CategorySelector
             categoryID={categoryID}
             selectList={selectCategory}
@@ -217,33 +217,37 @@ const BoostsList = ({
   return (
     <List
       headerSection={
-        <>
-          <InputGroup w='250px' mr={6}>
+        <Flex flexDir={['column', 'column', 'row']}>
+          <InputGroup w='250px' mr={6} mb={2}>
             <Input placeholder='Search Boosts' onChange={handleTypeSearch} />
           </InputGroup>
-          <TextBox p={2}>Sort By:</TextBox>
-          <Menu value={sortBy}>
-            <MenuButton
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize={['sm', null, null, 'md']}
-              color='secondary.500'
-              _hover={{ color: 'secondary.400' }}
-              display='inline-block'
-            >
-              {sortBy}
-              <Icon as={RiArrowDropDownFill} color='secondary.500' />
-            </MenuButton>
-            <MenuList>
-              <MenuItem value='Available' onClick={handleSetSort}>
-                Available
-              </MenuItem>
-              <MenuItem value='Title (A-Z)' onClick={handleSetSort}>
-                Title (A-Z)
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </>
+          <Flex alignItems='center'>
+            <TextBox mr='2' size='sm'>
+              Sort By:
+            </TextBox>
+            <Menu value={sortBy}>
+              <MenuButton
+                textTransform='uppercase'
+                fontFamily='heading'
+                fontSize='sm'
+                color='secondary.500'
+                _hover={{ color: 'secondary.400' }}
+                display='inline-block'
+              >
+                {sortBy}
+                <Icon as={RiArrowDropDownFill} color='secondary.500' />
+              </MenuButton>
+              <MenuList>
+                <MenuItem value='Available' onClick={handleSetSort}>
+                  Available
+                </MenuItem>
+                <MenuItem value='Title (A-Z)' onClick={handleSetSort}>
+                  Title (A-Z)
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Flex>
+        </Flex>
       }
       list={
         currentCategory?.length > 0 ? (

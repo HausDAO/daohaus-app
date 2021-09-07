@@ -24,7 +24,7 @@ const PlaylistSelector = ({
     <ListSelector
       selectList={selectList}
       headerSection={
-        <Flex justifyContent='flex-end' mb={4}>
+        <Flex mb={4}>
           <Button variant='ghost' onClick={addPlaylist}>
             <TextBox mr={2} color='secondary.400'>
               New Playlist

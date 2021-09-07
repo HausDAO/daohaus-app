@@ -45,13 +45,13 @@ export const MetaDataProvider = ({ children }) => {
         })?.meta;
 
       if (daoMeta && shouldUpdateTheme.current) {
-        if (daoMeta.customTheme) {
-          updateTheme(daoMeta.customTheme);
+        if (daoMeta.customThemeConfig) {
+          updateTheme(daoMeta.customThemeConfig);
         } else {
           resetTheme();
         }
-        if (daoMeta.customTerms) {
-          setCustomTerms(daoMeta.customTerms);
+        if (daoMeta.customTermsConfig) {
+          setCustomTerms(daoMeta.customTermsConfig);
         }
         setDaoMetaData(daoMeta);
         dispatchPropConfig({ action: 'INIT', payload: daoMeta });
@@ -65,13 +65,13 @@ export const MetaDataProvider = ({ children }) => {
       try {
         const [data] = await fetchMetaData(daoid);
         if (shouldUpdateTheme.current && !daoMetaData) {
-          if (data.customTheme) {
-            updateTheme(data.customTheme);
+          if (data.customThemeConfig) {
+            updateTheme(data.customThemeConfig);
           } else {
             resetTheme();
           }
-          if (data.customTerms) {
-            setCustomTerms(data.customTerms);
+          if (data.customTermsConfig) {
+            setCustomTerms(data.customTermsConfig);
           }
           setDaoMetaData(data);
           dispatchPropConfig({ action: 'INIT', payload: data });
@@ -90,13 +90,13 @@ export const MetaDataProvider = ({ children }) => {
     try {
       const [data] = await fetchMetaData(daoid);
       if (shouldUpdateTheme.current && !daoMetaData) {
-        if (data.customTheme) {
-          updateTheme(data.customTheme);
+        if (data.customThemeConfig) {
+          updateTheme(data.customThemeConfig);
         } else {
           resetTheme();
         }
-        if (data.customTerms) {
-          setCustomTerms(data.customTerms);
+        if (data.customTermsConfig) {
+          setCustomTerms(data.customTermsConfig);
         }
         console.log('setting metadata', data);
         setDaoMetaData(data);

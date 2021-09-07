@@ -12,16 +12,18 @@ const ListItem = ({
 }) => {
   return (
     <ChakraListItem>
-      <ContentBox mb={4} p={5} d>
-        <Flex justifyContent='space-between'>
+      <ContentBox mb={4} p={5}>
+        <Flex justifyContent='space-between' flexDir={['column', 'row']}>
           {/* <Image h='70px' minW='70px' mb={6} /> */}
-          <Box>
-            <TextBox mb={2}>{customFormData?.title || title}</TextBox>
+          <Box mb={3}>
+            <TextBox mb={2} p={0}>
+              {customFormData?.title || title}
+            </TextBox>
             <Box fontFamily='body' size='sm' color='whiteAlpha.800'>
               {customFormData?.description || description}
             </Box>
           </Box>
-          <Flex flexDir='column' alignItems='flex-end'>
+          <Flex flexDir='column' alignItems={['flex-start', 'flex-end']}>
             {menuSection}
             {helperText && (
               <TextBox

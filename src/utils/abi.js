@@ -42,14 +42,21 @@ export const LOCAL_ABI = Object.freeze({
   DAO_CONDITIONAL_HELPER,
 });
 
-const isEtherScan = chainID => {
-  if (chainID === '0x1' || chainID === '0x4' || chainID === '0x2a') {
-    return true;
+const getBlockExplorerApiKey = chainID => {
+  switch (chainID) {
+    case '0x89': {
+      return process.env.REACT_APP_POLYGONSCAN_KEY;
+    }
+    case '0x64': {
+      return null;
+    }
+    default: {
+      return process.env.REACT_APP_ETHERSCAN_KEY;
+    }
   }
-  return false;
 };
 const getABIurl = (contractAddress, chainID) => {
-  const key = isEtherScan(chainID) ? process.env.REACT_APP_ETHERSCAN_KEY : null;
+  const key = getBlockExplorerApiKey(chainID);
   return key
     ? `${chainByID(chainID).abi_api_url}${contractAddress}&apiKey=${key}`
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
