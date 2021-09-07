@@ -260,10 +260,10 @@ const MinionProposalForm = () => {
     try {
       const key =
         daochain === '0x64'
-          ? daochain === '0x84'
-            ? 'EM7G9BPWRFTG9F9GVEEJMS917NJ2WVT8ZS'
-            : process.env.REACT_APP_ETHERSCAN_KEY
-          : null;
+          ? ''
+          : daochain === '0x89'
+          ? 'EM7G9BPWRFTG9F9GVEEJMS917NJ2WVT8ZS'
+          : process.env.REACT_APP_ETHERSCAN_KEY;
       const url = `${chainByID(daochain).abi_api_url}${value}${key &&
         `&apikey=${key}`}`;
       const response = await fetch(url);
