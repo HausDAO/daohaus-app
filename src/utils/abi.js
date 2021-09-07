@@ -44,7 +44,7 @@ const getABIurl = (contractAddress, chainID) => {
   const key = isEtherScan(chainID)
     ? process.env.REACT_APP_ETHERSCAN_KEY
     : isPolygonScan(chainID)
-    ? 'EM7G9BPWRFTG9F9GVEEJMS917NJ2WVT8ZS'
+    ? process.env.REACT_APP_POLYGONSCAN_KEY
     : null;
   return key
     ? `${chainByID(chainID).abi_api_url}${contractAddress}&apiKey=${key}`
