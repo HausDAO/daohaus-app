@@ -125,8 +125,14 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
   };
 
   return (
-    <Flex alignItems='top'>
-      <Select mb={8} width='60%' onChange={handleChange} fontFamily='accessory'>
+    <Flex alignItems='top' flexDir={['column', 'column', 'row']} mb='6'>
+      <Select
+        width={['100%', '100%', '60%']}
+        onChange={handleChange}
+        fontFamily='accessory'
+        mr='4'
+        mb='2'
+      >
         {playlists?.map(list => (
           <option key={list.id} value={list.id}>
             {list.name}
@@ -138,7 +144,7 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
           to={`/dao/${daochain}/${daoid}/settings/proposals`}
           onClick={handleClose}
         >
-          <Flex ml={4} alignItems='center' transform='translateY(5px)'>
+          <Flex alignItems='center' transform='translateY(5px)'>
             <Icon as={VscGear} mr={2} />
             <TextBox variant='body' color='secondary.600'>
               Manage
