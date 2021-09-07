@@ -124,8 +124,8 @@ const ProposalTypes = () => {
 
   return (
     <MainViewLayout isDao header='Proposal Types'>
-      <Flex flexDir='column' w='95%'>
-        <Flex justifyContent='flex-end' mb={12}>
+      <Flex flexDir='column' w='100%'>
+        <Flex mb={[6, 12]}>
           <SaveButton
             size='md'
             watch={daoProposals}
@@ -136,7 +136,7 @@ const ProposalTypes = () => {
           </SaveButton>
         </Flex>
         {daoProposals ? (
-          <Flex>
+          <Flex flexDir={['column', 'column', 'row']}>
             <PlaylistSelector
               selectList={selectList}
               addPlaylist={addPlaylist}

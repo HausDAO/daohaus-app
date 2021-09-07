@@ -64,7 +64,7 @@ const Installed = ({ installBoost, openDetails, goToSettings }) => {
   return (
     <Flex flexDir='column' w='95%'>
       {daoMetaData && daoOverview ? (
-        <Flex>
+        <Flex flexDir={['column', 'column', 'row']}>
           <ListTypeSelector
             selectList={selectList}
             listID={listID}
@@ -199,15 +199,19 @@ const InstalledList = ({
   return (
     <List
       headerSection={
-        <Flex w='100%' justifyContent='space-between'>
-          <InputGroup w='250px' mr={6}>
+        <Flex
+          w='100%'
+          justifyContent='space-between'
+          flexDir={['column', 'column', 'row']}
+        >
+          <InputGroup w='250px' mr={6} mb={3}>
             <Input
               onChange={handleChange}
               placeholder={`Search ${listID || 'Installed'}...`}
             />
           </InputGroup>
           {canInteract && (
-            <Button variant='outline' onClick={handleClick}>
+            <Button variant='outline' onClick={handleClick} width='fit-content'>
               Summon Minion
             </Button>
           )}
@@ -221,6 +225,7 @@ const InstalledList = ({
 const ListTypeSelector = ({ selectList, listID, lists }) => {
   return (
     <ListSelector
+      divider='categories'
       lists={lists?.map((type, index) => (
         <ListSelectorItem
           key={type.id}
