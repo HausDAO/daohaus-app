@@ -177,6 +177,29 @@ export const supportedChains = {
       version: 'v1',
     },
   },
+  '0xa4ec': {
+    name: 'Celo',
+    short_name: 'celo',
+    nativeCurrency: 'CELO',
+    network_id: 42220,
+    chain_id: '0xa4ec',
+    hub_sort_order: 4,
+    providers: ['walletconnect'],
+    rpc_url: 'https://forno.celo.org',
+    abi_api_url:
+     'https://explorer.celo.org/api?module=contract&action=getabi&address=',
+    subgraph_url:
+     '',
+    stats_graph_url:
+     '',
+    boosts_graph_url: '',
+    minion_factory_addr: '0xaD791Ef059A25b6C82e56977C6489974333C5A0C',
+    moloch_factory_addr: '0x9100A2489B2998B1331Fd33714187d895c919075', // moloch v2.1.sol
+    dai_contract: '0x765DE816845861e75A25fCA122bb6898B8B1282a', // This is cUSD for Celo
+    wrapper_contract: '',
+    wrap_n_zap_factory_addr: '0x07269699bc441FC97d12d5478Cb09522EF32f76A',
+    block_explorer: 'https://explorer.celo.org',
+  },
   // '0x4a': {
   //   name: 'IDChain',
   //   short_name: 'idchain',
