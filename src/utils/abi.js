@@ -35,7 +35,7 @@ const isEtherScan = chainID => {
   return false;
 };
 const isPolygonScan = chainID => {
-  if (chainID === '0x84') {
+  if (chainID === '0x89') {
     return true;
   }
   return false;
