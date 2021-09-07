@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useBreakpointValue, Flex, IconButton } from '@chakra-ui/react';
 
-import { HiOutlineChevronDown } from 'react-icons/hi';
+import { HiOutlineChevronDown, HiOutlineChevronRight } from 'react-icons/hi';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 
 const ListSelector = props => {
   const viewport = useBreakpointValue({
     base: <DropdownSelector {...props} />,
-    sm: <StaticSelector {...props} />,
+    md: <StaticSelector {...props} />,
   });
 
   return <>{viewport}</>;
@@ -40,7 +40,13 @@ const DropdownSelector = ({ headerSection, topListItem, divider, lists }) => {
                 {divider}
               </TextBox>
               <IconButton
-                icon={<HiOutlineChevronDown />}
+                icon={
+                  expanded ? (
+                    <HiOutlineChevronRight />
+                  ) : (
+                    <HiOutlineChevronDown />
+                  )
+                }
                 variant='link'
                 isRound='true'
                 mr={3}
