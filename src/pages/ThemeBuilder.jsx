@@ -8,12 +8,13 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { defaultTheme } from '../themes/defaultTheme';
-import { boostPost } from '../utils/requests';
 import CustomThemeForm from '../forms/customTheme';
 import ThemePreview from '../components/themePreview';
 import MainViewLayout from '../components/mainViewLayout';
 import { useMetaData } from '../contexts/MetaDataContext';
 import GenericModal from '../modals/genericModal';
+// import { boostPost } from '../utils/requests';
+import { put } from '../utils/metadata';
 
 const ThemeBuilder = ({ refetchMetaData }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
@@ -28,7 +29,7 @@ const ThemeBuilder = ({ refetchMetaData }) => {
   useEffect(() => {
     if (theme) {
       if (!tempCustomTerms) {
-        setTempCustomTerms(customTerms);
+        setTempCustomTerms(customTerms || defaultTheme.daoMeta);
       }
       setPreviewTheme({
         primary500: theme.colors.primary[500],
@@ -70,13 +71,16 @@ const ThemeBuilder = ({ refetchMetaData }) => {
 
     const updateThemeObject = {
       contractAddress: daoid,
-      boostKey: 'customTheme',
-      metadata: themeUpdate,
+      customThemeConfig: themeUpdate,
       network: injectedChain.network,
       signature,
     };
 
-    const result = await boostPost('dao/boost', updateThemeObject);
+    // const result = await boostPost('dao/boost', updateThemeObject);
+
+    const result = await put('dao/update', updateThemeObject);
+
+    console.log('result', result);
 
     if (result === 'success') {
       refetchMetaData();

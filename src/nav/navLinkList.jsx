@@ -38,8 +38,8 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
             <NavLink
               key={link.path || link.href}
               label={
-                dao?.customTerms
-                  ? getTerm(dao.customTerms, link.label)
+                dao?.customTermsConfig
+                  ? getTerm(dao.customTermsConfig, link.label)
                   : link.label
               }
               path={link.path}
