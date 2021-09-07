@@ -14,6 +14,8 @@ import UBERHAUS_MINION from '../contracts/uberHausMinion.json';
 import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
 import NEAPOLITAN_MINION_FACTORY from '../contracts/neapolitanMinionFactory.json';
 import NEAPOLITAN_MINION from '../contracts/neapolitanMinion.json';
+import SAFE_MINION_FACTORY from '../contracts/safeMinionFactory.json';
+import SAFE_MINION from '../contracts/safeMinion.json';
 import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import NIFTY_MINION_FACTORY from '../contracts/minionNiftyFactory.json';
 import NIFTY_MINION from '../contracts/minionNifty.json';
@@ -35,6 +37,8 @@ export const LOCAL_ABI = Object.freeze({
   SUPERFLUID_MINION_FACTORY,
   NEAPOLITAN_MINION_FACTORY,
   NEAPOLITAN_MINION,
+  SAFE_MINION_FACTORY,
+  SAFE_MINION,
   VANILLA_MINION_FACTORY,
   NIFTY_MINION_FACTORY,
   WRAP_N_ZAP_FACTORY,

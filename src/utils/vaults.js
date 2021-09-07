@@ -159,11 +159,11 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
-    case MINION_TYPES.NEAPOLITAN:
+    case MINION_TYPES.SAFE:
       return {
         badgeColor: 'pink',
         badgeTextColor: '#632b16',
-        badgeName: 'NEAPOLITAN',
+        badgeName: 'GNOSIS SAFE',
         badgeVariant: 'outline',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };

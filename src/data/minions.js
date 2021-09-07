@@ -14,9 +14,9 @@ export const MINION_NETWORKS = {
     '0x89': '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
     '0x4': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
   },
-  // [MINION_TYPES.NEAPOLITAN]: {
-  //   '0x64': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
-  // },
+  [MINION_TYPES.SAFE]: {
+    '0x4': '0x13319a33b862E9B8BA21cb95f15A880247c22Dd2',
+  },
   // [MINION_TYPES.UBER]: {
   //   '0x2a': '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
   //   '0x64': '0xf5106077892992B84c33C35CA8763895eb80B298',
@@ -65,15 +65,18 @@ export const MINION_CONTENT = {
     publisher: 'DAOhaus',
     //  MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
   },
-  [MINION_TYPES.NEAPOLITAN]: {
-    title: 'Neapolitan Minion',
+  [MINION_TYPES.SAFE]: {
+    title: 'Safe Minion',
     description:
-      'Enable multiple interactions with other smart contracts via DAO proposals',
+      'Manage assets & execute transactions by leveraging Gnosis Safe smart wallet capabilities',
     info: [
-      'The Advanced Minion is an upgrade to the Vanilla Minion, enabling you to do multiple smart contract transactions once a proposal is passed.',
+      'The Safe Minion is an upgrade to the Vanilla Minion, allowing you to manage assets and do multiple smart contract transactions by interacting with Gnosis Safe through your DAO.',
+      'Thus, the DAO would be able to propose, sign, & execute multiple transactions as well as interact with any Gnosis Safe App via a proposal.',
+      'This operation will assign a Minion as both as a signer of the Safe and as a Safe Module.',
+      // 'You also need to specify a human member of DAO as a Co-Signer to propose & sign transactions through the Safe UI or via a DAO proposal.',
       'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimise their proposals velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
     ],
-    //  MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
+    //  MINION_NETWORKS[MINION_TYPES.SAFE],
   },
   // [MINION_TYPES.RARIBLE]: {
   //   title: 'Rarible Minion',
@@ -122,11 +125,11 @@ export const MINIONS = {
     summonForm: FORM.NEW_SUPERFLUID_MINION,
     settings: SETTINGS_LINKS.SF_LINK,
   },
-  [MINION_TYPES.NEAPOLITAN]: {
-    minionType: MINION_TYPES.NEAPOLITAN,
-    content: MINION_CONTENT[MINION_TYPES.NEAPOLITAN],
-    networks: MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
-    summonForm: FORM.NEW_NEAPOLITAN_MINION,
+  [MINION_TYPES.SAFE]: {
+    minionType: MINION_TYPES.SAFE,
+    content: MINION_CONTENT[MINION_TYPES.SAFE],
+    networks: MINION_NETWORKS[MINION_TYPES.SAFE],
+    summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },
 };
