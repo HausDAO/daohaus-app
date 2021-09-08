@@ -112,11 +112,10 @@ export const CONTRACTS = {
     abiName: 'SUPERFLUID_MINION_FACTORY',
     contractAddress: '.contextData.chainConfig.superfluid.minion_factory_addr',
   },
-  NEAPOLITAN_MINION_FACTORY: {
+  SAFE_MINION_FACTORY: {
     location: 'local',
-    abiName: 'NEAPOLITAN_MINION_FACTORY',
-    contractAddress:
-      '.contextData.chainConfig.neapolitanMinion.minion_factory_addr',
+    abiName: 'SAFE_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.safeMinion.minion_factory_addr',
   },
   NIFTY_MINION_FACTORY: {
     location: 'local',
@@ -658,9 +657,9 @@ export const TX = {
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
   },
-  SUMMON_MINION_NEAPOLITAN: {
-    contract: CONTRACTS.NEAPOLITAN_MINION_FACTORY,
-    name: 'summonMinion',
+  SUMMON_MINION_SAFE: {
+    contract: CONTRACTS.SAFE_MINION_FACTORY,
+    name: 'summonMinionAndSafe', // TODO: Conditional contract method: easy/hard mode
     poll: 'subgraph',
     display: 'Summoning Minion',
     errMsg: 'Error Summoning Minion',
@@ -669,6 +668,7 @@ export const TX = {
       '.contextData.daoid',
       '.values.minionName',
       '.values.minQuorum',
+      '.values.saltNonce', // TODO: saltNonce as hidden field
     ],
   },
   SUMMON_MINION_NIFTY: {

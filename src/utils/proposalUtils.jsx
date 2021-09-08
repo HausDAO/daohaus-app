@@ -52,6 +52,7 @@ export const MINION_TYPES = {
   SUPERFLUID: 'Superfluid minion',
   RARIBLE: 'Rarible minion',
   NEAPOLITAN: 'Neapolitan minion',
+  SAFE: 'SAFE MINION V0',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {

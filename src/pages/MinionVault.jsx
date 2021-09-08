@@ -61,7 +61,10 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
         };
       });
 
-      const nativeBalance = await fetchNativeBalance(minion, daochain);
+      const nativeBalance = await fetchNativeBalance(
+        vaultMatch.safeAddress || minion,
+        daochain,
+      );
       if (+nativeBalance > 0) {
         setNativeBalance(formatNativeData(daochain, nativeBalance));
       }

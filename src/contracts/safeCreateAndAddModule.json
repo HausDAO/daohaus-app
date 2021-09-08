@@ -1,25 +1,37 @@
 [
   {
-    "type": "function",
-    "stateMutability": "nonpayable",
-    "payable": false,
-    "outputs": [],
-    "name": "createAndAddModules",
+    "constant": false,
     "inputs": [
-      { "type": "address", "name": "proxyFactory", "internalType": "address" },
-      { "type": "bytes", "name": "data", "internalType": "bytes" }
+      {
+        "internalType": "contract Module",
+        "name": "module",
+        "type": "address"
+      }
     ],
-    "constant": false
+    "name": "enableModule",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "type": "function",
-    "stateMutability": "nonpayable",
-    "payable": false,
-    "outputs": [],
-    "name": "enableModule",
+    "constant": false,
     "inputs": [
-      { "type": "address", "name": "module", "internalType": "contract Module" }
+      {
+        "internalType": "address",
+        "name": "proxyFactory",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
-    "constant": false
+    "name": "createAndAddModules",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]

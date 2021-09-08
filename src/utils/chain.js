@@ -61,8 +61,8 @@ export const supportedChains = {
     wrapper_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://rinkeby.etherscan.io',
-    neapolitanMinion: {
-      minion_factory_addr: '0x4050E747Ed393e1Fd89783662C48373421fD0647',
+    safeMinion: {
+      minion_factory_addr: '0x13319a33b862E9B8BA21cb95f15A880247c22Dd2',
     },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
@@ -82,6 +82,14 @@ export const supportedChains = {
       base_url: 'https://rinkeby.rarible.com',
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
+    gnosis_safe: {
+      proxy_factory: '0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B',
+      create_and_add_modules: '0xF61A721642B0c0C8b334bA3763BA1326F53798C0',
+      // master_copy: '0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F', // v1.1.1
+      master_copy: '0x6851d6fdfafd08c0295c392436245e5bc78b0185', // v1.2.0
+      mutisend: '0x8D29bE29923b68abfDD21e541b9374737B49cdAD',
+      module_enabler: '0x119CA974Ecf393351E9335E137442A39a3c03091',
+    },
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -147,6 +155,14 @@ export const supportedChains = {
         v1: '0x9fc9420F277b7C25E17B67008b35CCB01c5c9B63',
       },
       version: 'v1',
+    },
+    gnosis_safe: {
+      proxy_factory: '0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B',
+      create_and_add_modules: '0xF61A721642B0c0C8b334bA3763BA1326F53798C0',
+      // master_copy: '0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F', // v1.1.1
+      master_copy: '0x6851d6fdfafd08c0295c392436245e5bc78b0185', // v1.2.0
+      mutisend: '0x8D29bE29923b68abfDD21e541b9374737B49cdAD',
+      module_enabler: '0x10286225AE73546Dcf1BB51F4695610Ae1EE5CaD',
     },
     niftyMinion: {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',

@@ -19,6 +19,7 @@ const GenericInput = props => {
     prepend,
     onChange = null,
     disabled,
+    defaultValue,
   } = props;
   const { register } = localForm;
   return (
@@ -34,6 +35,10 @@ const GenericInput = props => {
           placeholder={placeholder || label || htmlFor}
           ref={register}
           disabled={disabled}
+          defaultValue={
+            defaultValue &&
+            (typeof defaultValue === 'function' ? defaultValue() : defaultValue)
+          }
         />
         {append && (
           <InputRightAddon background='primary.600' p={0}>

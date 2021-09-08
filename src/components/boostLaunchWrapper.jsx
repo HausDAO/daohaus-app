@@ -11,7 +11,6 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import DiscourseLaunch from './discourseLaunch';
-import NewMinionSafe from './newMinionSafe';
 import GenericBoostLaunch from './genericBoostLaunch';
 import SnapshotLaunch from './snapshotLaunch';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -97,9 +96,6 @@ const BoostLaunchWrapper = ({ boost }) => {
       }
       case 'niftyMinion': {
         return <NewMinionForm minionType='nifty minion' />;
-      }
-      case 'minionSafe': {
-        return <NewMinionSafe />;
       }
       case 'discourse': {
         return (

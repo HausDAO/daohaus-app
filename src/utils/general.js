@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 import Web3 from 'web3';
@@ -319,3 +320,5 @@ export const getKeyedArray = (obj, keyName = 'field') => {
 
 export const isLastItem = (list, index) => index === list?.length - 1;
 export const isFirstItem = (list, index) => index === 0;
+
+export const generateNonce = () => `0x${randomBytes(32).toString('hex')}`;
