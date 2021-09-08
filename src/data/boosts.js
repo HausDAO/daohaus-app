@@ -93,7 +93,7 @@ export const CONTENT = {
       'With Discord notifications, keep your DAO members involved and updated whenever there are new proposals to vote, sponsor or process.',
     ],
     externalLinks: [
-      // { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
   MINTGATE: {
