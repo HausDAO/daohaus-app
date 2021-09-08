@@ -34,8 +34,18 @@ const isEtherScan = chainID => {
   }
   return false;
 };
+const isPolygonScan = chainID => {
+  if (chainID === '0x89') {
+    return true;
+  }
+  return false;
+};
 const getABIurl = (contractAddress, chainID) => {
-  const key = isEtherScan(chainID) ? process.env.REACT_APP_ETHERSCAN_KEY : null;
+  const key = isEtherScan(chainID)
+    ? process.env.REACT_APP_ETHERSCAN_KEY
+    : isPolygonScan(chainID)
+    ? process.env.REACT_APP_POLYGONSCAN_KEY
+    : null;
   return key
     ? `${chainByID(chainID).abi_api_url}${contractAddress}&apiKey=${key}`
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
