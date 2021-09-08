@@ -122,7 +122,7 @@ export const FORM = {
     fields: [
       [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.LINK, FIELD.DESCRIPTION],
     ],
-    additionalOptions: [FIELD.PAYMENT_REQUEST, FIELD.SHARES_REQUEST],
+    additionalOptions: [FIELD.PAYMENT_REQUEST],
   },
   MEMBER: {
     id: 'MEMBER',
