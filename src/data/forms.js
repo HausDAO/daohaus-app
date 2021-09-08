@@ -261,7 +261,7 @@ export const FORM = {
     fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
   MINION: {
-    id: 'VAN_MINION_GENERIC',
+    id: 'MINION',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
