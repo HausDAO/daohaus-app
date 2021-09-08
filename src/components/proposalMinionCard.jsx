@@ -85,7 +85,7 @@ const ProposalMinionCard = ({ proposal }) => {
           daochain === '0x64'
             ? ''
             : daochain === '0x89'
-            ? 'EM7G9BPWRFTG9F9GVEEJMS917NJ2WVT8ZS'
+            ? process.env.REACT_APP_POLYGONSCAN_KEY
             : process.env.REACT_APP_ETHERSCAN_KEY;
         const url = `${chainByID(daochain).abi_api_url}${minionDeets.proxyTo ||
           minionDeets.to}${key && `&apikey=${key}`}`;
