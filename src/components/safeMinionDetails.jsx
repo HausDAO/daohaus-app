@@ -15,7 +15,7 @@ const SafeMinionDetails = ({ vault, handleCopy }) => {
       </TextBox>
       <Box fontFamily='mono' mb={5}>
         Gnosis Safe
-        <CopyToClipboard onCopy={handleCopy}>
+        <CopyToClipboard text={vault.safeAddress} onCopy={handleCopy}>
           <Box color='secondary.300'>
             {vault.safeAddress}
             <Icon
@@ -29,7 +29,7 @@ const SafeMinionDetails = ({ vault, handleCopy }) => {
       </Box>
       <Box fontFamily='mono'>
         Minion Address (Do Not Send Funds)
-        <CopyToClipboard onCopy={handleCopy}>
+        <CopyToClipboard text={vault.address} onCopy={handleCopy}>
           <Box color='secondary.300'>
             {vault.address}
             <Icon
