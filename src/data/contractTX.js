@@ -1211,3 +1211,50 @@ export const EXTRA_MULTICALL_ACTIONS = {
     ],
   },
 };
+
+export const TEST_TX = {
+  MINION_SEND_ERC20_TOKEN_NEAPOLITAN: {
+    contract: CONTRACTS.LOCAL_NEAPOLITAN_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Transferring Tokens',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      {
+        type: 'encodeSafeActions',
+        tos: {
+          type: 'nestedArgs',
+          gatherArgs: ['.localValues.tokenAddress'],
+        },
+        values: {
+          type: 'nestedArgs',
+          gatherArgs: ['0'],
+        },
+        datas: {
+          type: 'nestedArgs',
+          gatherArgs: [
+            {
+              type: 'encodeHex',
+              contract: CONTRACTS.LOCAL_ERC_20,
+              fnName: 'transfer',
+              gatherArgs: ['.values.applicant', '.values.minionPayment'],
+            },
+          ],
+        },
+        operations: {
+          type: 'nestedArgs',
+          gatherArgs: ['0'],
+        },
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      0,
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+      },
+      'true',
+    ],
+  },
+};
