@@ -17,7 +17,7 @@ const defaultConfig = {
       tooltTipLabel:
         'Make a proposal to tranfer this nft to the applicant address',
       modalName: 'transfer',
-      formLego: CORE_FORMS.MINION_SEND_ERC721_TOKEN,
+      formLego: FORM.MINION_SEND_ERC721_TOKEN,
       localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
       minionTypeOverride: true,
     },
