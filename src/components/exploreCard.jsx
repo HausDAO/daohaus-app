@@ -19,6 +19,8 @@ const ExploreCard = ({ dao }) => {
     }
   };
 
+  console.log('dao', dao);
+
   const renderTags = () => {
     if (dao.meta?.tags) {
       return (
@@ -52,9 +54,9 @@ const ExploreCard = ({ dao }) => {
     <ContentBox
       as={dao.meta.version === '1' ? Link : RouterLink}
       to={
-        dao.meta.version.startsWith('2')
-          ? `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`
-          : null
+        dao.meta.version === '1'
+          ? null
+          : `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`
       }
       href={dao.meta.version === '1' ? pokemolUrlExplore(dao) : null}
       w={['100%', '100%', '100%', '340px', '340px']}

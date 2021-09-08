@@ -4,6 +4,7 @@ import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
 import { TX } from '../data/contractTX';
 import { FORM } from '../data/forms';
+import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
 
 export const getReadableBalance = tokenData => {
   if (tokenData?.balance && tokenData.decimals) {
@@ -102,12 +103,12 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
 
   if (vaultMinionType === 'nifty minion') {
     minionType = MINION_TYPES.NIFTY;
-    tx = TX[`${tokenFormsString[tokenType]}_NIFTY`];
+    tx = VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_NIFTY`];
   }
 
   if (vaultMinionType === 'Neapolitan minion') {
     minionType = MINION_TYPES.NEAPOLITAN;
-    tx = TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
+    tx = VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
   }
 
   return {
