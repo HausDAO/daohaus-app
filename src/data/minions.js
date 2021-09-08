@@ -111,13 +111,6 @@ export const MINIONS = {
     summonForm: FORM.NEW_NIFTY_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },
-  [MINION_TYPES.UBER]: {
-    minionType: MINION_TYPES.UBER,
-    content: MINION_CONTENT[MINION_TYPES.UBER],
-    networks: MINION_NETWORKS[MINION_TYPES.UBER],
-    summonForm: null,
-    settings: SETTINGS_LINKS.UBER_LINK,
-  },
   [MINION_TYPES.SUPERFLUID]: {
     minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
@@ -132,4 +125,11 @@ export const MINIONS = {
     summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },
+  // [MINION_TYPES.UBER]: {
+  //   minionType: MINION_TYPES.UBER,
+  //   content: MINION_CONTENT[MINION_TYPES.UBER],
+  //   networks: MINION_NETWORKS[MINION_TYPES.UBER],
+  //   summonForm: null,
+  //   settings: SETTINGS_LINKS.UBER_LINK,
+  // },
 };

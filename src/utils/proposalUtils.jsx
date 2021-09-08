@@ -48,11 +48,9 @@ export const PROPOSAL_TYPES = {
 export const MINION_TYPES = {
   VANILLA: 'vanilla minion',
   NIFTY: 'nifty minion',
-  UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
-  RARIBLE: 'Rarible minion',
-  NEAPOLITAN: 'Neapolitan minion',
   SAFE: 'SAFE MINION V0',
+  // UBER: 'UberHaus minion',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {
