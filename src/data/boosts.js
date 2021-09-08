@@ -13,7 +13,9 @@ export const CONTENT = {
     pars: [
       'The DEV Suite is an all-in-one developer toolset for advanced builders to prototype, build and test their own Minions and Boosts.',
     ],
-    externalLinks: [{ href: 'https://daohaus.club/', label: 'Boost Support' }],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
   },
   OLD_DEV_SUITE: {
     title: 'Basic Minion DEV Suite',
@@ -26,7 +28,9 @@ export const CONTENT = {
       'Also known as a vanilla minion, it is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed. ',
       'This way, you can upgrade your DAO experience by seamlessly go from voting to execution without any coordination lags.',
     ],
-    externalLinks: [{ href: 'https://daohaus.club/', label: 'Boost Support' }],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
   },
   NIFTY_DEV_SUITE: {
     title: 'Advanced Minion DEV Suite',
@@ -38,7 +42,9 @@ export const CONTENT = {
       'The Advanced Minion is similar to the vanilla minion with the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met',
       'Also know as a Nifty Minion',
     ],
-    externalLinks: [{ href: 'https://daohaus.club/', label: 'Boost Support' }],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
   },
   NIFTY_INK: {
     title: 'Nifty Ink',
@@ -54,7 +60,7 @@ export const CONTENT = {
         href: 'https://github.com/HausDAO/NiftyMInionSummoner',
         label: 'Nifty Minion Code',
       },
-      { href: 'https://daohaus.club/', label: 'Boost Support' },
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
   WRAP_N_ZAP: {
@@ -72,24 +78,14 @@ export const CONTENT = {
         href: '	https://github.com/HausDAO/wrap-n-zap',
         label: 'Contract Code',
       },
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-  // SNAPSHOT: {
-  //   title: 'Snapshot Proposals',
-  //   description:
-  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
-  //   publisher: PUBLISHERS.DAOHAUS,
-  //   version: '0.5',
-  //   pars: ['AWAITING CONTENT'],
-  //   externalLinks: [
-  //     { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-  //   ],
-  // },
+
   DISCORD: {
     title: 'Discord Notifications',
     description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
+      'Customize and send notifications of your DAO’s activity to your Discord server with this boost.',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',
     pars: [
@@ -97,7 +93,7 @@ export const CONTENT = {
       'With Discord notifications, keep your DAO members involved and updated whenever there are new proposals to vote, sponsor or process.',
     ],
     externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+      // { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
   MINTGATE: {
@@ -111,7 +107,7 @@ export const CONTENT = {
       'This is especially useful for content creators looking to gate the access to their content to DAO members, or DAOs looking to keep sensitive information to the right audience.',
     ],
     externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
   SUPERFLUID: {
@@ -124,7 +120,7 @@ export const CONTENT = {
       'Set it up once, and your payments will be streamed in real-time automatically as long as your minion vault has sufficient funds.',
     ],
     externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
   DISCOURSE: {
@@ -137,21 +133,32 @@ export const CONTENT = {
       'With each proposal, the Boost automatically creates a forum post, so that DAO members can have long-form and in-depth discussions for the decisions that matter.',
     ],
     externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-  RARIBLE: {
-    title: 'Rarible',
-    description: 'Buy and sell NFTs on Rarible from your DAO.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '1.0',
-    pars: [
-      'This boost helps your DAO create NFT sell and buy orders on the Rarible marketplace.',
-    ],
-    externalLinks: [
-      { href: 'https://discord.gg/gAWWhpN8', label: 'Boost Support' },
-    ],
-  },
+  // RARIBLE: {
+  //   title: 'Rarible',
+  //   description: 'Buy and sell NFTs on Rarible from your DAO.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '1.0',
+  //   pars: [
+  //     'This boost helps your DAO create NFT sell and buy orders on the Rarible marketplace.',
+  //   ],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+  //   ],
+  // },
+  // SNAPSHOT: {
+  //   title: 'Snapshot Proposals',
+  //   description:
+  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '0.5',
+  //   pars: ['AWAITING CONTENT'],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+  //   ],
+  // },
 };
 
 const STEPS = {
@@ -286,17 +293,17 @@ export const BOOSTS = {
   //   networks: MINIONS[MINION_TYPES.NEAPOLITAN].networks,
   //   cost: 'free',
   // },
-  RARIBLE: {
-    id: 'RARIBLE',
-    minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
-    steps: STEPS.MINION_BOOST,
-    boostContent: CONTENT.RARIBLE,
-    categories: ['nft'],
-    networks: { '0x4': true },
-    playlist: BOOST_PLAYLISTS.RARIBLE,
-    cost: 'free',
-    settings: 'none',
-  },
+  // RARIBLE: {
+  //   id: 'RARIBLE',
+  //   minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
+  //   steps: STEPS.MINION_BOOST,
+  //   boostContent: CONTENT.RARIBLE,
+  //   categories: ['nft'],
+  //   networks: { '0x4': true },
+  //   playlist: BOOST_PLAYLISTS.RARIBLE,
+  //   cost: 'free',
+  //   settings: 'none',
+  // },
   NIFTY_INK: {
     id: 'NIFTY_INK',
     boostContent: CONTENT.NIFTY_INK,
