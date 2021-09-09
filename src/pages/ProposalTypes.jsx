@@ -126,6 +126,10 @@ const ProposalTypes = () => {
     });
   };
 
+  const undoChanges = () => {
+    dispatchPropConfig({ action: 'UNDO_CHANGES', daoMetaData });
+  };
+
   return (
     <MainViewLayout isDao header='Proposal Types'>
       <Flex flexDir='column' maxW={['100%', '90%', '80%']}>
@@ -135,6 +139,7 @@ const ProposalTypes = () => {
             saveFn={handleSaveConfig}
             disabled={loading}
             blockRouteOnDiff
+            undoChanges={undoChanges}
           >
             SAVE CHANGES {loading && <Spinner ml={3} />}
           </SaveButton>

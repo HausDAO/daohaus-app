@@ -16,6 +16,7 @@ const SaveButton = props => {
     header = 'You have unsaved changes.',
     description = 'If you would like to sign and save your changes, click save. To erase your changes, click cancel.',
     saveFn,
+    undoChanges,
   } = props;
   const [isSame, setSame] = useState(true);
   const history = useHistory();
@@ -51,6 +52,7 @@ const SaveButton = props => {
             console.log(tx);
             closeModal();
             unblock();
+            undoChanges?.();
             if (tx?.pathname) {
               history.push(tx.pathname);
             }
