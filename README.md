@@ -81,3 +81,24 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
+
+## 🙏 We need your help to make DAOhaus even better
+
+Thank you for using DAOhaus and being part of the community. To continually improve the DAOhaus product and better empower coordination among humans globally, we need your help in the following areas:  
+
+### A. Faced an issue or have a feature request? 🤖
+
+Fill in this [form](https://forms.clickup.com/f/83fyz-1425/9CJITRZPWXTAD612RP). Detailed responses will help us better investigate, triage and resolve them.  
+
+### B. Want to contribute with your skills and time? 💪
+
+1. Go to our [Public Tasks Board](https://sharing.clickup.com/b/h/83fyz-1405/5c588f59600254b) and find an issue you can work on. 
+* 🎨 For designers, look out for tasks with status 'UX Gate' 
+* 🛠 For engineers, look out for tasks with status 'First Tasks'
+
+2. After finding a task you can work on, hop onto our [Discord](https://discord.gg/FFzckS7GdA) and let us know! We'll answer questions and guide you where neessary. 
+
+3. After completing the task, submit a PR (for engineers) or send your work in [Discord's open-chat channel](https://discord.gg/gWH4vt3tWE)
+
+Meanwhile, if there are other ways to better onboard contributors, please reach out to us as well. Thanks in advance again, and we look forward to you joining us in continually DAOhaus a better product for all 🚀
+
