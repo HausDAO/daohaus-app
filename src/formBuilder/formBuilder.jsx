@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { v4 as uuid } from 'uuid';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
@@ -38,7 +37,7 @@ const FormBuilder = props => {
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
-  const localForm = parentForm || useForm();
+  const localForm = parentForm || useForm({ shouldUnregister: false });
   const { handleSubmit } = localForm;
 
   const addOption = e => {
@@ -47,8 +46,9 @@ const FormBuilder = props => {
     );
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
 
-    const lastCol = formFields.slice(-1);
+    const lastCol = formFields.slice(-1)?.[0];
     const rest = formFields.slice(0, -1);
+
     setFields([...rest, [...lastCol, selectedOption]]);
   };
 
@@ -214,8 +214,8 @@ const FormBuilder = props => {
     },
   });
 
-  const renderInputs = (fields, depth = 0) =>
-    fields.map((field, index) =>
+  const renderInputs = (fields, depth = 0) => {
+    return fields.map((field, index) =>
       Array.isArray(field) ? (
         <Flex
           flex={1}
@@ -227,8 +227,8 @@ const FormBuilder = props => {
         </Flex>
       ) : (
         <InputFactory
-          key={field?.htmlFor || field?.name || uuid()}
           {...field}
+          key={`${depth}-${index}`}
           minionType={props.minionType}
           layout={props.layout}
           localForm={localForm}
@@ -238,6 +238,7 @@ const FormBuilder = props => {
         />
       ),
     );
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

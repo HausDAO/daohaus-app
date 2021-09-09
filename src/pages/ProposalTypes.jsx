@@ -20,6 +20,11 @@ import { chainByID } from '../utils/chain';
 
 const dev = process.env.REACT_APP_DEV;
 
+const orderPlaylistForms = playlists => {
+  console.log(playlists);
+  return playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
+};
+
 const ProposalTypes = () => {
   const {
     daoProposals,
@@ -32,13 +37,12 @@ const ProposalTypes = () => {
   const { successToast, errorToast } = useOverlay();
   const { openConfirmation } = useConfirmation();
   const { playlists, allForms = {}, customData, devList } = daoProposals || {};
-
   const { daochain } = useParams();
   const [selectedListID, setListID] = useState(
     dev && devList?.forms?.length ? 'dev' : 'all',
   );
   const [loading, setLoading] = useState(false);
-  // console.log(daoProposals);
+
   const selectList = id => {
     if (!id) return;
     if (id === selectedListID) {
@@ -73,9 +77,9 @@ const ProposalTypes = () => {
   const handleSaveConfig = () => {
     if (dev) {
       openConfirmation({
-        onSubmit: () => {
+        onSubmit: async () => {
           closeModal();
-          saveConfig();
+          await saveConfig();
         },
         title: 'DEV WARNING',
         header: 'DEV WARNING',
@@ -122,15 +126,20 @@ const ProposalTypes = () => {
     });
   };
 
+  const undoChanges = () => {
+    dispatchPropConfig({ action: 'UNDO_CHANGES', daoMetaData });
+  };
+
   return (
     <MainViewLayout isDao header='Proposal Types'>
-      <Flex flexDir='column' w='100%'>
-        <Flex mb={[6, 12]}>
+      <Flex flexDir='column' maxW={['100%', '90%', '80%']}>
+        <Flex mb={[6, 12]} justifyContent='flex-end'>
           <SaveButton
-            size='md'
-            watch={daoProposals}
-            onClick={handleSaveConfig}
+            watch={orderPlaylistForms(playlists)}
+            saveFn={handleSaveConfig}
             disabled={loading}
+            blockRouteOnDiff
+            undoChanges={undoChanges}
           >
             SAVE CHANGES {loading && <Spinner ml={3} />}
           </SaveButton>

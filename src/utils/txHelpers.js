@@ -98,43 +98,25 @@ const argBuilderCallback = Object.freeze({
       JSON.parse(values.abiInput),
       collapse(values, '*ABI_ARG*', 'array'),
     );
+
     const details = detailsToJSON({
       ...values,
       minionType: formData.minionType,
     });
+
     return [
       values.targetContract,
       values.minionValue || '0',
       hexData,
       details,
       values.paymentToken,
-      values.paymetRequested,
-    ];
-  },
-  proposeActionNeapolitan({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      collapse(values, '*ABI_ARG*', 'array'),
-    );
-    const details = detailsToJSON({
-      ...values,
-      minionType: formData.minionType,
-    });
-    return [
-      [values.targetContract],
-      [values.minionValue || '0'],
-      [hexData],
-      values.paymentToken,
-      values.paymetRequested,
-      details,
-      'true',
+      values.paymentRequested,
     ];
   },
 });
 
 const handleSearch = (data, arg) => {
   const path = getPath(arg);
-  console.log(path);
   if (!path.length)
     throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
   return searchData(data, path);
@@ -214,7 +196,6 @@ export const createHydratedString = data => {
       'txHelpers.js => createHydratedString: string does not exist',
     );
   const fragments = splitByTemplates(string);
-  console.log(`fragments`, fragments);
   return fragments
     .map(fragment => {
       if (fragment[0] === '.') {
@@ -275,7 +256,6 @@ export const exposeValues = data => {
 };
 
 export const createActions = ({ tx, uiControl, stage }) => {
-  console.log(`uiControl`, uiControl);
   if (!tx[stage]) return;
 
   // FOR REFERENCE:

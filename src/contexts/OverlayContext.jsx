@@ -170,11 +170,13 @@ export const useConfirmation = () => {
       onSubmit,
       header,
       overrideFooter,
+      temporary,
       loading,
     }) {
       setModal({
         isConfirmation: true,
         title,
+        temporary,
         header,
         body,
         width,
