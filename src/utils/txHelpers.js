@@ -117,7 +117,6 @@ const argBuilderCallback = Object.freeze({
 
 const handleSearch = (data, arg) => {
   const path = getPath(arg);
-  console.log(path);
   if (!path.length)
     throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
   return searchData(data, path);
@@ -197,7 +196,6 @@ export const createHydratedString = data => {
       'txHelpers.js => createHydratedString: string does not exist',
     );
   const fragments = splitByTemplates(string);
-  console.log(`fragments`, fragments);
   return fragments
     .map(fragment => {
       if (fragment[0] === '.') {
@@ -232,8 +230,6 @@ export const Transaction = async data => {
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
 
-  console.log('&&&&&&& data', data);
-
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
     .on('transactionHash', txHash => {
@@ -260,7 +256,6 @@ export const exposeValues = data => {
 };
 
 export const createActions = ({ tx, uiControl, stage }) => {
-  console.log(`uiControl`, uiControl);
   if (!tx[stage]) return;
 
   // FOR REFERENCE:
