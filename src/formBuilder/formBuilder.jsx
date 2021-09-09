@@ -47,17 +47,9 @@ const FormBuilder = props => {
     );
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
 
-    // const lastCol = formFields.slice(-1);
-    // const rest = formFields.slice(0, -1);
-
-    // setFields([...rest, [...lastCol, selectedOption]]);
-
-    setFields(prevFields => {
-      console.log('prevFields', prevFields);
-      const lastCol = prevFields.slice(-1);
-      const rest = prevFields.slice(0, -1);
-      // return [...rest, [...lastCol, selectedOption]];
-    });
+    const lastCol = formFields.slice(-1);
+    const rest = formFields.slice(0, -1);
+    setFields([...rest, [...lastCol, selectedOption]]);
   };
 
   const buildABIOptions = abiString => {
