@@ -98,36 +98,19 @@ const argBuilderCallback = Object.freeze({
       JSON.parse(values.abiInput),
       collapse(values, '*ABI_ARG*', 'array'),
     );
+
     const details = detailsToJSON({
       ...values,
       minionType: formData.minionType,
     });
+
     return [
       values.targetContract,
       values.minionValue || '0',
       hexData,
       details,
       values.paymentToken,
-      values.paymetRequested,
-    ];
-  },
-  proposeActionNeapolitan({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      collapse(values, '*ABI_ARG*', 'array'),
-    );
-    const details = detailsToJSON({
-      ...values,
-      minionType: formData.minionType,
-    });
-    return [
-      [values.targetContract],
-      [values.minionValue || '0'],
-      [hexData],
-      values.paymentToken,
-      values.paymetRequested,
-      details,
-      'true',
+      values.paymentRequested,
     ];
   },
 });
@@ -248,6 +231,8 @@ export const Transaction = async data => {
   });
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
+
+  console.log('&&&&&&& data', data);
 
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
