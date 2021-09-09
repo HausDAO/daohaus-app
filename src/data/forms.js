@@ -1,6 +1,7 @@
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { TX } from './contractTX';
+import { VAULT_TRANSFER_TX } from './transferContractTx';
 
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
@@ -59,36 +60,6 @@ export const CORE_FORMS = {
         },
       ],
     ],
-  },
-  MINION_SEND_NETWORK_TOKEN: {
-    id: 'MINION_SEND_NETWORK_TOKEN',
-    title: 'Network Token Transfer',
-    subtitle: 'Make a proposal to transfer tokens out of the minion',
-    type: PROPOSAL_TYPES.MINION_NATIVE,
-    required: ['minionPayment', 'applicant', 'description'],
-    minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_NETWORK_TOKEN,
-    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
-  },
-  MINION_SEND_ERC20_TOKEN: {
-    id: 'MINION_SEND_ERC20_TOKEN',
-    title: 'ERC20 Token Transfer',
-    subtitle: 'Make a proposal to transfer tokens out of the minion',
-    type: PROPOSAL_TYPES.MINION_ERC20,
-    required: ['minionPayment', 'applicant'],
-    minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_ERC20_TOKEN,
-    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
-  },
-  MINION_SEND_ERC721_TOKEN: {
-    id: 'MINION_SEND_ERC721_TOKEN',
-    title: 'ERC721 Token Transfer',
-    subtitle: 'Make a proposal to transfer the nft out of the minion',
-    type: PROPOSAL_TYPES.MINION_ERC721,
-    required: ['applicant'],
-    minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_ERC721_TOKEN,
-    fields: [[FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   MINION_SELL_NIFTY: {
     id: 'MINION_SELL_NIFTY',
@@ -151,7 +122,7 @@ export const FORM = {
     fields: [
       [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.LINK, FIELD.DESCRIPTION],
     ],
-    additionalOptions: [FIELD.PAYMENT_REQUEST, FIELD.SHARES_REQUEST],
+    additionalOptions: [FIELD.PAYMENT_REQUEST],
   },
   MEMBER: {
     id: 'MEMBER',
@@ -384,7 +355,7 @@ export const FORM = {
     type: PROPOSAL_TYPES.MINION_NATIVE,
     required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_NETWORK_TOKEN,
+    tx: VAULT_TRANSFER_TX.MINION_SEND_NETWORK_TOKEN,
     fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   MINION_SEND_ERC20_TOKEN: {
@@ -393,8 +364,40 @@ export const FORM = {
     type: PROPOSAL_TYPES.MINION_ERC20,
     required: ['minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_ERC20_TOKEN,
+    tx: VAULT_TRANSFER_TX.MINION_SEND_ERC20_TOKEN,
     fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
+  },
+  MINION_SEND_ERC721_TOKEN: {
+    title: 'ERC721 Token Transfer',
+    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    type: PROPOSAL_TYPES.MINION_ERC721,
+    required: ['applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: VAULT_TRANSFER_TX.MINION_SEND_ERC721_TOKEN,
+    fields: [
+      [
+        FIELD.NFT_SELECT,
+        FIELD.MINION_SELECT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
+  },
+  MINION_SEND_ERC1155_TOKEN: {
+    title: 'ERC1155 Token Transfer',
+    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    type: PROPOSAL_TYPES.MINION_ERC1155,
+    required: ['applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: VAULT_TRANSFER_TX.MINION_SEND_ERC1155_TOKEN,
+    fields: [
+      [
+        FIELD.NFT_SELECT,
+        FIELD.MINION_SELECT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
+    ],
   },
   SELL_NFT_RARIBLE: {
     id: 'SELL_NFT_RARIBLE',
@@ -429,38 +432,7 @@ export const FORM = {
       [FIELD.BUYOUT_PAYMENT_REQUEST],
     ],
   },
-  MINION_SEND_ERC721_TOKEN: {
-    title: 'ERC721 Token Transfer',
-    subtitle: 'Make a proposal to transfer the nft out of the minion',
-    type: PROPOSAL_TYPES.MINION_ERC721,
-    required: ['applicant'],
-    minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_ERC721_TOKEN,
-    fields: [
-      [
-        FIELD.NFT_SELECT,
-        FIELD.MINION_SELECT,
-        FIELD.APPLICANT,
-        FIELD.DESCRIPTION,
-      ],
-    ],
-  },
-  MINION_SEND_ERC1155_TOKEN: {
-    title: 'ERC1155 Token Transfer',
-    subtitle: 'Make a proposal to transfer the nft out of the minion',
-    type: PROPOSAL_TYPES.MINION_ERC1155,
-    required: ['applicant'],
-    minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_ERC1155_TOKEN,
-    fields: [
-      [
-        FIELD.NFT_SELECT,
-        FIELD.MINION_SELECT,
-        FIELD.APPLICANT,
-        FIELD.DESCRIPTION,
-      ],
-    ],
-  },
+
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
     subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
