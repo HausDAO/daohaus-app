@@ -1,20 +1,24 @@
 import { Input } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { ExploreContext } from '../contexts/ExploreContext';
+import { debounce } from '../utils/debounce';
 
 const ExploreSearch = () => {
   const { dispatch } = useContext(ExploreContext);
 
   const handleChange = event => {
-    if (event.target.value) {
+    const searchTerm = event.target.value;
+    if (searchTerm) {
       dispatch({
         type: 'setSearchTerm',
-        payload: event.target.value.toLowerCase(),
+        payload: searchTerm.toLowerCase(),
       });
     } else {
       dispatch({ type: 'clearSearchTerm' });
     }
   };
+
+  const debouncedHandleChange = useMemo(() => debounce(handleChange, 400), []);
 
   return (
     <Input
@@ -23,7 +27,7 @@ const ExploreSearch = () => {
       type='search'
       className='input'
       placeholder='Search Daos'
-      onChange={e => handleChange(e)}
+      onChange={debouncedHandleChange}
     />
   );
 };
