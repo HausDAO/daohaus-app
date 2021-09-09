@@ -51,7 +51,9 @@ const DaoModal = () => {
     appendBody,
     steps,
     boost,
+    temporary,
   } = modal;
+
   const handleClose = () => setModal(false);
   const modalHeader = lego?.title || title;
   return (
@@ -73,8 +75,8 @@ const DaoModal = () => {
         maxWidth={getMaxWidth(modal)}
         p={3}
       >
-        {modalHeader && (
-          <ModalHeader p b={0}>
+        <ModalHeader p={3}>
+          {modalHeader && (
             <Box
               fontFamily='heading'
               textTransform='uppercase'
@@ -85,19 +87,26 @@ const DaoModal = () => {
             >
               {modalHeader}
             </Box>
-            {header && <TextBox>{header}</TextBox>}
-          </ModalHeader>
-        )}
-        <ModalCloseButton />
-        <ModalBody>
+          )}
+          {header && <TextBox>{header}</TextBox>}
+        </ModalHeader>
+
+        <ModalCloseButton right={4} top={4} />
+        <ModalBody p={3}>
           {prependBody}
           {steps && <StepperForm steps={steps} />}
           {boost && <StepperForm {...boost} />}
           {lego && <FormBuilder {...lego} onSubmit={onSubmit} />}
           {body && <Flex p={3}>{body}</Flex>}
+          {temporary && (
+            <Flex>
+              <TextBox variant='body' size='sm' mb={3} p={0}>
+                {temporary}
+              </TextBox>
+            </Flex>
+          )}
           {appendBody}
         </ModalBody>
-
         {footer}
         {isConfirmation && (
           <ConfirmationFooter
