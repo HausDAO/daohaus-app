@@ -108,7 +108,7 @@ const argBuilderCallback = Object.freeze({
       hexData,
       details,
       values.paymentToken,
-      values.paymetRequested,
+      values.paymentRequested,
     ];
   },
   proposeActionNeapolitan({ values, formData }) {

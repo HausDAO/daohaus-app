@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Flex, Text, Spinner, Box } from '@chakra-ui/react';
+import { Flex, Spinner, Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import ProposalCard from './proposalCard';
@@ -10,7 +10,6 @@ import {
   sortOptions,
   allFilter,
 } from '../utils/proposalContent';
-import ContentBox from './ContentBox';
 import GenericSelect from './genericSelect';
 import {
   determineUnreadProposalList,

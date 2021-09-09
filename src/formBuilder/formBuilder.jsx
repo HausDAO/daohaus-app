@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { v4 as uuid } from 'uuid';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
@@ -47,16 +46,10 @@ const FormBuilder = props => {
     );
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
 
-    const lastCol = formFields.slice(-1);
+    const lastCol = formFields.slice(-1)?.[0];
     const rest = formFields.slice(0, -1);
-    console.log(`rest`, rest);
-    console.log(`lastCol`, lastCol);
-    console.log(`selectedOption`, selectedOption);
-    if (rest?.length) {
-      setFields([[...rest], [lastCol, selectedOption]]);
-    } else {
-      setFields([...lastCol, selectedOption]);
-    }
+
+    setFields([...rest, [...lastCol, selectedOption]]);
   };
 
   const buildABIOptions = abiString => {
@@ -222,8 +215,6 @@ const FormBuilder = props => {
   });
 
   const renderInputs = (fields, depth = 0) => {
-    console.log(`fields`, fields);
-    console.log(`depth`, depth);
     return fields.map((field, index) =>
       Array.isArray(field) ? (
         <Flex
@@ -237,6 +228,7 @@ const FormBuilder = props => {
       ) : (
         <InputFactory
           {...field}
+          key={`${depth}-${index}`}
           minionType={props.minionType}
           layout={props.layout}
           localForm={localForm}
