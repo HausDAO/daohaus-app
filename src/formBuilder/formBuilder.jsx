@@ -38,7 +38,7 @@ const FormBuilder = props => {
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
-  const localForm = parentForm || useForm();
+  const localForm = parentForm || useForm({ shouldUnregister: false });
   const { handleSubmit } = localForm;
 
   const addOption = e => {
@@ -49,7 +49,14 @@ const FormBuilder = props => {
 
     const lastCol = formFields.slice(-1);
     const rest = formFields.slice(0, -1);
-    setFields([...rest, [...lastCol, selectedOption]]);
+    console.log(`rest`, rest);
+    console.log(`lastCol`, lastCol);
+    console.log(`selectedOption`, selectedOption);
+    if (rest?.length) {
+      setFields([[...rest], [lastCol, selectedOption]]);
+    } else {
+      setFields([...lastCol, selectedOption]);
+    }
   };
 
   const buildABIOptions = abiString => {
@@ -214,8 +221,10 @@ const FormBuilder = props => {
     },
   });
 
-  const renderInputs = (fields, depth = 0) =>
-    fields.map((field, index) =>
+  const renderInputs = (fields, depth = 0) => {
+    console.log(`fields`, fields);
+    console.log(`depth`, depth);
+    return fields.map((field, index) =>
       Array.isArray(field) ? (
         <Flex
           flex={1}
@@ -227,7 +236,6 @@ const FormBuilder = props => {
         </Flex>
       ) : (
         <InputFactory
-          key={field?.htmlFor || field?.name || uuid()}
           {...field}
           minionType={props.minionType}
           layout={props.layout}
@@ -238,6 +246,7 @@ const FormBuilder = props => {
         />
       ),
     );
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

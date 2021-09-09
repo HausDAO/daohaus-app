@@ -141,11 +141,11 @@ export const TXProvider = ({ children }) => {
           resolvePoll(txHash);
           console.error(`${tx.errMsg}: ${error}`);
         },
-        onSuccess: txHash => {
+        onSuccess: async txHash => {
+          await refreshDao();
           successToast({
             title: tx.successMsg || 'Transaction Successful',
           });
-          refreshDao();
           lifeCycleFns?.onPollSuccess?.(txHash, data);
           resolvePoll(txHash);
           if (tx.createDiscourse) {
@@ -159,8 +159,6 @@ export const TXProvider = ({ children }) => {
               daoMetaData,
             });
           }
-
-          // could we add some more
         },
       },
     });
