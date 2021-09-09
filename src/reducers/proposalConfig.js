@@ -47,6 +47,11 @@ const handleRemoveCustomData = (state, params) => ({
     [params.formId]: null,
   },
 });
+
+const undoChanges = (state, params) => {
+  return params?.daoMetaData?.proposalConfig || state;
+};
+
 const handleAddToPlaylist = (state, params) => {
   const newPlaylists = state.playlists.map(list => {
     if (list.id === params.listId) {
@@ -75,5 +80,6 @@ export const proposalConfigReducer = (state, params) => {
   if (action === 'RESTORE_PROPOSAL')
     return handleRemoveCustomData(state, params);
   if (action === 'TOGGLE_PLAYLIST') return handleAddToPlaylist(state, params);
+  if (action === 'UNDO_CHANGES') return undoChanges(state, params);
   throw new Error('Error in ProposalConfig Reducer => Invalid Action');
 };

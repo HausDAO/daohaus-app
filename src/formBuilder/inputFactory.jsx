@@ -30,6 +30,7 @@ import DiscourseMeta from './discourseMeta';
 
 export const InputFactory = props => {
   const { type } = props;
+
   if (type === 'input') {
     return <GenericInput {...props} />;
   }

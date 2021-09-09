@@ -59,7 +59,9 @@ export const mapInRequired = (fields, required) => {
       : required.includes(field.name)
       ? { ...field, required: true }
       : field;
-  return fields.map(mapIn);
+  const res = fields.map(mapIn);
+
+  return res;
 };
 
 export const inputDataFromABI = inputs => {

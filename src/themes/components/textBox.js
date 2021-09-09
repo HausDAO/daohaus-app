@@ -6,6 +6,7 @@ const TextBoxComponent = {
     textTransform: props.textTransform || 'uppercase',
     letterSpacing: '0.15em',
     opacity: props.opacity || 1.0,
+    padding: props.p || props.padding || 0,
   }),
 
   sizes: {
@@ -63,6 +64,7 @@ const TextBoxComponent = {
       textTransform: 'none',
       fontWeight: 400,
       opacity: props.opacity || 1.0,
+      padding: 0,
     }),
   },
 };
