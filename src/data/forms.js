@@ -28,8 +28,9 @@ export const CORE_FORMS = {
       [
         {
           ...FIELD.TITLE,
+          label: 'Playlist Name',
           helperText: 'Max 100 characters',
-          placeholder: 'Playlist Title',
+          placeholder: 'Playlist Name',
         },
       ],
     ],
@@ -48,15 +49,7 @@ export const CORE_FORMS = {
     required: ['title', 'description'],
     fields: [
       [
-        {
-          name: 'name',
-          type: 'input',
-          label: 'Proposal Name',
-          htmlFor: 'Name',
-          helperText: 'Max 30 characters',
-          placeholder: 'Proposal Name',
-          expectType: 'any',
-        },
+        FIELD.PROPOSAL_NAME,
         {
           ...FIELD.DESCRIPTION,
           helperText: 'Max 100 characters',

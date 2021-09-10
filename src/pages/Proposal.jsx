@@ -72,8 +72,6 @@ const Proposal = ({
     }
   }, [currentProposal, daochain]);
 
-  console.log('currentProposal', currentProposal);
-
   return (
     <MainViewLayout header='Proposal' customTerms={customTerms} isDao>
       <Box>
