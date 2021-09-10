@@ -160,6 +160,7 @@ const ProposalTypes = () => {
               selectedListID={selectedListID}
               allForms={allForms}
               devList={devList}
+              selectList={selectList}
             />
           </Flex>
         ) : (
