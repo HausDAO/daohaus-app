@@ -20,10 +20,8 @@ import { chainByID } from '../utils/chain';
 
 const dev = process.env.REACT_APP_DEV;
 
-const orderPlaylistForms = playlists => {
-  console.log(playlists);
-  return playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
-};
+const orderPlaylistForms = playlists =>
+  playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
 
 const ProposalTypes = () => {
   const {
@@ -162,6 +160,7 @@ const ProposalTypes = () => {
               selectedListID={selectedListID}
               allForms={allForms}
               devList={devList}
+              selectList={selectList}
             />
           </Flex>
         ) : (
