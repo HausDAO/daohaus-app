@@ -268,6 +268,15 @@ export const FIELD = {
     label: 'Target NiftyInk Url',
     expectType: 'any',
   },
+  PROPOSAL_NAME: {
+    name: 'name',
+    type: 'input',
+    label: 'Proposal Name',
+    htmlFor: 'Name',
+    helperText: 'Max 30 characters',
+    placeholder: 'Proposal Name',
+    expectType: 'any',
+  },
   // PARAGRAPHS: {
   //   type: 'paragraphs',
   //   pars: [] /* Overwrite with customCopy */,
