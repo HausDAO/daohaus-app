@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
+
 import {
   Box,
   Flex,
@@ -11,92 +12,115 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Skeleton,
   HStack,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
 
+import { MinionService } from '../services/minionService';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import AddressAvatar from './addressAvatar';
-import UberHausAvatar from './uberHausAvatar';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
-import { hasMinionActions, PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import UberHausAvatar from './uberHausAvatar';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ProposalMinionCard = ({ proposal, minionAction }) => {
+const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
   const { theme } = useCustomTheme();
   const [minionDeets, setMinionDeets] = useState();
   const [decodedData, setDecodedData] = useState();
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (minionAction && proposal) {
-      const formattedActions = {
-        ...minionAction,
-        actions:
-          proposal.actions.length > 0
-            ? proposal.actions.map(a => {
-                return { to: a.target, ...a };
-              })
-            : [minionAction],
-      };
+    const getMinionDeets = async () => {
+      try {
+        if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+          proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
+        ) {
+          const action = await MinionService({
+            minion: proposal?.minionAddress,
+            chainID: daochain,
+          })('getAction')({ proposalId: proposal?.proposalId });
+          setMinionDeets(action);
+        } else if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+        ) {
+          const action = await UberHausMinionService({
+            uberHausMinion: proposal.minionAddress,
+            chainID: daochain,
+          })('getAction')({ proposalId: proposal?.proposalId });
+          setMinionDeets(action);
+        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+          const action = await UberHausMinionService({
+            uberHausMinion: proposal.minionAddress,
+            chainID: daochain,
+          })('getAppointment')({ proposalId: proposal?.proposalId });
 
-      setMinionDeets(formattedActions);
+          setMinionDeets(action);
+        }
+      } catch (err) {
+        console.error(err);
+        setMinionDeets(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (proposal?.proposalId && proposal?.minionAddress && daochain) {
+      getMinionDeets();
     }
-  }, [minionAction, proposal]);
+  }, [proposal, daochain]);
 
   useEffect(() => {
-    const hydrateActions = async () => {
-      const promRes = await Promise.all(
-        minionDeets.actions.map(async action => {
-          const hydratedAction = { ...action };
-          try {
-            const key =
-              daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-            const url = `${chainByID(daochain).abi_api_url}${action.proxyTo ||
-              action.to}${key && `&apikey=${key}`}`;
-            const response = await fetch(url);
-            const json = await response.json();
+    const getAbi = async () => {
+      try {
+        const key =
+          daochain === '0x64'
+            ? ''
+            : daochain === '0x89'
+            ? process.env.REACT_APP_POLYGONSCAN_KEY
+            : process.env.REACT_APP_ETHERSCAN_KEY;
+        const url = `${chainByID(daochain).abi_api_url}${minionDeets.proxyTo ||
+          minionDeets.to}${key && `&apikey=${key}`}`;
+        const response = await fetch(url);
+        const json = await response.json();
+        if (json.status === '0') {
+          // contract is not verified
+          return;
+        }
+        const parsed = JSON.parse(json.result);
+        const imp = parsed.find(p => p.name === 'implementation');
+        if (imp) {
+          const rpcUrl = chainByID(daochain).rpc_url;
+          const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
 
-            if (json.status === '0') {
-              return hydratedAction;
-            }
-            const parsed = JSON.parse(json.result);
-            const imp = parsed.find(p => p.name === 'implementation');
-            if (imp) {
-              const rpcUrl = chainByID(daochain).rpc_url;
-              const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-
-              const abi = parsed;
-              const contract = new web3.eth.Contract(abi, action.to);
-              const newaddr = await contract.methods.implementation().call();
-              hydratedAction.proxyTo = newaddr;
-              return null;
-            }
-            abiDecoder.addABI(parsed);
-            const localDecodedData = abiDecoder.decodeMethod(action.data);
-            hydratedAction.decodedData = localDecodedData;
-            return hydratedAction;
-          } catch (err) {
-            console.log(err);
-            return hydratedAction;
-          }
-        }),
-      );
-
-      console.log('promRes', promRes);
-      setDecodedData(promRes);
+          const abi = parsed;
+          const contract = new web3.eth.Contract(abi, minionDeets.to);
+          const newaddr = await contract.methods.implementation().call();
+          console.log(newaddr);
+          setMinionDeets({ ...minionDeets, proxyTo: newaddr });
+          return null;
+        }
+        abiDecoder.addABI(parsed);
+        const localDecodedData = abiDecoder.decodeMethod(minionDeets.data);
+        setDecodedData(localDecodedData);
+      } catch (err) {
+        console.log(err);
+      }
     };
-
     if (
       proposal &&
-      minionDeets &&
+      minionDeets?.data &&
       proposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_DEL
     ) {
-      hydrateActions();
+      getAbi();
     }
   }, [proposal, minionDeets]);
 
@@ -112,76 +136,62 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   };
 
   const displayDecodedData = data => {
-    if (data.decodedData) {
-      return (
-        <>
-          <HStack spacing={3}>
-            <TextBox size='xs'>Method</TextBox>
-            <TextBox variant='value'>{data.decodedData?.name}</TextBox>
-          </HStack>
-          <Divider my={2} />
-          <Box fontFamily='heading' mt={4}>
-            Params
-          </Box>
-          {data.decodedData?.params.map((param, idx) => {
-            return (
-              <Box key={idx}>
-                <HStack spacing={3}>
-                  <TextBox size='xs'>{`Param${idx + 1}:`}</TextBox>
-                  <TextBox variant='value'>{param.name}</TextBox>
-                </HStack>
-                <HStack spacing={3}>
-                  <TextBox size='xs'>Type:</TextBox>
-                  <TextBox variant='value'>{param.type}</TextBox>
-                </HStack>
-                <TextBox size='xs'>Value:</TextBox>
-                <TextBox variant='value'>{param.value.toString()}</TextBox>
-                <Divider my={2} />
-              </Box>
-            );
-          })}
-        </>
-      );
-    }
     return (
-      <TextBox mt={2} size='sm'>
-        Could not decode action data
-      </TextBox>
+      <>
+        <HStack spacing={3}>
+          <TextBox size='xs'>Method</TextBox>
+          <TextBox variant='value'>{data.name}</TextBox>
+        </HStack>
+        <Divider my={2} />
+        <Box fontFamily='heading' mt={4}>
+          Params
+        </Box>
+        {data.params.map((param, idx) => {
+          return (
+            <Box key={idx}>
+              <HStack spacing={3}>
+                <TextBox size='xs'>{`Param${idx + 1}:`}</TextBox>
+                <TextBox variant='value'>{param.name}</TextBox>
+              </HStack>
+              <HStack spacing={3}>
+                <TextBox size='xs'>Type:</TextBox>
+                <TextBox variant='value'>{param.type}</TextBox>
+              </HStack>
+              <TextBox size='xs'>Value:</TextBox>
+              <TextBox variant='value'>{param.value.toString()}</TextBox>
+              <Divider my={2} />
+            </Box>
+          );
+        })}
+      </>
     );
   };
 
-  if (hasMinionActions(proposal, minionDeets)) {
+  // hides details on funding and payroll proposals
+  if (
+    minionDeets &&
+    minionDeets[1] === '0x0000000000000000000000000000000000000000'
+  ) {
     return null;
   }
 
   return (
     <>
-      {minionDeets && (
-        <Flex mt={6}>
-          <Flex flexDir='column'>
-            {minionDeets?.data && (
-              <>
-                <TextBox size='xs' mb={3}>
-                  {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
-                </TextBox>
-                {minionDeets?.to && getAvatar(minionDeets.to)}
-                {minionDeets?.nominee && (
-                  <Box>
-                    <AddressAvatar addr={minionDeets.nominee} alwaysShowName />
-                  </Box>
-                )}
-              </>
-            )}
-
-            {proposal.minion.minionType === 'Neapolitan minion' &&
-              minionDeets?.actions.length > 0 && (
-                <TextBox size='xs' mb={3}>
-                  Multiple Action Proposal
-                </TextBox>
+      <Skeleton isLoaded={!loading}>
+        {minionDeets && (
+          <Flex mt={6}>
+            <Flex flexDir='column'>
+              <TextBox size='xs' mb={3}>
+                {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
+              </TextBox>
+              {minionDeets?.to && getAvatar(minionDeets.to)}
+              {minionDeets?.nominee && (
+                <Box>
+                  <AddressAvatar addr={minionDeets.nominee} alwaysShowName />
+                </Box>
               )}
 
-            {minionDeets?.actions.length > 0 && (
-              <>
+              {minionDeets?.to && (
                 <Button
                   mt={3}
                   px={3}
@@ -195,11 +205,11 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 >
                   Details
                 </Button>
-              </>
-            )}
+              )}
+            </Flex>
           </Flex>
-        </Flex>
-      )}
+        )}
+      </Skeleton>
       <Modal isOpen={showModal} onClose={toggleModal} isCentered>
         <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
@@ -216,35 +226,21 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
               fontWeight={700}
               color='white'
             >
-              Minion Action Details
+              Minion Details
             </Box>
           </ModalHeader>
           <ModalCloseButton color='white' />
-
           <ModalBody
             flexDirection='column'
             display='flex'
             maxH='300px'
             overflowY='scroll'
           >
-            {minionDeets?.actions.map((action, i) => {
-              return (
-                <Box key={`${action.to}_${i}`}>
-                  <TextBox size='sm' fontWeight='900'>
-                    Action {i + 1}
-                  </TextBox>
-
-                  {action.proxyTo ? (
-                    <TextBox size='xs'>Target Proxy: {action.proxyTo}</TextBox>
-                  ) : (
-                    <TextBox size='xs'>Target: {action.to}</TextBox>
-                  )}
-                  <TextBox size='xs'>VALUE: {action.value}</TextBox>
-                  {decodedData && displayDecodedData(decodedData[i])}
-                  <Divider my={5} />
-                </Box>
-              );
-            })}
+            {minionDeets?.proxyTo && (
+              <TextBox size='xs'>Proxy: {minionDeets?.proxyTo}</TextBox>
+            )}
+            <TextBox size='xs'>VALUE: {minionDeets?.value}</TextBox>
+            {decodedData && displayDecodedData(decodedData)}
           </ModalBody>
         </ModalContent>
       </Modal>
