@@ -70,11 +70,10 @@ export const MINION_CONTENT = {
     description:
       'Manage assets & execute transactions by leveraging Gnosis Safe smart wallet capabilities',
     info: [
-      'The Safe Minion is an upgrade to the Vanilla Minion, allowing you to manage assets and do multiple smart contract transactions by interacting with Gnosis Safe through your DAO.',
-      'Thus, the DAO would be able to propose, sign, & execute multiple transactions as well as interact with any Gnosis Safe App via a proposal.',
-      'This operation will assign a Minion as both as a signer of the Safe and as a Safe Module.',
-      // 'You also need to specify a human member of DAO as a Co-Signer to propose & sign transactions through the Safe UI or via a DAO proposal.',
-      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimise their proposals velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
+      "This operation will deploy a new Minion and Gnosis Safe for your DAO, and will give your DAO full control over the Safe's assets and transactions. It enables a wide variety of treasury structures and migration paths for your DAO.",
+      'Through this module, your DAO can manage collections of NFTs, manage LP positions with AMMs, and make any other arbitrary interactions.',
+      'It also enables DAOs to upgrade their governance framework over time while keeping the assets in one location.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
     ],
     //  MINION_NETWORKS[MINION_TYPES.SAFE],
   },

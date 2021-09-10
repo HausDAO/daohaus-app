@@ -2,7 +2,6 @@ import { ethers } from 'ethers';
 import { supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
-import { TX } from '../data/contractTX';
 import { FORM } from '../data/forms';
 import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
 
