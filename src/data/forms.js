@@ -49,14 +49,18 @@ export const CORE_FORMS = {
     fields: [
       [
         {
-          ...FIELD.TITLE,
+          name: 'name',
+          type: 'input',
+          label: 'Proposal Name',
+          htmlFor: 'Name',
           helperText: 'Max 30 characters',
-          placeholder: 'Proposal Title',
+          placeholder: 'Proposal Name',
+          expectType: 'any',
         },
         {
           ...FIELD.DESCRIPTION,
           helperText: 'Max 100 characters',
-          placeholder: 'proposal Title',
+          placeholder: 'Proposal Description',
         },
       ],
     ],
