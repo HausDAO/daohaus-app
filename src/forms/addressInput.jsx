@@ -19,6 +19,7 @@ import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
+import { handleGetENS } from '../utils/ens';
 import { chainByID } from '../utils/chain';
 
 const defaultTipLabel =
@@ -62,12 +63,27 @@ const AddressInput = ({
 
   useEffect(() => {
     let shouldSet = true;
+
+    const getMemberName = async memberAddress => {
+      const profileResult = await handleGetProfile(memberAddress);
+      if (profileResult?.name) {
+        return profileResult;
+      }
+
+      const ensResult = await handleGetENS(memberAddress);
+      if (ensResult) {
+        return { name: ensResult };
+      }
+
+      return undefined;
+    };
+
     const fetchDaoMembers = async () => {
       const memberProfiles = await Promise.all(
         daoMembers.map(async member => {
           return {
             ...member,
-            ...(await handleGetProfile(member.memberAddress)),
+            ...(await getMemberName(member.memberAddress)),
           };
         }),
       );
@@ -80,7 +96,7 @@ const AddressInput = ({
         overrideData.map(async member => {
           return {
             ...member,
-            ...handleGetProfile(member.memberAddress),
+            ...(await getMemberName(member.memberAddress)),
           };
         }),
       );
@@ -93,7 +109,7 @@ const AddressInput = ({
     } else if (memberOverride && overrideData) {
       fetchOverride();
     } else {
-      console.warn('Address input did not recieve a valid members array');
+      console.warn('Address input did not receive a valid members array');
     }
 
     return () => {
