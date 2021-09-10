@@ -126,11 +126,11 @@ export const boostList = [
     comingSoon: true,
     modalName: 'minionSafeLaunch',
     dependency: 'vanillaMinions',
-    successRoute: '',
+    successRoute: 'minion-safe',
+    settings: true,
     networks: {
       all: false,
-      '0x1': true,
-      '0x64': true,
+      '0x4': true,
     },
   },
   {
