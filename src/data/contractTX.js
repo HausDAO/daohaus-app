@@ -67,10 +67,15 @@ export const CONTRACTS = {
     abiName: 'NIFTY_MINION',
     contractAddress: '.localValues.minionAddress',
   },
-  LOCAL_NEAPOLITAN_MINION: {
+  LOCAL_SAFE_MINION: {
     location: 'local',
-    abiName: 'NEAPOLITAN_MINION',
+    abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
+  },
+  LOCAL_SAFE_MULTISEND: {
+    location: 'local',
+    abiName: 'SAFE_MULTISEND',
+    contractAddress: '.contextData.chainConfig.safeMinion.safe_mutisend_addr',
   },
   LOCAL_ERC_20: {
     location: 'local',
@@ -87,9 +92,9 @@ export const CONTRACTS = {
     abiName: 'VANILLA_MINION',
     contractAddress: '.localValues.minionAddress',
   },
-  MINION_NEAPOLITAN_EXECUTE: {
+  MINION_SAFE_EXECUTE: {
     location: 'local',
-    abiName: 'NEAPOLITAN_MINION',
+    abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
   },
   UBERHAUS_MINION: {
@@ -178,7 +183,7 @@ export const DETAILS = {
     title: 'Minion sends a token',
     description: '.values.description',
     proposalType: '.formData.type',
-    minionType: MINION_TYPES.VANILLA,
+    minionType: '.formData.minionType',
   },
   MINION_NFT_TRANSFER: {
     title: 'Minion sends a NFT',
@@ -630,8 +635,8 @@ export const TX = {
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
   },
-  MINION_NEAPOLITAN_EXECUTE: {
-    contract: CONTRACTS.MINION_NEAPOLITAN_EXECUTE,
+  MINION_SAFE_EXECUTE: {
+    contract: CONTRACTS.MINION_SAFE_EXECUTE,
     name: 'executeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -668,7 +673,7 @@ export const TX = {
       '.contextData.daoid',
       '.values.minionName',
       '.values.minQuorum',
-      '.values.saltNonce', // TODO: saltNonce as hidden field
+      '.values.saltNonce',
     ],
   },
   SUMMON_MINION_NIFTY: {

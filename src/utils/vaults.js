@@ -98,23 +98,23 @@ const tokenFormsString = {
 
 export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
   const formLego = FORM[`${tokenFormsString[tokenType]}`];
-  let { tx, minionType } = formLego;
 
-  if (vaultMinionType === 'nifty minion') {
-    minionType = MINION_TYPES.NIFTY;
-    tx = VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_NIFTY`];
+  if (vaultMinionType === MINION_TYPES.NIFTY) {
+    return {
+      ...formLego,
+      minionType: MINION_TYPES.NIFTY,
+      tx: VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_NIFTY`],
+    };
+  }
+  if (vaultMinionType === MINION_TYPES.SAFE) {
+    return {
+      ...formLego,
+      minionType: MINION_TYPES.SAFE,
+      tx: VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
+    };
   }
 
-  if (vaultMinionType === 'Neapolitan minion') {
-    minionType = MINION_TYPES.NEAPOLITAN;
-    tx = VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
-  }
-
-  return {
-    ...formLego,
-    tx,
-    minionType,
-  };
+  return formLego;
 };
 
 export const vaultFilterOptions = [

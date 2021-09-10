@@ -63,6 +63,7 @@ export const supportedChains = {
     block_explorer: 'https://rinkeby.etherscan.io',
     safeMinion: {
       minion_factory_addr: '0x13319a33b862E9B8BA21cb95f15A880247c22Dd2',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
     },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
@@ -119,6 +120,10 @@ export const supportedChains = {
     wrapper_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://kovan.etherscan.io',
+    safeMinion: {
+      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+    },
   },
   '0x64': {
     name: 'xDAI Chain',
@@ -144,6 +149,10 @@ export const supportedChains = {
     wrapper_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
     block_explorer: 'https://blockscout.com/poa/xdai',
+    safeMinion: {
+      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+    },
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
     superfluid: {
@@ -198,6 +207,10 @@ export const supportedChains = {
     wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://polygonscan.com',
+    safeMinion: {
+      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+    },
     superfluid: {
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
       resolver: '0xE0cc76334405EE8b39213E620587d815967af39C',

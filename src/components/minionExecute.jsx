@@ -6,11 +6,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
-import {
-  MINION_TYPES,
-  multicallActionsFromProposal,
-  PROPOSAL_TYPES,
-} from '../utils/proposalUtils';
+import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
@@ -91,14 +87,8 @@ const MinionExecute = ({
     setLoading(true);
 
     let args = [proposal.proposalId];
-    if (proposal.minion.minionType === MINION_TYPES.NEAPOLITAN) {
-      const actions = multicallActionsFromProposal(proposal);
-      args = [
-        proposal.proposalId,
-        actions.targets,
-        actions.values,
-        actions.datas,
-      ];
+    if (proposal.minion.minionType === MINION_TYPES.SAFE) {
+      args = [proposal.proposalId, proposal.actions[0].data];
     }
 
     await submitTransaction({
