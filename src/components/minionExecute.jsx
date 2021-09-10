@@ -22,7 +22,9 @@ const MinionExecute = ({
   const { injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
   const { refreshMinionVault, daoMembers } = useDao();
-  const proposalDetails = useMemo(() => JSON.parse(proposal.details), proposal);
+  const proposalDetails = useMemo(() => JSON.parse(proposal.details), [
+    proposal,
+  ]);
 
   const [loading, setLoading] = useState(false);
   const [minionDetails, setMinionDetails] = useState(null);

@@ -15,6 +15,7 @@ import {
 import { useParams } from 'react-router-dom';
 import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
+import Web3 from 'web3';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -63,7 +64,13 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   };
 
   const checkIfProxy = async (abi, to) => {
-    const contract = new injectedProvider.eth.Contract(abi, to);
+    // const contract = new injectedProvider.eth.Contract(abi, to);
+    // return contract.methods.implementation().call();
+
+    const rpcUrl = chainByID(daochain).rpc_url;
+    const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+
+    const contract = new web3.eth.Contract(abi, to);
     return contract.methods.implementation().call();
   };
 
@@ -123,15 +130,19 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
             if (action.data.slice(2).length === 0) {
               return buildEthTransferAction(action);
             }
-            const json = await decodeFromEtherscan(action);
+            let json = await decodeFromEtherscan(action);
             if (json.status === '0') {
               return hydratedAction;
             }
-            const parsed = JSON.parse(json.result);
+            let parsed = JSON.parse(json.result);
             const imp = parsed.find(p => p.name === 'implementation');
             if (imp) {
               hydratedAction.proxyTo = await checkIfProxy(parsed, action.to);
-              return null;
+              json = await decodeFromEtherscan(hydratedAction);
+              if (json.status === '0') {
+                return hydratedAction;
+              }
+              parsed = JSON.parse(json.result);
             }
             abiDecoder.addABI(parsed);
             const localDecodedData = abiDecoder.decodeMethod(action.data);
