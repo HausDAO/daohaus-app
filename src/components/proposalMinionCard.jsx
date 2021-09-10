@@ -64,12 +64,8 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   };
 
   const checkIfProxy = async (abi, to) => {
-    // const contract = new injectedProvider.eth.Contract(abi, to);
-    // return contract.methods.implementation().call();
-
     const rpcUrl = chainByID(daochain).rpc_url;
     const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-
     const contract = new web3.eth.Contract(abi, to);
     return contract.methods.implementation().call();
   };
