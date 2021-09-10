@@ -1,6 +1,13 @@
 # DAOhaus
 
-A House for DAOs
+DAOhaus is a no-code platform for summoning and managing Moloch DAOs, such as [MetaCartel](https://app.daohaus.club/dao/0x1/0x4570b4faf71e23942b8b9f934b47ccedf7540162), [Raid Guild](https://app.daohaus.club/dao/0x64/0xfe1084bc16427e5eb7f13fc19bcd4e641f7d571f) and [The LAO](https://app.daohaus.club/dao/0x1/0x8f56682a50becb1df2fb8136954f2062871bc7fc). 
+
+
+If you've a bug to report or want to contributes, jump to the `🙏 We need your help to make DAOhaus even better` section below for more information. 
+
+If you'd like to join our community, we coordinate and hang out on Discord. To join in the fun, hop onto our [Discord](https://discord.gg/gWH4vt3tWE) and say hi! 
+
+---
 
 ## Development
 
@@ -27,7 +34,7 @@ Set up auto-linting and prettier to be run on file save or in real-time in your 
 
 2. Create your branch
 
-   You will either pull of of the base branch: `develop` or a release branch if working on feature for a bundled release `RELEASE_<release name>`.
+   You will either pull of the base branch: `develop` or a release branch if working on feature for a bundled release `RELEASE_<release name>`.
 
    Branch naming:
 
@@ -42,6 +49,8 @@ Set up auto-linting and prettier to be run on file save or in real-time in your 
 Please fetch the base or relase branch you pulled off of and ensure the latest work is merged into your branch before creating the PR.
 
 PR template is TBD, so just be as descriptive as you can.
+
+---
 
 ## 🙏 We need your help to make DAOhaus even better
 
@@ -61,7 +70,9 @@ Fill in this [form](https://forms.clickup.com/f/83fyz-1425/9CJITRZPWXTAD612RP). 
 
 3. After completing the task, submit a PR (for engineers) or send your work in [Discord's open-chat channel](https://discord.gg/gWH4vt3tWE)
 
-Meanwhile, if there are other ways to better onboard contributors, please reach out to us as well. Thanks in advance again, and we look forward to you joining us in continually DAOhaus a better product for all 🚀
+Meanwhile, if there are other ways to better onboard contributors, please reach out to us. Thanks in advance! 🔥
+
+--- 
 
 ### License
 
