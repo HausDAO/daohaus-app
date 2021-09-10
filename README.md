@@ -43,45 +43,6 @@ Please fetch the base or relase branch you pulled off of and ensure the latest w
 
 PR template is TBD, so just be as descriptive as you can.
 
-### Deployments
-
-1. Deploy to staging
-
-   PR from `develop` or the release branch, `RELEASE_<release name>` into `staging`. CD will deploy to
-
-   `staging.pokemol.com` (kovan)
-
-2. Deploy to production
-
-   PR from `staging` into `production`. CD will deploy to
-
-   `pokemol.com` (mainnet)
-   `kovan.pokemol.com` (kovan)
-   `rinkeby.pokemol.com` (rinkeby)
-   `xdai.pokemol.com` (xdai)
-
-   **Note that our CI/CD will fail if there are eslint code warnings.**
-
-
-### License
-
-DAOhaus is an easy user interface for decentralized autonomous organizations built on the Moloch DAO framework smart contracts <https://github.com/MolochVentures/moloch>. 
-
-Copyright (C) 2021 DAOhaus
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
-
 ## 🙏 We need your help to make DAOhaus even better
 
 Thank you for using DAOhaus and being part of the community. To continually improve the DAOhaus product and better empower coordination among humans globally, we need your help in the following areas:  
@@ -101,4 +62,25 @@ Fill in this [form](https://forms.clickup.com/f/83fyz-1425/9CJITRZPWXTAD612RP). 
 3. After completing the task, submit a PR (for engineers) or send your work in [Discord's open-chat channel](https://discord.gg/gWH4vt3tWE)
 
 Meanwhile, if there are other ways to better onboard contributors, please reach out to us as well. Thanks in advance again, and we look forward to you joining us in continually DAOhaus a better product for all 🚀
+
+### License
+
+DAOhaus is an easy user interface for decentralized autonomous organizations built on the Moloch DAO framework smart contracts <https://github.com/MolochVentures/moloch>. 
+
+Copyright (C) 2021 DAOhaus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/gpl-3.0.txt>.
+
+
 
