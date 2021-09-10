@@ -1,97 +1,169 @@
 [
   {
-    "type": "event",
-    "name": "ProxyCreation",
+    "anonymous": false,
     "inputs": [
       {
-        "type": "address",
+        "indexed": false,
+        "internalType": "contract GnosisSafeProxy",
         "name": "proxy",
-        "internalType": "contract Proxy",
-        "indexed": false
+        "type": "address"
       }
     ],
-    "anonymous": false
+    "name": "ProxyCreation",
+    "type": "event"
   },
   {
-    "type": "function",
-    "stateMutability": "nonpayable",
-    "payable": false,
-    "outputs": [
-      { "type": "address", "name": "proxy", "internalType": "contract Proxy" }
-    ],
-    "name": "calculateCreateProxyWithNonceAddress",
+    "constant": false,
     "inputs": [
-      { "type": "address", "name": "_mastercopy", "internalType": "address" },
-      { "type": "bytes", "name": "initializer", "internalType": "bytes" },
-      { "type": "uint256", "name": "saltNonce", "internalType": "uint256" }
-    ],
-    "constant": false
-  },
-  {
-    "type": "function",
-    "stateMutability": "nonpayable",
-    "payable": false,
-    "outputs": [
-      { "type": "address", "name": "proxy", "internalType": "contract Proxy" }
+      {
+        "internalType": "address",
+        "name": "masterCopy",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
     "name": "createProxy",
-    "inputs": [
-      { "type": "address", "name": "masterCopy", "internalType": "address" },
-      { "type": "bytes", "name": "data", "internalType": "bytes" }
-    ],
-    "constant": false
-  },
-  {
-    "type": "function",
-    "stateMutability": "nonpayable",
-    "payable": false,
     "outputs": [
-      { "type": "address", "name": "proxy", "internalType": "contract Proxy" }
-    ],
-    "name": "createProxyWithCallback",
-    "inputs": [
-      { "type": "address", "name": "_mastercopy", "internalType": "address" },
-      { "type": "bytes", "name": "initializer", "internalType": "bytes" },
-      { "type": "uint256", "name": "saltNonce", "internalType": "uint256" },
       {
-        "type": "address",
-        "name": "callback",
-        "internalType": "contract IProxyCreationCallback"
+        "internalType": "contract GnosisSafeProxy",
+        "name": "proxy",
+        "type": "address"
       }
     ],
-    "constant": false
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "type": "function",
-    "stateMutability": "nonpayable",
-    "payable": false,
+    "constant": true,
+    "inputs": [],
+    "name": "proxyRuntimeCode",
     "outputs": [
-      { "type": "address", "name": "proxy", "internalType": "contract Proxy" }
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "proxyCreationCode",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_mastercopy",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "initializer",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saltNonce",
+        "type": "uint256"
+      }
     ],
     "name": "createProxyWithNonce",
-    "inputs": [
-      { "type": "address", "name": "_mastercopy", "internalType": "address" },
-      { "type": "bytes", "name": "initializer", "internalType": "bytes" },
-      { "type": "uint256", "name": "saltNonce", "internalType": "uint256" }
+    "outputs": [
+      {
+        "internalType": "contract GnosisSafeProxy",
+        "name": "proxy",
+        "type": "address"
+      }
     ],
-    "constant": false
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "type": "function",
-    "stateMutability": "pure",
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_mastercopy",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "initializer",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saltNonce",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract IProxyCreationCallback",
+        "name": "callback",
+        "type": "address"
+      }
+    ],
+    "name": "createProxyWithCallback",
+    "outputs": [
+      {
+        "internalType": "contract GnosisSafeProxy",
+        "name": "proxy",
+        "type": "address"
+      }
+    ],
     "payable": false,
-    "outputs": [{ "type": "bytes", "name": "", "internalType": "bytes" }],
-    "name": "proxyCreationCode",
-    "inputs": [],
-    "constant": true
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "type": "function",
-    "stateMutability": "pure",
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_mastercopy",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "initializer",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "saltNonce",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculateCreateProxyWithNonceAddress",
+    "outputs": [
+      {
+        "internalType": "contract GnosisSafeProxy",
+        "name": "proxy",
+        "type": "address"
+      }
+    ],
     "payable": false,
-    "outputs": [{ "type": "bytes", "name": "", "internalType": "bytes" }],
-    "name": "proxyRuntimeCode",
-    "inputs": [],
-    "constant": true
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]

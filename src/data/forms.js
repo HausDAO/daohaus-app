@@ -439,10 +439,10 @@ export const FORM = {
     tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
-  NEW_NEAPOLITAN_MINION: {
-    required: ['minQuorum', 'minionName'],
-    tx: TX.SUMMON_MINION_NEAPOLITAN,
-    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM]],
+  NEW_SAFE_MINION: {
+    required: ['minQuorum', 'minionName', 'saltNonce'],
+    tx: TX.SUMMON_MINION_SAFE,
+    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
   },
   NEW_NIFTY_MINION: {
     required: ['minQuorum', 'minionName'],

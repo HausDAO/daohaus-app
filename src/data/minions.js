@@ -14,9 +14,9 @@ export const MINION_NETWORKS = {
     '0x89': '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
     '0x4': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
   },
-  // [MINION_TYPES.NEAPOLITAN]: {
-  //   '0x64': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
-  // },
+  [MINION_TYPES.SAFE]: {
+    '0x4': '0x13319a33b862E9B8BA21cb95f15A880247c22Dd2',
+  },
   // [MINION_TYPES.UBER]: {
   //   '0x2a': '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
   //   '0x64': '0xf5106077892992B84c33C35CA8763895eb80B298',
@@ -65,15 +65,17 @@ export const MINION_CONTENT = {
     publisher: 'DAOhaus',
     //  MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
   },
-  [MINION_TYPES.NEAPOLITAN]: {
-    title: 'Neapolitan Minion',
+  [MINION_TYPES.SAFE]: {
+    title: 'Safe Minion',
     description:
-      'Enable multiple interactions with other smart contracts via DAO proposals',
+      'Manage assets & execute transactions by leveraging Gnosis Safe smart wallet capabilities',
     info: [
-      'The Advanced Minion is an upgrade to the Vanilla Minion, enabling you to do multiple smart contract transactions once a proposal is passed.',
-      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimise their proposals velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
+      "This operation will deploy a new Minion and Gnosis Safe for your DAO, and will give your DAO full control over the Safe's assets and transactions. It enables a wide variety of treasury structures and migration paths for your DAO.",
+      'Through this module, your DAO can manage collections of NFTs, manage LP positions with AMMs, and make any other arbitrary interactions.',
+      'It also enables DAOs to upgrade their governance framework over time while keeping the assets in one location.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
     ],
-    //  MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
+    //  MINION_NETWORKS[MINION_TYPES.SAFE],
   },
   // [MINION_TYPES.RARIBLE]: {
   //   title: 'Rarible Minion',
@@ -108,13 +110,6 @@ export const MINIONS = {
     summonForm: FORM.NEW_NIFTY_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },
-  [MINION_TYPES.UBER]: {
-    minionType: MINION_TYPES.UBER,
-    content: MINION_CONTENT[MINION_TYPES.UBER],
-    networks: MINION_NETWORKS[MINION_TYPES.UBER],
-    summonForm: null,
-    settings: SETTINGS_LINKS.UBER_LINK,
-  },
   [MINION_TYPES.SUPERFLUID]: {
     minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
@@ -122,11 +117,18 @@ export const MINIONS = {
     summonForm: FORM.NEW_SUPERFLUID_MINION,
     settings: SETTINGS_LINKS.SF_LINK,
   },
-  [MINION_TYPES.NEAPOLITAN]: {
-    minionType: MINION_TYPES.NEAPOLITAN,
-    content: MINION_CONTENT[MINION_TYPES.NEAPOLITAN],
-    networks: MINION_NETWORKS[MINION_TYPES.NEAPOLITAN],
-    summonForm: FORM.NEW_NEAPOLITAN_MINION,
+  [MINION_TYPES.SAFE]: {
+    minionType: MINION_TYPES.SAFE,
+    content: MINION_CONTENT[MINION_TYPES.SAFE],
+    networks: MINION_NETWORKS[MINION_TYPES.SAFE],
+    summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },
+  // [MINION_TYPES.UBER]: {
+  //   minionType: MINION_TYPES.UBER,
+  //   content: MINION_CONTENT[MINION_TYPES.UBER],
+  //   networks: MINION_NETWORKS[MINION_TYPES.UBER],
+  //   summonForm: null,
+  //   settings: SETTINGS_LINKS.UBER_LINK,
+  // },
 };

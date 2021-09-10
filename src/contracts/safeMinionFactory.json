@@ -1,0 +1,313 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_safeMinionSingleton",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_gnosisSingleton",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_gnosisFallbackLibrary",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_gnosisMultisendLibrary",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "proxy",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "masterCopy",
+				"type": "address"
+			}
+		],
+		"name": "ModuleProxyCreation",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "minion",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "moloch",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "avatar",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "details",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "minionType",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "minQuorum",
+				"type": "uint256"
+			}
+		],
+		"name": "SummonMinion",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "masterCopy",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes",
+				"name": "initializer",
+				"type": "bytes"
+			},
+			{
+				"internalType": "uint256",
+				"name": "saltNonce",
+				"type": "uint256"
+			}
+		],
+		"name": "deployModule",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "proxy",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "gnosisFallbackLibrary",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "gnosisMultisendLibrary",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "gnosisSingleton",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "minionCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "minionList",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "minionType",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "minions",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "moloch",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "details",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "safeMinionSingleton",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_moloch",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_avatar",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_details",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_minQuorum",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_saltNonce",
+				"type": "uint256"
+			}
+		],
+		"name": "summonMinion",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_moloch",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_details",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_minQuorum",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_saltNonce",
+				"type": "uint256"
+			}
+		],
+		"name": "summonMinionAndSafe",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

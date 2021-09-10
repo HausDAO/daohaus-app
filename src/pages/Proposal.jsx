@@ -41,8 +41,6 @@ const Proposal = ({
   useEffect(() => {
     const getMinionAction = async currentProposal => {
       try {
-        console.log('currentProposal.minion', currentProposal);
-        // TODO: need the type here
         const tx = transactionByProposalType(currentProposal);
         const abi = LOCAL_ABI[tx.contract.abiName];
         const web3Contract = createContract({

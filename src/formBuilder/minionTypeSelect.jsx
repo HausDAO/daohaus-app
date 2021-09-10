@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { Flex } from '@chakra-ui/layout';
 
 import { useParams } from 'react-router';
-import { capitalizeWords } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
 import GenericSelect from './genericSelect';
@@ -18,9 +17,10 @@ const noneSelected = {
     'Some minions are generic, meaning that they can be used for many boosts (add-ons), while others are specialized to work within a single protocol.',
   ],
 };
+
 const minions = Object.entries(MINION_TYPES).map(([key, value]) => ({
   id: key,
-  name: capitalizeWords(value),
+  name: MINION_CONTENT[value].title,
   value,
 }));
 
