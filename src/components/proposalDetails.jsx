@@ -250,11 +250,9 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
   }
   // handles case of a funding proposal sending funds to a minion address
   if (
-    [
-      MINION_TYPES.VANILLA,
-      MINION_TYPES.NIFTY,
-      MINION_TYPES.NEAPOLITAN,
-    ].includes(minionType) &&
+    [MINION_TYPES.VANILLA, MINION_TYPES.NIFTY, MINION_TYPES.SAFE].includes(
+      minionType,
+    ) &&
     hideMinionExecuteButton === true
   ) {
     return (

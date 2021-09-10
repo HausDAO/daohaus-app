@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
 import {
   Box,
   Flex,
@@ -18,15 +17,22 @@ import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import AddressAvatar from './addressAvatar';
 import UberHausAvatar from './uberHausAvatar';
 import TextBox from './TextBox';
+import { decodeMultisendTx } from '../utils/abi';
 import { chainByID } from '../utils/chain';
-import { hasMinionActions, PROPOSAL_TYPES } from '../utils/proposalUtils';
+import {
+  hasMinionActions,
+  MINION_TYPES,
+  PROPOSAL_TYPES,
+} from '../utils/proposalUtils';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const ProposalMinionCard = ({ proposal, minionAction }) => {
   const { daochain } = useParams();
+  const { injectedProvider } = useInjectedProvider();
   const { theme } = useCustomTheme();
   const [minionDeets, setMinionDeets] = useState();
   const [decodedData, setDecodedData] = useState();
@@ -48,32 +54,83 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
     }
   }, [minionAction, proposal]);
 
+  const decodeFromEtherscan = async action => {
+    const key = daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+    const url = `${chainByID(daochain).abi_api_url}${action.proxyTo ||
+      action.to}${key && `&apikey=${key}`}`;
+    const response = await fetch(url);
+    return response.json();
+  };
+
+  const checkIfProxy = async (abi, to) => {
+    const contract = new injectedProvider.eth.Contract(abi, to);
+    return contract.methods.implementation().call();
+  };
+
+  const buildEthTransferAction = action => ({
+    name: 'ETH Transfer',
+    params: [
+      {
+        name: 'value',
+        type: 'uint256',
+        value: injectedProvider.utils.toBN(action.value).toString(),
+      },
+    ],
+  });
+
   useEffect(() => {
     const hydrateActions = async () => {
       const promRes = await Promise.all(
         minionDeets.actions.map(async action => {
           const hydratedAction = { ...action };
           try {
-            const key =
-              daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-            const url = `${chainByID(daochain).abi_api_url}${action.proxyTo ||
-              action.to}${key && `&apikey=${key}`}`;
-            const response = await fetch(url);
-            const json = await response.json();
-
+            if (proposal.minion.minionType === MINION_TYPES.SAFE) {
+              const multisendAddress = `${
+                chainByID(daochain).safeMinion.safe_mutisend_addr
+              }`;
+              const decodedMultisend = decodeMultisendTx(
+                multisendAddress,
+                action.data,
+              );
+              hydratedAction.decodedMultisend = decodedMultisend;
+              hydratedAction.decodedData = {
+                name: 'multiSend',
+                actions: await Promise.all(
+                  decodedMultisend.map(async action => {
+                    if (action.data.slice(2).length === 0) {
+                      return buildEthTransferAction(action);
+                    }
+                    const json = await decodeFromEtherscan(action);
+                    if (json.status === '0') {
+                      return null;
+                    }
+                    const parsed = JSON.parse(json.result);
+                    const imp = parsed.find(p => p.name === 'implementation');
+                    if (imp) {
+                      hydratedAction.proxyTo = await checkIfProxy(
+                        parsed,
+                        action.to,
+                      );
+                      return null;
+                    }
+                    abiDecoder.addABI(parsed);
+                    return abiDecoder.decodeMethod(action.data);
+                  }),
+                ),
+              };
+              return hydratedAction;
+            }
+            if (action.data.slice(2).length === 0) {
+              return buildEthTransferAction(action);
+            }
+            const json = await decodeFromEtherscan(action);
             if (json.status === '0') {
               return hydratedAction;
             }
             const parsed = JSON.parse(json.result);
             const imp = parsed.find(p => p.name === 'implementation');
             if (imp) {
-              const rpcUrl = chainByID(daochain).rpc_url;
-              const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-
-              const abi = parsed;
-              const contract = new web3.eth.Contract(abi, action.to);
-              const newaddr = await contract.methods.implementation().call();
-              hydratedAction.proxyTo = newaddr;
+              hydratedAction.proxyTo = await checkIfProxy(parsed, action.to);
               return null;
             }
             abiDecoder.addABI(parsed);
@@ -87,7 +144,6 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
         }),
       );
 
-      console.log('promRes', promRes);
       setDecodedData(promRes);
     };
 
@@ -111,6 +167,22 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
     return <AddressAvatar addr={minionDeets.to} alwaysShowName />;
   };
 
+  const displayActionData = (action, idx) => (
+    <Box key={idx}>
+      <HStack spacing={3}>
+        <TextBox size='xs'>{`Param${idx + 1}:`}</TextBox>
+        <TextBox variant='value'>{action.name}</TextBox>
+      </HStack>
+      <HStack spacing={3}>
+        <TextBox size='xs'>Type:</TextBox>
+        <TextBox variant='value'>{action.type}</TextBox>
+      </HStack>
+      <TextBox size='xs'>Value:</TextBox>
+      <TextBox variant='value'>{action.value.toString()}</TextBox>
+      <Divider my={2} />
+    </Box>
+  );
+
   const displayDecodedData = data => {
     if (data.decodedData) {
       return (
@@ -121,23 +193,25 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           </HStack>
           <Divider my={2} />
           <Box fontFamily='heading' mt={4}>
-            Params
+            {data.decodedData?.params && 'Params'}
+            {data.decodedData?.actions && 'Actions'}
           </Box>
-          {data.decodedData?.params.map((param, idx) => {
-            return (
+          <Divider my={2} />
+          {data.decodedData?.params?.map(displayActionData)}
+          {data.decodedData?.actions?.map((action, idx) => {
+            return action ? (
               <Box key={idx}>
                 <HStack spacing={3}>
-                  <TextBox size='xs'>{`Param${idx + 1}:`}</TextBox>
-                  <TextBox variant='value'>{param.name}</TextBox>
+                  <TextBox size='xs'>
+                    {`Action ${idx + 1}: ${action.name}`}
+                  </TextBox>
                 </HStack>
-                <HStack spacing={3}>
-                  <TextBox size='xs'>Type:</TextBox>
-                  <TextBox variant='value'>{param.type}</TextBox>
-                </HStack>
-                <TextBox size='xs'>Value:</TextBox>
-                <TextBox variant='value'>{param.value.toString()}</TextBox>
-                <Divider my={2} />
+                {action.params.map(displayActionData)}
               </Box>
+            ) : (
+              <TextBox mt={2} size='sm'>
+                Could not decode action data
+              </TextBox>
             );
           })}
         </>
@@ -172,13 +246,6 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 )}
               </>
             )}
-
-            {proposal.minion.minionType === 'Neapolitan minion' &&
-              minionDeets?.actions.length > 0 && (
-                <TextBox size='xs' mb={3}>
-                  Multiple Action Proposal
-                </TextBox>
-              )}
 
             {minionDeets?.actions.length > 0 && (
               <>
@@ -230,16 +297,17 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
             {minionDeets?.actions.map((action, i) => {
               return (
                 <Box key={`${action.to}_${i}`}>
-                  <TextBox size='sm' fontWeight='900'>
-                    Action {i + 1}
-                  </TextBox>
-
+                  {proposal.minion.minionType !== MINION_TYPES.SAFE && (
+                    <TextBox size='sm' fontWeight='900'>
+                      Action {i + 1}
+                    </TextBox>
+                  )}
                   {action.proxyTo ? (
                     <TextBox size='xs'>Target Proxy: {action.proxyTo}</TextBox>
                   ) : (
                     <TextBox size='xs'>Target: {action.to}</TextBox>
                   )}
-                  <TextBox size='xs'>VALUE: {action.value}</TextBox>
+                  <TextBox size='xs'>VALUE: {action.value || '0'}</TextBox>
                   {decodedData && displayDecodedData(decodedData[i])}
                   <Divider my={5} />
                 </Box>
