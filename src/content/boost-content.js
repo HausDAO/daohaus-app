@@ -123,21 +123,6 @@ export const boostList = [
     },
   },
   {
-    name: 'Minion Safe',
-    key: 'minionSafe',
-    description: 'Launch and interact with a Gnosis Safe multisig.',
-    price: '0',
-    comingSoon: true,
-    modalName: 'minionSafeLaunch',
-    dependency: 'vanillaMinions',
-    successRoute: 'minion-safe',
-    settings: true,
-    networks: {
-      all: false,
-      '0x4': true,
-    },
-  },
-  {
     name: 'Superfluid Minion',
     key: 'superfluidMinion',
     description: 'Stream/distribute tokens using Superfluid Protocol.',
@@ -289,11 +274,6 @@ export const superpowerLinks = [
   //   label: 'Proposal Settings',
   //   link: 'settings/proposals',
   // },
-  {
-    boostKey: 'minionSafe',
-    label: 'Minion Safe',
-    link: 'settings/minion-safe',
-  },
   // {
   //   boostKey: 'snapshot',
   //   boostKey: 'SNAPSHOT',
