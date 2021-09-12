@@ -19,6 +19,7 @@ import NEAPOLITAN_MINION from '../contracts/neapolitanMinion.json';
 import SAFE_MINION_FACTORY from '../contracts/safeMinionFactory.json';
 import SAFE_MINION from '../contracts/safeMinion.json';
 import SAFE_MULTISEND from '../contracts/safeMultisend.json';
+import SAFE_SIGNLIB from '../contracts/safeSignMessageLib.json';
 import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import NIFTY_MINION_FACTORY from '../contracts/minionNiftyFactory.json';
 import NIFTY_MINION from '../contracts/minionNifty.json';
@@ -43,6 +44,7 @@ export const LOCAL_ABI = Object.freeze({
   SAFE_MINION_FACTORY,
   SAFE_MINION,
   SAFE_MULTISEND,
+  SAFE_SIGNLIB,
   VANILLA_MINION_FACTORY,
   NIFTY_MINION_FACTORY,
   WRAP_N_ZAP_FACTORY,
@@ -63,6 +65,7 @@ const getBlockExplorerApiKey = chainID => {
     }
   }
 };
+
 const getABIurl = (contractAddress, chainID) => {
   const key = getBlockExplorerApiKey(chainID);
   return key

@@ -33,20 +33,13 @@ const handleSearch = (formsArr, str) => {
   );
 };
 
-const generateNoListMsg = (selectedListID, searchStr) => {
-  if (selectedListID && !searchStr) return 'No Proposals Added';
-  if (selectedListID && !!searchStr)
-    return `Could not find proposal with title ${searchStr}`;
-  if (!selectedListID) return 'Select a Playlist';
-  return 'Not Found';
-};
-
 const ProposalList = ({
   playlists,
   customData,
   selectedListID,
   allForms,
   devList,
+  selectList,
 }) => {
   const { openFormModal, closeModal } = useFormModal();
   const { dispatchPropConfig } = useMetaData();
@@ -89,7 +82,42 @@ const ProposalList = ({
     openFormModal({
       lego: form,
     });
+  const handleSwitchToProposals = () => selectList('all');
 
+  const generateNoListUI = (selectedListID, searchStr) => {
+    if (selectedListID && !searchStr)
+      return (
+        <Flex
+          flexDir='column'
+          justifyContent='center'
+          alignItems='center'
+          h='100%'
+          w='100%'
+        >
+          <TextBox mb={3}>No Proposals Added </TextBox>
+          <TextBox variant='body' textAlign='center'>
+            Go to the{' '}
+            <Button
+              variant='ghost'
+              p={0}
+              h='fit-content'
+              transform='translateY(-1px)'
+              color='secondary.400'
+              onClick={handleSwitchToProposals}
+            >
+              Proposals
+            </Button>{' '}
+            list and star proposals you think should be here.
+          </TextBox>
+        </Flex>
+      );
+    if (selectedListID && !!searchStr)
+      return (
+        <TextBox>Could not find proposal with title ${searchStr}`</TextBox>
+      );
+    if (!selectedListID) return <TextBox>Select a Playlist</TextBox>;
+    return 'Not Found';
+  };
   return (
     <List
       headerSection={
@@ -142,9 +170,7 @@ const ProposalList = ({
             );
           })
         ) : (
-          <NoListItem>
-            <TextBox>{generateNoListMsg(selectedListID, searchStr)}</TextBox>
-          </NoListItem>
+          <NoListItem>{generateNoListUI(selectedListID, searchStr)}</NoListItem>
         )
       }
     />
