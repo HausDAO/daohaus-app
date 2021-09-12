@@ -10,9 +10,11 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+// import TextBox from '../components/TextBox';
 
-export const SubmitErrList = ({ errors = [] }) => {
+export const ErrorList = ({ errors = [] }) => {
   //  determine which errors are submit errors
+
   return (
     <Flex flexDirection='column' alignItems='flex-start'>
       {errors.map((error, index) => (
@@ -43,7 +45,14 @@ export const ModButton = ({ label, callback }) => (
   </Button>
 );
 
-export const FormFooter = ({ options, loading, addOption, errors }) => {
+export const FormFooter = ({
+  options,
+  loading,
+  addOption,
+  errors,
+  ctaText,
+  secondaryBtn,
+}) => {
   if (options?.length) {
     return (
       <Box>
@@ -58,29 +67,44 @@ export const FormFooter = ({ options, loading, addOption, errors }) => {
               type='submit'
               loadingText='Submitting'
               isLoading={loading}
-              disabled={loading}
+              disabled={loading || errors?.length}
               borderBottomLeftRadius='0'
               borderTopLeftRadius='0'
             >
-              Submit
+              {ctaText || 'Submit'}
             </Button>
           </Flex>
-          <SubmitErrList errors={errors} />
+          <ErrorList errors={errors} />
         </Flex>
       </Box>
     );
   }
   return (
-    <Flex justifyContent='flex-end'>
-      <Button
-        type='submit'
-        loadingText='Submitting'
-        isLoading={loading}
-        disabled={loading}
-      >
-        Submit
-      </Button>
-    </Flex>
+    <Box>
+      <Flex justifyContent='flex-end'>
+        <Flex>
+          {secondaryBtn && (
+            <Button
+              type='button'
+              variant='outline'
+              disabled={loading}
+              onClick={secondaryBtn.fn}
+              mr={4}
+            >
+              {secondaryBtn.text}
+            </Button>
+          )}
+          <Button
+            type='submit'
+            loadingText='Submitting'
+            isLoading={loading}
+            disabled={loading || errors?.length}
+          >
+            {ctaText || 'Submit'}
+          </Button>
+        </Flex>
+      </Flex>
+    </Box>
   );
 };
 
@@ -115,3 +139,11 @@ export const AdditionalOptions = ({ options = [], addOption }) => {
     </Box>
   );
 };
+
+// const FormErrorList = formErrorStore => {
+//   return formErrorStore.map(error => (
+//     <TextBox key='error' variant='body'>
+//       {error}
+//     </TextBox>
+//   ));
+// };

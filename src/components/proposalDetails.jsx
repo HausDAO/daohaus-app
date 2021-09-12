@@ -42,7 +42,12 @@ const urlify = text => {
   });
 };
 
-const ProposalDetails = ({ proposal, daoMember, hideMinionExecuteButton }) => {
+const ProposalDetails = ({
+  proposal,
+  daoMember,
+  hideMinionExecuteButton,
+  minionAction,
+}) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
   const { isUberHaus, daoOverview } = useDao();
@@ -110,7 +115,10 @@ const ProposalDetails = ({ proposal, daoMember, hideMinionExecuteButton }) => {
           {proposal?.minionAddress ? (
             <>
               <Box w='100%'>{proposal?.description}</Box>
-              <ProposalMinionCard proposal={proposal} />
+              <ProposalMinionCard
+                proposal={proposal}
+                minionAction={minionAction}
+              />
             </>
           ) : (
             <Skeleton isLoaded={proposal?.description}>
@@ -242,8 +250,9 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
   }
   // handles case of a funding proposal sending funds to a minion address
   if (
-    (minionType === MINION_TYPES.VANILLA ||
-      minionType === MINION_TYPES.NIFTY) &&
+    [MINION_TYPES.VANILLA, MINION_TYPES.NIFTY, MINION_TYPES.SAFE].includes(
+      minionType,
+    ) &&
     hideMinionExecuteButton === true
   ) {
     return (
@@ -259,8 +268,11 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
     );
   }
   if (
-    minionType === MINION_TYPES.VANILLA ||
-    minionType === MINION_TYPES.NIFTY
+    [
+      MINION_TYPES.VANILLA,
+      MINION_TYPES.NIFTY,
+      MINION_TYPES.NEAPOLITAN,
+    ].includes(minionType)
   ) {
     return (
       <MemberIndicator

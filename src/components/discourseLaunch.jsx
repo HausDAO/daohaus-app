@@ -17,8 +17,6 @@ const DiscourseLaunch = ({ handleLaunch, loading, setLoading }) => {
     color: theme.colors.primary[500],
   });
 
-  console.log('theme', theme);
-
   const onSubmit = async () => {
     setLoading(true);
     const boostMetadata = {

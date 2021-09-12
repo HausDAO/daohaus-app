@@ -46,13 +46,19 @@ const NftCard = ({ nft, minion, minionType, ...props }) => {
         </Box>
         <NftCardActionMenu nft={hydratedNft} minion={minion} />
       </Flex>
-      <AspectRatio ratio={1} maxWidth={300} maxHeight={300} m='auto' mb={5}>
-        <Image
-          src={hydratedNft?.image}
-          margin='auto'
-          fit='contain'
-          objectFit='contain'
-        />
+      <AspectRatio
+        ratio={1}
+        maxWidth={300}
+        maxHeight={300}
+        m='auto'
+        mb={5}
+        sx={{
+          '&>img': {
+            objectFit: 'contain',
+          },
+        }}
+      >
+        <Image src={hydratedNft?.image} margin='auto' />
       </AspectRatio>
       <Flex
         direction='row'

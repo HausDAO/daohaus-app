@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
 import {
   RiDiscordFill,
@@ -9,12 +10,17 @@ import {
   RiLinksLine,
 } from 'react-icons/ri';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
 import { fixSocialLink } from '../utils/navLinks';
+import { daoConnectedAndSameChain } from '../utils/general';
 
-const DaoMetaOverview = ({ daoMetaData }) => {
+const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
+  const { daochain, daoid } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
+
   return (
     <Flex as={ContentBox} mt={2} direction='column' w='100%'>
       {daoMetaData && (
@@ -44,6 +50,37 @@ const DaoMetaOverview = ({ daoMetaData }) => {
                   })}
                 </Stack>
               </Flex>
+            </>
+          ) : null}
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainId,
+          ) && +daoMember?.shares > 0 ? (
+            <>
+              <Link
+                as={RouterLink}
+                color='secondary.500'
+                fontFamily='heading'
+                fontSize='xs'
+                textTransform='uppercase'
+                letterSpacing='0.15em'
+                to={`/dao/${daochain}/${daoid}/settings/meta`}
+                mb={3}
+              >
+                Edit Metadata
+              </Link>
+              <Link
+                as={RouterLink}
+                color='secondary.500'
+                fontFamily='heading'
+                fontSize='xs'
+                textTransform='uppercase'
+                letterSpacing='0.15em'
+                to={`/dao/${daochain}/${daoid}/settings/theme`}
+              >
+                Edit Custom Theme
+              </Link>
             </>
           ) : null}
           {daoMetaData.name && (

@@ -1,5 +1,7 @@
+import { BOOSTS } from '../data/boosts';
 import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
+import { addBoostPlaylist, checkIsPlaylist, hasPlaylist } from './playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 const ccoApiUrl = 'https://cco.daohaus.club';
@@ -9,7 +11,6 @@ export const fetchMetaData = async endpoint => {
 
   try {
     const response = await fetch(url);
-
     return response.json();
   } catch (err) {
     throw new Error(err);
@@ -260,6 +261,24 @@ export const ipfsPost = async (creds, file) => {
   }
 };
 
+export const ipfsJsonPin = async (creds, obj) => {
+  const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        pinata_api_key: creds.pinata_api_key,
+        pinata_secret_api_key: creds.pinata_api_secret,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj),
+    });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const post = async (endpoint, data) => {
   const url = `${metadataApiUrl}/${endpoint}`;
   try {
@@ -333,5 +352,130 @@ export const getNftMeta = async url => {
     return response.json();
   } catch (error) {
     throw new Error(error);
+  }
+};
+
+export const updateProposalConfig = async (proposalConfig, params) => {
+  const {
+    meta,
+    injectedProvider,
+    address,
+    network,
+    onError,
+    onSuccess,
+  } = params;
+
+  if (!meta || !injectedProvider || !proposalConfig || !network)
+    throw new Error('proposalConfig => handlePostNewConfig');
+  try {
+    const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
+    const signature = await injectedProvider.eth.personal.sign(
+      messageHash,
+      address,
+    );
+    const updateData = {
+      proposalConfig,
+      contractAddress: meta.contractAddress,
+      network,
+      signature,
+    };
+    const res = await put('dao/update', updateData);
+
+    if (res.error) throw new Error(res.error);
+    onSuccess?.(res, params);
+    return true;
+  } catch (error) {
+    onError?.(error, params);
+    console.error(error);
+  }
+};
+
+export const addBoost = async ({
+  meta,
+  injectedProvider,
+  address,
+  network,
+  boostData,
+  proposalConfig,
+  extraMetaData = {},
+  onSuccess,
+  onError,
+}) => {
+  if (!meta || !injectedProvider || !address || !network)
+    throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
+
+  try {
+    const messageHash = injectedProvider.utils.sha3(meta.contractAddress);
+    const signature = await injectedProvider.eth.personal.sign(
+      messageHash,
+      address,
+    );
+    const updateData = {
+      contractAddress: meta.contractAddress,
+      network,
+      boostKey: boostData.id,
+      metadata: extraMetaData,
+      signature,
+    };
+
+    if (proposalConfig) {
+      const newPropConfig = addBoostPlaylist(
+        proposalConfig,
+        boostData.playlist,
+      );
+      updateData.proposalConfig = newPropConfig;
+    }
+
+    const res = await boostPost('dao/boost', updateData);
+
+    if (res.error)
+      throw new Error(
+        typeof res.error === 'string'
+          ? res.error
+          : 'API rejected playlist update',
+      );
+    onSuccess?.(res);
+    return true;
+  } catch (error) {
+    onError?.(error);
+  }
+};
+
+export const handleExtractBoosts = ({ daoMetaData, returnIDs = false }) => {
+  const IDs = [
+    ...new Set(
+      Object.keys(daoMetaData.boosts).reduce((array, boostKey) => {
+        if (BOOSTS[boostKey]) {
+          return [...array, BOOSTS[boostKey].id];
+        }
+        return array;
+      }, []),
+    ),
+  ];
+  if (returnIDs) return IDs;
+  return IDs.map(boostKey => BOOSTS[boostKey]);
+};
+
+export const handleRestorePlaylist = async params => {
+  const { meta, playlist, proposalConfig, onError } = params;
+  const isPlaylistType = checkIsPlaylist(playlist);
+  const isMissingPlaylist = hasPlaylist(meta, playlist) === false;
+  if (isPlaylistType && isMissingPlaylist) {
+    const newProposalConfig = {
+      ...proposalConfig,
+      playlists: [...proposalConfig.playlists, playlist],
+    };
+    return updateProposalConfig(newProposalConfig, params);
+  }
+  if (!isPlaylistType) {
+    console.log('Is Playlist:', checkIsPlaylist(playlist));
+    console.log('params: ', params);
+
+    onError?.(new Error('Playlist data does not match playlist model'), params);
+  }
+  if (!isMissingPlaylist) {
+    console.log('Has Playlist', hasPlaylist(meta, playlist));
+    console.log('params: ', params);
+    onError?.(new Error('DAO already has playlist'), params);
   }
 };

@@ -30,6 +30,12 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
       const minions = daoOverview?.minions.length;
       return minions;
     }
+    if (boostKey === 'advanced minion') {
+      const hasNeapolitan = daoOverview?.minions.some(
+        min => min.minionType === 'neapolitan minion',
+      );
+      return hasNeapolitan;
+    }
     const boostData = daoMetaData.boosts[boostKey];
     return boostData && boostData.active;
   };

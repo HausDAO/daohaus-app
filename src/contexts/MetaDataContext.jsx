@@ -4,9 +4,11 @@ import React, {
   createContext,
   useEffect,
   useRef,
+  useReducer,
 } from 'react';
 
 import { useParams } from 'react-router-dom';
+import { proposalConfigReducer } from '../reducers/proposalConfig';
 import { fetchMetaData } from '../utils/metadata';
 
 import { useCustomTheme } from './CustomThemeContext';
@@ -21,6 +23,10 @@ export const MetaDataProvider = ({ children }) => {
 
   const [customTerms, setCustomTerms] = useState(null);
   const [daoMetaData, setDaoMetaData] = useState(null);
+  const [daoProposals, dispatchPropConfig] = useReducer(
+    proposalConfigReducer,
+    null,
+  );
 
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
@@ -39,15 +45,16 @@ export const MetaDataProvider = ({ children }) => {
         })?.meta;
 
       if (daoMeta && shouldUpdateTheme.current) {
-        if (daoMeta.customTheme) {
-          updateTheme(daoMeta.customTheme);
+        if (daoMeta.customThemeConfig) {
+          updateTheme(daoMeta.customThemeConfig);
         } else {
           resetTheme();
         }
-        if (daoMeta.customTerms) {
-          setCustomTerms(daoMeta.customTerms);
+        if (daoMeta.customTermsConfig) {
+          setCustomTerms(daoMeta.customTermsConfig);
         }
         setDaoMetaData(daoMeta);
+        dispatchPropConfig({ action: 'INIT', payload: daoMeta });
         shouldUpdateTheme.current = false;
       }
     }
@@ -58,15 +65,16 @@ export const MetaDataProvider = ({ children }) => {
       try {
         const [data] = await fetchMetaData(daoid);
         if (shouldUpdateTheme.current && !daoMetaData) {
-          if (data.customTheme) {
-            updateTheme(data.customTheme);
+          if (data.customThemeConfig) {
+            updateTheme(data.customThemeConfig);
           } else {
             resetTheme();
           }
-          if (data.customTerms) {
-            setCustomTerms(data.customTerms);
+          if (data.customTermsConfig) {
+            setCustomTerms(data.customTermsConfig);
           }
           setDaoMetaData(data);
+          dispatchPropConfig({ action: 'INIT', payload: data });
           shouldUpdateTheme.current = false;
         }
       } catch (error) {
@@ -82,15 +90,17 @@ export const MetaDataProvider = ({ children }) => {
     try {
       const [data] = await fetchMetaData(daoid);
       if (shouldUpdateTheme.current && !daoMetaData) {
-        if (data.customTheme) {
-          updateTheme(data.customTheme);
+        if (data.customThemeConfig) {
+          updateTheme(data.customThemeConfig);
         } else {
           resetTheme();
         }
-        if (data.customTerms) {
-          setCustomTerms(data.customTerms);
+        if (data.customTermsConfig) {
+          setCustomTerms(data.customTermsConfig);
         }
+        console.log('setting metadata', data);
         setDaoMetaData(data);
+        dispatchPropConfig({ action: 'INIT', payload: data });
         shouldUpdateTheme.current = false;
       }
     } catch (error) {
@@ -109,6 +119,8 @@ export const MetaDataProvider = ({ children }) => {
       value={{
         daoMetaData,
         customTerms,
+        daoProposals,
+        dispatchPropConfig,
         hasFetchedMetadata,
         shouldUpdateTheme,
         refetchMetaData,
@@ -122,14 +134,18 @@ export const MetaDataProvider = ({ children }) => {
 export const useMetaData = () => {
   const {
     daoMetaData,
+    daoProposals,
     hasFetchedMetadata,
+    dispatchPropConfig,
     shouldUpdateTheme,
     customTerms,
     refetchMetaData,
   } = useContext(MetaDataContext);
   return {
     daoMetaData,
+    daoProposals,
     hasFetchedMetadata,
+    dispatchPropConfig,
     shouldUpdateTheme,
     customTerms,
     refetchMetaData,

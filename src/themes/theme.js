@@ -141,6 +141,7 @@ export const createTheme = daoTheme => {
           fontSize: 'm',
           color: 'mode.900',
           lineHeight: 'tall',
+          overflowX: 'hidden',
         },
         a: {
           transition: 'all 0.15s linear',

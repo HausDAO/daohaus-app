@@ -13,6 +13,7 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
   // const { daoMetaData } = useMetaData();
 
   const { address } = useInjectedProvider();
+
   const navLinks =
     dao?.chainID && dao?.daoID && dao.daoProposals && dao.daoVaults
       ? generateDaoLinks(
@@ -37,8 +38,8 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
             <NavLink
               key={link.path || link.href}
               label={
-                dao?.customTerms
-                  ? getTerm(dao.customTerms, link.label)
+                dao?.customTermsConfig
+                  ? getTerm(dao.customTermsConfig, link.label)
                   : link.label
               }
               path={link.path}

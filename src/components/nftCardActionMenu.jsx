@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router';
 import {
   Menu,
@@ -11,43 +11,37 @@ import {
 } from '@chakra-ui/react';
 import { BsThreeDots } from 'react-icons/bs';
 
-import { useOverlay } from '../contexts/OverlayContext';
+import { useDao } from '../contexts/DaoContext';
+import { useFormModal } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import GenericModal from '../modals/genericModal';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const NftCardActionMenu = ({ nft, minion }) => {
+  const { daoOverview } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
-  const { setGenericModal } = useOverlay();
-  const [modalData, setModalData] = useState(null);
+  const { openFormModal } = useFormModal();
 
   const handleActionClick = action => {
-    setModalData({
-      id: action.modalName,
-      formLego: {
+    const currentMinion = daoOverview.minions.find(
+      m => m.minionAddress === minion,
+    );
+    openFormModal({
+      lego: {
         ...action.formLego,
         localValues: {
           ...action.localValues,
-          minionAddress: minion,
-          nftImage: nft.metadata?.image,
+          minionAddress: currentMinion.minionAddress,
+          safeAddress: currentMinion.safeAddress,
         },
       },
     });
-    setGenericModal({ [action.modalName]: true });
   };
 
   return (
     <>
-      {modalData && (
-        <GenericModal
-          modalId={modalData.id}
-          formLego={modalData.formLego}
-          closeOnOverlayClick
-        />
-      )}
       <Menu isDisabled>
         <MenuButton
           as={Button}

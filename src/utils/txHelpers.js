@@ -1,8 +1,13 @@
 import Web3 from 'web3';
 
-import { detailsToJSON } from './general';
+import { detailsToJSON, filterObject, HASH } from './general';
 import { valToDecimalString } from './tokenValue';
-import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
+import {
+  encodeMultisendTx,
+  getABIsnippet,
+  getContractABI,
+  safeEncodeHexFunction,
+} from './abi';
 import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
 import { createContract } from './contract';
@@ -11,7 +16,6 @@ import { PROPOSAL_TYPES } from './proposalUtils';
 import { TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
-
 const getPath = pathString =>
   pathString
     .slice(1)
@@ -21,15 +25,18 @@ const getPath = pathString =>
 const getConditions = pathString =>
   pathString.split(' || ').filter(str => str !== '' || str !== ' ');
 
+const splitByTemplates = string => string.split(/{|}/g).filter(Boolean);
+
 const searchData = (data, fields, shouldThrow = true) => {
   if (data == null || fields == null) {
     throw new Error('txHelpers => searchData(): data or fields is empty');
   }
+
   if (!fields?.length) return data;
   const newData = data[fields[0]];
   if (newData == null) {
     if (shouldThrow) {
-      console.log('searchData error', data, fields);
+      console.log('data, fields', data, fields);
       throw new Error(`txHelpers => searchData()`);
     } else {
       return false;
@@ -52,44 +59,73 @@ const handleConditionalPaths = (data, paths) => {
   }
   if (nextString) return nextString;
   throw new Error(
-    `txHelpers => handleFallback: Dead end, bruh. No values found for given conditional paths`,
+    `txHelpers => handleFallback: No values found for given conditional paths`,
   );
 };
 
 const buildJSONdetails = (data, fields) => {
   const newObj = {};
   for (const key in fields) {
-    const isSearchPath = fields[key][0] === '.';
-    if (isSearchPath) {
+    const value = fields[key];
+    if (typeof value === 'string' && value.includes('||')) {
+      const paths = getConditions(value);
+      if (!paths.length)
+        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+      const result = handleConditionalPaths(data, paths);
+      newObj[key] = result;
+    } else if (fields[key][0] === '.') {
       const path = getPath(fields[key]);
       newObj[key] = searchData(data, path);
     } else {
       newObj[key] = fields[key];
     }
   }
-
-  return JSON.stringify(newObj);
+  const cleanValues = filterObject(newObj, val => {
+    return val !== HASH.EMPTY_FIELD;
+  });
+  return JSON.stringify(cleanValues);
 };
 
 const argBuilderCallback = Object.freeze({
-  proposeAction({ values, hash, formData }) {
+  proposeActionVanilla({ values, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
       collapse(values, '*ABI_ARG*', 'array'),
     );
     const details = detailsToJSON({
       ...values,
-      hash,
       minionType: formData.minionType,
     });
+    return [values.targetContract, values.minionValue || '0', hexData, details];
+  },
+  proposeActionNifty({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+
+    const details = detailsToJSON({
+      ...values,
+      minionType: formData.minionType,
+    });
+
     return [
       values.targetContract,
-      values.minionPayment || '0',
+      values.minionValue || '0',
       hexData,
       details,
+      values.paymentToken,
+      values.paymentRequested,
     ];
   },
 });
+
+const handleSearch = (data, arg) => {
+  const path = getPath(arg);
+  if (!path.length)
+    throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+  return searchData(data, path);
+};
 
 const gatherArgs = data => {
   const { tx } = data;
@@ -105,10 +141,7 @@ const gatherArgs = data => {
     }
     //  takes in search notation. Performs recursive search for application data
     if (arg[0] === '.') {
-      const path = getPath(arg);
-      if (!path.length)
-        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
-      return searchData(data, path);
+      return handleSearch(data, arg);
     }
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
@@ -120,8 +153,36 @@ const gatherArgs = data => {
         ...data,
         tx: { ...tx, gatherArgs: arg.gatherArgs },
       });
-      console.log(args);
       return safeEncodeHexFunction(getABIsnippet(arg), args);
+    }
+    if (arg.type === 'encodeSafeActions') {
+      return encodeMultisendTx(
+        getABIsnippet(arg),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.to },
+        }).flatMap(a => a),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.value },
+        }).flatMap(a => a),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.data },
+        }).flatMap(a => a),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.operation },
+        }).flatMap(a => a),
+      );
+    }
+    if (arg.type === 'nestedArgs') {
+      return arg.gatherArgs.flatMap(a => {
+        return gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: [a] },
+        });
+      });
     }
     //  for convenience, will search the values object for a field with the given string.
     return arg;
@@ -154,74 +215,22 @@ export const getArgs = data => {
   );
 };
 
-// export const MolochTransaction = async ({
-//   args,
-//   poll,
-//   onTxHash,
-//   contextData,
-//   injectedProvider,
-//   tx,
-// }) => {
-//   const { daoid, daochain, daoOverview, address } = contextData;
-//   return MolochService({
-//     web3: injectedProvider,
-//     daoAddress: daoid,
-//     chainID: daochain,
-//     version: daoOverview.version,
-//   })(tx.name)({
-//     args,
-//     address,
-//     poll,
-//     onTxHash,
-//   });
-// };
-// export const MinionTransaction = async ({
-//   args,
-//   poll,
-//   onTxHash,
-//   contextData,
-//   injectedProvider,
-//   values,
-//   tx,
-// }) => {
-//   const { daochain, daoOverview, address } = contextData;
-//   const minionAddress = values.minionAddress || values.selectedMinion;
-//   return MinionService({
-//     web3: injectedProvider,
-//     minion: minionAddress,
-//     chainID: daochain,
-//     version: daoOverview.version,
-//   })(tx.name)({
-//     args,
-//     address,
-//     poll,
-//     onTxHash,
-//   });
-// };
-
-// export const TokenTransaction = async ({
-//   args,
-//   poll,
-//   onTxHash,
-//   contextData,
-//   injectedProvider,
-//   values,
-//   tx,
-// }) => {
-//   const { daochain, daoOverview, address } = contextData;
-//   const { tokenAddress } = values;
-//   return TokenService({
-//     web3: injectedProvider,
-//     tokenAddress,
-//     chainID: daochain,
-//     version: daoOverview.version,
-//   })(tx.name)({
-//     args,
-//     address,
-//     poll,
-//     onTxHash,
-//   });
-// };
+export const createHydratedString = data => {
+  const { string } = data;
+  if (!string)
+    throw new Error(
+      'txHelpers.js => createHydratedString: string does not exist',
+    );
+  const fragments = splitByTemplates(string);
+  return fragments
+    .map(fragment => {
+      if (fragment[0] === '.') {
+        return handleSearch(data, fragment);
+      }
+      return fragment;
+    })
+    .join('');
+};
 
 export const getContractAddress = data => {
   const { contractAddress } = data.tx.contract;
@@ -244,9 +253,9 @@ export const Transaction = async data => {
     chainID: contextData.daochain,
     web3: injectedProvider,
   });
-  console.log(web3Contract);
   const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
+
   return transaction
     .send('eth_requestAccounts', { from: contextData.address })
     .on('transactionHash', txHash => {
@@ -283,18 +292,18 @@ export const createActions = ({ tx, uiControl, stage }) => {
   //   cachePoll,
   //   refetch,
   //   setTxInfoModal,
-  //   setProposalModal,
+  //   setModal,
   //   setGenericModal
   // };
   const actions = {
     closeProposalModal() {
-      uiControl.setProposalModal(false);
+      uiControl?.setModal?.(false);
     },
     openTxModal() {
-      uiControl.setTxInfoModal(true);
+      uiControl?.setTxInfoModal?.(true);
     },
     closeGenericModal() {
-      uiControl.setGenericModal({});
+      uiControl?.setGenericModal?.({});
     },
   };
 
@@ -353,7 +362,6 @@ export const handleFieldModifiers = appData => {
     if (field.modifiers) {
       //  check to see that all modifiers are valid
       field.modifiers.forEach(mod => {
-        console.log(`mod`, mod);
         const modifiedVal = fieldModifiers[mod](newValues[field.name], appData);
         newValues[field.name] = modifiedVal;
       });
@@ -370,6 +378,9 @@ export const transactionByProposalType = proposal => {
   }
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return TX.SUPERFLUID_MINION_EXECUTE;
+  }
+  if (proposal.minion.minionType === PROPOSAL_TYPES.MINION_SAFE) {
+    return TX.MINION_SAFE_EXECUTE;
   }
   return TX.MINION_SIMPLE_EXECUTE;
 };

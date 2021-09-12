@@ -76,6 +76,7 @@ const RateInput = ({
         );
         const newRate = parseFloat(tokenRate / rates[baseRate]).toFixed(10);
         setRatePerSec(newRate);
+
         setValue('weiRatePerSec', weiRatePerSec);
       }
     };

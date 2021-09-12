@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -10,10 +10,16 @@ import MainViewLayout from '../components/mainViewLayout';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getTerm, getTitle } from '../utils/metadata';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const Proposals = React.memo(({ proposals, activities, customTerms }) => {
-  const { daoid, daochain } = useParams();
+  const { daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+  const { setProposalSelector } = useOverlay();
+
+  const openProposalSelector = () => {
+    setProposalSelector(true);
+  };
 
   const ctaButton = daoConnectedAndSameChain(
     address,
@@ -21,10 +27,9 @@ const Proposals = React.memo(({ proposals, activities, customTerms }) => {
     daochain,
   ) && (
     <Button
-      as={RouterLink}
-      to={`/dao/${daochain}/${daoid}/proposals/new`}
       rightIcon={<RiAddFill />}
       title={getTitle(customTerms, 'Proposal')}
+      onClick={openProposalSelector}
     >
       New {getTerm(customTerms, 'proposal')}
     </Button>
