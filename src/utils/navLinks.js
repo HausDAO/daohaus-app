@@ -46,10 +46,7 @@ export const generateDaoLinks = (chainID, daoID, proposals, vaults) => {
     links = links.filter(link => link.label !== 'Gallery');
   }
   return links.map(link => {
-    let path = `/dao/${chainID}/${daoID}/${link.path}`;
-    if (link.path === 'proposals' && !proposals.length) {
-      path = `${path}/new`;
-    }
+    const path = `/dao/${chainID}/${daoID}/${link.path}`;
     return {
       ...link,
       path,

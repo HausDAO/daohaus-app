@@ -27,12 +27,15 @@ export const DaoMemberProvider = ({
 
   useEffect(() => {
     const checkForMember = daoMembers => {
-      return daoMembers.find(member => member.memberAddress === address);
+      return daoMembers.find(
+        member => member.memberAddress === address && +member.shares > 0,
+      );
     };
 
     if (daoMembers) {
       if (currentMemberRef.current !== address) {
         const currentMember = checkForMember(daoMembers);
+
         if (currentMember) {
           setDaoMember(currentMember);
           setIsMember(true);

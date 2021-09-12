@@ -12,6 +12,7 @@ const FieldWrapper = ({
   info,
   htmlFor,
   helperText,
+  hidden,
   btn,
   error,
   required,
@@ -22,11 +23,17 @@ const FieldWrapper = ({
 }) => {
   const width = useMemo(() => {
     if (w) return w;
-    if (layout === 'singleRow') return '100%';
-    return ['100%', null, '48%'];
+    // if (layout === 'singleRow') return '100%';
+    // return ['100%', null, '48%'];
   }, [w, layout]);
   return (
-    <Flex w={width} mb={mb || 3} flexDir='column' {...containerProps}>
+    <Flex
+      w={width}
+      mb={mb || 3}
+      flexDir='column'
+      {...containerProps}
+      hidden={hidden}
+    >
       <Flex>
         <TextBox as={FormLabel} size='xs' htmlFor={htmlFor} position='relative'>
           {required && (

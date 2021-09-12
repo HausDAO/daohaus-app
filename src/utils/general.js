@@ -1,7 +1,13 @@
+import { randomBytes } from 'crypto';
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 import Web3 from 'web3';
 import { validate } from './validation';
+
+export const HASH = {
+  EMPTY_FIELD: 'e3bb180f-dda4-46e0-8ba5-7b24e7b00855',
+  AWAITING_VALUE: '13345e28-135b-46ed-8047-716324197a6b',
+};
 
 export const SECONDS = {
   PER_MINUTE: 60,
@@ -36,7 +42,7 @@ export const calcSeconds = (val, unit) => {
   return false;
 };
 
-export const pipe = (...fns) => x => fns.reduce((prev, func) => func(prev), x);
+export const pipe = fns => x => fns.reduce((prev, func) => () => func(prev), x);
 
 export const parseIfJSON = data => {
   try {
@@ -98,6 +104,10 @@ export const detailsToJSON = values => {
   if (values.minionType) {
     details.minionType = values.minionType;
   }
+  if (values.fundsRequested) {
+    details.fundsRequested = values.fundsRequested;
+    details.token = values.token;
+  }
   return JSON.stringify(details);
 };
 
@@ -120,13 +130,24 @@ export const filterObject = (object, callback) => {
   for (const key in object) {
     if (callback(object[key], key, index, newObj)) {
       newObj[key] = object[key];
-      index += 1;
     }
+    index += 1;
   }
   return newObj;
 };
-export const getObjectLength = object => Object.keys(object).length;
+export const getObjectLength = object =>
+  object ? Object.keys(object).length : 0;
 export const isObjectEmpty = object => getObjectLength(object) === 0;
+
+export const areAnyFields = (param, obj) => {
+  if (!obj || !param) return;
+  if (param === 'truthy') {
+    return Object.values(obj).some(field => field);
+  }
+  if (param === 'falsy') {
+    return Object.values(obj).some(field => !field);
+  }
+};
 
 export const numberWithCommas = num => {
   if (num === 0) return 0;
@@ -138,6 +159,11 @@ export const numberWithCommas = num => {
     parseInt(localNum.split('.')[1]) === 0
       ? localNum.split('.')[0]
       : parseFloat(localNum);
+
+  const localNoZeroDec =
+    typeof noZeroDec !== 'string' ? noZeroDec.toString() : noZeroDec;
+  if (localNoZeroDec.includes(`e-`)) return localNoZeroDec;
+
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
@@ -190,6 +216,14 @@ export const capitalize = string => {
   if (string) {
     return string[0].toUpperCase() + string.slice(1);
   }
+};
+export const capitalizeWords = string => {
+  if (!string) return null;
+  const words = string.split(' ');
+  if (words?.length <= 1) {
+    return capitalize(words);
+  }
+  return words.map(word => capitalize(word)).join(' ');
 };
 
 export const daoConnectedAndSameChain = (
@@ -271,3 +305,20 @@ export const isSameAddress = (addr1, addr2) => {
   if (typeof addr1 !== 'string' || typeof addr2 !== 'string') return null;
   return addr1.toLowerCase() === addr2.toLowerCase();
 };
+
+export const getKeyedArray = (obj, keyName = 'field') => {
+  if (!obj) {
+    console.error('Receieved falsy value for object in getKeyedArray');
+    return null;
+  }
+  if (isObjectEmpty(obj)) {
+    console.warn('Object passed to getKeyedArray is Empty');
+    return [];
+  }
+  return Object.entries(obj).map(item => ({ ...item[1], [keyName]: item[0] }));
+};
+
+export const isLastItem = (list, index) => index === list?.length - 1;
+export const isFirstItem = (list, index) => index === 0;
+
+export const generateNonce = () => `0x${randomBytes(32).toString('hex')}`;
