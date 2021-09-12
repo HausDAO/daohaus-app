@@ -37,6 +37,7 @@ export const supportedChains = {
     safeMinion: {
       minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
   },
   '0x4': {
@@ -68,6 +69,7 @@ export const supportedChains = {
     safeMinion: {
       minion_factory_addr: '0x3f13ABc8931c0e381Ce6d1Be9f978aE6E9d99Cb8',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
@@ -119,6 +121,7 @@ export const supportedChains = {
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
   },
   '0x64': {
@@ -148,6 +151,7 @@ export const supportedChains = {
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
@@ -198,6 +202,7 @@ export const supportedChains = {
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',

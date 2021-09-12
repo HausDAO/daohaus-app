@@ -37,6 +37,11 @@ export const CONTRACTS = {
     abiName: 'NEAPOLITAN_MINION',
     contractAddress: '.values.selectedMinion',
   },
+  SELECTED_MINION_SAFE: {
+    location: 'local',
+    abiName: 'SAFE_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
   ERC_20: {
     location: 'local',
     abiName: 'ERC_20',
@@ -76,6 +81,11 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'SAFE_MULTISEND',
     contractAddress: '.contextData.chainConfig.safeMinion.safe_mutisend_addr',
+  },
+  LOCAL_SAFE_SIGNLIB: {
+    location: 'local',
+    abiName: 'SAFE_SIGNLIB',
+    contractAddress: '.contextData.chainConfig.safeMinion.safe_sign_lib_addr',
   },
   LOCAL_ERC_20: {
     location: 'local',
@@ -217,7 +227,7 @@ export const DETAILS = {
     description: '.values.raribleDescription',
     link: '.values.image',
     proposalType: '.formData.type',
-    minionType: MINION_TYPES.NEAPOLITAN,
+    minionType: MINION_TYPES.SAFE,
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
   },
@@ -784,7 +794,7 @@ export const TX = {
     successMsg: 'Wrap-N-Zap Poke Successful!',
   },
   SELL_NFT_RARIBLE: {
-    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
@@ -793,44 +803,61 @@ export const TX = {
     successMsg: 'Proposal Submitted',
     gatherArgs: [
       {
-        type: 'nestedArgs',
-        gatherArgs: ['.values.nftAddress', '.values.selectedMinion'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['0', '0'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: [
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
           {
-            type: 'encodeHex',
-            contract: CONTRACTS.ERC_721,
-            fnName: 'setApprovalForAll',
+            type: 'nestedArgs',
             gatherArgs: [
-              '.contextData.chainConfig.rarible.nft_transfer_proxy',
-              'true',
-            ],
-          },
-          {
-            type: 'encodeHex',
-            contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
-            fnName: 'sign',
-            gatherArgs: [
-              '.values.eip712HashValue',
-              '.values.signatureHash',
-              '0x1626ba7e',
+              '.values.nftAddress',
+              '.contextData.chainConfig.safeMinion.safe_sign_lib_addr',
             ],
           },
         ],
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+        data: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.ERC_721,
+                fnName: 'setApprovalForAll',
+                gatherArgs: [
+                  '.contextData.chainConfig.rarible.nft_transfer_proxy',
+                  'true',
+                ],
+              },
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.LOCAL_SAFE_SIGNLIB,
+                fnName: 'signMessage',
+                gatherArgs: ['.values.signatureHash'],
+              },
+            ],
+          },
+        ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '1'],
+          },
+        ],
       },
-      '.contextData.daoOverview.depositToken.tokenAddress',
-      '0',
+      '.contextData.daoOverview.depositToken.tokenAddress', // _withdrawToken
+      0, // _withdrawAmount
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.SELL_NFT_RARIBLE,
       },
-      'true',
+      true, // _memberOnlyEnabled
     ],
   },
   SET_BUYOUT_NFT: {

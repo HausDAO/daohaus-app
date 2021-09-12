@@ -52,6 +52,9 @@ const RaribleNftSelect = props => {
   const setupOrder = async () => {
     setLoading(true);
 
+    const currentMinion = daoOverview.minions.find(
+      minion => minion.minionAddress === selectedMinion,
+    );
     const guildToken = daoOverview.tokenBalances.find(token => {
       return token.token.tokenAddress === paymentToken;
     });
@@ -60,7 +63,7 @@ const RaribleNftSelect = props => {
       tokenId,
       tokenAddress: paymentToken,
       price: addZeros(sellPrice, guildToken.token.decimals),
-      minionAddress: selectedMinion,
+      minionAddress: currentMinion.safeAddress || currentMinion.minionAddress,
       startDate: isNaN(startDate) ? '0' : startDate,
       endDate: isNaN(endDate) ? '0' : endDate,
     });
