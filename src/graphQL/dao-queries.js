@@ -23,6 +23,7 @@ export const HOME_DAO = gql`
         minionType
         details
         minQuorum
+        safeAddress
         uberHausAddress
         uberHausDelegate
         uberHausDelegateRewardFactor
