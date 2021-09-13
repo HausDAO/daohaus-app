@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import CustomThemeLaunch from './customThemeLaunch';
-import NewMinionForm from '../forms/newMinion';
+import NewMinionForm from '../forms/newMinionForm';
 import NewSuperfluidMinionForm from '../forms/newSuperfluidMinion';
 import NotificationsLaunch from './notificationsLaunch';
 import ProposalTypesLaunch from './proposalTypesLaunch';
@@ -11,7 +11,6 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import DiscourseLaunch from './discourseLaunch';
-import NewMinionSafe from './newMinionSafe';
 import GenericBoostLaunch from './genericBoostLaunch';
 import SnapshotLaunch from './snapshotLaunch';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -87,18 +86,19 @@ const BoostLaunchWrapper = ({ boost }) => {
         );
       }
       case 'vanillaMinion': {
-        return <NewMinionForm />;
+        return <NewMinionForm minionType='vanilla minion' />;
+      }
+      case 'neapolitanMinion': {
+        return <NewMinionForm minionType='Neapolitan minion' />;
       }
       case 'superfluidMinion': {
         return <NewSuperfluidMinionForm />;
       }
       case 'niftyMinion': {
-        return <NewMinionForm minionType='niftyMinion' />;
+        return <NewMinionForm minionType='nifty minion' />;
       }
-      case 'minionSafe': {
-        return <NewMinionSafe />;
-      }
-      case 'discourse': {
+      // case 'discourse': {
+      case 'DISCOURSE': {
         return (
           <DiscourseLaunch
             handleLaunch={handleLaunch}
@@ -107,7 +107,8 @@ const BoostLaunchWrapper = ({ boost }) => {
           />
         );
       }
-      case 'notificationsLevel1': {
+      // case 'notificationsLevel1': {
+      case 'DISCORD': {
         return (
           <NotificationsLaunch
             handleLaunch={handleLaunch}
@@ -125,7 +126,8 @@ const BoostLaunchWrapper = ({ boost }) => {
           />
         );
       }
-      case 'mintGate': {
+      // case 'mintGate': {
+      case 'MINTGATE': {
         return (
           <GenericBoostLaunch
             boostName='MintGate'

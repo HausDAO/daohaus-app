@@ -2,8 +2,8 @@ import { ethers } from 'ethers';
 import { supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
-import { TX } from '../data/contractTX';
 import { FORM } from '../data/forms';
+import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
 
 export const getReadableBalance = tokenData => {
   if (tokenData?.balance && tokenData.decimals) {
@@ -91,29 +91,30 @@ export const formatNativeData = (daochain, balance) => {
 const tokenFormsString = {
   erc20: 'MINION_SEND_ERC20_TOKEN',
   erc721: 'MINION_SEND_ERC721_TOKEN',
+  erc1155: 'MINION_SEND_ERC155_TOKEN',
   network: 'MINION_SEND_NETWORK_TOKEN',
   sellNifty: 'MINION_SELL_NIFTY',
 };
 
 export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
   const formLego = FORM[`${tokenFormsString[tokenType]}`];
-  let { tx, minionType } = formLego;
 
-  if (vaultMinionType === 'nifty minion') {
-    minionType = MINION_TYPES.NIFTY;
-    tx = TX[`${tokenFormsString[tokenType]}_NIFTY`];
+  if (vaultMinionType === MINION_TYPES.NIFTY) {
+    return {
+      ...formLego,
+      minionType: MINION_TYPES.NIFTY,
+      tx: VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_NIFTY`],
+    };
+  }
+  if (vaultMinionType === MINION_TYPES.SAFE) {
+    return {
+      ...formLego,
+      minionType: MINION_TYPES.SAFE,
+      tx: VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
+    };
   }
 
-  if (vaultMinionType === 'Neapolitan minion') {
-    // minionType = MINION_TYPES.NEAPOLITAN;
-    // tx = TX[`${tokenFormsString[tokenType]}_NEAPOLITAN`];
-  }
-
-  return {
-    ...formLego,
-    tx,
-    minionType,
-  };
+  return formLego;
 };
 
 export const vaultFilterOptions = [
@@ -158,11 +159,11 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
-    case MINION_TYPES.NEAPOLITAN:
+    case MINION_TYPES.SAFE:
       return {
         badgeColor: 'pink',
         badgeTextColor: '#632b16',
-        badgeName: 'NEAPOLITAN',
+        badgeName: 'GNOSIS SAFE',
         badgeVariant: 'outline',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };

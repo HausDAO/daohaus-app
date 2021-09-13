@@ -42,9 +42,7 @@ const RageInput = ({ register, setValue, label, type, max, mb = 2 }) => {
         />
       </InputGroup>
       <FormHelperText>
-        {`You can Rage up to ${max} ${
-          type === 'loot' ? 'loot ' : null
-        } shares.`}
+        {`You can Rage up to ${max} ${type === 'loot' ? 'loot ' : ''} shares.`}
       </FormHelperText>
     </Box>
   );

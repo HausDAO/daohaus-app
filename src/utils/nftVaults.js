@@ -1,4 +1,4 @@
-import { FORM } from '../data/forms';
+import { CORE_FORMS, FORM } from '../data/forms';
 import { getMinionActionFormLego } from './vaults';
 
 // NEXT STEPS:
@@ -10,19 +10,26 @@ import { getMinionActionFormLego } from './vaults';
 
 const defaultConfig = {
   platform: 'unknown',
-  fields: {
-    image: 'getMetadataImage',
-  },
+  fields: {},
   actions: {
-    transfer721: {
+    transfer: {
       menuLabel: 'Transfer NFT',
       tooltTipLabel:
         'Make a proposal to tranfer this nft to the applicant address',
-      modalName: 'transfer721',
+      modalName: 'transfer',
       formLego: FORM.MINION_SEND_ERC721_TOKEN,
-      localValues: ['tokenId', 'contractAddress'],
+      localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
       minionTypeOverride: true,
     },
+    // REVIEW: Should this be under nftConfigs or default config?
+    // sellRarible: {
+    //   menuLabel: 'Sell NFT on Rarible',
+    //   tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
+    //   modalName: 'sell721',
+    //   formLego: FORM.SELL_NFT_RARIBLE,
+    //   localValues: ['tokenId', 'contractAddress'],
+    //   minionTypeOverride: false,
+    // },
   },
 };
 
@@ -40,7 +47,7 @@ const nftConfigs = {
         tooltTipLabel:
           'Make a proposal to set the price of the nft on nifty.ink',
         modalName: 'sellNifty',
-        formLego: FORM.MINION_SELL_NIFTY,
+        formLego: CORE_FORMS.MINION_SELL_NIFTY,
         localValues: ['tokenId', 'contractAddress'],
         minionTypeOverride: true,
       },
@@ -49,9 +56,6 @@ const nftConfigs = {
 };
 
 export const attributeModifiers = Object.freeze({
-  getMetadataImage(nft) {
-    return nft.metadata.image_url ? nft.metadata.image_url : nft.metadata.image;
-  },
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
     if (!description) {
@@ -74,7 +78,8 @@ export const hydrateNftCard = (nft, minionType) => {
       }, {});
     let { formLego } = action;
     if (action.minionTypeOverride) {
-      formLego = getMinionActionFormLego('erc721', minionType);
+      const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
+      formLego = getMinionActionFormLego(nftType, minionType);
     }
     return {
       ...action,

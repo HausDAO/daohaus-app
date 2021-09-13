@@ -13,7 +13,7 @@ import { lookupENS } from '../utils/ens';
 
 const AddressInput = props => {
   const { daoMembers } = useDao();
-  const { name, localForm } = props;
+  const { name, localForm, localValues } = props;
 
   const [textMode, setTextMode] = useState(true);
   const [userAddresses, setAddresses] = useState([]);
@@ -40,7 +40,6 @@ const AddressInput = props => {
         }),
       );
       if (shouldSet) {
-        console.log(`memberProfiles`, memberProfiles);
         setAddresses(memberProfiles);
       }
     };
@@ -51,6 +50,12 @@ const AddressInput = props => {
       shouldSet = false;
     };
   }, [daoMembers]);
+
+  useEffect(() => {
+    if (localValues?.memberAddress) {
+      setValue(name, localValues.memberAddress);
+    }
+  }, [localValues?.memberAddress]);
 
   const switchElement = () => {
     setTextMode(prevState => !prevState);

@@ -29,7 +29,8 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
   useEffect(() => {
     const fetchForumTopics = async () => {
       const topicsRes = await getForumTopics(
-        daoMetaData.boosts.discourse.metadata.categoryId,
+        // daoMetaData.boosts.discourse.metadata.categoryId,
+        daoMetaData.boosts.DISCOURSE.metadata.categoryId,
       );
 
       const topicMatch = topicsRes.find(topic => {
@@ -40,7 +41,8 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
       setForumTopic(topicMatch ? topicMatch.id : null);
     };
 
-    if (daoMetaData?.boosts?.discourse?.active && proposal?.proposalId) {
+    if (daoMetaData?.boosts?.DISCOURSE?.active && proposal?.proposalId) {
+      // if (daoMetaData?.boosts?.discourse?.active && proposal?.proposalId) {
       fetchForumTopics();
     }
   }, [daoMetaData, proposal]);
@@ -59,7 +61,8 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
       ...proposal,
       values: { ...proposal },
       daoMetaData,
-      category: daoMetaData.boosts.discourse.metadata.categoryId,
+      // category: daoMetaData.boosts.discourse.metadata.categoryId,
+      category: daoMetaData.boosts.DISCOURSE.metadata.categoryId,
       sigData: {
         contractAddress: daoid,
         network: injectedChain.network,
@@ -80,7 +83,8 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
 
   return (
     <>
-      {daoMetaData?.boosts?.discourse?.active ? (
+      {/* {daoMetaData?.boosts?.discourse?.active ? ( */}
+      {daoMetaData?.boosts?.DISCOURSE?.active ? (
         <Box width='100%' fontSize='sm' mt={5}>
           {loading ? (
             <Spinner />

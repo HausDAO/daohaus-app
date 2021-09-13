@@ -12,21 +12,32 @@ import {
   inputDataFromABI,
   mapInRequired,
 } from '../utils/formBuilder';
+import { omit } from '../utils/general';
 
 const FormBuilder = props => {
-  const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
+  const {
+    submitTransaction,
+    handleCustomValidation,
+    modifyFields,
+    submitCallback,
+  } = useTX();
   const {
     fields,
     additionalOptions = null,
     required = [],
     localValues,
+    parentForm,
+    next,
+    goToNext,
+    ctaText,
+    secondaryBtn,
   } = props;
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
-
+  const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
-  const localForm = useForm();
+  const localForm = parentForm || useForm({ shouldUnregister: false });
   const { handleSubmit } = localForm;
 
   const addOption = e => {
@@ -34,35 +45,52 @@ const FormBuilder = props => {
       option => option.htmlFor === e.target.value,
     );
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
-    setFields([...formFields, selectedOption]);
+
+    const lastCol = formFields.slice(-1)?.[0];
+    const rest = formFields.slice(0, -1);
+
+    setFields([...rest, [...lastCol, selectedOption]]);
   };
 
   const buildABIOptions = abiString => {
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
+
     if (abiString === 'clear' || abiString === 'hex') {
       setFields(originalFields);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      setFields([...originalFields, ...inputDataFromABI(abiInputs)]);
+      let updatedFields = [
+        ...originalFields[originalFields.length - 1],
+        ...inputDataFromABI(abiInputs),
+      ];
+      if (originalFields.length > 1) {
+        updatedFields = [originalFields[0], updatedFields];
+      }
+      setFields(updatedFields);
     }
   };
 
   const updateErrors = errors => {
-    setFields(prevFields =>
-      prevFields.map(field => {
-        const error = errors.find(error => error.name === field.name);
-        if (error) {
-          return { ...field, error };
+    // REVIEW
+    setFields(prevFields => {
+      const update = field => {
+        if (Array.isArray(field)) {
+          return field.map(update);
         }
-        return { ...field, error: false };
-      }),
-    );
+        const error = errors.find(error => error.name === field.name);
+        return { ...field, error };
+      };
+      return prevFields.map(update);
+    });
   };
   const clearErrors = () => {
-    setFields(prevFields =>
-      prevFields.map(field => ({ ...field, error: false })),
-    );
+    // REVIEW
+    setFields(prevFields => {
+      const clear = f =>
+        Array.isArray(f) ? f.map(clear) : { ...f, error: false };
+      return prevFields.map(clear);
+    });
   };
 
   const onSubmit = async values => {
@@ -71,77 +99,169 @@ const FormBuilder = props => {
     //  Checks for required values
     const missingVals = validateRequired(
       values,
-      formFields.filter(field => field.required),
+      // REVIEW
+      // formFields.filter(field => field.required),
+      formFields.flat(Infinity).filter(field => field.required),
     );
+
     if (missingVals) {
+      console.log('missingVals', missingVals);
       updateErrors(missingVals);
       return;
     }
 
     //  Checks for type errors
-    const typeErrors = checkFormTypes(values, formFields);
+    // REVIEW
+    // const typeErrors = checkFormTypes(values, formFields);
+    const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
     if (typeErrors) {
       updateErrors(typeErrors);
       return;
     }
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-
     const modifiedValues = modifyFields({
       values: collapsedValues,
-      activeFields: formFields,
+      // REVIEW
+      // activeFields: formFields,
+      activeFields: formFields.flat(Infinity),
       formData: props,
       tx: props.tx,
     });
     //  Checks for custom validation
+
     const customValErrors = handleCustomValidation({
       values: modifiedValues,
       formData: props,
     });
+
     if (customValErrors) {
       updateErrors(customValErrors);
       return;
     }
 
-    try {
-      setLoading(true);
-      await submitTransaction({
-        values: modifiedValues,
-        formData: props,
-        localValues,
-        tx: props.tx,
-        lifeCycleFns: {
-          onCatch() {
-            setLoading(false);
+    const handleSubmitCallback = async () => {
+      //  checks if submit is not a contract interaction and is a callback
+      if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+        try {
+          setLoading(true);
+          const res = await submitCallback({
+            values: modifiedValues,
+            formData: props,
+            onSubmit: props.onSubmit,
+          });
+          return res;
+        } catch (error) {
+          console.error(error);
+          setLoading(false);
+        }
+      }
+    };
+    const handleSubmitTX = async () => {
+      try {
+        setLoading(true);
+        const res = await submitTransaction({
+          values: modifiedValues,
+          formData: props,
+          localValues,
+          tx: props.tx,
+          lifeCycleFns: {
+            ...props?.lifeCycleFns,
+            onCatch() {
+              setLoading(false);
+              props?.lifeCycleFns?.onCatch?.();
+            },
+            afterTx() {
+              props?.lifeCycleFns?.afterTx?.();
+            },
           },
-        },
-      });
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
+        });
+        setLoading(false);
+        return res;
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+
+    // const handleConditional = async choice => {
+    //   if (choice.tx && choice.then)
+    //     return () => handleSubmitTX(handleConditional(choice.then));
+    //   if (choice.tx) return () => handleSubmitTX();
+    //   if (choice.callback) return () => handleSubmitCallback();
+    //   if (choice.goTo) return () => goToNext(choice.goTo);
+    // };
+
+    if (next && typeof goToNext === 'function') {
+      return goToNext(next);
+
+      // const choice = next[condition];
+      // return handleConditional(choice)();
     }
+    //  HANDLE CALLBACK ON SUBMIT
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+      return handleSubmitCallback();
+    }
+    //  HANDLE CONTRACT TX ON SUBMIT
+    return handleSubmitTX();
+  };
+
+  const useFormError = () => ({
+    removeError(fieldName) {
+      setFormErrors(prevState => omit(fieldName, prevState));
+    },
+    addError(fieldName, error) {
+      setFormErrors(prevState => ({ ...prevState, [fieldName]: error }));
+    },
+  });
+
+  const renderInputs = (fields, depth = 0) => {
+    return fields.map((field, index) =>
+      Array.isArray(field) ? (
+        <Flex
+          flex={1}
+          flexDir='column'
+          key={`${depth}-${index}`}
+          _notFirst={{ pl: [0, null, 8] }}
+        >
+          {renderInputs(field, depth + 1)}
+        </Flex>
+      ) : (
+        <InputFactory
+          {...field}
+          key={`${depth}-${index}`}
+          minionType={props.minionType}
+          layout={props.layout}
+          localForm={localForm}
+          localValues={localValues}
+          buildABIOptions={buildABIOptions}
+          useFormError={useFormError}
+        />
+      ),
+    );
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl display='flex' mb={5}>
-          <Flex w='100%' flexWrap='wrap' justifyContent='space-between'>
-            {formFields?.map(field => {
-              return (
-                <InputFactory
-                  key={field?.htmlFor || field?.name}
-                  {...field}
-                  minionType={props.minionType}
-                  layout={props.layout}
-                  localForm={localForm}
-                  localValues={localValues}
-                  buildABIOptions={buildABIOptions}
-                />
-              );
-            })}
+          <Flex
+            width='100%'
+            flexDirection={['column', null, 'row']}
+            justifyContent='space-between'
+          >
+            {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <FormFooter options={options} addOption={addOption} loading={loading} />
+        <FormFooter
+          options={options}
+          addOption={addOption}
+          loading={loading}
+          ctaText={ctaText}
+          next={next}
+          goToNext={goToNext}
+          errors={Object.values(formErrors)}
+          secondaryBtn={secondaryBtn}
+        />
       </Flex>
     </form>
   );

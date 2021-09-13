@@ -8,6 +8,7 @@
 //   successMsg: String
 // }
 
+import { HASH } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const CONTRACTS = {
@@ -16,9 +17,29 @@ export const CONTRACTS = {
     abiName: 'MOLOCH_V2',
     contractAddress: '.contextData.daoid',
   },
+  MINION_ACTION: {
+    location: 'fetch',
+    // abiName: 'VANILLA_MINION',
+    contractAddress: '.values.targetContract',
+  },
   SELECTED_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
+  SELECTED_MINION_NIFTY: {
+    location: 'local',
+    abiName: 'NIFTY_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
+  SELECTED_MINION_NEAPOLITAN: {
+    location: 'local',
+    abiName: 'NEAPOLITAN_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
+  SELECTED_MINION_SAFE: {
+    location: 'local',
+    abiName: 'SAFE_MINION',
     contractAddress: '.values.selectedMinion',
   },
   ERC_20: {
@@ -36,6 +57,11 @@ export const CONTRACTS = {
     abiName: 'ERC_721',
     contractAddress: '.localValues.contractAddress',
   },
+  LOCAL_ERC_1155: {
+    location: 'local',
+    abiName: 'ERC_1155',
+    contractAddress: '.localValues.contractAddress',
+  },
   LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -46,10 +72,20 @@ export const CONTRACTS = {
     abiName: 'NIFTY_MINION',
     contractAddress: '.localValues.minionAddress',
   },
-  LOCAL_NEAPOLITAN_MINION: {
+  LOCAL_SAFE_MINION: {
     location: 'local',
-    abiName: 'NEAPOLITAN_MINION',
+    abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
+  },
+  LOCAL_SAFE_MULTISEND: {
+    location: 'local',
+    abiName: 'SAFE_MULTISEND',
+    contractAddress: '.contextData.chainConfig.safeMinion.safe_mutisend_addr',
+  },
+  LOCAL_SAFE_SIGNLIB: {
+    location: 'local',
+    abiName: 'SAFE_SIGNLIB',
+    contractAddress: '.contextData.chainConfig.safeMinion.safe_sign_lib_addr',
   },
   LOCAL_ERC_20: {
     location: 'local',
@@ -66,25 +102,65 @@ export const CONTRACTS = {
     abiName: 'VANILLA_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  MINION_SAFE_EXECUTE: {
+    location: 'local',
+    abiName: 'SAFE_MINION',
+    contractAddress: '.localValues.minionAddress',
+  },
   UBERHAUS_MINION: {
     location: 'local',
     abiName: 'UBERHAUS_MINION',
     contractAddress: '.localValues.minionAddress',
   },
-  SUPERFLUID_MINION: {
+  SUPERFLUID_MINION_LOCAL: {
     location: 'local',
     abiName: 'SUPERFLUID_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  SUPERFLUID_MINION_SELECT: {
+    location: 'local',
+    abiName: 'SUPERFLUID_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
+  SUPERFLUID_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'SUPERFLUID_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.superfluid.minion_factory_addr',
+  },
+  SAFE_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'SAFE_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.safeMinion.minion_factory_addr',
+  },
+  NIFTY_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'NIFTY_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.niftyMinion.minion_factory_addr',
+  },
+  VANILLA_MINION_FACTORY: {
+    location: 'local',
+    abiName: 'VANILLA_MINION_FACTORY',
+    contractAddress: '.contextData.chainConfig.minion_factory_addr',
+  },
   WRAP_N_ZAP_FACTORY: {
     location: 'local',
     abiName: 'WRAP_N_ZAP_FACTORY',
-    contractAddress: '.localValues.contractAddress',
+    contractAddress: '.contextData.chainConfig.wrap_n_zap_factory_addr',
   },
   WRAP_N_ZAP: {
     location: 'local',
     abiName: 'WRAP_N_ZAP',
     contractAddress: '.localValues.contractAddress',
+  },
+  DAO_CONDITIONAL_HELPER: {
+    location: 'local',
+    abiName: 'DAO_CONDITIONAL_HELPER',
+    contractAddress: '.contextData.chainConfig.dao_conditional_helper_addr',
+  },
+  PAYMENT_ERC_20: {
+    location: 'local',
+    abiName: 'ERC_20',
+    contractAddress: 'values.paymentToken',
   },
 };
 
@@ -94,43 +170,73 @@ export const ACTIONS = {
   GENERIC_MODAL: ['closeGenericModal', 'openTxModal'],
 };
 
+//  HASH.EMPTY_FIELD with '||' allows the search to turn up
+//  falsy without crashing searchFields()
+
+//  buildJSONdetails simply filters any values that are HASH.EMPTY_FIELD
+//  any other falsy will get stringified as is.
+
 export const DETAILS = {
   STANDARD_PROPOSAL: {
-    title: '.values.title',
-    description: '.values.description',
-    link: '.values.link.',
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
   },
   VANILLA_MINION_PROPOSAL: {
-    title: '.values.title',
-    description: '.values.description',
+    title: `.values.title`,
+    description: `.values.description`,
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },
   PAYROLL_PROPOSAL: {
-    title: '{minionName} sends a token',
-    description:
-      '{minionName} would like to send {tokenAmount} {tokenSymbol} to {recipient}',
-    proposalType: '.formData.type',
-    minionType: MINION_TYPES.VANILLA,
-  },
-  PAYROLL_PROPOSAL_TEMPORARY: {
     title: 'Minion sends a token',
     description: '.values.description',
     proposalType: '.formData.type',
-    minionType: MINION_TYPES.VANILLA,
+    minionType: '.formData.minionType',
   },
-  MINION_ERC721_TRANSFER: {
+  MINION_NFT_TRANSFER: {
     title: 'Minion sends a NFT',
     description: '.values.description',
     proposalType: '.formData.type',
-    minionType: MINION_TYPES.VANILLA,
   },
   MINION_SELL_NIFTY: {
     title: 'Minion sets Nifty price',
     description: '.values.description',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
+  },
+  MINION_BUY_NIFTY: {
+    title: 'Minion Buys a NiftyInk',
+    description: '.values.nftMetadata.name',
+    link: '.values.nftMetadata.image',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.NIFTY,
+  },
+  SUPERFLUID_STREAM: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    recipient: '.values.applicant',
+    token: '.values.paymentToken',
+    tokenRate: '.values.rateString',
+  },
+  SELL_NFT_RARIBLE: {
+    title: 'Rarible NFT Sell Order',
+    description: '.values.raribleDescription',
+    link: '.values.image',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+    orderIpfsHash: '.values.ipfsOrderHash',
+    eip712HashValue: '.values.eip712HashValue',
+  },
+  SET_BUYOUT_NFT: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.NEAPOLITAN,
   },
 };
 
@@ -222,7 +328,18 @@ export const TX = {
     display: 'Propose Minion Action',
     errMsg: 'Error submitting action to minion',
     successMsg: 'Minion Proposal Created!',
-    argsFromCallback: true,
+    createDiscourse: true,
+    argsFromCallback: 'proposeActionVanilla',
+  },
+  MINION_PROPOSE_ACTION_NIFTY: {
+    contract: CONTRACTS.SELECTED_MINION_NIFTY,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    argsFromCallback: 'proposeActionNifty',
     createDiscourse: true,
   },
   CANCEL_PROPOSAL: {
@@ -311,10 +428,20 @@ export const TX = {
     contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'ragequit',
     poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
+    onTxHash: ACTIONS.PROPOSAL,
     display: 'Rage Quit',
     errMsg: 'Error Rage Quitting',
     successMsg: 'Rage quit processed!',
+    gatherArgs: ['.values.shares || 0', '.values.loot || 0'],
+  },
+  RAGE_KICK: {
+    contract: CONTRACTS.CURRENT_MOLOCH,
+    name: 'ragekick',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Rage Kick',
+    errMsg: 'Error Rage Kicking',
+    successMsg: 'Rage kick processed!',
   },
   PAYROLL: {
     contract: CONTRACTS.SELECTED_MINION,
@@ -335,8 +462,70 @@ export const TX = {
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+        gatherFields: DETAILS.PAYROLL_PROPOSAL,
       },
+    ],
+  },
+  PAYROLL_NIFTY: {
+    contract: CONTRACTS.SELECTED_MINION_NIFTY,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Sending Token',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.values.minionToken',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.ERC_20,
+        fnName: 'transfer',
+        gatherArgs: ['.values.applicant', '.values.minionPayment'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL,
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      0,
+    ],
+  },
+  PAYROLL_NEAPOLITAN: {
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Sending Token',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['.localValues.minionToken'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['0'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.ERC_20,
+            fnName: 'transfer',
+            gatherArgs: ['.values.applicant', '.values.minionPayment'],
+          },
+        ],
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      0,
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL,
+      },
+      'true',
     ],
   },
   MINION_WITHDRAW: {
@@ -348,148 +537,6 @@ export const TX = {
     errMsg: 'Error Transferring Balance',
     successMsg: 'Balance Transferred!',
   },
-  MINION_SEND_ERC20_TOKEN: {
-    contract: CONTRACTS.LOCAL_VANILLA_MINION,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Transferring Tokens',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      '.localValues.tokenAddress',
-      0,
-      {
-        type: 'encodeHex',
-        contract: CONTRACTS.LOCAL_ERC_20,
-        fnName: 'transfer',
-        gatherArgs: ['.values.applicant', '.values.minionPayment'],
-      },
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
-      },
-    ],
-  },
-  MINION_SEND_ERC20_TOKEN_NIFTY: {
-    contract: CONTRACTS.LOCAL_NIFTY_MINION,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Transferring Tokens',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      '.localValues.tokenAddress',
-      0,
-      {
-        type: 'encodeHex',
-        contract: CONTRACTS.LOCAL_ERC_20,
-        fnName: 'transfer',
-        gatherArgs: ['.values.applicant', '.values.minionPayment'],
-      },
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
-      },
-      '.contextData.daoOverview.depositToken.tokenAddress',
-      0,
-    ],
-  },
-  MINION_SEND_NETWORK_TOKEN: {
-    contract: CONTRACTS.LOCAL_VANILLA_MINION,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Transferring Tokens',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      '.values.applicant',
-      '.values.minionPayment',
-      '.localValues.tokenAddress',
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
-      },
-    ],
-  },
-  MINION_SEND_NETWORK_TOKEN_NIFTY: {
-    contract: CONTRACTS.LOCAL_NIFTY_MINION,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Transferring Tokens',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      '.values.applicant',
-      '.values.minionPayment',
-      '.localValues.tokenAddress',
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
-      },
-      '.contextData.daoOverview.depositToken.tokenAddress',
-      0,
-    ],
-  },
-  MINION_SEND_ERC721_TOKEN: {
-    contract: CONTRACTS.LOCAL_VANILLA_MINION,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Transferring NFT',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      '.localValues.contractAddress',
-      0,
-      {
-        type: 'encodeHex',
-        contract: CONTRACTS.LOCAL_ERC_721,
-        fnName: 'safeTransferFrom',
-        gatherArgs: [
-          '.localValues.minionAddress',
-          '.values.applicant',
-          '.localValues.tokenId',
-        ],
-      },
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
-      },
-    ],
-  },
-  MINION_SEND_ERC721_TOKEN_NIFTY: {
-    contract: CONTRACTS.LOCAL_NIFTY_MINION,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Transferring NFT',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      '.localValues.contractAddress',
-      0,
-      {
-        type: 'encodeHex',
-        contract: CONTRACTS.LOCAL_ERC_721,
-        fnName: 'safeTransferFrom',
-        gatherArgs: [
-          '.localValues.minionAddress',
-          '.values.applicant',
-          '.localValues.tokenId',
-        ],
-      },
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
-      },
-      '.contextData.daoOverview.depositToken.tokenAddress',
-      0,
-    ],
-  },
   MINION_SELL_NIFTY: {
     contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'proposeAction',
@@ -499,6 +546,9 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
+      // TODO: should be minion
+      // why some local and some not??
+      // check in nft card vs. playlist
       '.localValues.contractAddress',
       0,
       {
@@ -538,6 +588,43 @@ export const TX = {
       0,
     ],
   },
+  MINION_SELL_NIFTY_NEAPOLITAN: {
+    contract: CONTRACTS.LOCAL_NEAPOLITAN_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Sell Nifty',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['.localValues.contractAddress'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['0'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.NIFTY_INK,
+            fnName: 'setTokenPrice',
+            gatherArgs: ['.localValues.tokenId', '.values.price'],
+          },
+        ],
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      0,
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_SELL_NIFTY,
+      },
+      'true',
+    ],
+  },
   MINION_SIMPLE_EXECUTE: {
     contract: CONTRACTS.MINION_SIMPLE_EXECUTE,
     name: 'executeAction',
@@ -547,8 +634,17 @@ export const TX = {
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
   },
+  MINION_SAFE_EXECUTE: {
+    contract: CONTRACTS.MINION_SAFE_EXECUTE,
+    name: 'executeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Executing Minion Proposal',
+    errMsg: 'Error Executing Minion Proposal',
+    successMsg: 'Minion Proposal Executed!',
+  },
   SUPERFLUID_MINION_EXECUTE: {
-    contract: CONTRACTS.SUPERFLUID_MINION,
+    contract: CONTRACTS.SUPERFLUID_MINION_LOCAL,
     name: 'executeAction',
     specialPoll: 'executeAction',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -565,14 +661,128 @@ export const TX = {
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
   },
+  SUMMON_MINION_SAFE: {
+    contract: CONTRACTS.SAFE_MINION_FACTORY,
+    name: 'summonMinionAndSafe', // TODO: Conditional contract method: easy/hard mode
+    poll: 'subgraph',
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.values.minionName',
+      '.values.minQuorum',
+      '.values.saltNonce',
+    ],
+  },
+  SUMMON_MINION_NIFTY: {
+    contract: CONTRACTS.NIFTY_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.values.minionName',
+      '.values.minQuorum',
+    ],
+  },
+  SUMMON_MINION_VANILLA: {
+    contract: CONTRACTS.VANILLA_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: ['.contextData.daoid', '.values.minionName'],
+  },
+  SUMMON_MINION_SUPERFLUID: {
+    contract: CONTRACTS.SUPERFLUID_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.contextData.chainConfig.superfluid.superapp_addr.v1',
+      '.values.minionName',
+    ],
+  },
+  MINION_BUY_NIFTY_INK: {
+    contract: CONTRACTS.SELECTED_MINION_NIFTY,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Buy NiftyInk',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '0xcf964c89f509a8c0ac36391c5460df94b91daba5',
+      '.values.paymentRequested',
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.NIFTY_INK,
+        fnName: 'buyInk',
+        gatherArgs: ['.values.ipfsHash'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_BUY_NIFTY,
+      },
+      '.values.paymentToken',
+      '.values.paymentRequested',
+    ],
+  },
+  MINION_BUY_NIFTY_INK_NEAPOLITAN: {
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Buy NiftyInk',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['0xcf964c89f509a8c0ac36391c5460df94b91daba5'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['.values.paymentRequested'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.NIFTY_INK,
+            fnName: 'buyInk',
+            gatherArgs: ['.values.ipfsHash'],
+          },
+        ],
+      },
+      '.values.paymentToken',
+      '.values.paymentRequested',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_BUY_NIFTY,
+      },
+      'true',
+    ],
+  },
   CREATE_WRAP_N_ZAP: {
     contract: CONTRACTS.WRAP_N_ZAP_FACTORY,
     name: 'create',
-    onTxHash: ACTIONS.GENERIC_MODAL,
     poll: 'boostSubgraph',
     display: 'Create Wrap-N-Zap',
     errMsg: 'Error creating Wrap-N-Zap',
     successMsg: 'Wrap-N-Zap added!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.contextData.chainConfig.wrapper_contract',
+    ],
   },
   POKE_WRAP_N_ZAP: {
     contract: CONTRACTS.WRAP_N_ZAP,
@@ -582,5 +792,118 @@ export const TX = {
     display: 'Poke Wrap-N-Zap',
     errMsg: 'Error poking Wrap-N-Zap',
     successMsg: 'Wrap-N-Zap Poke Successful!',
+  },
+  SELL_NFT_RARIBLE: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting NFT Sale Proposal',
+    errMsg: 'Error Submitting Proposals',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      {
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.values.nftAddress',
+              '.contextData.chainConfig.safeMinion.safe_sign_lib_addr',
+            ],
+          },
+        ],
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+        data: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.ERC_721,
+                fnName: 'setApprovalForAll',
+                gatherArgs: [
+                  '.contextData.chainConfig.rarible.nft_transfer_proxy',
+                  'true',
+                ],
+              },
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.LOCAL_SAFE_SIGNLIB,
+                fnName: 'signMessage',
+                gatherArgs: ['.values.signatureHash'],
+              },
+            ],
+          },
+        ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '1'],
+          },
+        ],
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress', // _withdrawToken
+      0, // _withdrawAmount
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.SELL_NFT_RARIBLE,
+      },
+      true, // _memberOnlyEnabled
+    ],
+  },
+  SET_BUYOUT_NFT: {
+    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting Buyout Proposal',
+    errMsg: 'Error Submitting Buyout Proposal',
+    successMsg: 'Buyout Proposal Submitted',
+    gatherArgs: [
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          '.contextData.chainConfig.dao_conditional_helper_addr',
+          '.values.paymentToken',
+        ],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['0', '0'],
+      },
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.DAO_CONDITIONAL_HELPER,
+            fnName: 'isNotDaoMember',
+            gatherArgs: ['.contextData.address', '.contextData.daoid'],
+          },
+          {
+            type: 'encodeHex',
+            contract: CONTRACTS.PAYMENT_ERC_20,
+            fnName: 'transfer',
+            gatherArgs: ['.contextData.address', '.values.paymentRequested'],
+          },
+        ],
+      },
+      '.values.paymentToken',
+      '0',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.SET_BUYOUT_NFT,
+      },
+      'false',
+    ],
   },
 };

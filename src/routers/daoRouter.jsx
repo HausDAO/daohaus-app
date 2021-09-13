@@ -19,14 +19,13 @@ import Proposal from '../pages/Proposal';
 import NewProposal from '../pages/NewProposal';
 import Settings from '../pages/Settings';
 import Allies from '../pages/Allies';
-import Boosts from '../pages/Boosts';
+// import Boosts from '../pages/Boosts';
 import ThemeBuilder from '../pages/ThemeBuilder';
 import Layout from '../components/layout';
 import Meta from '../pages/Meta';
 import Notifications from '../pages/Notifications';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
-import MinionSafe from '../pages/MinionSafe';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
@@ -38,6 +37,7 @@ import Vaults from '../pages/Vaults';
 import MinionVault from '../pages/MinionVault';
 import MinionGallery from '../pages/MinionGallery';
 import Treasury from '../pages/Treasury';
+import MarketPlaceV0 from '../pages/MarketPlaceV0';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -133,12 +133,7 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/settings/boosts`}>
-          <Boosts
-            daoOverview={daoOverview}
-            daoMetaData={daoMetaData}
-            customTerms={customTerms}
-            daoMember={daoMember}
-          />
+          <MarketPlaceV0 />
         </Route>
         <Route exact path={`${path}/staking`}>
           <Redirect to='/' />
@@ -193,17 +188,6 @@ const DaoRouter = () => {
             members={daoMembers}
           />
         </Route>
-        <Route
-          exact
-          path={`${path}/settings/minion-safe`} // path={`${path}/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
-        >
-          <MinionSafe
-            daoOverview={daoOverview}
-            daoMetaData={daoMetaData}
-            members={daoMembers}
-            currentDaoTokens={currentDaoTokens}
-          />
-        </Route>
         <Route exact path={`${path}/allies`}>
           <Allies
             daoOverview={daoOverview}
@@ -211,20 +195,6 @@ const DaoRouter = () => {
             proposals={daoActivities?.proposals}
             isMember={isMember}
             daoMembers={daoMembers}
-          />
-        </Route>
-        <Route exact path={`${path}/proposals/new/:proposalType`}>
-          <NewProposal
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
-            daoOverview={daoOverview}
-          />
-        </Route>
-        <Route exact path={`${path}/proposals/new`}>
-          <NewProposal
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
-            daoOverview={daoOverview}
           />
         </Route>
         <Route exact path={`${path}/proposals/:propid`}>
