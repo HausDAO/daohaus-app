@@ -33,17 +33,13 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
   const [loading, setLoading] = useState();
 
   useEffect(() => {
-    if (daoMetaData?.boosts?.discourse?.metadata) {
-      setLocalMetadata(daoMetaData.boosts.discourse.metadata);
-    } else if (daoMetaData?.boosts?.DISCOURSE?.metadata) {
-      console.log(daoMetaData?.boosts?.DISCOURSE);
+    if (daoMetaData?.boosts?.DISCOURSE?.active) {
       setLocalMetadata(daoMetaData.boosts.DISCOURSE.metadata);
     }
   }, [daoMetaData]);
 
   const handleSave = async () => {
     setLoading(true);
-    const boostKey = daoMetaData?.boosts?.DISCOURSE ? 'DISCOURSE' : 'discourse';
     try {
       const messageHash = injectedProvider.utils.sha3(daoid);
       const signature = await injectedProvider.eth.personal.sign(
@@ -53,7 +49,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
 
       const updatedBoost = {
         contractAddress: daoid,
-        boostKey,
+        boostKey: 'DISCOURSE',
         metadata: localMetadata,
         network: injectedChain.network,
         signature,

@@ -402,7 +402,7 @@ export const FORM = {
     subtitle: 'Post an NFT for sale on Rarible',
     description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT,
-    minionType: MINION_TYPES.NEAPOLITAN,
+    minionType: MINION_TYPES.SAFE,
     tx: TX.SELL_NFT_RARIBLE,
     required: ['selectedMinion', 'sellPrice', 'raribleNftData'],
     fields: [

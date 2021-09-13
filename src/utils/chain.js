@@ -34,6 +34,11 @@ export const supportedChains = {
       minion_factory_addr: '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
       version: 'v1',
     },
+    safeMinion: {
+      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
@@ -62,8 +67,9 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://rinkeby.etherscan.io',
     safeMinion: {
-      minion_factory_addr: '0x13319a33b862E9B8BA21cb95f15A880247c22Dd2',
+      minion_factory_addr: '0x3f13ABc8931c0e381Ce6d1Be9f978aE6E9d99Cb8',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
@@ -83,14 +89,6 @@ export const supportedChains = {
       base_url: 'https://rinkeby.rarible.com',
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
-    gnosis_safe: {
-      proxy_factory: '0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B',
-      create_and_add_modules: '0xF61A721642B0c0C8b334bA3763BA1326F53798C0',
-      // master_copy: '0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F', // v1.1.1
-      master_copy: '0x6851d6fdfafd08c0295c392436245e5bc78b0185', // v1.2.0
-      mutisend: '0x8D29bE29923b68abfDD21e541b9374737B49cdAD',
-      module_enabler: '0x119CA974Ecf393351E9335E137442A39a3c03091',
-    },
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -121,8 +119,9 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://kovan.etherscan.io',
     safeMinion: {
-      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
   },
   '0x64': {
@@ -150,8 +149,9 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
     block_explorer: 'https://blockscout.com/poa/xdai',
     safeMinion: {
-      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
@@ -164,14 +164,6 @@ export const supportedChains = {
         v1: '0x9fc9420F277b7C25E17B67008b35CCB01c5c9B63',
       },
       version: 'v1',
-    },
-    gnosis_safe: {
-      proxy_factory: '0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B',
-      create_and_add_modules: '0xF61A721642B0c0C8b334bA3763BA1326F53798C0',
-      // master_copy: '0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F', // v1.1.1
-      master_copy: '0x6851d6fdfafd08c0295c392436245e5bc78b0185', // v1.2.0
-      mutisend: '0x8D29bE29923b68abfDD21e541b9374737B49cdAD',
-      module_enabler: '0x10286225AE73546Dcf1BB51F4695610Ae1EE5CaD',
     },
     niftyMinion: {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
@@ -208,8 +200,9 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://polygonscan.com',
     safeMinion: {
-      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
