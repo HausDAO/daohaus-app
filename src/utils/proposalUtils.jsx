@@ -51,7 +51,7 @@ export const MINION_TYPES = {
   NIFTY: 'nifty minion',
   SUPERFLUID: 'Superfluid minion',
   SAFE: 'SAFE MINION V0',
-  // UBER: 'UberHaus minion',
+  UBER: 'UberHaus minion',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {
