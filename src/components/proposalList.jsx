@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Flex, Text, Spinner } from '@chakra-ui/react';
+import { Flex, Spinner, Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import ProposalCard from './proposalCard';
@@ -10,7 +10,6 @@ import {
   sortOptions,
   allFilter,
 } from '../utils/proposalContent';
-import ContentBox from './ContentBox';
 import GenericSelect from './genericSelect';
 import {
   determineUnreadProposalList,
@@ -23,6 +22,8 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ProposalSearch from './proposalSearch';
 import CsvDownloadButton from './csvDownloadButton';
+import NoListItem from './NoListItem';
+import TextBox from './TextBox';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
@@ -41,7 +42,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const searchMode = useRef(false);
 
   useEffect(() => {
-    if (proposals?.length) {
+    if (proposals) {
       setIsLoaded(true);
     }
   }, [proposals]);
@@ -167,7 +168,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
           allRecords={listProposals}
         />
       ) : (
-        <Flex w='100%' h='250px' align='center' justify='center'>
+        <Flex w='100%' h='150px' align='center' justify='center'>
           <Spinner
             thickness='6px'
             speed='0.45s'
@@ -179,9 +180,11 @@ const ProposalsList = ({ proposals, customTerms }) => {
         </Flex>
       )}
       {listProposals && !listProposals.length && (
-        <ContentBox mt={6} p={3}>
-          <Text>No Proposals here yet</Text>
-        </ContentBox>
+        <Box mt={6}>
+          <NoListItem>
+            <TextBox>No Proposals Here yet</TextBox>
+          </NoListItem>
+        </Box>
       )}
     </>
   );

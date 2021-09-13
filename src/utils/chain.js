@@ -25,9 +25,19 @@ export const supportedChains = {
     wrapper_contract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://etherscan.io',
+    rarible: {
+      api_url: 'https://ethereum-api.rarible.org/protocol/v0.1/ethereum',
+      nft_transfer_proxy: '0x0',
+      base_url: 'https://rarible.com',
+    },
     niftyMinion: {
       minion_factory_addr: '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
       version: 'v1',
+    },
+    safeMinion: {
+      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
   },
   '0x4': {
@@ -56,6 +66,11 @@ export const supportedChains = {
     wrapper_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://rinkeby.etherscan.io',
+    safeMinion: {
+      minion_factory_addr: '0x3f13ABc8931c0e381Ce6d1Be9f978aE6E9d99Cb8',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
       resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
@@ -66,6 +81,14 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    rarible: {
+      api_url:
+        // 'https://ethereum-api-staging.rarible.org/protocol/v0.1/ethereum',
+        'https://api-staging.rarible.com/protocol/v0.1/ethereum',
+      nft_transfer_proxy: '0x7d47126a2600E22eab9eD6CF0e515678727779A6',
+      base_url: 'https://rinkeby.rarible.com',
+    },
+    dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -95,6 +118,11 @@ export const supportedChains = {
     wrapper_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://kovan.etherscan.io',
+    safeMinion: {
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
   },
   '0x64': {
     name: 'xDAI Chain',
@@ -120,6 +148,11 @@ export const supportedChains = {
     wrapper_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
     block_explorer: 'https://blockscout.com/poa/xdai',
+    safeMinion: {
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
     superfluid: {
@@ -133,6 +166,10 @@ export const supportedChains = {
       version: 'v1',
     },
     niftyMinion: {
+      minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
+      version: 'v1',
+    },
+    neapolitanMinion: {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
@@ -162,6 +199,11 @@ export const supportedChains = {
     wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://polygonscan.com',
+    safeMinion: {
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
     superfluid: {
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
       resolver: '0xE0cc76334405EE8b39213E620587d815967af39C',
@@ -275,3 +317,5 @@ export const EIP3085 = {
     '0x4': true,
   },
 };
+
+export const NIFTYINK_ADDRESS = '0xcf964c89f509a8c0ac36391c5460df94b91daba5';

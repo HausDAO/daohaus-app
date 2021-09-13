@@ -16,11 +16,13 @@ import {
   exposeValues,
   getArgs,
   handleFieldModifiers,
+  createHydratedString,
   // handleFormError,
   Transaction,
 } from '../utils/txHelpers';
 import { customValidations } from '../utils/validation';
 import { TX } from '../data/contractTX';
+import { supportedChains } from '../utils/chain';
 
 export const TXContext = createContext();
 
@@ -40,13 +42,14 @@ export const TXProvider = ({ children }) => {
     daoMembers,
     daoProposals,
     daoVaults,
+    refreshAllDaoVaults,
   } = useDao();
   const { daoMetaData } = useMetaData();
   const {
     errorToast,
     successToast,
     setTxInfoModal,
-    setProposalModal,
+    setModal,
     setGenericModal,
   } = useOverlay();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
@@ -58,13 +61,15 @@ export const TXProvider = ({ children }) => {
     daoMember,
   } = useDaoMember();
 
-  const { daoid, daochain } = useParams();
+  const { daoid, daochain, minion } = useParams();
+  const chainConfig = supportedChains[daochain];
 
   const contextData = {
     address,
     daoOverview,
     daoid,
     daochain,
+    minion,
     daoMetaData,
     daoMembers,
     daoProposals,
@@ -74,6 +79,7 @@ export const TXProvider = ({ children }) => {
     userHubDaos,
     outstandingTXs,
     daoVaults,
+    chainConfig,
   };
 
   const uiControl = {
@@ -82,12 +88,13 @@ export const TXProvider = ({ children }) => {
     resolvePoll,
     cachePoll,
     refetch,
+    refreshAllDaoVaults,
     setTxInfoModal,
-    setProposalModal,
     setGenericModal,
+    setModal,
   };
 
-  const refreshDao = () => {
+  const refreshDao = async () => {
     // I use useRef to stop excessive rerenders in most of the contexts
     // I need to reset them in order to prevent them from locking up
     // the rerendering flow
@@ -106,6 +113,7 @@ export const TXProvider = ({ children }) => {
     // Now, I call rerender on DaoContext, which should re-fetch all the graphQueries
     // This should get up all the up to date data from the Graph and spread across the
     // entire component tree. It should also recache the new data automatically
+    await refreshAllDaoVaults();
     refetch();
   };
 
@@ -133,11 +141,11 @@ export const TXProvider = ({ children }) => {
           resolvePoll(txHash);
           console.error(`${tx.errMsg}: ${error}`);
         },
-        onSuccess: txHash => {
+        onSuccess: async txHash => {
+          await refreshDao();
           successToast({
             title: tx.successMsg || 'Transaction Successful',
           });
-          refreshDao();
           lifeCycleFns?.onPollSuccess?.(txHash, data);
           resolvePoll(txHash);
           if (tx.createDiscourse) {
@@ -191,6 +199,9 @@ export const TXProvider = ({ children }) => {
 
     try {
       const args = getArgs({ ...consolidatedData });
+
+      console.log('args', args);
+
       const poll = buildTXPoll({
         ...consolidatedData,
       });
@@ -218,8 +229,6 @@ export const TXProvider = ({ children }) => {
       tx: { name },
     } = data;
 
-    console.log('data', data);
-
     //  Checks that this TX has a name and that the name is in the
     //  list of existing Transactions
     if (!name) {
@@ -243,6 +252,17 @@ export const TXProvider = ({ children }) => {
     return handleFieldModifiers({ ...formState, contextData });
   };
 
+  const submitCallback = formState => {
+    return formState.onSubmit({ ...formState, contextData, injectedProvider });
+  };
+
+  const hydrateString = data =>
+    createHydratedString({
+      ...data,
+      contextData,
+      injectedProvider,
+    });
+
   return (
     <TXContext.Provider
       value={{
@@ -250,6 +270,8 @@ export const TXProvider = ({ children }) => {
         submitTransaction,
         handleCustomValidation,
         modifyFields,
+        submitCallback,
+        hydrateString,
       }}
     >
       {children}
@@ -263,11 +285,15 @@ export const useTX = () => {
     submitTransaction,
     handleCustomValidation,
     modifyFields,
+    submitCallback,
+    hydrateString,
   } = useContext(TXContext);
   return {
     refreshDao,
     submitTransaction,
     handleCustomValidation,
     modifyFields,
+    submitCallback,
+    hydrateString,
   };
 };

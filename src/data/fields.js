@@ -1,4 +1,4 @@
-import { MINION_TYPES } from '../utils/proposalUtils';
+import { generateNonce } from '../utils/general';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 
 export const INFO_TEXT = {
@@ -17,6 +17,12 @@ export const INFO_TEXT = {
   DELEGATE_ADDRESS:
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
+  MINION_VALUE: 'Value in wei of network token for payable functions.',
+  MINION_QUORUM:
+    'Once this percentage of DAO shares have votes yes this minion action will be executable.',
+  NIFTY_REPAYMENT_REQUEST:
+    'This proposal requires the selected minion to hold the XDAI funds to purchase the NiftyInk. Enter that amount in WXDAI to repay the minion from the DAO treasury.',
+  RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
 };
 
 export const FIELD = {
@@ -69,6 +75,15 @@ export const FIELD = {
     htmlFor: 'link',
     placeholder: 'daolink.club',
     expectType: 'urlNoHTTP',
+  },
+  MINION_VALUE: {
+    type: 'input',
+    label: 'Value',
+    name: 'minionValue',
+    htmlFor: 'minionValue',
+    placeholder: '0',
+    expectType: 'number',
+    info: INFO_TEXT.MINION_VALUE,
   },
   APPLICANT: {
     type: 'applicantInput',
@@ -136,7 +151,6 @@ export const FIELD = {
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
     expectType: 'address',
-    minionType: MINION_TYPES.VANILLA,
   },
   ABI_INPUT: {
     type: 'abiInput',
@@ -153,6 +167,35 @@ export const FIELD = {
     htmlFor: 'targetContract',
     placeholder: '0x',
     expectType: 'address',
+  },
+  SET_PRICE: {
+    type: 'priceInput',
+    htmlFor: 'sellPrice',
+    name: 'sellPrice',
+    placeholder: '0',
+    label: 'Set Price (Take)',
+    expectType: 'number',
+  },
+  NFT_SELECT: {
+    type: 'nftSelect',
+    htmlFor: 'nftAddress',
+    name: 'nftAddress',
+    label: 'Select an NFT',
+    expectType: 'address',
+  },
+  RARIBLE_NFT_DATA: {
+    type: 'raribleNftData',
+    htmlFor: 'raribleNftData',
+    name: 'raribleNftData',
+    label: 'Vaild Rarible Order Data',
+    expectType: 'any',
+  },
+  DATE_RANGE: {
+    type: 'dateRange',
+    htmlFor: 'dateRange',
+    name: 'dateRange',
+    label: 'Set Auction Duration',
+    expectType: 'any',
   },
   DELEGATE_ADDRESS: {
     type: 'input',
@@ -180,6 +223,121 @@ export const FIELD = {
     info: INFO_TEXT.NFT_PRICE,
     expectType: 'number',
     modifiers: ['addWeiDecimals'],
+  },
+  MINION_NAME: {
+    type: 'input',
+    label: 'Minion Name',
+    name: 'minionName',
+    helperText: 'All minions get a name',
+    htmlFor: 'minionName',
+    placeholder: 'Sally',
+    expectType: 'any',
+  },
+  MINION_QUORUM: {
+    type: 'input',
+    label: 'Minumum Quorum (%)',
+    name: 'minQuorum',
+    htmlFor: 'minQuorum',
+    placeholder: '50',
+    info: INFO_TEXT.MINION_QUORUM,
+    expectType: 'number',
+  },
+  SALT_NONCE: {
+    type: 'input',
+    label: 'Salt Nonce',
+    name: 'saltNonce',
+    hidden: true,
+    htmlFor: 'saltNonce',
+    expectType: 'any',
+    defaultValue: generateNonce,
+  },
+  NIFTY_MINION_PAYMENT_REQUEST: {
+    type: 'paymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Minion Repayment Requested',
+    info: INFO_TEXT.NIFTY_REPAYMENT_REQUEST,
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
+  },
+  NIFTY_INK_URL: {
+    type: 'targetInk',
+    htmlFor: 'targetInk',
+    name: 'targetInk',
+    label: 'Target NiftyInk Url',
+    expectType: 'any',
+  },
+  PROPOSAL_NAME: {
+    name: 'name',
+    type: 'input',
+    label: 'Proposal Name',
+    htmlFor: 'Name',
+    helperText: 'Max 30 characters',
+    placeholder: 'Proposal Name',
+    expectType: 'any',
+  },
+  // PARAGRAPHS: {
+  //   type: 'paragraphs',
+  //   pars: [] /* Overwrite with customCopy */,
+  // },
+  // HEADER: {
+  //   type: 'header',
+  //   headerText: 'Empty' /* Overwrite with custom Copy */,
+  // },
+  MINION_TYPE_SELECT: {
+    type: 'minionTypeSelect',
+    name: 'minionType',
+    label: 'Choose a Minion Type',
+    expectType: 'any',
+  },
+  SUPERFLUID_RATE: {
+    type: 'superfluidRate',
+    htmlFor: 'superfluidRate',
+    name: 'superfluidRate',
+    label: 'Streaming Rate',
+    expectType: 'greaterThanZero',
+  },
+  SUPERFLUID_PAYMENT_REQUEST: {
+    type: 'superfluidPaymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Payment Requested',
+    info: INFO_TEXT.PAYMENT_REQUEST,
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
+  },
+  BUYOUT_PAYMENT_REQUEST: {
+    type: 'buyoutPaymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Request Funds',
+    expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
+  },
+  RAGE_QUIT_INPUT: {
+    type: 'rageInput',
+    label: 'Shares To Rage',
+    name: 'shares',
+    htmlFor: 'shares',
+    placeholder: '0',
+    info: INFO_TEXT.RAGE_QUIT_INPUT,
+    expectType: 'integer',
+  },
+  COLOR_PICKER: {
+    type: 'colorPicker',
+    label: 'Color',
+    name: 'color',
+    htmlFor: 'color',
+    expectType: 'any',
+  },
+  DISCOURSE_META: {
+    type: 'discourseMeta',
+    name: 'discourseMeta',
+    htmlFor: 'discourseMeta',
+    expectType: 'any',
   },
 };
 

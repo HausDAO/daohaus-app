@@ -1,251 +1,172 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Flex, Spinner } from '@chakra-ui/react';
+
+import { useParams } from 'react-router-dom';
 import {
-  Flex,
-  Stack,
-  Switch,
-  Box,
-  Button,
-  Spinner,
-  Input,
-  Icon,
-  Tooltip,
-} from '@chakra-ui/react';
-import { BiArrowBack } from 'react-icons/bi';
-import { RiQuestionLine } from 'react-icons/ri';
-import { useParams, Link as RouterLink } from 'react-router-dom';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { boostPost, getTerm, getTitle } from '../utils/metadata';
-import { useOverlay } from '../contexts/OverlayContext';
-import ContentBox from '../components/ContentBox';
-import TextBox from '../components/TextBox';
-import { proposalTypesContent } from '../content/boost-content';
-import MainViewLayout from '../components/mainViewLayout';
+  useConfirmation,
+  useFormModal,
+  useOverlay,
+} from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
-  const { injectedProvider, injectedChain, address } = useInjectedProvider();
-  const { daochain, daoid } = useParams();
-  const { customTerms } = useMetaData();
-  const { setGenericModal, successToast, errorToast } = useOverlay();
-  const [localMetadata, setLocalMetadata] = useState();
-  const [hasChanges, setHasChanges] = useState();
-  const [loading, setLoading] = useState();
-  const [error, setError] = useState(null);
+import PlaylistSelector from '../components/playlistSelector';
+import MainViewLayout from '../components/mainViewLayout';
+import ProposalList from '../components/formList';
+import SaveButton from '../components/saveButton';
+import { updateProposalConfig } from '../utils/metadata';
+import { CORE_FORMS } from '../data/forms';
+import { chainByID } from '../utils/chain';
 
-  useEffect(() => {
-    if (daoMetaData?.boosts?.proposalTypes?.active) {
-      setLocalMetadata(daoMetaData.boosts.proposalTypes.metadata);
-    }
-  }, [daoMetaData]);
+const dev = process.env.REACT_APP_DEV;
 
-  const handleSave = async () => {
-    setLoading(true);
+const orderPlaylistForms = playlists =>
+  playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
 
-    try {
-      const metaUpdate = localMetadata;
-      console.log(metaUpdate);
+const ProposalTypes = () => {
+  const {
+    daoProposals,
+    daoMetaData,
+    dispatchPropConfig,
+    refetchMetaData,
+  } = useMetaData();
+  const { injectedProvider, address } = useInjectedProvider();
+  const { openFormModal, closeModal } = useFormModal();
+  const { successToast, errorToast } = useOverlay();
+  const { openConfirmation } = useConfirmation();
+  const { playlists, allForms = {}, customData, devList } = daoProposals || {};
+  const { daochain } = useParams();
+  const [selectedListID, setListID] = useState(
+    dev && devList?.forms?.length ? 'dev' : 'all',
+  );
+  const [loading, setLoading] = useState(false);
 
-      const messageHash = injectedProvider.utils.sha3(daoid);
-      const signature = await injectedProvider.eth.personal.sign(
-        messageHash,
-        address,
-      );
-
-      const updateNotifications = {
-        contractAddress: daoid,
-        boostKey: 'proposalTypes',
-        metadata: metaUpdate,
-        network: injectedChain.network,
-        signature,
-      };
-
-      const updateRes = await boostPost('dao/boost', updateNotifications);
-      console.log('updateRes', updateRes);
-      setLoading(false);
-      setHasChanges(false);
-      setGenericModal({});
-      refetchMetaData();
-      successToast({
-        title: 'Notification Settings Updated',
-        description: 'You DAOd it!',
-      });
-    } catch (err) {
-      console.log('update error', err);
-      setLoading(false);
-      errorToast({
-        title: 'Something went wrong',
-        description: 'Are you an active member of this DAO?',
-      });
-    }
-  };
-
-  const handleChange = (proposal, e) => {
-    const updateData = {
-      ...localMetadata,
-      [proposal.key]: {
-        ...localMetadata[proposal.key],
-        active: e.target.checked,
-      },
-    };
-    setLocalMetadata(updateData);
-    setHasChanges(true);
-  };
-
-  const handleOptionChange = (key, option, e) => {
-    if (option?.validation(e.target.value)) {
-      setLocalMetadata({
-        ...localMetadata,
-        [key]: {
-          ...localMetadata[key],
-          [option.id]: e.target.value,
-        },
-      });
-      setHasChanges(true);
-      setError(null);
+  const selectList = id => {
+    if (!id) return;
+    if (id === selectedListID) {
+      setListID(null);
     } else {
-      setError({ error: option.validationText });
+      setListID(id);
     }
   };
 
-  const renderProposalType = proposal => {
-    const isActive =
-      proposal.key in localMetadata
-        ? localMetadata[proposal.key].active === true
-        : false;
-    return (
-      <ContentBox key={proposal.label}>
-        <Flex justify='space-between'>
-          <TextBox size='sm'>{proposal.label}</TextBox>
-          <Flex align='center'>
-            {proposal.comingSoon ? (
-              <TextBox size='xs'>Coming Soon</TextBox>
-            ) : (
-              <Switch
-                id={proposal.key}
-                colorScheme='blue'
-                isChecked={isActive}
-                onChange={e => handleChange(proposal, e)}
-                isDisabled={
-                  loading ||
-                  (!proposal.default && !(proposal?.key in daoMetaData.boosts))
-                }
-              />
-            )}
-          </Flex>
-        </Flex>
-        {isActive &&
-          proposal.options?.length &&
-          proposal.options.map(option => {
-            return localMetadata?.[proposal.key][option.id] ? (
-              <Flex
-                mt={3}
-                key={`${proposal.key}-${option.id}`}
-                justify='space-around'
-                align='center'
-                wrap='wrap'
-              >
-                <Flex align='center'>
-                  <TextBox size='xs'>{option.label}</TextBox>
-                  {option.validationText ? (
-                    <Tooltip
-                      hasArrow
-                      shouldWrapChildren
-                      placement='top'
-                      label={option.validationText}
-                    >
-                      <Icon ml={2} as={RiQuestionLine} color='whiteAlpha.800' />
-                    </Tooltip>
-                  ) : null}
-                </Flex>
+  const saveConfig = async () => {
+    setLoading(true);
+    await updateProposalConfig(daoProposals, {
+      injectedProvider,
+      meta: daoMetaData,
+      address,
+      network: chainByID(daochain).network,
+      onSuccess: () => {
+        successToast({ title: 'Proposal data updated!' });
+        refetchMetaData();
+        setLoading(false);
+      },
+      onError: error => {
+        errorToast({
+          title: 'Error saving Proposal Data',
+          description: error.message || '',
+        });
+        setLoading(false);
+      },
+    });
+  };
 
-                <Box maxW='50%'>
-                  <Input
-                    type={option.type}
-                    id={option.id}
-                    defaultValue={
-                      localMetadata[proposal.key][option.id] ||
-                      option?.default ||
-                      0
-                    }
-                    border={error ? '1px solid red' : '1px solid white'}
-                    textAlign='right'
-                    onChange={e => handleOptionChange(proposal.key, option, e)}
-                  />
-                  {error ? (
-                    <Box mt={2} fontSize='sm' color='red'>
-                      {option.validationText}
-                    </Box>
-                  ) : null}
-                </Box>
-              </Flex>
-            ) : null;
-          })}
-      </ContentBox>
-    );
+  const handleSaveConfig = () => {
+    if (dev) {
+      openConfirmation({
+        onSubmit: async () => {
+          closeModal();
+          await saveConfig();
+        },
+        title: 'DEV WARNING',
+        header: 'DEV WARNING',
+        body:
+          'Local DEV builds may have data that is out of sync with the app branch. If you are pushing a form to the DAO metadata, make sure the form exists on the app branch first.',
+      });
+    } else {
+      saveConfig();
+    }
+  };
+
+  const editPlaylist = id => {
+    openFormModal({
+      lego: CORE_FORMS.EDIT_PLAYLIST,
+      onSubmit: ({ values }) => {
+        const name = values?.title;
+        if (name && id) {
+          dispatchPropConfig({ action: 'EDIT_PLAYLIST', id, name });
+          closeModal();
+        }
+      },
+    });
+  };
+
+  const deletePlaylist = id => {
+    const playlist = playlists.find(list => list.id === id);
+    openConfirmation({
+      title: 'Delete Playlist',
+      header: `Are you sure you want to delete '${playlist?.name}'?`,
+      onSubmit() {
+        dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
+        closeModal();
+      },
+    });
+  };
+
+  const addPlaylist = () => {
+    openFormModal({
+      lego: CORE_FORMS.ADD_PLAYLIST,
+      onSubmit: ({ values }) => {
+        dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
+        closeModal();
+      },
+    });
+  };
+
+  const undoChanges = () => {
+    dispatchPropConfig({ action: 'UNDO_CHANGES', daoMetaData });
   };
 
   return (
-    <MainViewLayout
-      header={`${getTerm(customTerms, 'proposal')} ${getTerm(
-        customTerms,
-        'settings',
-      )}`}
-      isDao
-    >
-      {localMetadata ? (
-        <>
-          <Flex justify='space-between' align='center' w='100%'>
-            <Flex
-              as={RouterLink}
-              to={`/dao/${daochain}/${daoid}/settings`}
-              align='center'
-            >
-              <Icon as={BiArrowBack} color='secondary.500' mr={2} />
-              Back
-            </Flex>
-            <Flex align='center'>
-              {loading ? <Spinner mr={4} /> : null}
-              <Button
-                mx='2.5%'
-                disabled={!hasChanges || loading}
-                onClick={() => handleSave()}
-              >
-                Save Changes
-              </Button>
-            </Flex>
-          </Flex>
-          <Flex justify='space-around' mt='100px'>
-            <Box w={['90%', '80%', '60%', '45%']}>
-              <Flex justify='space-between'>
-                <TextBox
-                  color='white'
-                  size='sm'
-                  mb={2}
-                  title={getTitle(customTerms, 'Proposal')}
-                >
-                  {`${getTerm(customTerms, 'proposal')} Types`}
-                </TextBox>
-              </Flex>
-
-              <Stack spacing={6}>
-                {proposalTypesContent.map(proposal =>
-                  renderProposalType(proposal),
-                )}
-              </Stack>
-            </Box>
-          </Flex>
-        </>
-      ) : (
-        <Flex justify='space-around' mt='150px'>
-          <Box w='45%'>
-            <Flex justify='space-between'>
-              <TextBox color='whiteAlpha.900' size='sm' mb={2}>
-                Boost not active
-              </TextBox>
-            </Flex>
-          </Box>
+    <MainViewLayout isDao header='Proposal Types'>
+      <Flex flexDir='column' maxW={['100%', '90%', '80%']}>
+        <Flex mb={[6, 12]} justifyContent='flex-end'>
+          <SaveButton
+            watch={orderPlaylistForms(playlists)}
+            saveFn={handleSaveConfig}
+            disabled={loading}
+            blockRouteOnDiff
+            undoChanges={undoChanges}
+          >
+            SAVE CHANGES {loading && <Spinner ml={3} />}
+          </SaveButton>
         </Flex>
-      )}
+        {daoProposals ? (
+          <Flex flexDir={['column', 'column', 'row']}>
+            <PlaylistSelector
+              selectList={selectList}
+              addPlaylist={addPlaylist}
+              allForms={allForms}
+              selectedListID={selectedListID}
+              playlists={playlists}
+              deletePlaylist={deletePlaylist}
+              editPlaylist={editPlaylist}
+              devList={devList}
+            />
+            <ProposalList
+              playlists={playlists}
+              customData={customData}
+              selectedListID={selectedListID}
+              allForms={allForms}
+              devList={devList}
+              selectList={selectList}
+            />
+          </Flex>
+        ) : (
+          <Spinner />
+        )}
+      </Flex>
     </MainViewLayout>
   );
 };

@@ -23,6 +23,7 @@ export const HOME_DAO = gql`
         minionType
         details
         minQuorum
+        safeAddress
         uberHausAddress
         uberHausDelegate
         uberHausDelegateRewardFactor
@@ -65,6 +66,7 @@ export const DAO_ACTIVITIES = gql`
         createdAt
         details
         didPass
+        executed
         gracePeriodEnds
         guildkick
         isMinion
@@ -104,6 +106,10 @@ export const DAO_ACTIVITIES = gql`
         minion {
           minionType
           minQuorum
+        }
+        actions {
+          target
+          data
         }
         moloch {
           gracePeriodLength

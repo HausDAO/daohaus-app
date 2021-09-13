@@ -17,6 +17,7 @@ export const ProposalStatus = {
 };
 
 export const PROPOSAL_TYPES = {
+  CORE: 'Core',
   MEMBER: 'Member Proposal',
   SIGNAL: 'Signal Proposal',
   WHITELIST: 'Whitelist Token Proposal',
@@ -28,27 +29,34 @@ export const PROPOSAL_TYPES = {
   MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
+  MINION_SAFE: 'SAFE MINION V0',
   MINION_NIFTY: 'Nifty Minion',
   MINION_SUPERFLUID: 'Superfluid Proposal',
+  MINION_RARIBLE: 'Rarible Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
   PAYROLL: 'Payroll Proposal',
   MINION_NATIVE: 'Minion Native Token Transfer Proposal',
   MINION_ERC20: 'Minion Erc20 Token Transfer Proposal',
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
+  MINION_ERC1155: 'Minion Erc1155 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
+  MINION_BUYOUT: 'Minion Buyout Proposal',
+  BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
+  SELL_NFT: 'Sell NFT',
 };
 
 export const MINION_TYPES = {
   VANILLA: 'vanilla minion',
   NIFTY: 'nifty minion',
-  UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
-  NEAPOLITAN: 'Neapolitan minion',
+  SAFE: 'SAFE MINION V0',
+  // UBER: 'UberHaus minion',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
+  SAFE_MINION: 'actions',
   UBERHAUS_MINION: 'appointments',
   SUPERFLUID_MINION: 'streams',
 };
@@ -147,6 +155,9 @@ const getMinionProposalType = (proposal, details) => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
     }
+    if (proposal?.minion?.minionType === MINION_TYPES.SAFE) {
+      return PROPOSAL_TYPES.MINION_SAFE;
+    }
     if (proposal?.minion?.minionType === MINION_TYPES.NIFTY) {
       return PROPOSAL_TYPES.MINION_NIFTY;
     }
@@ -236,6 +247,16 @@ export const linkMaker = proposal => {
     const parsed =
       IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.link || '';
+  } catch (e) {
+    return '';
+  }
+};
+
+export const raribleHashMaker = proposal => {
+  try {
+    const parsed =
+      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    return parsed.orderIpfsHash || '';
   } catch (e) {
     return '';
   }
@@ -549,5 +570,27 @@ export const pendingUberHausStakingProposal = (prop, minionAddress) => {
     prop.proposalType === 'Member Proposal' &&
     !prop.cancelled &&
     !prop.processed
+  );
+};
+
+export const multicallActionsFromProposal = prop => {
+  return prop.actions.reduce(
+    (obj, action) => {
+      obj.targets.push(action.target);
+      obj.values.push(action.value);
+      obj.datas.push(action.data);
+      return obj;
+    },
+    { targets: [], values: [], datas: [] },
+  );
+};
+
+export const hasMinionActions = (prop, minionDeets) => {
+  if (prop.minion.minionType === MINION_TYPES.SAFE) {
+    return prop.actions > 0;
+  }
+  return (
+    minionDeets &&
+    minionDeets[1] === '0x0000000000000000000000000000000000000000'
   );
 };

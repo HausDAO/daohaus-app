@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import CustomThemeLaunch from './customThemeLaunch';
-import NewMinionForm from '../forms/newMinion';
+import NewMinionForm from '../forms/newMinionForm';
 import NewSuperfluidMinionForm from '../forms/newSuperfluidMinion';
 import NotificationsLaunch from './notificationsLaunch';
 import ProposalTypesLaunch from './proposalTypesLaunch';
@@ -11,7 +11,6 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import DiscourseLaunch from './discourseLaunch';
-import NewMinionSafe from './newMinionSafe';
 import GenericBoostLaunch from './genericBoostLaunch';
 import SnapshotLaunch from './snapshotLaunch';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -87,16 +86,16 @@ const BoostLaunchWrapper = ({ boost }) => {
         );
       }
       case 'vanillaMinion': {
-        return <NewMinionForm />;
+        return <NewMinionForm minionType='vanilla minion' />;
+      }
+      case 'neapolitanMinion': {
+        return <NewMinionForm minionType='Neapolitan minion' />;
       }
       case 'superfluidMinion': {
         return <NewSuperfluidMinionForm />;
       }
       case 'niftyMinion': {
-        return <NewMinionForm minionType='niftyMinion' />;
-      }
-      case 'minionSafe': {
-        return <NewMinionSafe />;
+        return <NewMinionForm minionType='nifty minion' />;
       }
       // case 'discourse': {
       case 'DISCOURSE': {

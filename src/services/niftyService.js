@@ -4,8 +4,6 @@ import NFTAbi from '../contracts/niftyInk.json';
 
 import { chainByID } from '../utils/chain';
 
-export const NIFTYINK_ADDRESS = '0xcf964c89f509a8c0ac36391c5460df94b91daba5';
-
 export const NiftyService = ({
   web3,
   chainID,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Flex, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -11,10 +11,12 @@ import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import NftCard from '../components/nftCard';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
+import SafeMinionDetails from '../components/safeMinionDetails';
 import Loading from '../components/loading';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { formatNativeData } from '../utils/vaults';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
@@ -35,13 +37,22 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
     });
   };
 
-  const ctaButton = (
-    <Flex>
-      <CopyToClipboard text={vault?.address} mr={2} onCopy={handleCopy}>
-        <Button>Copy Address</Button>
-      </CopyToClipboard>
-    </Flex>
-  );
+  const ctaButton = useMemo(() => {
+    if (vault) {
+      return (
+        <Flex>
+          <CopyToClipboard
+            text={vault.safeAddress || vault.address}
+            mr={2}
+            onCopy={handleCopy}
+          >
+            <Button>Copy Address</Button>
+          </CopyToClipboard>
+        </Flex>
+      );
+    }
+    return null;
+  }, [vault]);
 
   useEffect(() => {
     const setupBalanceData = async () => {
@@ -61,7 +72,10 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
         };
       });
 
-      const nativeBalance = await fetchNativeBalance(minion, daochain);
+      const nativeBalance = await fetchNativeBalance(
+        vaultMatch.safeAddress || minion,
+        daochain,
+      );
       if (+nativeBalance > 0) {
         setNativeBalance(formatNativeData(daochain, nativeBalance));
       }
@@ -121,6 +135,9 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               daoVaults={daoVaults}
               visibleVaults={[vault]}
             />
+            {vault?.minionType === MINION_TYPES.SAFE && (
+              <SafeMinionDetails vault={vault} handleCopy={handleCopy} />
+            )}
             <CrossDaoInternalBalanceList
               tokens={internalBalances}
               currentDaoTokens={currentDaoTokens}

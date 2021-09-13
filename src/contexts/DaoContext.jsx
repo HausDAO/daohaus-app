@@ -133,14 +133,12 @@ export const DaoProvider = ({ children }) => {
 
   const refreshMinionVault = async minionAddress => {
     const { network } = supportedChains[daochain];
-    const res = await putRefreshApiVault({ network, minionAddress });
-    console.log('refresh res', res);
+    await putRefreshApiVault({ network, minionAddress });
   };
 
   const refreshAllDaoVaults = async () => {
     const { network } = supportedChains[daochain];
-    const res = await putRefreshApiVault({ network, molochAddress: daoid });
-    console.log('refresh dao res', res);
+    await putRefreshApiVault({ network, molochAddress: daoid });
   };
 
   useEffect(() => {
