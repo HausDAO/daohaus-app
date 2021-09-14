@@ -300,7 +300,7 @@ export const chainByNetworkId = networkId => {
     74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
-    42161: supportedChains['0xA4B1'],
+    42161: supportedChains['0xa4b1'],
   };
 
   return idMapping[networkId];
