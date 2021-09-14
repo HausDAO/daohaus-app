@@ -219,13 +219,13 @@ export const supportedChains = {
       version: 'v1',
     },
   },
-  '0xA4B1': {
+  '0xa4b1': {
     name: 'Arbitrum',
     short_name: 'arb1',
     nativeCurrency: 'ETH',
     network: 'arbitrum',
     network_id: 42161,
-    chain_id: '0xA4B1',
+    chain_id: '0xa4b1',
     hub_sort_order: 3,
     providers: ['walletconnect'],
     rpc_url: 'https://arb1.arbitrum.io/rpc',

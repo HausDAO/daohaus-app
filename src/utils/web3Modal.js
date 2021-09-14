@@ -4,8 +4,9 @@ import { chainByID, chainByNetworkId } from './chain';
 
 const isInjected = () => window.ethereum?.chainId;
 
-export const attemptInjectedChainData = () =>
-  isInjected() ? chainByID(window.ethereum.chainId) : chainByID('0x1');
+export const attemptInjectedChainData = () => {
+  return isInjected() ? chainByID(window.ethereum.chainId) : chainByID('0x1');
+};
 
 const addNetworkProviders = chainData => {
   const allProviders = {};
