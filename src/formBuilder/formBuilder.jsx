@@ -119,6 +119,7 @@ const FormBuilder = props => {
       return;
     }
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
+    console.log(`collapsedValues`, collapsedValues);
     const modifiedValues = modifyFields({
       values: collapsedValues,
       // REVIEW

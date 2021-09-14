@@ -63,7 +63,7 @@ export const checkFormTypes = (values, fields) => {
     }
     return arr;
   }, []);
-
+  console.log(`errors`, errors);
   if (!errors.length) {
     return false;
   }

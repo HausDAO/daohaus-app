@@ -33,7 +33,7 @@ export const collapse = (values, flag, collapseType) => {
     (value, key) => !key.includes(flag) && value,
   );
   if (collapseType === 'objOfArrays') {
-    return { ...collapseToObjOfArrays(groupedItems), ...nonGrouped };
+    return { ...collapseToObjOfArrays(groupedItems, flag), ...nonGrouped };
   }
   const orderedArray = Object.entries(groupedItems)
     .map(([key, value]) => splitMulti(key, value, flag))
@@ -53,6 +53,7 @@ export const mapInRequired = (fields, required) => {
   if (!required?.length || !fields) return fields;
   // go through each sub array to
   // REVIEW
+
   const mapIn = field =>
     Array.isArray(field)
       ? field.map(mapIn)
