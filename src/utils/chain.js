@@ -300,6 +300,7 @@ export const chainByNetworkId = networkId => {
     74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
+    42161: supportedChains['0xA4B1'],
   };
 
   return idMapping[networkId];
@@ -347,6 +348,17 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
+  '0xA4B1': {
+    chainId: '0xA4B1',
+    chainName: 'Arbitrum',
+    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    blockExplorerUrls: ['https://arbiscan.io/'],
+    nativeCurrency: {
+      name: 'ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+  },
 };
 
 export const EIP3085 = {
@@ -354,6 +366,7 @@ export const EIP3085 = {
     '0x64': true,
     '0x89': true,
     '0x4a': true,
+    '0xA4B1': true,
   },
   NOT_SUPPORTED: {
     '0x1': true,
