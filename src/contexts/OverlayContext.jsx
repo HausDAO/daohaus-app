@@ -6,7 +6,7 @@ export const OverlayContext = createContext();
 export const OverlayProvider = ({ children }) => {
   const toast = useToast();
   const [modal, setModal] = useState(false);
-  // console.log('modal', modal);
+
   const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
   const [hubAccountModal, setHubAccountModal] = useState(false);
   const [daoAccountModal, setDaoAccountModal] = useState(false);

@@ -43,8 +43,6 @@ const BoostDetails = ({
   const { address, injectedProvider } = useInjectedProvider();
   const { daoMetaData, daoProposals, refetchMetaData } = useMetaData();
 
-  console.log(daoProposals);
-
   const handleNext = () => {
     if (next && goToNext) {
       goToNext(next);
