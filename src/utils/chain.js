@@ -219,6 +219,50 @@ export const supportedChains = {
       version: 'v1',
     },
   },
+  '0xa4b1': {
+    name: 'Arbitrum',
+    short_name: 'arb1',
+    nativeCurrency: 'ETH',
+    network: 'arbitrum',
+    network_id: 42161,
+    chain_id: '0xa4b1',
+    hub_sort_order: 3,
+    providers: ['walletconnect'],
+    rpc_url: 'https://arb1.arbitrum.io/rpc',
+    abi_api_url:
+      'https://api.arbiscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api.arbiscan.io/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-arbitrum',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-arbitrum',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
+    minion_factory_addr: '',
+    moloch_factory_addr: '0x9232dea84e91b49fef6b604eea0455692fc27ba8',
+    dai_contract: '',
+    wrapper_contract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+    wrap_n_zap_factory_addr: '0xff0184056B7865F924ea3c0C1823882ad388421b',
+    block_explorer: 'https://arbiscan.io/',
+    safeMinion: {
+      minion_factory_addr: '',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
+    superfluid: {
+      minion_factory_addr: '',
+      resolver: '',
+      subgraph_url: '',
+      superapp_addr: {
+        v1: '',
+      },
+      version: 'v1',
+    },
+    niftyMinion: {
+      minion_factory_addr: '0xA92CbC525EabFa5baE4e0ff7bDa8E011B43B9aCC',
+      version: 'v1',
+    },
+  },
   // '0x4a': {
   //   name: 'IDChain',
   //   short_name: 'idchain',
@@ -256,6 +300,7 @@ export const chainByNetworkId = networkId => {
     74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
+    42161: supportedChains['0xa4b1'],
   };
 
   return idMapping[networkId];
@@ -303,6 +348,17 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
+  '0xA4B1': {
+    chainId: '0xA4B1',
+    chainName: 'Arbitrum',
+    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    blockExplorerUrls: ['https://arbiscan.io/'],
+    nativeCurrency: {
+      name: 'ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+  },
 };
 
 export const EIP3085 = {
@@ -310,6 +366,7 @@ export const EIP3085 = {
     '0x64': true,
     '0x89': true,
     '0x4a': true,
+    '0xA4B1': true,
   },
   NOT_SUPPORTED: {
     '0x1': true,
