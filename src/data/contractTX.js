@@ -546,9 +546,6 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
-      // TODO: should be minion
-      // why some local and some not??
-      // check in nft card vs. playlist
       '.localValues.contractAddress',
       0,
       {
