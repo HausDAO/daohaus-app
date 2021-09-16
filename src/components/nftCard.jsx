@@ -17,6 +17,8 @@ const NftCard = ({ nft, minion, minionType, ...props }) => {
     }
   }, [nft]);
 
+  // console.log('hydratedNft', hydratedNft);
+
   const setModal = () => {
     setNftViewModal(hydratedNft || nft);
   };
