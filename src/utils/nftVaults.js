@@ -51,7 +51,6 @@ const nftConfigs = {
         modalName: 'sellNifty',
         formLego: CORE_FORMS.MINION_SELL_NIFTY,
         localValues: ['tokenId', 'contractAddress'],
-        minionTypeOverride: true,
       },
     },
   },
@@ -70,6 +69,8 @@ export const attributeModifiers = Object.freeze({
 export const hydrateNftCard = (nft, minionType) => {
   const config = nftConfigs[nft.contractAddress] || defaultConfig;
 
+  console.log('config', config);
+
   const hydratedActions = Object.keys(config.actions).map(key => {
     const action = config.actions[key];
     const localValues =
@@ -79,8 +80,7 @@ export const hydrateNftCard = (nft, minionType) => {
         return vals;
       }, {});
 
-    // new function to create a new object - don't use assignment
-    let { formLego } = action;
+    let formLego = { ...action.formLego };
     if (action.minionTypeOverride) {
       const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
       formLego = getMinionActionFormLego(nftType, minionType);
