@@ -69,8 +69,6 @@ export const attributeModifiers = Object.freeze({
 export const hydrateNftCard = (nft, minionType) => {
   const config = nftConfigs[nft.contractAddress] || defaultConfig;
 
-  console.log('config', config);
-
   const hydratedActions = Object.keys(config.actions).map(key => {
     const action = config.actions[key];
     const localValues =
