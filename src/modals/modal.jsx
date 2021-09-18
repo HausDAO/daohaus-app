@@ -8,7 +8,6 @@ import {
   Box,
   Flex,
   Button,
-  useTheme,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
@@ -16,6 +15,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 import { capitalizeWords } from '../utils/general';
+import FormFooter from '../formBuilder/formFooter';
 
 // const getMaxWidth = modal => {
 //   // if (modal.steps) return '500px';
@@ -44,9 +44,12 @@ const Modal = () => {
     loading,
     width = '600px',
     description,
+    onSubmit,
+    onCancel,
   } = modal;
-  console.log();
+
   const handleClose = () => setModal(false);
+
   return (
     <ChakraModal
       isOpen={modal}
@@ -60,7 +63,7 @@ const Modal = () => {
       />
       <ModalContent rounded='lg' bg='black' maxWidth={width}>
         <ModalBody>
-          <Flex p={6} position='relative' flexDir='column'>
+          <Flex px={[3, 6]} py={[2, 4]} position='relative' flexDir='column'>
             <Box
               fontFamily='heading'
               textTransform='uppercase'
@@ -71,7 +74,7 @@ const Modal = () => {
               {subtitle}
             </Box>
             <ModalCloseButton top='4' />
-            <TextBox mb={4} size='lg' variant='body' fontWeight='600'>
+            <TextBox mb={4} size='lg'>
               {capitalizeWords(title)}
             </TextBox>
             {/* {description && (
@@ -86,13 +89,17 @@ const Modal = () => {
               </TextBox>
               // </Flex>
             )} */}
-            {body}
+            <Box mb={2}>{body}</Box>
             {footer && (
-              <Footer
-                onCancel={footer.onCancel}
-                onSubmit={footer.onSubmit}
-                loading={loading}
+              <FormFooter
+                customPrimaryBtn={footer?.primaryBtn}
+                customSecondaryBtn={footer?.secondaryBtn}
               />
+              // <Footer
+              //   onCancel={footer.onCancel}
+              //   onSubmit={footer.onSubmit}
+              //   loading={loading}
+              // />
             )}
           </Flex>
         </ModalBody>
@@ -102,33 +109,3 @@ const Modal = () => {
 };
 
 export default Modal;
-
-const Footer = ({ onCancel, onSubmit, loading }) => {
-  const handleCancel = () => onCancel?.();
-  return (
-    <Box>
-      <Flex alignItems='flex-end' flexDir='column'>
-        <Flex mb={2}>
-          <Button
-            variant='outline'
-            borderTopRightRadius='0'
-            borderBottomRightRadius='0'
-            onClick={handleCancel}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={onSubmit}
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading}
-            borderBottomLeftRadius='0'
-            borderTopLeftRadius='0'
-          >
-            Submit
-          </Button>
-        </Flex>
-      </Flex>
-    </Box>
-  );
-};

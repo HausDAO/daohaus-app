@@ -186,24 +186,13 @@ const FormBuilder = props => {
       }
     };
 
-    // const handleConditional = async choice => {
-    //   if (choice.tx && choice.then)
-    //     return () => handleSubmitTX(handleConditional(choice.then));
-    //   if (choice.tx) return () => handleSubmitTX();
-    //   if (choice.callback) return () => handleSubmitCallback();
-    //   if (choice.goTo) return () => goToNext(choice.goTo);
-    // };
+    //  HANDLE GO TO NEXT
+    if (next && typeof goToNext === 'function') return goToNext(next);
 
-    if (next && typeof goToNext === 'function') {
-      return goToNext(next);
-
-      // const choice = next[condition];
-      // return handleConditional(choice)();
-    }
     //  HANDLE CALLBACK ON SUBMIT
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function')
       return handleSubmitCallback();
-    }
+
     //  HANDLE CONTRACT TX ON SUBMIT
     return handleSubmitTX();
   };
@@ -263,7 +252,7 @@ const FormBuilder = props => {
           next={next}
           goToNext={goToNext}
           errors={Object.values(formErrors)}
-          secondaryBtn={secondaryBtn}
+          customSecondaryBtn={secondaryBtn}
         />
       </Flex>
     </form>

@@ -17,6 +17,7 @@ import SaveButton from '../components/saveButton';
 import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
+import { useAppModal } from '../hooks/useModals';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -33,6 +34,7 @@ const ProposalTypes = () => {
   const { injectedProvider, address } = useInjectedProvider();
   const { openFormModal, closeModal } = useFormModal();
   const { successToast, errorToast } = useOverlay();
+  const { formModal, confirmModal } = useAppModal();
   const { openConfirmation } = useConfirmation();
   const { playlists, allForms = {}, customData, devList } = daoProposals || {};
   const { daochain } = useParams();
@@ -50,9 +52,9 @@ const ProposalTypes = () => {
     }
   };
 
-  const saveConfig = async () => {
+  const saveConfig = async updateSaveButton => {
     setLoading(true);
-    await updateProposalConfig(daoProposals, {
+    updateProposalConfig(daoProposals, {
       injectedProvider,
       meta: daoMetaData,
       address,
@@ -60,6 +62,7 @@ const ProposalTypes = () => {
       onSuccess: () => {
         successToast({ title: 'Proposal data updated!' });
         refetchMetaData();
+        updateSaveButton?.();
         setLoading(false);
       },
       onError: error => {
@@ -70,23 +73,6 @@ const ProposalTypes = () => {
         setLoading(false);
       },
     });
-  };
-
-  const handleSaveConfig = () => {
-    if (dev) {
-      openConfirmation({
-        onSubmit: async () => {
-          closeModal();
-          await saveConfig();
-        },
-        title: 'DEV WARNING',
-        header: 'DEV WARNING',
-        body:
-          'Local DEV builds may have data that is out of sync with the app branch. If you are pushing a form to the DAO metadata, make sure the form exists on the app branch first.',
-      });
-    } else {
-      saveConfig();
-    }
   };
 
   const editPlaylist = id => {
@@ -134,7 +120,7 @@ const ProposalTypes = () => {
         <Flex mb={[6, 12]} justifyContent='flex-end'>
           <SaveButton
             watch={orderPlaylistForms(playlists)}
-            saveFn={handleSaveConfig}
+            saveFn={saveConfig}
             disabled={loading}
             blockRouteOnDiff
             undoChanges={undoChanges}

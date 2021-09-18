@@ -6,8 +6,8 @@ import StepperForm from '../formBuilder/StepperForm';
 
 const MODAL_SIZES = Object.freeze({
   sm: '400px',
-  md: '550px',
-  lg: '650px',
+  md: '500px',
+  lg: '600px',
   xl: '800px',
 });
 
@@ -15,7 +15,7 @@ const calcMaxWidth = data => {
   if (data?.fields?.length)
     return data.fields.length > 1 ? MODAL_SIZES.xl : MODAL_SIZES.md;
   if (MODAL_SIZES[data?.width]) return MODAL_SIZES[data?.width];
-  return '650px';
+  return '600px';
 };
 
 export const useAppModal = () => {
@@ -36,7 +36,7 @@ export const useAppModal = () => {
         title: steps.title,
         subtitle: steps.subtitle,
         body: <StepperForm {...steps} />,
-        width: calcMaxWidth(steps),
+        width: steps.customWidth || calcMaxWidth(steps),
       });
     },
     confirmModal({
@@ -48,6 +48,7 @@ export const useAppModal = () => {
       secondaryBtn,
       onCancel,
       onSubmit,
+      customWidth,
     }) {
       const submitBtn = { text: 'Submit', fn: onSubmit };
       const cancelBtn = { text: 'Close', fn: onCancel || closeModal };
@@ -55,11 +56,13 @@ export const useAppModal = () => {
         primaryBtn: primaryBtn || submitBtn,
         secondaryBtn: secondaryBtn || cancelBtn,
       };
+
       setModal({
         title,
         subtitle,
         body: body || <TextBox variant='body'>{description}</TextBox>,
         footer,
+        width: customWidth || 'lg',
       });
     },
     genericModal(params) {
