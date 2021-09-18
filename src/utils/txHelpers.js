@@ -118,6 +118,7 @@ const argBuilderCallback = Object.freeze({
       values.paymentRequested,
     ];
   },
+  proposeActionSafe({ values, formData }) {},
 });
 
 const handleSearch = (data, arg) => {
