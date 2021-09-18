@@ -51,7 +51,7 @@ export const useAppModal = () => {
       customWidth,
     }) {
       const submitBtn = { text: 'Submit', fn: onSubmit };
-      const cancelBtn = { text: 'Close', fn: onCancel || closeModal };
+      const cancelBtn = { text: 'Cancel', fn: onCancel || closeModal };
       const footer = {
         primaryBtn: primaryBtn || submitBtn,
         secondaryBtn: secondaryBtn || cancelBtn,
@@ -60,7 +60,11 @@ export const useAppModal = () => {
       setModal({
         title,
         subtitle,
-        body: body || <TextBox variant='body'>{description}</TextBox>,
+        body: body || (
+          <TextBox variant='body' size='sm' mb={2}>
+            {description}
+          </TextBox>
+        ),
         footer,
         width: customWidth || 'lg',
       });

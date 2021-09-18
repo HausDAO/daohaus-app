@@ -76,8 +76,8 @@ const ProposalTypes = () => {
   };
 
   const editPlaylist = id => {
-    openFormModal({
-      lego: CORE_FORMS.EDIT_PLAYLIST,
+    formModal({
+      ...CORE_FORMS.EDIT_PLAYLIST,
       onSubmit: ({ values }) => {
         const name = values?.title;
         if (name && id) {
@@ -90,11 +90,15 @@ const ProposalTypes = () => {
 
   const deletePlaylist = id => {
     const playlist = playlists.find(list => list.id === id);
-    openConfirmation({
-      title: 'Delete Playlist',
-      header: `Are you sure you want to delete '${playlist?.name}'?`,
+
+    confirmModal({
+      subtitle: 'Delete Playlist',
+      title: `Delete '${playlist?.name}'?`,
+      description:
+        'Requires member signature. Boost playlists can be restored on the Boosts Marketplace page.',
       onSubmit() {
         dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
+        setListID('all');
         closeModal();
       },
     });

@@ -16,13 +16,12 @@ import {
 import { omit } from '../utils/general';
 
 const FormBuilder = props => {
-  const { daoid } = useParams();
   const {
     submitTransaction,
     handleCustomValidation,
     modifyFields,
     submitCallback,
-  } = daoid ? useTX() : {};
+  } = useTX();
   const {
     fields,
     additionalOptions = null,

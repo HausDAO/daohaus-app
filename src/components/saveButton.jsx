@@ -4,7 +4,6 @@ import deepEqual from 'deep-equal';
 
 import { useHistory } from 'react-router-dom';
 import { HASH } from '../utils/general';
-import { useConfirmation } from '../contexts/OverlayContext';
 import { useAppModal } from '../hooks/useModals';
 
 const dev = process.env.REACT_APP_DEV;
@@ -24,20 +23,16 @@ const SaveButton = props => {
   } = props;
   const [isSame, setSame] = useState(true);
   const history = useHistory();
-  const { openConfirmation, closeModal } = useConfirmation();
-  const { formModal, confirmModal } = useAppModal();
+  const { confirmModal, closeModal } = useAppModal();
 
   const startingVals = useRef(HASH.AWAITING_VALUE);
 
   useEffect(() => {
     if (watch != null && startingVals.current === HASH.AWAITING_VALUE) {
-      console.log('SETTING STARTING VALUE');
       startingVals.current = watch;
       return;
     }
     if (startingVals.current !== HASH.AWAITING_VALUE) {
-      const isEqual = deepEqual(watch, startingVals.current);
-      console.log(`isEqual`, isEqual);
       setSame(deepEqual(watch, startingVals.current));
     }
   }, [watch]);
@@ -79,7 +74,7 @@ const SaveButton = props => {
     }
   }, [isSame, blockRouteOnDiff]);
 
-  const handleTrySave = async () => {
+  const handleTrySave = () => {
     const updateSaveButton = () => {
       setSame(true);
       startingVals.current = watch;

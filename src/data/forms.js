@@ -6,7 +6,7 @@ import { VAULT_TRANSFER_TX } from './transferContractTx';
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
     id: 'EDIT_PLAYLIST',
-    title: 'Edit Proposal Playlist',
+    subtitle: 'Edit Proposal Playlist',
     type: PROPOSAL_TYPES.CORE,
     required: ['title'],
     fields: [
