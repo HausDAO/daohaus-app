@@ -8,12 +8,14 @@ import {
   Box,
   Flex,
   Button,
+  useTheme,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
+import { capitalizeWords } from '../utils/general';
 
 // const getMaxWidth = modal => {
 //   // if (modal.steps) return '500px';
@@ -34,10 +36,17 @@ import TextBox from '../components/TextBox';
 const Modal = () => {
   const { theme } = useCustomTheme();
   const { modal, setModal } = useOverlay();
-  const { title, subtitle, body, footer, loading, width = '600px' } = modal;
-
+  const {
+    title,
+    subtitle,
+    body,
+    footer,
+    loading,
+    width = '600px',
+    description,
+  } = modal;
+  console.log();
   const handleClose = () => setModal(false);
-
   return (
     <ChakraModal
       isOpen={modal}
@@ -49,34 +58,44 @@ const Modal = () => {
         bgColor={rgba(theme.colors.background[500], 0.8)}
         style={{ backdropFilter: 'blur(6px)' }}
       />
-      <ModalContent
-        rounded='lg'
-        bg='black'
-        borderWidth='1px'
-        maxWidth={width}
-        p={3}
-      >
-        <ModalCloseButton right={4} top={4} />
-        <Box
-          fontFamily='heading'
-          textTransform='uppercase'
-          fontSize='sm'
-          fontWeight={700}
-          color='secondary.500'
-        >
-          {subtitle}
-        </Box>
+      <ModalContent rounded='lg' bg='black' maxWidth={width}>
         <ModalBody>
-          <TextBox>{title}</TextBox>
-          {body}
+          <Flex p={6} position='relative' flexDir='column'>
+            <Box
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+              color='secondary.500'
+            >
+              {subtitle}
+            </Box>
+            <ModalCloseButton top='4' />
+            <TextBox mb={4} size='lg' variant='body' fontWeight='600'>
+              {capitalizeWords(title)}
+            </TextBox>
+            {/* {description && (
+              // <Flex
+              //   border={`1px ${theme.colors.secondary['500']} solid`}
+              //   p={4}
+              //   mb={6}
+              //   borderRadius='md'
+              // >
+              <TextBox size='sm' variant='body' opacity={0.9} mb={6}>
+                {description}
+              </TextBox>
+              // </Flex>
+            )} */}
+            {body}
+            {footer && (
+              <Footer
+                onCancel={footer.onCancel}
+                onSubmit={footer.onSubmit}
+                loading={loading}
+              />
+            )}
+          </Flex>
         </ModalBody>
-        {footer && (
-          <Footer
-            onCancel={footer.onCancel}
-            onSubmit={footer.onSubmit}
-            loading={loading}
-          />
-        )}
       </ModalContent>
     </ChakraModal>
   );
@@ -112,11 +131,4 @@ const Footer = ({ onCancel, onSubmit, loading }) => {
       </Flex>
     </Box>
   );
-};
-
-const useAppModal = params => {
-  // is lego
-  // is steps
-  // is confirmation
-  // is custom
 };

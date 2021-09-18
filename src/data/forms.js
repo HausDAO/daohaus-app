@@ -99,6 +99,7 @@ export const FORM = {
     id: 'BUY_SHARES',
     title: 'Request shares for tokens',
     description: 'Request shares from the DAO in exchange for ERC-20 tokens',
+    subtitle: 'Buy shares',
     playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,

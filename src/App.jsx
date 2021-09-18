@@ -19,7 +19,6 @@ function App() {
     <>
       <DaoSwitcherModal />
       <TxInfoModal />
-      <Modal />
     </>
   );
 

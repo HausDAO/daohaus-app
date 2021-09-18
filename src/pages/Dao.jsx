@@ -6,14 +6,16 @@ import DaoAccountModal from '../modals/daoAccountModal';
 import { DaoProvider } from '../contexts/DaoContext';
 import ProposalSelector from '../modals/proposalSelector';
 import DaoModal from '../modals/daoModal';
+import Modal from '../modals/modal';
 
 const Dao = () => {
   const { daoid } = useParams();
+
   const DaoScopedModals = () => (
     <>
       <DaoAccountModal />
       <ProposalSelector />
-      <DaoModal />
+      <Modal />
     </>
   );
 

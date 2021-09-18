@@ -62,7 +62,7 @@ const TextBoxComponent = {
       textAlign: props.textAlign || null,
       fontFamily: 'body',
       textTransform: 'none',
-      fontWeight: 400,
+      fontWeight: props.fontWeight || 400,
       opacity: props.opacity || 1.0,
       padding: 0,
     }),

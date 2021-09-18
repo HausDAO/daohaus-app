@@ -287,7 +287,7 @@ export const useTX = () => {
     modifyFields,
     submitCallback,
     hydrateString,
-  } = useContext(TXContext);
+  } = useContext(TXContext) || {};
   return {
     refreshDao,
     submitTransaction,

@@ -68,8 +68,6 @@ export const FormFooter = ({
               loadingText='Submitting'
               isLoading={loading}
               disabled={loading || errors?.length}
-              borderBottomLeftRadius='0'
-              borderTopLeftRadius='0'
             >
               {ctaText || 'Submit'}
             </Button>
@@ -116,9 +114,8 @@ export const AdditionalOptions = ({ options = [], addOption }) => {
           as={Button}
           variant='outline'
           rightIcon={<Icon as={RiAddFill} />}
-          borderTopRightRadius='0'
-          borderBottomRightRadius='0'
           type='button'
+          mr={4}
         >
           Additional Options
         </MenuButton>

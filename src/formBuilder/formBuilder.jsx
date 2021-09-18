@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
+import { useParams } from 'react-router-dom';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import { FormFooter } from './staticElements';
@@ -15,12 +16,13 @@ import {
 import { omit } from '../utils/general';
 
 const FormBuilder = props => {
+  const { daoid } = useParams();
   const {
     submitTransaction,
     handleCustomValidation,
     modifyFields,
     submitCallback,
-  } = useTX();
+  } = daoid ? useTX() : {};
   const {
     fields,
     additionalOptions = null,

@@ -13,9 +13,7 @@ const MODAL_SIZES = Object.freeze({
 
 const calcMaxWidth = data => {
   if (data?.fields?.length)
-    return data.fields.length > 1
-      ? MODAL_SIZES.xl
-      : MODAL_SIZES.md(data.fields);
+    return data.fields.length > 1 ? MODAL_SIZES.xl : MODAL_SIZES.md;
   if (MODAL_SIZES[data?.width]) return MODAL_SIZES[data?.width];
   return '650px';
 };
@@ -28,6 +26,7 @@ export const useAppModal = () => {
       setModal({
         title: form.title,
         subtitle: form.subtitle,
+        description: form.description,
         body: <FormBuilder {...form} />,
         width: form.customWidth || calcMaxWidth(form),
       });
