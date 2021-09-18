@@ -15,8 +15,8 @@ const SaveButton = props => {
     disabled,
     blockRouteOnDiff,
     children,
-    title = 'Discard Changes?',
-    header = 'You have unsaved changes.',
+    subtitle = 'Discard Changes?',
+    title = 'You have unsaved changes.',
     description = 'If you would like to sign and save your changes, click save. To erase your changes, click cancel.',
     saveFn,
     undoChanges,
@@ -30,8 +30,6 @@ const SaveButton = props => {
   const startingVals = useRef(HASH.AWAITING_VALUE);
 
   useEffect(() => {
-    console.log('watchedValue', watch);
-    console.log('startingValue', startingVals.current);
     if (watch != null && startingVals.current === HASH.AWAITING_VALUE) {
       console.log('SETTING STARTING VALUE');
       startingVals.current = watch;
@@ -48,24 +46,29 @@ const SaveButton = props => {
     if (blockRouteOnDiff) {
       const unblock = history.block(tx => {
         if (isSame) return true;
-
-        openConfirmation({
+        confirmModal({
           title,
-          header,
-          temporary: description,
-          async onSubmit() {
-            await saveFn?.();
-            unblock();
-            setSame(true);
-            startingVals.current = watch;
+          subtitle,
+          description,
+          primaryBtn: {
+            text: 'Sign',
+            fn: async () => {
+              await saveFn?.();
+              unblock();
+              setSame(true);
+              startingVals.current = watch;
+            },
           },
-          onCancel() {
-            closeModal();
-            unblock();
-            undoChanges?.();
-            if (tx?.pathname) {
-              history.push(tx.pathname);
-            }
+          secondaryBtn: {
+            text: 'Discard Changes',
+            fn: () => {
+              closeModal();
+              unblock();
+              undoChanges?.();
+              if (tx?.pathname) {
+                history.push(tx.pathname);
+              }
+            },
           },
         });
         return false;
@@ -88,7 +91,7 @@ const SaveButton = props => {
         body:
           'Local DEV builds may have data that is out of sync with the app branch. If you are pushing a form to the DAO metadata, make sure the form exists on the app branch first.',
         secondaryBtn: {
-          text: 'Submit Anyway',
+          text: 'Sign Anyway',
           fn: () => {
             closeModal();
             saveFn?.(updateSaveButton);
