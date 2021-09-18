@@ -80,6 +80,9 @@ const RaribleNftSelect = props => {
     setLoading(false);
   };
 
+  //  REVIEW
+  //  Can this component use the usual FieldWrapper pattern?
+
   return (
     <FieldWrapper>
       <Flex alignItems='flex-end'>

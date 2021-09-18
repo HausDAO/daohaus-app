@@ -71,10 +71,13 @@ const NiftyInkUrl = props => {
       getNiftyData();
     }
   }, [targetInk]);
+  //  REVIEW
+  //  Can this component use the usual FieldWrapper pattern?
 
   return (
     <Box>
       <LinkInput {...props} />
+
       {invalidLink && <SubmitFormError message='Invalid NiftyInk Url' />}
       {nftData ? (
         <>
