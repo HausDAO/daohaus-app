@@ -17,15 +17,15 @@ export const BOOST_PLAYLISTS = {
   //   id: 'nifty minion',
   //   forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
   // },
-  // DEV_SUITE: {
-  //   name: 'Dev Suite',
-  //   id: 'Neapolitan minion',
-  //   forms: [
-  //     'MINION_NEAPOLITAN_SIMPLE',
-  //     'PAYROLL_NEAPOLITAN',
-  //     'MINION_BUYOUT_ERC721_TOKEN',
-  //   ],
-  // },
+  SAFE_DEV_SUITE: {
+    name: 'Safe Minion Classics',
+    id: 'safeMinionClassics',
+    forms: [
+      'MINION_SAFE_SIMPLE',
+      // 'PAYROLL_SAFE',
+      // 'MINION_BUYOUT_ERC721_TOKEN',
+    ],
+  },
   RARIBLE: {
     name: 'Rarible',
     id: 'rarible',
