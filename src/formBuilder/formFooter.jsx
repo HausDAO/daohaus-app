@@ -9,7 +9,8 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import { RiAddFill } from 'react-icons/ri';
+import { ErrorList } from './staticElements';
 
 export const FormFooter = ({
   options,
@@ -102,28 +103,6 @@ export const AdditionalOptions = ({ options = [], addOption }) => {
     </Box>
   );
 };
-
-export const ErrorList = ({ errors = [] }) => (
-  <Flex flexDirection='column' alignItems='flex-start'>
-    {errors.map((error, index) => (
-      <SubmitFormError
-        message={error.message}
-        key={`${error.message}-${index}`}
-      />
-    ))}
-  </Flex>
-);
-export const SubmitFormError = ({ message }) => (
-  <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
-    <Icon
-      as={RiErrorWarningLine}
-      color='secondary.300'
-      mr={1}
-      transform='translateY(2px)'
-    />
-    {message}
-  </Flex>
-);
 
 export const ModButton = ({ label, callback }) => (
   <Button onClick={callback} variant='outline' size='xs'>

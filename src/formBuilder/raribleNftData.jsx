@@ -14,6 +14,7 @@ import {
 import { SubmitFormError } from './staticElements';
 import { useDao } from '../contexts/DaoContext';
 import { addZeros } from '../utils/tokenValue';
+import ErrorList from './ErrorList';
 
 const RaribleNftSelect = props => {
   const { localForm, name, error } = props;
@@ -106,7 +107,7 @@ const RaribleNftSelect = props => {
         )}
         {loading && <Spinner />}
       </Flex>
-      {error && <SubmitFormError message={error.message} />}
+      {error && <ErrorList message={error.message} />}
     </FieldWrapper>
   );
 };
