@@ -12,7 +12,7 @@ import {
 import { RiAddFill } from 'react-icons/ri';
 import ErrorList from './ErrorList';
 
-export const FormFooter = ({
+const FormFooter = ({
   options,
   loading,
   addOption,
@@ -73,7 +73,8 @@ export const FormFooter = ({
   );
 };
 
-export const AdditionalOptions = ({ options = [], addOption }) => {
+export default FormFooter;
+const AdditionalOptions = ({ options = [], addOption }) => {
   return (
     <Box>
       <Menu color='white' textTransform='uppercase'>

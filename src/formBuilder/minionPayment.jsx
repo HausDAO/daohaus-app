@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
-import { ModButton } from './staticElements';
+import ModButton from './modButton';
 
 import { validate } from '../utils/validation';
 import { handleDecimals } from '../utils/general';
@@ -101,8 +101,8 @@ const MinionToken = props => {
       btn={
         selectedMinion && (
           <ModButton
-            callback={setMax}
-            label={
+            fn={setMax}
+            text={
               displayableBalance != null ? `Max: ${displayableBalance}` : '--'
             }
           />

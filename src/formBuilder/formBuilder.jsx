@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
-import { FormFooter } from './staticElements';
+import FormFooter from './formFooter';
 
 import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
