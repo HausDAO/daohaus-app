@@ -11,7 +11,6 @@ import {
   getSignatureHash,
   pinOrderToIpfs,
 } from '../utils/rarible';
-import { SubmitFormError } from './staticElements';
 import { useDao } from '../contexts/DaoContext';
 import { addZeros } from '../utils/tokenValue';
 import ErrorList from './ErrorList';

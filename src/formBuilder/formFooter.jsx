@@ -10,7 +10,7 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
-import { ErrorList } from './staticElements';
+import ErrorList from './ErrorList';
 
 export const FormFooter = ({
   options,
@@ -103,9 +103,3 @@ export const AdditionalOptions = ({ options = [], addOption }) => {
     </Box>
   );
 };
-
-export const ModButton = ({ label, callback }) => (
-  <Button onClick={callback} variant='outline' size='xs'>
-    {label}
-  </Button>
-);

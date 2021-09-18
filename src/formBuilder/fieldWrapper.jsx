@@ -3,7 +3,7 @@ import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 
 import TextBox from '../components/TextBox';
-import { SubmitFormError } from './staticElements';
+import ErrorList from './ErrorList';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
 const FieldWrapper = ({
@@ -61,7 +61,7 @@ const FieldWrapper = ({
 
       {children}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      {error && <SubmitFormError message={error.message} />}
+      {error && <ErrorList message={error.message} />}
     </Flex>
   );
 };
