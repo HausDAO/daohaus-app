@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { Flex, Spinner } from '@chakra-ui/react';
 
 import { useParams } from 'react-router-dom';
-import {
-  useConfirmation,
-  useFormModal,
-  useOverlay,
-} from '../contexts/OverlayContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
@@ -32,12 +28,11 @@ const ProposalTypes = () => {
     refetchMetaData,
   } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
-  const { openFormModal, closeModal } = useFormModal();
   const { successToast, errorToast } = useOverlay();
-  const { formModal, confirmModal } = useAppModal();
-  const { openConfirmation } = useConfirmation();
+  const { formModal, confirmModal, closeModal } = useAppModal();
   const { playlists, allForms = {}, customData, devList } = daoProposals || {};
   const { daochain } = useParams();
+
   const [selectedListID, setListID] = useState(
     dev && devList?.forms?.length ? 'dev' : 'all',
   );
@@ -90,7 +85,6 @@ const ProposalTypes = () => {
 
   const deletePlaylist = id => {
     const playlist = playlists.find(list => list.id === id);
-
     confirmModal({
       subtitle: 'Delete Playlist',
       title: `Delete '${playlist?.name}'?`,
@@ -105,8 +99,8 @@ const ProposalTypes = () => {
   };
 
   const addPlaylist = () => {
-    openFormModal({
-      lego: CORE_FORMS.ADD_PLAYLIST,
+    formModal({
+      ...CORE_FORMS.ADD_PLAYLIST,
       onSubmit: ({ values }) => {
         dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
         closeModal();
