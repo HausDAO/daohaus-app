@@ -61,7 +61,7 @@ const FieldWrapper = ({
 
       {children}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      {error && <ErrorList message={error.message} />}
+      {error && <ErrorList singleError={error} />}
     </Flex>
   );
 };

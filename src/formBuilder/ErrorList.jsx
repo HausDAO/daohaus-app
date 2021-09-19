@@ -2,11 +2,12 @@ import React from 'react';
 import { Flex, Icon } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-const ErrorList = ({ errors = [] }) => (
+const ErrorList = ({ errors = [], singleError }) => (
   <Flex flexDirection='column' alignItems='flex-start'>
     {errors.map((error, index) => (
       <Error message={error.message} key={`${error.message}-${index}`} />
     ))}
+    {singleError && <Error message={singleError?.message} />}
   </Flex>
 );
 
@@ -16,7 +17,7 @@ const Error = ({ message }) => (
       as={RiErrorWarningLine}
       color='secondary.300'
       mr={1}
-      transform='translateY(2px)'
+      transform='translateY(4px)'
     />
     {message}
   </Flex>

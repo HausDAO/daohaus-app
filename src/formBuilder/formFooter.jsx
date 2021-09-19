@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import ErrorList from './ErrorList';
-import { useOverlay } from '../contexts/OverlayContext';
+import { useAppModal } from '../hooks/useModals';
 
 const FormFooter = ({
   options,
@@ -22,7 +22,7 @@ const FormFooter = ({
   customSecondaryBtn,
   customPrimaryBtn,
 }) => {
-  const { closeModal } = useOverlay();
+  const { closeModal } = useAppModal();
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
 
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
@@ -32,7 +32,7 @@ const FormFooter = ({
       <Flex flexDir='column'>
         <Flex
           mb={2}
-          alignItems={['flex-end', 'flex-end']}
+          alignItems={['flex-row', 'flex-end']}
           flexDir={['column', 'row']}
         >
           {options?.length > 0 && (
@@ -83,7 +83,7 @@ const AdditionalOptions = ({ options = [], addOption }) => {
           type='button'
           mr={[0, 4]}
         >
-          Additional Options
+          More
         </MenuButton>
         <MenuList>
           {options?.map(option => {

@@ -7,7 +7,6 @@ import {
   ModalOverlay,
   Box,
   Flex,
-  Button,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
