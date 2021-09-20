@@ -5,12 +5,11 @@ import { Button } from '@chakra-ui/button';
 import { Spinner } from '@chakra-ui/spinner';
 
 import FormBuilder from '../formBuilder/formBuilder';
-import Header from '../formBuilder/header';
 
 import ProgressIndicator from './progressIndicator';
 
 const TheLauncher = props => {
-  const { goToNext, next, lego, boostContent } = props;
+  const { goToNext, next, form } = props;
 
   const [menuState, setMenuState] = useState('summon');
 
@@ -34,10 +33,8 @@ const TheLauncher = props => {
   ) {
     return (
       <Flex flexDirection='column'>
-        <Header>{boostContent.title}</Header>
-
         {menuState === 'summon' && (
-          <FormBuilder {...lego} lifeCycleFns={lifeCycleFns} ctaText='Deploy' />
+          <FormBuilder {...form} lifeCycleFns={lifeCycleFns} ctaText='Deploy' />
         )}
         {menuState === 'summoning' && (
           <ProgressIndicator prepend={<Spinner mr={3} />} text='Deploying...' />

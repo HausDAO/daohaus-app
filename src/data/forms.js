@@ -510,7 +510,7 @@ export const BOOST_FORMS = {
   },
   WRAP_N_ZAP_LAUNCH: {
     id: 'WRAP_N_ZAP_LAUNCH',
-    title: 'Wrap n Zap',
+    title: 'Deploy Wrap n Zap',
     fields: [[]],
     tx: TX.CREATE_WRAP_N_ZAP,
   },
