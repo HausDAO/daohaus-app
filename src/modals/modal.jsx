@@ -13,24 +13,7 @@ import { rgba } from 'polished';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
-import { capitalizeWords } from '../utils/general';
 import FormFooter from '../formBuilder/formFooter';
-
-// const getMaxWidth = modal => {
-//   // if (modal.steps) return '500px';
-//   if (modal?.lego?.fields) {
-//     if (modal?.lego.fields?.length > 1) {
-//       return '800px';
-//     }
-//     return '500px';
-//   }
-//   if (modal?.width === 'sm') return '400px';
-//   if (modal?.width === 'md') return '500px';
-//   if (modal?.width === 'lg') return '650px';
-//   if (modal?.width === 'xl') return '600px';
-//   if (modal?.width?.includes('px')) return modal?.width;
-//   return '600px';
-// };
 
 const Modal = () => {
   const { theme } = useCustomTheme();

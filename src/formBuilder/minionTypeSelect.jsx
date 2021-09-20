@@ -6,7 +6,6 @@ import { MINION_TYPES } from '../utils/proposalUtils';
 import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
 import GenericSelect from './genericSelect';
 import Paragraphs from './Paragraphs';
-import Header from './header';
 import TextBox from '../components/TextBox';
 
 const noneSelected = {

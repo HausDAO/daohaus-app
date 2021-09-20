@@ -13,7 +13,6 @@ import ListItem from '../components/listItem';
 
 import { daoConnectedAndSameChain, isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
-import { CORE_FORMS } from '../data/forms';
 import BoostItemButton from '../components/boostItemButton';
 import ListItemButton from '../components/listItemButton';
 import { useTX } from '../contexts/TXContext';

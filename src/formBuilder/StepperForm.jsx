@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Box, Flex } from '@chakra-ui/layout';
 import { useOverlay } from '../contexts/OverlayContext';
 import FormBuilder from './formBuilder';
 import BoostDetails from '../components/boostDetails';

@@ -4,7 +4,6 @@ import { BsCheckCircle } from 'react-icons/bs';
 
 import { useParams } from 'react-router';
 import ProgressIndicator from './progressIndicator';
-import Header from '../formBuilder/header';
 import TextBox from './TextBox';
 import { FORM } from '../data/forms';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
