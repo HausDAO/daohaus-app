@@ -20,6 +20,7 @@ import ListItemButton from '../components/listItemButton';
 import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useAppModal } from '../hooks/useModals';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -94,6 +95,7 @@ const InstalledList = ({
 }) => {
   const { daoid, daochain } = useParams();
   const history = useHistory();
+  const { stepperModal } = useAppModal();
   const { openFormModal } = useFormModal();
   const { hydrateString } = useTX();
   const { address, injectedChain } = useInjectedProvider();
@@ -116,19 +118,21 @@ const InstalledList = ({
     }
   }, [listID, lists, searchStr]);
 
-  const handleClick = () => {
-    openFormModal({
-      steps: {
-        STEP1: {
-          start: true,
-          type: 'form',
-          next: 'STEP2',
-          lego: CORE_FORMS.SUMMON_MINION_SELECTOR,
-        },
-        STEP2: {
-          type: 'summoner',
-          finish: true,
-        },
+  const handleSummon = () => {
+    stepperModal({
+      STEP1: {
+        start: true,
+        type: 'form',
+        next: 'STEP2',
+        form: CORE_FORMS.SUMMON_MINION_SELECTOR,
+        isUserStep: true,
+        stepLabel: 'Choose a Minion',
+      },
+      STEP2: {
+        type: 'summoner',
+        finish: true,
+        isUserStep: true,
+        stepLabel: 'Summon a Minion',
       },
     });
   };
@@ -211,7 +215,11 @@ const InstalledList = ({
             />
           </InputGroup>
           {canInteract && (
-            <Button variant='outline' onClick={handleClick} width='fit-content'>
+            <Button
+              variant='outline'
+              onClick={handleSummon}
+              width='fit-content'
+            >
               Summon Minion
             </Button>
           )}

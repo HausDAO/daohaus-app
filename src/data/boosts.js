@@ -161,101 +161,69 @@ export const CONTENT = {
   // },
 };
 
+const COMMON_STEPS = {
+  DISPLAY: {
+    type: 'boostDetails',
+    title: { type: 'boostName' },
+    next: 'STEP1',
+    start: true,
+  },
+  SIGNER: {
+    type: 'signer',
+    title: 'Member Signature',
+    stepLabel: 'Add Proposals & Sign',
+    finish: true,
+    isUserStep: true,
+  },
+};
+
 const STEPS = {
   MINION_BOOST: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'summoner',
+      title: { type: 'minionName' },
       next: 'STEP2',
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Proposals & Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_DISCORD: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'discordForm',
       next: 'STEP2',
       stepLabel: 'Setup Discord Bot',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_DISCOURSE: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      lego: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
+      form: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_WRAP_N_ZAP: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'launcher',
-      lego: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
+      form: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
       next: 'STEP2',
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_MINTGATE: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
-    STEP1: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: COMMON_STEPS.SIGNER,
   },
 };
 

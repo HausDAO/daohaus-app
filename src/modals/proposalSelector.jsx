@@ -18,7 +18,7 @@ import { rgba } from 'polished';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import { VscGear } from 'react-icons/vsc';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 

@@ -11,8 +11,25 @@ import BoostMetaForm from './boostMetaForm';
 import TheLauncher from '../components/theLauncher';
 import DiscordNotificationsLaunch from './discordLaunchForm';
 
+const getStepTitle = (currentStep, props) => {
+  if (typeof currentStep?.title === 'string') return currentStep.title;
+  if (currentStep?.form) return currentStep?.form?.title;
+  if (currentStep?.title?.type === 'minionName')
+    return props.minionData?.content?.title;
+  if (currentStep?.title?.type === 'boostName')
+    return props.boostContent?.title;
+  return null;
+};
+
 const StepperForm = props => {
-  const { steps = {}, minionData, boostContent, playlist, metaFields } = props;
+  const {
+    steps = {},
+    minionData,
+    boostContent,
+    playlist,
+    metaFields,
+    updateModalUI,
+  } = props;
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useFormModal();
   const { errorToast } = useOverlay();
@@ -20,7 +37,6 @@ const StepperForm = props => {
   const [currentStep, setCurrentStep] = useState(
     Object.values(steps).find(step => step.start),
   );
-  const [position, setPosition] = useState(0);
   const [stepperStorage, setStepperStorage] = useState();
 
   //  User steps are the amount of percieved steps to finish a given tasl
@@ -38,12 +54,16 @@ const StepperForm = props => {
   }, [steps]);
 
   useEffect(() => {
-    if (!currentStep || !userSteps) return;
+    if (!currentStep || !userSteps || typeof updateModalUI !== 'function')
+      return;
     if (currentStep.isUserStep) {
-      setPosition(
-        userSteps.find(step => step.stepLabel === currentStep.stepLabel)
-          ?.position,
-      );
+      const position = userSteps.find(
+        step => step.stepLabel === currentStep.stepLabel,
+      )?.position;
+      updateModalUI({
+        title: getStepTitle(currentStep, props),
+        subtitle: `Step ${position} of ${userSteps?.length}: ${currentStep.stepLabel}`,
+      });
     }
   }, [currentStep, userSteps]);
 
@@ -73,116 +93,111 @@ const StepperForm = props => {
     fn: () => closeModal(),
   };
 
-  const getFrame = () => {
-    if (currentStep?.type === 'form') {
-      return (
-        <FormBuilder
-          {...currentStep.lego}
-          parentForm={parentForm}
-          goToNext={goToNext}
-          next={currentStep.next}
-          ctaText={currentStep.ctaText || 'Next'}
-          secondaryBtn={secondaryBtn}
-        />
-      );
-    }
-    if (currentStep?.type === 'boostMetaForm') {
-      return (
-        <BoostMetaForm
-          currentStep={currentStep}
-          parentForm={parentForm}
-          metaFields={metaFields}
-          goToNext={goToNext}
-          setStepperStorage={setStepperStorage}
-          secondaryBtn={secondaryBtn}
-        />
-      );
-    }
-    if (currentStep?.type === 'boostDetails') {
-      return (
-        <BoostDetails
-          {...props}
-          goToNext={goToNext}
-          next={currentStep.next}
-          userSteps={userSteps}
-          steps={steps}
-          secondaryBtn={secondaryBtn}
-        />
-      );
-    }
-    if (currentStep?.type === 'summoner') {
-      return (
-        <TheSummoner
-          {...currentStep}
-          localForm={parentForm}
-          next={currentStep.next}
-          minionData={minionData}
-          goToNext={goToNext}
-          boostContent={boostContent}
-          secondaryBtn={secondaryBtn}
-        />
-      );
-    }
-    if (currentStep?.type === 'launcher') {
-      return (
-        <TheLauncher
-          {...currentStep}
-          localForm={parentForm}
-          next={currentStep.next}
-          goToNext={goToNext}
-          boostContent={boostContent}
-          secondaryBtn={secondaryBtn}
-        />
-      );
-    }
-    if (currentStep?.type === 'signer') {
-      return (
-        <Signer
-          {...currentStep}
-          boostData={props}
-          stepperStorage={stepperStorage}
-          parentForm={parentForm}
-          next={currentStep.next}
-          goToNext={goToNext}
-          playlist={playlist}
-          secondaryBtn={secondaryBtn}
-        />
-      );
-    }
-    if (currentStep?.type === 'discordForm') {
-      return (
-        <DiscordNotificationsLaunch
-          currentStep={currentStep}
-          // parentForm={parentForm}
-          metaFields={metaFields}
-          goToNext={goToNext}
-          setStepperStorage={setStepperStorage}
-          secondaryBtn={secondaryBtn}
-        />
-      );
-    }
-    return null;
-  };
-
-  if (userSteps?.length && position > 0)
+  if (currentStep?.type === 'form') {
     return (
-      <Flex flexDir='column' p={3}>
-        <Box
-          fontFamily='heading'
-          textTransform='uppercase'
-          fontSize='sm'
-          fontWeight={700}
-          color='secondary.400'
-          mb={2}
-        >
-          {`Step ${position} of ${userSteps.length}`}
-          {currentStep?.stepLabel && `: ${currentStep.stepLabel}`}
-        </Box>
-        {getFrame()}
-      </Flex>
+      <FormBuilder
+        {...currentStep.form}
+        parentForm={parentForm}
+        goToNext={goToNext}
+        next={currentStep.next}
+        ctaText={currentStep.ctaText || 'Next'}
+      />
     );
+  }
+  if (currentStep?.type === 'boostMetaForm') {
+    return (
+      <BoostMetaForm
+        currentStep={currentStep}
+        parentForm={parentForm}
+        metaFields={metaFields}
+        goToNext={goToNext}
+        setStepperStorage={setStepperStorage}
+        secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  if (currentStep?.type === 'boostDetails') {
+    return (
+      <BoostDetails
+        {...props}
+        goToNext={goToNext}
+        next={currentStep.next}
+        userSteps={userSteps}
+        steps={steps}
+        secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  if (currentStep?.type === 'summoner') {
+    return (
+      <TheSummoner
+        {...currentStep}
+        localForm={parentForm}
+        next={currentStep.next}
+        minionData={minionData}
+        goToNext={goToNext}
+        boostContent={boostContent}
+        secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  if (currentStep?.type === 'launcher') {
+    return (
+      <TheLauncher
+        {...currentStep}
+        localForm={parentForm}
+        next={currentStep.next}
+        goToNext={goToNext}
+        boostContent={boostContent}
+        secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  if (currentStep?.type === 'signer') {
+    return (
+      <Signer
+        {...currentStep}
+        boostData={props}
+        stepperStorage={stepperStorage}
+        parentForm={parentForm}
+        next={currentStep.next}
+        goToNext={goToNext}
+        playlist={playlist}
+        secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  if (currentStep?.type === 'discordForm') {
+    return (
+      <DiscordNotificationsLaunch
+        currentStep={currentStep}
+        // parentForm={parentForm}
+        metaFields={metaFields}
+        goToNext={goToNext}
+        setStepperStorage={setStepperStorage}
+        secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  return null;
 
-  return <Flex p={3}>{getFrame()}</Flex>;
+  // if (userSteps?.length && position > 0)
+  //   return (
+  //     <Flex flexDir='column'>
+  //       <Box
+  //         fontFamily='heading'
+  //         textTransform='uppercase'
+  //         fontSize='sm'
+  //         fontWeight={700}
+  //         color='secondary.400'
+  //         mb={2}
+  //       >
+  //         {`Step ${position} of ${userSteps.length}`}
+  //         {currentStep?.stepLabel && `: ${currentStep.stepLabel}`}
+  //       </Box>
+  //       {getFrame()}
+  //     </Flex>
+  //   );
 };
 
 export default StepperForm;

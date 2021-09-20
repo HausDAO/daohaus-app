@@ -28,45 +28,43 @@ const FormFooter = ({
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
 
   return (
-    <Box>
-      <Flex flexDir='column'>
-        <Flex
-          mb={2}
-          alignItems={['flex-row', 'flex-end']}
-          flexDir={['column', 'row']}
-        >
-          {options?.length > 0 && (
-            <AdditionalOptions
-              mr='auto'
-              options={options}
-              addOption={addOption}
-            />
-          )}
-          <Flex ml={['0', 'auto']}>
-            <Button
-              type='button'
-              variant='outline'
-              disabled={loading}
-              onClick={secondaryBtn.fn}
-              mr={2}
-            >
-              {secondaryBtn.text}
-            </Button>
+    <Flex flexDir='column'>
+      <Flex
+        mb={2}
+        alignItems={['flex-row', 'flex-end']}
+        flexDir={['column', 'row']}
+      >
+        {options?.length > 0 && (
+          <AdditionalOptions
+            mr='auto'
+            options={options}
+            addOption={addOption}
+          />
+        )}
+        <Flex ml={['0', 'auto']}>
+          <Button
+            type='button'
+            variant='outline'
+            disabled={loading}
+            onClick={secondaryBtn.fn}
+            mr={2}
+          >
+            {secondaryBtn.text}
+          </Button>
 
-            <Button
-              type={customPrimaryBtn ? 'button' : 'submit'}
-              onClick={customPrimaryBtn && customPrimaryBtn?.fn}
-              loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
-              isLoading={loading}
-              disabled={loading || errors?.length}
-            >
-              {ctaText || customPrimaryBtn?.text || 'Submit'}
-            </Button>
-          </Flex>
+          <Button
+            type={customPrimaryBtn ? 'button' : 'submit'}
+            onClick={customPrimaryBtn && customPrimaryBtn?.fn}
+            loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
+            isLoading={loading}
+            disabled={loading || errors?.length}
+          >
+            {ctaText || customPrimaryBtn?.text || 'Submit'}
+          </Button>
         </Flex>
-        <ErrorList errors={errors} />
       </Flex>
-    </Box>
+      <ErrorList errors={errors} />
+    </Flex>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import TextBox from '../components/TextBox';
 import { OverlayContext } from '../contexts/OverlayContext';
 import FormBuilder from '../formBuilder/formBuilder';
@@ -32,10 +32,11 @@ export const useAppModal = () => {
       });
     },
     stepperModal(steps) {
+      const updateModalUI = ({ subtitle, title }) => {
+        setModal(prevState => ({ ...prevState, subtitle, title }));
+      };
       setModal({
-        title: steps.title,
-        subtitle: steps.subtitle,
-        body: <StepperForm {...steps} />,
+        body: <StepperForm steps={steps} updateModalUI={updateModalUI} />,
         width: steps.customWidth || calcMaxWidth(steps),
       });
     },

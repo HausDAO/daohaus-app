@@ -12,7 +12,6 @@ import DaoSwitcherModal from './modals/daoSwitcherModal';
 import TxInfoModal from './modals/TxInfoModal';
 import FourOhFour from './pages/404';
 import HubBalances from './pages/HubBalances';
-import Modal from './modals/modal';
 
 function App() {
   const AppScopedModals = () => (
