@@ -8,16 +8,20 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import BoostDetails from '../components/boostDetails';
 import { getSettingsLink } from '../utils/marketplace';
+import { useAppModal } from '../hooks/useModals';
 
 const MarketPlaceV0 = () => {
   const { errorToast } = useOverlay();
   const { openFormModal } = useFormModal();
+  const { genericModal } = useAppModal();
   const params = useParams();
   const history = useHistory();
 
   const installBoost = boost => openFormModal({ boost });
   const openDetails = boost => {
-    openFormModal({
+    genericModal({
+      title: boost.boostContent.title,
+      subtitle: 'Boost Details',
       body: <BoostDetails {...boost} />,
     });
   };

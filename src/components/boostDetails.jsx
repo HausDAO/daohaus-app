@@ -85,9 +85,6 @@ const BoostDetails = ({
   const secondBtn = canRestore ? restorePlaylist : secondaryBtn;
   return (
     <Flex flexDirection='column'>
-      <TextBox mb={6} size='lg'>
-        {header || title}
-      </TextBox>
       <Flex justifyContent='space-between' flexWrap='wrap'>
         <MemberIndicator
           link={`/dao/${daoData?.network}/${daoData?.address}`}

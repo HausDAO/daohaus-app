@@ -96,7 +96,6 @@ const InstalledList = ({
   const { daoid, daochain } = useParams();
   const history = useHistory();
   const { stepperModal } = useAppModal();
-  const { openFormModal } = useFormModal();
   const { hydrateString } = useTX();
   const { address, injectedChain } = useInjectedProvider();
   const { daoMember } = useDaoMember();
