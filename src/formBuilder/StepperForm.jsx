@@ -10,12 +10,15 @@ import TheSummoner from '../components/theSummoner';
 import BoostMetaForm from './boostMetaForm';
 import TheLauncher from '../components/theLauncher';
 import DiscordNotificationsLaunch from './discordLaunchForm';
+import { MINION_CONTENT } from '../data/minions';
 
 const getStepTitle = (currentStep, props) => {
   if (typeof currentStep?.title === 'string') return currentStep.title;
   if (currentStep?.form) return currentStep?.form?.title;
-  if (currentStep?.title?.type === 'minionName')
-    return props.minionData?.content?.title;
+  if (currentStep?.title?.type === 'minionName') {
+    const tryMinionName = props.minionData?.content?.title;
+    return tryMinionName || 'Summon';
+  }
   if (currentStep?.title?.type === 'boostName')
     return props.boostContent?.title;
   return null;

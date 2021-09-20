@@ -49,9 +49,6 @@ const MinionTypeSelect = props => {
 
   return (
     <Flex flexDir='column'>
-      <Header mb={4}>
-        Summon a {currentMinion?.title || noneSelected.title}
-      </Header>
       <TextBox variant='body' size='sm' mb={4}>
         {currentMinion?.description || noneSelected.description}
       </TextBox>

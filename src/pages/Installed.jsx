@@ -132,6 +132,7 @@ const InstalledList = ({
         type: 'summoner',
         finish: true,
         isUserStep: true,
+        title: { type: 'minionName' },
         stepLabel: 'Summon a Minion',
       },
     });

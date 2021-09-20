@@ -9,7 +9,7 @@ import { Spinner } from '@chakra-ui/spinner';
 
 import { useDao } from '../contexts/DaoContext';
 import FormBuilder from '../formBuilder/formBuilder';
-import Header from '../formBuilder/header';
+
 import TextBox from './TextBox';
 
 import { MINIONS } from '../data/minions';
@@ -106,7 +106,7 @@ const TheSummoner = props => {
   if (menuState === 'displayExisting') {
     return (
       <Flex flexDirection='column'>
-        <Header>{minionType}</Header>
+        {/* <Header>{minionType}</Header> */}
         <MinionFound minionType={minionType} />
         <Flex flexDir='column' mb={4}>
           <Flex w='100%' mt={6} mb={4}>
@@ -170,7 +170,7 @@ const TheSummoner = props => {
   ) {
     return (
       <Flex flexDirection='column'>
-        <Header>{minionType}</Header>
+        {/* <Header>{minionType}</Header> */}
         <Box mb={4}>
           <MinionNotFound minionType={minionType} />
         </Box>

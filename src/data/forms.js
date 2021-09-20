@@ -70,7 +70,7 @@ export const CORE_FORMS = {
   },
   SUMMON_MINION_SELECTOR: {
     id: 'SUMMON_MINION_SELECTOR',
-    title: 'Minion Summon Selector',
+    title: 'Select a Minion',
     required: ['minionType'],
     fields: [[FIELD.MINION_TYPE_SELECT]],
   },
@@ -430,7 +430,6 @@ export const FORM = {
       [FIELD.BUYOUT_PAYMENT_REQUEST],
     ],
   },
-
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
     subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
