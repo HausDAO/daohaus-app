@@ -25,7 +25,7 @@ export const useAppModal = () => {
     formModal(form) {
       setModal({
         title: form.title,
-        subtitle: form.subtitle,
+        subtitle: form.subtitle || form.type,
         description: form.description,
         body: <FormBuilder {...form} />,
         width: form.customWidth || calcMaxWidth(form),

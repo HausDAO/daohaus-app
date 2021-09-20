@@ -14,6 +14,7 @@ import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
 import { useAppModal } from '../hooks/useModals';
+import { PLAYLISTS } from '../utils/playlists';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -71,8 +72,11 @@ const ProposalTypes = () => {
   };
 
   const editPlaylist = id => {
+    const playlist = playlists?.find(list => list.id === id);
+
     formModal({
       ...CORE_FORMS.EDIT_PLAYLIST,
+      title: `Edit ${playlist?.name || 'Playlist'}?`,
       onSubmit: ({ values }) => {
         const name = values?.title;
         if (name && id) {

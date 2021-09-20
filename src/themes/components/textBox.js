@@ -61,7 +61,7 @@ const TextBoxComponent = {
       color: props.color || 'mode.900',
       textAlign: props.textAlign || null,
       fontFamily: 'body',
-      textTransform: 'none',
+      textTransform: props.textTransform || 'none',
       fontWeight: props.fontWeight || 400,
       opacity: props.opacity || 1.0,
       padding: 0,

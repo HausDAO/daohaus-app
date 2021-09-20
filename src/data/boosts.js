@@ -97,7 +97,7 @@ export const CONTENT = {
     ],
   },
   MINTGATE: {
-    title: 'MintGate',
+    title: 'Mint Gate',
     description: 'Gate links to restrict view access to DAO members only',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',

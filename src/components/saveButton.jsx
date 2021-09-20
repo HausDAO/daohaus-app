@@ -82,7 +82,8 @@ const SaveButton = props => {
 
     if (dev && !ignoreDevWarning) {
       confirmModal({
-        subtitle: 'DEV WARNING',
+        subtitle: 'sync warning',
+        title: 'Warning for devs',
         body:
           'Local DEV builds may have data that is out of sync with the app branch. If you are pushing a form to the DAO metadata, make sure the form exists on the app branch first.',
         secondaryBtn: {

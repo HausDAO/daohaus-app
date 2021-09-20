@@ -37,10 +37,10 @@ export const CORE_FORMS = {
   },
   UPDATE_DELEGATE: {
     id: 'UPDATE_DELEGATE',
-    title: 'UPDATE DELEGATE ADDRESS',
+    title: 'Update delegate address',
     required: ['delegateAddress'],
     tx: TX.UPDATE_DELEGATE,
-    fields: [FIELD.DELEGATE_ADDRESS],
+    fields: [[FIELD.DELEGATE_ADDRESS]],
   },
   EDIT_PROPOSAL: {
     id: 'EDIT_PROPOSAL',
@@ -61,7 +61,7 @@ export const CORE_FORMS = {
   MINION_SELL_NIFTY: {
     id: 'MINION_SELL_NIFTY',
     title: 'Sell Nifty ERC721',
-    subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
+    description: 'Make a proposal to set the price of the nft on nifty.ink',
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
@@ -77,7 +77,7 @@ export const CORE_FORMS = {
   RAGE_QUIT: {
     customValidations: ['rageQuitMinimum', 'rageQuitMax'],
     id: 'RAGE_QUIT',
-    title: 'RAGE QUIT',
+    title: 'Rage Quit',
     required: [],
     tx: TX.RAGE_QUIT,
     fields: [
@@ -99,7 +99,6 @@ export const FORM = {
     id: 'BUY_SHARES',
     title: 'Request shares for tokens',
     description: 'Request shares from the DAO in exchange for ERC-20 tokens',
-    subtitle: 'Buy shares',
     playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
@@ -349,7 +348,7 @@ export const FORM = {
   },
   MINION_SEND_NETWORK_TOKEN: {
     title: 'Network Token Transfer',
-    subtitle: 'Make a proposal to transfer tokens out of the minion',
+    description: 'Make a proposal to transfer tokens out of the minion',
     type: PROPOSAL_TYPES.MINION_NATIVE,
     required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
@@ -358,7 +357,7 @@ export const FORM = {
   },
   MINION_SEND_ERC20_TOKEN: {
     title: 'ERC20 Token Transfer',
-    subtitle: 'Make a proposal to transfer tokens out of the minion',
+    description: 'Make a proposal to transfer tokens out of the minion',
     type: PROPOSAL_TYPES.MINION_ERC20,
     required: ['minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -367,7 +366,7 @@ export const FORM = {
   },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
-    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    description: 'Make a proposal to transfer the nft out of the minion',
     type: PROPOSAL_TYPES.MINION_ERC721,
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -383,7 +382,7 @@ export const FORM = {
   },
   MINION_SEND_ERC1155_TOKEN: {
     title: 'ERC1155 Token Transfer',
-    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    description: 'Make a proposal to transfer the nft out of the minion',
     type: PROPOSAL_TYPES.MINION_ERC1155,
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -400,7 +399,6 @@ export const FORM = {
   SELL_NFT_RARIBLE: {
     id: 'SELL_NFT_RARIBLE',
     title: 'Sell NFT on Rarible',
-    subtitle: 'Post an NFT for sale on Rarible',
     description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.SAFE,
@@ -419,7 +417,6 @@ export const FORM = {
   MINION_BUYOUT_ERC721_TOKEN: {
     id: 'MINION_BUYOUT_ERC721_TOKEN',
     title: 'Buyout Proposal',
-    subtitle: 'Request funds as buyout',
     description: 'Request funds as buyout',
     type: PROPOSAL_TYPES.MINION_BUYOUT,
     minionType: MINION_TYPES.NEAPOLITAN,
@@ -432,7 +429,7 @@ export const FORM = {
   },
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
-    subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
+    description: 'Make a proposal to set the price of the nft on nifty.ink',
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,

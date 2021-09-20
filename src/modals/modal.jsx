@@ -18,7 +18,7 @@ import FormFooter from '../formBuilder/formFooter';
 const Modal = () => {
   const { theme } = useCustomTheme();
   const { modal, setModal } = useOverlay();
-  const { title, subtitle, body, footer, width = '600px' } = modal;
+  const { title, subtitle, body, footer, width = '600px', description } = modal;
 
   const handleClose = () => setModal(false);
 
@@ -47,33 +47,28 @@ const Modal = () => {
             </Box>
             <ModalCloseButton top='4' />
             {title && (
-              <TextBox mb={4} size='lg'>
+              <TextBox
+                mb={4}
+                size='lg'
+                variant='body'
+                fontWeight='500'
+                mr={4}
+                textTransform='capitalize'
+              >
                 {title}
               </TextBox>
             )}
-            {/* {description && (
-              // <Flex
-              //   border={`1px ${theme.colors.secondary['500']} solid`}
-              //   p={4}
-              //   mb={6}
-              //   borderRadius='md'
-              // >
+            {description && (
               <TextBox size='sm' variant='body' opacity={0.9} mb={6}>
                 {description}
               </TextBox>
-              // </Flex>
-            )} */}
+            )}
             <Box mb={2}>{body}</Box>
             {footer && (
               <FormFooter
                 customPrimaryBtn={footer?.primaryBtn}
                 customSecondaryBtn={footer?.secondaryBtn}
               />
-              // <Footer
-              //   onCancel={footer.onCancel}
-              //   onSubmit={footer.onSubmit}
-              //   loading={loading}
-              // />
             )}
           </Flex>
         </ModalBody>
