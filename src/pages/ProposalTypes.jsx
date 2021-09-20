@@ -14,7 +14,6 @@ import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
 import { useAppModal } from '../hooks/useModals';
-import { PLAYLISTS } from '../utils/playlists';
 
 const dev = process.env.REACT_APP_DEV;
 
