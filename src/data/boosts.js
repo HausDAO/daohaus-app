@@ -254,7 +254,7 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
     settings: 'none',
-    networks: 'all',
+    networks: MINIONS[MINION_TYPES.VANILLA].networks,
     cost: 'free',
   },
   NIFTY_DEV_SUITE: {

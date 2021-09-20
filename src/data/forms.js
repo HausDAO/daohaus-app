@@ -65,7 +65,7 @@ export const CORE_FORMS = {
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_NIFTY_SET_PRICE,
+    tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   SUMMON_MINION_SELECTOR: {

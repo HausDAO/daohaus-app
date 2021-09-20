@@ -5,7 +5,7 @@ import imgProjects from '../assets/Daohaus__Castle--Dark.svg';
 import imgClubs from '../assets/Daohaus__Castle--Dark.svg';
 import { supportedChains } from '../utils/chains';
 
-export const daoConstants = (networkId) => {
+export const daoConstants = networkId => {
   const constants = {
     abortWindow: '1',
     dilutionBound: '3',
@@ -19,7 +19,7 @@ export const daoConstants = (networkId) => {
   return constants;
 };
 
-export const daoPresets = (networkId) => {
+export const daoPresets = networkId => {
   let presets = [
     {
       presetName: 'Guilds',
@@ -114,7 +114,7 @@ export const daoPresets = (networkId) => {
   ];
 
   if (networkId === 100) {
-    presets = presets.map((preset) => {
+    presets = presets.map(preset => {
       preset.currency = 'WXDAI';
       preset.approvedToken = supportedChains[networkId].wrapper_contract;
       preset.proposalDeposit = '100000000000000000';
@@ -123,7 +123,7 @@ export const daoPresets = (networkId) => {
       return preset;
     });
   } else if (networkId === 137) {
-    presets = presets.map((preset) => {
+    presets = presets.map(preset => {
       preset.currency = 'WMATIC';
       preset.approvedToken = supportedChains[networkId].wrapper_contract;
       preset.proposalDeposit = '100000000000000000';
@@ -135,7 +135,7 @@ export const daoPresets = (networkId) => {
   return presets;
 };
 
-export const currencyOptions = (networkId) => {
+export const currencyOptions = networkId => {
   let options;
 
   if (networkId === 100) {
