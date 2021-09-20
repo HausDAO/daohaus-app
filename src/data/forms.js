@@ -440,7 +440,7 @@ export const FORM = {
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   NEW_SAFE_MINION: {
-    required: ['minQuorum', 'minionName', 'saltNonce'],
+    required: ['minionName', 'minQuorum', 'saltNonce'],
     tx: TX.SUMMON_MINION_SAFE,
     fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
   },
