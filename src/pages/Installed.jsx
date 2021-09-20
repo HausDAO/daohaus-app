@@ -21,6 +21,7 @@ import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useAppModal } from '../hooks/useModals';
+import { STEPS } from '../data/boosts';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -118,23 +119,7 @@ const InstalledList = ({
   }, [listID, lists, searchStr]);
 
   const handleSummon = () => {
-    stepperModal({
-      STEP1: {
-        start: true,
-        type: 'form',
-        next: 'STEP2',
-        form: CORE_FORMS.SUMMON_MINION_SELECTOR,
-        isUserStep: true,
-        stepLabel: 'Choose a Minion',
-      },
-      STEP2: {
-        type: 'summoner',
-        finish: true,
-        isUserStep: true,
-        title: { type: 'minionName' },
-        stepLabel: 'Summon a Minion',
-      },
-    });
+    stepperModal(STEPS.SUMMON_ANY);
   };
 
   const handleMinionSettings = ({ data, id }) => {

@@ -13,11 +13,12 @@ import DiscordNotificationsLaunch from './discordLaunchForm';
 import { MINION_CONTENT } from '../data/minions';
 
 const getStepTitle = (currentStep, props) => {
+  console.log(`currentStep`, currentStep);
+  console.log(`props`, props);
   if (typeof currentStep?.title === 'string') return currentStep.title;
   if (currentStep?.form) return currentStep?.form?.title;
   if (currentStep?.title?.type === 'minionName') {
-    const tryMinionName = props.minionData?.content?.title;
-    return tryMinionName || 'Summon';
+    return props.minionData?.content?.title;
   }
   if (currentStep?.title?.type === 'boostName')
     return props.boostContent?.title;
@@ -42,11 +43,6 @@ const StepperForm = props => {
   );
   const [stepperStorage, setStepperStorage] = useState();
 
-  //  User steps are the amount of percieved steps to finish a given tasl
-  //  regular steps tell the app which frame to render, (ex. BoostDetails)
-  //  userSteps tell the users the steps they will have to perform
-  //  (ex. form, summoner, or signer)
-
   const userSteps = useMemo(() => {
     if (steps) {
       return Object.values(steps)
@@ -65,7 +61,14 @@ const StepperForm = props => {
       )?.position;
       updateModalUI({
         title: getStepTitle(currentStep, props),
-        subtitle: `Step ${position} of ${userSteps?.length}: ${currentStep.stepLabel}`,
+        subtitle:
+          currentStep?.subtitle ||
+          `Step ${position} of ${userSteps?.length}: ${currentStep.stepLabel}`,
+      });
+    } else {
+      updateModalUI({
+        title: getStepTitle(currentStep, props),
+        subtitle: currentStep?.subtitle,
       });
     }
   }, [currentStep, userSteps]);

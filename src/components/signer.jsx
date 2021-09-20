@@ -41,8 +41,6 @@ const Signer = props => {
 
   return (
     <Flex flexDirection='column'>
-      <Header>Member Signature</Header>
-
       {!playlist && (
         <TextBox variant='body' mb={6}>
           This boost is ready to launch. Sign with metamask to prove DAO

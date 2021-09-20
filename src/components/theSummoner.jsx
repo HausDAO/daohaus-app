@@ -106,7 +106,6 @@ const TheSummoner = props => {
   if (menuState === 'displayExisting') {
     return (
       <Flex flexDirection='column'>
-        {/* <Header>{minionType}</Header> */}
         <MinionFound minionType={minionType} />
         <Flex flexDir='column' mb={4}>
           <Flex w='100%' mt={6} mb={4}>
@@ -170,7 +169,6 @@ const TheSummoner = props => {
   ) {
     return (
       <Flex flexDirection='column'>
-        {/* <Header>{minionType}</Header> */}
         <Box mb={4}>
           <MinionNotFound minionType={minionType} />
         </Box>

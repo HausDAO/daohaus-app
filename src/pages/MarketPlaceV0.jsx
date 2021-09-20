@@ -13,18 +13,18 @@ import { useAppModal } from '../hooks/useModals';
 const MarketPlaceV0 = () => {
   const { errorToast } = useOverlay();
   const { openFormModal } = useFormModal();
-  const { genericModal } = useAppModal();
+  const { genericModal, boostModal } = useAppModal();
   const params = useParams();
   const history = useHistory();
 
-  const installBoost = boost => openFormModal({ boost });
-  const openDetails = boost => {
+  const installBoost = boost => boostModal(boost);
+  const openDetails = boost =>
     genericModal({
       title: boost.boostContent.title,
       subtitle: 'Boost Details',
       body: <BoostDetails {...boost} />,
     });
-  };
+
   const goToSettings = boost => {
     if (boost.settings.type === 'internalLink') {
       history.push(getSettingsLink(boost.settings, params));

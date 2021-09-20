@@ -6,7 +6,7 @@ import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 import { useParams } from 'react-router-dom';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+import { useOverlay } from '../contexts/OverlayContext';
 
 import MemberIndicator from './memberIndicator';
 import TextIndicator from './textIndicator';
@@ -16,6 +16,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { chainByID } from '../utils/chain';
 import { hasPlaylist } from '../utils/playlists';
+import { useAppModal } from '../hooks/useModals';
 
 const BoostDetails = ({
   boostContent = {},
@@ -26,14 +27,12 @@ const BoostDetails = ({
   secondaryBtn,
   playlist,
 }) => {
-  const { closeModal } = useFormModal();
+  const { closeModal } = useAppModal();
   const {
     publisher = {},
     version,
     pars = [],
     externalLinks = [],
-    header,
-    title,
   } = boostContent;
   const { name, daoData } = publisher;
 

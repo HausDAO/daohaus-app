@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { BOOST_FORMS } from './forms';
+import { BOOST_FORMS, CORE_FORMS } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -165,6 +165,7 @@ const COMMON_STEPS = {
   DISPLAY: {
     type: 'boostDetails',
     title: { type: 'boostName' },
+    subtitle: 'Install Boost',
     next: 'STEP1',
     start: true,
   },
@@ -177,7 +178,7 @@ const COMMON_STEPS = {
   },
 };
 
-const STEPS = {
+export const STEPS = {
   MINION_BOOST: {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
@@ -224,6 +225,23 @@ const STEPS = {
   ADD_MINTGATE: {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: COMMON_STEPS.SIGNER,
+  },
+  SUMMON_ANY: {
+    STEP1: {
+      start: true,
+      type: 'form',
+      next: 'STEP2',
+      form: CORE_FORMS.SUMMON_MINION_SELECTOR,
+      isUserStep: true,
+      stepLabel: 'Choose a Minion',
+    },
+    STEP2: {
+      type: 'summoner',
+      finish: true,
+      isUserStep: true,
+      title: 'Summon',
+      stepLabel: 'Summon',
+    },
   },
 };
 

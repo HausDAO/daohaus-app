@@ -40,6 +40,20 @@ export const useAppModal = () => {
         width: steps.customWidth || calcMaxWidth(steps),
       });
     },
+    boostModal(boost) {
+      const updateModalUI = ({ subtitle, title }) => {
+        setModal(prevState => ({ ...prevState, subtitle, title }));
+      };
+      setModal({
+        body: (
+          <StepperForm
+            steps={boost.steps}
+            updateModalUI={updateModalUI}
+            {...boost}
+          />
+        ),
+      });
+    },
     confirmModal({
       title,
       subtitle,
