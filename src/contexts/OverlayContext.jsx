@@ -189,16 +189,3 @@ export const useConfirmation = () => {
     closeModal,
   };
 };
-
-export const useFormModal = () => {
-  const { setModal, closeModal } = useContext(OverlayContext);
-  return {
-    openFormModal(params) {
-      //  TODO once TX Context is ready on Hub level
-      //  get url info from useParams  and conditionally load the correct
-      //  modal based on scope. Same pattern can be used for other scoped modals
-      setModal(params);
-    },
-    closeModal,
-  };
-};

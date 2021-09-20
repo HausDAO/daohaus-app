@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Box, Flex } from '@chakra-ui/layout';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import FormBuilder from './formBuilder';
 import BoostDetails from '../components/boostDetails';
 import Signer from '../components/signer';
@@ -10,7 +10,7 @@ import TheSummoner from '../components/theSummoner';
 import BoostMetaForm from './boostMetaForm';
 import TheLauncher from '../components/theLauncher';
 import DiscordNotificationsLaunch from './discordLaunchForm';
-import { MINION_CONTENT } from '../data/minions';
+import { useAppModal } from '../hooks/useModals';
 
 const getStepTitle = (currentStep, props) => {
   console.log(`currentStep`, currentStep);
@@ -35,7 +35,7 @@ const StepperForm = props => {
     updateModalUI,
   } = props;
   const parentForm = useForm({ shouldUnregister: false });
-  const { closeModal } = useFormModal();
+  const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
 
   const [currentStep, setCurrentStep] = useState(

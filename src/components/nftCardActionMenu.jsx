@@ -12,30 +12,28 @@ import {
 import { BsThreeDots } from 'react-icons/bs';
 
 import { useDao } from '../contexts/DaoContext';
-import { useFormModal } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useAppModal } from '../hooks/useModals';
 
 const NftCardActionMenu = ({ nft, minion }) => {
   const { daoOverview } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
-  const { openFormModal } = useFormModal();
+  const { formModal } = useAppModal();
 
   const handleActionClick = action => {
     const currentMinion = daoOverview.minions.find(
       m => m.minionAddress === minion,
     );
-    openFormModal({
-      lego: {
-        ...action.formLego,
-        localValues: {
-          ...action.localValues,
-          minionAddress: currentMinion.minionAddress,
-          safeAddress: currentMinion.safeAddress,
-        },
+    formModal({
+      ...action.formLego,
+      localValues: {
+        ...action.localValues,
+        minionAddress: currentMinion.minionAddress,
+        safeAddress: currentMinion.safeAddress,
       },
     });
   };

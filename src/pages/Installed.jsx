@@ -3,7 +3,6 @@ import { Flex, Spinner, Button, InputGroup, Input } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
 
 import { useMetaData } from '../contexts/MetaDataContext';
-import { useFormModal } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
 import ListSelectorItem from '../components/ListSelectorItem';
 import TextBox from '../components/TextBox';
