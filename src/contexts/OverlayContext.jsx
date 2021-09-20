@@ -157,35 +157,3 @@ export const useOverlay = () => {
     setNftViewModal,
   };
 };
-
-export const useConfirmation = () => {
-  const { setModal, closeModal } = useContext(OverlayContext);
-
-  return {
-    openConfirmation({
-      title,
-      body,
-      width = '500px',
-      onCancel,
-      onSubmit,
-      header,
-      overrideFooter,
-      temporary,
-      loading,
-    }) {
-      setModal({
-        isConfirmation: true,
-        title,
-        temporary,
-        header,
-        body,
-        width,
-        onCancel,
-        onSubmit,
-        overrideFooter,
-        loading,
-      });
-    },
-    closeModal,
-  };
-};
