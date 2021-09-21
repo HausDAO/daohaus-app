@@ -11,6 +11,10 @@ import TheLauncher from '../components/theLauncher';
 import DiscordNotificationsLaunch from './discordLaunchForm';
 import { useAppModal } from '../hooks/useModals';
 
+// const getFormCtaText = (currentStep) => {
+//   if()
+// }
+
 const getStepTitle = (currentStep, props) => {
   console.log(`currentStep`, currentStep);
   console.log(`props`, props);
@@ -115,7 +119,7 @@ const StepperForm = props => {
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}
-        ctaText={currentStep.ctaText || 'Next'}
+        ctaText={currentStep?.next?.ctaText || 'Next >'}
       />
     );
   }
