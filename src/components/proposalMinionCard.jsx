@@ -56,7 +56,12 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   }, [minionAction, proposal]);
 
   const decodeFromEtherscan = async action => {
-    const key = daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+    let key;
+    if (daochain === '0x89') {
+      key = process.env.REACT_APP_POLYGONSCAN_KEY;
+    } else {
+      key = process.env.REACT_APP_ETHERSCAN_KEY;
+    }
     const url = `${chainByID(daochain).abi_api_url}${action.proxyTo ||
       action.to}${key && `&apikey=${key}`}`;
     const response = await fetch(url);
