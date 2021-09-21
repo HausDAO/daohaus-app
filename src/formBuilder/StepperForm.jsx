@@ -72,11 +72,9 @@ const StepperForm = props => {
     }
   }, [currentStep, userSteps]);
 
-  const goToNext = () => {
-    if (currentStep.finish) {
-      closeModal();
-    } else if (currentStep.next) {
-      const nextStep = steps[currentStep.next];
+  const goToNext = next => {
+    const handleNextStep = nextString => {
+      const nextStep = steps[nextString];
       if (nextStep) {
         setCurrentStep(nextStep);
       } else {
@@ -86,9 +84,21 @@ const StepperForm = props => {
             'Check the steps and make sure the "next" key links to a valid step',
         });
       }
+    };
+    if (currentStep.finish) {
+      closeModal();
+    } else if (
+      typeof next === 'string' ||
+      typeof currentStep.next === 'string'
+    ) {
+      handleNextStep(next);
+    } else if (currentStep.next) {
+      handleNextStep(currentStep.next);
     } else {
       errorToast({
-        title: 'Next step is undefined or falsy',
+        title: "Incorrect 'Next' Value",
+        description:
+          'Next step is an unrecognized specialType, undefined, or falsy. Check console.',
       });
     }
   };
