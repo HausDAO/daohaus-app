@@ -38,7 +38,7 @@ export const CONTRACT_MODELS = {
 const fetchEtherscanAPIData = async (address, daochain, module) => {
   try {
     let key;
-    if (daochain === '0x84') {
+    if (daochain === '0x89') {
       key = process.env.REACT_APP_POLYGONSCAN_KEY;
     } else {
       key = process.env.REACT_APP_ETHERSCAN_KEY;
