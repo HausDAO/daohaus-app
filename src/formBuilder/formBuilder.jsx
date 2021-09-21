@@ -13,6 +13,7 @@ import {
   mapInRequired,
 } from '../utils/formBuilder';
 import { omit } from '../utils/general';
+import ProgressIndicator from '../components/progressIndicator';
 
 const FormBuilder = props => {
   const {
@@ -33,7 +34,7 @@ const FormBuilder = props => {
     secondaryBtn,
   } = props;
 
-  const [loading, setLoading] = useState(false);
+  const [formState, setFormState] = useState(null);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
@@ -144,22 +145,23 @@ const FormBuilder = props => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
         try {
-          setLoading(true);
+          setFormState('loading');
           const res = await submitCallback({
             values: modifiedValues,
             formData: props,
             onSubmit: props.onSubmit,
           });
+          setFormState('success');
           return res;
         } catch (error) {
           console.error(error);
-          setLoading(false);
+          setFormState('error');
         }
       }
     };
     const handleSubmitTX = async () => {
       try {
-        setLoading(true);
+        setFormState('loading');
         const res = await submitTransaction({
           values: modifiedValues,
           formData: props,
@@ -168,19 +170,18 @@ const FormBuilder = props => {
           lifeCycleFns: {
             ...props?.lifeCycleFns,
             onCatch() {
-              setLoading(false);
+              setFormState('error');
               props?.lifeCycleFns?.onCatch?.();
             },
             afterTx() {
-              props?.lifeCycleFns?.afterTx?.();
+              setFormState('success');
             },
           },
         });
-        setLoading(false);
         return res;
       } catch (error) {
         console.error(error);
-        setLoading(false);
+        setFormState('error');
       }
     };
 
@@ -225,6 +226,7 @@ const FormBuilder = props => {
           localValues={localValues}
           buildABIOptions={buildABIOptions}
           useFormError={useFormError}
+          formState={formState}
         />
       ),
     );
@@ -233,7 +235,7 @@ const FormBuilder = props => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
-        <FormControl display='flex' mb={5}>
+        <FormControl display='flex'>
           <Flex
             width='100%'
             flexDirection={['column', null, 'row']}
@@ -242,10 +244,11 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
+        <ProgressIndicator currentState={formState} />
         <FormFooter
           options={options}
           addOption={addOption}
-          loading={loading}
+          formState={formState}
           ctaText={ctaText}
           next={next}
           goToNext={goToNext}

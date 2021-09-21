@@ -10,28 +10,8 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
-import { BsCheckCircle } from 'react-icons/bs';
-import { BiErrorCircle } from 'react-icons/bi';
 import ErrorList from './ErrorList';
 import { useAppModal } from '../hooks/useModals';
-import ProgressIndicator from '../components/progressIndicator';
-import { HASH } from '../utils/general';
-
-const indicatorStates = {
-  loading: {
-    spinner: true,
-    title: 'Submitting...',
-  },
-  success: {
-    icon: BsCheckCircle,
-    title: 'Form Submitted',
-  },
-  error: {
-    icon: BiErrorCircle,
-    title: 'Error Submitting Transaction',
-    description: HASH.ERROR_MESSAGE,
-  },
-};
 
 const FormFooter = ({
   options,
@@ -46,18 +26,10 @@ const FormFooter = ({
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
 
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
-  const indicatorState = 'loading';
+
   return (
     <Flex flexDir='column'>
-      <ProgressIndicator
-        states={indicatorStates}
-        currentState={indicatorState}
-      />
-      <Flex
-        mb={2}
-        alignItems={['flex-row', 'flex-end']}
-        flexDir={['column', 'row']}
-      >
+      <Flex alignItems={['flex-row', 'flex-end']} flexDir={['column', 'row']}>
         {options?.length > 0 && (
           <AdditionalOptions
             mr='auto'

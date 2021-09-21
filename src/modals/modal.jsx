@@ -48,7 +48,7 @@ const Modal = () => {
             <ModalCloseButton top='4' />
             {title && (
               <TextBox
-                mb={4}
+                mb={2}
                 size='lg'
                 variant='body'
                 fontWeight='500'
@@ -59,7 +59,7 @@ const Modal = () => {
               </TextBox>
             )}
             {description && (
-              <TextBox size='sm' variant='body' opacity={0.9} mb={6}>
+              <TextBox size='sm' variant='body' opacity={0.9} mb={3}>
                 {description}
               </TextBox>
             )}

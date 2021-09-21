@@ -1,27 +1,44 @@
 import React from 'react';
-import { Flex } from '@chakra-ui/layout';
-import { BsCheckCircle } from 'react-icons/bs';
+import { Flex, Spinner } from '@chakra-ui/react';
 import Icon from '@chakra-ui/icon';
 
-import { Spinner } from '@chakra-ui/react';
+import { BsCheckCircle } from 'react-icons/bs';
+import { BiErrorCircle } from 'react-icons/bi';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import TextBox from './TextBox';
 import ExplorerLink from './explorerLink';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+
+const defaultIndicatorStates = {
+  loading: {
+    spinner: true,
+    title: 'Submitting...',
+    explorerLink: true,
+  },
+  success: {
+    icon: BsCheckCircle,
+    title: 'Form Submitted',
+    explorerLink: true,
+  },
+  error: {
+    icon: BiErrorCircle,
+    title: 'Error Submitting Transaction',
+    errorMessage: true,
+  },
+};
 
 const ProgressIndicator = ({
-  states,
+  states = defaultIndicatorStates,
   currentState,
   txHash,
   message,
   description,
-  fallbackText,
 }) => {
   const { theme } = useCustomTheme();
   const { injectedChain } = useInjectedProvider();
 
   const currentUI = states?.[currentState];
-  const msgText = message || description || fallbackText;
+  const msgText = message || description || currentUI?.fallbackText;
 
   if (!currentUI) return null;
 
@@ -31,9 +48,10 @@ const ProgressIndicator = ({
       borderRadius='md'
       p={3}
       flexDir='column'
+      mb={3}
     >
       <Flex>
-        {currentUI?.spinner && <Spinner />}
+        {currentUI?.spinner && <Spinner mr={3} />}
         {currentUI?.icon && (
           <Icon mr={3} as={currentUI.icon} h='25px' w='25px' />
         )}
