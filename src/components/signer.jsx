@@ -3,6 +3,7 @@ import { Divider, Flex, Link, Spinner, Button, Box } from '@chakra-ui/react';
 import { BsCheckCircle } from 'react-icons/bs';
 
 import { useParams } from 'react-router';
+import { BiErrorCircle } from 'react-icons/bi';
 import ProgressIndicator from './progressIndicator';
 import TextBox from './TextBox';
 import { FORM } from '../data/forms';
@@ -10,10 +11,30 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { addBoost } from '../utils/metadata';
 import { chainByID } from '../utils/chain';
+import { useOverlay } from '../contexts/OverlayContext';
+
+const indicatorStates = {
+  signing: {
+    spinner: true,
+    title: 'Signing...',
+    explorerLink: true,
+  },
+  signed: {
+    icon: BsCheckCircle,
+    title: 'Signed!',
+    explorerLink: true,
+  },
+  error: {
+    icon: BiErrorCircle,
+    title: 'Error updating DAO Metadata',
+    errorMessage: true,
+  },
+};
 
 const Signer = props => {
   const { playlist, boostData, goToNext, finish, stepperStorage } = props;
   const { daochain } = useParams();
+  const { successToast, errorToast } = useOverlay();
   const { daoProposals, daoMetaData, refetchMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
   const [state, setState] = useState(null);
@@ -28,11 +49,18 @@ const Signer = props => {
       boostData,
       proposalConfig: playlist && daoProposals,
       extraMetaData: stepperStorage,
-      onError() {
-        setState(null);
+      onError(error) {
+        setState('error');
+        errorToast({
+          title: 'Error updating DAO Metadata',
+          description: error?.message,
+        });
       },
       onSuccess() {
         setState('signed');
+        successToast({
+          title: 'Updated DAO Metadata',
+        });
         refetchMetaData();
       },
     });
@@ -86,12 +114,9 @@ const Signer = props => {
           })}
         </>
       )}
-      {state === 'signing' && (
-        <ProgressIndicator prepend={<Spinner mr={3} />} text='Processing...' />
-      )}
-      {state === 'signed' && (
-        <ProgressIndicator icon={BsCheckCircle} text='Boost Added!' />
-      )}
+
+      <ProgressIndicator states={indicatorStates} currentState={state} />
+
       <Flex mt={6} justifyContent='flex-end'>
         {state === 'signed' ? (
           <Button onClick={goToNext}>{finish ? 'Finish' : 'Next >'}</Button>

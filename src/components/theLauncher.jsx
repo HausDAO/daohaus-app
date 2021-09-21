@@ -13,27 +13,9 @@ const TheLauncher = props => {
 
   const [menuState, setMenuState] = useState('summon');
 
-  const handleNext = () => goToNext();
-  const lifeCycleFns = {
-    beforeTx() {
-      setMenuState('summoning');
-    },
-    onPollSuccess() {
-      setMenuState('summoned');
-    },
-    onCatch() {
-      setMenuState('summon');
-    },
-  };
+  return <FormBuilder {...form} ctaText='Deploy' />;
 
-  if (
-    menuState === 'summon' ||
-    menuState === 'summoned' ||
-    menuState === 'summoning'
-  ) {
-    return (
-      <Flex flexDirection='column'>
-        {menuState === 'summon' && (
+  /* {menuState === 'summon' && (
           <FormBuilder {...form} lifeCycleFns={lifeCycleFns} ctaText='Deploy' />
         )}
         {menuState === 'summoning' && (
@@ -53,12 +35,7 @@ const TheLauncher = props => {
               </Button>
             )}
           </Flex>
-        )}
-      </Flex>
-    );
-  }
-
-  return null;
+        )} */
 };
 
 export default TheLauncher;

@@ -159,7 +159,7 @@ const FormBuilder = props => {
         }
       }
     };
-    const handleSubmitTX = async () => {
+    const handleSubmitTX = async handleNext => {
       try {
         setFormState('loading');
         const res = await submitTransaction({
@@ -174,7 +174,11 @@ const FormBuilder = props => {
               props?.lifeCycleFns?.onCatch?.();
             },
             afterTx() {
-              setFormState('success');
+              if (typeof handleNext === 'function') {
+                handleNext();
+              } else {
+                setFormState('success');
+              }
             },
           },
         });
@@ -186,7 +190,14 @@ const FormBuilder = props => {
     };
 
     //  HANDLE GO TO NEXT
-    if (next && typeof goToNext === 'function') return goToNext(next);
+    if (next && typeof goToNext === 'function') {
+      if (typeof next === 'string') {
+        return goToNext(next);
+      }
+      if (next?.type === 'txFirst' && typeof next?.then === 'string') {
+        return handleSubmitTX(() => goToNext(next.then));
+      }
+    }
 
     //  HANDLE CALLBACK ON SUBMIT
     if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function')

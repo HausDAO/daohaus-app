@@ -214,9 +214,9 @@ export const STEPS = {
   ADD_WRAP_N_ZAP: {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
-      type: 'launcher',
+      type: 'form',
       form: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
-      next: 'STEP2',
+      next: { type: 'txFirst', then: 'STEP2' },
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
     },
