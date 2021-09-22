@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Divider, Flex, Link, Spinner, Button, Box } from '@chakra-ui/react';
+import { Divider, Flex, Link, Button, Box } from '@chakra-ui/react';
 import { BsCheckCircle } from 'react-icons/bs';
 
 import { useParams } from 'react-router';
