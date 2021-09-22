@@ -30,6 +30,7 @@ const FormBuilder = props => {
     parentForm,
     next,
     goToNext,
+    handleThen,
     ctaText,
     secondaryBtn,
   } = props;
@@ -120,7 +121,7 @@ const FormBuilder = props => {
       return;
     }
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-    console.log(`collapsedValues`, collapsedValues);
+
     const modifiedValues = modifyFields({
       values: collapsedValues,
       // REVIEW
@@ -159,7 +160,7 @@ const FormBuilder = props => {
         }
       }
     };
-    const handleSubmitTX = async handleNext => {
+    const handleSubmitTX = async then => {
       try {
         setFormState('loading');
         const res = await submitTransaction({
@@ -174,8 +175,9 @@ const FormBuilder = props => {
               props?.lifeCycleFns?.onCatch?.();
             },
             afterTx() {
-              if (typeof handleNext === 'function') {
-                handleNext();
+              if (typeof then === 'function') {
+                then();
+                setFormState('success');
               } else {
                 setFormState('success');
               }
@@ -194,8 +196,9 @@ const FormBuilder = props => {
       if (typeof next === 'string') {
         return goToNext(next);
       }
-      if (next?.type === 'txFirst' && typeof next?.then === 'string') {
-        return handleSubmitTX(() => goToNext(next.then));
+      if (next?.type === 'awaitTx') {
+        console.log('This should be firing');
+        return handleSubmitTX(() => handleThen(next));
       }
     }
 

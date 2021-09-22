@@ -184,7 +184,7 @@ export const STEPS = {
     STEP1: {
       type: 'summoner',
       title: { type: 'minionName' },
-      next: 'STEP2',
+      next: { type: 'txFirst', then: 'STEP2' },
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },
@@ -216,7 +216,7 @@ export const STEPS = {
     STEP1: {
       type: 'form',
       form: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
-      next: { type: 'txFirst', then: 'STEP2', ctaText: 'Deploy' },
+      next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Deploy' },
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
     },

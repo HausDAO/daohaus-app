@@ -107,6 +107,22 @@ const StepperForm = props => {
     }
   };
 
+  const handleThen = nextObj => {
+    if (!nextObj?.then)
+      throw new Error(
+        'StepperForm.jsx => handleThen(): Did not recieve a valid .then property',
+      );
+    const newCtaText =
+      typeof nextObj.then === 'string' || !nextObj.then?.ctaText
+        ? 'Next >'
+        : nextObj.then.ctaText;
+
+    setCurrentStep(prevState => ({
+      ...prevState,
+      next: nextObj.then,
+      ctaText: newCtaText,
+    }));
+  };
   const secondaryBtn = {
     text: 'Cancel',
     fn: () => closeModal(),
@@ -120,6 +136,7 @@ const StepperForm = props => {
         goToNext={goToNext}
         next={currentStep.next}
         ctaText={currentStep?.next?.ctaText || 'Next >'}
+        handleThen={handleThen}
       />
     );
   }

@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
-import { Flex } from '@chakra-ui/layout';
-import { BsCheckCircle } from 'react-icons/bs';
-import { Button } from '@chakra-ui/button';
-import { Spinner } from '@chakra-ui/spinner';
+// PURGE
 
-import FormBuilder from '../formBuilder/formBuilder';
+// import React, { useState } from 'react';
+// import { Flex } from '@chakra-ui/layout';
+// import { BsCheckCircle } from 'react-icons/bs';
+// import { Button } from '@chakra-ui/button';
+// import { Spinner } from '@chakra-ui/spinner';
 
-import ProgressIndicator from './progressIndicator';
+// import FormBuilder from '../formBuilder/formBuilder';
 
-const TheLauncher = props => {
-  const { goToNext, next, form } = props;
+// import ProgressIndicator from './progressIndicator';
 
-  const [menuState, setMenuState] = useState('summon');
+// const TheLauncher = props => {
+//   const { goToNext, next, form } = props;
 
-  return <FormBuilder {...form} ctaText='Deploy' />;
+//   const [menuState, setMenuState] = useState('summon');
 
-  /* {menuState === 'summon' && (
+//   return <FormBuilder {...form} ctaText='Deploy' />;
+
+/* {menuState === 'summon' && (
           <FormBuilder {...form} lifeCycleFns={lifeCycleFns} ctaText='Deploy' />
         )}
         {menuState === 'summoning' && (
@@ -36,6 +38,6 @@ const TheLauncher = props => {
             )}
           </Flex>
         )} */
-};
+// };
 
-export default TheLauncher;
+// export default TheLauncher;
