@@ -32,6 +32,21 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  SAFE_DEV_SUITE: {
+    title: 'Safe Minion DEV Suite',
+    description:
+      'Enable interactions with other smart contracts from your Safe Minion/Gnosis Safe vault via DAO proposals.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.00',
+    pars: [
+      'Deploying a Minion and a Gnosis Safe, this Boost enables your DAO to manage funds in a Gnosis Safe, as well as do complex multi-call transactions via the Minion.',
+      'This Boost is perfect for advanced DAOs looking to trade NFTs, manage LP positions in AMMs or do other arbitrary transactions',
+      'To increase proposal velocity for less critical proposals, the ability to set quorum levels enable early execution when a minimum quorum is met.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   NIFTY_DEV_SUITE: {
     title: 'Advanced Minion DEV Suite',
     description:
@@ -279,6 +294,17 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
     networks: MINIONS[MINION_TYPES.NIFTY].networks,
+    cost: 'free',
+    settings: 'none',
+  },
+  SAFE_DEV_SUITE: {
+    id: 'SAFE_DEV_SUITE',
+    boostContent: CONTENT.SAFE_DEV_SUITE,
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    categories: ['devTools'],
+    steps: STEPS.MINION_BOOST,
+    playlist: BOOST_PLAYLISTS.SAFE_DEV_SUITE,
+    networks: MINIONS[MINION_TYPES.SAFE].networks,
     cost: 'free',
     settings: 'none',
   },
