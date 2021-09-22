@@ -25,6 +25,7 @@ export const INFO_TEXT = {
   QUORUM:
     'Allows the DAO to execute proposals once a set percentage of passed votes has been reached. We recommend 50% or higher. This cannot be changed once deployed.',
   RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
+  SAFE_ADDRESS: 'Address of an already deployed Gnosis Safe.',
 };
 
 export const FIELD = {
@@ -132,6 +133,16 @@ export const FIELD = {
     name: 'erc721TokenAddress',
     htmlFor: 'erc20TokenAddress',
     placeholder: '0x',
+    expectType: 'address',
+  },
+  ONLY_SAFE: {
+    type: 'gatedInput',
+    only: CONTRACT_MODELS.GNOSIS_SAFE,
+    label: 'Gnosis Safe Address',
+    name: 'safeAddress',
+    htmlFor: 'safeAddress',
+    placeholder: '0x',
+    info: INFO_TEXT.SAFE_ADDRESS,
     expectType: 'address',
   },
   //  Plain old input until token price API can be built

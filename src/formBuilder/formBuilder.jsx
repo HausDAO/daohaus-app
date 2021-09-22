@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
@@ -31,6 +31,7 @@ const FormBuilder = props => {
     goToNext,
     ctaText,
     secondaryBtn,
+    warningMsg,
   } = props;
 
   const [loading, setLoading] = useState(false);
@@ -241,6 +242,27 @@ const FormBuilder = props => {
     );
   };
 
+  useEffect(() => {
+    // Reset form fields in case these are updated
+    const prevFields = [].concat(...formFields);
+    const prevFieldNames = prevFields.map(f => f.name);
+    const currFields = [].concat(...fields).map(f => f.name);
+    if (!currFields.every(fName => prevFieldNames.includes(fName))) {
+      localForm.reset();
+      prevFields.forEach(f =>
+        localForm.setValue(
+          f.name,
+          f.defaultValue
+            ? typeof f.defaultValue === 'function'
+              ? f.defaultValue()
+              : f.defaultValue
+            : '',
+        ),
+      );
+    }
+    setFields(mapInRequired(fields, required));
+  }, [fields]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
@@ -262,6 +284,7 @@ const FormBuilder = props => {
           goToNext={goToNext}
           errors={Object.values(formErrors)}
           secondaryBtn={secondaryBtn}
+          warningMsg={warningMsg}
         />
       </Flex>
     </form>

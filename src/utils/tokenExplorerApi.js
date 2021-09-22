@@ -33,6 +33,26 @@ export const CONTRACT_MODELS = {
       'isApprovedForAll',
     ],
   },
+  // SRC https://github.com/gnosis/safe-contracts/blob/v1.3.0/contracts/GnosisSafe.sol
+  GNOSIS_SAFE: {
+    name: 'GnosisSafe',
+    model: [
+      'setup',
+      'execTransaction',
+      'checkSignatures',
+      'checkNSignatures',
+      'requiredTxGas',
+      'approveHash',
+      'domainSeparator',
+      'encodeTransactionData',
+      'getTransactionHash',
+      'enableModule',
+      'disableModule',
+      'execTransactionFromModule',
+      'execTransactionFromModuleReturnData',
+      'isModuleEnabled',
+    ],
+  },
 };
 
 const fetchEtherscanAPIData = async (address, daochain, module) => {
