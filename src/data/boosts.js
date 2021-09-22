@@ -184,7 +184,7 @@ export const STEPS = {
     STEP1: {
       type: 'summoner',
       title: { type: 'minionName' },
-      next: { type: 'txFirst', then: 'STEP2' },
+      next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Summon' },
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },

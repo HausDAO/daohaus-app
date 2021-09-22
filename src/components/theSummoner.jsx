@@ -58,7 +58,14 @@ const MinionNotFound = ({ minionType = 'Minion' }) => {
 };
 
 const TheSummoner = props => {
-  const { localForm, goToNext, minionData, next, secondaryBtn } = props;
+  const {
+    parentForm,
+    goToNext,
+    minionData,
+    secondaryBtn,
+    next,
+    handleThen,
+  } = props;
 
   const { daoOverview } = useDao();
   const { daoid, daochain } = useParams();
@@ -68,7 +75,7 @@ const TheSummoner = props => {
     minionData?.minionType ? null : 'summon',
   );
 
-  const minionType = minionData?.minionType || localForm.watch('minionType');
+  const minionType = minionData?.minionType || parentForm.watch('minionType');
   const summonData = MINIONS[minionType];
 
   useEffect(() => {
@@ -87,7 +94,8 @@ const TheSummoner = props => {
     }
   }, [minionType, daoOverview, menuState]);
 
-  const handleNext = () => goToNext();
+  const handleNext = () =>
+    goToNext(typeof next === 'string' ? next : next?.then);
   const switchToSummon = () => setMenuState('summon');
 
   if (menuState === 'displayExisting') {
@@ -157,8 +165,11 @@ const TheSummoner = props => {
         </Box>
         <FormBuilder
           {...summonData.summonForm}
-          ctaText='Deploy'
           secondaryBtn={secondaryBtn}
+          ctaText={next?.ctaText || 'Next >'}
+          handleThen={handleThen}
+          next={next}
+          goToNext={goToNext}
         />
         {!summonData?.summonForm && <TextBox>Error: Form not found</TextBox>}
       </Flex>

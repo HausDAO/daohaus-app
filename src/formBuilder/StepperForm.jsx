@@ -16,8 +16,6 @@ import { useAppModal } from '../hooks/useModals';
 // }
 
 const getStepTitle = (currentStep, props) => {
-  console.log(`currentStep`, currentStep);
-  console.log(`props`, props);
   if (typeof currentStep?.title === 'string') return currentStep.title;
   if (currentStep?.form) return currentStep?.form?.title;
   if (currentStep?.title?.type === 'minionName') {
@@ -174,6 +172,7 @@ const StepperForm = props => {
         goToNext={goToNext}
         boostContent={boostContent}
         secondaryBtn={secondaryBtn}
+        handleThen={handleThen}
       />
     );
   }
