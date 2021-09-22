@@ -13,7 +13,7 @@ import { getContractBalance, getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
 import { PROPOSAL_TYPES } from './proposalUtils';
-import { TX } from '../data/contractTX';
+import { CONTRACTS, TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
 const getPath = pathString =>
@@ -116,6 +116,33 @@ const argBuilderCallback = Object.freeze({
       details,
       values.paymentToken,
       values.paymentRequested,
+    ];
+  },
+  proposeActionSafe({ values, formData }) {
+    const hexData = safeEncodeHexFunction(
+      JSON.parse(values.abiInput),
+      collapse(values, '*ABI_ARG*', 'array'),
+    );
+
+    const details = detailsToJSON({
+      ...values,
+      minionType: formData.minionType,
+    });
+    return [
+      encodeMultisendTx(
+        getABIsnippet({
+          contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+          fnName: 'multiSend',
+        }),
+        [values.targetContract],
+        [values.minionValue || '0'],
+        [hexData],
+        [0],
+      ),
+      values.paymentToken,
+      values.paymentRequested,
+      details,
+      true, // _memberOnlyEnabled
     ];
   },
 });

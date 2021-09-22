@@ -122,7 +122,12 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                       return null;
                     }
                     abiDecoder.addABI(parsed);
-                    return abiDecoder.decodeMethod(action.data);
+                    return {
+                      ...abiDecoder.decodeMethod(action.data),
+                      value: injectedProvider.utils
+                        .toBN(action.value)
+                        .toString(),
+                    };
                   }),
                 ),
               };
@@ -218,6 +223,11 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                     {`Action ${idx + 1}: ${action.name}`}
                   </TextBox>
                 </HStack>
+                {+action.value > 0 && (
+                  <HStack spacing={3}>
+                    <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
+                  </HStack>
+                )}
                 {action.params.map(displayActionData)}
               </Box>
             ) : (
