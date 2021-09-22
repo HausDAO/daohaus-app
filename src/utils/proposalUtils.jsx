@@ -29,6 +29,7 @@ export const PROPOSAL_TYPES = {
   MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
+  MINION_SAFE: 'SAFE MINION V0',
   MINION_NIFTY: 'Nifty Minion',
   MINION_SUPERFLUID: 'Superfluid Proposal',
   MINION_RARIBLE: 'Rarible Proposal',
@@ -48,15 +49,14 @@ export const PROPOSAL_TYPES = {
 export const MINION_TYPES = {
   VANILLA: 'vanilla minion',
   NIFTY: 'nifty minion',
-  UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
-  RARIBLE: 'Rarible minion',
-  NEAPOLITAN: 'Neapolitan minion',
+  SAFE: 'SAFE MINION V0',
+  UBER: 'UberHaus minion',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
-  NEAPOLITAN_MINION: 'actions',
+  SAFE_MINION: 'actions',
   UBERHAUS_MINION: 'appointments',
   SUPERFLUID_MINION: 'streams',
 };
@@ -154,6 +154,9 @@ const getMinionProposalType = (proposal, details) => {
   const getUberTypeFromGraphData = proposal => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
+    }
+    if (proposal?.minion?.minionType === MINION_TYPES.SAFE) {
+      return PROPOSAL_TYPES.MINION_SAFE;
     }
     if (proposal?.minion?.minionType === MINION_TYPES.NIFTY) {
       return PROPOSAL_TYPES.MINION_NIFTY;
@@ -583,7 +586,7 @@ export const multicallActionsFromProposal = prop => {
 };
 
 export const hasMinionActions = (prop, minionDeets) => {
-  if (prop.minion.minionType === 'Neapolitan minion') {
+  if (prop.minion.minionType === MINION_TYPES.SAFE) {
     return prop.actions > 0;
   }
   return (

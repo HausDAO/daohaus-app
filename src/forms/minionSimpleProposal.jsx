@@ -259,7 +259,11 @@ const MinionProposalForm = () => {
     setAbiLoading(true);
     try {
       const key =
-        daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+        daochain === '0x64'
+          ? ''
+          : daochain === '0x89'
+          ? process.env.REACT_APP_POLYGONSCAN_KEY
+          : process.env.REACT_APP_ETHERSCAN_KEY;
       const url = `${chainByID(daochain).abi_api_url}${value}${key &&
         `&apikey=${key}`}`;
       const response = await fetch(url);

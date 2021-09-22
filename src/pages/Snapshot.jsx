@@ -17,7 +17,8 @@ const Snapshot = ({ isMember, daoMetaData }) => {
     const getSnaphots = async () => {
       try {
         const localSnapshots = await getSnapshotProposals(
-          daoMetaData?.boosts?.snapshot.metadata.space,
+          // daoMetaData?.boosts?.snapshot.metadata.space,
+          daoMetaData?.boosts?.SNAPSHOT.metadata.space,
         );
         setSnapshots(localSnapshots);
         setLoading(false);
@@ -31,8 +32,10 @@ const Snapshot = ({ isMember, daoMetaData }) => {
     };
     if (
       daoMetaData &&
-      'snapshot' in daoMetaData?.boosts &&
-      daoMetaData?.boosts?.snapshot.active
+      // 'snapshot' in daoMetaData?.boosts &&
+      // daoMetaData?.boosts?.snapshot.active
+      'SNAPSHOT' in daoMetaData?.boosts &&
+      daoMetaData?.boosts?.SNAPSHOT.active
     ) {
       getSnaphots();
     }
@@ -57,7 +60,8 @@ const Snapshot = ({ isMember, daoMetaData }) => {
     >
       <Flex as={Stack} direction='column' spacing={4} w='100%'>
         {!loading ? (
-          daoMetaData && 'snapshot' in daoMetaData?.boosts ? (
+          // daoMetaData && 'snapshot' in daoMetaData?.boosts ? (
+          daoMetaData && 'SNAPSHOT' in daoMetaData?.boosts ? (
             Object.keys(snapshots).length > 0 ? (
               Object.keys(snapshots)
                 .slice(0, 10)

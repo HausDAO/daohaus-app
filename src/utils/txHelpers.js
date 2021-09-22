@@ -2,7 +2,12 @@ import Web3 from 'web3';
 
 import { detailsToJSON, filterObject, HASH } from './general';
 import { valToDecimalString } from './tokenValue';
-import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
+import {
+  encodeMultisendTx,
+  getABIsnippet,
+  getContractABI,
+  safeEncodeHexFunction,
+} from './abi';
 import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
 import { createContract } from './contract';
@@ -149,6 +154,27 @@ const gatherArgs = data => {
         tx: { ...tx, gatherArgs: arg.gatherArgs },
       });
       return safeEncodeHexFunction(getABIsnippet(arg), args);
+    }
+    if (arg.type === 'encodeSafeActions') {
+      return encodeMultisendTx(
+        getABIsnippet(arg),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.to },
+        }).flatMap(a => a),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.value },
+        }).flatMap(a => a),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.data },
+        }).flatMap(a => a),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: arg.operation },
+        }).flatMap(a => a),
+      );
     }
     if (arg.type === 'nestedArgs') {
       return arg.gatherArgs.flatMap(a => {
@@ -353,8 +379,8 @@ export const transactionByProposalType = proposal => {
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return TX.SUPERFLUID_MINION_EXECUTE;
   }
-  if (proposal.minion.minionType === 'Neapolitan minion') {
-    return TX.MINION_NEAPOLITAN_EXECUTE;
+  if (proposal.minion.minionType === PROPOSAL_TYPES.MINION_SAFE) {
+    return TX.MINION_SAFE_EXECUTE;
   }
   return TX.MINION_SIMPLE_EXECUTE;
 };

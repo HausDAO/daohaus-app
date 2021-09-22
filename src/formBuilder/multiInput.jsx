@@ -33,12 +33,7 @@ const MultiInput = props => {
 
   const getLabel = index => (index === 0 ? props.label : null);
   return (
-    <Flex
-      flexDirection='column'
-      w={['100%', null, '48%']}
-      maxH='200px'
-      overflow='auto'
-    >
+    <Flex flexDirection='column' maxH='200px' overflow='auto'>
       {inputs?.map((input, index) => {
         return (
           <GenericInput

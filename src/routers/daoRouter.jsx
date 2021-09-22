@@ -26,7 +26,6 @@ import Meta from '../pages/Meta';
 import Notifications from '../pages/Notifications';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
-import MinionSafe from '../pages/MinionSafe';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
@@ -187,17 +186,6 @@ const DaoRouter = () => {
             overview={daoOverview}
             daoMember={daoMember}
             members={daoMembers}
-          />
-        </Route>
-        <Route
-          exact
-          path={`${path}/settings/minion-safe`} // path={`${path}/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
-        >
-          <MinionSafe
-            daoOverview={daoOverview}
-            daoMetaData={daoMetaData}
-            members={daoMembers}
-            currentDaoTokens={currentDaoTokens}
           />
         </Route>
         <Route exact path={`${path}/allies`}>

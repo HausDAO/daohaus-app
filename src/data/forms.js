@@ -28,8 +28,9 @@ export const CORE_FORMS = {
       [
         {
           ...FIELD.TITLE,
+          label: 'Playlist Name',
           helperText: 'Max 100 characters',
-          placeholder: 'Playlist Title',
+          placeholder: 'Playlist Name',
         },
       ],
     ],
@@ -48,15 +49,11 @@ export const CORE_FORMS = {
     required: ['title', 'description'],
     fields: [
       [
-        {
-          ...FIELD.TITLE,
-          helperText: 'Max 30 characters',
-          placeholder: 'Proposal Title',
-        },
+        FIELD.PROPOSAL_NAME,
         {
           ...FIELD.DESCRIPTION,
           helperText: 'Max 100 characters',
-          placeholder: 'proposal Title',
+          placeholder: 'Proposal Description',
         },
       ],
     ],
@@ -68,7 +65,7 @@ export const CORE_FORMS = {
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_NIFTY_SET_PRICE,
+    tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   SUMMON_MINION_SELECTOR: {
@@ -405,7 +402,7 @@ export const FORM = {
     subtitle: 'Post an NFT for sale on Rarible',
     description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT,
-    minionType: MINION_TYPES.NEAPOLITAN,
+    minionType: MINION_TYPES.SAFE,
     tx: TX.SELL_NFT_RARIBLE,
     required: ['selectedMinion', 'sellPrice', 'raribleNftData'],
     fields: [
@@ -442,10 +439,10 @@ export const FORM = {
     tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
-  NEW_NEAPOLITAN_MINION: {
-    required: ['minQuorum', 'minionName'],
-    tx: TX.SUMMON_MINION_NEAPOLITAN,
-    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM]],
+  NEW_SAFE_MINION: {
+    required: ['minQuorum', 'minionName', 'saltNonce'],
+    tx: TX.SUMMON_MINION_SAFE,
+    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
   },
   NEW_NIFTY_MINION: {
     required: ['minQuorum', 'minionName'],

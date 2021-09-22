@@ -30,9 +30,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
   const [loading, setLoading] = useState();
 
   useEffect(() => {
-    if (daoMetaData?.boosts?.notificationsLevel1?.active) {
-      setLocalMetadata(daoMetaData.boosts.notificationsLevel1.metadata);
-    } else if (daoMetaData?.boosts?.DISCORD.metadata) {
+    if (daoMetaData?.boosts?.DISCORD?.active) {
       setLocalMetadata(daoMetaData.boosts.DISCORD.metadata);
     }
   }, [daoMetaData]);
@@ -47,17 +45,13 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
         address,
       );
 
-      const boostKey = daoMetaData?.boosts?.DISCORD.metadata
-        ? 'DISCORD'
-        : 'notificationsLevel1';
-
       const metaUpdate = newChannelMetadata
         ? [{ ...localMetadata[0], channelId: newChannelMetadata[0].channelId }]
         : localMetadata;
 
       const updateNotifications = {
         contractAddress: daoid,
-        boostKey,
+        boostKey: 'DISCORD',
         metadata: metaUpdate,
         network: injectedChain.network,
         signature,

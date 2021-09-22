@@ -34,6 +34,11 @@ export const supportedChains = {
       minion_factory_addr: '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
       version: 'v1',
     },
+    safeMinion: {
+      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
@@ -61,8 +66,10 @@ export const supportedChains = {
     wrapper_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://rinkeby.etherscan.io',
-    neapolitanMinion: {
-      minion_factory_addr: '0x4050E747Ed393e1Fd89783662C48373421fD0647',
+    safeMinion: {
+      minion_factory_addr: '0x3f13ABc8931c0e381Ce6d1Be9f978aE6E9d99Cb8',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
@@ -111,6 +118,11 @@ export const supportedChains = {
     wrapper_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://kovan.etherscan.io',
+    safeMinion: {
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
   },
   '0x64': {
     name: 'xDAI Chain',
@@ -136,6 +148,11 @@ export const supportedChains = {
     wrapper_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
     block_explorer: 'https://blockscout.com/poa/xdai',
+    safeMinion: {
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
     superfluid: {
@@ -182,6 +199,11 @@ export const supportedChains = {
     wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://polygonscan.com',
+    safeMinion: {
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
     superfluid: {
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
       resolver: '0xE0cc76334405EE8b39213E620587d815967af39C',
@@ -194,6 +216,50 @@ export const supportedChains = {
     },
     niftyMinion: {
       minion_factory_addr: '0x4CCaDF3f5734436B28869c27A11B6D0F4776bc8E',
+      version: 'v1',
+    },
+  },
+  '0xa4b1': {
+    name: 'Arbitrum',
+    short_name: 'arb1',
+    nativeCurrency: 'ETH',
+    network: 'arbitrum',
+    network_id: 42161,
+    chain_id: '0xa4b1',
+    hub_sort_order: 3,
+    providers: ['walletconnect'],
+    rpc_url: 'https://arb1.arbitrum.io/rpc',
+    abi_api_url:
+      'https://api.arbiscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api.arbiscan.io/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-arbitrum',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-arbitrum',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
+    minion_factory_addr: '',
+    moloch_factory_addr: '0x9232dea84e91b49fef6b604eea0455692fc27ba8',
+    dai_contract: '',
+    wrapper_contract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
+    wrap_n_zap_factory_addr: '0xff0184056B7865F924ea3c0C1823882ad388421b',
+    block_explorer: 'https://arbiscan.io/',
+    safeMinion: {
+      minion_factory_addr: '',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
+    superfluid: {
+      minion_factory_addr: '',
+      resolver: '',
+      subgraph_url: '',
+      superapp_addr: {
+        v1: '',
+      },
+      version: 'v1',
+    },
+    niftyMinion: {
+      minion_factory_addr: '0xA92CbC525EabFa5baE4e0ff7bDa8E011B43B9aCC',
       version: 'v1',
     },
   },
@@ -234,6 +300,7 @@ export const chainByNetworkId = networkId => {
     74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
+    42161: supportedChains['0xa4b1'],
   };
 
   return idMapping[networkId];
@@ -281,6 +348,17 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
+  '0xA4B1': {
+    chainId: '0xA4B1',
+    chainName: 'Arbitrum',
+    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    blockExplorerUrls: ['https://arbiscan.io/'],
+    nativeCurrency: {
+      name: 'ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+  },
 };
 
 export const EIP3085 = {
@@ -288,6 +366,7 @@ export const EIP3085 = {
     '0x64': true,
     '0x89': true,
     '0x4a': true,
+    '0xA4B1': true,
   },
   NOT_SUPPORTED: {
     '0x1': true,

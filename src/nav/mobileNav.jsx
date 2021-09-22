@@ -40,7 +40,7 @@ const MobileNav = ({ dao }) => {
       align='start'
       justifyContent='start'
       bg='primary.500'
-      zIndex='5'
+      zIndex='25'
       w='100%'
       minH='80px'
       overflow='hidden'

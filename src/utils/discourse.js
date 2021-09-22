@@ -17,8 +17,10 @@ export const createForumTopic = async ({
 }) => {
   const canPost =
     autoOverride ||
-    (daoMetaData?.boosts?.discourse?.active &&
-      daoMetaData?.boosts?.discourse?.metadata?.autoProposal);
+    // (daoMetaData?.boosts?.discourse?.active &&
+    // daoMetaData?.boosts?.discourse?.metadata?.autoProposal);
+    (daoMetaData?.boosts?.DISCOURSE?.active &&
+      daoMetaData?.boosts?.DISCOURSE?.metadata?.autoProposal);
   if (canPost) {
     let title;
     let isAuto = false;
@@ -45,7 +47,8 @@ export const createForumTopic = async ({
       link: values.link,
       title,
       applicant,
-      category: daoMetaData.boosts.discourse.metadata.categoryId,
+      // category: daoMetaData.boosts.discourse.metadata.categoryId,
+      category: daoMetaData.boosts.DISCOURSE.metadata.categoryId,
       shares: values.sharesRequested || '0',
       loot: values.lootRequested || '0',
       paymentRequested: values.paymentRequested || '0',

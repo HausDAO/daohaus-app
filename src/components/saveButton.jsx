@@ -49,7 +49,6 @@ const SaveButton = props => {
             startingVals.current = watch;
           },
           onCancel() {
-            console.log(tx);
             closeModal();
             unblock();
             undoChanges?.();
@@ -66,8 +65,14 @@ const SaveButton = props => {
     }
   }, [isSame, blockRouteOnDiff]);
 
+  const handleSaveFn = async () => {
+    await saveFn?.();
+    setSame(true);
+    startingVals.current = watch;
+  };
+
   return (
-    <Button size='md' disabled={disabled || isSame} onClick={saveFn}>
+    <Button size='md' disabled={disabled || isSame} onClick={handleSaveFn}>
       {children}
     </Button>
   );

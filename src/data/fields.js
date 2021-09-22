@@ -1,3 +1,4 @@
+import { generateNonce } from '../utils/general';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 
 export const INFO_TEXT = {
@@ -241,6 +242,15 @@ export const FIELD = {
     info: INFO_TEXT.MINION_QUORUM,
     expectType: 'number',
   },
+  SALT_NONCE: {
+    type: 'input',
+    label: 'Salt Nonce',
+    name: 'saltNonce',
+    hidden: true,
+    htmlFor: 'saltNonce',
+    expectType: 'any',
+    defaultValue: generateNonce,
+  },
   NIFTY_MINION_PAYMENT_REQUEST: {
     type: 'paymentInput',
     htmlFor: 'paymentRequested',
@@ -256,6 +266,15 @@ export const FIELD = {
     htmlFor: 'targetInk',
     name: 'targetInk',
     label: 'Target NiftyInk Url',
+    expectType: 'any',
+  },
+  PROPOSAL_NAME: {
+    name: 'name',
+    type: 'input',
+    label: 'Proposal Name',
+    htmlFor: 'Name',
+    helperText: 'Max 30 characters',
+    placeholder: 'Proposal Name',
     expectType: 'any',
   },
   // PARAGRAPHS: {
