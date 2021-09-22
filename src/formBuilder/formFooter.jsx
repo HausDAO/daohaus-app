@@ -37,13 +37,18 @@ const FormFooter = ({
             addOption={addOption}
           />
         )}
-        <Flex ml={['0', 'auto']}>
+        <Flex
+          ml={['0', 'auto']}
+          // wrap={['wrap-reverse', 'wrap']}
+          w={['100%', 'inherit']}
+          flexDir={['column-reverse', 'row']}
+        >
           <Button
             type='button'
             variant='outline'
             disabled={loading}
             onClick={secondaryBtn.fn}
-            mr={2}
+            mr={[0, 2]}
           >
             {secondaryBtn.text}
           </Button>
@@ -54,6 +59,7 @@ const FormFooter = ({
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
             isLoading={loading}
             disabled={loading || errors?.length}
+            mb={[2, 0]}
           >
             {ctaText || customPrimaryBtn?.text || 'Submit'}
           </Button>
@@ -76,8 +82,9 @@ const AdditionalOptions = ({ options = [], addOption }) => {
           rightIcon={<Icon as={RiAddFill} />}
           type='button'
           mr={[0, 4]}
+          w={['100%']}
         >
-          More
+          <Box transform={['translateX(10px)', 'translateX(0)']}>More</Box>
         </MenuButton>
         <MenuList>
           {options?.map(option => {
