@@ -65,7 +65,7 @@ export const CORE_FORMS = {
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_NIFTY_SET_PRICE,
+    tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   SUMMON_MINION_SELECTOR: {
@@ -267,14 +267,14 @@ export const FORM = {
       [FIELD.ABI_INPUT],
     ],
   },
-  MINION_NEAPOLITAN_SIMPLE: {
-    id: 'MINION_NEAPOLITAN_SIMPLE',
+  MINION_SAFE_SIMPLE: {
+    id: 'MINION_SAFE_SIMPLE',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
     required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
-    minionType: MINION_TYPES.NEAPOLITAN,
-    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.MINION_PROPOSE_ACTION_SAFE,
     fields: [
       [
         FIELD.TITLE,
@@ -440,7 +440,7 @@ export const FORM = {
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   NEW_SAFE_MINION: {
-    required: ['minQuorum', 'minionName', 'saltNonce'],
+    required: ['minionName', 'minQuorum', 'saltNonce'],
     tx: TX.SUMMON_MINION_SAFE,
     fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
   },

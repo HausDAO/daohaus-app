@@ -77,6 +77,15 @@ const ProposalVote = ({
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [quorumNeeded, setQuorumNeeded] = useState(null);
 
+  console.log('proposal', proposal);
+
+  const earlyExecuteMinionType = proposal => {
+    return (
+      proposal?.minion?.minionType === MINION_TYPES.NIFTY ||
+      proposal?.minion?.minionType === MINION_TYPES.SAFE
+    );
+  };
+
   const currentlyVoting = proposal => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
@@ -508,7 +517,7 @@ const ProposalVote = ({
             ))}
 
           {((proposal?.status === 'Passed' && proposal?.minionAddress) ||
-            proposal?.minion?.minionType === MINION_TYPES.NIFTY) && (
+            earlyExecuteMinionType(proposal)) && (
             <Stack mt='15px' justify='center'>
               {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
               proposal.yesShares >= quorumNeeded ? (
@@ -517,7 +526,7 @@ const ProposalVote = ({
                   minionAction={minionAction}
                   proposal={proposal}
                   early={
-                    proposal?.minion?.minionType === MINION_TYPES.NIFTY &&
+                    earlyExecuteMinionType(proposal) &&
                     proposal.yesShares >= quorumNeeded &&
                     !proposal?.status === 'Passed'
                   }

@@ -33,6 +33,8 @@ const defaultConfig = {
   },
 };
 
+// TODO: make this look like th other configs
+
 const nftConfigs = {
   '0xcf964c89f509a8c0ac36391c5460df94b91daba5': {
     platform: 'nifty ink',
@@ -49,7 +51,6 @@ const nftConfigs = {
         modalName: 'sellNifty',
         formLego: CORE_FORMS.MINION_SELL_NIFTY,
         localValues: ['tokenId', 'contractAddress'],
-        minionTypeOverride: true,
       },
     },
   },
@@ -76,7 +77,8 @@ export const hydrateNftCard = (nft, minionType) => {
         vals[field] = nft[field];
         return vals;
       }, {});
-    let { formLego } = action;
+
+    let formLego = { ...action.formLego };
     if (action.minionTypeOverride) {
       const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
       formLego = getMinionActionFormLego(nftType, minionType);
@@ -88,6 +90,7 @@ export const hydrateNftCard = (nft, minionType) => {
     };
   });
 
+  // TODO: look into using defaultValues
   const hydratedFields = Object.keys(config.fields).reduce((fieldObj, key) => {
     const mod = config.fields[key];
     if (!mod) {

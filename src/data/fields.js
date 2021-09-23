@@ -19,9 +19,11 @@ export const INFO_TEXT = {
   NFT_PRICE: 'Price in xDai',
   MINION_VALUE: 'Value in wei of network token for payable functions.',
   MINION_QUORUM:
-    'Once this percentage of DAO shares have votes yes this minion action will be executable.',
+    'Warning: 51% or more is recommended to ensure the community majority approve decisions.',
   NIFTY_REPAYMENT_REQUEST:
     'This proposal requires the selected minion to hold the XDAI funds to purchase the NiftyInk. Enter that amount in WXDAI to repay the minion from the DAO treasury.',
+  QUORUM:
+    'Allows the DAO to execute proposals once a set percentage of passed votes has been reached. We recommend 50% or higher. This cannot be changed once deployed.',
   RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
 };
 
@@ -234,13 +236,17 @@ export const FIELD = {
     expectType: 'any',
   },
   MINION_QUORUM: {
-    type: 'input',
-    label: 'Minumum Quorum (%)',
+    type: 'conditionalInput',
+    append: '%',
+    conditionalLabel: 'Allow Minimum Quorum',
+    conditionalDesc: INFO_TEXT.QUORUM,
+    label: 'Minumum Quorum',
     name: 'minQuorum',
     htmlFor: 'minQuorum',
     placeholder: '50',
     info: INFO_TEXT.MINION_QUORUM,
     expectType: 'number',
+    defaultValue: 0,
   },
   SALT_NONCE: {
     type: 'input',

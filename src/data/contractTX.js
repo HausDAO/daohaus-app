@@ -342,6 +342,17 @@ export const TX = {
     argsFromCallback: 'proposeActionNifty',
     createDiscourse: true,
   },
+  MINION_PROPOSE_ACTION_SAFE: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    argsFromCallback: 'proposeActionSafe',
+    createDiscourse: true,
+  },
   CANCEL_PROPOSAL: {
     contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'cancelProposal',
@@ -546,9 +557,6 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
-      // TODO: should be minion
-      // why some local and some not??
-      // check in nft card vs. playlist
       '.localValues.contractAddress',
       0,
       {

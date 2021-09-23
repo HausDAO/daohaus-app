@@ -27,6 +27,12 @@ export const EXPLORE_FILTER_OPTIONS = [
     default: true,
   },
   {
+    name: 'Arbitrum',
+    value: 42161,
+    type: 'network',
+    default: true,
+  },
+  {
     name: 'xDai',
     value: 100,
     type: 'network',
