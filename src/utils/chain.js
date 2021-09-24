@@ -89,6 +89,7 @@ export const supportedChains = {
       base_url: 'https://rinkeby.rarible.com',
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
+    escrow_minion: '0x8A6a656EF02Dd592e3Af1521Bc0Ea5f8A38D15d8',
   },
   '0x2a': {
     name: 'Ethereum Kovan',

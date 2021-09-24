@@ -162,6 +162,11 @@ export const CONTRACTS = {
     abiName: 'ERC_20',
     contractAddress: 'values.paymentToken',
   },
+  ESCROW_MINION: {
+    location: 'local',
+    abiName: 'ESCROW_MINION',
+    contractAddress: '.contextData.chainConfig.escrow_minion',
+  },
 };
 
 export const ACTIONS = {
