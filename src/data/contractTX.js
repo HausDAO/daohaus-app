@@ -936,6 +936,7 @@ export const TX = {
     successMsg: 'Proposal Submitted',
     gatherArgs: [
       '.contextData.daoid',
+      [], // TODO: tokenAddresses
       [], // TODO: typesTokensIdsAmounts
       '', // TODO: vaultAddress (Minion Address?)
       [
