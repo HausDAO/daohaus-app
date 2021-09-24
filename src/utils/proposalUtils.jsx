@@ -262,6 +262,16 @@ export const raribleHashMaker = proposal => {
   }
 };
 
+export const proposalTypeMaker = proposal => {
+  try {
+    const parsed =
+      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    return parsed.proposalType || '';
+  } catch (e) {
+    return '';
+  }
+};
+
 export const determineUnreadActivityFeed = proposal => {
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   const now = new Date() / 1000 || 0;
