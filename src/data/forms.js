@@ -429,7 +429,27 @@ export const FORM = {
       [FIELD.BUYOUT_PAYMENT_REQUEST],
     ],
   },
-
+  MINION_TRIBUTE: {
+    id: 'MINION_TRIBUTE',
+    title: 'NFT Tribute',
+    subtitle: 'Offer NFT as Tribute',
+    description:
+      'Offer an NFT as tribute to the DAO. Optionally, offer or request some funds as well.',
+    type: PROPOSAL_TYPES.MINION_TRIBUTE,
+    tx: null,
+    required: ['title'],
+    fields: [
+      [FIELD.NFT_SELECT],
+      [
+        FIELD.TITLE,
+        FIELD.DESCRIPTION,
+        FIELD.LINK,
+        FIELD.TRIBUTE,
+        FIELD.SHARES_REQUEST,
+        FIELD.LOOT_REQUEST,
+      ],
+    ],
+  },
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
     subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
