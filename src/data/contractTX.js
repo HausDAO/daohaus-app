@@ -243,6 +243,13 @@ export const DETAILS = {
     proposalType: '.formData.type',
     minionType: MINION_TYPES.NEAPOLITAN,
   },
+  OFFER_NFT_TRIBUTE: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+    // minionType: MINION_TYPES.ESCROW, // REVIEW: Adding Escrow to minion types causes issues elsewhere
+  },
 };
 
 export const TX = {
@@ -917,6 +924,29 @@ export const TX = {
         gatherFields: DETAILS.SET_BUYOUT_NFT,
       },
       'false',
+    ],
+  },
+  OFFER_NFT_TRIBUTE: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'proposeTribute',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting NFT Tribute Proposal',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      '.contextData.daoid',
+      [], // TODO: typesTokensIdsAmounts
+      '', // TODO: vaultAddress (Minion Address?)
+      [
+        '.values.sharesRequested',
+        '.values.lootRequested',
+        '', // TODO: Funds
+      ],
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.OFFER_NFT_TRIBUTE,
+      },
     ],
   },
 };

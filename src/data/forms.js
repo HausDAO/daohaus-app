@@ -436,7 +436,7 @@ export const FORM = {
     description:
       'Offer an NFT as tribute to the DAO. Optionally, offer or request some funds as well.',
     type: PROPOSAL_TYPES.MINION_TRIBUTE,
-    tx: null,
+    tx: TX.OFFER_NFT_TRIBUTE,
     required: ['title'],
     fields: [
       [FIELD.NFT_SELECT],
