@@ -445,6 +445,19 @@ export const TX = {
     successMsg: 'Rage quit processed!',
     gatherArgs: ['.values.shares || 0', '.values.loot || 0'],
   },
+  RAGE_QUIT_CLAIM: {
+    contract: CONTRACTS.CURRENT_MOLOCH,
+    name: 'ragequit',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Rage Quit',
+    errMsg: 'Error Rage Quitting',
+    successMsg: 'Rage quit processed!',
+    gatherArgs: [
+      '.contextData.daoMember.shares',
+      '.contextData.daoMember.loot',
+    ],
+  },
   RAGE_KICK: {
     contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'ragekick',

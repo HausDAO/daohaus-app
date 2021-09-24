@@ -1,34 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Flex, Box, Text } from '@chakra-ui/react';
+import { useParams } from 'react-router';
 
-import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useUser } from '../contexts/UserContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import Layout from '../components/layout';
+import SummonHard from '../forms/summonHard';
+import SummonPending from '../components/summonPending';
+import MainViewLayout from '../components/mainViewLayout';
+import { SummonService } from '../services/summonService';
+import { createPoll } from '../services/pollService';
+import { graphQuery } from '../utils/apollo';
+import { getGraphEndpoint } from '../utils/chain';
+import { capitalize } from '../utils/general';
+import { getFormattedOwnersByPaopId } from '../utils/poap-helpers';
 import {
-  // cloneDaoPresets,
-  // cloneMembers,
-  // cloneTokens,
   daoConstants,
   daoPresets,
   parseSummonersAndShares,
 } from '../utils/summoning';
-import SummonHard from '../forms/summonHard';
-import SummonEasy from '../forms/summonEasy';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { SummonService } from '../services/summonService';
-import SummonPending from '../components/summonPending';
-import { graphQuery } from '../utils/apollo';
-import { getGraphEndpoint } from '../utils/chain';
 import { DAO_POLL } from '../graphQL/dao-queries';
-import MainViewLayout from '../components/mainViewLayout';
-import { capitalize } from '../utils/general';
-// import TemporaryCloneSummon from '../components/temporaryCloneSummon';
-
-// const tokenMsg =
-//   '''Token addresses are different across chains.
-//    If you would like to clone the same tokens to a different network,
-//    you will need to manually add the equivalent token addresses here.''';
 
 const SummonPartyFavor = () => {
   const {
@@ -39,21 +31,31 @@ const SummonPartyFavor = () => {
   } = useInjectedProvider();
   const { cachePoll, resolvePoll, refetchUserHubDaos } = useUser();
   const { errorToast, successToast } = useOverlay();
-  const [hardMode, setHardMode] = useState(true);
+  const { poapId } = useParams();
   const [daoData, setDaoData] = useState(null);
   const [isSummoning, setIsSummoning] = useState(false);
   const [pendingTx, setPendingTx] = useState(null);
   const [success, setSuccess] = useState(false);
   const [summonError, setSummonError] = useState(null);
 
+  // TODO: REQUIRE XDAI
+
   useEffect(() => {
     if (injectedChain) {
-      const presets = daoPresets(injectedChain.chain_id);
-      setDaoData({
-        ...daoConstants(injectedChain.chain_id),
-        summoner: address,
-        ...presets[0],
-      });
+      const setup = async () => {
+        const presets = daoPresets(injectedChain.chain_id);
+        const summonerAndShares = await getFormattedOwnersByPaopId(poapId);
+
+        console.log('summonerAndShares', summonerAndShares);
+        setDaoData({
+          ...daoConstants(injectedChain.chain_id),
+          summoner: address,
+          ...presets[0],
+          summonerAndShares,
+        });
+      };
+
+      setup();
     }
   }, [injectedChain]);
 
@@ -111,8 +113,6 @@ const SummonPartyFavor = () => {
       summonData.summonerShares,
     ];
 
-    console.log('summonParams', summonParams);
-
     try {
       const poll = createPoll({ action: 'summonMoloch', cachePoll })({
         chainID: injectedChain.chain_id,
@@ -162,25 +162,6 @@ const SummonPartyFavor = () => {
       });
     }
   };
-
-  // const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
-  //   const cloneData = {
-  //     ...daoConstants(injectedChain.chain_id),
-  //     summoner: '',
-  //     summonerAndShares: cloneMembers(daoMembers),
-  //     approvedToken:
-  //       injectedChain.chainId === daoNetwork
-  //         ? cloneTokens(daoOverview)
-  //         : tokenMsg,
-  //     ...cloneDaoPresets(daoOverview, daoMembers),
-  //   };
-
-  //   if (injectedChain.chainId !== daoNetwork) {
-  //     cloneData.proposalDeposit = '0';
-  //     cloneData.processingReward = '0';
-  //   }
-  //   setDaoData(cloneData);
-  // };
 
   return (
     <Layout>
@@ -234,9 +215,6 @@ const SummonPartyFavor = () => {
             </Flex>
           </Box>
         )}
-        {/* {hardMode && !isSummoning && (
-          <TemporaryCloneSummon handleCloneDAO={handleCloneDAO} />
-        )} */}
       </MainViewLayout>
     </Layout>
   );

@@ -42,7 +42,7 @@ function App() {
         <Route exact path='/summon'>
           <Summon />
         </Route>
-        <Route exact path='/summon-party-favor'>
+        <Route exact path='/summon-party-favor/:poapId'>
           <SummonPartyFavor />
         </Route>
         <Route exact path='/register/:registerchain/:daoid'>

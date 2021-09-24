@@ -257,6 +257,7 @@ const DaoRouter = () => {
           <PartyFavor
             daoMetaData={daoMetaData}
             isMember={isMember}
+            daoMember={daoMember}
             refetchMetaData={refetchMetaData}
           />
         </Route>
