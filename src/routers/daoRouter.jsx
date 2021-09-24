@@ -252,6 +252,13 @@ const DaoRouter = () => {
         <Route exact path={`${path}/boost/snapshot`}>
           <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
         </Route>
+        <Route exact path={`${path}/party-favor`}>
+          <Meta
+            daoMetaData={daoMetaData}
+            isMember={isMember}
+            refetchMetaData={refetchMetaData}
+          />
+        </Route>
       </Switch>
     </Layout>
   );
