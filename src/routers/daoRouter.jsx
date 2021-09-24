@@ -38,6 +38,7 @@ import MinionVault from '../pages/MinionVault';
 import MinionGallery from '../pages/MinionGallery';
 import Treasury from '../pages/Treasury';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
+import PartyFavor from '../pages/PartyFavor';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -253,7 +254,7 @@ const DaoRouter = () => {
           <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/party-favor`}>
-          <Meta
+          <PartyFavor
             daoMetaData={daoMetaData}
             isMember={isMember}
             refetchMetaData={refetchMetaData}
