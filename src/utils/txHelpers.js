@@ -119,9 +119,10 @@ const argBuilderCallback = Object.freeze({
     ];
   },
   proposeActionSafe({ values, formData }) {
+    const inputVals = collapse(values, '*ABI_ARG*', 'array');
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
-      collapse(values, '*ABI_ARG*', 'array'),
+      Array.isArray(inputVals) ? inputVals : [],
     );
 
     const details = detailsToJSON({
@@ -140,7 +141,7 @@ const argBuilderCallback = Object.freeze({
         [0],
       ),
       values.paymentToken,
-      values.paymentRequested,
+      values.paymentRequested || '0',
       details,
       true, // _memberOnlyEnabled
     ];
