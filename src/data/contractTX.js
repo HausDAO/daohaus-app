@@ -453,10 +453,10 @@ export const TX = {
     display: 'Rage Quit',
     errMsg: 'Error Rage Quitting',
     successMsg: 'Rage quit processed!',
-    gatherArgs: [
-      '.contextData.daoMember.shares',
-      '.contextData.daoMember.loot',
-    ],
+    // gatherArgs: [
+    //   '.contextData.daoMember.shares',
+    //   '.contextData.daoMember.loot',
+    // ],
   },
   RAGE_KICK: {
     contract: CONTRACTS.CURRENT_MOLOCH,

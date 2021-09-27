@@ -51,6 +51,11 @@ const SummonPartyFavor = () => {
           ...daoConstants(injectedChain.chain_id),
           summoner: address,
           ...presets[0],
+          proposalDeposit: '0',
+          processingReward: '0',
+          votingPeriod: '4320',
+          gracePeriod: '2880',
+          periodDuration: '60',
           summonerAndShares,
         });
       };
@@ -171,7 +176,9 @@ const SummonPartyFavor = () => {
             {!isSummoning ? (
               <>
                 <Flex direction='row' justify='space-between'>
-                  <Text>What kind of Haus will you build?</Text>
+                  <Box fontSize='2xl' mb={10}>
+                    POAP Event #{poapId}
+                  </Box>
 
                   {summonError ? (
                     <Text as='h1'>{summonError.message || summonError}</Text>
