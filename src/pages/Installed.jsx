@@ -106,7 +106,6 @@ const InstalledList = ({
     +daoMember?.shares > 0;
 
   const currentList = useMemo(() => {
-    console.log(`lists`, lists);
     if (listID && lists) {
       return handleSearch(
         lists?.find(list => list.id === listID).types,

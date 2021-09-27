@@ -10,6 +10,7 @@ const handleInit = payload => {
   if (payload?.proposalConfig) {
     return handleDevForms(payload.proposalConfig);
   }
+  console.warn('DID NOT RECIEVE PROPOSAL CONFIG FROM DAO METADATA');
   return handleDevForms(generateNewConfig({ daoMetaData: payload }));
 };
 
