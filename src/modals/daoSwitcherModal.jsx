@@ -74,6 +74,7 @@ const DaoSwitcherModal = () => {
   };
 
   const handleClose = () => {
+    setSearchTerm(null);
     setDaoSwitcherModal(false);
   };
 
