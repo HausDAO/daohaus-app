@@ -7,10 +7,19 @@ import { useFormModal } from '../contexts/OverlayContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getMinionActionFormLego } from '../utils/vaults';
 
+const LABELS = {
+  NO_MEMBER: 'Wrong network or not a DAO member',
+  MINION_NOT_READY: 'Must complete your minion setup',
+};
+
 const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
   const { address, injectedChain } = useInjectedProvider();
   const { openFormModal } = useFormModal();
   const { daochain } = useParams();
+
+  const enableTransfer =
+    isMember &&
+    (!vault.safeAddress || (vault.safeAddress && vault.isMinionModule));
 
   const transferFormLego = useMemo(() => {
     const tokenType = isNativeToken ? 'network' : 'erc20';
@@ -34,7 +43,7 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
   return (
     <>
       {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
-      isMember ? (
+      enableTransfer ? (
         <Button size='md' variant='outline' ml={6} onClick={openSendModal}>
           Transfer
         </Button>
@@ -43,7 +52,7 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
           hasArrow
           shouldWrapChildren
           placement='bottom'
-          label='Wrong network or not a DAO member'
+          label={!isMember ? LABELS.NO_MEMBER : LABELS.MINION_NOT_READY}
           bg='secondary.500'
         >
           <Button size='md' variant='outline' disabled>
