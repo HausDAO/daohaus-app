@@ -134,6 +134,20 @@ export const customValidations = {
     }
     return false;
   },
+  canRagequit({ appState }) {
+    const { proposalId } = appState.daoMember.highestIndexYesVote;
+    const proposal = appState.daoProposals.find(
+      p => p.proposalId === proposalId,
+    );
+    if (proposal && !proposal.processed) {
+      return {
+        name: 'shares',
+        message:
+          'Cannot process this request until all pending proposal that voted YES are processed',
+      };
+    }
+    return false;
+  },
   rageQuitMinimum({ values }) {
     if (!Number(values.shares) && !Number(values.loot)) {
       return {
@@ -144,14 +158,14 @@ export const customValidations = {
     return false;
   },
   rageQuitMax({ appState, values }) {
-    if (values.shares > appState.daoMember.shares) {
+    if (+values.shares > +appState.daoMember.shares) {
       return {
         name: 'shares',
         message: `Shares to Rage Quit may not exceed ${appState.daoMember.shares}.`,
       };
     }
 
-    if (values.loot > appState.daoMember.loot) {
+    if (+values.loot > +appState.daoMember.loot) {
       return {
         name: 'loot',
         message: `Loot to Rage Quit may not exceed ${appState.daoMember.loot} loot.`,
@@ -189,6 +203,19 @@ export const customValidations = {
           message: 'Payment must be less than the DAO balance.',
         };
       }
+    }
+    return false;
+  },
+  noExistingSafeMinion({ appState, values }) {
+    const { minions } = appState.daoOverview;
+    const foundSafe = minions?.find(
+      m => m.safeAddress === values.safeAddress.toLowerCase(),
+    );
+    if (foundSafe) {
+      return {
+        name: 'safeAddress',
+        message: 'This Gnosis Safe has already been assigned to a Minion',
+      };
     }
     return false;
   },

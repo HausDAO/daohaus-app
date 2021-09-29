@@ -75,7 +75,7 @@ export const CORE_FORMS = {
     fields: [[FIELD.MINION_TYPE_SELECT]],
   },
   RAGE_QUIT: {
-    customValidations: ['rageQuitMinimum', 'rageQuitMax'],
+    customValidations: ['canRagequit', 'rageQuitMinimum', 'rageQuitMax'],
     id: 'RAGE_QUIT',
     title: 'RAGE QUIT',
     required: [],
@@ -445,6 +445,7 @@ export const FORM = {
     fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
   },
   NEW_SAFE_MINION_ADVANCED: {
+    customValidations: ['noExistingSafeMinion'],
     required: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
     tx: TX.SUMMON_MINION_SAFE,
     fields: [
