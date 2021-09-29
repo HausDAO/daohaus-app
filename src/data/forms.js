@@ -421,7 +421,7 @@ export const FORM = {
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.SAFE,
     // tx: TX.SELL_NFT_RARIBLE,
-    txCondition: {
+    tx: {
       isRarible: TX.SELL_NFT_RARIBLE,
       notRarible: TX.SELL_NFT,
     },
@@ -429,6 +429,15 @@ export const FORM = {
     required: ['title'],
     fields: [
       [
+        {
+          ...FIELD.CHECK_SWITCH,
+          label: {
+            isRarible: 'Display Tribute',
+            notRarible: 'Display Link',
+          },
+          checked: 'isRarible',
+          unchecked: 'notRarible',
+        },
         FIELD.TITLE,
         FIELD.DESCRIPTION,
         {

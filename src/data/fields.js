@@ -345,8 +345,8 @@ export const FIELD = {
     htmlFor: 'discourseMeta',
     expectType: 'any',
   },
-  CONDITIONAL_RENDER: {
-    type: 'condition',
+  CHECK_SWITCH: {
+    type: 'checkSwitch',
   },
 };
 

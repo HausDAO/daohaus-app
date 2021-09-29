@@ -28,6 +28,7 @@ import RaribleNftSelect from './raribleNftData';
 import ColorPicker from './colorPicker';
 import DiscourseMeta from './discourseMeta';
 import ConditionalInput from './conditionalInput';
+import CheckSwitch from './checkSwitch';
 
 export const InputFactory = props => {
   const { type, formCondition } = props;
@@ -119,6 +120,9 @@ export const InputFactory = props => {
   }
   if (type === 'conditionalInput') {
     return <ConditionalInput {...props} />;
+  }
+  if (type === 'checkSwitch') {
+    return <CheckSwitch {...props} />;
   }
   return null;
 };

@@ -237,6 +237,7 @@ const FormBuilder = props => {
           key={`${depth}-${index}`}
           minionType={props.minionType}
           formCondition={formCondition}
+          setFormCondition={setFormCondition}
           layout={props.layout}
           localForm={localForm}
           localValues={localValues}
