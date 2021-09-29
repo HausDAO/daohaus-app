@@ -30,7 +30,11 @@ import DiscourseMeta from './discourseMeta';
 import ConditionalInput from './conditionalInput';
 
 export const InputFactory = props => {
-  const { type } = props;
+  const { type, formCondition } = props;
+
+  if (type === 'condition' && props[formCondition]) {
+    return <InputFactory {...props} {...props[formCondition]} />;
+  }
 
   if (type === 'input') {
     return <GenericInput {...props} />;

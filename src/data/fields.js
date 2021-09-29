@@ -345,6 +345,9 @@ export const FIELD = {
     htmlFor: 'discourseMeta',
     expectType: 'any',
   },
+  CONDITIONAL_RENDER: {
+    type: 'condition',
+  },
 };
 
 export const FORM_DISPLAY = {

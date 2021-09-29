@@ -99,7 +99,6 @@ export const FORM = {
     id: 'BUY_SHARES',
     title: 'Request shares for tokens',
     description: 'Request shares from the DAO in exchange for ERC-20 tokens',
-    playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['sharesRequested', 'tributeOffered', 'title'],
@@ -112,7 +111,6 @@ export const FORM = {
     id: 'SHARES_FOR_WORK',
     title: 'Request shares for work completed',
     description: 'Request shares from the DAO by showing finished work.',
-    playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['sharesRequested', 'link', 'title'],
@@ -124,7 +122,6 @@ export const FORM = {
   MEMBER: {
     id: 'MEMBER',
     title: 'Membership Proposal',
-    dev: true,
     description: 'Proposal for DAO membership',
     type: PROPOSAL_TYPES.MEMBER,
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
@@ -413,6 +410,33 @@ export const FORM = {
         FIELD.DATE_RANGE,
         FIELD.SET_PRICE,
         FIELD.RARIBLE_NFT_DATA,
+      ],
+    ],
+  },
+  SAMPLE_CONDITIONAL: {
+    dev: true,
+    id: 'SAMPLE_CONDITIONAL',
+    title: 'Conditional Form',
+    description: 'Conditional Description',
+    type: PROPOSAL_TYPES.SELL_NFT,
+    minionType: MINION_TYPES.SAFE,
+    // tx: TX.SELL_NFT_RARIBLE,
+    txCondition: {
+      isRarible: TX.SELL_NFT_RARIBLE,
+      notRarible: TX.SELL_NFT,
+    },
+    defaultCondition: 'isRarible',
+    required: ['title'],
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.DESCRIPTION,
+        {
+          type: 'condition',
+          isRarible: FIELD.LINK,
+          notRarible: FIELD.TRIBUTE,
+        },
+        FIELD.LOOT_REQUEST,
       ],
     ],
   },

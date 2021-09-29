@@ -33,9 +33,11 @@ const FormBuilder = props => {
     handleThen,
     ctaText,
     secondaryBtn,
+    defaultCondition,
   } = props;
 
   const [formState, setFormState] = useState(null);
+  const [formCondition, setFormCondition] = useState(defaultCondition || null);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
@@ -234,6 +236,7 @@ const FormBuilder = props => {
           {...field}
           key={`${depth}-${index}`}
           minionType={props.minionType}
+          formCondition={formCondition}
           layout={props.layout}
           localForm={localForm}
           localValues={localValues}
