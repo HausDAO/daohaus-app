@@ -124,6 +124,7 @@ export const FORM = {
   MEMBER: {
     id: 'MEMBER',
     title: 'Membership Proposal',
+    dev: true,
     description: 'Proposal for DAO membership',
     type: PROPOSAL_TYPES.MEMBER,
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
@@ -249,6 +250,7 @@ export const FORM = {
   },
   MINION_NIFTY: {
     id: 'MINION_NIFTY',
+
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
