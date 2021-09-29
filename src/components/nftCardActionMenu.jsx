@@ -26,7 +26,9 @@ const NftCardActionMenu = ({ nft, vault }) => {
   useEffect(() => {
     enableActions(
       isMember &&
-        (!vault.safeAddress || (vault.safeAddress && vault.isMinionModule)),
+        (!vault ||
+          !vault.safeAddress ||
+          (vault.safeAddress && vault.isMinionModule)),
     );
   }, [vault]);
 
