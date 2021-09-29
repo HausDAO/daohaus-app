@@ -219,6 +219,34 @@ export const supportedChains = {
       version: 'v1',
     },
   },
+  '0x6357d2e0': {
+    name: 'Harmony Testnet',
+    short_name: 'harmony',
+    nativeCurrency: 'ONE',
+    network: 'harmonyTest',
+    network_id: 1666700000,
+    chain_id: '0x6357d2e0',
+    hub_sort_order: 3,
+    providers: ['walletconnect'],
+    rpc_url: 'https://api.s0.b.hmny.io',
+    abi_api_url: 'https://ctrver.t.hmny.io/fetchContractCode?contractAddress=',
+    tokenlist_api_url: 'https://api.polygonscan.com/api',
+    subgraph_url: 'http://localhost:8000/subgraphs/name/victaphu/daohaus',
+    stats_graph_url:
+      'http://localhost:8000/subgraphs/name/victaphu/daohaus-stats',
+    boosts_graph_url:
+      'http://127.0.0.1:8000/subgraphs/name/victaphu/daohaus-boosts',
+    minion_factory_addr: '0xF1D62573deDbE7CBED757C2043861b2293D3184a',
+    moloch_factory_addr: '0x5F099659FA596c95B06Db8457748068F11F20AdE',
+    wrapper_contract: '0x421ffdD8C67133cA6961E05DAE223Fd52cebD340',
+    wrap_n_zap_factory_addr: '0xBc899838daE0d6563489D8dc7E90510eBb2BDcaf',
+    dai_contract: '0x373E636F40875803DF77Bd72425E95B00764F2ab',
+    block_explorer: 'https://explorer.pops.one',
+    niftyMinion: {
+      minion_factory_addr: '0xD26b63F4668577f02317D9C1FC6B5bD5d5c29C2d',
+      version: 'v1',
+    },
+  },
   '0xa4b1': {
     name: 'Arbitrum',
     short_name: 'arb1',
@@ -288,7 +316,10 @@ export const supportedChains = {
   // },
 };
 
-export const chainByID = chainID => supportedChains[chainID];
+export const chainByID = chainID => {
+  console.log(chainID, supportedChains);
+  return supportedChains[chainID];
+};
 export const getGraphEndpoint = (chainID, endpointType) =>
   chainByID(chainID)[endpointType];
 
@@ -301,6 +332,7 @@ export const chainByNetworkId = networkId => {
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
     42161: supportedChains['0xa4b1'],
+    1666700000: supportedChains['0x6357d2e0'],
   };
 
   return idMapping[networkId];
