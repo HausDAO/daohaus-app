@@ -10,6 +10,7 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import { TiWarningOutline } from 'react-icons/ti';
 // import TextBox from '../components/TextBox';
 
 export const ErrorList = ({ errors = [] }) => {
@@ -27,16 +28,19 @@ export const ErrorList = ({ errors = [] }) => {
   );
 };
 
-export const SubmitFormError = ({ message }) => (
+export const FormMessage = ({ message, icon }) => (
   <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
-    <Icon
-      as={RiErrorWarningLine}
-      color='secondary.300'
-      mr={1}
-      transform='translateY(2px)'
-    />
+    <Icon as={icon} color='secondary.300' mr={1} transform='translateY(2px)' />
     {message}
   </Flex>
+);
+
+export const SubmitFormError = ({ message }) => (
+  <FormMessage message={message} icon={RiErrorWarningLine} />
+);
+
+export const WarningMessage = ({ message }) => (
+  <FormMessage message={message} icon={TiWarningOutline} />
 );
 
 export const ModButton = ({ label, callback }) => (
@@ -52,10 +56,12 @@ export const FormFooter = ({
   errors,
   ctaText,
   secondaryBtn,
+  warningMsg,
 }) => {
   if (options?.length) {
     return (
       <Box>
+        {warningMsg && <WarningMessage message={warningMsg} />}
         <Flex alignItems='flex-end' flexDir='column'>
           <Flex mb={2}>
             <AdditionalOptions
@@ -81,6 +87,7 @@ export const FormFooter = ({
   }
   return (
     <Box>
+      {warningMsg && <WarningMessage message={warningMsg} />}
       <Flex justifyContent='flex-end'>
         <Flex>
           {secondaryBtn && (

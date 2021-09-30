@@ -53,26 +53,28 @@ export const getDatesArray = (start, end, range = []) => {
 };
 
 export const balancesWithValue = (balances, prices) => {
-  return balances.reduce((list, balance) => {
-    if (prices[balance.tokenAddress]) {
-      let value =
-        (balance.balance / 10 ** balance.tokenDecimals) *
-        prices[balance.tokenAddress].usd;
+  return balances
+    .reduce((list, balance) => {
+      if (prices[balance.tokenAddress]) {
+        let value =
+          (balance.balance / 10 ** balance.tokenDecimals) *
+          prices[balance.tokenAddress].usd;
 
-      // TODO: This is happening on some minion balances with 2 transactions in the same block
-      // clean up on the caching job
-      if (value < 0) {
-        value = 0;
+        // TODO: This is happening on some minion balances with 2 transactions in the same block
+        // clean up on the caching job
+        if (value < 0) {
+          value = 0;
+        }
+
+        list.push({
+          ...balance,
+          usdPrice: prices[balance.tokenAddress].usd,
+          value,
+        });
       }
-
-      list.push({
-        ...balance,
-        usdPrice: prices[balance.tokenAddress].usd,
-        value,
-      });
-    }
-    return list;
-  }, []);
+      return list;
+    }, [])
+    .sort((a, b) => a.timestamp - b.timestamp);
 };
 
 export const groupBalancesToDateRange = (balances, dates) => {

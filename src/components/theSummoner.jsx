@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
+import { Box, Divider, Flex, HStack, Link } from '@chakra-ui/layout';
+import { Switch, Text } from '@chakra-ui/react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import Icon from '@chakra-ui/icon';
@@ -68,6 +69,7 @@ const TheSummoner = props => {
   const [menuState, setMenuState] = useState(
     minionData?.minionType ? null : 'summon',
   );
+  const [setupMode, setSetupMode] = useState(false);
 
   const minionType = minionData?.minionType || localForm.watch('minionType');
   const summonData = MINIONS[minionType];
@@ -175,12 +177,25 @@ const TheSummoner = props => {
           <MinionNotFound minionType={minionType} />
         </Box>
         {summonData?.summonForm && menuState === 'summon' && (
-          <FormBuilder
-            {...summonData.summonForm}
-            lifeCycleFns={lifeCycleFns}
-            ctaText='Deploy'
-            secondaryBtn={secondaryBtn}
-          />
+          <>
+            {summonData.summonForm.length && (
+              <HStack mb={3}>
+                <Text fontSize='sm'>Advanced Mode</Text>
+                <Switch
+                  onChange={() => setSetupMode(!setupMode)}
+                  value={setupMode}
+                />
+              </HStack>
+            )}
+            <FormBuilder
+              {...(summonData.summonForm.length
+                ? summonData.summonForm[Number(setupMode)]
+                : summonData.summonForm)}
+              lifeCycleFns={lifeCycleFns}
+              ctaText='Deploy'
+              secondaryBtn={secondaryBtn}
+            />
+          </>
         )}
         {menuState === 'summoning' && (
           <ProgressIndicator prepend={<Spinner mr={3} />} text='Deploying...' />

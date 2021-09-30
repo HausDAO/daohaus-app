@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   Menu,
@@ -11,30 +11,35 @@ import {
 } from '@chakra-ui/react';
 import { BsThreeDots } from 'react-icons/bs';
 
-import { useDao } from '../contexts/DaoContext';
 import { useFormModal } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const NftCardActionMenu = ({ nft, minion }) => {
-  const { daoOverview } = useDao();
+const NftCardActionMenu = ({ nft, vault }) => {
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
   const { openFormModal } = useFormModal();
+  const [actionsEnabled, enableActions] = useState(false);
+
+  useEffect(() => {
+    enableActions(
+      isMember &&
+        (!vault ||
+          !vault.safeAddress ||
+          (vault.safeAddress && vault.isMinionModule)),
+    );
+  }, [vault]);
 
   const handleActionClick = action => {
-    const currentMinion = daoOverview.minions.find(
-      m => m.minionAddress === minion,
-    );
     openFormModal({
       lego: {
         ...action.formLego,
         localValues: {
           ...action.localValues,
-          minionAddress: currentMinion.minionAddress,
-          safeAddress: currentMinion.safeAddress,
+          minionAddress: vault.address,
+          safeAddress: vault.safeAddress,
         },
       },
     });
@@ -65,7 +70,7 @@ const NftCardActionMenu = ({ nft, minion }) => {
                 onClick={() => handleActionClick(action)}
                 isDisabled={
                   !(
-                    isMember &&
+                    actionsEnabled &&
                     daoConnectedAndSameChain(
                       address,
                       daochain,
