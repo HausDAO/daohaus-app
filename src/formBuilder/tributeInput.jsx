@@ -7,7 +7,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import InputSelect from './inputSelect';
-import { ModButton } from './staticElements';
+import ModButton from './modButton';
 
 import { TokenService } from '../services/tokenService';
 import { validate } from '../utils/validation';
@@ -143,8 +143,8 @@ const TributeInput = props => {
       helperText={helperText()}
       btn={
         <ModButton
-          label={btnDisplay()}
-          callback={needsUnlock ? handleUnlock : setMax}
+          text={btnDisplay()}
+          fn={needsUnlock ? handleUnlock : setMax}
         />
       }
     />

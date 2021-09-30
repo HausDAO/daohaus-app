@@ -18,13 +18,14 @@ const BoostMetaForm = props => {
       update[fieldName] = formValues[fieldName];
       return update;
     }, {});
+    //  Does values still not persist through different steps?
     setStepperStorage(prevState => ({ ...prevState, ...metaUpdate }));
     goToNext();
   };
 
   return (
     <FormBuilder
-      {...currentStep.lego}
+      {...currentStep.form}
       parentForm={parentForm}
       goToNext={handleGoToNext}
       next={currentStep.next}

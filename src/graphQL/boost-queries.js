@@ -29,3 +29,27 @@ export const GET_WRAP_N_ZAPS = gql`
     }
   }
 `;
+
+export const GET_POAP = gql`
+  query event($eventId: String!) {
+    event(id: $eventId) {
+      id
+      tokens {
+        owner {
+          id
+        }
+      }
+    }
+  }
+`;
+
+// {
+//   event(id: "8540") {
+//     id
+//     tokens {
+//       owner {
+//         id
+//       }
+//     }
+//   }
+// }

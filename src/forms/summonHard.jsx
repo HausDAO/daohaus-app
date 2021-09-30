@@ -229,7 +229,7 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
             <Textarea
               className='inline-field'
               name='summonerAndShares'
-              placeholder={`${daoData.summoner} 1`}
+              placeholder={`${daoData?.summoner} 1`}
               ref={register({
                 required: true,
                 validate: {

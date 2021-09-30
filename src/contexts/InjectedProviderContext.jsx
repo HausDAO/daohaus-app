@@ -71,7 +71,6 @@ export const InjectedProvider = ({ children }) => {
   useEffect(() => {
     const attemptSafeConnection = async () => {
       const provider = await defaultModal.requestProvider();
-      console.log(provider?.safe);
       if (provider?.safe) {
         connectProvider();
       } else if (window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER')) {
