@@ -53,8 +53,8 @@ const SummonPartyFavor = () => {
           ...presets[0],
           proposalDeposit: '0',
           processingReward: '0',
-          votingPeriod: '4320',
-          gracePeriod: '2880',
+          votingPeriod: '30',
+          gracePeriod: '10',
           periodDuration: '60',
           summonerAndShares,
         });
