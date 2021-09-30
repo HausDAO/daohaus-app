@@ -8,6 +8,7 @@ import { getDaoActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 import CcoBanner from '../components/ccoBanner';
 import ServicesBanner from '../components/servicesBanner';
+import OverviewBanner from '../components/overviewBanner';
 // import { getActiveMembers } from '../utils/dao';
 
 const Overview = React.memo(function overview({
@@ -20,6 +21,7 @@ const Overview = React.memo(function overview({
   daoMetaData,
   daoVaults,
 }) {
+  console.log('daoMetaData', daoMetaData);
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao>
       <Box w='100%'>
@@ -38,6 +40,9 @@ const Overview = React.memo(function overview({
               />
               {daoMetaData?.boosts?.cco?.active ? <CcoBanner /> : null}
               {daoMetaData?.servicesUrl ? <ServicesBanner /> : null}
+              {daoMetaData?.tags.includes('haus party favor') ? (
+                <OverviewBanner bannerType='hausPartyFavors' />
+              ) : null}
             </Box>
           )}
           {isMember && (

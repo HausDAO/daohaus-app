@@ -1,12 +1,16 @@
 import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
-import { GET_TRANSMUTATION, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
 import { getApiMetadata, fetchApiVaultData } from './metadata';
+import {
+  GET_POAP,
+  GET_TRANSMUTATION,
+  GET_WRAP_N_ZAPS,
+} from '../graphQL/boost-queries';
 import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
@@ -77,6 +81,16 @@ export const fetchTransmutation = async args => {
     query: GET_TRANSMUTATION,
     variables: {
       contractAddress: args.molochAddress,
+    },
+  });
+};
+
+export const fetchPoapAddresses = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint('0x64', 'poap_graph_url'),
+    query: GET_POAP,
+    variables: {
+      eventId: args.eventId,
     },
   });
 };
