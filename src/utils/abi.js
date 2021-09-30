@@ -27,6 +27,7 @@ import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import DAO_CONDITIONAL_HELPER from '../contracts/daoConditionalHelper.json';
 import SUPERFLUID_MINION_FACTORY from '../contracts/superfluidMinionFactory.json';
+import GNOSIS_IPROXY from '../contracts/iProxy.json';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -79,10 +80,23 @@ const isProxyABI = response => {
   }
 };
 
+const isGnosisProxy = response => {
+  return (
+    response.length === 2 &&
+    response.every(fn => ['constructor', 'fallback'].includes(fn.type))
+  );
+};
+
 const getImplementationOf = async (address, chainID, abi) => {
   const web3Contract = createContract({ address, abi, chainID });
   const newAddress = await web3Contract.methods.implementation().call();
   return newAddress;
+};
+
+const getGnosisMasterCopy = async (address, chainID) => {
+  const web3Contract = createContract({ address, abi: GNOSIS_IPROXY, chainID });
+  const masterCopy = await web3Contract.methods.masterCopy().call();
+  return masterCopy;
 };
 
 export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
@@ -95,13 +109,12 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     const data = await response.json();
     if (data.message === 'OK' && IsJsonString(data?.result) && parseJSON) {
       const abiData = JSON.parse(data.result);
-      if (isProxyABI(abiData)) {
-        const originalAddress = await getImplementationOf(
-          contractAddress,
-          chainID,
-          abiData,
-        );
-        const newData = await fetchABI(originalAddress, chainID, parseJSON);
+      const proxyAddress = isProxyABI(abiData)
+        ? await getImplementationOf(contractAddress, chainID, abiData)
+        : isGnosisProxy(abiData) &&
+          (await getGnosisMasterCopy(contractAddress, chainID));
+      if (proxyAddress) {
+        const newData = await fetchABI(proxyAddress, chainID, parseJSON);
         return newData;
       }
       return abiData;

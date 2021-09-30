@@ -166,7 +166,7 @@ const StepperForm = props => {
     return (
       <TheSummoner
         {...currentStep}
-        localForm={parentForm}
+        parentForm={parentForm}
         next={currentStep.next}
         minionData={minionData}
         goToNext={goToNext}

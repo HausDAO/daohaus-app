@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Flex, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { utils as Web3Utils } from 'web3';
 
 import { BiArrowBack } from 'react-icons/bi';
 import { useToken } from '../contexts/TokenContext';
@@ -13,10 +14,12 @@ import NftCard from '../components/nftCard';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import SafeMinionDetails from '../components/safeMinionDetails';
 import Loading from '../components/loading';
+import { chainByID } from '../utils/chain';
+import { MINION_TYPES } from '../utils/proposalUtils';
+import { fetchSafeDetails } from '../utils/requests';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { formatNativeData } from '../utils/vaults';
-import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
@@ -26,6 +29,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const [erc20Balances, setErc20Balances] = useState(null);
   const [nativeBalance, setNativeBalance] = useState(null);
   const [internalBalances, setInternalBalances] = useState(null);
+  const [safeDetails, setSafeDetails] = useState(null);
 
   const handleCopy = () => {
     toast({
@@ -64,6 +68,22 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       if (!vaultMatch) {
         console.log('no vault found');
         return;
+      }
+      if (vaultMatch.safeAddress) {
+        try {
+          const safe = await fetchSafeDetails(
+            chainByID(daochain).network,
+            vaultMatch,
+          );
+          if (safe) {
+            vaultMatch.isMinionModule = safe.modules.includes(
+              Web3Utils.toChecksumAddress(vaultMatch.address),
+            );
+            setSafeDetails(safe);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       }
       const erc20sWithTotalUsd = vaultMatch.erc20s.map(token => {
         return {
@@ -136,7 +156,11 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               visibleVaults={[vault]}
             />
             {vault?.minionType === MINION_TYPES.SAFE && (
-              <SafeMinionDetails vault={vault} handleCopy={handleCopy} />
+              <SafeMinionDetails
+                vault={vault}
+                safeDetails={safeDetails}
+                handleCopy={handleCopy}
+              />
             )}
             <CrossDaoInternalBalanceList
               tokens={internalBalances}
@@ -169,12 +193,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
-                  <NftCard
-                    key={i}
-                    nft={nft}
-                    minion={minion}
-                    minionType={vault.minionType}
-                  />
+                  <NftCard key={i} nft={nft} minion={minion} vault={vault} />
                 ))}
               </>
             )}

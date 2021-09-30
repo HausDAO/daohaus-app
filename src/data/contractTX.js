@@ -669,15 +669,30 @@ export const TX = {
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
   },
-  SUMMON_MINION_SAFE: {
+  SUMMON_MINION_AND_SAFE: {
     contract: CONTRACTS.SAFE_MINION_FACTORY,
-    name: 'summonMinionAndSafe', // TODO: Conditional contract method: easy/hard mode
+    name: 'summonMinionAndSafe',
     poll: 'subgraph',
     display: 'Summoning Minion',
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',
     gatherArgs: [
       '.contextData.daoid',
+      '.values.minionName',
+      '.values.minQuorum',
+      '.values.saltNonce',
+    ],
+  },
+  SUMMON_MINION_SAFE: {
+    contract: CONTRACTS.SAFE_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.values.safeAddress',
       '.values.minionName',
       '.values.minQuorum',
       '.values.saltNonce',
