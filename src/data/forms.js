@@ -431,10 +431,12 @@ export const FORM = {
       [
         {
           ...FIELD.CHECK_SWITCH,
-          label: {
+          label: 'Toggle UI',
+          title: {
             isRarible: 'Display Tribute',
             notRarible: 'Display Link',
           },
+          description: 'This is a full sentence',
           checked: 'isRarible',
           unchecked: 'notRarible',
         },
