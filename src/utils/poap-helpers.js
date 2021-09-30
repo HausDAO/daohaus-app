@@ -5,10 +5,20 @@ export const getFormattedOwnersByPaopId = async poapId => {
     eventId: poapId,
   });
 
-  const formattedOwners = res.event.tokens.reduce((strg, token) => {
+  const tokens = res?.event?.tokens || [];
+
+  const formattedOwners = tokens.reduce((strg, token) => {
     strg += `${token.owner.id} 2\n`;
     return strg;
   }, '');
 
   return formattedOwners.slice(0, -1);
+};
+
+export const banners = {
+  hausPartyFavors: {
+    headline: 'This is a Haus Party Favor DAO!',
+    linkText: 'Claim your favors',
+    path: 'party-favor',
+  },
 };
