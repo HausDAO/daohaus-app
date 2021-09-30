@@ -4,14 +4,7 @@ import GenericCheck from './genericCheck';
 import { InputFactory } from './inputFactory';
 
 const CheckGate = props => {
-  const {
-    formCondition,
-    label,
-    title,
-    description,
-    startsChecked,
-    renderOnCheck,
-  } = props;
+  const { formCondition, label, title, description, renderOnCheck } = props;
   const [checkLabel, checkTitle, checkDescription] = useFormConditions({
     values: [label, title, description],
     condition: formCondition,

@@ -349,19 +349,20 @@ export const FIELD = {
   TEST_SWITCH: {
     type: 'checkSwitch',
     listenTo: 'formCondition',
+    checked: 'token',
+    unchecked: 'signal',
     label: {
       type: 'formCondition',
-      testOn: 'On Label',
-      testOff: 'Off Label',
+      token: 'checked',
+      signal: 'not checked',
     },
-    title: {
+    title: 'Create a token proposal',
+    description: {
       type: 'formCondition',
-      testOn: 'Display Tribute',
-      testOff: 'Display Link',
+      token: 'This creates a WhiteList Token TX',
+      signal: 'This creates a signal proposal',
     },
-    description: 'This is a full sentence',
-    checked: 'testOn',
-    unchecked: 'testOff',
+    expectType: 'any',
   },
   TEST_GATE: {
     type: 'checkGate',
@@ -369,6 +370,7 @@ export const FIELD = {
     label: 'Toggle Field State',
     title: 'Check to render Description',
     description: 'You bet',
+    expectType: 'any',
   },
 };
 

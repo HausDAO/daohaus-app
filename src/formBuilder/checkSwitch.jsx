@@ -4,9 +4,8 @@ import GenericCheck from './genericCheck';
 
 const findStartingState = props => {
   if (!props) return;
-  const { listenTo, checked, formCondition, startsChecked } = props;
-  if (listenTo === 'formCondition') return checked === formCondition;
-  if (!listenTo) return startsChecked;
+  const { checked, formCondition } = props;
+  return checked === formCondition;
 };
 
 const CheckSwitch = props => {

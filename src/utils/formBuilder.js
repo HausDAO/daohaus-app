@@ -135,3 +135,10 @@ export const useFormCondition = ({ value, condition }) => {
 
 export const useFormConditions = ({ values = [], condition }) =>
   values.map(val => useFormCondition({ value: val, condition }));
+
+export const checkConditionalTx = ({ tx, condition }) => {
+  if (tx?.type === 'formCondition' && tx[condition]) {
+    return tx[condition];
+  }
+  return tx;
+};

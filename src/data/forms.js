@@ -415,31 +415,28 @@ export const FORM = {
   },
   SAMPLE_CONDITIONAL: {
     dev: true,
+    // logValues: true,
     id: 'SAMPLE_CONDITIONAL',
+    formConditions: ['signal', 'token'],
     title: 'Conditional Form',
     description: 'Conditional Description',
-    type: PROPOSAL_TYPES.SELL_NFT,
-    minionType: MINION_TYPES.SAFE,
-    // tx: TX.SELL_NFT_RARIBLE,
+    type: PROPOSAL_TYPES.FUNDING,
     tx: {
       type: 'formCondition',
-      testOn: TX.SELL_NFT_RARIBLE,
-      testOff: TX.SELL_NFT,
+      token: TX.WHITELIST_TOKEN_PROPOSAL,
+      signal: TX.SUBMIT_PROPOSAL,
     },
-    defaultCondition: 'testOn',
     required: ['title'],
     fields: [
       [
         FIELD.TEST_SWITCH,
         FIELD.TITLE,
-
         { ...FIELD.TEST_GATE, renderOnCheck: FIELD.DESCRIPTION },
         {
           type: 'formCondition',
-          testOn: FIELD.LINK,
-          testOff: FIELD.TRIBUTE,
+          token: { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
+          signal: FIELD.LINK,
         },
-        FIELD.LOOT_REQUEST,
       ],
     ],
   },

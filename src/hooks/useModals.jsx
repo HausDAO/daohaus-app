@@ -1,3 +1,4 @@
+import { Flex } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import TextBox from '../components/TextBox';
 import { OverlayContext } from '../contexts/OverlayContext';
@@ -29,6 +30,19 @@ export const useAppModal = () => {
         description: form.description,
         body: <FormBuilder {...form} />,
         width: form.customWidth || calcMaxWidth(form),
+      });
+    },
+    devFormModal(form) {
+      setModal({
+        title: form.title,
+        subtitle: form.subtitle || form.type,
+        description: form.description,
+        body: (
+          <Flex>
+            <FormBuilder {...form} />
+          </Flex>
+        ),
+        width: '100%',
       });
     },
     stepperModal(steps) {
@@ -87,6 +101,7 @@ export const useAppModal = () => {
     genericModal(params) {
       setModal(params);
     },
+
     closeModal,
   };
 };
