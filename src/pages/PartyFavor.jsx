@@ -20,18 +20,8 @@ const PartyFavor = ({ isMember }) => {
   const { address, injectedProvider } = useInjectedProvider();
   const [loading, setLoading] = useState(false);
   const [canRageQuit, setCanRageQuit] = useState(false);
-  const [hasBalance, setHasBalance] = useState(false);
 
   const canClaim = Number(daoMember?.shares) > 0;
-
-  useEffect(() => {
-    console.log('daoMember', daoMember);
-    if (daoMember?.tokenBalances) {
-      setHasBalance(
-        daoMember.tokenBalances.some(bal => Number(bal.tokenBalance) > 0),
-      );
-    }
-  }, [daoMember]);
 
   useEffect(() => {
     const getCanRageQuit = async () => {
