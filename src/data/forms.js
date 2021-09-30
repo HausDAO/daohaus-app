@@ -432,7 +432,8 @@ export const FORM = {
       [
         FIELD.TEST_SWITCH,
         FIELD.TITLE,
-        FIELD.DESCRIPTION,
+
+        { ...FIELD.TEST_GATE, renderOnCheck: FIELD.DESCRIPTION },
         {
           type: 'formCondition',
           testOn: FIELD.LINK,

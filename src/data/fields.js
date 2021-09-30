@@ -349,7 +349,11 @@ export const FIELD = {
   TEST_SWITCH: {
     type: 'checkSwitch',
     listenTo: 'formCondition',
-    label: 'Toggle UI',
+    label: {
+      type: 'formCondition',
+      testOn: 'On Label',
+      testOff: 'Off Label',
+    },
     title: {
       type: 'formCondition',
       testOn: 'Display Tribute',
@@ -358,6 +362,13 @@ export const FIELD = {
     description: 'This is a full sentence',
     checked: 'testOn',
     unchecked: 'testOff',
+  },
+  TEST_GATE: {
+    type: 'checkGate',
+    startsChecked: false,
+    label: 'Toggle Field State',
+    title: 'Check to render Description',
+    description: 'You bet',
   },
 };
 

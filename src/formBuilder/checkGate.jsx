@@ -1,40 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormConditions } from '../utils/formBuilder';
 import GenericCheck from './genericCheck';
+import { InputFactory } from './inputFactory';
 
-const findStartingState = props => {
-  if (!props) return;
-  const { listenTo, checked, formCondition, startsChecked } = props;
-  if (listenTo === 'formCondition') return checked === formCondition;
-  if (!listenTo) return startsChecked;
-};
-
-const CheckSwitch = props => {
+const CheckGate = props => {
   const {
     formCondition,
-    checked,
-    unchecked,
-    setFormCondition,
     label,
     title,
     description,
+    startsChecked,
+    renderOnCheck,
   } = props;
   const [checkLabel, checkTitle, checkDescription] = useFormConditions({
     values: [label, title, description],
     condition: formCondition,
   });
-  const isChecked = findStartingState(props);
-  const handleChange = () =>
-    isChecked ? setFormCondition(unchecked) : setFormCondition(checked);
+  const [isChecked, setIsChecked] = useState(false);
+  const handleChange = () => setIsChecked(prevState => !prevState);
+
   return (
-    <GenericCheck
-      isChecked={isChecked}
-      onChange={handleChange}
-      label={checkLabel}
-      title={checkTitle}
-      description={checkDescription}
-    />
+    <>
+      {isChecked ? (
+        <InputFactory {...props} {...renderOnCheck} />
+      ) : (
+        <GenericCheck
+          isChecked={isChecked}
+          onChange={handleChange}
+          label={checkLabel}
+          title={checkTitle}
+          description={checkDescription}
+        />
+      )}
+    </>
   );
 };
 
-export default CheckSwitch;
+export default CheckGate;

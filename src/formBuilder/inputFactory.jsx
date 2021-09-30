@@ -29,6 +29,7 @@ import ColorPicker from './colorPicker';
 import DiscourseMeta from './discourseMeta';
 import ConditionalInput from './conditionalInput';
 import CheckSwitch from './checkSwitch';
+import CheckGate from './checkGate';
 
 export const InputFactory = props => {
   const { type, formCondition } = props;
