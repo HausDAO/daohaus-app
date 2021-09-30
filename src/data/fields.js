@@ -345,8 +345,19 @@ export const FIELD = {
     htmlFor: 'discourseMeta',
     expectType: 'any',
   },
-  CHECK_SWITCH: {
+
+  TEST_SWITCH: {
     type: 'checkSwitch',
+    listenTo: 'formCondition',
+    label: 'Toggle UI',
+    title: {
+      type: 'formCondition',
+      testOn: 'Display Tribute',
+      testOff: 'Display Link',
+    },
+    description: 'This is a full sentence',
+    checked: 'testOn',
+    unchecked: 'testOff',
   },
 };
 

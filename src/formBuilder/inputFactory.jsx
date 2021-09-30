@@ -33,7 +33,7 @@ import CheckSwitch from './checkSwitch';
 export const InputFactory = props => {
   const { type, formCondition } = props;
 
-  if (type === 'condition' && props[formCondition]) {
+  if (type === 'formCondition' && props[formCondition]) {
     return <InputFactory {...props} {...props[formCondition]} />;
   }
 
@@ -123,6 +123,9 @@ export const InputFactory = props => {
   }
   if (type === 'checkSwitch') {
     return <CheckSwitch {...props} />;
+  }
+  if (type === 'checkGate') {
+    return <CheckGate {...props} />;
   }
   return null;
 };

@@ -126,3 +126,12 @@ export const handleFormError = ({
     description: errMsg,
   });
 };
+
+export const useFormCondition = ({ value, condition }) => {
+  if (typeof value === 'string') return value;
+  if (value?.type === 'formCondition' && condition && value?.[condition])
+    return value[condition];
+};
+
+export const useFormConditions = ({ values = [], condition }) =>
+  values.map(val => useFormCondition({ value: val, condition }));

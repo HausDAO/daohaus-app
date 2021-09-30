@@ -422,30 +422,21 @@ export const FORM = {
     minionType: MINION_TYPES.SAFE,
     // tx: TX.SELL_NFT_RARIBLE,
     tx: {
-      isRarible: TX.SELL_NFT_RARIBLE,
-      notRarible: TX.SELL_NFT,
+      type: 'formCondition',
+      testOn: TX.SELL_NFT_RARIBLE,
+      testOff: TX.SELL_NFT,
     },
-    defaultCondition: 'isRarible',
+    defaultCondition: 'testOn',
     required: ['title'],
     fields: [
       [
-        {
-          ...FIELD.CHECK_SWITCH,
-          label: 'Toggle UI',
-          title: {
-            isRarible: 'Display Tribute',
-            notRarible: 'Display Link',
-          },
-          description: 'This is a full sentence',
-          checked: 'isRarible',
-          unchecked: 'notRarible',
-        },
+        FIELD.TEST_SWITCH,
         FIELD.TITLE,
         FIELD.DESCRIPTION,
         {
-          type: 'condition',
-          isRarible: FIELD.LINK,
-          notRarible: FIELD.TRIBUTE,
+          type: 'formCondition',
+          testOn: FIELD.LINK,
+          testOff: FIELD.TRIBUTE,
         },
         FIELD.LOOT_REQUEST,
       ],

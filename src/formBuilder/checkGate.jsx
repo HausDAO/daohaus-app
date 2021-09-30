@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormCondition, useFormConditions } from '../utils/formBuilder';
+import { useFormConditions } from '../utils/formBuilder';
 import GenericCheck from './genericCheck';
 
 const findStartingState = props => {
