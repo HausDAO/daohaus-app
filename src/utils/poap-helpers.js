@@ -7,6 +7,8 @@ export const getFormattedOwnersByPaopId = async poapId => {
 
   const tokens = res?.event?.tokens || [];
 
+  console.log('tokens', tokens.length);
+
   const formattedOwners = tokens.reduce((strg, token) => {
     strg += `${token.owner.id} 2\n`;
     return strg;
