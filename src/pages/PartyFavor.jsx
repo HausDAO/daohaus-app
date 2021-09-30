@@ -10,11 +10,13 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
+import { useDao } from '../contexts/DaoContext';
 
 const PartyFavor = ({ isMember }) => {
   const { daoid, daochain } = useParams();
   const { submitTransaction } = useTX();
   const { daoMember } = useDaoMember();
+  const { daoProposals } = useDao();
   const { address, injectedProvider } = useInjectedProvider();
   const [loading, setLoading] = useState(false);
   const [canRageQuit, setCanRageQuit] = useState(false);
@@ -32,25 +34,28 @@ const PartyFavor = ({ isMember }) => {
 
   useEffect(() => {
     const getCanRageQuit = async () => {
-      if (daoMember?.highestIndexYesVote?.proposalIndex) {
-        const molochContract = createContract({
-          address: daoid,
-          abi: LOCAL_ABI.MOLOCH_V2,
-          chainID: daochain,
-          web3: injectedProvider,
-        });
+      if (daoProposals) {
+        if (daoMember?.highestIndexYesVote?.proposalIndex) {
+          const molochContract = createContract({
+            address: daoid,
+            abi: LOCAL_ABI.MOLOCH_V2,
+            chainID: daochain,
+            web3: injectedProvider,
+          });
 
-        const localCanRage = await molochContract.methods
-          .canRagequit(daoMember?.highestIndexYesVote?.proposalIndex)
-          .call();
+          const localCanRage = await molochContract.methods
+            .canRagequit(daoMember?.highestIndexYesVote?.proposalIndex)
+            .call();
 
-        setCanRageQuit(localCanRage);
-      } else {
-        setCanRageQuit(true);
+          setCanRageQuit(localCanRage);
+        } else {
+          const hasProposal = daoProposals.some(p => p.processed);
+          setCanRageQuit(hasProposal);
+        }
       }
     };
     getCanRageQuit();
-  }, [daoMember]);
+  }, [daoMember, daoProposals]);
 
   const handleClaim = async () => {
     setLoading(true);
@@ -60,6 +65,13 @@ const PartyFavor = ({ isMember }) => {
     });
     setLoading(false);
   };
+
+  console.log(
+    'isMember && canClaim && canRageQuit',
+    isMember,
+    canClaim,
+    canRageQuit,
+  );
 
   const claimButton =
     isMember && canClaim && canRageQuit ? (
