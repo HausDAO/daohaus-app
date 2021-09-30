@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Stack, Button, Spinner, Box, Icon } from '@chakra-ui/react';
 import { GiPartyPopper } from 'react-icons/gi';
@@ -8,20 +8,48 @@ import MainViewLayout from '../components/mainViewLayout';
 import { TX } from '../data/contractTX';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { createContract } from '../utils/contract';
+import { LOCAL_ABI } from '../utils/abi';
 
 const PartyFavor = ({ isMember }) => {
   const { daoid, daochain } = useParams();
   const { submitTransaction } = useTX();
   const { daoMember } = useDaoMember();
-  const { address } = useInjectedProvider();
+  const { address, injectedProvider } = useInjectedProvider();
   const [loading, setLoading] = useState(false);
+  const [canRageQuit, setCanRageQuit] = useState(false);
+  const [hasBalance, setHasBalance] = useState(false);
 
   const canClaim = daoMember?.shares > 1;
 
-  const hasBalance = useMemo(() => {
+  useEffect(() => {
     if (daoMember?.tokenBalances) {
-      return daoMember.tokenBalances.some(bal => Number(bal.tokenBalance) > 0);
+      setHasBalance(
+        daoMember.tokenBalances.some(bal => Number(bal.tokenBalance) > 0),
+      );
     }
+  }, [daoMember]);
+
+  useEffect(() => {
+    const getCanRageQuit = async () => {
+      if (daoMember?.highestIndexYesVote?.proposalIndex) {
+        const molochContract = createContract({
+          address: daoid,
+          abi: LOCAL_ABI.MOLOCH_V2,
+          chainID: daochain,
+          web3: injectedProvider,
+        });
+
+        const localCanRage = await molochContract.methods
+          .canRagequit(daoMember?.highestIndexYesVote?.proposalIndex)
+          .call();
+
+        setCanRageQuit(localCanRage);
+      } else {
+        setCanRageQuit(true);
+      }
+    };
+    getCanRageQuit();
   }, [daoMember]);
 
   const handleClaim = async () => {
@@ -34,13 +62,13 @@ const PartyFavor = ({ isMember }) => {
   };
 
   const claimButton =
-    isMember && canClaim ? (
+    isMember && canClaim && canRageQuit ? (
       <Button onClick={handleClaim} size='lg'>
         Claim
       </Button>
     ) : (
       <Button disabled size='lg'>
-        Not Eligible
+        {!canRageQuit ? `Proposal pending` : `Not Eligible`}
       </Button>
     );
 
@@ -51,7 +79,7 @@ const PartyFavor = ({ isMember }) => {
         <Box fontSize='5xl' fontFamily='heading' mb={10}>
           GET YOUR FAVORS!
         </Box>
-        <Flex as={Stack} direction='column' spacing={4} w='10%' mb={10}>
+        <Flex as={Stack} direction='column' spacing={4} w='20%' mb={10}>
           {!loading ? claimButton : <Spinner size='xl' />}
         </Flex>
         {hasBalance && (
