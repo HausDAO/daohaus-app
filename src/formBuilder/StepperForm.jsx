@@ -38,7 +38,6 @@ const StepperForm = props => {
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
-
   const [currentStep, setCurrentStep] = useState(
     Object.values(steps).find(step => step.start),
   );
@@ -166,7 +165,7 @@ const StepperForm = props => {
     return (
       <TheSummoner
         {...currentStep}
-        localForm={parentForm}
+        parentForm={parentForm}
         next={currentStep.next}
         minionData={minionData}
         goToNext={goToNext}
