@@ -22,9 +22,10 @@ const PartyFavor = ({ isMember }) => {
   const [canRageQuit, setCanRageQuit] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
 
-  const canClaim = daoMember?.shares > 1;
+  const canClaim = Number(daoMember?.shares) > 0;
 
   useEffect(() => {
+    console.log('daoMember', daoMember);
     if (daoMember?.tokenBalances) {
       setHasBalance(
         daoMember.tokenBalances.some(bal => Number(bal.tokenBalance) > 0),
@@ -61,17 +62,10 @@ const PartyFavor = ({ isMember }) => {
     setLoading(true);
     await submitTransaction({
       tx: TX.RAGE_QUIT_CLAIM,
-      args: ['1', '0'],
+      args: ['2', '0'],
     });
     setLoading(false);
   };
-
-  console.log(
-    'isMember && canClaim && canRageQuit',
-    isMember,
-    canClaim,
-    canRageQuit,
-  );
 
   const claimButton =
     isMember && canClaim && canRageQuit ? (
@@ -94,10 +88,13 @@ const PartyFavor = ({ isMember }) => {
         <Flex as={Stack} direction='column' spacing={4} w='20%' mb={10}>
           {!loading ? claimButton : <Spinner size='xl' />}
         </Flex>
-        {hasBalance && (
-          <Link to={`/dao/${daochain}/${daoid}/${address}`}>
-            Withdraw your tokens your DAO profile.
-          </Link>
+        {address && (
+          <Box fontSize='md'>
+            If you already claimed, withdraw your tokens your {` `}
+            <Link to={`/dao/${daochain}/${daoid}/profile/${address}`}>
+              DAO profile.
+            </Link>
+          </Box>
         )}
         {isMember && (
           <Box fontSize='xl'>
