@@ -22,7 +22,7 @@ const PartyFavor = ({ isMember }) => {
   const [canRageQuit, setCanRageQuit] = useState(false);
   const [hasBalance, setHasBalance] = useState(false);
 
-  const canClaim = daoMember?.shares > 1;
+  const canClaim = Number(daoMember?.shares) > 0;
 
   useEffect(() => {
     if (daoMember?.tokenBalances) {
@@ -61,17 +61,10 @@ const PartyFavor = ({ isMember }) => {
     setLoading(true);
     await submitTransaction({
       tx: TX.RAGE_QUIT_CLAIM,
-      args: ['1', '0'],
+      args: ['2', '0'],
     });
     setLoading(false);
   };
-
-  console.log(
-    'isMember && canClaim && canRageQuit',
-    isMember,
-    canClaim,
-    canRageQuit,
-  );
 
   const claimButton =
     isMember && canClaim && canRageQuit ? (
