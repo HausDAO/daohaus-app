@@ -77,8 +77,6 @@ const ProposalVote = ({
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [quorumNeeded, setQuorumNeeded] = useState(null);
 
-  console.log('proposal', proposal);
-
   const earlyExecuteMinionType = proposal => {
     return (
       proposal?.minion?.minionType === MINION_TYPES.NIFTY ||

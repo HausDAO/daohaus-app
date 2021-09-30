@@ -4,7 +4,7 @@ import { Spinner } from '@chakra-ui/react';
 import { useDao } from '../contexts/DaoContext';
 import GenericInput from './genericInput';
 import GenericSelect from './genericSelect';
-import { ModButton } from './staticElements';
+import ModButton from './modButton';
 
 import { handleGetProfile } from '../utils/3box';
 import { isEthAddress, truncateAddr } from '../utils/general';
@@ -89,7 +89,7 @@ const AddressInput = props => {
       {textMode ? (
         <GenericInput
           {...props}
-          btn={<ModButton label='Members' callback={switchElement} />}
+          btn={<ModButton text='Members' fn={switchElement} />}
           onChange={checkApplicant}
           helperText={helperText}
         />
@@ -98,7 +98,7 @@ const AddressInput = props => {
           {...props}
           placeholder='Select an Address'
           options={userAddresses}
-          btn={<ModButton label='Address' callback={switchElement} />}
+          btn={<ModButton text='Address' fn={switchElement} />}
         />
       )}
     </>

@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 
 import GenericSelect from './genericSelect';
 import GenericTextarea from './genericTextArea';
-import { ModButton } from './staticElements';
+import ModButton from './modButton';
 import { validate } from '../utils/validation';
 import {
   fetchABI,
@@ -71,7 +71,7 @@ const AbiInput = props => {
           {...props}
           disabled={isDisabled}
           helperText={helperText}
-          btn={<ModButton label='Address' callback={switchElement} />}
+          btn={<ModButton text='Address' fn={switchElement} />}
           h={40}
         />
       ) : (

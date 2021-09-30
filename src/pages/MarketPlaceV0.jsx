@@ -5,22 +5,25 @@ import { useHistory, useParams } from 'react-router';
 import Installed from './Installed';
 import Market from './Market';
 import MainViewLayout from '../components/mainViewLayout';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import BoostDetails from '../components/boostDetails';
 import { getSettingsLink } from '../utils/marketplace';
+import { useAppModal } from '../hooks/useModals';
 
 const MarketPlaceV0 = () => {
   const { errorToast } = useOverlay();
-  const { openFormModal } = useFormModal();
+  const { genericModal, boostModal } = useAppModal();
   const params = useParams();
   const history = useHistory();
 
-  const installBoost = boost => openFormModal({ boost });
-  const openDetails = boost => {
-    openFormModal({
+  const installBoost = boost => boostModal(boost);
+  const openDetails = boost =>
+    genericModal({
+      title: boost.boostContent.title,
+      subtitle: 'Boost Details',
       body: <BoostDetails {...boost} />,
     });
-  };
+
   const goToSettings = boost => {
     if (boost.settings.type === 'internalLink') {
       history.push(getSettingsLink(boost.settings, params));

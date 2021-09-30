@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
-import { FormFooter } from './staticElements';
+import FormFooter from './formFooter';
 
 import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
@@ -13,6 +13,7 @@ import {
   mapInRequired,
 } from '../utils/formBuilder';
 import { omit } from '../utils/general';
+import ProgressIndicator from '../components/progressIndicator';
 
 const FormBuilder = props => {
   const {
@@ -29,12 +30,12 @@ const FormBuilder = props => {
     parentForm,
     next,
     goToNext,
+    handleThen,
     ctaText,
     secondaryBtn,
-    warningMsg,
   } = props;
 
-  const [loading, setLoading] = useState(false);
+  const [formState, setFormState] = useState(null);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
@@ -120,7 +121,7 @@ const FormBuilder = props => {
       return;
     }
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-    console.log(`collapsedValues`, collapsedValues);
+
     const modifiedValues = modifyFields({
       values: collapsedValues,
       // REVIEW
@@ -145,22 +146,23 @@ const FormBuilder = props => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
         try {
-          setLoading(true);
+          setFormState('loading');
           const res = await submitCallback({
             values: modifiedValues,
             formData: props,
             onSubmit: props.onSubmit,
           });
+          setFormState('success');
           return res;
         } catch (error) {
           console.error(error);
-          setLoading(false);
+          setFormState('error');
         }
       }
     };
-    const handleSubmitTX = async () => {
+    const handleSubmitTX = async then => {
       try {
-        setLoading(true);
+        setFormState('loading');
         const res = await submitTransaction({
           values: modifiedValues,
           formData: props,
@@ -169,40 +171,41 @@ const FormBuilder = props => {
           lifeCycleFns: {
             ...props?.lifeCycleFns,
             onCatch() {
-              setLoading(false);
+              setFormState('error');
               props?.lifeCycleFns?.onCatch?.();
             },
             afterTx() {
-              props?.lifeCycleFns?.afterTx?.();
+              if (typeof then === 'function') {
+                then();
+                setFormState('success');
+              } else {
+                setFormState('success');
+              }
             },
           },
         });
-        setLoading(false);
         return res;
       } catch (error) {
         console.error(error);
-        setLoading(false);
+        setFormState('error');
       }
     };
 
-    // const handleConditional = async choice => {
-    //   if (choice.tx && choice.then)
-    //     return () => handleSubmitTX(handleConditional(choice.then));
-    //   if (choice.tx) return () => handleSubmitTX();
-    //   if (choice.callback) return () => handleSubmitCallback();
-    //   if (choice.goTo) return () => goToNext(choice.goTo);
-    // };
-
+    //  HANDLE GO TO NEXT
     if (next && typeof goToNext === 'function') {
-      return goToNext(next);
+      if (typeof next === 'string') {
+        return goToNext(next);
+      }
+      if (next?.type === 'awaitTx') {
+        console.log('This should be firing');
+        return handleSubmitTX(() => handleThen(next));
+      }
+    }
 
-      // const choice = next[condition];
-      // return handleConditional(choice)();
-    }
     //  HANDLE CALLBACK ON SUBMIT
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function')
       return handleSubmitCallback();
-    }
+
     //  HANDLE CONTRACT TX ON SUBMIT
     return handleSubmitTX();
   };
@@ -237,36 +240,16 @@ const FormBuilder = props => {
           localValues={localValues}
           buildABIOptions={buildABIOptions}
           useFormError={useFormError}
+          formState={formState}
         />
       ),
     );
   };
 
-  useEffect(() => {
-    // Reset form fields in case these are updated
-    const prevFields = [].concat(...formFields);
-    const prevFieldNames = prevFields.map(f => f.name);
-    const currFields = [].concat(...fields).map(f => f.name);
-    if (!currFields.every(fName => prevFieldNames.includes(fName))) {
-      localForm.reset();
-      prevFields.forEach(f =>
-        localForm.setValue(
-          f.name,
-          f.defaultValue
-            ? typeof f.defaultValue === 'function'
-              ? f.defaultValue()
-              : f.defaultValue
-            : '',
-        ),
-      );
-    }
-    setFields(mapInRequired(fields, required));
-  }, [fields]);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
-        <FormControl display='flex' mb={5}>
+        <FormControl display='flex'>
           <Flex
             width='100%'
             flexDirection={['column', null, 'row']}
@@ -275,16 +258,16 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
+        <ProgressIndicator currentState={formState} />
         <FormFooter
           options={options}
           addOption={addOption}
-          loading={loading}
+          formState={formState}
           ctaText={ctaText}
           next={next}
           goToNext={goToNext}
           errors={Object.values(formErrors)}
-          secondaryBtn={secondaryBtn}
-          warningMsg={warningMsg}
+          customSecondaryBtn={secondaryBtn}
         />
       </Flex>
     </form>

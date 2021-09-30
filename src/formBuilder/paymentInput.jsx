@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
-import { ModButton } from './staticElements';
+import ModButton from './modButton';
 
 import { handleDecimals } from '../utils/general';
 
@@ -74,7 +74,7 @@ const PaymentInput = props => {
       selectName='paymentToken'
       options={daoTokens}
       // helperText={unlocked || 'Unlock to tokens to submit proposal'}
-      btn={<ModButton label={maxBtnDisplay} callback={setMax} />}
+      btn={<ModButton text={maxBtnDisplay} fn={setMax} />}
     />
   );
 };

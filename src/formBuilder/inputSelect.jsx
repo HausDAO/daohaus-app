@@ -37,6 +37,8 @@ const InputSelect = props => {
           onChange={handleSelectChange}
           ref={register}
           disabled={disabled}
+          borderTopLeftRadius='0'
+          borderBottomLeftRadius='0'
         >
           {options?.map((option, index) => (
             <option key={`${option?.value}-${index}`} value={option.value}>

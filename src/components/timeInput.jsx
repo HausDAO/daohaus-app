@@ -48,7 +48,6 @@ const TimeInput = ({
     if (currentUnit && amt && !errors.enforceNumber) {
       const seconds = calcSeconds(amt, currentUnit);
       setTimePeriod(seconds);
-      console.log(seconds);
       setTotalSeconds(seconds);
     } else {
       setTimePeriod(0);

@@ -7,6 +7,7 @@ import { validate } from './validation';
 export const HASH = {
   EMPTY_FIELD: 'e3bb180f-dda4-46e0-8ba5-7b24e7b00855',
   AWAITING_VALUE: '13345e28-135b-46ed-8047-716324197a6b',
+  PROPS_MESSAGE: 'b136aa06-7d7c-42a3-824f-c92ed163b18a',
 };
 
 export const SECONDS = {

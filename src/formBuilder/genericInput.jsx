@@ -26,7 +26,9 @@ const GenericInput = props => {
     <FieldWrapper {...props}>
       <InputGroup>
         {prepend && (
-          <InputLeftAddon background='primary.600'>{prepend}</InputLeftAddon>
+          <InputLeftAddon background='primary.600' borderColor='inherit'>
+            {prepend}
+          </InputLeftAddon>
         )}
         <Input
           id={htmlFor}
@@ -41,7 +43,7 @@ const GenericInput = props => {
           }
         />
         {append && (
-          <InputRightAddon background='primary.600' p={0}>
+          <InputRightAddon background='primary.600' p={0} borderColor='inherit'>
             {append}
           </InputRightAddon>
         )}

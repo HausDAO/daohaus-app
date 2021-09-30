@@ -3,9 +3,9 @@ import { Button, Tooltip } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useFormModal } from '../contexts/OverlayContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getMinionActionFormLego } from '../utils/vaults';
+import { useAppModal } from '../hooks/useModals';
 
 const LABELS = {
   NO_MEMBER: 'Wrong network or not a DAO member',
@@ -14,7 +14,7 @@ const LABELS = {
 
 const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
   const { address, injectedChain } = useInjectedProvider();
-  const { openFormModal } = useFormModal();
+  const { formModal } = useAppModal();
   const { daochain } = useParams();
 
   const enableTransfer =
@@ -27,15 +27,13 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
   }, [isNativeToken]);
 
   const openSendModal = () => {
-    openFormModal({
-      lego: {
-        ...transferFormLego,
-        localValues: {
-          tokenAddress: isNativeToken ? '0x00' : token.tokenAddress,
-          minionAddress: minion,
-          balance: token.tokenBalance,
-          tokenDecimals: isNativeToken ? '18' : token.decimals,
-        },
+    formModal({
+      ...transferFormLego,
+      localValues: {
+        tokenAddress: isNativeToken ? '0x00' : token.tokenAddress,
+        minionAddress: minion,
+        balance: token.tokenBalance,
+        tokenDecimals: isNativeToken ? '18' : token.decimals,
       },
     });
   };
