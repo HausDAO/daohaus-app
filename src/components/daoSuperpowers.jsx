@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 
-import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { daoConnectedAndSameChain } from '../utils/general';
+import BoostLaunchWrapper from './boostLaunchWrapper';
+import ContentBox from './ContentBox';
 import { superpowerLinks, boostList } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
-import BoostLaunchWrapper from './boostLaunchWrapper';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const Superpowers = ({ daoMember, daoMetaData }) => {
   const { daochain, daoid } = useParams();

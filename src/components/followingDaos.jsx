@@ -1,12 +1,13 @@
 import React from 'react';
-import { Box, Flex, Icon, Image } from '@chakra-ui/react';
-import { RiLoginBoxLine } from 'react-icons/ri';
 import { Link as RouterLink } from 'react-router-dom';
+import { RiLoginBoxLine } from 'react-icons/ri';
+import { Box, Flex, Icon, Image } from '@chakra-ui/react';
+
+import ComingSoonOverlay from './comingSoonOverlay';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import MetaChill from '../assets/img/metacartel__avatar.jpg';
 import LexDAO from '../assets/img/lex__avatar.png';
-import ComingSoonOverlay from './comingSoonOverlay';
 
 const followingDaos = [
   {
@@ -46,7 +47,7 @@ const Following = () => (
                 {dao.name}
               </Box>
               <Flex>
-                {dao.tags.map((tag) => (
+                {dao.tags.map(tag => (
                   <Box
                     key={`${dao}-${tag}`}
                     bg='secondary.500'

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { RiExternalLinkLine } from 'react-icons/ri';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Link, Text } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
-import { RiExternalLinkLine } from 'react-icons/ri';
 
-import { supportedChains } from '../utils/chain';
 import { useDao } from '../contexts/DaoContext';
 import NewTransmutation from '../forms/newTransmutation';
+import { supportedChains } from '../utils/chain';
 
 const CcoTransmutation = ({ ccoType, transmutation }) => {
   const { daochain, daoid } = useParams();

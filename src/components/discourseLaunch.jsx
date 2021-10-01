@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Box, Button, Flex, Heading, Spinner, Text } from '@chakra-ui/react';
 import { SketchPicker } from 'react-color';
+import { Box, Button, Flex, Heading, Spinner, Text } from '@chakra-ui/react';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';

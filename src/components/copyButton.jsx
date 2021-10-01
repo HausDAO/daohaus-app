@@ -1,7 +1,7 @@
 import React from 'react';
-import { Icon, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
+import { Icon, useToast } from '@chakra-ui/react';
 
 const CopyButton = ({
   text,

@@ -1,4 +1,6 @@
 import React from 'react';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
   Menu,
   MenuList,
@@ -7,8 +9,7 @@ import {
   MenuItem,
   Link,
 } from '@chakra-ui/react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import { useOverlay } from '../contexts/OverlayContext';
 
 const DelegateMenu = ({ member }) => {

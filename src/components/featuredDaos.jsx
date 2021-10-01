@@ -8,9 +8,9 @@ import {
   Text,
   HStack,
 } from '@chakra-ui/react';
+
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-
 import MCAvatar from '../assets/img/metacartel__avatar.jpg';
 import LexAvatar from '../assets/img/lex__avatar.png';
 import MGDAvatar from '../assets/img/mgd__avatar.jpg';

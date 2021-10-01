@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { Box } from '@chakra-ui/react';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useTX } from '../contexts/TXContext';
 import CustomThemeLaunch from './customThemeLaunch';
+import DiscourseLaunch from './discourseLaunch';
+import GenericBoostLaunch from './genericBoostLaunch';
 import NewMinionForm from '../forms/newMinionForm';
 import NewSuperfluidMinionForm from '../forms/newSuperfluidMinion';
 import NotificationsLaunch from './notificationsLaunch';
 import ProposalTypesLaunch from './proposalTypesLaunch';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { boostPost } from '../utils/metadata';
-import { useMetaData } from '../contexts/MetaDataContext';
-import DiscourseLaunch from './discourseLaunch';
-import GenericBoostLaunch from './genericBoostLaunch';
 import SnapshotLaunch from './snapshotLaunch';
-import { useOverlay } from '../contexts/OverlayContext';
-import { useTX } from '../contexts/TXContext';
-import { supportedChains } from '../utils/chain';
 import { TX } from '../data/contractTX';
+import { boostPost } from '../utils/metadata';
+import { supportedChains } from '../utils/chain';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);

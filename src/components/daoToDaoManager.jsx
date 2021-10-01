@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { FaCopy } from 'react-icons/fa';
+import { RiLoginBoxLine } from 'react-icons/ri';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -11,9 +14,6 @@ import {
   Spinner,
   useToast,
 } from '@chakra-ui/react';
-import { FaCopy } from 'react-icons/fa';
-import { RiLoginBoxLine } from 'react-icons/ri';
-import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
