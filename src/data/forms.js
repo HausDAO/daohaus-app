@@ -75,7 +75,7 @@ export const CORE_FORMS = {
     fields: [[FIELD.MINION_TYPE_SELECT]],
   },
   RAGE_QUIT: {
-    customValidations: ['rageQuitMinimum', 'rageQuitMax'],
+    customValidations: ['canRagequit', 'rageQuitMinimum', 'rageQuitMax'],
     id: 'RAGE_QUIT',
     title: 'Rage Quit',
     required: [],
@@ -464,8 +464,23 @@ export const FORM = {
   },
   NEW_SAFE_MINION: {
     required: ['minionName', 'minQuorum', 'saltNonce'],
-    tx: TX.SUMMON_MINION_SAFE,
+    tx: TX.SUMMON_MINION_AND_SAFE,
     fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
+  },
+  NEW_SAFE_MINION_ADVANCED: {
+    customValidations: ['noExistingSafeMinion'],
+    required: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
+    tx: TX.SUMMON_MINION_SAFE,
+    fields: [
+      [
+        FIELD.MINION_NAME,
+        FIELD.ONLY_SAFE,
+        FIELD.MINION_QUORUM,
+        FIELD.SALT_NONCE,
+      ],
+    ],
+    warningMsg:
+      'WARNING: you MUST add the new minion as a Safe module after deployment',
   },
   NEW_NIFTY_MINION: {
     required: ['minQuorum', 'minionName'],

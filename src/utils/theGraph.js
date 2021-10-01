@@ -2,14 +2,20 @@ import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { proposalResolver, daoResolver } from './resolvers';
-import { getGraphEndpoint, supportedChains } from './chain';
-import { calcTotalUSD, fetchTokenData } from './tokenValue';
-import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
-import { UBERHAUS_DATA } from './uberhaus';
+import { getGraphEndpoint, supportedChains } from './chain';
+import { omit } from './general';
 import { getApiMetadata, fetchApiVaultData } from './metadata';
-import { GET_TRANSMUTATION, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
+import {
+  GET_POAP,
+  GET_TRANSMUTATION,
+  GET_WRAP_N_ZAPS,
+} from '../graphQL/boost-queries';
+import { MINION_TYPES } from './proposalUtils';
+import { proposalResolver, daoResolver } from './resolvers';
+import { calcTotalUSD, fetchTokenData } from './tokenValue';
+import { UBERHAUS_DATA } from './uberhaus';
+import { validateSafeMinion } from './vaults';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -79,6 +85,16 @@ export const fetchTransmutation = async args => {
   });
 };
 
+export const fetchPoapAddresses = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint('0x64', 'poap_graph_url'),
+    query: GET_POAP,
+    variables: {
+      eventId: args.eventId,
+    },
+  });
+};
+
 export const fetchMinionInternalBalances = async args => {
   const metadata = await getApiMetadata();
   const internalBalances = await graphQuery({
@@ -141,6 +157,21 @@ const completeQueries = {
           supportedChains[args.chainID].network,
           minionAddresses,
         );
+        const vaultData = await Promise.all(
+          vaultApiData.map(async vault => {
+            if (vault.minionType === MINION_TYPES.SAFE) {
+              const { isMinionModule } = await validateSafeMinion(
+                args.chainID,
+                vault,
+              );
+              return {
+                ...vault,
+                isMinionModule,
+              };
+            }
+            return vault;
+          }),
+        );
 
         const balanceData = await fetchBankValues({
           daoID: args.daoID,
@@ -168,8 +199,7 @@ const completeQueries = {
           nfts: [],
           balanceHistory: balanceData,
         };
-
-        setter.setDaoVaults([guildBank, ...vaultApiData]);
+        setter.setDaoVaults([guildBank, ...vaultData]);
       }
     } catch (error) {
       console.error(error);
