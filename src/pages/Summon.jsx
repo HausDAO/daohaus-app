@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
-import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useUser } from '../contexts/UserContext';
+import Layout from '../components/layout';
+import MainViewLayout from '../components/mainViewLayout';
+import SummonEasy from '../forms/summonEasy';
+import SummonHard from '../forms/summonHard';
+import SummonPending from '../components/summonPending';
+// import TemporaryCloneSummon from '../components/temporaryCloneSummon';
+import { createPoll } from '../services/pollService';
+import { SummonService } from '../services/summonService';
+import { DAO_POLL } from '../graphQL/dao-queries';
+import { capitalize } from '../utils/general';
 import {
   // cloneDaoPresets,
   // cloneMembers,
@@ -11,19 +22,8 @@ import {
   daoPresets,
   parseSummonersAndShares,
 } from '../utils/summoning';
-import SummonHard from '../forms/summonHard';
-import SummonEasy from '../forms/summonEasy';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { SummonService } from '../services/summonService';
-import SummonPending from '../components/summonPending';
-import { graphQuery } from '../utils/apollo';
 import { getGraphEndpoint } from '../utils/chain';
-import { DAO_POLL } from '../graphQL/dao-queries';
-import MainViewLayout from '../components/mainViewLayout';
-import { capitalize } from '../utils/general';
-// import TemporaryCloneSummon from '../components/temporaryCloneSummon';
+import { graphQuery } from '../utils/apollo';
 
 // const tokenMsg =
 //   '''Token addresses are different across chains.

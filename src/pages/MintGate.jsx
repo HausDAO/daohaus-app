@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { RiAddFill } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 import { Flex, Button, Link, Spinner, Box } from '@chakra-ui/react';
-import { RiAddFill } from 'react-icons/ri';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import BoostNotActive from '../components/boostNotActive';
 import MainViewLayout from '../components/mainViewLayout';
 import MintGateCard from '../components/mintGateCard';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { daoConnectedAndSameChain } from '../utils/general';
-import { getMintGates } from '../utils/requests';
-import BoostNotActive from '../components/boostNotActive';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
-import { useOverlay } from '../contexts/OverlayContext';
+import { daoConnectedAndSameChain } from '../utils/general';
+import { getMintGates } from '../utils/requests';
 
 const MintGate = ({ daoMetaData }) => {
   const [gates, setGates] = useState([]);

@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { RiAddFill } from 'react-icons/ri';
 import { Flex, Box, Stack, Button } from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
-import { RiAddFill } from 'react-icons/ri';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import ActivitiesFeed from '../components/activitiesFeed';
-import MemberCard from '../components/memberCard';
-import MemberInfoWrapper from '../components/memberInfoWrapper';
 import ContentBox from '../components/ContentBox';
+import CsvDownloadButton from '../components/csvDownloadButton';
+import ListFilter from '../components/listFilter';
+import ListSort from '../components/listSort';
+import MainViewLayout from '../components/mainViewLayout';
+import MemberCard from '../components/memberCard';
+import MembersChart from '../components/membersChart';
+import MemberInfoWrapper from '../components/memberInfoWrapper';
 import TextBox from '../components/TextBox';
+import UberHausMemberCard from '../components/uberHausMemberCard';
+import { daoConnectedAndSameChain } from '../utils/general';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
-import MembersChart from '../components/membersChart';
-import ListSort from '../components/listSort';
 import {
   membersFilterOptions,
   membersSortOptions,
 } from '../utils/memberContent';
-import MainViewLayout from '../components/mainViewLayout';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { daoConnectedAndSameChain } from '../utils/general';
-import UberHausMemberCard from '../components/uberHausMemberCard';
-import CsvDownloadButton from '../components/csvDownloadButton';
-import ListFilter from '../components/listFilter';
-import { useOverlay } from '../contexts/OverlayContext';
 
 const Members = React.memo(
   ({

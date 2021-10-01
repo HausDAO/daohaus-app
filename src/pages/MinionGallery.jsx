@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import deepEqual from 'deep-eql';
 import { useParams } from 'react-router-dom';
 import { Wrap, WrapItem, Flex, Box } from '@chakra-ui/react';
-import MainViewLayout from '../components/mainViewLayout';
-import NftFilter from '../components/nftFilter';
+import deepEqual from 'deep-eql';
+
 // import ListSort from '../components/listSort';
-import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
+import MainViewLayout from '../components/mainViewLayout';
 import NftCard from '../components/nftCard';
+import NftFilter from '../components/nftFilter';
 import { concatNftSearchData } from '../utils/nftVaults';
+import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();

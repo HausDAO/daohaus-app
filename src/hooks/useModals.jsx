@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import TextBox from '../components/TextBox';
+
 import { OverlayContext } from '../contexts/OverlayContext';
 import FormBuilder from '../formBuilder/formBuilder';
 import StepperForm from '../formBuilder/StepperForm';
+import TextBox from '../components/TextBox';
 
 const MODAL_SIZES = Object.freeze({
   sm: '400px',
