@@ -1,5 +1,5 @@
-import { generateNonce } from '../utils/general';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
+import { generateNonce } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const INFO_TEXT = {
