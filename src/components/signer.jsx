@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Divider, Flex, Link, Button, Box } from '@chakra-ui/react';
 import { BsCheckCircle } from 'react-icons/bs';
-
-import { useParams } from 'react-router';
 import { BiErrorCircle } from 'react-icons/bi';
+import { useParams } from 'react-router';
+import { Divider, Flex, Link, Button, Box } from '@chakra-ui/react';
+
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import ProgressIndicator from './progressIndicator';
 import TextBox from './TextBox';
 import { FORM } from '../data/forms';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { addBoost } from '../utils/metadata';
 import { chainByID } from '../utils/chain';
-import { useOverlay } from '../contexts/OverlayContext';
 
 const indicatorStates = {
   signing: {

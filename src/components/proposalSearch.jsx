@@ -1,4 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  RiCheckboxCircleLine,
+  RiCloseCircleLine,
+  RiErrorWarningLine,
+  RiSearchLine,
+} from 'react-icons/ri';
 import {
   Box,
   Button,
@@ -10,15 +17,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import {
-  RiCheckboxCircleLine,
-  RiCloseCircleLine,
-  RiErrorWarningLine,
-  RiSearchLine,
-} from 'react-icons/ri';
-import { useForm } from 'react-hook-form';
-import { isEthAddress } from '../utils/general';
+
 import AddressInput from '../forms/addressInput';
+import { isEthAddress } from '../utils/general';
 
 const TemporaryPopoverFix = styled.span`
   .css-n0uled {

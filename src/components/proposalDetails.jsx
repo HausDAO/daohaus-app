@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-
 import { useParams } from 'react-router-dom';
 import { Flex, Box, Skeleton, Badge, Text, Spinner } from '@chakra-ui/react';
 import { AddressZero } from '@ethersproject/constants';
@@ -7,16 +6,17 @@ import { AddressZero } from '@ethersproject/constants';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useDao } from '../contexts/DaoContext';
-import TextBox from './TextBox';
 import ContentBox from './ContentBox';
-import ProposalMinionCard from './proposalMinionCard';
-import Vote from './voteIcon';
+import DiscourseProposalTopic from './discourseProposalTopic';
 import MediaBox from './mediaBox';
-import TextIndicator from './textIndicator';
 import MemberIndicator from './memberIndicator';
+import ProposalMinionCard from './proposalMinionCard';
+import TextBox from './TextBox';
+import TextIndicator from './textIndicator';
+import TokenDisplay from './tokenDisplay';
 import UberDaoInfo from './uberDaoInfo';
-
-import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
+import UberHausDelegate from './uberhausDelegate';
+import Vote from './voteIcon';
 import {
   determineProposalStatus,
   getProposalCountdownText,
@@ -26,11 +26,9 @@ import {
   PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { getCustomProposalTerm } from '../utils/metadata';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
 import { handleDecimals } from '../utils/general';
-import UberHausDelegate from './uberhausDelegate';
-import TokenDisplay from './tokenDisplay';
-import DiscourseProposalTopic from './discourseProposalTopic';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const UBER_LINK =
   '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
