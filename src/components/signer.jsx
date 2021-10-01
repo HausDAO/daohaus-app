@@ -17,12 +17,10 @@ const indicatorStates = {
   signing: {
     spinner: true,
     title: 'Signing...',
-    explorerLink: true,
   },
   signed: {
     icon: BsCheckCircle,
     title: 'Signed!',
-    explorerLink: true,
   },
   error: {
     icon: BiErrorCircle,
