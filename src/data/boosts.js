@@ -96,7 +96,6 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-
   DISCORD: {
     title: 'Discord Notifications',
     description:
@@ -256,6 +255,7 @@ export const STEPS = {
       isUserStep: true,
       title: 'Summon',
       stepLabel: 'Summon',
+      next: { type: 'awaitTx', then: 'FINISH', ctaText: 'Summon' },
     },
   },
 };

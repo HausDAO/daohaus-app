@@ -8,9 +8,9 @@ import { Button } from '@chakra-ui/button';
 
 import { useDao } from '../contexts/DaoContext';
 import FormBuilder from '../formBuilder/formBuilder';
-
 import TextBox from './TextBox';
 
+import { ignoreAwaitStep } from '../utils/formBuilder';
 import { MINIONS } from '../data/minions';
 
 // Make avaiable across app
@@ -65,6 +65,7 @@ const TheSummoner = props => {
     secondaryBtn,
     next,
     handleThen,
+    currentStep,
   } = props;
 
   const { daoOverview } = useDao();
@@ -94,8 +95,7 @@ const TheSummoner = props => {
     }
   }, [minionType, daoOverview, menuState]);
 
-  const handleNext = () =>
-    goToNext(typeof next === 'string' ? next : next?.then);
+  const handleNext = () => goToNext(ignoreAwaitStep(next));
   const switchToSummon = () => setMenuState('summon');
 
   if (menuState === 'displayExisting') {
@@ -166,7 +166,7 @@ const TheSummoner = props => {
         <FormBuilder
           {...summonData.summonForm}
           secondaryBtn={secondaryBtn}
-          ctaText={next?.ctaText || 'Next >'}
+          ctaText={currentStep?.ctaText || next?.ctaText || 'Next >'}
           handleThen={handleThen}
           next={next}
           goToNext={goToNext}

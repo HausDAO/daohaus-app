@@ -110,15 +110,20 @@ const StepperForm = props => {
       throw new Error(
         'StepperForm.jsx => handleThen(): Did not recieve a valid .then property',
       );
-    const newCtaText =
-      typeof nextObj.then === 'string' || !nextObj.then?.ctaText
-        ? 'Next >'
-        : nextObj.then.ctaText;
+
+    const getNewCtaText = next => {
+      console.log(next);
+      if (next?.then === 'FINISH') {
+        return 'Finish';
+      }
+      if (next?.then?.ctaText) return nextObj.then.ctaText;
+      return 'Next >';
+    };
 
     setCurrentStep(prevState => ({
       ...prevState,
       next: nextObj.then,
-      ctaText: newCtaText,
+      ctaText: getNewCtaText(nextObj),
     }));
   };
   const secondaryBtn = {
@@ -145,6 +150,7 @@ const StepperForm = props => {
         parentForm={parentForm}
         metaFields={metaFields}
         goToNext={goToNext}
+        next={currentStep.next}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}
       />
@@ -167,6 +173,7 @@ const StepperForm = props => {
       <TheSummoner
         {...currentStep}
         parentForm={parentForm}
+        currentStep={currentStep}
         next={currentStep.next}
         minionData={minionData}
         goToNext={goToNext}
@@ -206,8 +213,8 @@ const StepperForm = props => {
     return (
       <DiscordNotificationsLaunch
         currentStep={currentStep}
-        // parentForm={parentForm}
         metaFields={metaFields}
+        next={currentStep.next}
         goToNext={goToNext}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}

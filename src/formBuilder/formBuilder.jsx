@@ -197,7 +197,6 @@ const FormBuilder = props => {
         return goToNext(next);
       }
       if (next?.type === 'awaitTx') {
-        console.log('This should be firing');
         return handleSubmitTX(() => handleThen(next));
       }
     }
