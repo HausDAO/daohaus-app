@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { RiInformationLine } from 'react-icons/ri';
 import {
   Button,
   FormErrorMessage,
@@ -11,10 +12,9 @@ import {
   Icon,
   FormControl,
 } from '@chakra-ui/react';
-import { RiInformationLine } from 'react-icons/ri';
 
-import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
+import TextBox from '../components/TextBox';
 
 const PaymentInput = ({
   errors,

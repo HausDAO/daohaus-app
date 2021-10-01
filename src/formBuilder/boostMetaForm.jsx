@@ -1,4 +1,5 @@
 import React from 'react';
+
 import FormBuilder from './formBuilder';
 
 const BoostMetaForm = props => {

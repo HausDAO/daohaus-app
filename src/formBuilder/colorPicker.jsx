@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { SketchPicker } from 'react-color';
 import { Box, Flex } from '@chakra-ui/layout';
 
-import { SketchPicker } from 'react-color';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 

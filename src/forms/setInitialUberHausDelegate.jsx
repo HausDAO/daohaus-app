@@ -4,8 +4,8 @@ import { Button } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 

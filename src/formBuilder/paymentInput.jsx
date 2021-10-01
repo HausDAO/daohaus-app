@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
-
 import { handleDecimals } from '../utils/general';
 
 const getMaxBalance = (tokenData, tokenAddress) => {

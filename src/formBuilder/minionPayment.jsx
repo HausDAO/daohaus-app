@@ -3,14 +3,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
-
-import { validate } from '../utils/validation';
 import { handleDecimals } from '../utils/general';
 import {
   getReadableBalanceFromList,
   getReadableBalance,
   getVaultERC20s,
 } from '../utils/vaults';
+import { validate } from '../utils/validation';
 
 const MinionToken = props => {
   const { daoVaults } = useDao();
