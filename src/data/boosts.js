@@ -256,6 +256,7 @@ export const STEPS = {
       isUserStep: true,
       title: 'Summon',
       stepLabel: 'Summon',
+      next: { type: 'awaitTx', then: 'FINISH', ctaText: 'Summon' },
     },
   },
 };

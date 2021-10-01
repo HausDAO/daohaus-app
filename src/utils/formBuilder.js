@@ -126,3 +126,7 @@ export const handleFormError = ({
     description: errMsg,
   });
 };
+
+export const ignoreAwaitStep = next => {
+  return typeof next === 'string' ? next : next?.then;
+};

@@ -110,15 +110,20 @@ const StepperForm = props => {
       throw new Error(
         'StepperForm.jsx => handleThen(): Did not recieve a valid .then property',
       );
-    const newCtaText =
-      typeof nextObj.then === 'string' || !nextObj.then?.ctaText
-        ? 'Next >'
-        : nextObj.then.ctaText;
+
+    const getNewCtaText = next => {
+      console.log(next);
+      if (next?.then === 'FINISH') {
+        return 'Finish';
+      }
+      if (next?.then?.ctaText) return nextObj.then.ctaText;
+      return 'Next >';
+    };
 
     setCurrentStep(prevState => ({
       ...prevState,
       next: nextObj.then,
-      ctaText: newCtaText,
+      ctaText: getNewCtaText(nextObj),
     }));
   };
   const secondaryBtn = {
@@ -167,6 +172,7 @@ const StepperForm = props => {
       <TheSummoner
         {...currentStep}
         parentForm={parentForm}
+        currentStep={currentStep}
         next={currentStep.next}
         minionData={minionData}
         goToNext={goToNext}
