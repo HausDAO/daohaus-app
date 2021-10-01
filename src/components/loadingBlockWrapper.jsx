@@ -1,6 +1,7 @@
+import React from 'react';
 import { Flex } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
-import React from 'react';
+
 import TextBox from './TextBox';
 
 const LoadingBlockWrapper = ({

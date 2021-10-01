@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BsThreeDots } from 'react-icons/bs';
 import { useParams } from 'react-router';
 import {
   Menu,
@@ -9,13 +10,12 @@ import {
   Button,
   Tooltip,
 } from '@chakra-ui/react';
-import { BsThreeDots } from 'react-icons/bs';
 
 import { useDao } from '../contexts/DaoContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const NftCardActionMenu = ({ nft, minion, vault }) => {
   const { daoOverview } = useDao();

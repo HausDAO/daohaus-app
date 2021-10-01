@@ -6,6 +6,7 @@ import { Box, Flex, Icon, Image } from '@chakra-ui/react';
 import ComingSoonOverlay from './comingSoonOverlay';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
+
 import MetaChill from '../assets/img/metacartel__avatar.jpg';
 import LexDAO from '../assets/img/lex__avatar.png';
 

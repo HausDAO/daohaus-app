@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { HiOutlineChevronDown, HiOutlineChevronRight } from 'react-icons/hi';
 import { useBreakpointValue, Flex, IconButton } from '@chakra-ui/react';
 
-import { HiOutlineChevronDown, HiOutlineChevronRight } from 'react-icons/hi';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 

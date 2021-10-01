@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BsThreeDots } from 'react-icons/bs';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Menu,
@@ -10,13 +11,12 @@ import {
   Flex,
   Tooltip,
 } from '@chakra-ui/react';
-import { BsThreeDots } from 'react-icons/bs';
 
 import { useTX } from '../contexts/TXContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import { chainByName } from '../utils/chain';
 import { useDao } from '../contexts/DaoContext';
 import { TX } from '../data/contractTX';
+import { chainByName } from '../utils/chain';
 
 const MinionInternalBalanceActionMenu = ({
   targetDao,

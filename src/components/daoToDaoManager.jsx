@@ -30,6 +30,7 @@ import {
   pendingUberHausStakingProposalChildDao,
 } from '../utils/proposalUtils';
 import { truncateAddr } from '../utils/general';
+
 import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 
 const DaoToDaoManager = ({

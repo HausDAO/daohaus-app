@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Flex, Icon, useToast, HStack, Stack, Badge } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { VscGear } from 'react-icons/vsc';
 import { FaCopy } from 'react-icons/fa';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+import { VscGear } from 'react-icons/vsc';
+import { Flex, Icon, useToast, HStack, Stack, Badge } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { truncateAddr } from '../utils/general';
 import { getVaultListData } from '../utils/vaults';
+import { truncateAddr } from '../utils/general';
 
 const MinionList = () => {
   const { daoOverview } = useDao();
