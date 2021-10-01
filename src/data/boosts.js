@@ -96,7 +96,6 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-
   DISCORD: {
     title: 'Discord Notifications',
     description:

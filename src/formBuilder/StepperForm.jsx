@@ -150,6 +150,7 @@ const StepperForm = props => {
         parentForm={parentForm}
         metaFields={metaFields}
         goToNext={goToNext}
+        next={currentStep.next}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}
       />
@@ -212,8 +213,8 @@ const StepperForm = props => {
     return (
       <DiscordNotificationsLaunch
         currentStep={currentStep}
-        // parentForm={parentForm}
         metaFields={metaFields}
+        next={currentStep.next}
         goToNext={goToNext}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}
