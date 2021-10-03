@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   Menu,
@@ -17,12 +17,22 @@ import { daoConnectedAndSameChain } from '../utils/general';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useAppModal } from '../hooks/useModals';
 
-const NftCardActionMenu = ({ nft, minion }) => {
+const NftCardActionMenu = ({ nft, minion, vault }) => {
   const { daoOverview } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
   const { formModal } = useAppModal();
+  const [actionsEnabled, enableActions] = useState(false);
+
+  useEffect(() => {
+    enableActions(
+      isMember &&
+        (!vault ||
+          !vault.safeAddress ||
+          (vault.safeAddress && vault.isMinionModule)),
+    );
+  }, [vault]);
 
   const handleActionClick = action => {
     const currentMinion = daoOverview.minions.find(
@@ -63,7 +73,7 @@ const NftCardActionMenu = ({ nft, minion }) => {
                 onClick={() => handleActionClick(action)}
                 isDisabled={
                   !(
-                    isMember &&
+                    actionsEnabled &&
                     daoConnectedAndSameChain(
                       address,
                       daochain,
@@ -88,5 +98,4 @@ const NftCardActionMenu = ({ nft, minion }) => {
     </>
   );
 };
-
 export default NftCardActionMenu;

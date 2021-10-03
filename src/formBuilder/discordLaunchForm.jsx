@@ -15,7 +15,7 @@ import { notificationBoostContent } from '../content/boost-content';
 import { get } from '../utils/requests';
 
 const DiscordNotificationsLaunch = props => {
-  const { stepOverride, goToNext, setStepperStorage } = props;
+  const { stepOverride, goToNext, setStepperStorage, next } = props;
 
   const { handleSubmit, register, getValues, watch } = useForm();
   const [connectionError, setConnectionError] = useState();
@@ -48,7 +48,7 @@ const DiscordNotificationsLaunch = props => {
         actions: ['votingPeriod', 'rageQuit', 'newProposal'],
       },
     ]);
-    goToNext();
+    goToNext(next);
   };
 
   const testConnection = async () => {
