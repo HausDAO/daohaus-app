@@ -24,13 +24,24 @@ export const useAppModal = () => {
 
   return {
     formModal(form) {
-      setModal({
-        title: form.title,
-        subtitle: form.subtitle || form.type,
-        description: form.description,
-        body: <FormBuilder {...form} />,
-        width: form.customWidth || calcMaxWidth(form),
-      });
+      console.log(form);
+      if (form.type === 'multiStep') {
+        const updateModalUI = ({ subtitle, title }) => {
+          setModal(prevState => ({ ...prevState, subtitle, title }));
+        };
+        setModal({
+          body: <StepperForm steps={form} updateModalUI={updateModalUI} />,
+          width: form.customWidth || calcMaxWidth(form),
+        });
+      } else {
+        setModal({
+          title: form.title,
+          subtitle: form.subtitle || form.type,
+          description: form.description,
+          body: <FormBuilder {...form} />,
+          width: form.customWidth || calcMaxWidth(form),
+        });
+      }
     },
     devFormModal(form) {
       setModal({
