@@ -94,7 +94,7 @@ export const CORE_FORMS = {
   },
 };
 
-export const FORM = {
+export const PROPOSAL_FORMS = {
   BUY_SHARES: {
     id: 'BUY_SHARES',
     title: 'Request shares for tokens',
@@ -537,6 +537,56 @@ export const FORM = {
     ],
     customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
   },
+  START_SAFE_MULTI: {
+    id: 'START_SAFE_MULTI',
+    logValues: true,
+    title: 'Safe Minion Transaction Builder',
+    description: 'Create a multi-transaction proposal',
+    type: PROPOSAL_TYPES.MINION_SAFE,
+    minionType: MINION_TYPES.SAFE,
+    required: ['title'],
+    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK, FIELD.MINION_SELECT]],
+  },
+  CREATE_TX: {
+    logValues: true,
+    addStep: { form: 'self', at: 'beforeFinish' },
+    fields: [[FIELD.ABI_INPUT]],
+  },
+  MULTICALL_CONFIRMATION: {
+    logValues: true,
+    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK, FIELD.MINION_SELECT]],
+  },
+};
+
+const MULTI_STEP = {
+  SAFE_TX_BUILDER: {
+    id: 'SAFE_TX_BUILDER',
+    dev: true,
+    type: 'multiStep',
+    title: 'Safe Minion TX Builder',
+    description:
+      'Build custom multi-call DAO transactions using a Gnosis Safe Minion',
+    STEP1: {
+      type: 'form',
+      start: true,
+      form: PROPOSAL_FORMS.START_SAFE_MULTI,
+      next: 'STEP2',
+      stepLabel: 'Choose Minion + Describe TXs',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'form',
+      isUserStep: true,
+      form: PROPOSAL_FORMS.CREATE_TX,
+      next: { type: 'awaitGenerate', then: 'STEP3', ctaText: 'Confirm' },
+    },
+    STEP3: {
+      type: 'form',
+      isUserStep: true,
+      form: PROPOSAL_FORMS.CONFIRM_TX,
+      finish: true,
+    },
+  },
 };
 
 export const BOOST_FORMS = {
@@ -553,3 +603,5 @@ export const BOOST_FORMS = {
     tx: TX.CREATE_WRAP_N_ZAP,
   },
 };
+
+export const FORM = { ...PROPOSAL_FORMS, ...MULTI_STEP };
