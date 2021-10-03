@@ -164,6 +164,7 @@ const StepperForm = props => {
   if (currentStep?.type === 'summoner') {
     return (
       <TheSummoner
+        // Todo clean current step stuff
         {...currentStep}
         parentForm={parentForm}
         next={currentStep.next}

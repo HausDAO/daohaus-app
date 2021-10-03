@@ -415,7 +415,7 @@ export const FORM = {
   },
   SAMPLE_CONDITIONAL: {
     dev: true,
-    // logValues: true,
+    logValues: true,
     id: 'SAMPLE_CONDITIONAL',
     formConditions: ['signal', 'token'],
     title: 'Conditional Form',

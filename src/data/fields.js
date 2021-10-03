@@ -357,11 +357,7 @@ export const FIELD = {
       signal: 'not checked',
     },
     title: 'Create a token proposal',
-    description: {
-      type: 'formCondition',
-      token: 'This creates a WhiteList Token TX',
-      signal: 'This creates a signal proposal',
-    },
+    description: 'ssdfsd',
     expectType: 'any',
   },
   TEST_GATE: {
