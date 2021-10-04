@@ -26,7 +26,7 @@ const PaymentInput = props => {
 
   const paymentToken = watch('paymentToken');
   const maxBtnDisplay =
-    balance || balance === 0
+    (balance !== '--' && balance) || balance === 0
       ? `Max: ${balance.toFixed(4)}`
       : 'Error: Not found.';
 
@@ -59,6 +59,8 @@ const PaymentInput = props => {
     const tokenAddr = paymentToken || getValues('paymentToken');
     if (daoTokens?.length && tokenAddr) {
       const bal = getMaxBalance(daoTokens, tokenAddr);
+
+      console.log('bal', bal);
 
       setBalance(bal);
     }
