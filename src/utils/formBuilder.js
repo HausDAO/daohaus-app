@@ -144,4 +144,5 @@ export const checkConditionalTx = ({ tx, condition }) => {
 };
 
 export const ignoreAwaitStep = next => {
-  return typeof next === 'string' ? next : next?.then;}
+  return typeof next === 'string' ? next : next?.then;
+};
