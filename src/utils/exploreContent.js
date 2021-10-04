@@ -44,6 +44,18 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'network',
     default: true,
   },
+  {
+    name: 'Harmony',
+    value: 1666600000,
+    type: 'network',
+    default: true,
+  },
+  {
+    name: 'HarmonyTest',
+    value: 1666700000,
+    type: 'network',
+    default: true,
+  },
   // {
   //   name: 'IDChain',
   //   value: 74,
