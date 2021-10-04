@@ -20,6 +20,7 @@ import {
   PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
+import { NFTService } from '../services/nftService';
 
 import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { MinionService } from '../services/minionService';
@@ -104,6 +105,25 @@ export const pollTokenAllowances = async ({
     contractAddr: daoID,
   });
   return amountApproved;
+};
+
+export const pollTokenApproval = async ({
+  chainID,
+  tokenAddress,
+  userAddress,
+  controllerAddress,
+}) => {
+  const tokenContract = NFTService({
+    chainID,
+    tokenAddress,
+  });
+
+  const args = [userAddress, controllerAddress];
+  const approved = await tokenContract('isApprovedForAll')({
+    args,
+    userAddress,
+  });
+  return approved;
 };
 
 export const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {

@@ -192,6 +192,12 @@ export const FIELD = {
     label: 'Vaild Rarible Order Data',
     expectType: 'any',
   },
+  NFT_APPROVAL: {
+    type: 'nftApproval',
+    htmlFor: 'nftApproval',
+    name: 'nftApproval',
+    expectType: 'boolean',
+  },
   DATE_RANGE: {
     type: 'dateRange',
     htmlFor: 'dateRange',

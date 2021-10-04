@@ -37,6 +37,9 @@ export const validate = {
   greaterThanZero(val) {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },
+  boolean(val) {
+    return val;
+  },
 };
 
 export const checkFormTypes = (values, fields) => {

@@ -28,6 +28,7 @@ import RaribleNftSelect from './raribleNftData';
 import ColorPicker from './colorPicker';
 import DiscourseMeta from './discourseMeta';
 import ConditionalInput from './conditionalInput';
+import NftApproval from './nftApproval';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -115,6 +116,9 @@ export const InputFactory = props => {
   }
   if (type === 'conditionalInput') {
     return <ConditionalInput {...props} />;
+  }
+  if (type === 'nftApproval') {
+    return <NftApproval {...props} />;
   }
   return null;
 };
