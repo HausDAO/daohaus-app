@@ -38,7 +38,6 @@ const StepperForm = props => {
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
-
   const [currentStep, setCurrentStep] = useState(
     Object.values(steps).find(step => step.start),
   );

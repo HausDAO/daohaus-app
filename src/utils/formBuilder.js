@@ -127,6 +127,21 @@ export const handleFormError = ({
   });
 };
 
-export const ignoreAwaitStep = next => {
-  return typeof next === 'string' ? next : next?.then;
+export const useFormCondition = ({ value, condition }) => {
+  if (typeof value === 'string') return value;
+  if (value?.type === 'formCondition' && condition && value?.[condition])
+    return value[condition];
 };
+
+export const useFormConditions = ({ values = [], condition }) =>
+  values.map(val => useFormCondition({ value: val, condition }));
+
+export const checkConditionalTx = ({ tx, condition }) => {
+  if (tx?.type === 'formCondition' && tx[condition]) {
+    return tx[condition];
+  }
+  return tx;
+};
+
+export const ignoreAwaitStep = next => {
+  return typeof next === 'string' ? next : next?.then;}

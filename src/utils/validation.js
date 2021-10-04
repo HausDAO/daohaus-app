@@ -48,11 +48,12 @@ export const checkFormTypes = (values, fields) => {
   const errors = fields.reduce((arr, field) => {
     const inputVal = values[field.name];
     //  check if empty
-    if (inputVal === '' || field.expectType === 'any') {
+    if (inputVal === '' || field.expectType === 'any' || !field.expectType) {
       return arr;
     }
     const isValid = validate[field.expectType];
     if (typeof isValid !== 'function') {
+      console.log(field);
       throw new Error(`Could not find validator function ${field.expectType}`);
     }
     if (!isValid(inputVal)) {
