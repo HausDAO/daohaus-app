@@ -829,6 +829,26 @@ export const TX = {
     errMsg: 'Error poking Wrap-N-Zap',
     successMsg: 'Wrap-N-Zap Poke Successful!',
   },
+  SUPERFLUID_STREAM: {
+    contract: CONTRACTS.SUPERFLUID_MINION_SELECT,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting Stream Proposal',
+    errMsg: 'Error Submitting Proposals',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      '.values.applicant',
+      '.values.paymentToken',
+      '.values.weiRatePerSec',
+      '.values.paymentRequested',
+      '0x0',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.STANDARD_PROPOSAL,
+      },
+    ],
+  },
   SELL_NFT_RARIBLE: {
     contract: CONTRACTS.SELECTED_MINION_SAFE,
     name: 'proposeAction',

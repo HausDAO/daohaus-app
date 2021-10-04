@@ -5,7 +5,7 @@ import GenericFormDisplay from './genericFormDisplay';
 import InputSelect from './inputSelect';
 
 const rates = [
-  { name: 'one time', value: 1 },
+  // { name: 'one time', value: 1 },
   { name: 'per hour', value: 3600 },
   { name: 'per day', value: 3600 * 24 },
   { name: 'per week', value: 3600 * 24 * 7 },
