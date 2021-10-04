@@ -10,11 +10,14 @@ const MinionSelect = props => {
   const minions = useMemo(() => {
     return daoOverview.minions
       .filter(minion => minion.minionType === props.minionType)
-      .map(minion => ({
-        value: minion.minionAddress,
-        name: minion.details,
-      }));
-  }, []);
+      .map(
+        minion => ({
+          value: minion.safeAddress || minion.minionAddress,
+          name: minion.details,
+        }),
+        [],
+      );
+  });
 
   useEffect(() => {
     if (localValues && localValues.minionAddress) {

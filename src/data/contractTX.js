@@ -936,14 +936,28 @@ export const TX = {
     successMsg: 'Proposal Submitted',
     gatherArgs: [
       '.contextData.daoid',
-      [], // TODO: tokenAddresses
-      [], // TODO: typesTokensIdsAmounts
-      '', // TODO: vaultAddress (Minion Address?)
-      [
-        '.values.sharesRequested',
-        '.values.lootRequested',
-        '', // TODO: Funds
-      ],
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['.values.nftAddress'],
+      }, // tokenAddresses
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['2', '.values.tokenId', '1'],
+          },
+        ],
+      }, // typesTokensIdsAmounts
+      '.values.selectedMinion', // vaultAddress (Minion Address?)
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          '.values.sharesRequested',
+          '.values.lootRequested',
+          '.values.paymentRequested', // Funds
+        ],
+      }, // tokenAddresses
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.OFFER_NFT_TRIBUTE,
