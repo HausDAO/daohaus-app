@@ -194,5 +194,8 @@ export const validateSafeMinion = async (chainId, vault) => {
     };
   } catch (error) {
     console.error(error);
+    return {
+      isMinionModule: false,
+    };
   }
 };

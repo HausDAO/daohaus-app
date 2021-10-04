@@ -518,7 +518,7 @@ export const FORM = {
     description: 'Stream funds from the Superfluid Minion',
     type: PROPOSAL_TYPES.MINION_SUPERFLUID,
     minionType: MINION_TYPES.SUPERFLUID,
-    tx: TX.SUPERFLUID_PROPOSE_ACTION,
+    tx: TX.SUPERFLUID_STREAM,
     required: [
       'title',
       'applicant',
