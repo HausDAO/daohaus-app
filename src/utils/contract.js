@@ -1,7 +1,7 @@
 // SAVE FOR LATER
 import { ethers } from 'ethers';
-import Web3 from 'web3';
 import SafeMasterCopy from '@gnosis.pm/safe-contracts/build/artifacts/contracts/GnosisSafe.sol/GnosisSafe.json';
+import Web3 from 'web3';
 
 // import Erc20Abi from '../contracts/erc20a.json';
 import { chainByID } from './chain';
