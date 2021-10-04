@@ -136,7 +136,9 @@ export const customValidations = {
     return false;
   },
   canRagequit({ appState }) {
-    const { proposalId } = appState.daoMember.highestIndexYesVote;
+    const proposalId = appState.daoMember.highestIndexYesVote
+      ? appState.daoMember.highestIndexYesVote
+      : null;
     const proposal = appState.daoProposals.find(
       p => p.proposalId === proposalId,
     );
