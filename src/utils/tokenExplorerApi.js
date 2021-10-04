@@ -39,8 +39,6 @@ export const CONTRACT_MODELS = {
     model: [
       'setup',
       'execTransaction',
-      'checkSignatures',
-      'checkNSignatures',
       'requiredTxGas',
       'approveHash',
       'domainSeparator',
@@ -50,7 +48,6 @@ export const CONTRACT_MODELS = {
       'disableModule',
       'execTransactionFromModule',
       'execTransactionFromModuleReturnData',
-      'isModuleEnabled',
     ],
   },
 };

@@ -11,6 +11,7 @@ const FieldWrapper = ({
   label,
   info,
   htmlFor,
+  name,
   helperText,
   hidden,
   btn,
@@ -35,7 +36,12 @@ const FieldWrapper = ({
       hidden={hidden}
     >
       <Flex>
-        <TextBox as={FormLabel} size='xs' htmlFor={htmlFor} position='relative'>
+        <TextBox
+          as={FormLabel}
+          size='xs'
+          htmlFor={htmlFor || name}
+          position='relative'
+        >
           {required && (
             <Box display='inline' position='absolute' left='-1rem'>
               {'* '}

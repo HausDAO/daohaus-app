@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
@@ -8,12 +8,15 @@ import FormFooter from './formFooter';
 
 import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
+  checkConditionalTx,
   collapse,
   inputDataFromABI,
   mapInRequired,
 } from '../utils/formBuilder';
 import { omit } from '../utils/general';
 import ProgressIndicator from '../components/progressIndicator';
+
+const dev = process.env.REACT_APP_DEV;
 
 const FormBuilder = props => {
   const {
@@ -33,14 +36,20 @@ const FormBuilder = props => {
     handleThen,
     ctaText,
     secondaryBtn,
+    formConditions,
+    logValues,
   } = props;
 
   const [formState, setFormState] = useState(null);
+  const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
-  const { handleSubmit } = localForm;
+  const { handleSubmit, watch } = localForm;
+  const values = watch();
+
+  useEffect(() => logValues && dev && console.log(`values`, values), [values]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -167,7 +176,7 @@ const FormBuilder = props => {
           values: modifiedValues,
           formData: props,
           localValues,
-          tx: props.tx,
+          tx: checkConditionalTx({ tx: props.tx, condition: formCondition }),
           lifeCycleFns: {
             ...props?.lifeCycleFns,
             onCatch() {
@@ -234,6 +243,8 @@ const FormBuilder = props => {
           {...field}
           key={`${depth}-${index}`}
           minionType={props.minionType}
+          formCondition={formCondition}
+          setFormCondition={setFormCondition}
           layout={props.layout}
           localForm={localForm}
           localValues={localValues}

@@ -99,7 +99,6 @@ export const FORM = {
     id: 'BUY_SHARES',
     title: 'Request shares for tokens',
     description: 'Request shares from the DAO in exchange for ERC-20 tokens',
-    playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['sharesRequested', 'tributeOffered', 'title'],
@@ -112,7 +111,6 @@ export const FORM = {
     id: 'SHARES_FOR_WORK',
     title: 'Request shares for work completed',
     description: 'Request shares from the DAO by showing finished work.',
-    playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['sharesRequested', 'link', 'title'],
@@ -249,6 +247,7 @@ export const FORM = {
   },
   MINION_NIFTY: {
     id: 'MINION_NIFTY',
+
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
@@ -411,6 +410,33 @@ export const FORM = {
         FIELD.DATE_RANGE,
         FIELD.SET_PRICE,
         FIELD.RARIBLE_NFT_DATA,
+      ],
+    ],
+  },
+  SAMPLE_CONDITIONAL: {
+    dev: true,
+    // logValues: true,
+    id: 'SAMPLE_CONDITIONAL',
+    formConditions: ['signal', 'token'],
+    title: 'Conditional Form',
+    description: 'Conditional Description',
+    type: PROPOSAL_TYPES.FUNDING,
+    tx: {
+      type: 'formCondition',
+      token: TX.WHITELIST_TOKEN_PROPOSAL,
+      signal: TX.SUBMIT_PROPOSAL,
+    },
+    required: ['title'],
+    fields: [
+      [
+        FIELD.TEST_SWITCH,
+        FIELD.TITLE,
+        { ...FIELD.TEST_GATE, renderOnCheck: FIELD.DESCRIPTION },
+        {
+          type: 'formCondition',
+          token: { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
+          signal: FIELD.LINK,
+        },
       ],
     ],
   },
