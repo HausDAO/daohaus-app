@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
-import { ModButton } from './staticElements';
+import ModButton from './modButton';
 
 import { handleDecimals } from '../utils/general';
 
@@ -26,7 +26,7 @@ const PaymentInput = props => {
 
   const paymentToken = watch('paymentToken');
   const maxBtnDisplay =
-    balance || balance === 0
+    (balance !== '--' && balance) || balance === 0
       ? `Max: ${balance.toFixed(4)}`
       : 'Error: Not found.';
 
@@ -60,6 +60,8 @@ const PaymentInput = props => {
     if (daoTokens?.length && tokenAddr) {
       const bal = getMaxBalance(daoTokens, tokenAddr);
 
+      console.log('bal', bal);
+
       setBalance(bal);
     }
   }, [daoTokens, paymentToken]);
@@ -74,7 +76,7 @@ const PaymentInput = props => {
       selectName='paymentToken'
       options={daoTokens}
       // helperText={unlocked || 'Unlock to tokens to submit proposal'}
-      btn={<ModButton label={maxBtnDisplay} callback={setMax} />}
+      btn={<ModButton text={maxBtnDisplay} fn={setMax} />}
     />
   );
 };

@@ -33,6 +33,23 @@ export const CONTRACT_MODELS = {
       'isApprovedForAll',
     ],
   },
+  // SRC https://github.com/gnosis/safe-contracts/blob/v1.3.0/contracts/GnosisSafe.sol
+  GNOSIS_SAFE: {
+    name: 'GnosisSafe',
+    model: [
+      'setup',
+      'execTransaction',
+      'requiredTxGas',
+      'approveHash',
+      'domainSeparator',
+      'encodeTransactionData',
+      'getTransactionHash',
+      'enableModule',
+      'disableModule',
+      'execTransactionFromModule',
+      'execTransactionFromModuleReturnData',
+    ],
+  },
 };
 
 const fetchEtherscanAPIData = async (address, daochain, module) => {
@@ -300,8 +317,8 @@ export const getExplorerLink = (tokenAddress, chainID) => {
 
 export const checkContractType = async (address, chainID, model) => {
   const abi = await fetchABI(address, chainID);
-  if (abi.status === '0') {
-    console.log(abi);
+  if (!abi || abi.status === '0') {
+    console.log('Failed to fetch contract ABI', abi);
     return false;
   }
   const names = abi.filter(fn => fn.name).map(fn => fn.name);

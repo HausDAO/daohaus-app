@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   Menu,
@@ -12,30 +12,38 @@ import {
 import { BsThreeDots } from 'react-icons/bs';
 
 import { useDao } from '../contexts/DaoContext';
-import { useFormModal } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useAppModal } from '../hooks/useModals';
 
-const NftCardActionMenu = ({ nft, minion }) => {
+const NftCardActionMenu = ({ nft, minion, vault }) => {
   const { daoOverview } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
-  const { openFormModal } = useFormModal();
+  const { formModal } = useAppModal();
+  const [actionsEnabled, enableActions] = useState(false);
+
+  useEffect(() => {
+    enableActions(
+      isMember &&
+        (!vault ||
+          !vault.safeAddress ||
+          (vault.safeAddress && vault.isMinionModule)),
+    );
+  }, [vault]);
 
   const handleActionClick = action => {
     const currentMinion = daoOverview.minions.find(
       m => m.minionAddress === minion,
     );
-    openFormModal({
-      lego: {
-        ...action.formLego,
-        localValues: {
-          ...action.localValues,
-          minionAddress: currentMinion.minionAddress,
-          safeAddress: currentMinion.safeAddress,
-        },
+    formModal({
+      ...action.formLego,
+      localValues: {
+        ...action.localValues,
+        minionAddress: currentMinion.minionAddress,
+        safeAddress: currentMinion.safeAddress,
       },
     });
   };
@@ -65,7 +73,7 @@ const NftCardActionMenu = ({ nft, minion }) => {
                 onClick={() => handleActionClick(action)}
                 isDisabled={
                   !(
-                    isMember &&
+                    actionsEnabled &&
                     daoConnectedAndSameChain(
                       address,
                       daochain,
@@ -90,5 +98,4 @@ const NftCardActionMenu = ({ nft, minion }) => {
     </>
   );
 };
-
 export default NftCardActionMenu;

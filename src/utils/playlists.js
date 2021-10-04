@@ -17,15 +17,15 @@ export const BOOST_PLAYLISTS = {
   //   id: 'nifty minion',
   //   forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
   // },
-  // DEV_SUITE: {
-  //   name: 'Dev Suite',
-  //   id: 'Neapolitan minion',
-  //   forms: [
-  //     'MINION_NEAPOLITAN_SIMPLE',
-  //     'PAYROLL_NEAPOLITAN',
-  //     'MINION_BUYOUT_ERC721_TOKEN',
-  //   ],
-  // },
+  SAFE_DEV_SUITE: {
+    name: 'Safe Minion Classics',
+    id: 'safeMinionClassics',
+    forms: [
+      'MINION_SAFE_SIMPLE',
+      // 'PAYROLL_SAFE',
+      // 'MINION_BUYOUT_ERC721_TOKEN',
+    ],
+  },
   RARIBLE: {
     name: 'Rarible',
     id: 'rarible',
@@ -70,10 +70,22 @@ export const PLAYLISTS = [
 ];
 
 export const generateNewConfig = ({ daoMetaData }) => {
+  const allForms = {
+    name: 'All Proposals',
+    id: 'all',
+    forms: [
+      ...new Set(PLAYLISTS.reduce((acc, list) => [...acc, ...list.forms], [])),
+    ],
+  };
+  if (!daoMetaData) {
+    console.error('DAO METADATA NOT FOUND: Creating default proposal config');
+    return {
+      playlists: PLAYLISTS,
+      allForms,
+    };
+  }
   const boostIDs = Object.values(BOOST_PLAYLISTS).map(boost => boost.id);
   const { boosts } = daoMetaData;
-  console.log('GENERATING NEW CONFIG');
-  console.log(`daoMetaData`, daoMetaData);
   const playlists = boostIDs.reduce((acc, boostID) => {
     if (boosts?.[boostID]) {
       return [
@@ -87,15 +99,7 @@ export const generateNewConfig = ({ daoMetaData }) => {
   return {
     // playlists: PLAYLISTS,
     playlists,
-    allForms: {
-      name: 'All Proposals',
-      id: 'all',
-      forms: [
-        ...new Set(
-          PLAYLISTS.reduce((acc, list) => [...acc, ...list.forms], []),
-        ),
-      ],
-    },
+    allForms,
     customData: null,
   };
 };

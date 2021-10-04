@@ -12,6 +12,7 @@ import DaoSwitcherModal from './modals/daoSwitcherModal';
 import TxInfoModal from './modals/TxInfoModal';
 import FourOhFour from './pages/404';
 import HubBalances from './pages/HubBalances';
+import SummonPartyFavor from './pages/SummonPartyFavor';
 
 function App() {
   const AppScopedModals = () => (
@@ -40,6 +41,9 @@ function App() {
         </Route>
         <Route exact path='/summon'>
           <Summon />
+        </Route>
+        <Route exact path='/summon-party-favor/:poapId'>
+          <SummonPartyFavor />
         </Route>
         <Route exact path='/register/:registerchain/:daoid'>
           <Register />

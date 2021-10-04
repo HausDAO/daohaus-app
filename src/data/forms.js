@@ -6,7 +6,7 @@ import { VAULT_TRANSFER_TX } from './transferContractTx';
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
     id: 'EDIT_PLAYLIST',
-    title: 'Edit Proposal Playlist',
+    subtitle: 'Edit Proposal Playlist',
     type: PROPOSAL_TYPES.CORE,
     required: ['title'],
     fields: [
@@ -37,10 +37,10 @@ export const CORE_FORMS = {
   },
   UPDATE_DELEGATE: {
     id: 'UPDATE_DELEGATE',
-    title: 'UPDATE DELEGATE ADDRESS',
+    title: 'Update delegate address',
     required: ['delegateAddress'],
     tx: TX.UPDATE_DELEGATE,
-    fields: [FIELD.DELEGATE_ADDRESS],
+    fields: [[FIELD.DELEGATE_ADDRESS]],
   },
   EDIT_PROPOSAL: {
     id: 'EDIT_PROPOSAL',
@@ -61,7 +61,7 @@ export const CORE_FORMS = {
   MINION_SELL_NIFTY: {
     id: 'MINION_SELL_NIFTY',
     title: 'Sell Nifty ERC721',
-    subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
+    description: 'Make a proposal to set the price of the nft on nifty.ink',
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
@@ -70,14 +70,14 @@ export const CORE_FORMS = {
   },
   SUMMON_MINION_SELECTOR: {
     id: 'SUMMON_MINION_SELECTOR',
-    title: 'Minion Summon Selector',
+    title: 'Select a Minion',
     required: ['minionType'],
     fields: [[FIELD.MINION_TYPE_SELECT]],
   },
   RAGE_QUIT: {
-    customValidations: ['rageQuitMinimum', 'rageQuitMax'],
+    customValidations: ['canRagequit', 'rageQuitMinimum', 'rageQuitMax'],
     id: 'RAGE_QUIT',
-    title: 'RAGE QUIT',
+    title: 'Rage Quit',
     required: [],
     tx: TX.RAGE_QUIT,
     fields: [
@@ -99,7 +99,6 @@ export const FORM = {
     id: 'BUY_SHARES',
     title: 'Request shares for tokens',
     description: 'Request shares from the DAO in exchange for ERC-20 tokens',
-    playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['sharesRequested', 'tributeOffered', 'title'],
@@ -112,7 +111,6 @@ export const FORM = {
     id: 'SHARES_FOR_WORK',
     title: 'Request shares for work completed',
     description: 'Request shares from the DAO by showing finished work.',
-    playlists: { favorites: true },
     type: PROPOSAL_TYPES.MEMBER,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['sharesRequested', 'link', 'title'],
@@ -249,6 +247,7 @@ export const FORM = {
   },
   MINION_NIFTY: {
     id: 'MINION_NIFTY',
+
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
@@ -267,14 +266,14 @@ export const FORM = {
       [FIELD.ABI_INPUT],
     ],
   },
-  MINION_NEAPOLITAN_SIMPLE: {
-    id: 'MINION_NEAPOLITAN_SIMPLE',
+  MINION_SAFE_SIMPLE: {
+    id: 'MINION_SAFE_SIMPLE',
     title: 'Minion Proposal',
     description: 'Extend DAO proposals to external contracts',
     type: PROPOSAL_TYPES.MINION_DEFAULT,
     required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
-    minionType: MINION_TYPES.NEAPOLITAN,
-    tx: TX.MINION_PROPOSE_ACTION_NIFTY,
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.MINION_PROPOSE_ACTION_SAFE,
     fields: [
       [
         FIELD.TITLE,
@@ -348,7 +347,7 @@ export const FORM = {
   },
   MINION_SEND_NETWORK_TOKEN: {
     title: 'Network Token Transfer',
-    subtitle: 'Make a proposal to transfer tokens out of the minion',
+    description: 'Make a proposal to transfer tokens out of the minion',
     type: PROPOSAL_TYPES.MINION_NATIVE,
     required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
@@ -357,7 +356,7 @@ export const FORM = {
   },
   MINION_SEND_ERC20_TOKEN: {
     title: 'ERC20 Token Transfer',
-    subtitle: 'Make a proposal to transfer tokens out of the minion',
+    description: 'Make a proposal to transfer tokens out of the minion',
     type: PROPOSAL_TYPES.MINION_ERC20,
     required: ['minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -366,7 +365,7 @@ export const FORM = {
   },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
-    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    description: 'Make a proposal to transfer the nft out of the minion',
     type: PROPOSAL_TYPES.MINION_ERC721,
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -382,7 +381,7 @@ export const FORM = {
   },
   MINION_SEND_ERC1155_TOKEN: {
     title: 'ERC1155 Token Transfer',
-    subtitle: 'Make a proposal to transfer the nft out of the minion',
+    description: 'Make a proposal to transfer the nft out of the minion',
     type: PROPOSAL_TYPES.MINION_ERC1155,
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
@@ -399,7 +398,6 @@ export const FORM = {
   SELL_NFT_RARIBLE: {
     id: 'SELL_NFT_RARIBLE',
     title: 'Sell NFT on Rarible',
-    subtitle: 'Post an NFT for sale on Rarible',
     description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.SAFE,
@@ -415,10 +413,36 @@ export const FORM = {
       ],
     ],
   },
+  SAMPLE_CONDITIONAL: {
+    dev: true,
+    // logValues: true,
+    id: 'SAMPLE_CONDITIONAL',
+    formConditions: ['signal', 'token'],
+    title: 'Conditional Form',
+    description: 'Conditional Description',
+    type: PROPOSAL_TYPES.FUNDING,
+    tx: {
+      type: 'formCondition',
+      token: TX.WHITELIST_TOKEN_PROPOSAL,
+      signal: TX.SUBMIT_PROPOSAL,
+    },
+    required: ['title'],
+    fields: [
+      [
+        FIELD.TEST_SWITCH,
+        FIELD.TITLE,
+        { ...FIELD.TEST_GATE, renderOnCheck: FIELD.DESCRIPTION },
+        {
+          type: 'formCondition',
+          token: { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
+          signal: FIELD.LINK,
+        },
+      ],
+    ],
+  },
   MINION_BUYOUT_ERC721_TOKEN: {
     id: 'MINION_BUYOUT_ERC721_TOKEN',
     title: 'Buyout Proposal',
-    subtitle: 'Request funds as buyout',
     description: 'Request funds as buyout',
     type: PROPOSAL_TYPES.MINION_BUYOUT,
     minionType: MINION_TYPES.NEAPOLITAN,
@@ -429,10 +453,9 @@ export const FORM = {
       [FIELD.BUYOUT_PAYMENT_REQUEST],
     ],
   },
-
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
-    subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
+    description: 'Make a proposal to set the price of the nft on nifty.ink',
     type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
@@ -440,9 +463,24 @@ export const FORM = {
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   NEW_SAFE_MINION: {
-    required: ['minQuorum', 'minionName', 'saltNonce'],
-    tx: TX.SUMMON_MINION_SAFE,
+    required: ['minionName', 'minQuorum', 'saltNonce'],
+    tx: TX.SUMMON_MINION_AND_SAFE,
     fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
+  },
+  NEW_SAFE_MINION_ADVANCED: {
+    customValidations: ['noExistingSafeMinion'],
+    required: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
+    tx: TX.SUMMON_MINION_SAFE,
+    fields: [
+      [
+        FIELD.MINION_NAME,
+        FIELD.ONLY_SAFE,
+        FIELD.MINION_QUORUM,
+        FIELD.SALT_NONCE,
+      ],
+    ],
+    warningMsg:
+      'WARNING: you MUST add the new minion as a Safe module after deployment',
   },
   NEW_NIFTY_MINION: {
     required: ['minQuorum', 'minionName'],
@@ -510,7 +548,7 @@ export const BOOST_FORMS = {
   },
   WRAP_N_ZAP_LAUNCH: {
     id: 'WRAP_N_ZAP_LAUNCH',
-    title: 'Wrap n Zap',
+    title: 'Deploy Wrap n Zap',
     fields: [[]],
     tx: TX.CREATE_WRAP_N_ZAP,
   },

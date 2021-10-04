@@ -11,6 +11,7 @@ import { getTerm, getTitle } from '../utils/metadata';
 import ComingSoonOverlay from '../components/comingSoonOverlay';
 import MainViewLayout from '../components/mainViewLayout';
 
+// PURGE
 const validProposalType = type => {
   return [
     'lego',

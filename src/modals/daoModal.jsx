@@ -18,6 +18,7 @@ import FormBuilder from '../formBuilder/formBuilder';
 import TextBox from '../components/TextBox';
 import StepperForm from '../formBuilder/StepperForm';
 
+// PURGe
 const getMaxWidth = modal => {
   // if (modal.steps) return '500px';
   if (modal?.lego?.fields) {

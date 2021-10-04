@@ -16,7 +16,6 @@ export const devBoostList = {
 export const generateLists = (daoMetaData, daoOverview, dev) => {
   const daoBoosts = handleExtractBoosts({ daoMetaData });
 
-  console.log('daoBoosts', daoBoosts);
   const lists = [
     {
       name: 'Boosts',

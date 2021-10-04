@@ -342,6 +342,17 @@ export const TX = {
     argsFromCallback: 'proposeActionNifty',
     createDiscourse: true,
   },
+  MINION_PROPOSE_ACTION_SAFE: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    argsFromCallback: 'proposeActionSafe',
+    createDiscourse: true,
+  },
   CANCEL_PROPOSAL: {
     contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'cancelProposal',
@@ -433,6 +444,19 @@ export const TX = {
     errMsg: 'Error Rage Quitting',
     successMsg: 'Rage quit processed!',
     gatherArgs: ['.values.shares || 0', '.values.loot || 0'],
+  },
+  RAGE_QUIT_CLAIM: {
+    contract: CONTRACTS.CURRENT_MOLOCH,
+    name: 'ragequit',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Rage Quit',
+    errMsg: 'Error Rage Quitting',
+    successMsg: 'Rage quit processed!',
+    // gatherArgs: [
+    //   '.contextData.daoMember.shares',
+    //   '.contextData.daoMember.loot',
+    // ],
   },
   RAGE_KICK: {
     contract: CONTRACTS.CURRENT_MOLOCH,
@@ -658,15 +682,30 @@ export const TX = {
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
   },
-  SUMMON_MINION_SAFE: {
+  SUMMON_MINION_AND_SAFE: {
     contract: CONTRACTS.SAFE_MINION_FACTORY,
-    name: 'summonMinionAndSafe', // TODO: Conditional contract method: easy/hard mode
+    name: 'summonMinionAndSafe',
     poll: 'subgraph',
     display: 'Summoning Minion',
     errMsg: 'Error Summoning Minion',
     successMsg: 'Minion Summoned!',
     gatherArgs: [
       '.contextData.daoid',
+      '.values.minionName',
+      '.values.minQuorum',
+      '.values.saltNonce',
+    ],
+  },
+  SUMMON_MINION_SAFE: {
+    contract: CONTRACTS.SAFE_MINION_FACTORY,
+    name: 'summonMinion',
+    poll: 'subgraph',
+    display: 'Summoning Minion',
+    errMsg: 'Error Summoning Minion',
+    successMsg: 'Minion Summoned!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.values.safeAddress',
       '.values.minionName',
       '.values.minQuorum',
       '.values.saltNonce',

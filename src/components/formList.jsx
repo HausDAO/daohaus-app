@@ -17,13 +17,12 @@ import { HiPencil, HiRefresh } from 'react-icons/hi';
 import TextBox from './TextBox';
 import { CORE_FORMS, FORM } from '../data/forms';
 
-import { useFormModal } from '../contexts/OverlayContext';
-
 import { useMetaData } from '../contexts/MetaDataContext';
 import { areAnyFields } from '../utils/general';
 import List from './list';
 import ListItem from './listItem';
 import NoListItem from './NoListItem';
+import { useAppModal } from '../hooks/useModals';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
@@ -41,7 +40,7 @@ const ProposalList = ({
   devList,
   selectList,
 }) => {
-  const { openFormModal, closeModal } = useFormModal();
+  const { formModal, closeModal } = useAppModal();
   const { dispatchPropConfig } = useMetaData();
 
   const [searchStr, setSearchStr] = useState(null);
@@ -58,8 +57,8 @@ const ProposalList = ({
   }, [selectedListID, playlists, allForms, searchStr]);
 
   const handleEditProposal = formId =>
-    openFormModal({
-      lego: CORE_FORMS.EDIT_PROPOSAL,
+    formModal({
+      ...CORE_FORMS.EDIT_PROPOSAL,
       onSubmit: ({ values }) => {
         dispatchPropConfig({
           action: 'EDIT_PROPOSAL',
@@ -78,10 +77,7 @@ const ProposalList = ({
     dispatchPropConfig({ action: 'TOGGLE_PLAYLIST', listId, formId, isListed });
 
   const handleTypeSearch = e => setSearchStr(e.target.value.toLowerCase());
-  const handlePreview = form =>
-    openFormModal({
-      lego: form,
-    });
+  const handlePreview = form => formModal(form);
   const handleSwitchToProposals = () => selectList('all');
 
   const generateNoListUI = (selectedListID, searchStr) => {

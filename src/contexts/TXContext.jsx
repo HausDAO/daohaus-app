@@ -199,9 +199,6 @@ export const TXProvider = ({ children }) => {
 
     try {
       const args = getArgs({ ...consolidatedData });
-
-      console.log('args', args);
-
       const poll = buildTXPoll({
         ...consolidatedData,
       });
@@ -287,7 +284,7 @@ export const useTX = () => {
     modifyFields,
     submitCallback,
     hydrateString,
-  } = useContext(TXContext);
+  } = useContext(TXContext) || {};
   return {
     refreshDao,
     submitTransaction,

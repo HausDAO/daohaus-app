@@ -18,20 +18,21 @@ import { rgba } from 'polished';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import { VscGear } from 'react-icons/vsc';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 
 import { FORM } from '../data/forms';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useAppModal } from '../hooks/useModals';
 
 // PLAYLISTS.find(list => list.id === 'favorites');
 
 const ProposalSelector = () => {
   const { daoProposals } = useMetaData();
   const { proposalSelector, setProposalSelector } = useOverlay();
-  const { openFormModal } = useFormModal();
+  const { formModal } = useAppModal();
   const { theme } = useCustomTheme();
 
   const { playlists, customData } = daoProposals || {};
@@ -51,10 +52,10 @@ const ProposalSelector = () => {
 
   const selectProposal = id => {
     if (!currentPlaylist) return;
-    const selectedForm = FORM[id];
 
     handleClose();
-    openFormModal({ lego: selectedForm });
+    formModal(FORM[id]);
+    // openFormModal({ lego: selectedForm });
   };
 
   const selectPlaylist = id => {

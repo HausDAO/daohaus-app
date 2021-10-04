@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import { ModButton } from './staticElements';
+import ModButton from './modButton';
 import GenericInput from './genericInput';
 
 const RageInput = props => {
@@ -20,7 +20,7 @@ const RageInput = props => {
   return (
     <GenericInput
       {...props}
-      btn={<ModButton label={btnDisplay()} callback={setMax} />}
+      btn={<ModButton text={btnDisplay()} fn={setMax} />}
     />
   );
 };
