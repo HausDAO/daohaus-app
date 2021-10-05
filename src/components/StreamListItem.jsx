@@ -33,6 +33,14 @@ const StreamListItem = ({
     cancelStream(stream.proposalId, isActive);
   };
 
+  const streamRate = balances[stream.superTokenAddress]
+    ? numberWithCommas(
+        parseFloat(
+          +stream.rate / 10 ** balances[stream.superTokenAddress].decimals,
+        ).toFixed(10),
+      )
+    : '--';
+
   return (
     <Flex h='60px' align='center'>
       <Box w='15%' d={['none', null, null, 'inline-block']} fontFamily='mono'>
@@ -44,14 +52,7 @@ const StreamListItem = ({
         <AddressAvatar addr={stream.to} hideCopy alwaysShowName />
       </Box>
       <Box w='15%' fontFamily='mono'>
-        {stream?.rateStr
-          ? `${stream.rateStr}`
-          : `${numberWithCommas(
-              parseFloat(
-                +stream.rate /
-                  10 ** balances[stream.superTokenAddress].decimals,
-              ).toFixed(10),
-            )} per sec`}
+        {stream?.rateStr ? `${stream.rateStr}` : `${streamRate} per sec`}
       </Box>
       <Box w='15%'>
         {stream?.executed ? (
