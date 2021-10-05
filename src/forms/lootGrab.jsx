@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   FormControl,
@@ -9,29 +11,26 @@ import {
   Tooltip,
   VisuallyHidden,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 
-import { useParams } from 'react-router-dom';
-import TextBox from '../components/TextBox';
-
-import TributeInput from './tributeInput';
-import DetailsFields from './detailFields';
+import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
+import TextBox from '../components/TextBox';
+import TributeInput from './tributeInput';
+import DetailsFields from './detailFields';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { chainByID } from '../utils/chain';
 import {
   createHash,
   daoConnectedAndSameChain,
   detailsToJSON,
 } from '../utils/general';
-import { createPoll } from '../services/pollService';
-import { MolochService } from '../services/molochService';
-import { useDao } from '../contexts/DaoContext';
-import { valToDecimalString } from '../utils/tokenValue';
-import { chainByID } from '../utils/chain';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { createForumTopic } from '../utils/discourse';
+import { valToDecimalString } from '../utils/tokenValue';
 
 const LootGrabForm = () => {
   const {

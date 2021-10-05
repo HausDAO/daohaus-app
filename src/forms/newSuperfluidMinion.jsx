@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { useForm } from 'react-hook-form';
 import {
   Box,
   Button,
@@ -12,17 +14,15 @@ import {
   Select,
   Spinner,
 } from '@chakra-ui/react';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import { useForm } from 'react-hook-form';
 
+import { useDao } from '../contexts/DaoContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useUser } from '../contexts/UserContext';
+import { createPoll } from '../services/pollService';
 import { SuperfluidMinionFactoryService } from '../services/superfluidMinionFactoryService';
 import { chainByID, supportedChains } from '../utils/chain';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { useDao } from '../contexts/DaoContext';
 
 const NewSuperfluidMinionForm = () => {
   const [loading, setLoading] = useState(false);

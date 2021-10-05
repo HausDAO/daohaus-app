@@ -1,4 +1,13 @@
 import React, { useState } from 'react';
+import { AiOutlineCaretDown, AiFillQuestionCircle } from 'react-icons/ai';
+import {
+  RiDiscordFill,
+  RiTelegramFill,
+  RiTwitterFill,
+  RiGlobeLine,
+  RiMediumFill,
+} from 'react-icons/ri';
+import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import {
   Flex,
@@ -16,22 +25,14 @@ import {
   FormHelperText,
   HStack,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import {
-  RiDiscordFill,
-  RiTelegramFill,
-  RiTwitterFill,
-  RiGlobeLine,
-  RiMediumFill,
-} from 'react-icons/ri';
-import { AiOutlineCaretDown, AiFillQuestionCircle } from 'react-icons/ai';
+
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { daoPresets } from '../utils/summoning';
+import { getQueryStringParams } from '../utils/general';
 import { put, themeImagePath } from '../utils/metadata';
 import ImageUploadModal from '../modals/imageUploadModal';
-import { getQueryStringParams } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 
 const puposes = daoPresets('0x1').map(preset => preset.presetName);

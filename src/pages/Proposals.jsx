@@ -1,16 +1,16 @@
 import React from 'react';
-import { Box, Button, Flex } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
+import { useParams } from 'react-router-dom';
+import { Box, Button, Flex } from '@chakra-ui/react';
 
-import ActivitiesFeed from '../components/activitiesFeed';
-import { getProposalsActivites } from '../utils/activities';
-import ProposalsList from '../components/proposalList';
-import MainViewLayout from '../components/mainViewLayout';
-import { daoConnectedAndSameChain } from '../utils/general';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { getTerm, getTitle } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
+import ActivitiesFeed from '../components/activitiesFeed';
+import MainViewLayout from '../components/mainViewLayout';
+import ProposalsList from '../components/proposalList';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
+import { getProposalsActivites } from '../utils/activities';
+import { getTerm, getTitle } from '../utils/metadata';
 
 const Proposals = React.memo(({ proposals, activities, customTerms }) => {
   const { daochain } = useParams();

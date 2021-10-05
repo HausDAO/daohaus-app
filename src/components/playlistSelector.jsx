@@ -1,11 +1,9 @@
 import React from 'react';
-
-import { Icon, Flex, Button } from '@chakra-ui/react';
-import { VscGear } from 'react-icons/vsc';
 import { FiTrash2 } from 'react-icons/fi';
+import { VscGear } from 'react-icons/vsc';
+import { Icon, Flex, Button } from '@chakra-ui/react';
 
 import TextBox from './TextBox';
-
 import ListSelector from './ListSelector';
 import ListSelectorItem from './ListSelectorItem';
 import { isLastItem } from '../utils/general';

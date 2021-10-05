@@ -12,13 +12,13 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import StakeProposalForm from '../forms/daoToDaoStakeProposal';
-import DelegateProposalForm from '../forms/daoToDaoDelegateProposal';
-import RageQuitProposalForm from '../forms/daoToDaoRageQuitProposal';
-import WithdrawPullForm from '../forms/daoToDaoWithdrawPull';
-// import DistributeRewardsProposalForm from '../forms/daoToDaoDistributeRewardsProposal';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import DelegateProposalForm from '../forms/daoToDaoDelegateProposal';
+// import DistributeRewardsProposalForm from '../forms/daoToDaoDistributeRewardsProposal';
+import RageQuitProposalForm from '../forms/daoToDaoRageQuitProposal';
+import StakeProposalForm from '../forms/daoToDaoStakeProposal';
+import WithdrawPullForm from '../forms/daoToDaoWithdrawPull';
 
 const getModalWidth = proposalType => {
   if (proposalType === 'd2dRageQuit') {

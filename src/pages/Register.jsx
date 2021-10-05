@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Icon, Box, Button } from '@chakra-ui/react';
-import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
+import { Flex, Icon, Box, Button } from '@chakra-ui/react';
 
-import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { supportedChains } from '../utils/chain';
-import DaoMetaForm from '../forms/daoMetaForm';
 import { useUser } from '../contexts/UserContext';
+import DaoMetaForm from '../forms/daoMetaForm';
+import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
+import { supportedChains } from '../utils/chain';
 
 const Register = () => {
   const { registerchain, daoid } = useParams();

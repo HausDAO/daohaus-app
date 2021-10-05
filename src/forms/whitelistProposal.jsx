@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   FormLabel,
@@ -10,25 +11,24 @@ import {
   Icon,
   Box,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine } from 'react-icons/ri';
 
+import { useDao } from '../contexts/DaoContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
+import { chainByID } from '../utils/chain';
+import DetailsFields from './detailFields';
+import TextBox from '../components/TextBox';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { createForumTopic } from '../utils/discourse';
 import {
   createHash,
   detailsToJSON,
   daoConnectedAndSameChain,
 } from '../utils/general';
-import { createPoll } from '../services/pollService';
-import { MolochService } from '../services/molochService';
-import { useDao } from '../contexts/DaoContext';
-import { chainByID } from '../utils/chain';
-import DetailsFields from './detailFields';
-import TextBox from '../components/TextBox';
-import { useMetaData } from '../contexts/MetaDataContext';
-import { createForumTopic } from '../utils/discourse';
 
 const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);

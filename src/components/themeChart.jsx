@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
 import {
   FlexibleWidthXYPlot,
   XAxis,
@@ -16,12 +17,11 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { FaChevronDown } from 'react-icons/fa';
 
+import { useMetaData } from '../contexts/MetaDataContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { getTerm, getTitle } from '../utils/metadata';
-import { useMetaData } from '../contexts/MetaDataContext';
 
 const bankChartTimeframes = [
   { name: 'Lifetime', value: 'lifetime' },

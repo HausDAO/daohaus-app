@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Button, HStack } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { RiArrowRightLine } from 'react-icons/ri';
+import { Box, Flex, Button, HStack } from '@chakra-ui/react';
 
-import ContentBox from '../components/ContentBox';
-import TextBox from '../components/TextBox';
-import { boostList } from '../content/boost-content';
-import GenericModal from '../modals/genericModal';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import BoostLaunchWrapper from '../components/boostLaunchWrapper';
+import ContentBox from '../components/ContentBox';
+import GenericModal from '../modals/genericModal';
 import MainViewLayout from '../components/mainViewLayout';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import TextBox from '../components/TextBox';
+import { boostList } from '../content/boost-content';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm, getTitle } from '../utils/metadata';
 import { getWrapNZap } from '../utils/theGraph';

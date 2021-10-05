@@ -1,7 +1,7 @@
-import { NFTService } from '../services/nftService';
-import { fetchABI } from './abi';
 import { chainByID } from './chain';
+import { fetchABI } from './abi';
 import { fetchTokenData } from './tokenValue';
+import { NFTService } from '../services/nftService';
 
 export const CONTRACT_MODELS = {
   //  SRC https://ethereum.org/en/developers/docs/standards/tokens/erc-20/

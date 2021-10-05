@@ -1,5 +1,5 @@
-import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
+import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
 

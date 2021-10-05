@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 import {
   Box,
   Menu,
@@ -12,10 +13,9 @@ import {
   Switch,
   FormLabel,
 } from '@chakra-ui/react';
-import { RiArrowDropDownFill } from 'react-icons/ri';
 
-import { EXPLORE_FILTER_OPTIONS } from '../utils/exploreContent';
 import { ExploreContext } from '../contexts/ExploreContext';
+import { EXPLORE_FILTER_OPTIONS } from '../utils/exploreContent';
 
 const ExploreFilterList = () => {
   const { state, dispatch } = useContext(ExploreContext);

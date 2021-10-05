@@ -1,4 +1,5 @@
 import React from 'react';
+
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';

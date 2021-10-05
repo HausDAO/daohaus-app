@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, FormControl } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { Flex, FormControl } from '@chakra-ui/react';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
+import ProgressIndicator from '../components/progressIndicator';
 import FormFooter from './formFooter';
-
 import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
   checkConditionalTx,
@@ -14,7 +15,6 @@ import {
   mapInRequired,
 } from '../utils/formBuilder';
 import { omit } from '../utils/general';
-import ProgressIndicator from '../components/progressIndicator';
 
 const dev = process.env.REACT_APP_DEV;
 

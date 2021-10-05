@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button } from '@chakra-ui/button';
 import deepEqual from 'deep-equal';
 
-import { useHistory } from 'react-router-dom';
-import { HASH } from '../utils/general';
 import { useAppModal } from '../hooks/useModals';
+import { HASH } from '../utils/general';
 
 const dev = process.env.REACT_APP_DEV;
 

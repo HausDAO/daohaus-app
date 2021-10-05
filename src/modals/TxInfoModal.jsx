@@ -1,6 +1,11 @@
 import React from 'react';
 // import { Link as RouterLink } from 'react-router-dom';
 import {
+  RiExternalLinkLine,
+  RiInformationLine,
+  RiCheckLine,
+} from 'react-icons/ri';
+import {
   Box,
   Modal,
   ModalOverlay,
@@ -18,18 +23,13 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
-import {
-  RiExternalLinkLine,
-  RiInformationLine,
-  RiCheckLine,
-} from 'react-icons/ri';
-import TextBox from '../components/TextBox';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import { getLastTx } from '../utils/txData';
 import ExplorerLink from '../components/explorerLink';
+import TextBox from '../components/TextBox';
+import { getLastTx } from '../utils/txData';
 
 const TxInfoModal = () => {
   const { outstandingTXs } = useUser();

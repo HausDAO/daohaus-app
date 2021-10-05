@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { FaDiscourse } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
 import {
   Spinner,
   Box,
@@ -8,15 +11,12 @@ import {
   Text,
   HStack,
 } from '@chakra-ui/react';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import { FaDiscourse } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
 
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getForumTopics } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createForumTopic } from '../utils/discourse';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { getForumTopics } from '../utils/metadata';
 
 const DiscourseProposalTopic = ({ proposal, daoMember }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { VscGear } from 'react-icons/vsc';
 import {
   Flex,
   Stack,
@@ -8,18 +10,16 @@ import {
   Button,
   Spinner,
 } from '@chakra-ui/react';
-import { VscGear } from 'react-icons/vsc';
-import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { boostPost } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from '../components/ContentBox';
+import GenericModal from '../modals/genericModal';
+import MainViewLayout from '../components/mainViewLayout';
+import NotificationsLaunch from '../components/notificationsLaunch';
 import TextBox from '../components/TextBox';
 import { notificationBoostContent } from '../content/boost-content';
-import GenericModal from '../modals/genericModal';
-import NotificationsLaunch from '../components/notificationsLaunch';
-import MainViewLayout from '../components/mainViewLayout';
+import { boostPost } from '../utils/metadata';
 
 const Notifications = ({ daoMetaData, refetchMetaData }) => {
   const { injectedProvider, injectedChain, address } = useInjectedProvider();

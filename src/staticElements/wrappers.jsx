@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Tooltip, Link } from '@chakra-ui/react';
+
 import ToolTipLabel from '../components/toolTipLabel';
 
 export const LinkWrapper = ({ children, link }) =>

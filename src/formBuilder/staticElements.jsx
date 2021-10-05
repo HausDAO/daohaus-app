@@ -1,4 +1,6 @@
 import React from 'react';
+import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import { TiWarningOutline } from 'react-icons/ti';
 import {
   Button,
   Box,
@@ -9,8 +11,7 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
-import { TiWarningOutline } from 'react-icons/ti';
+
 // import TextBox from '../components/TextBox';
 
 export const ErrorList = ({ errors = [] }) => {

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { GiPartyPopper } from 'react-icons/gi';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Stack, Button, Spinner, Box, Icon } from '@chakra-ui/react';
-import { GiPartyPopper } from 'react-icons/gi';
 
+import { useDao } from '../contexts/DaoContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import MainViewLayout from '../components/mainViewLayout';
 import { TX } from '../data/contractTX';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
-import { useDao } from '../contexts/DaoContext';
 
 const PartyFavor = ({ isMember }) => {
   const { daoid, daochain } = useParams();

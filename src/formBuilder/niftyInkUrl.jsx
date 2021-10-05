@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { Box, Button, FormHelperText, Image, Spinner } from '@chakra-ui/react';
 
-import { useParams } from 'react-router';
-import LinkInput from './linkInput';
-import { getNftMeta } from '../utils/metadata';
-import { LOCAL_ABI } from '../utils/abi';
-import { createContract } from '../utils/contract';
-import { NIFTYINK_ADDRESS } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ErrorList from './ErrorList';
+import LinkInput from './linkInput';
+import { createContract } from '../utils/contract';
+import { getNftMeta } from '../utils/metadata';
+import { LOCAL_ABI } from '../utils/abi';
+import { NIFTYINK_ADDRESS } from '../utils/chain';
 
 const NiftyInkUrl = props => {
   const { localForm } = props;

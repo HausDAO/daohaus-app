@@ -1,4 +1,5 @@
 import React from 'react';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 import {
   Menu,
   MenuButton,
@@ -10,7 +11,6 @@ import {
   MenuDivider,
   Text,
 } from '@chakra-ui/react';
-import { RiArrowDropDownFill } from 'react-icons/ri';
 
 const GenericSelect = ({
   options = {},
