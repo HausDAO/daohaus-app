@@ -134,6 +134,7 @@ const StepperForm = props => {
     return (
       <FormBuilder
         {...currentStep.form}
+        key={currentStep.form.id}
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}

@@ -566,6 +566,7 @@ const MULTI_STEP = {
     title: 'Safe Minion TX Builder',
     description:
       'Build custom multi-call DAO transactions using a Gnosis Safe Minion',
+    canAddStep: true,
     STEP1: {
       type: 'form',
       start: true,
