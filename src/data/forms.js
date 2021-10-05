@@ -548,9 +548,10 @@ export const PROPOSAL_FORMS = {
     fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK, FIELD.MINION_SELECT]],
   },
   CREATE_TX: {
-    logValues: true,
+    id: 'CREATE_TX',
+    // logValues: true,
     addStep: { form: 'self', at: 'beforeFinish' },
-    fields: [[FIELD.ABI_INPUT]],
+    fields: [[FIELD.TARGET_CONTRACT, FIELD.ABI_INPUT]],
   },
   MULTICALL_CONFIRMATION: {
     logValues: true,
@@ -566,7 +567,7 @@ const MULTI_STEP = {
     title: 'Safe Minion TX Builder',
     description:
       'Build custom multi-call DAO transactions using a Gnosis Safe Minion',
-    canAddStep: true,
+
     STEP1: {
       type: 'form',
       start: true,

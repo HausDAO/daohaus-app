@@ -64,9 +64,9 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = abiString => {
+    console.log(`abiString`, abiString);
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
-
     if (abiString === 'clear' || abiString === 'hex') {
       setFields(originalFields);
     } else {
@@ -78,6 +78,7 @@ const FormBuilder = props => {
       if (originalFields.length > 1) {
         updatedFields = [originalFields[0], updatedFields];
       }
+      console.log(`updatedFields`, updatedFields);
       setFields(updatedFields);
     }
   };
