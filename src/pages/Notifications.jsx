@@ -18,8 +18,8 @@ import GenericModal from '../modals/genericModal';
 import MainViewLayout from '../components/mainViewLayout';
 import NotificationsLaunch from '../components/notificationsLaunch';
 import TextBox from '../components/TextBox';
-import { notificationBoostContent } from '../content/boost-content';
 import { boostPost } from '../utils/metadata';
+import { notificationBoostContent } from '../data/boosts';
 
 const Notifications = ({ daoMetaData, refetchMetaData }) => {
   const { injectedProvider, injectedChain, address } = useInjectedProvider();

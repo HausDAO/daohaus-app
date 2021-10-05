@@ -12,9 +12,8 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
-
-import { notificationBoostContent } from '../content/boost-content';
 import { get } from '../utils/requests';
+import { notificationBoostContent } from '../data/boosts';
 
 const NotificationsLaunch = ({
   handleLaunch,

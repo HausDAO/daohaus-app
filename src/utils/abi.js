@@ -12,8 +12,6 @@ import ERC_721 from '../contracts/nft.json';
 import ERC_1155 from '../contracts/erc1155.json';
 import GNOSIS_IPROXY from '../contracts/iProxy.json';
 import MOLOCH_V2 from '../contracts/molochV2.json';
-import NEAPOLITAN_MINION from '../contracts/neapolitanMinion.json';
-import NEAPOLITAN_MINION_FACTORY from '../contracts/neapolitanMinionFactory.json';
 import NIFTY_INK from '../contracts/niftyInk.json';
 import NIFTY_MINION_FACTORY from '../contracts/minionNiftyFactory.json';
 import NIFTY_MINION from '../contracts/minionNifty.json';
@@ -40,8 +38,6 @@ export const LOCAL_ABI = Object.freeze({
   UBERHAUS_MINION,
   SUPERFLUID_MINION,
   SUPERFLUID_MINION_FACTORY,
-  NEAPOLITAN_MINION_FACTORY,
-  NEAPOLITAN_MINION,
   SAFE_MINION_FACTORY,
   SAFE_MINION,
   SAFE_MULTISEND,

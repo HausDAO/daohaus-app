@@ -1,5 +1,5 @@
-import { Flex } from '@chakra-ui/react';
 import React, { useContext } from 'react';
+import { Flex } from '@chakra-ui/react';
 
 import { OverlayContext } from '../contexts/OverlayContext';
 import FormBuilder from '../formBuilder/formBuilder';

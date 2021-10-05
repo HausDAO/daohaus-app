@@ -266,11 +266,9 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
     );
   }
   if (
-    [
-      MINION_TYPES.VANILLA,
-      MINION_TYPES.NIFTY,
-      MINION_TYPES.NEAPOLITAN,
-    ].includes(minionType)
+    [MINION_TYPES.VANILLA, MINION_TYPES.NIFTY, MINION_TYPES.SAFE].includes(
+      minionType,
+    )
   ) {
     return (
       <MemberIndicator
