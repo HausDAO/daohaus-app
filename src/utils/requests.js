@@ -124,7 +124,7 @@ export const getApiPriceData = async () => {
 };
 
 export const getApiGnosis = async (networkName, endpoint) => {
-  const apiGnosisUrl = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint.toLowerCase()}`;
+  const apiGnosisUrl = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
 
   try {
     const response = await fetch(apiGnosisUrl);
