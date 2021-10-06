@@ -555,7 +555,13 @@ export const PROPOSAL_FORMS = {
     isTx: true,
     logValues: true,
     addForm: { type: 'self', at: 'indexAbove' },
-    fields: [[FIELD.TARGET_CONTRACT, FIELD.ABI_INPUT], []],
+    fields: [
+      [
+        FIELD.TARGET_CONTRACT,
+        { ...FIELD.ABI_INPUT, listenTo: 'targetContract' },
+      ],
+      [],
+    ],
   },
   MULTICALL_CONFIRMATION: {
     logValues: true,

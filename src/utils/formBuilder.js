@@ -146,3 +146,16 @@ export const checkConditionalTx = ({ tx, condition }) => {
 export const ignoreAwaitStep = next => {
   return typeof next === 'string' ? next : next?.then;
 };
+
+const serializeParam = (name, index) => `*TX${index}*${name}`;
+
+export const serializeFields = (fields = [], index) =>
+  fields.map(column =>
+    column.map(field => {
+      return {
+        ...field,
+        name: serializeParam(field.name, index),
+        listenTo: field.listenTo ? serializeParam(field.listenTo, index) : null,
+      };
+    }),
+  );

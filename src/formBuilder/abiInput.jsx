@@ -13,17 +13,18 @@ import {
 } from '../utils/abi';
 
 const AbiInput = props => {
-  const { localForm } = props;
+  const { localForm, listenTo } = props;
   const { daochain } = useParams();
   const [isRawHex, setRawHex] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState(null);
 
-  const targetContract = localForm.watch('targetContract');
+  const targetContract = localForm.watch(listenTo || 'targetContract');
   const abiInput = localForm.watch('abiInput');
   const helperText = isDisabled && 'Please enter a target contract';
-
+  console.log(`listenTo`, listenTo);
+  console.log(`targetContract`, targetContract);
   useEffect(() => {
     const getABI = async () => {
       try {

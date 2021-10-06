@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Divider, Flex, Icon, IconButton } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 import { BiChevronDown, BiChevronUp, BiPlus } from 'react-icons/bi';
@@ -7,7 +7,7 @@ import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
 import { isLastItem } from '../utils/general';
-import { PROPOSAL_FORMS } from '../data/forms';
+import { serializeFields } from '../utils/formBuilder';
 
 const MultiForm = ({ forms }) => {
   const parentForm = useForm({ shouldUnregister: false });
@@ -15,10 +15,6 @@ const MultiForm = ({ forms }) => {
 
   const handleAddTx = (index, form) => {
     if (localForms?.length && index && form) {
-      console.log(`index`, index);
-      console.log(`form`, form);
-      console.log(`localForms`, localForms);
-      console.log(`localForms.slice(index)`, localForms.slice(0, index));
       setLocalForms(prevState => [
         ...prevState.slice(0, index + 1),
         form,
@@ -26,6 +22,7 @@ const MultiForm = ({ forms }) => {
       ]);
     }
   };
+
   return localForms?.map((form, index) => {
     if (form.isTx)
       return (
@@ -33,6 +30,7 @@ const MultiForm = ({ forms }) => {
           key={form.id}
           {...form}
           index={index}
+          fields={serializeFields(form.fields, index)}
           handleAddTx={handleAddTx}
           parentForm={parentForm}
         />
@@ -82,8 +80,9 @@ const FormSection = props => {
 };
 
 const TxFormSection = props => {
-  const { index, isTx, handleAddTx } = props;
+  const { index, isTx, handleAddTx, fields } = props;
 
+  console.log(fields);
   const handleClick = () => handleAddTx(index, props);
   return (
     <FormSection
