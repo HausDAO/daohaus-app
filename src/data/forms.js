@@ -555,7 +555,7 @@ export const PROPOSAL_FORMS = {
     isTx: true,
     logValues: true,
     addForm: { type: 'self', at: 'indexAbove' },
-    fields: [[FIELD.TARGET_CONTRACT], [FIELD.ABI_INPUT]],
+    fields: [[FIELD.TARGET_CONTRACT, FIELD.ABI_INPUT], []],
   },
   MULTICALL_CONFIRMATION: {
     logValues: true,
@@ -576,7 +576,7 @@ const MULTI_FORMS = {
     forms: [
       PROPOSAL_FORMS.START_SAFE_MULTI,
       PROPOSAL_FORMS.CREATE_TX,
-      // PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
+      PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
     ],
   },
 };

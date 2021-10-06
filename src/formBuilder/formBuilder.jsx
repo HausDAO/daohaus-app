@@ -71,15 +71,15 @@ const FormBuilder = props => {
       setFields(originalFields);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      let updatedFields = [
+      const updatedFields = [
         ...originalFields[originalFields.length - 1],
         ...inputDataFromABI(abiInputs),
       ];
       if (originalFields.length > 1) {
-        updatedFields = [originalFields[0], updatedFields];
+        setFields([originalFields[0], updatedFields]);
+      } else {
+        setFields([updatedFields]);
       }
-
-      setFields([updatedFields]);
     }
   };
 
