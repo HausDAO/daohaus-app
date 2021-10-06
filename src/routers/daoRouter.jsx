@@ -40,6 +40,7 @@ import Treasury from '../pages/Treasury';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
 import PartyFavor from '../pages/PartyFavor';
 import ProposalWatcher from '../pages/ProposalWatcher';
+import MetaAudit from '../pages/MetaAudit';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -172,6 +173,9 @@ const DaoRouter = () => {
             isMember={isMember}
             refetchMetaData={refetchMetaData}
           />
+        </Route>
+        <Route exact path={`${path}/settings/audit`}>
+          <MetaAudit daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/settings/proposals`}>
           <ProposalTypes
