@@ -36,8 +36,6 @@ export const InjectedProvider = ({ children }) => {
   const connectProvider = async () => {
     const providerOptions = getProviderOptions();
 
-    console.log(providerOptions);
-
     if (!providerOptions) {
       setInjectedProvider(null);
       setAddress(null);

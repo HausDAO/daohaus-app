@@ -188,7 +188,7 @@ export const supportedChains = {
     rpc_url: 'https://rpc-mainnet.maticvigil.com/',
     abi_api_url:
       'https://api.polygonscan.com/api?module=contract&action=getabi&address=',
-    tokenlist_api_url: 'https://api.harmony.one',
+    tokenlist_api_url: 'https://api.polygonscan.com/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
     stats_graph_url:
