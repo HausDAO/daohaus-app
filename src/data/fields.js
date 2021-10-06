@@ -94,7 +94,7 @@ export const FIELD = {
     htmlFor: 'applicant',
     name: 'applicant',
     placeholder: '0x',
-    label: 'Applicant',
+    label: 'Recipient',
     info: INFO_TEXT.APPLICANT,
     expectType: 'address',
   },

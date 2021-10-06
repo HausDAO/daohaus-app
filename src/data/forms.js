@@ -131,7 +131,10 @@ export const FORM = {
       [FIELD.SHARES_REQUEST, FIELD.TRIBUTE],
     ],
     additionalOptions: [
-      FIELD.APPLICANT,
+      {
+        ...FIELD.APPLICANT,
+        label: 'Applicant',
+      },
       FIELD.LOOT_REQUEST,
       FIELD.PAYMENT_REQUEST,
     ],
