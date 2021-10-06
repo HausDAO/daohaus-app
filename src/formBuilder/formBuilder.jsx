@@ -229,7 +229,7 @@ const FormBuilder = props => {
   });
 
   const renderInputs = (fields, depth = 0) => {
-    return fields.map((field, index) =>
+    return fields?.map((field, index) =>
       Array.isArray(field) ? (
         <Flex
           flex={1}
