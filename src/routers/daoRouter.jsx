@@ -39,6 +39,7 @@ import MinionGallery from '../pages/MinionGallery';
 import Treasury from '../pages/Treasury';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
 import PartyFavor from '../pages/PartyFavor';
+import ProposalWatcher from '../pages/ProposalWatcher';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -198,6 +199,9 @@ const DaoRouter = () => {
             daoMembers={daoMembers}
           />
         </Route>
+        <Route exact path={`${path}/proposals/hardcore`}>
+          <ProposalWatcher daoProposals={daoProposals} />
+        </Route>
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal
             overview={daoOverview}
@@ -208,6 +212,7 @@ const DaoRouter = () => {
             delegate={delegate}
           />
         </Route>
+
         <Route exact path={`${path}/profile/:userid`}>
           <Profile
             members={daoMembers}
