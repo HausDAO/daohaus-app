@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import TextBox from '../components/TextBox';
 import { OverlayContext } from '../contexts/OverlayContext';
 import FormBuilder from '../formBuilder/formBuilder';
+import MultiForm from '../formBuilder/multiForm';
 import StepperForm from '../formBuilder/StepperForm';
 
 const MODAL_SIZES = Object.freeze({
@@ -24,8 +25,15 @@ export const useAppModal = () => {
 
   return {
     formModal(form) {
-      console.log(form);
-      if (form.type === 'multiStep') {
+      if (form.type === 'multiForm') {
+        setModal({
+          title: form.title,
+          subtitle: form.subtitle,
+          description: form.description,
+          body: <MultiForm {...form} />,
+          width: form.customWidth || calcMaxWidth(form),
+        });
+      } else if (form.type === 'multiStep') {
         const updateModalUI = ({ subtitle, title }) => {
           setModal(prevState => ({ ...prevState, subtitle, title }));
         };

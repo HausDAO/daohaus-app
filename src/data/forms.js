@@ -545,49 +545,39 @@ export const PROPOSAL_FORMS = {
     type: PROPOSAL_TYPES.MINION_SAFE,
     minionType: MINION_TYPES.SAFE,
     required: ['title'],
-    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK, FIELD.MINION_SELECT]],
+    fields: [
+      [FIELD.TITLE, FIELD.DESCRIPTION],
+      [FIELD.LINK, FIELD.MINION_SELECT],
+    ],
   },
   CREATE_TX: {
     id: 'CREATE_TX',
-    // logValues: true,
-    addStep: { form: 'self', at: 'beforeFinish' },
-    fields: [[FIELD.TARGET_CONTRACT, FIELD.ABI_INPUT]],
+    isTx: true,
+    logValues: true,
+    addForm: { type: 'self', at: 'indexAbove' },
+    fields: [[FIELD.TARGET_CONTRACT], [FIELD.ABI_INPUT]],
   },
   MULTICALL_CONFIRMATION: {
     logValues: true,
-    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK, FIELD.MINION_SELECT]],
+    fields: [[], []],
   },
 };
 
-const MULTI_STEP = {
+const MULTI_FORMS = {
   SAFE_TX_BUILDER: {
     id: 'SAFE_TX_BUILDER',
     dev: true,
-    type: 'multiStep',
+    type: 'multiForm',
     title: 'Safe Minion TX Builder',
-    description:
-      'Build custom multi-call DAO transactions using a Gnosis Safe Minion',
-
-    STEP1: {
-      type: 'form',
-      start: true,
-      form: PROPOSAL_FORMS.START_SAFE_MULTI,
-      next: 'STEP2',
-      stepLabel: 'Choose Minion + Describe TXs',
-      isUserStep: true,
-    },
-    STEP2: {
-      type: 'form',
-      isUserStep: true,
-      form: PROPOSAL_FORMS.CREATE_TX,
-      next: { type: 'awaitGenerate', then: 'STEP3', ctaText: 'Confirm' },
-    },
-    STEP3: {
-      type: 'form',
-      isUserStep: true,
-      form: PROPOSAL_FORMS.CONFIRM_TX,
-      finish: true,
-    },
+    description: 'Create a multi-transaction proposal',
+    footer: 'end',
+    collapse: 'all',
+    customWidth: `900px`,
+    forms: [
+      PROPOSAL_FORMS.START_SAFE_MULTI,
+      PROPOSAL_FORMS.CREATE_TX,
+      // PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
+    ],
   },
 };
 
@@ -606,4 +596,4 @@ export const BOOST_FORMS = {
   },
 };
 
-export const FORM = { ...PROPOSAL_FORMS, ...MULTI_STEP };
+export const FORM = { ...PROPOSAL_FORMS, ...MULTI_FORMS };

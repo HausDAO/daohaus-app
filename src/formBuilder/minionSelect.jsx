@@ -16,7 +16,7 @@ const MinionSelect = props => {
           (!customFilter ||
             customFilter({
               ...minion,
-              ...daoVaults.find(v => v.address === minion.minionAddress),
+              ...daoVaults?.find(v => v.address === minion.minionAddress),
             }))
         );
       })

@@ -38,6 +38,7 @@ const FormBuilder = props => {
     secondaryBtn,
     formConditions,
     logValues,
+    footer = true,
   } = props;
 
   const [formState, setFormState] = useState(null);
@@ -64,7 +65,6 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = abiString => {
-    console.log(`abiString`, abiString);
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
     if (abiString === 'clear' || abiString === 'hex') {
@@ -78,8 +78,8 @@ const FormBuilder = props => {
       if (originalFields.length > 1) {
         updatedFields = [originalFields[0], updatedFields];
       }
-      console.log(`updatedFields`, updatedFields);
-      setFields(updatedFields);
+
+      setFields([updatedFields]);
     }
   };
 
@@ -270,16 +270,18 @@ const FormBuilder = props => {
           </Flex>
         </FormControl>
         <ProgressIndicator currentState={formState} />
-        <FormFooter
-          options={options}
-          addOption={addOption}
-          formState={formState}
-          ctaText={ctaText}
-          next={next}
-          goToNext={goToNext}
-          errors={Object.values(formErrors)}
-          customSecondaryBtn={secondaryBtn}
-        />
+        {footer && (
+          <FormFooter
+            options={options}
+            addOption={addOption}
+            formState={formState}
+            ctaText={ctaText}
+            next={next}
+            goToNext={goToNext}
+            errors={Object.values(formErrors)}
+            customSecondaryBtn={secondaryBtn}
+          />
+        )}
       </Flex>
     </form>
   );

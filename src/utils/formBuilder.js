@@ -82,7 +82,7 @@ export const inputDataFromABI = inputs => {
   const labels = {
     string: 'Enter text here',
     number: 'Numbers only',
-    integer: 'Whole numbers only',
+    integer: 'uInt 256',
     address: '0x',
     urlNoHttp: 'www.example.fake',
   };

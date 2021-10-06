@@ -35,6 +35,7 @@ const StepperForm = props => {
     metaFields,
     updateModalUI,
   } = props;
+  const [localSteps, setLocalSteps] = useState(steps);
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
@@ -44,13 +45,13 @@ const StepperForm = props => {
   const [stepperStorage, setStepperStorage] = useState();
 
   const userSteps = useMemo(() => {
-    if (steps) {
-      return Object.values(steps)
+    if (localSteps) {
+      return Object.values(localSteps)
         .filter(step => step.isUserStep)
         .map((step, index) => ({ ...step, position: index + 1 }));
     }
     return [];
-  }, [steps]);
+  }, [localSteps]);
 
   useEffect(() => {
     if (!currentStep || !userSteps || typeof updateModalUI !== 'function')
@@ -75,7 +76,7 @@ const StepperForm = props => {
 
   const goToNext = next => {
     const handleNextStep = nextString => {
-      const nextStep = steps[nextString];
+      const nextStep = localSteps[nextString];
       if (nextStep) {
         setCurrentStep(nextStep);
       } else {
@@ -125,6 +126,7 @@ const StepperForm = props => {
       ctaText: getNewCtaText(nextObj),
     }));
   };
+
   const secondaryBtn = {
     text: 'Cancel',
     fn: () => closeModal(),
@@ -163,7 +165,7 @@ const StepperForm = props => {
         goToNext={goToNext}
         next={currentStep.next}
         userSteps={userSteps}
-        steps={steps}
+        steps={localSteps}
         secondaryBtn={secondaryBtn}
       />
     );

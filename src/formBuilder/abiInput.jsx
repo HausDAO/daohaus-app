@@ -31,7 +31,6 @@ const AbiInput = props => {
         setIsDisabled(false);
         const abi = await fetchABI(targetContract, daochain);
         const fns = formatFNsAsSelectOptions(getABIfunctions(abi));
-        console.log(fns);
         setOptions(fns);
         setLoading(false);
       } catch (error) {
@@ -56,7 +55,6 @@ const AbiInput = props => {
   }, [abiInput]);
 
   const switchElement = () => {
-    console.log('fired');
     if (isRawHex) {
       setRawHex(false);
       props.buildABIOptions('clear');

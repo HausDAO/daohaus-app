@@ -21,6 +21,8 @@ const FormFooter = ({
   ctaText,
   customSecondaryBtn,
   customPrimaryBtn,
+  handleAddStep,
+  addStep,
 }) => {
   const { closeModal } = useAppModal();
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
@@ -37,6 +39,7 @@ const FormFooter = ({
             addOption={addOption}
           />
         )}
+        {addStep && <Button onClick={handleAddStep}>Add Step</Button>}
         <Flex
           ml={['0', 'auto']}
           // wrap={['wrap-reverse', 'wrap']}
