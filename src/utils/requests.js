@@ -124,8 +124,8 @@ export const getApiPriceData = async () => {
 };
 
 export const getApiGnosis = async (networkName, endpoint) => {
-  const apiGnosisUrl = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
-
+  const network = networkName === 'matic' ? 'polygon' : networkName;
+  const apiGnosisUrl = `https://safe-transaction.${network}.gnosis.io/api/v1/${endpoint}`;
   try {
     const response = await fetch(apiGnosisUrl);
     if (response.status >= 400) {
@@ -158,7 +158,8 @@ export const postApiGnosis = async (
   data,
   getJSONResponse = true,
 ) => {
-  const url = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
+  const network = networkName === 'matic' ? 'polygon' : networkName;
+  const url = `https://safe-transaction.${network}.gnosis.io/api/v1/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',

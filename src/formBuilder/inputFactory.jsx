@@ -26,9 +26,11 @@ import RageInput from './rageInput';
 import RaribleNftSelect from './raribleNftData';
 import CheckSwitch from './checkSwitch';
 import CheckGate from './checkGate';
+import SaltGenerator from './saltGenerator';
 import SuperfluidPaymentInput from './superfluidPaymentInput';
 import SuperfluidRate from './superfluidRate';
 import TargetContract from './targetContract';
+import ToggleForm from './toggleForm';
 import TributeInput from './tributeInput';
 
 export const InputFactory = props => {
@@ -119,14 +121,17 @@ export const InputFactory = props => {
   if (type === 'discourseMeta') {
     return <DiscourseMeta {...props} />;
   }
-  if (type === 'conditionalInput') {
-    return <ConditionalInput {...props} />;
-  }
   if (type === 'checkSwitch') {
     return <CheckSwitch {...props} />;
   }
   if (type === 'checkGate') {
     return <CheckGate {...props} />;
+  }
+  if (type === 'toggleForm') {
+    return <ToggleForm {...props} />;
+  }
+  if (type === 'saltGenerator') {
+    return <SaltGenerator {...props} />;
   }
   return null;
 };

@@ -85,6 +85,7 @@ const FormBuilder = props => {
     // REVIEW
     setFields(prevFields => {
       const update = field => {
+        // TODO: how to handle validation errors on fields within formCondition and checkGate input types
         if (Array.isArray(field)) {
           return field.map(update);
         }
@@ -107,6 +108,7 @@ const FormBuilder = props => {
     clearErrors();
 
     //  Checks for required values
+    // TODO: how to handle required values from inputs within formCondition & checkGate
     const missingVals = validateRequired(
       values,
       // REVIEW
