@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { Button, Tooltip } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { Button, Tooltip } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useAppModal } from '../hooks/useModals';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getMinionActionFormLego } from '../utils/vaults';
-import { useAppModal } from '../hooks/useModals';
 
 const LABELS = {
   NO_MEMBER: 'Wrong network or not a DAO member',

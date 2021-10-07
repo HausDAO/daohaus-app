@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { AiOutlineCaretDown } from 'react-icons/ai';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   FormLabel,
@@ -11,20 +14,16 @@ import {
   Select,
   Text,
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
-import { RiErrorWarningLine } from 'react-icons/ri';
-import { AiOutlineCaretDown } from 'react-icons/ai';
-
-import AddressInput from './addressInput';
-import DetailsFields from './detailFields';
-import PaymentInput from './paymentInput';
-import RateInput from './rateInput';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import AddressInput from './addressInput';
+import DetailsFields from './detailFields';
+import PaymentInput from './paymentInput';
+import RateInput from './rateInput';
 import TextBox from '../components/TextBox';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { createPoll } from '../services/pollService';

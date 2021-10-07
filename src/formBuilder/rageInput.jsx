@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import ModButton from './modButton';
 import GenericInput from './genericInput';
+import ModButton from './modButton';
 
 const RageInput = props => {
   const { daoMember } = useDaoMember();

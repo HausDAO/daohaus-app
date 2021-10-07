@@ -1,5 +1,6 @@
-import { Box, Flex } from '@chakra-ui/layout';
 import React from 'react';
+import { Box, Flex } from '@chakra-ui/layout';
+
 import TextBox from './TextBox';
 
 const ListSelectorItem = ({

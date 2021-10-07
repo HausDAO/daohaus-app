@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   FormLabel,
@@ -13,25 +15,23 @@ import {
   InputGroup,
   Spinner,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine } from 'react-icons/ri';
-import { useParams } from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { graphQuery } from '../utils/apollo';
-import { getGraphEndpoint } from '../utils/chain';
-import { TransmutationService } from '../services/transmutationService';
-import { TokenService } from '../services/tokenService';
-import { GET_TRANSMUTATION } from '../graphQL/boost-queries';
-import { useUser } from '../contexts/UserContext';
-import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { createPoll } from '../services/pollService';
-import { createHash, detailsToJSON } from '../utils/general';
-import { createForumTopic } from '../utils/discourse';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import AddressInput from './addressInput';
+import { createPoll } from '../services/pollService';
+import { TokenService } from '../services/tokenService';
+import { TransmutationService } from '../services/transmutationService';
+import { GET_TRANSMUTATION } from '../graphQL/boost-queries';
+import { createForumTopic } from '../utils/discourse';
+import { createHash, detailsToJSON } from '../utils/general';
+import { getGraphEndpoint } from '../utils/chain';
+import { graphQuery } from '../utils/apollo';
 
 const TransmutationProposal = () => {
   const { handleSubmit, errors, register, setValue, watch } = useForm();

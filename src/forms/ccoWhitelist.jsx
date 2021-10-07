@@ -9,8 +9,8 @@ import {
   Flex,
 } from '@chakra-ui/react';
 
-import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { CCO_CONSTANTS } from '../utils/cco';
 import { ccoPost } from '../utils/metadata';
 

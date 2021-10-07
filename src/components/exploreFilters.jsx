@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
-import ExploreSearch from './exploreSearch';
-import ExploreTagList from './exploreTagList';
-import ExploreFilterList from './exploreFilterList';
 import { ExploreContext } from '../contexts/ExploreContext';
+import ExploreFilterList from './exploreFilterList';
+import ExploreTagList from './exploreTagList';
+import ExploreSearch from './exploreSearch';
 import ListSort from './listSort';
 import { SORT_OPTIONS } from '../utils/exploreContent';
 

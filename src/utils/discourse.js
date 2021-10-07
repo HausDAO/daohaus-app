@@ -1,7 +1,7 @@
+import { getGraphEndpoint } from './chain';
 import { graphQuery } from './apollo';
 import { post } from './metadata';
 import { PROPOSALS_DISCOURSE_TOPIC } from '../graphQL/proposal-queries';
-import { getGraphEndpoint } from './chain';
 
 export const createForumTopic = async ({
   chainID,

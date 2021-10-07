@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Box, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router';
+import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useUser } from '../contexts/UserContext';
 import Layout from '../components/layout';
+import MainViewLayout from '../components/mainViewLayout';
 import SummonHard from '../forms/summonHard';
 import SummonPending from '../components/summonPending';
-import MainViewLayout from '../components/mainViewLayout';
-import { SummonService } from '../services/summonService';
 import { createPoll } from '../services/pollService';
-import { graphQuery } from '../utils/apollo';
-import { getGraphEndpoint } from '../utils/chain';
+import { SummonService } from '../services/summonService';
+import { DAO_POLL } from '../graphQL/dao-queries';
 import { capitalize } from '../utils/general';
-import { getFormattedOwnersByPaopId } from '../utils/poap-helpers';
 import {
   daoConstants,
   daoPresets,
   parseSummonersAndShares,
 } from '../utils/summoning';
-import { DAO_POLL } from '../graphQL/dao-queries';
+import { getFormattedOwnersByPaopId } from '../utils/poap-helpers';
+import { getGraphEndpoint } from '../utils/chain';
+import { graphQuery } from '../utils/apollo';
 
 const SummonPartyFavor = () => {
   const {

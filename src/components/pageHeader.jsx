@@ -1,8 +1,9 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
+
+import Web3SignIn from './web3SignIn';
 import WrongNetworkToolTip from './wrongNetworkToolTip';
 import { getTerm } from '../utils/metadata';
-import Web3SignIn from './web3SignIn';
 
 const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
   return (

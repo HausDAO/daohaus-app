@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { Badge, Flex, Icon, Box } from '@chakra-ui/react';
 import { FaRegWindowClose } from 'react-icons/fa';
+import { Badge, Flex, Icon, Box } from '@chakra-ui/react';
 
-import TextBox from './TextBox';
 import { ExploreContext } from '../contexts/ExploreContext';
+import TextBox from './TextBox';
 
 const ExploreTagList = () => {
   const { state, dispatch } = useContext(ExploreContext);

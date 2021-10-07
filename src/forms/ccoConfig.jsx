@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { CCO_CONSTANTS } from '../utils/cco';
 import { ccoPost } from '../utils/metadata';
 

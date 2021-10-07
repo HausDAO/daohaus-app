@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import ActivityCard from './activityCard';
 import Paginator from './paginator';
 import TextBox from './TextBox';

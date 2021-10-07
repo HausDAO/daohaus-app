@@ -1,5 +1,5 @@
-import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
+import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
 
@@ -328,23 +328,6 @@ export const FORM = {
       ],
     ],
   },
-  PAYROLL_NEAPOLITAN: {
-    id: 'PAYROLL_NEAPOLITAN',
-    title: 'Payroll Proposal',
-    description: 'Pay Members with a minion',
-    type: PROPOSAL_TYPES.PAYROLL,
-    required: ['selectedMinion', 'minionPayment', 'applicant'],
-    minionType: MINION_TYPES.NEAPOLITAN,
-    tx: TX.PAYROLL_NEAPOLITAN,
-    fields: [
-      [
-        FIELD.MINION_SELECT,
-        FIELD.MINION_PAYMENT,
-        FIELD.APPLICANT,
-        FIELD.DESCRIPTION,
-      ],
-    ],
-  },
   MINION_SEND_NETWORK_TOKEN: {
     title: 'Network Token Transfer',
     description: 'Make a proposal to transfer tokens out of the minion',
@@ -445,7 +428,7 @@ export const FORM = {
     title: 'Buyout Proposal',
     description: 'Request funds as buyout',
     type: PROPOSAL_TYPES.MINION_BUYOUT,
-    minionType: MINION_TYPES.NEAPOLITAN,
+    minionType: MINION_TYPES.SAFE,
     tx: TX.SET_BUYOUT_NFT,
     required: ['selectedMinion', 'title', 'paymentRequested'],
     fields: [

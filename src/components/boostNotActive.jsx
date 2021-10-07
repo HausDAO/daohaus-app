@@ -1,7 +1,8 @@
 import React from 'react';
+import { RiArrowRightSLine } from 'react-icons/ri';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Flex, Button, Icon } from '@chakra-ui/react';
-import { RiArrowRightSLine } from 'react-icons/ri';
+
 import TextBox from './TextBox';
 
 const BoostNotActive = () => {

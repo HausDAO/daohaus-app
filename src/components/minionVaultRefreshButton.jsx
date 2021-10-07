@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton } from '@chakra-ui/react';
 import { RiRefreshLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
-import { useDaoMember } from '../contexts/DaoMemberContext';
+import { IconButton } from '@chakra-ui/react';
+
 import { useDao } from '../contexts/DaoContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useTX } from '../contexts/TXContext';
 
 const MinionVaultRefreshButton = () => {

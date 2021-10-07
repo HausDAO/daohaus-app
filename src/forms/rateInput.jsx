@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { RiInformationLine } from 'react-icons/ri';
 import {
   FormErrorMessage,
   FormLabel,
@@ -8,7 +9,6 @@ import {
   Select,
   Tooltip,
 } from '@chakra-ui/react';
-import { RiInformationLine } from 'react-icons/ri';
 
 import { useDao } from '../contexts/DaoContext';
 import TextBox from '../components/TextBox';

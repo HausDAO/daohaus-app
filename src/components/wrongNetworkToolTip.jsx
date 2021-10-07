@@ -1,7 +1,7 @@
 import React from 'react';
 import { RiInformationLine } from 'react-icons/ri';
-import { Box, Button, Flex, Icon, Tooltip } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { Box, Button, Flex, Icon, Tooltip } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';

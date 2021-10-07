@@ -1,4 +1,5 @@
 import React from 'react';
+// import { useHistory, useParams } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -11,8 +12,8 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
+
 import TextBox from '../components/TextBox';
-// import { useHistory, useParams } from 'react-router-dom';
 
 import { daoToDaoProposalTypes } from '../content/proposal-types';
 import { useCustomTheme } from '../contexts/CustomThemeContext';

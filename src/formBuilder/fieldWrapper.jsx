@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
+import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 
 import TextBox from '../components/TextBox';
 import ErrorList from './ErrorList';

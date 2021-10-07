@@ -1,4 +1,9 @@
 import React from 'react';
+import {
+  RiExternalLinkLine,
+  RiErrorWarningLine,
+  RiCheckLine,
+} from 'react-icons/ri';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
@@ -10,13 +15,8 @@ import {
   Stack,
   Link,
 } from '@chakra-ui/react';
-import {
-  RiExternalLinkLine,
-  RiErrorWarningLine,
-  RiCheckLine,
-} from 'react-icons/ri';
-import ContentBox from './ContentBox';
 
+import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { POPUP_CONTENT } from '../content/pending-tx-modal';
 import { supportedChains } from '../utils/chain';

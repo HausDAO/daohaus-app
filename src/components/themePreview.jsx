@@ -1,13 +1,13 @@
 import React from 'react';
-import { Flex, Image, Box, Icon, HStack, Button } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
+import { Flex, Image, Box, Icon, HStack, Button } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import ThemeChart from './themeChart';
 import ThemeProposalCard from './themeProposalCard';
 import { themeImagePath, getTerm, getTitle } from '../utils/metadata';
-import { useMetaData } from '../contexts/MetaDataContext';
 
 const ThemePreview = ({ previewValues }) => {
   const { daoMetaData, customTerms } = useMetaData();

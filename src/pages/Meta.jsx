@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Icon } from '@chakra-ui/react';
-import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
+import { Box, Flex, Icon } from '@chakra-ui/react';
 
 import DaoMetaForm from '../forms/daoMetaForm';
 import MainViewLayout from '../components/mainViewLayout';

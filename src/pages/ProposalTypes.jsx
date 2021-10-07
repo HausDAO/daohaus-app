@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Flex, Spinner } from '@chakra-ui/react';
 
-import { useParams } from 'react-router-dom';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-
-import PlaylistSelector from '../components/playlistSelector';
+import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
+import PlaylistSelector from '../components/playlistSelector';
 import ProposalList from '../components/formList';
 import SaveButton from '../components/saveButton';
-import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
-import { useAppModal } from '../hooks/useModals';
+import { updateProposalConfig } from '../utils/metadata';
 
 const dev = process.env.REACT_APP_DEV;
 

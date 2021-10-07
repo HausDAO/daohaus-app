@@ -32,11 +32,6 @@ export const CONTRACTS = {
     abiName: 'NIFTY_MINION',
     contractAddress: '.values.selectedMinion',
   },
-  SELECTED_MINION_NEAPOLITAN: {
-    location: 'local',
-    abiName: 'NEAPOLITAN_MINION',
-    contractAddress: '.values.selectedMinion',
-  },
   SELECTED_MINION_SAFE: {
     location: 'local',
     abiName: 'SAFE_MINION',
@@ -230,13 +225,6 @@ export const DETAILS = {
     minionType: MINION_TYPES.SAFE,
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
-  },
-  SET_BUYOUT_NFT: {
-    title: '.values.title',
-    description: '.values.description',
-    link: '.values.link',
-    proposalType: '.formData.type',
-    minionType: MINION_TYPES.NEAPOLITAN,
   },
 };
 
@@ -515,43 +503,6 @@ export const TX = {
       0,
     ],
   },
-  PAYROLL_NEAPOLITAN: {
-    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.PROPOSAL,
-    display: 'Sending Token',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['.localValues.minionToken'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['0'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: [
-          {
-            type: 'encodeHex',
-            contract: CONTRACTS.ERC_20,
-            fnName: 'transfer',
-            gatherArgs: ['.values.applicant', '.values.minionPayment'],
-          },
-        ],
-      },
-      '.contextData.daoOverview.depositToken.tokenAddress',
-      0,
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL,
-      },
-      'true',
-    ],
-  },
   MINION_WITHDRAW: {
     contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'crossWithdraw',
@@ -607,43 +558,6 @@ export const TX = {
       },
       '.contextData.daoOverview.depositToken.tokenAddress',
       0,
-    ],
-  },
-  MINION_SELL_NIFTY_NEAPOLITAN: {
-    contract: CONTRACTS.LOCAL_NEAPOLITAN_MINION,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Sell Nifty',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['.localValues.contractAddress'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['0'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: [
-          {
-            type: 'encodeHex',
-            contract: CONTRACTS.NIFTY_INK,
-            fnName: 'setTokenPrice',
-            gatherArgs: ['.localValues.tokenId', '.values.price'],
-          },
-        ],
-      },
-      '.contextData.daoOverview.depositToken.tokenAddress',
-      0,
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_SELL_NIFTY,
-      },
-      'true',
     ],
   },
   MINION_SIMPLE_EXECUTE: {
@@ -771,43 +685,6 @@ export const TX = {
       '.values.paymentRequested',
     ],
   },
-  MINION_BUY_NIFTY_INK_NEAPOLITAN: {
-    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
-    name: 'proposeAction',
-    poll: 'subgraph',
-    onTxHash: ACTIONS.PROPOSAL,
-    display: 'Buy NiftyInk',
-    errMsg: 'Error Submitting Proposal',
-    successMsg: 'Proposal Submitted!',
-    gatherArgs: [
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['0xcf964c89f509a8c0ac36391c5460df94b91daba5'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['.values.paymentRequested'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: [
-          {
-            type: 'encodeHex',
-            contract: CONTRACTS.NIFTY_INK,
-            fnName: 'buyInk',
-            gatherArgs: ['.values.ipfsHash'],
-          },
-        ],
-      },
-      '.values.paymentToken',
-      '.values.paymentRequested',
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.MINION_BUY_NIFTY,
-      },
-      'true',
-    ],
-  },
   CREATE_WRAP_N_ZAP: {
     contract: CONTRACTS.WRAP_N_ZAP_FACTORY,
     name: 'create',
@@ -917,7 +794,7 @@ export const TX = {
     ],
   },
   SET_BUYOUT_NFT: {
-    contract: CONTRACTS.SELECTED_MINION_NEAPOLITAN,
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,

@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FaCopy } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
 import {
   Flex,
   Stack,
@@ -11,16 +14,13 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FaCopy } from 'react-icons/fa';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { boostPost } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import MainViewLayout from '../components/mainViewLayout';
+import { boostPost } from '../utils/metadata';
 
 const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
   console.log(daoMetaData);

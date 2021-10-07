@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Spinner } from '@chakra-ui/spinner';
 import { useParams } from 'react-router';
+import { Spinner } from '@chakra-ui/spinner';
 
 import GenericSelect from './genericSelect';
 import GenericTextarea from './genericTextArea';
