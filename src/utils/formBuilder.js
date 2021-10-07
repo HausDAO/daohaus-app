@@ -147,7 +147,13 @@ export const ignoreAwaitStep = next => {
   return typeof next === 'string' ? next : next?.then;
 };
 
-const serializeParam = (name, index) => `*TX${index}*${name}`;
+const serializeParam = (name, index, tag) => {
+  const regex = new RegExp(`(\\*${tag}\\d+\\*)+`);
+  if (regex.test(name)) {
+    return name.replace(regex, `*${tag}${index}*`);
+  }
+  return `*${tag}${index}*${name}`;
+};
 
 export const serializeFields = (fields = [], index) =>
   fields.map(column =>

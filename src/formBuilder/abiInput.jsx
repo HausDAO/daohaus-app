@@ -23,8 +23,7 @@ const AbiInput = props => {
   const targetContract = localForm.watch(listenTo || 'targetContract');
   const abiInput = localForm.watch('abiInput');
   const helperText = isDisabled && 'Please enter a target contract';
-  console.log(`listenTo`, listenTo);
-  console.log(`targetContract`, targetContract);
+
   useEffect(() => {
     const getABI = async () => {
       try {
