@@ -1,13 +1,29 @@
 import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Box, Table, Thead, Tr, Th, Tbody, Td, Link } from '@chakra-ui/react';
+import {
+  Box,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Link,
+  Icon,
+  Flex,
+} from '@chakra-ui/react';
+import { format } from 'date-fns';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { FaCopy } from 'react-icons/fa';
 import MainViewLayout from '../components/mainViewLayout';
 import ContentBox from '../components/ContentBox';
+import { truncateAddr } from '../utils/general';
+import AuditJsonDisplay from '../components/auditJsonDisplay';
 
 const renderRow = (log, daoid, daochain) => {
   const createdAt = new Date(log.createdAt);
-  const humanDate = `${createdAt.toLocaleDateString()} ${createdAt.toLocaleTimeString()}`;
+  const humanDate = format(createdAt, 'd LLL y | h:mm aaa');
 
   return (
     <Tr key={log.createdAt}>
@@ -17,10 +33,22 @@ const renderRow = (log, daoid, daochain) => {
           as={RouterLink}
           to={`/dao/${daochain}/${daoid}/profile/${log.updatedBy}`}
         >
-          {log.updatedBy}
+          <CopyToClipboard text={log.updatedBy}>
+            <Flex>
+              {truncateAddr(log.updatedBy)}
+              <Icon
+                as={FaCopy}
+                color='secondary.300'
+                ml={2}
+                _hover={{ cursor: 'pointer' }}
+              />
+            </Flex>
+          </CopyToClipboard>
         </Link>
       </Td>
-      <Td>{JSON.stringify(log?.update || {})}</Td>
+      <Td>
+        <AuditJsonDisplay log={log} />
+      </Td>
     </Tr>
   );
 };
@@ -31,13 +59,15 @@ const MetaAudit = ({ daoMetaData }) => {
   return (
     <MainViewLayout header='Metadata Audit Log' isDao>
       <ContentBox w='100%'>
-        {daoMetaData && daoMetaData.logs.length > 0 && (
-          <Table size='sm' variant='simple'>
+        {daoMetaData?.logs?.length > 0 && (
+          <Table size='md' variant='simple'>
             <Thead>
               <Tr>
-                <Th>Created At</Th>
-                <Th>Updated By</Th>
-                <Th>Update JSON</Th>
+                <Th fontSize='md' minW='240px'>
+                  Created At
+                </Th>
+                <Th fontSize='md'>Updated By</Th>
+                <Th fontSize='md'>JSON Update</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -52,7 +82,7 @@ const MetaAudit = ({ daoMetaData }) => {
           </Table>
         )}
 
-        {!daoMetaData || (!daoMetaData.logs.length && <Box>No Logs</Box>)}
+        {!daoMetaData || (!daoMetaData?.logs?.length && <Box>No Logs</Box>)}
       </ContentBox>
     </MainViewLayout>
   );
