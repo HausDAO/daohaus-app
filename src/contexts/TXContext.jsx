@@ -93,7 +93,7 @@ export const TXProvider = ({ children }) => {
     setModal,
   };
 
-  const refreshDao = async () => {
+  const refreshDao = async (skipVaults = false) => {
     // I use useRef to stop excessive rerenders in most of the contexts
     // I need to reset them in order to prevent them from locking up
     // the rerendering flow
@@ -112,7 +112,10 @@ export const TXProvider = ({ children }) => {
     // Now, I call rerender on DaoContext, which should re-fetch all the graphQueries
     // This should get up all the up to date data from the Graph and spread across the
     // entire component tree. It should also recache the new data automatically
-    await refreshAllDaoVaults();
+    if (!skipVaults) {
+      console.log('vault fetch');
+      await refreshAllDaoVaults();
+    }
     refetch();
   };
 

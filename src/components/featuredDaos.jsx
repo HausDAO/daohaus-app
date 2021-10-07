@@ -54,7 +54,7 @@ const featuredDaoList = [
     badges: ['Grants', 'xDai'],
   },
   {
-    address: '0x58234d4bf7a83693dc0815d97189ed7d188f6981',
+    address: '0x1b975a9daf25e7b01e0a6c72d657ff74925327a8',
     network: '0x64',
     image: FoundationsAvatar,
     name: 'Foundations DAO',

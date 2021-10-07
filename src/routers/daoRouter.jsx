@@ -33,6 +33,7 @@ import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
 import Proposals from '../pages/Proposals';
 import ProposalTypes from '../pages/ProposalTypes';
+import ProposalWatcher from '../pages/ProposalWatcher';
 import Settings from '../pages/Settings';
 import Snapshot from '../pages/Snapshot';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
@@ -198,6 +199,9 @@ const DaoRouter = () => {
             daoMembers={daoMembers}
           />
         </Route>
+        <Route exact path={`${path}/proposals/hardcore`}>
+          <ProposalWatcher daoProposals={daoProposals} />
+        </Route>
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal
             overview={daoOverview}
@@ -208,6 +212,7 @@ const DaoRouter = () => {
             delegate={delegate}
           />
         </Route>
+
         <Route exact path={`${path}/profile/:userid`}>
           <Profile
             members={daoMembers}

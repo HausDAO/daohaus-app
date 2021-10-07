@@ -77,11 +77,11 @@ const SafeMinionDetails = ({ vault, safeDetails, handleCopy }) => {
   useEffect(() => {
     if (
       address &&
-      safeDetails.owners.includes(Web3Utils.toChecksumAddress(address))
+      safeDetails?.owners?.includes(Web3Utils.toChecksumAddress(address))
     ) {
       safeOwner(true);
     }
-  }, [injectedProvider, safeDetails]);
+  }, [address, safeDetails]);
 
   return (
     <ContentBox mt={6}>
