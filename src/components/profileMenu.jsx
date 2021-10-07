@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useParams } from 'react-router-dom';
 import {
   Menu,
@@ -9,17 +11,16 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
-import { TX } from '../data/contractTX';
 import { CORE_FORMS, FORM } from '../data/forms';
-import { daoConnectedAndSameChain } from '../utils/general';
+import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
+import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
 
 const ProfileMenu = ({ member }) => {

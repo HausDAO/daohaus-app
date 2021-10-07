@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 // import { utils } from 'web3';
-import { RiErrorWarningLine } from 'react-icons/ri';
 
 // import {
 //   useDao,
@@ -10,11 +10,10 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 //   useUser,
 //   useModals,
 // } from '../../../contexts/PokemolContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from '../components/TextBox';
 import RageInput from './rageInput';
-
 import { detailsToJSON } from '../utils/general';
-import { useOverlay } from '../contexts/OverlayContext';
 
 const DistributeRewardsProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +34,7 @@ const DistributeRewardsProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
 
     const details = detailsToJSON(values);
@@ -64,7 +63,7 @@ const DistributeRewardsProposalForm = () => {
     //   setLoading(false);
     //   console.log('error: ', err);
     // }
-    setD2dProposalModal((prevState) => !prevState);
+    setD2dProposalModal(prevState => !prevState);
   };
 
   return (

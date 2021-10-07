@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Icon, useToast } from '@chakra-ui/react';
 import { BsDownload } from 'react-icons/bs';
+import { Box, Icon, useToast } from '@chakra-ui/react';
 
 import { useMetaData } from '../contexts/MetaDataContext';
 import { ToolTipWrapper } from '../staticElements/wrappers';

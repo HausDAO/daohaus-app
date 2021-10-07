@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+import { VscGear } from 'react-icons/vsc';
 import {
   Modal,
   ModalContent,
@@ -12,20 +14,15 @@ import {
   Divider,
   Icon,
 } from '@chakra-ui/react';
-
 import { rgba } from 'polished';
 
-import { Link as RouterLink, useParams } from 'react-router-dom';
-
-import { VscGear } from 'react-icons/vsc';
-import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import TextBox from '../components/TextBox';
-
-import { FORM } from '../data/forms';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useAppModal } from '../hooks/useModals';
+import TextBox from '../components/TextBox';
+import { FORM } from '../data/forms';
 
 // PLAYLISTS.find(list => list.id === 'favorites');
 

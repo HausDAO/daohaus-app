@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@chakra-ui/layout';
-import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
+import { Spinner } from '@chakra-ui/spinner';
 
 const CcoEligibilityButton = ({
   networkMatch,

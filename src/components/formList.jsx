@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-
+import { HiPencil, HiRefresh } from 'react-icons/hi';
+import { RiMore2Line, RiStarFill } from 'react-icons/ri';
 import {
   Icon,
   Flex,
@@ -12,17 +13,14 @@ import {
   Button,
 } from '@chakra-ui/react';
 
-import { RiMore2Line, RiStarFill } from 'react-icons/ri';
-import { HiPencil, HiRefresh } from 'react-icons/hi';
-import TextBox from './TextBox';
-import { CORE_FORMS, FORM } from '../data/forms';
-
 import { useMetaData } from '../contexts/MetaDataContext';
-import { areAnyFields } from '../utils/general';
+import { useAppModal } from '../hooks/useModals';
 import List from './list';
 import ListItem from './listItem';
 import NoListItem from './NoListItem';
-import { useAppModal } from '../hooks/useModals';
+import TextBox from './TextBox';
+import { CORE_FORMS, FORM } from '../data/forms';
+import { areAnyFields } from '../utils/general';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;

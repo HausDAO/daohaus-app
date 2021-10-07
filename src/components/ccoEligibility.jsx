@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Box, Flex } from '@chakra-ui/layout';
 import {
   RiCloseCircleLine,
   RiCheckboxCircleLine,
   RiQuestionLine,
 } from 'react-icons/ri';
+import { Box, Flex } from '@chakra-ui/layout';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
+import CcoEligibilityButton from './ccoEligibilityButton';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 import { getEligibility } from '../utils/metadata';
-import CcoEligibilityButton from './ccoEligibilityButton';
 
 const CcoEligibility = ({
   networkMatch,

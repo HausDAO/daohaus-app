@@ -1,13 +1,12 @@
 import React from 'react';
-import { Stack } from '@chakra-ui/react';
 import { RiTrophyLine } from 'react-icons/ri';
+import { Stack } from '@chakra-ui/react';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+// import { useMetaData } from '../contexts/MetaDataContext';
 import NavLink from './navlink';
 import { defaultHubData, generateDaoLinks } from '../utils/navLinks';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getTerm } from '../utils/metadata';
-// import { useMetaData } from '../contexts/MetaDataContext';
-// import { getTerm } from '../utils/metadata';
 
 const NavLinkList = ({ dao, view, toggleNav = null }) => {
   // const { daoMetaData } = useMetaData();

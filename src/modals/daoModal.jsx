@@ -14,8 +14,8 @@ import { rgba } from 'polished';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import FormBuilder from '../formBuilder/formBuilder';
 import TextBox from '../components/TextBox';
+import FormBuilder from '../formBuilder/formBuilder';
 import StepperForm from '../formBuilder/StepperForm';
 
 // PURGe

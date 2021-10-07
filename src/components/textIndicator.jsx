@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Skeleton } from '@chakra-ui/react';
-import TextBox from './TextBox';
 
+import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 import { handlePossibleNumber } from '../utils/general';
 

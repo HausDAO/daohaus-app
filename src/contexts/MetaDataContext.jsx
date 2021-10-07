@@ -6,13 +6,12 @@ import React, {
   useRef,
   useReducer,
 } from 'react';
-
 import { useParams } from 'react-router-dom';
-import { proposalConfigReducer } from '../reducers/proposalConfig';
-import { fetchMetaData } from '../utils/metadata';
 
 import { useCustomTheme } from './CustomThemeContext';
 import { useUser } from './UserContext';
+import { proposalConfigReducer } from '../reducers/proposalConfig';
+import { fetchMetaData } from '../utils/metadata';
 
 export const MetaDataContext = createContext();
 

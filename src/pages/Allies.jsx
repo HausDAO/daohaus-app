@@ -1,20 +1,20 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 // import Following from '../components/followingDaos';
-import { useParams } from 'react-router-dom';
-import MainViewLayout from '../components/mainViewLayout';
 import DaoToDaoManager from '../components/daoToDaoManager';
 import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
 import DaoToDaoProposalTypeModal from '../modals/daoToDaoProposalTypeModal';
-import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
+import MainViewLayout from '../components/mainViewLayout';
 import NewUberHausMinion from '../forms/newUberHausMinion';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useSessionStorage } from '../hooks/useSessionStorage';
+import { UberHausMinionService } from '../services/uberHausMinionService';
 import { bigGraphQuery } from '../utils/theGraph';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { UberHausMinionService } from '../services/uberHausMinionService';
 
 const Allies = ({
   daoOverview,

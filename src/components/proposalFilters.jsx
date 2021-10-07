@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 import {
   Menu,
   MenuButton,
@@ -10,11 +11,10 @@ import {
   MenuDivider,
   Text,
 } from '@chakra-ui/react';
-import { RiArrowDropDownFill } from 'react-icons/ri';
 
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { getFilters, sortOptions } from '../utils/proposalContent';
 import { determineUnreadProposalList } from '../utils/proposalUtils';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
   // const [memberWallet] = useMemberWallet();

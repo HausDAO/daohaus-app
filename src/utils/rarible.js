@@ -108,9 +108,12 @@ const DOMAIN_TYPE = [
 export const getMessageHash = encodedOrder => {
   const typeData = {
     /* eslint-disable */
-    types: Object.assign({
-      EIP712Domain: DOMAIN_TYPE,
-    }, encodedOrder.signMessage.types),
+    types: Object.assign(
+      {
+        EIP712Domain: DOMAIN_TYPE,
+      },
+      encodedOrder.signMessage.types,
+    ),
     domain: encodedOrder.signMessage.domain,
     primaryType: encodedOrder.signMessage.structType,
     message: encodedOrder.signMessage.struct,
@@ -143,16 +146,18 @@ export const pinOrderToIpfs = async (order, daoid) => {
   return ipfsRes;
 };
 
-export const getOrderDataFromProposal = async (proposal) => {
+export const getOrderDataFromProposal = async proposal => {
   const hash = raribleHashMaker(proposal);
-  console.log('hash', hash)
+  console.log('hash', hash);
   if (hash !== '') {
-    const ipfsData = await getNftMeta(`https://daohaus.mypinata.cloud/ipfs/${hash}`)
+    const ipfsData = await getNftMeta(
+      `https://daohaus.mypinata.cloud/ipfs/${hash}`,
+    );
     return ipfsData;
   } else {
-    return null
+    return null;
   }
-}
+};
 
 export const compareSellOrder = (ipfsData, orderRes) => {
   return orderRes.some(order => {
@@ -160,19 +165,19 @@ export const compareSellOrder = (ipfsData, orderRes) => {
       ...ipfsData.make,
       ...ipfsData.take,
       start: +ipfsData.start,
-      end: +ipfsData.end
-    }
-  
+      end: +ipfsData.end,
+    };
+
     const raribleOrderData = {
       ...order.make,
       ...order.take,
       start: order.start,
-      end: order.end
-    }
-    return deepEqual(propOrderData, raribleOrderData)
-  })
-}
+      end: order.end,
+    };
+    return deepEqual(propOrderData, raribleOrderData);
+  });
+};
 
 export const buildRaribleUrl = (orderData, daochain) => {
-  return `${supportedChains[daochain].rarible.base_url}/token/${orderData.make.assetType.contract}:${orderData.make.assetType.tokenId}`
-}
+  return `${supportedChains[daochain].rarible.base_url}/token/${orderData.make.assetType.contract}:${orderData.make.assetType.tokenId}`;
+};

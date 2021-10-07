@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import {
+  RiAddFill,
+  RiErrorWarningLine,
+  RiInformationLine,
+} from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   FormLabel,
@@ -15,35 +21,29 @@ import {
   Tooltip,
   Stack,
 } from '@chakra-ui/react';
-import {
-  RiAddFill,
-  RiErrorWarningLine,
-  RiInformationLine,
-} from 'react-icons/ri';
-import { useParams } from 'react-router-dom';
 
-import TextBox from '../components/TextBox';
-import PaymentInput from './paymentInput';
-import TributeInput from './tributeInput';
-import AddressInput from './addressInput';
-import DetailsFields from './detailFields';
+import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
+import AddressInput from './addressInput';
+import DetailsFields from './detailFields';
+import PaymentInput from './paymentInput';
+import TextBox from '../components/TextBox';
+import TributeInput from './tributeInput';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { chainByID } from '../utils/chain';
+import { createForumTopic } from '../utils/discourse';
 import {
   createHash,
   detailsToJSON,
   daoConnectedAndSameChain,
 } from '../utils/general';
-import { createPoll } from '../services/pollService';
-import { MolochService } from '../services/molochService';
-import { useDao } from '../contexts/DaoContext';
-import { valToDecimalString } from '../utils/tokenValue';
 import { LogError } from '../utils/errorLog';
-import { chainByID } from '../utils/chain';
-import { createForumTopic } from '../utils/discourse';
-import { useMetaData } from '../contexts/MetaDataContext';
+import { valToDecimalString } from '../utils/tokenValue';
 
 const MemberProposalForm = () => {
   const {

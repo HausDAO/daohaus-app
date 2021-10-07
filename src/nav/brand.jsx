@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-
 import { Avatar } from '@chakra-ui/react';
-import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
+
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
+
+import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 
 const Brand = React.memo(({ dao }) => {
   const brandImg = dao?.daoMetaData?.avatarImg

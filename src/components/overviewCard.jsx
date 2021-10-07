@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { utils } from 'ethers';
 import { useParams, useHistory } from 'react-router-dom';
 import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
+import { utils } from 'ethers';
+
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
-import TextBox from './TextBox';
 import ContentBox from './ContentBox';
-import { getActiveMembers } from '../utils/dao';
+import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
+import { getActiveMembers } from '../utils/dao';
+import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
 
 const OverviewCard = ({ daoOverview, members, daoVaults }) => {
   const { daochain, daoid } = useParams();

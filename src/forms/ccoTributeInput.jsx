@@ -7,8 +7,8 @@ import { MaxUint256 } from '@ethersproject/constants';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
-import { TokenService } from '../services/tokenService';
 import { createPoll } from '../services/pollService';
+import { TokenService } from '../services/tokenService';
 
 const CcoTributeInput = ({
   register,

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Icon, Text } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
-
 import { handleDecimals } from '../utils/general';
 
 const getMaxBalance = (tokenData, tokenAddress) => {

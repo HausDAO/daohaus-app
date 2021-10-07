@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Flex, Box, Button, Icon } from '@chakra-ui/react';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
+import { Flex, Box, Button, Icon } from '@chakra-ui/react';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import AddressAvatar from '../components/addressAvatar';
+import Brand from './brand';
 import ChangeDao from './changeDao';
 import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
-import AddressAvatar from '../components/addressAvatar';
-import Brand from './brand';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
 
 import '../global.css';
 

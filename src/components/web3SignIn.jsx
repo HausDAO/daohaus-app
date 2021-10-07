@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@chakra-ui/react';
+
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import AddressAvatar from './addressAvatar';

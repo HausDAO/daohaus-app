@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 import {
   Box,
   HStack,
@@ -9,7 +10,6 @@ import {
   Flex,
   Icon,
 } from '@chakra-ui/react';
-import { RiArrowDropDownFill } from 'react-icons/ri';
 
 const ListSort = ({ sort, setSort, options }) => {
   useEffect(() => {

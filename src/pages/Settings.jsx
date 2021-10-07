@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { Box, Flex } from '@chakra-ui/react';
 
 import DaoContractSettings from '../components/daoContractSettings';
 import DaoMetaOverview from '../components/daoMetaOverview';
-import TextBox from '../components/TextBox';
 import MainViewLayout from '../components/mainViewLayout';
+import TextBox from '../components/TextBox';
 import { fetchTransmutation, getWrapNZap } from '../utils/theGraph';
 
 const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Flex, Icon } from '@chakra-ui/react';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { Flex, Icon } from '@chakra-ui/react';
 
 const Vote = ({
   thumbsUp,

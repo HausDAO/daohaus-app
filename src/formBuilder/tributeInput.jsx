@@ -1,18 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MaxUint256 } from '@ethersproject/constants';
 import { Spinner } from '@chakra-ui/react';
+import { MaxUint256 } from '@ethersproject/constants';
 
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
-
 import { TokenService } from '../services/tokenService';
-import { validate } from '../utils/validation';
 import { TX } from '../data/contractTX';
 import { handleDecimals } from '../utils/general';
+import { validate } from '../utils/validation';
 
 const TributeInput = props => {
   const { submitTransaction } = useTX();

@@ -5,10 +5,9 @@ import { useDao } from '../contexts/DaoContext';
 import GenericInput from './genericInput';
 import GenericSelect from './genericSelect';
 import ModButton from './modButton';
-
+import { getActiveMembers } from '../utils/dao';
 import { handleGetProfile } from '../utils/3box';
 import { isEthAddress, truncateAddr } from '../utils/general';
-import { getActiveMembers } from '../utils/dao';
 import { lookupENS } from '../utils/ens';
 
 const AddressInput = props => {

@@ -1,5 +1,6 @@
-import { Box } from '@chakra-ui/react';
 import React from 'react';
+import { Box } from '@chakra-ui/react';
+
 import PageHeader from './pageHeader';
 
 const MainViewLayout = ({ children, header, headerEl, customTerms, isDao }) => {
