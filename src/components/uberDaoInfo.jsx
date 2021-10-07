@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaCopy } from 'react-icons/fa';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import {
   Flex,
@@ -10,12 +11,11 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { FaCopy } from 'react-icons/fa';
 
 import { useDao } from '../contexts/DaoContext';
+import MemberIndicator from './memberIndicator';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
-import MemberIndicator from './memberIndicator';
 
 //  For QA.
 //  This won't be refactored until we know the specs of

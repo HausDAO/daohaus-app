@@ -1,14 +1,14 @@
 import React from 'react';
 import { Flex, Box, Button } from '@chakra-ui/react';
 
-import NewsFeed from '../components/newsFeed';
-import FeaturedDaos from '../components/featuredDaos';
-import NetworkList from '../components/networkList';
-import HubProfileCard from '../components/hubProfileCard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useUser } from '../contexts/UserContext';
+import FeaturedDaos from '../components/featuredDaos';
+import HubProfileCard from '../components/hubProfileCard';
 import HubSignedOut from '../components/hubSignedOut';
 import MainViewLayout from '../components/mainViewLayout';
-import { useUser } from '../contexts/UserContext';
+import NewsFeed from '../components/newsFeed';
+import NetworkList from '../components/networkList';
 
 const Main = () => {
   const { address } = useInjectedProvider();

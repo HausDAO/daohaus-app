@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Box, Flex, Button, Badge, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
-import ContentBox from './ContentBox';
+import { Avatar, Box, Flex, Button, Badge, Link, Text } from '@chakra-ui/react';
+import makeBlockie from 'ethereum-blockies-base64';
+
 import { ExploreContext } from '../contexts/ExploreContext';
-import { pokemolUrlExplore, themeImagePath } from '../utils/metadata';
-import { numberWithCommas } from '../utils/general';
+import ContentBox from './ContentBox';
 import { chainByNetworkId } from '../utils/chain';
+import { numberWithCommas } from '../utils/general';
+import { pokemolUrlExplore, themeImagePath } from '../utils/metadata';
 
 const ExploreCard = ({ dao }) => {
   const { state, dispatch } = useContext(ExploreContext);

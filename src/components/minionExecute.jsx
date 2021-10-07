@@ -6,15 +6,15 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
+import RaribleSellOrder from './raribleSellOrder';
+import { TokenService } from '../services/tokenService';
 import {
   MINION_TYPES,
   proposalTypeMaker,
   PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
-import { TokenService } from '../services/tokenService';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import RaribleSellOrder from './raribleSellOrder';
 
 const MinionExecute = ({
   hideMinionExecuteButton,

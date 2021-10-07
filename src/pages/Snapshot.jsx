@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Stack, Button, Link, Spinner } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
+import { Flex, Stack, Button, Link, Spinner } from '@chakra-ui/react';
+
+import { useOverlay } from '../contexts/OverlayContext';
+import BoostNotActive from '../components/boostNotActive';
 import MainViewLayout from '../components/mainViewLayout';
 import SnapshotCard from '../components/snapshotCard';
-import { getSnapshotProposals } from '../utils/requests';
-import BoostNotActive from '../components/boostNotActive';
 import TextBox from '../components/TextBox';
-import { useOverlay } from '../contexts/OverlayContext';
+import { getSnapshotProposals } from '../utils/requests';
 
 const Snapshot = ({ isMember, daoMetaData }) => {
   const [loading, setLoading] = useState(true);

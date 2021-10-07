@@ -1,6 +1,6 @@
 import React from 'react';
-import { Flex, Icon } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { Flex, Icon } from '@chakra-ui/react';
 
 const ErrorList = ({ errors = [], singleError }) => (
   <Flex flexDirection='column' alignItems='flex-start'>

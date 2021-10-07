@@ -7,6 +7,7 @@ import {
   AreaSeries,
   GradientDefs,
 } from 'react-vis';
+import { FaChevronDown } from 'react-icons/fa';
 import {
   Box,
   Flex,
@@ -17,12 +18,12 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { FaChevronDown } from 'react-icons/fa';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
+import { getCurrentPrices } from '../utils/vaults';
 import {
   getDateRange,
   balancesWithValue,
@@ -30,7 +31,6 @@ import {
   groupBalancesToDateRange,
   subtractDays,
 } from '../utils/charts';
-import { getCurrentPrices } from '../utils/vaults';
 
 const bankChartTimeframes = [
   { name: 'Lifetime', value: 'lifetime' },

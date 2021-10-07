@@ -1,9 +1,10 @@
+import { supportedChains } from '../utils/chains';
+
 import imgGrants from '../assets/Daohaus__Castle--Dark.svg';
 import imgGuilds from '../assets/Daohaus__Castle--Dark.svg';
 import imgVentures from '../assets/Daohaus__Castle--Dark.svg';
 import imgProjects from '../assets/Daohaus__Castle--Dark.svg';
 import imgClubs from '../assets/Daohaus__Castle--Dark.svg';
-import { supportedChains } from '../utils/chains';
 
 export const daoConstants = networkId => {
   const constants = {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Flex, Box, Icon, Button, Link, Stack } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 import { RiQuestionLine } from 'react-icons/ri';
 import { VscLinkExternal } from 'react-icons/vsc';
+import { Flex, Box, Icon, Button, Link, Stack } from '@chakra-ui/react';
 
 import { ToolTipWrapper } from '../staticElements/wrappers';
 import { SF_LABEL } from '../utils/toolTipLabels';

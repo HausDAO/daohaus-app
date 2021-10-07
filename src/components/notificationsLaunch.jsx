@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
@@ -11,10 +12,8 @@ import {
   Spinner,
   Text,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-
-import { notificationBoostContent } from '../content/boost-content';
 import { get } from '../utils/requests';
+import { notificationBoostContent } from '../data/boosts';
 
 const NotificationsLaunch = ({
   handleLaunch,

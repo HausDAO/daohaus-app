@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
+
 import { ExploreContext } from '../contexts/ExploreContext';
 import ExploreCard from './exploreCard';
 

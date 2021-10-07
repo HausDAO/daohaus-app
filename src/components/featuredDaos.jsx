@@ -8,6 +8,7 @@ import {
   Text,
   HStack,
 } from '@chakra-ui/react';
+
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 

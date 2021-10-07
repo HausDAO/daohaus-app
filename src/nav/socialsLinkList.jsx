@@ -1,5 +1,6 @@
-import { Icon } from '@chakra-ui/react';
 import React from 'react';
+import { Icon } from '@chakra-ui/react';
+
 import SocialLink from './socialLink';
 
 const SocialsLinkList = ({

@@ -1,13 +1,13 @@
 import React from 'react';
+import { BiErrorCircle } from 'react-icons/bi';
+import { BsCheckCircle } from 'react-icons/bs';
 import { Flex, Spinner } from '@chakra-ui/react';
 import Icon from '@chakra-ui/icon';
 
-import { BsCheckCircle } from 'react-icons/bs';
-import { BiErrorCircle } from 'react-icons/bi';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import TextBox from './TextBox';
 import ExplorerLink from './explorerLink';
+import TextBox from './TextBox';
 
 const defaultIndicatorStates = {
   loading: {

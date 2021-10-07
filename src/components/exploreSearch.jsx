@@ -1,5 +1,6 @@
-import { Input } from '@chakra-ui/react';
 import React, { useContext, useMemo } from 'react';
+import { Input } from '@chakra-ui/react';
+
 import { ExploreContext } from '../contexts/ExploreContext';
 import { debounce } from '../utils/debounce';
 

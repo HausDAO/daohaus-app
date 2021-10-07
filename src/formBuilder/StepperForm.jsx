@@ -2,14 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useOverlay } from '../contexts/OverlayContext';
-import FormBuilder from './formBuilder';
+import { useAppModal } from '../hooks/useModals';
 import BoostDetails from '../components/boostDetails';
+import BoostMetaForm from './boostMetaForm';
+import DiscordNotificationsLaunch from './discordLaunchForm';
+import FormBuilder from './formBuilder';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
-import BoostMetaForm from './boostMetaForm';
-import TheLauncher from '../components/theLauncher';
-import DiscordNotificationsLaunch from './discordLaunchForm';
-import { useAppModal } from '../hooks/useModals';
 
 // const getFormCtaText = (currentStep) => {
 //   if()
@@ -179,18 +178,6 @@ const StepperForm = props => {
         boostContent={boostContent}
         secondaryBtn={secondaryBtn}
         handleThen={handleThen}
-      />
-    );
-  }
-  if (currentStep?.type === 'launcher') {
-    return (
-      <TheLauncher
-        {...currentStep}
-        localForm={parentForm}
-        next={currentStep.next}
-        goToNext={goToNext}
-        boostContent={boostContent}
-        secondaryBtn={secondaryBtn}
       />
     );
   }

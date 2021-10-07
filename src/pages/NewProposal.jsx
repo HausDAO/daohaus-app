@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, Image } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
-import ContentBox from '../components/ContentBox';
-import TextBox from '../components/TextBox';
+import { Flex, Box, Image } from '@chakra-ui/react';
 
-import ProposalModal from '../modals/proposalModal';
-import { proposalTypes } from '../content/proposal-types';
 import { useOverlay } from '../contexts/OverlayContext';
-import { getTerm, getTitle } from '../utils/metadata';
 import ComingSoonOverlay from '../components/comingSoonOverlay';
+import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
+import ProposalModal from '../modals/proposalModal';
+import TextBox from '../components/TextBox';
+import { proposalTypes } from '../content/proposal-types';
+import { getTerm, getTitle } from '../utils/metadata';
 
 // PURGE
 const validProposalType = type => {

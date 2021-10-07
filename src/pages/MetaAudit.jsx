@@ -22,12 +22,9 @@ import { truncateAddr } from '../utils/general';
 import AuditJsonDisplay from '../components/auditJsonDisplay';
 
 const renderRow = (log, daoid, daochain) => {
-  const createdAt = new Date(log.createdAt);
-  const humanDate = format(createdAt, 'd LLL y | h:mm aaa');
-
   return (
     <Tr key={log.createdAt}>
-      <Td>{humanDate}</Td>
+      <Td>{format(new Date(log.createdAt), 'd LLL y | h:mm aaa')}</Td>
       <Td>
         <Link
           as={RouterLink}
@@ -63,11 +60,11 @@ const MetaAudit = ({ daoMetaData }) => {
           <Table size='md' variant='simple'>
             <Thead>
               <Tr>
-                <Th fontSize='md' minW='240px'>
-                  Created At
-                </Th>
+                <Th fontSize='md'>Created At</Th>
                 <Th fontSize='md'>Updated By</Th>
-                <Th fontSize='md'>JSON Update</Th>
+                <Th fontSize='md' w='70%'>
+                  JSON Update
+                </Th>
               </Tr>
             </Thead>
             <Tbody>

@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
-import { useParams } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useUser } from '../contexts/UserContext';
+import MainViewLayout from '../components/mainViewLayout';
+import SummonHard from '../forms/summonHard';
+import SummonPending from '../components/summonPending';
+import { createPoll } from '../services/pollService';
+import { SummonService } from '../services/summonService';
+import { DAO_POLL } from '../graphQL/dao-queries';
+import { capitalize } from '../utils/general';
 import {
   daoConstants,
   cloneMembers,
@@ -10,17 +19,8 @@ import {
   parseSummonersAndShares,
   cloneTokens,
 } from '../utils/summoning';
-import SummonHard from '../forms/summonHard';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { SummonService } from '../services/summonService';
-import SummonPending from '../components/summonPending';
-import { graphQuery } from '../utils/apollo';
 import { getGraphEndpoint } from '../utils/chain';
-import { DAO_POLL } from '../graphQL/dao-queries';
-import MainViewLayout from '../components/mainViewLayout';
-import { capitalize } from '../utils/general';
+import { graphQuery } from '../utils/apollo';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const tokenMsg =

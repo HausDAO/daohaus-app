@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Flex, Icon, Image, Box, useToast } from '@chakra-ui/react';
-import { RiLoginBoxLine } from 'react-icons/ri';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
+import { RiLoginBoxLine } from 'react-icons/ri';
+import { Flex, Icon, Image, Box, useToast } from '@chakra-ui/react';
 
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+
 import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 
 const UberHausAvatar = ({ enableCopy = true, enableLink = true }) => {

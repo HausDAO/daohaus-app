@@ -1,14 +1,14 @@
 import React from 'react';
+import { useHistory, useParams } from 'react-router';
 import { Tabs, Tab, TabList, TabPanel, TabPanels } from '@chakra-ui/react';
 
-import { useHistory, useParams } from 'react-router';
-import Installed from './Installed';
-import Market from './Market';
-import MainViewLayout from '../components/mainViewLayout';
 import { useOverlay } from '../contexts/OverlayContext';
-import BoostDetails from '../components/boostDetails';
-import { getSettingsLink } from '../utils/marketplace';
 import { useAppModal } from '../hooks/useModals';
+import BoostDetails from '../components/boostDetails';
+import Installed from './Installed';
+import MainViewLayout from '../components/mainViewLayout';
+import Market from './Market';
+import { getSettingsLink } from '../utils/marketplace';
 
 const MarketPlaceV0 = () => {
   const { errorToast } = useOverlay();

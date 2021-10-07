@@ -1,6 +1,6 @@
 import { BOOSTS } from '../data/boosts';
-import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
+import { chainByNetworkId } from './chain';
 import { addBoostPlaylist, checkIsPlaylist, hasPlaylist } from './playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';

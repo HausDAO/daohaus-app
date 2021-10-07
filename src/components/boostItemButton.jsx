@@ -1,10 +1,10 @@
 import React from 'react';
-
 import { useParams } from 'react-router';
+
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ListItemButton from './listItemButton';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const BoostItemButton = ({
   boost,

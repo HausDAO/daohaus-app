@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from 'react';
+import { RiExternalLinkLine, RiInformationLine } from 'react-icons/ri';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import {
   Box,
@@ -14,19 +16,17 @@ import {
   Text,
   Tooltip,
 } from '@chakra-ui/react';
-import { RiExternalLinkLine, RiInformationLine } from 'react-icons/ri';
-import { useForm } from 'react-hook-form';
 
-import { UberHausMinionFactoryService } from '../services/uberHausMinionFactoryService';
-import { supportedChains } from '../utils/chain';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
-import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useUser } from '../contexts/UserContext';
 import AddressInput from './addressInput';
+import { createPoll } from '../services/pollService';
+import { UberHausMinionFactoryService } from '../services/uberHausMinionFactoryService';
 import { isEthAddress } from '../utils/general';
+import { supportedChains } from '../utils/chain';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const NewUberHausMinion = ({ daoMembers, uberMembers, uberDelegate }) => {
   const [loading, setLoading] = useState(false);
