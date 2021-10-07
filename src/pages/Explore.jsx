@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
+
+import { CustomThemeContext } from '../contexts/CustomThemeContext';
+import { ExploreContext } from '../contexts/ExploreContext';
 import ExploreFilters from '../components/exploreFilters';
 import ExploreList from '../components/exploreList';
 import Layout from '../components/layout';
 import Loading from '../components/loading';
-import { CustomThemeContext } from '../contexts/CustomThemeContext';
-import { ExploreContext } from '../contexts/ExploreContext';
 import MainViewLayout from '../components/mainViewLayout';
 
 const Explore = () => {

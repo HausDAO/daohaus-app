@@ -1,6 +1,5 @@
-import { MINION_TYPES } from '../utils/proposalUtils';
-
 import { FORM } from './forms';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: {

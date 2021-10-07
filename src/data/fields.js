@@ -1,5 +1,5 @@
-import { generateNonce } from '../utils/general';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
+import { generateNonce } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const INFO_TEXT = {
@@ -94,7 +94,7 @@ export const FIELD = {
     htmlFor: 'applicant',
     name: 'applicant',
     placeholder: '0x',
-    label: 'Applicant',
+    label: 'Recipient',
     info: INFO_TEXT.APPLICANT,
     expectType: 'address',
   },

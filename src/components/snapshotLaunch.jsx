@@ -9,9 +9,10 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react';
+
+import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from './TextBox';
 import { getSnapshotSpaces } from '../utils/requests';
-import { useOverlay } from '../contexts/OverlayContext';
 
 const SnapshotLaunch = ({ handleLaunch, loading, setLoading, space }) => {
   const { daochain, daoid } = useParams();

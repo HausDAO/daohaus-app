@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { Button } from '@chakra-ui/react';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { ccoPost } from '../utils/metadata';
 
 const CcoActivate = ({ daoMetaData, ccoType }) => {

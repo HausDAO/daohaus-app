@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Box } from '@chakra-ui/react';
 
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useDao } from '../contexts/DaoContext';
 
 const CcoClaim = ({ setClaimComplete, claimOpen }) => {
   const { daoMember } = useDaoMember();

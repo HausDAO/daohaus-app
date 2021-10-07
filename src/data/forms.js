@@ -1,5 +1,5 @@
-import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
+import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
 
@@ -131,7 +131,10 @@ export const PROPOSAL_FORMS = {
       [FIELD.SHARES_REQUEST, FIELD.TRIBUTE],
     ],
     additionalOptions: [
-      FIELD.APPLICANT,
+      {
+        ...FIELD.APPLICANT,
+        label: 'Applicant',
+      },
       FIELD.LOOT_REQUEST,
       FIELD.PAYMENT_REQUEST,
     ],
@@ -328,23 +331,6 @@ export const PROPOSAL_FORMS = {
       ],
     ],
   },
-  PAYROLL_NEAPOLITAN: {
-    id: 'PAYROLL_NEAPOLITAN',
-    title: 'Payroll Proposal',
-    description: 'Pay Members with a minion',
-    type: PROPOSAL_TYPES.PAYROLL,
-    required: ['selectedMinion', 'minionPayment', 'applicant'],
-    minionType: MINION_TYPES.NEAPOLITAN,
-    tx: TX.PAYROLL_NEAPOLITAN,
-    fields: [
-      [
-        FIELD.MINION_SELECT,
-        FIELD.MINION_PAYMENT,
-        FIELD.APPLICANT,
-        FIELD.DESCRIPTION,
-      ],
-    ],
-  },
   MINION_SEND_NETWORK_TOKEN: {
     title: 'Network Token Transfer',
     description: 'Make a proposal to transfer tokens out of the minion',
@@ -445,7 +431,7 @@ export const PROPOSAL_FORMS = {
     title: 'Buyout Proposal',
     description: 'Request funds as buyout',
     type: PROPOSAL_TYPES.MINION_BUYOUT,
-    minionType: MINION_TYPES.NEAPOLITAN,
+    minionType: MINION_TYPES.SAFE,
     tx: TX.SET_BUYOUT_NFT,
     required: ['selectedMinion', 'title', 'paymentRequested'],
     fields: [
@@ -518,7 +504,7 @@ export const PROPOSAL_FORMS = {
     description: 'Stream funds from the Superfluid Minion',
     type: PROPOSAL_TYPES.MINION_SUPERFLUID,
     minionType: MINION_TYPES.SUPERFLUID,
-    tx: TX.SUPERFLUID_PROPOSE_ACTION,
+    tx: TX.SUPERFLUID_STREAM,
     required: [
       'title',
       'applicant',

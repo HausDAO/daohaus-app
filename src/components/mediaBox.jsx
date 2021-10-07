@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
-import { Box, HStack, Icon, Image, Link } from '@chakra-ui/react';
-import { RiExternalLinkLine } from 'react-icons/ri';
 import ReactPlayer from 'react-player';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { Box, HStack, Icon, Image, Link } from '@chakra-ui/react';
 
 import TextBox from './TextBox';
 

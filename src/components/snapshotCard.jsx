@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Box, HStack, Stack, Link } from '@chakra-ui/react';
 import { format } from 'date-fns';
+
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { getSnapshotVotes } from '../utils/requests';

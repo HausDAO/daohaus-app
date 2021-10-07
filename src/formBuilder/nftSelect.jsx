@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import deepEqual from 'deep-eql';
+import { RiAddFill } from 'react-icons/ri';
 import {
   Box,
   Text,
@@ -11,12 +11,12 @@ import {
   Input,
   AspectRatio,
 } from '@chakra-ui/react';
-import { RiAddFill } from 'react-icons/ri';
+import deepEqual from 'deep-eql';
 
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import GenericModal from '../modals/genericModal';
 import FieldWrapper from './fieldWrapper';
+import GenericModal from '../modals/genericModal';
 
 const NftSelect = props => {
   const { label, localForm, htmlFor, name, localValues } = props;

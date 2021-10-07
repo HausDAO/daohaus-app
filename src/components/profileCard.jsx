@@ -1,4 +1,6 @@
 import React from 'react';
+import { RiQuestionLine, RiLoginBoxLine } from 'react-icons/ri';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
   Flex,
@@ -9,16 +11,14 @@ import {
   Link,
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { useParams, Link as RouterLink } from 'react-router-dom';
 import { format } from 'date-fns';
-import { RiQuestionLine, RiLoginBoxLine } from 'react-icons/ri';
 
-import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
-import ProfileMenu from './profileMenu';
 import ContentBox from './ContentBox';
+import ProfileMenu from './profileMenu';
 import TextBox from './TextBox';
-import { calcPower, calcValue } from '../utils/profile';
 import UberHausMemberAvatar from './uberHausMemberAvatar';
+import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
+import { calcPower, calcValue } from '../utils/profile';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {

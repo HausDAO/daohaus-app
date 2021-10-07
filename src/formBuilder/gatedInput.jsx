@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-
 import { Spinner } from '@chakra-ui/spinner';
-import GenericInput from './genericInput';
 
+import GenericInput from './genericInput';
 import { validate } from '../utils/validation';
 import { checkContractType } from '../utils/tokenExplorerApi';
 

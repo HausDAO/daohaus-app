@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -12,7 +13,6 @@ import {
   ModalOverlay,
   HStack,
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
 import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
 import Web3, { utils as Web3Utils } from 'web3';
@@ -20,10 +20,10 @@ import Web3, { utils as Web3Utils } from 'web3';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import AddressAvatar from './addressAvatar';
-import UberHausAvatar from './uberHausAvatar';
 import TextBox from './TextBox';
-import { decodeMultisendTx } from '../utils/abi';
+import UberHausAvatar from './uberHausAvatar';
 import { chainByID } from '../utils/chain';
+import { decodeMultisendTx } from '../utils/abi';
 import {
   hasMinionActions,
   MINION_TYPES,

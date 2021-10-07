@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { RiLinksLine } from 'react-icons/ri';
 import {
   Flex,
   Icon,
@@ -13,14 +14,12 @@ import {
   PopoverCloseButton,
   Portal,
 } from '@chakra-ui/react';
-import { RiLinksLine } from 'react-icons/ri';
 import styled from '@emotion/styled';
 
 import Brand from './brand';
+import ChangeDao from './changeDao';
 import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
-import ChangeDao from './changeDao';
-
 import {
   defaultSocialLinks,
   generateDaoSocials,

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
-import MainViewLayout from '../components/mainViewLayout';
-import { isCcoProposal, contributionTotalValue } from '../utils/cco';
+
 import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
-import { groupByKey, timeToNow } from '../utils/general';
+import MainViewLayout from '../components/mainViewLayout';
 import { getDateTime } from '../utils/metadata';
+import { groupByKey, timeToNow } from '../utils/general';
+import { isCcoProposal, contributionTotalValue } from '../utils/cco';
 
 const CcoHelper = React.memo(
   ({ daoMetaData, currentDaoTokens, daoProposals }) => {

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
+import HubProfileCard from '../components/hubProfileCard';
+import HubSignedOut from '../components/hubSignedOut';
 import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
-import HubSignedOut from '../components/hubSignedOut';
-import HubProfileCard from '../components/hubProfileCard';
-import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import { balanceChainQuery } from '../utils/theGraph';
 import { supportedChains } from '../utils/chain';
 

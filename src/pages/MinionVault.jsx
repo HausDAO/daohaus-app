@@ -1,25 +1,25 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { BiArrowBack } from 'react-icons/bi';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Flex, useToast, Icon } from '@chakra-ui/react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { utils as Web3Utils } from 'web3';
 
-import { BiArrowBack } from 'react-icons/bi';
 import { useToken } from '../contexts/TokenContext';
-import BankChart from '../components/bankChart';
 import BalanceList from '../components/balanceList';
-import MainViewLayout from '../components/mainViewLayout';
-import TextBox from '../components/TextBox';
-import NftCard from '../components/nftCard';
+import BankChart from '../components/bankChart';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
-import SafeMinionDetails from '../components/safeMinionDetails';
 import Loading from '../components/loading';
+import MainViewLayout from '../components/mainViewLayout';
+import NftCard from '../components/nftCard';
+import TextBox from '../components/TextBox';
+import SafeMinionDetails from '../components/safeMinionDetails';
 import { chainByID } from '../utils/chain';
-import { MINION_TYPES } from '../utils/proposalUtils';
-import { fetchSafeDetails } from '../utils/requests';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { formatNativeData } from '../utils/vaults';
+import { fetchSafeDetails } from '../utils/requests';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();

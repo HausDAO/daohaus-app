@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
-
 import { RiExternalLinkLine } from 'react-icons/ri';
+import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
 import { Button } from '@chakra-ui/button';
 

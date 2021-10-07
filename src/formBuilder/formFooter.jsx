@@ -1,4 +1,5 @@
 import React from 'react';
+import { RiAddFill } from 'react-icons/ri';
 import {
   Button,
   Box,
@@ -9,9 +10,9 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { RiAddFill } from 'react-icons/ri';
-import ErrorList from './ErrorList';
+
 import { useAppModal } from '../hooks/useModals';
+import ErrorList from './ErrorList';
 
 const FormFooter = ({
   options,

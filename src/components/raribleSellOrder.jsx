@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 import { useParams } from 'react-router';
+import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 
 import {
   buildRaribleUrl,

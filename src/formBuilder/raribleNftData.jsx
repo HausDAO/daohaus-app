@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Button, Spinner } from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
+import { Flex, Button, Spinner } from '@chakra-ui/react';
+
+import { useDao } from '../contexts/DaoContext';
+import ErrorList from './ErrorList';
 import FieldWrapper from './fieldWrapper';
+import { addZeros } from '../utils/tokenValue';
 import {
   arbitrarySignature,
   buildEncodeOrder,
@@ -11,9 +15,6 @@ import {
   getSignatureHash,
   pinOrderToIpfs,
 } from '../utils/rarible';
-import { useDao } from '../contexts/DaoContext';
-import { addZeros } from '../utils/tokenValue';
-import ErrorList from './ErrorList';
 
 const RaribleNftSelect = props => {
   const { localForm, name, error } = props;

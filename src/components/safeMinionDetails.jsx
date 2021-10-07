@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Icon from '@chakra-ui/icon';
-import { Box, Flex } from '@chakra-ui/layout';
-import { Button } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 import { TiWarningOutline } from 'react-icons/ti';
+import Icon from '@chakra-ui/icon';
+import { Box, Flex } from '@chakra-ui/layout';
+import { Button } from '@chakra-ui/react';
 import { utils as Web3Utils } from 'web3';
 import ModuleManager from '@gnosis.pm/safe-contracts/build/artifacts/contracts/base/ModuleManager.sol/ModuleManager.json';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
-
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
-
 import { safeEncodeHexFunction } from '../utils/abi';
 import { createGnosisSafeTxProposal } from '../utils/contract';
 
@@ -79,11 +77,11 @@ const SafeMinionDetails = ({ vault, safeDetails, handleCopy }) => {
   useEffect(() => {
     if (
       address &&
-      safeDetails.owners.includes(Web3Utils.toChecksumAddress(address))
+      safeDetails?.owners?.includes(Web3Utils.toChecksumAddress(address))
     ) {
       safeOwner(true);
     }
-  }, [injectedProvider, safeDetails]);
+  }, [address, safeDetails]);
 
   return (
     <ContentBox mt={6}>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Box,
   Button,
@@ -9,10 +10,9 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
 
-import { notificationBoostContent } from '../content/boost-content';
 import { get } from '../utils/requests';
+import { notificationBoostContent } from '../data/boosts';
 
 const DiscordNotificationsLaunch = props => {
   const { stepOverride, goToNext, setStepperStorage, next } = props;

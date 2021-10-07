@@ -1,24 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Flex, Spinner, Button, InputGroup, Input } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
+import { Flex, Spinner, Button, InputGroup, Input } from '@chakra-ui/react';
 
-import { useMetaData } from '../contexts/MetaDataContext';
 import { useDao } from '../contexts/DaoContext';
-import ListSelectorItem from '../components/ListSelectorItem';
-import TextBox from '../components/TextBox';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useTX } from '../contexts/TXContext';
+import { useAppModal } from '../hooks/useModals';
+import BoostItemButton from '../components/boostItemButton';
 import List from '../components/list';
-import NoListItem from '../components/NoListItem';
-import ListSelector from '../components/ListSelector';
 import ListItem from '../components/listItem';
-
+import ListItemButton from '../components/listItemButton';
+import ListSelector from '../components/ListSelector';
+import ListSelectorItem from '../components/ListSelectorItem';
+import NoListItem from '../components/NoListItem';
+import TextBox from '../components/TextBox';
 import { daoConnectedAndSameChain, isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
-import BoostItemButton from '../components/boostItemButton';
-import ListItemButton from '../components/listItemButton';
-import { useTX } from '../contexts/TXContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useAppModal } from '../hooks/useModals';
 import { STEPS } from '../data/boosts';
 
 const dev = process.env.REACT_APP_DEV;

@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import { BsArrowReturnRight } from 'react-icons/bs';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { useParams } from 'react-router-dom';
+import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import Icon from '@chakra-ui/icon';
-import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
-import { RiExternalLinkLine } from 'react-icons/ri';
 
-import { useParams } from 'react-router-dom';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useAppModal } from '../hooks/useModals';
 import MemberIndicator from './memberIndicator';
 import TextIndicator from './textIndicator';
 import TextBox from './TextBox';
-import { handleRestorePlaylist } from '../utils/metadata';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { chainByID } from '../utils/chain';
+import { handleRestorePlaylist } from '../utils/metadata';
 import { hasPlaylist } from '../utils/playlists';
-import { useAppModal } from '../hooks/useModals';
 
 const BoostDetails = ({
   boostContent = {},

@@ -1,7 +1,8 @@
 import { getTerm } from '../utils/metadata';
-import swordImg from '../assets/img/swords-white.svg';
 import { hasMinion } from '../utils/dao';
 import { MINION_TYPES } from '../utils/proposalUtils';
+
+import swordImg from '../assets/img/swords-white.svg';
 
 export const proposalTypes = (
   customTerms,

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Spinner, Tooltip } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { Button, Spinner, Tooltip } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { TX } from '../data/contractTX';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const Withdraw = ({ token }) => {
   const { address, injectedChain } = useInjectedProvider();

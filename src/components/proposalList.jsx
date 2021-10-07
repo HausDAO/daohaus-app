@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Flex, Spinner, Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { Flex, Spinner, Box } from '@chakra-ui/react';
 
-import ProposalCard from './proposalCard';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import CsvDownloadButton from './csvDownloadButton';
+import GenericSelect from './genericSelect';
+import NoListItem from './NoListItem';
+import ProposalSearch from './proposalSearch';
 import Paginator from './paginator';
 import {
   defaultFilterOptions,
@@ -10,20 +16,14 @@ import {
   sortOptions,
   allFilter,
 } from '../utils/proposalContent';
-import GenericSelect from './genericSelect';
+import ProposalCard from './proposalCard';
+import TextBox from './TextBox';
 import {
   determineUnreadProposalList,
   handleListFilter,
   handleListSort,
   searchProposals,
 } from '../utils/proposalUtils';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useSessionStorage } from '../hooks/useSessionStorage';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import ProposalSearch from './proposalSearch';
-import CsvDownloadButton from './csvDownloadButton';
-import NoListItem from './NoListItem';
-import TextBox from './TextBox';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();

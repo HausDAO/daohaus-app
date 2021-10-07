@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
+import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';

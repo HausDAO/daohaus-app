@@ -1,6 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { FaCopy } from 'react-icons/fa';
 import {
   Flex,
   Box,
@@ -11,15 +13,13 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { RiExternalLinkLine } from 'react-icons/ri';
-import { FaCopy } from 'react-icons/fa';
 
+import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { formatPeriods, truncateAddr } from '../utils/general';
 import { getTerm, getTitle } from '../utils/metadata';
 import { supportedChains } from '../utils/chain';
-import { useOverlay } from '../contexts/OverlayContext';
 
 const DaoContractSettings = ({
   overview,

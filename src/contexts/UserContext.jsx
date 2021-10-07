@@ -6,15 +6,14 @@ import React, {
   useRef,
 } from 'react';
 
-import { getApiMetadata } from '../utils/metadata';
-
+import { useInjectedProvider } from './InjectedProviderContext';
+import { useOverlay } from './OverlayContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { HUB_MEMBERSHIPS } from '../graphQL/member-queries';
+import { createPoll } from '../services/pollService';
 import { hubChainQuery } from '../utils/theGraph';
 import { supportedChains } from '../utils/chain';
-import { useInjectedProvider } from './InjectedProviderContext';
-import { createPoll } from '../services/pollService';
-import { useOverlay } from './OverlayContext';
+import { getApiMetadata } from '../utils/metadata';
 
 const numOfSupportedChains = Object.keys(supportedChains).length;
 

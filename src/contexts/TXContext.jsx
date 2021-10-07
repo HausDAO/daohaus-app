@@ -3,14 +3,11 @@ import { useParams } from 'react-router-dom';
 
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
-import { useMetaData } from './MetaDataContext';
-import { useToken } from './TokenContext';
 import { useInjectedProvider } from './InjectedProviderContext';
-import { useUser } from './UserContext';
+import { useMetaData } from './MetaDataContext';
 import { useOverlay } from './OverlayContext';
-
-import { createPoll } from '../services/pollService';
-import { createForumTopic } from '../utils/discourse';
+import { useToken } from './TokenContext';
+import { useUser } from './UserContext';
 import {
   createActions,
   exposeValues,
@@ -20,9 +17,11 @@ import {
   // handleFormError,
   Transaction,
 } from '../utils/txHelpers';
+import { createPoll } from '../services/pollService';
+import { createForumTopic } from '../utils/discourse';
 import { customValidations } from '../utils/validation';
-import { TX } from '../data/contractTX';
 import { supportedChains } from '../utils/chain';
+import { TX } from '../data/contractTX';
 
 export const TXContext = createContext();
 
@@ -94,7 +93,7 @@ export const TXProvider = ({ children }) => {
     setModal,
   };
 
-  const refreshDao = async () => {
+  const refreshDao = async (skipVaults = false) => {
     // I use useRef to stop excessive rerenders in most of the contexts
     // I need to reset them in order to prevent them from locking up
     // the rerendering flow
@@ -113,7 +112,10 @@ export const TXProvider = ({ children }) => {
     // Now, I call rerender on DaoContext, which should re-fetch all the graphQueries
     // This should get up all the up to date data from the Graph and spread across the
     // entire component tree. It should also recache the new data automatically
-    await refreshAllDaoVaults();
+    if (!skipVaults) {
+      console.log('vault fetch');
+      await refreshAllDaoVaults();
+    }
     refetch();
   };
 

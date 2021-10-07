@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import {
   Box,
   Text,
@@ -9,7 +10,6 @@ import {
   Heading,
   Icon,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import {

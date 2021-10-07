@@ -294,17 +294,6 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  // TODO: coming later with neapolitan minion
-  // DEV_SUITE: {
-  //   id: 'DEV_SUITE',
-  //   boostContent: CONTENT.DEV_SUITE,
-  //   minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
-  //   categories: ['devTools'],
-  //   steps: STEPS.MINION_BOOST,
-  //   playlist: BOOST_PLAYLISTS.DEV_SUITE,
-  //   networks: MINIONS[MINION_TYPES.NEAPOLITAN].networks,
-  //   cost: 'free',
-  // },
   // RARIBLE: {
   //   id: 'RARIBLE',
   //   minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
@@ -413,3 +402,40 @@ export const categories = categoryStarter.map(cat => ({
     .filter(boost => boost.categories.includes(cat.id) && !boost.dev)
     .map(cat => cat.id),
 }));
+
+export const notificationBoostContent = {
+  actions: [
+    {
+      id: 'votingPeriod',
+      label: 'Proposal Ready for Voting',
+    },
+    {
+      id: 'newProposal',
+      label: 'Proposal Needs Sponsor',
+    },
+    {
+      id: 'proposalClosing',
+      label: 'Proposal Needs a Vote',
+      comingSoon: true,
+    },
+    {
+      id: 'newMember',
+      label: 'New Member is Official',
+      comingSoon: true,
+    },
+    {
+      id: 'rageQuit',
+      label: 'New Ragequit',
+    },
+  ],
+  channels: [
+    { name: 'discord' },
+    { name: 'telegram', comingSoon: true },
+    { name: 'email', comingSoon: true },
+    { name: 'twitter', comingSoon: true },
+  ],
+  inviteLinks: {
+    discord:
+      'https://discord.com/api/oauth2/authorize?client_id=736999684471521321&permissions=23552&scope=bot',
+  },
+};

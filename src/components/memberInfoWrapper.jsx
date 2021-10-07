@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useMediaQuery } from '@chakra-ui/react';
+
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import MemberInfo from './memberInfo';

@@ -125,6 +125,7 @@ export const getApiPriceData = async () => {
 
 export const getApiGnosis = async (networkName, endpoint) => {
   const apiGnosisUrl = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
+
   try {
     const response = await fetch(apiGnosisUrl);
     if (response.status >= 400) {
@@ -134,7 +135,8 @@ export const getApiGnosis = async (networkName, endpoint) => {
     }
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
+    // throw new Error(err);
   }
 };
 
@@ -146,7 +148,7 @@ export const fetchSafeDetails = async (networkName, vault) => {
     );
   } catch (error) {
     console.error(error);
-    throw new Error(error);
+    // throw new Error(error);
   }
 };
 

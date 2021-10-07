@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import { AiOutlineCaretDown } from 'react-icons/ai';
+import { RiInformationLine } from 'react-icons/ri';
 import {
   FormControl,
   FormHelperText,
@@ -11,16 +12,15 @@ import {
   Tooltip,
   Icon,
 } from '@chakra-ui/react';
-import { RiInformationLine } from 'react-icons/ri';
-import { AiOutlineCaretDown } from 'react-icons/ai';
+import { ethers } from 'ethers';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 import { truncateAddr } from '../utils/general';
+import { chainByID } from '../utils/chain';
 import { handleGetProfile } from '../utils/3box';
 import { handleGetENS } from '../utils/ens';
-import { chainByID } from '../utils/chain';
 
 const defaultTipLabel =
   'Address to receive the Shares, Loot, and/or Funding requested in this proposal. A DAO address cannot be the applicant on a proposal.';

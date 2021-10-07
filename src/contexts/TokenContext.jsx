@@ -6,8 +6,9 @@ import React, {
   useRef,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import { addContractVals, initTokenData } from '../utils/tokenValue';
+
 import { useDao } from './DaoContext';
+import { addContractVals, initTokenData } from '../utils/tokenValue';
 
 export const TokenContext = createContext();
 
