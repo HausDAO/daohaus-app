@@ -248,6 +248,11 @@ export const supportedChains = {
       minion_factory_addr: '0x29Fa6dF2514DDB8De516829C89B0caED84D74648',
       version: 'v1',
     },
+    safeMinion: {
+      minion_factory_addr: '0xb6890e1E323A3ec44a789AE9Eba5F222a6cb1a76',
+      safe_mutisend_addr: '0xB2b0875c54Dad0dD67DEbdc9e8109a78c2cbBb13',
+      safe_sign_lib_addr: '0x035bACd91CB7ad9C400cbe1B2712b4A55F5c007c',
+    },
   },
   '0xa4b1': {
     name: 'Arbitrum',
