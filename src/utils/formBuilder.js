@@ -155,13 +155,15 @@ const serializeParam = (name, index, tag) => {
   return `*${tag}${index}*${name}`;
 };
 
-export const serializeFields = (fields = [], index) =>
+export const serializeFields = (fields = [], index, tag) =>
   fields.map(column =>
     column.map(field => {
       return {
         ...field,
-        name: serializeParam(field.name, index),
-        listenTo: field.listenTo ? serializeParam(field.listenTo, index) : null,
+        name: serializeParam(field.name, index, tag),
+        listenTo: field.listenTo
+          ? serializeParam(field.listenTo, index, tag)
+          : null,
       };
     }),
   );

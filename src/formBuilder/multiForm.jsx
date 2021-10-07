@@ -30,7 +30,7 @@ const MultiForm = ({ forms }) => {
           key={form.id}
           {...form}
           index={index}
-          fields={serializeFields(form.fields, index)}
+          fields={serializeFields(form.fields, index, 'TX')}
           handleAddTx={handleAddTx}
           parentForm={parentForm}
         />
