@@ -63,16 +63,17 @@ const FormBuilder = props => {
     setFields([...rest, [...lastCol, selectedOption]]);
   };
 
-  const buildABIOptions = abiString => {
+  const buildABIOptions = (abiString, serialTag = false) => {
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
     if (abiString === 'clear' || abiString === 'hex') {
       setFields(originalFields);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
+      console.log(`abiInputs`, abiInputs);
       const updatedFields = [
         ...originalFields[originalFields.length - 1],
-        ...inputDataFromABI(abiInputs),
+        ...inputDataFromABI(abiInputs, serialTag),
       ];
       if (originalFields.length > 1) {
         setFields([originalFields[0], updatedFields]);

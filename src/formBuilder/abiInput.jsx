@@ -13,7 +13,7 @@ import {
 } from '../utils/abi';
 
 const AbiInput = props => {
-  const { localForm, listenTo } = props;
+  const { localForm, listenTo, name, tag = 'TX' } = props;
   const { daochain } = useParams();
   const [isRawHex, setRawHex] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -21,7 +21,7 @@ const AbiInput = props => {
   const [options, setOptions] = useState(null);
 
   const targetContract = localForm.watch(listenTo || 'targetContract');
-  const abiInput = localForm.watch('abiInput');
+  const abiInput = localForm.watch(name);
   const helperText = isDisabled && 'Please enter a target contract';
 
   useEffect(() => {
@@ -46,7 +46,8 @@ const AbiInput = props => {
 
   useEffect(() => {
     if (abiInput) {
-      props.buildABIOptions(abiInput);
+      const serialTag = name?.match(new RegExp(`(\\*${tag}\\d+\\*)+`))?.[0];
+      props.buildABIOptions(abiInput, serialTag);
     } else if (isRawHex) {
       props.buildABIOptions('hex');
     } else {

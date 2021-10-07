@@ -27,7 +27,7 @@ const MultiForm = ({ forms }) => {
     if (form.isTx)
       return (
         <TxFormSection
-          key={form.id}
+          key={`${form.id}-${index}`}
           {...form}
           index={index}
           fields={serializeFields(form.fields, index, 'TX')}
@@ -37,7 +37,7 @@ const MultiForm = ({ forms }) => {
       );
     return (
       <FormSection
-        key={form.id}
+        key={`${form.id}-${index}`}
         {...form}
         index={index}
         parentForm={parentForm}

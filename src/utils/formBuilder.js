@@ -65,7 +65,7 @@ export const mapInRequired = (fields, required) => {
   return res;
 };
 
-export const inputDataFromABI = inputs => {
+export const inputDataFromABI = (inputs, serialTag) => {
   const getType = type => {
     if (type === 'string' || type === 'address') {
       return type;
@@ -90,11 +90,15 @@ export const inputDataFromABI = inputs => {
   return inputs.map((input, index) => {
     const localType = getType(input.type);
     const isMulti = input.type.includes('[]');
+
+    const fieldName = serialTag
+      ? `${serialTag}${input.name}*ABI_ARG*${index}`
+      : `${input.name}*ABI_ARG*${index}`;
     return {
       type: isMulti ? 'multiInput' : 'input',
       label: input.name,
-      name: `${input.name}*ABI_ARG*${index}`,
-      htmlFor: `${input.name}*ABI_ARG*${index}`,
+      name: fieldName,
+      htmlFor: fieldName,
       placeholder: labels[localType] || input.type,
       expectType: isMulti ? 'any' : getType(localType),
       required: false,
