@@ -65,33 +65,44 @@ const ProposalWatcher = ({ daoProposals }) => {
 
   const renderRow = proposal => {
     return (
-      <Tr key={proposal.proposalId}>
-        <Td>{proposal.proposalId}</Td>
-        <Td>{proposal.sharesRequested}</Td>
-        <Td>{proposal.lootRequested}</Td>
-        <Td>
-          {`${proposal.paymentRequested /
-            10 **
-              proposal.paymentTokenDecimals} ${proposal.paymentTokenSymbol ||
-            ' '}`}
-        </Td>
-        <Td>
-          {`${proposal.tributeOffered /
-            10 **
-              proposal.tributeTokenDecimals} ${proposal.tributeTokenSymbol ||
-            ''}`}
-        </Td>
-        <Td>{`yes: ${proposal.yesShares} - no: ${proposal.noShares}`}</Td>
-        <Td>{renderStatus(proposal)}</Td>
-        <Td>{timeToNow(proposal.createdAt)}</Td>
-        <Td>
-          <Link
-            to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
-          >
-            View
-          </Link>
-        </Td>
-      </Tr>
+      <>
+        <Tr key={proposal.proposalId}>
+          <Td>{proposal.proposalId}</Td>
+          {/* <Td>{JSON.stringify(proposal.details)}</Td> */}
+          <Td>{proposal.sharesRequested}</Td>
+          <Td>{proposal.lootRequested}</Td>
+          <Td>
+            {`${proposal.paymentRequested /
+              10 **
+                proposal.paymentTokenDecimals} ${proposal.paymentTokenSymbol ||
+              ' '}`}
+          </Td>
+          <Td>
+            {`${proposal.tributeOffered /
+              10 **
+                proposal.tributeTokenDecimals} ${proposal.tributeTokenSymbol ||
+              ''}`}
+          </Td>
+          <Td>{`yes: ${proposal.yesShares} - no: ${proposal.noShares}`}</Td>
+          <Td>{renderStatus(proposal)}</Td>
+          <Td>{timeToNow(proposal.createdAt)}</Td>
+          <Td>
+            <Link
+              to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
+            >
+              View
+            </Link>
+          </Td>
+        </Tr>
+        <Tr key={`${proposal.proposalId}-2`}>
+          <Td colspan='2'>{proposal.proposalType}</Td>
+          <Td colspan='2'>{proposal.title}</Td>
+          <Td colspan='5'>{proposal.description}</Td>
+        </Tr>
+        <Tr key={`${proposal.proposalId}-3`}>
+          <Td colspan='9' backgroundColor='gray.900' />
+        </Tr>
+      </>
     );
   };
 
@@ -99,7 +110,7 @@ const ProposalWatcher = ({ daoProposals }) => {
     <MainViewLayout header='Proposal List' isDao>
       <Box w='100%'>
         <Box my={5} w='100%'>
-          <ContentBox w='100%' fontSize='xl' ml={3}>
+          <ContentBox w='100%' fontSize='xl' fontFamily='heading' ml={3}>
             {`${daoProposals?.length} proposals`}
             <IconButton
               icon={<RiRefreshLine size='1rem' />}
@@ -117,7 +128,9 @@ const ProposalWatcher = ({ daoProposals }) => {
             {Object.keys(proposals).map(section => {
               return (
                 <Box key={section}>
-                  <Box mt={10}>{`${proposals[section].length} ${section}`}</Box>
+                  <Box mt={5} p={4} fontSize='xl' fontFamily='heading'>
+                    {`${section} (${proposals[section].length})`}
+                  </Box>
 
                   <Table size='sm' variant='simple'>
                     <Thead>
