@@ -50,7 +50,11 @@ const FormBuilder = props => {
   const { handleSubmit, watch } = localForm;
   const values = watch();
 
-  useEffect(() => logValues && dev && console.log(`values`, values), [values]);
+  useEffect(() => {
+    if (logValues && dev && values) {
+      console.log(`values`, values);
+    }
+  }, [values]);
 
   const addOption = e => {
     const selectedOption = options.find(

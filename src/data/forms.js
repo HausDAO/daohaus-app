@@ -525,7 +525,6 @@ export const PROPOSAL_FORMS = {
   },
   START_SAFE_MULTI: {
     id: 'START_SAFE_MULTI',
-    logValues: true,
     title: 'Safe Minion Transaction Builder',
     description: 'Create a multi-transaction proposal',
     type: PROPOSAL_TYPES.MINION_SAFE,
@@ -539,7 +538,6 @@ export const PROPOSAL_FORMS = {
   CREATE_TX: {
     id: 'CREATE_TX',
     isTx: true,
-    logValues: true,
     addForm: { type: 'self', at: 'indexAbove' },
     fields: [
       [
@@ -550,7 +548,6 @@ export const PROPOSAL_FORMS = {
     ],
   },
   MULTICALL_CONFIRMATION: {
-    logValues: true,
     fields: [[], []],
   },
 };
@@ -559,6 +556,7 @@ const MULTI_FORMS = {
   SAFE_TX_BUILDER: {
     id: 'SAFE_TX_BUILDER',
     dev: true,
+    logValues: true,
     isTxBuilder: true,
     type: 'multiForm',
     title: 'Safe Minion TX Builder',

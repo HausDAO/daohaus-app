@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
@@ -8,7 +8,9 @@ import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
 import { isLastItem } from '../utils/general';
-import { serializeFields } from '../utils/formBuilder';
+import { getTagRegex, serializeFields } from '../utils/formBuilder';
+
+const dev = process.env.REACT_APP_DEV;
 
 const serializeTXs = (forms = []) =>
   forms.map((form, index) => ({
@@ -18,8 +20,15 @@ const serializeTXs = (forms = []) =>
   }));
 
 const MultiForm = props => {
-  const { forms, isTxBuilder } = props;
+  const { forms, isTxBuilder, logValues } = props;
   const parentForm = useForm({ shouldUnregister: true });
+  const values = parentForm?.watch();
+
+  useEffect(() => {
+    if (logValues && dev && values) {
+      console.log(`values`, values);
+    }
+  }, [values]);
 
   const preTxForm = forms[0];
   const confirmationForm = forms[forms.length - 1];
@@ -39,8 +48,32 @@ const MultiForm = props => {
       txForms.filter(form => form.txIndex !== txIndex),
     );
 
-    parentForm.reset({});
-    // setTxForms(newForms);
+    const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
+      // IF key value is the same txIndex
+      if (key.includes(`*TX${txIndex}`)) {
+        return acc;
+      }
+      //  If key value is the same TX as txIndex, but a different number
+      if (key.includes('*TX')) {
+        const checkSerial = key => {
+          // possibly replace the tag with another decremented tag
+          return key.replace(getTagRegex('TX'), tag => {
+            //  pull number from the tag
+            return tag.replace(/\d+/, tagNumString => {
+              const tagIndex = Number(tagNumString);
+              //  If the value is higher than txIndex,
+              //  reduce it by one
+              return tagIndex > txIndex ? tagIndex - 1 : tagIndex;
+            });
+          });
+        };
+        return { ...acc, [checkSerial(key)]: value };
+      }
+      return { ...acc, [key]: value };
+    }, {});
+    console.log(`newFormValues`, newFormValues);
+    parentForm.reset(newFormValues);
+    setTxForms(newForms);
   };
 
   const setParentFields = (txIndex, newFields) => {

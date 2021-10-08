@@ -151,6 +151,8 @@ export const ignoreAwaitStep = next => {
   return typeof next === 'string' ? next : next?.then;
 };
 
+export const getTagRegex = tag => new RegExp(`(\\*${tag}\\d+\\*)+`);
+
 const serializeParam = (name, index, tag) => {
   const regex = new RegExp(`(\\*${tag}\\d+\\*)+`);
   if (regex.test(name)) {
