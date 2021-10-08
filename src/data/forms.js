@@ -559,6 +559,7 @@ const MULTI_FORMS = {
   SAFE_TX_BUILDER: {
     id: 'SAFE_TX_BUILDER',
     dev: true,
+    isTxBuilder: true,
     type: 'multiForm',
     title: 'Safe Minion TX Builder',
     description: 'Create a multi-transaction proposal',

@@ -38,6 +38,7 @@ const FormBuilder = props => {
     formConditions,
     logValues,
     footer = true,
+    setParentFields,
   } = props;
 
   const [formState, setFormState] = useState(null);
@@ -70,15 +71,17 @@ const FormBuilder = props => {
       setFields(originalFields);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      console.log(`abiInputs`, abiInputs);
       const updatedFields = [
         ...originalFields[originalFields.length - 1],
         ...inputDataFromABI(abiInputs, serialTag),
       ];
+
       if (originalFields.length > 1) {
         setFields([originalFields[0], updatedFields]);
+        // setParentFields?.([originalFields[0], updatedFields]);
       } else {
         setFields([updatedFields]);
+        // setParentFields?.([originalFields[0], updatedFields]);
       }
     }
   };

@@ -1,45 +1,98 @@
 import React, { useState } from 'react';
 import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { v4 as uuid } from 'uuid';
 
-import { BiChevronDown, BiChevronUp, BiPlus } from 'react-icons/bi';
+import { BiChevronDown, BiChevronUp, BiMinus, BiPlus } from 'react-icons/bi';
 import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
 import { isLastItem } from '../utils/general';
 import { serializeFields } from '../utils/formBuilder';
 
-const MultiForm = ({ forms }) => {
-  const parentForm = useForm({ shouldUnregister: false });
-  const [localForms, setLocalForms] = useState(forms);
+const serializeTXs = (forms = []) =>
+  forms.map((form, index) => ({
+    ...form,
+    txIndex: index,
+    txID: form.txID || uuid(),
+  }));
 
-  const handleAddTx = (index, form) => {
-    if (localForms?.length && index && form) {
-      setLocalForms(prevState => [
-        ...prevState.slice(0, index + 1),
-        form,
-        ...prevState.slice(index + 1, -1),
-      ]);
-    }
+const MultiForm = props => {
+  const { forms, isTxBuilder } = props;
+  const preTxForm = forms[0];
+  const confirmationForm = forms[forms.length - 1];
+
+  const [txForms, setTxForms] = useState(
+    serializeTXs(forms.filter(form => form.isTx)),
+  );
+
+  const handleAddTx = form =>
+    setTxForms(prevState =>
+      serializeTXs([...prevState, { ...form, txID: uuid() }]),
+    );
+
+  const handleRemoveTx = txIndex => {
+    console.log(`txIndex`, txIndex);
+    if (txIndex == null) return;
+    const newForms = serializeTXs(
+      txForms.filter(form => form.txIndex !== txIndex),
+    );
+    console.log(`newForms`, newForms);
+    setTxForms(newForms);
   };
 
-  return localForms?.map((form, index) => {
+  const setParentFields = (txIndex, newFields) => {
+    setTxForms(prevState =>
+      prevState.map(form =>
+        form.txIndex === txIndex ? { ...form, fields: newFields } : form,
+      ),
+    );
+  };
+  if (isTxBuilder) {
+    return (
+      <StaticMultiForm
+        {...props}
+        forms={[preTxForm, ...txForms, confirmationForm]}
+        handleAddTx={handleAddTx}
+        handleRemoveTx={handleRemoveTx}
+        txForms={txForms}
+        setParentFields={setParentFields}
+      />
+    );
+  }
+  return <StaticMultiForm {...props} />;
+};
+
+const StaticMultiForm = props => {
+  const {
+    forms,
+    handleAddTx,
+    handleRemoveTx,
+    txForms,
+    setParentFields,
+  } = props;
+  const parentForm = useForm();
+
+  return forms?.map((form, index) => {
     if (form.isTx)
       return (
         <TxFormSection
-          key={`${form.id}-${index}`}
-          {...form}
-          index={index}
-          fields={serializeFields(form.fields, index, 'TX')}
+          key={`${form.id}-${form.txID}`}
+          form={form}
+          isLastItem={isLastItem(forms, index)}
+          txIndex={form.txIndex}
           handleAddTx={handleAddTx}
+          handleRemoveTx={handleRemoveTx}
           parentForm={parentForm}
+          setParentFields={setParentFields}
+          txForms={txForms}
         />
       );
     return (
       <FormSection
         key={`${form.id}-${index}`}
-        {...form}
-        index={index}
+        form={form}
+        isLastItem={isLastItem(forms, index)}
         parentForm={parentForm}
       />
     );
@@ -47,16 +100,24 @@ const MultiForm = ({ forms }) => {
 };
 
 const FormSection = props => {
-  const { index, forms, title, after, parentForm } = props;
+  const {
+    title,
+    after,
+    parentForm,
+    isLastItem,
+    form,
+    serializedFields,
+    setParentFields,
+    parentFields,
+  } = props;
 
-  const [isOpen, setIsOpen] = useState(index === 0);
-  const toggleMenu = () => {
-    setIsOpen(prevState => !prevState);
-  };
+  const [isOpen, setIsOpen] = useState(true);
+  const toggleMenu = () => setIsOpen(prevState => !prevState);
+
   return (
     <Box>
       <Flex mb={3} justifyContent='space-between'>
-        <TextBox>{title}</TextBox>
+        <TextBox>{form?.title || title}</TextBox>
         <Icon
           as={isOpen ? BiChevronDown : BiChevronUp}
           w='25px'
@@ -68,9 +129,12 @@ const FormSection = props => {
       </Flex>
       {isOpen && (
         <FormBuilder
-          {...props}
-          footer={isLastItem(forms, index)}
+          {...form}
+          footer={isLastItem}
           parentForm={parentForm}
+          fields={serializedFields || form?.fields}
+          setParentFields={setParentFields}
+          parentFields={parentFields}
         />
       )}
       {isOpen && <> {after} </>}
@@ -80,30 +144,46 @@ const FormSection = props => {
 };
 
 const TxFormSection = props => {
-  const { index, isTx, handleAddTx, fields } = props;
+  const {
+    handleAddTx,
+    handleRemoveTx,
+    txIndex,
+    txForms,
+    form,
+    isLastItem,
+    parentForm,
+    setParentFields,
+  } = props;
 
-  console.log(fields);
-  const handleClick = () => handleAddTx(index, props);
+  const handleClickAdd = () => handleAddTx(form);
+  const handleClickRemove = () => handleRemoveTx(txIndex);
+  const handleSetParentFields = newFields =>
+    setParentFields(txIndex, newFields);
+  const isLastTx = txIndex === txForms?.length - 1;
+
   return (
     <FormSection
-      title={`Transaction ${index}`}
-      {...props}
+      key={form.txID}
+      title={`Transaction ${txIndex + 1}`}
+      isLastItem={isLastItem}
+      form={form}
+      parentForm={parentForm}
+      serializedFields={serializeFields(form.fields, form.txIndex, 'TX')}
+      setParentFields={handleSetParentFields}
       after={
-        isTx && (
-          <Flex justifyContent='flex-end'>
-            <Button variant='ghost' onClick={handleClick}>
-              <TextBox>Add Transaction</TextBox>
-              <Icon
-                ml={2}
-                as={BiPlus}
-                w='20px'
-                h='20px'
-                cursor='pointer'
-                transform='translateY(1px)'
-              />
+        <Flex justifyContent='flex-end'>
+          {isLastTx ? (
+            <Button variant='ghost' onClick={handleClickAdd}>
+              <TextBox>Add TX</TextBox>
+              <Icon ml={2} as={BiPlus} w='20px' h='20px' cursor='pointer' />
             </Button>
-          </Flex>
-        )
+          ) : (
+            <Button variant='ghost' onClick={handleClickRemove}>
+              <TextBox>Remove TX</TextBox>
+              <Icon ml={2} as={BiMinus} w='20px' h='20px' cursor='pointer' />
+            </Button>
+          )}
+        </Flex>
       }
     />
   );
