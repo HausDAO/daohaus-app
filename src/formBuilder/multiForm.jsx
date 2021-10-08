@@ -19,6 +19,8 @@ const serializeTXs = (forms = []) =>
 
 const MultiForm = props => {
   const { forms, isTxBuilder } = props;
+  const parentForm = useForm({ shouldUnregister: true });
+
   const preTxForm = forms[0];
   const confirmationForm = forms[forms.length - 1];
 
@@ -32,13 +34,13 @@ const MultiForm = props => {
     );
 
   const handleRemoveTx = txIndex => {
-    console.log(`txIndex`, txIndex);
     if (txIndex == null) return;
     const newForms = serializeTXs(
       txForms.filter(form => form.txIndex !== txIndex),
     );
-    console.log(`newForms`, newForms);
-    setTxForms(newForms);
+
+    parentForm.reset({});
+    // setTxForms(newForms);
   };
 
   const setParentFields = (txIndex, newFields) => {
@@ -57,10 +59,11 @@ const MultiForm = props => {
         handleRemoveTx={handleRemoveTx}
         txForms={txForms}
         setParentFields={setParentFields}
+        parentForm={parentForm}
       />
     );
   }
-  return <StaticMultiForm {...props} />;
+  return <StaticMultiForm {...props} parentForm={parentForm} />;
 };
 
 const StaticMultiForm = props => {
@@ -70,8 +73,8 @@ const StaticMultiForm = props => {
     handleRemoveTx,
     txForms,
     setParentFields,
+    parentForm,
   } = props;
-  const parentForm = useForm();
 
   return forms?.map((form, index) => {
     if (form.isTx)

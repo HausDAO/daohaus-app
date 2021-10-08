@@ -24,7 +24,7 @@ const MinionSelect = props => {
         value: minion.minionAddress,
         name: minion.details,
       }));
-  }, [daoOverview]);
+  }, [daoOverview, daoVaults]);
 
   useEffect(() => {
     if (localValues && localValues.minionAddress) {
