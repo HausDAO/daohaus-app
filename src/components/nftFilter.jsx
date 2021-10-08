@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
 import {
   Flex,
   Menu,
@@ -9,7 +10,6 @@ import {
   Select,
   Icon,
 } from '@chakra-ui/react';
-import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 export default function NftFilter({
   filters,

@@ -10,11 +10,10 @@ import { useUser } from '../contexts/UserContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import StreamListItem from './StreamListItem';
-
 import { createPoll } from '../services/pollService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import { supportedChains } from '../utils/chain';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { supportedChains } from '../utils/chain';
 
 const StreamList = ({ list, loadingStreams, balances }) => {
   const [loading, setLoading] = useState({

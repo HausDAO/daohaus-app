@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 
-import { UBERHAUS_DATA } from '../utils/uberhaus';
-import molochAbi from '../contracts/molochV2.json';
-import { useOverlay } from '../contexts/OverlayContext';
-import RageInput from './rageInput';
-import { createHash, detailsToJSON } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import molochAbi from '../contracts/molochV2.json';
+import RageInput from './rageInput';
+import { createPoll } from '../services/pollService';
+import { createHash, detailsToJSON } from '../utils/general';
 import { createForumTopic } from '../utils/discourse';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
-import { useMetaData } from '../contexts/MetaDataContext';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
 const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {

@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import { Flex, FormControl } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Flex, FormControl } from '@chakra-ui/react';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
-import { FormFooter } from './staticElements';
-
+import ProgressIndicator from '../components/progressIndicator';
+import FormFooter from './formFooter';
 import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
+  checkConditionalTx,
   collapse,
   inputDataFromABI,
   mapInRequired,
 } from '../utils/formBuilder';
 import { omit } from '../utils/general';
+
+const dev = process.env.REACT_APP_DEV;
 
 const FormBuilder = props => {
   const {
@@ -29,16 +32,23 @@ const FormBuilder = props => {
     parentForm,
     next,
     goToNext,
+    handleThen,
     ctaText,
     secondaryBtn,
+    formConditions,
+    logValues,
   } = props;
 
-  const [loading, setLoading] = useState(false);
+  const [formState, setFormState] = useState(null);
+  const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
-  const { handleSubmit } = localForm;
+  const { handleSubmit, watch } = localForm;
+  const values = watch();
+
+  useEffect(() => logValues && dev && console.log(`values`, values), [values]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -119,7 +129,7 @@ const FormBuilder = props => {
       return;
     }
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-    console.log(`collapsedValues`, collapsedValues);
+
     const modifiedValues = modifyFields({
       values: collapsedValues,
       // REVIEW
@@ -144,64 +154,65 @@ const FormBuilder = props => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
         try {
-          setLoading(true);
+          setFormState('loading');
           const res = await submitCallback({
             values: modifiedValues,
             formData: props,
             onSubmit: props.onSubmit,
           });
+          setFormState('success');
           return res;
         } catch (error) {
           console.error(error);
-          setLoading(false);
+          setFormState('error');
         }
       }
     };
-    const handleSubmitTX = async () => {
+    const handleSubmitTX = async then => {
       try {
-        setLoading(true);
+        setFormState('loading');
         const res = await submitTransaction({
           values: modifiedValues,
           formData: props,
           localValues,
-          tx: props.tx,
+          tx: checkConditionalTx({ tx: props.tx, condition: formCondition }),
           lifeCycleFns: {
             ...props?.lifeCycleFns,
             onCatch() {
-              setLoading(false);
+              setFormState('error');
               props?.lifeCycleFns?.onCatch?.();
             },
             afterTx() {
-              props?.lifeCycleFns?.afterTx?.();
+              if (typeof then === 'function') {
+                then();
+                setFormState('success');
+              } else {
+                setFormState('success');
+              }
             },
           },
         });
-        setLoading(false);
         return res;
       } catch (error) {
         console.error(error);
-        setLoading(false);
+        setFormState('error');
       }
     };
 
-    // const handleConditional = async choice => {
-    //   if (choice.tx && choice.then)
-    //     return () => handleSubmitTX(handleConditional(choice.then));
-    //   if (choice.tx) return () => handleSubmitTX();
-    //   if (choice.callback) return () => handleSubmitCallback();
-    //   if (choice.goTo) return () => goToNext(choice.goTo);
-    // };
-
+    //  HANDLE GO TO NEXT
     if (next && typeof goToNext === 'function') {
-      return goToNext(next);
+      if (typeof next === 'string') {
+        return goToNext(next);
+      }
+      if (next?.type === 'awaitTx') {
+        return handleSubmitTX(() => handleThen(next));
+      }
+    }
 
-      // const choice = next[condition];
-      // return handleConditional(choice)();
-    }
     //  HANDLE CALLBACK ON SUBMIT
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function')
       return handleSubmitCallback();
-    }
+
     //  HANDLE CONTRACT TX ON SUBMIT
     return handleSubmitTX();
   };
@@ -231,11 +242,14 @@ const FormBuilder = props => {
           {...field}
           key={`${depth}-${index}`}
           minionType={props.minionType}
+          formCondition={formCondition}
+          setFormCondition={setFormCondition}
           layout={props.layout}
           localForm={localForm}
           localValues={localValues}
           buildABIOptions={buildABIOptions}
           useFormError={useFormError}
+          formState={formState}
         />
       ),
     );
@@ -244,7 +258,7 @@ const FormBuilder = props => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
-        <FormControl display='flex' mb={5}>
+        <FormControl display='flex'>
           <Flex
             width='100%'
             flexDirection={['column', null, 'row']}
@@ -253,15 +267,16 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
+        <ProgressIndicator currentState={formState} />
         <FormFooter
           options={options}
           addOption={addOption}
-          loading={loading}
+          formState={formState}
           ctaText={ctaText}
           next={next}
           goToNext={goToNext}
           errors={Object.values(formErrors)}
-          secondaryBtn={secondaryBtn}
+          customSecondaryBtn={secondaryBtn}
         />
       </Flex>
     </form>

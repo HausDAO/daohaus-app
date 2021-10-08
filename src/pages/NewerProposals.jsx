@@ -1,6 +1,7 @@
 import React from 'react';
-import MainViewLayout from '../components/mainViewLayout';
+
 import { FORM } from '../data/forms';
+import MainViewLayout from '../components/mainViewLayout';
 
 const NewerProposals = () => {
   return (

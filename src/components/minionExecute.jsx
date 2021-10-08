@@ -6,11 +6,15 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
-import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
+import RaribleSellOrder from './raribleSellOrder';
 import { TokenService } from '../services/tokenService';
+import {
+  MINION_TYPES,
+  proposalTypeMaker,
+  PROPOSAL_TYPES,
+} from '../utils/proposalUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import RaribleSellOrder from './raribleSellOrder';
 
 const MinionExecute = ({
   hideMinionExecuteButton,
@@ -22,7 +26,7 @@ const MinionExecute = ({
   const { injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
   const { refreshMinionVault, daoMembers } = useDao();
-  const proposalDetails = useMemo(() => JSON.parse(proposal.details), [
+  const proposalType = useMemo(() => proposalTypeMaker(proposal.details), [
     proposal,
   ]);
 
@@ -42,7 +46,10 @@ const MinionExecute = ({
     const getMinionDetails = async () => {
       setLoading(true);
       try {
-        if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+        if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+          proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
+        ) {
           const hausService = await TokenService({
             chainID: daochain,
             tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
@@ -128,7 +135,7 @@ const MinionExecute = ({
     if (hideMinionExecuteButton) {
       return null;
     }
-    if (proposalDetails.proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
+    if (proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
       const isMember =
         daoMembers.filter(member => member.memberAddress === proposal.proposer)
           .length > 0;

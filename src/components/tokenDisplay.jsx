@@ -3,9 +3,8 @@ import { useParams } from 'react-router';
 import { Box, Flex } from '@chakra-ui/layout';
 
 import { useToken } from '../contexts/TokenContext';
-import TokenIndicator from './tokenIndicator';
 import TextIndicator from './textIndicator';
-
+import TokenIndicator from './tokenIndicator';
 import { TokenService } from '../services/tokenService';
 
 const TokenDisplay = ({ tokenAddress }) => {

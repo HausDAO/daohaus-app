@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { Box, Button, FormHelperText, Image, Spinner } from '@chakra-ui/react';
 
-import { useParams } from 'react-router';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import ErrorList from './ErrorList';
 import LinkInput from './linkInput';
-import { SubmitFormError } from './staticElements';
+import { createContract } from '../utils/contract';
 import { getNftMeta } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
-import { createContract } from '../utils/contract';
 import { NIFTYINK_ADDRESS } from '../utils/chain';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const NiftyInkUrl = props => {
   const { localForm } = props;
@@ -71,11 +71,14 @@ const NiftyInkUrl = props => {
       getNiftyData();
     }
   }, [targetInk]);
+  //  REVIEW
+  //  Can this component use the usual FieldWrapper pattern?
 
   return (
     <Box>
       <LinkInput {...props} />
-      {invalidLink && <SubmitFormError message='Invalid NiftyInk Url' />}
+
+      {invalidLink && <ErrorList message='Invalid NiftyInk Url' />}
       {nftData ? (
         <>
           <Image src={nftData.metadata.image} w='300px' h='300px' />

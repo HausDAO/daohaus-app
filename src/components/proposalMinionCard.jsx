@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -12,18 +13,17 @@ import {
   ModalOverlay,
   HStack,
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
 import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
-import Web3 from 'web3';
+import Web3, { utils as Web3Utils } from 'web3';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import AddressAvatar from './addressAvatar';
-import UberHausAvatar from './uberHausAvatar';
 import TextBox from './TextBox';
-import { decodeMultisendTx } from '../utils/abi';
+import UberHausAvatar from './uberHausAvatar';
 import { chainByID } from '../utils/chain';
+import { decodeMultisendTx } from '../utils/abi';
 import {
   hasMinionActions,
   MINION_TYPES,
@@ -124,9 +124,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                     abiDecoder.addABI(parsed);
                     return {
                       ...abiDecoder.decodeMethod(action.data),
-                      value: injectedProvider.utils
-                        .toBN(action.value)
-                        .toString(),
+                      value: Web3Utils.toBN(action.value).toString(),
                     };
                   }),
                 ),
@@ -217,7 +215,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           {data.decodedData?.params?.map(displayActionData)}
           {data.decodedData?.actions?.map((action, idx) => {
             return action ? (
-              <Box key={idx}>
+              <Box key={`subaction_${idx}`}>
                 <HStack spacing={3}>
                   <TextBox size='xs'>
                     {`Action ${idx + 1}: ${action.name}`}
@@ -231,7 +229,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 {action.params.map(displayActionData)}
               </Box>
             ) : (
-              <TextBox mt={2} size='sm'>
+              <TextBox mt={2} size='sm' key={`decerror_${idx}`}>
                 Could not decode action data
               </TextBox>
             );

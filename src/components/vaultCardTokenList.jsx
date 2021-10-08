@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { Flex, Box, Image } from '@chakra-ui/react';
 
 const VaultCardTokenList = ({ tokens }) => {

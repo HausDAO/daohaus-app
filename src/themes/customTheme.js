@@ -1,5 +1,6 @@
 import { extendTheme } from '@chakra-ui/react';
 import { lighten, darken, rgba } from 'polished';
+
 import ContentBoxComponent from './components/contentBox';
 import TextBoxComponent from './components/textBox';
 

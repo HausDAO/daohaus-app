@@ -1,12 +1,13 @@
 import React from 'react';
+import { HiOutlineSwitchVertical } from 'react-icons/hi';
+import { RiMenu3Line } from 'react-icons/ri';
 import {
   IconButton,
   Link,
   Tooltip,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { RiMenu3Line } from 'react-icons/ri';
-import { HiOutlineSwitchVertical } from 'react-icons/hi';
+
 import { useOverlay } from '../contexts/OverlayContext';
 
 const ChangeDao = () => {

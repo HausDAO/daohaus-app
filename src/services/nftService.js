@@ -1,7 +1,6 @@
 import Web3 from 'web3';
 
 import NFTAbi from '../contracts/nft.json';
-
 import { chainByID } from '../utils/chain';
 
 export const NFTService = ({

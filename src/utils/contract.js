@@ -1,9 +1,11 @@
 // SAVE FOR LATER
-
+import { ethers } from 'ethers';
+import SafeMasterCopy from '@gnosis.pm/safe-contracts/build/artifacts/contracts/GnosisSafe.sol/GnosisSafe.json';
 import Web3 from 'web3';
 
 // import Erc20Abi from '../contracts/erc20a.json';
 import { chainByID } from './chain';
+import { postApiGnosis, postGnosisRelayApi } from './requests';
 
 export const createContract = ({ address, abi, chainID, web3 }) => {
   if (!web3) {
@@ -56,3 +58,86 @@ export const createContract = ({ address, abi, chainID, web3 }) => {
 // };
 
 // test();
+
+export const createGnosisSafeTxProposal = async ({
+  chainID,
+  web3,
+  safeAddress,
+  fromDelegate,
+  to,
+  value,
+  data,
+  operation,
+}) => {
+  const { network } = chainByID(chainID);
+  const txBase = {
+    to: web3.utils.toChecksumAddress(to),
+    value,
+    data,
+    operation,
+    gasToken: null,
+  };
+  const gasEstimate = await postGnosisRelayApi(
+    network,
+    `safes/${safeAddress}/transactions/estimate/`,
+    txBase,
+  );
+  const { lastUsedNonce, safeTxGas } = gasEstimate.data;
+  // TODO: consider Txs in the queue?
+  const nonce = lastUsedNonce >= 0 ? lastUsedNonce + 1 : 0;
+  const txRefund = {
+    gasToken: ethers.constants.AddressZero,
+    baseGas: 0,
+    gasPrice: 0,
+    refundReceiver: ethers.constants.AddressZero,
+  };
+  const txDetails = {
+    safeTxGas,
+    nonce,
+    ...txBase,
+    ...txRefund,
+  };
+  const safe = new web3.eth.Contract(SafeMasterCopy.abi, safeAddress);
+  const txHash = await safe.methods
+    .getTransactionHash(
+      txBase.to,
+      txBase.value,
+      txBase.data,
+      txBase.operation,
+      txDetails.safeTxGas,
+      txRefund.baseGas,
+      txRefund.gasPrice,
+      txRefund.gasToken,
+      txRefund.refundReceiver,
+      txDetails.nonce,
+    )
+    .call();
+
+  const txProposal = {
+    tx: txDetails,
+    txHash,
+  };
+  // TODO: EIP-712 compliant?
+  const signature = await web3.eth.sign(txProposal.txHash, fromDelegate);
+
+  const tx = {
+    ...txProposal.tx,
+    contractTransactionHash: txProposal.txHash,
+    sender: fromDelegate,
+    signature,
+    origin: 'Minion Safe enableModule Tx Proposal',
+  };
+
+  try {
+    const rs = await postApiGnosis(
+      network,
+      `safes/${safeAddress}/multisig-transactions/`,
+      tx,
+      false,
+    );
+    console.log('Gnosis API Response', rs);
+  } catch (error) {
+    console.error('Errow while calling Gnosis API', error);
+    throw new Error(error);
+  }
+};

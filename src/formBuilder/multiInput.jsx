@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import { Button } from '@chakra-ui/button';
 import { Flex } from '@chakra-ui/layout';
-import React, { useState } from 'react';
 
 import GenericInput from './genericInput';
 

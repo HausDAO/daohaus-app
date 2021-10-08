@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
-import { BsCheckCircle } from 'react-icons/bs';
 import { RiExternalLinkLine } from 'react-icons/ri';
+import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
 import { Button } from '@chakra-ui/button';
-import { Spinner } from '@chakra-ui/spinner';
 
 import { useDao } from '../contexts/DaoContext';
 import FormBuilder from '../formBuilder/formBuilder';
-import Header from '../formBuilder/header';
 import TextBox from './TextBox';
 
+import { ignoreAwaitStep } from '../utils/formBuilder';
 import { MINIONS } from '../data/minions';
-import ProgressIndicator from './progressIndicator';
 
+// Make avaiable across app
 const minionFromDaoOverview = ({ searchBy, daoOverview, searchParam }) => {
   if (!daoOverview || !searchBy || !searchParam) return;
   if (searchBy === 'type')
@@ -59,7 +57,15 @@ const MinionNotFound = ({ minionType = 'Minion' }) => {
 };
 
 const TheSummoner = props => {
-  const { localForm, goToNext, minionData, next, secondaryBtn } = props;
+  const {
+    parentForm,
+    goToNext,
+    minionData,
+    secondaryBtn,
+    next,
+    handleThen,
+    currentStep,
+  } = props;
 
   const { daoOverview } = useDao();
   const { daoid, daochain } = useParams();
@@ -69,7 +75,7 @@ const TheSummoner = props => {
     minionData?.minionType ? null : 'summon',
   );
 
-  const minionType = minionData?.minionType || localForm.watch('minionType');
+  const minionType = minionData?.minionType || parentForm.watch('minionType');
   const summonData = MINIONS[minionType];
 
   useEffect(() => {
@@ -80,7 +86,6 @@ const TheSummoner = props => {
         searchParam: minionType,
       });
       if (minionsOfType?.length) {
-        console.log(minionsOfType);
         setExistingMinions(minionsOfType);
         setMenuState('displayExisting');
       } else {
@@ -89,24 +94,12 @@ const TheSummoner = props => {
     }
   }, [minionType, daoOverview, menuState]);
 
-  const handleNext = () => goToNext();
+  const handleNext = () => goToNext(ignoreAwaitStep(next));
   const switchToSummon = () => setMenuState('summon');
-  const lifeCycleFns = {
-    beforeTx() {
-      setMenuState('summoning');
-    },
-    onPollSuccess() {
-      setMenuState('summoned');
-    },
-    onCatch() {
-      setMenuState('summon');
-    },
-  };
 
   if (menuState === 'displayExisting') {
     return (
       <Flex flexDirection='column'>
-        <Header>{minionType}</Header>
         <MinionFound minionType={minionType} />
         <Flex flexDir='column' mb={4}>
           <Flex w='100%' mt={6} mb={4}>
@@ -163,43 +156,20 @@ const TheSummoner = props => {
       </Flex>
     );
   }
-  if (
-    menuState === 'summon' ||
-    menuState === 'summoned' ||
-    menuState === 'summoning'
-  ) {
+  if (menuState === 'summon') {
     return (
       <Flex flexDirection='column'>
-        <Header>{minionType}</Header>
         <Box mb={4}>
           <MinionNotFound minionType={minionType} />
         </Box>
-        {summonData?.summonForm && menuState === 'summon' && (
-          <FormBuilder
-            {...summonData.summonForm}
-            lifeCycleFns={lifeCycleFns}
-            ctaText='Deploy'
-            secondaryBtn={secondaryBtn}
-          />
-        )}
-        {menuState === 'summoning' && (
-          <ProgressIndicator prepend={<Spinner mr={3} />} text='Deploying...' />
-        )}
-        {menuState === 'summoned' && (
-          <ProgressIndicator icon={BsCheckCircle} text='Minion Deployed!' />
-        )}
-        {menuState !== 'summon' && (
-          <Flex mt={6} justifyContent='flex-end'>
-            {menuState === 'summoning' && (
-              <Button disabled>Deploying...</Button>
-            )}
-            {menuState === 'summoned' && (
-              <Button onClick={handleNext}>
-                {next === 'DONE' ? 'Finish' : 'Next >'}
-              </Button>
-            )}
-          </Flex>
-        )}
+        <FormBuilder
+          {...summonData.summonForm}
+          secondaryBtn={secondaryBtn}
+          ctaText={currentStep?.ctaText || next?.ctaText || 'Next >'}
+          handleThen={handleThen}
+          next={next}
+          goToNext={goToNext}
+        />
         {!summonData?.summonForm && <TextBox>Error: Form not found</TextBox>}
       </Flex>
     );

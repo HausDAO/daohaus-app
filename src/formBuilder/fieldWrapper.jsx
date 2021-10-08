@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
+import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 
 import TextBox from '../components/TextBox';
-import { SubmitFormError } from './staticElements';
+import ErrorList from './ErrorList';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
 const FieldWrapper = ({
@@ -11,6 +11,7 @@ const FieldWrapper = ({
   label,
   info,
   htmlFor,
+  name,
   helperText,
   hidden,
   btn,
@@ -35,7 +36,12 @@ const FieldWrapper = ({
       hidden={hidden}
     >
       <Flex>
-        <TextBox as={FormLabel} size='xs' htmlFor={htmlFor} position='relative'>
+        <TextBox
+          as={FormLabel}
+          size='xs'
+          htmlFor={htmlFor || name}
+          position='relative'
+        >
           {required && (
             <Box display='inline' position='absolute' left='-1rem'>
               {'* '}
@@ -61,7 +67,7 @@ const FieldWrapper = ({
 
       {children}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      {error && <SubmitFormError message={error.message} />}
+      {error && <ErrorList singleError={error} />}
     </Flex>
   );
 };

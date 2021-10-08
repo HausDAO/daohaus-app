@@ -13,13 +13,13 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import HubProfileCard from '../components/hubProfileCard';
-import { useOverlay } from '../contexts/OverlayContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import MemberInfoGuts from '../components/memberInfoGuts';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import TxList from '../components/TxList';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import HubProfileCard from '../components/hubProfileCard';
+import MemberInfoGuts from '../components/memberInfoGuts';
+import TxList from '../components/TxList';
 
 const DaoAccountModal = () => {
   const { daoAccountModal, setDaoAccountModal } = useOverlay();

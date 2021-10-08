@@ -1,6 +1,5 @@
-import { MINION_TYPES } from '../utils/proposalUtils';
-
 import { FORM } from './forms';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: {
@@ -133,6 +132,7 @@ export const MINIONS = {
     minionType: MINION_TYPES.SAFE,
     content: MINION_CONTENT[MINION_TYPES.SAFE],
     networks: MINION_NETWORKS[MINION_TYPES.SAFE],
+    // summonForm: [FORM.NEW_SAFE_MINION, FORM.NEW_SAFE_MINION_ADVANCED],
     summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },

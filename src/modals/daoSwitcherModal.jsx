@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { RiArrowRightSLine } from 'react-icons/ri';
 import {
   Modal,
   ModalContent,
@@ -16,16 +17,16 @@ import {
   FormControl,
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { RiArrowRightSLine } from 'react-icons/ri';
 import { rgba } from 'polished';
 
-import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
 import { getDaosByNetwork, filterDAOsByName } from '../utils/dao';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { themeImagePath } from '../utils/metadata';
-import { useOverlay } from '../contexts/OverlayContext';
-import { useCustomTheme } from '../contexts/CustomThemeContext';
+
+import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 
 const DaoSwitcherModal = () => {
   const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
@@ -74,6 +75,7 @@ const DaoSwitcherModal = () => {
   };
 
   const handleClose = () => {
+    setSearchTerm(null);
     setDaoSwitcherModal(false);
   };
 

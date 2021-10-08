@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
+
+import PaymentInput from './paymentInput';
 import { SF_ACTIVE_STREAMS } from '../graphQL/superfluid-queries';
 import { graphQuery } from '../utils/apollo';
 import { supportedChains } from '../utils/chain';
-
-import PaymentInput from './paymentInput';
 
 const SuperfluidPaymentInput = props => {
   const { daochain } = useParams();

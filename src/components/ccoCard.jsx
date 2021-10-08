@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { BsEggFill } from 'react-icons/bs';
 import { Avatar, Box, Flex, Progress } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { BsEggFill } from 'react-icons/bs';
 
 import ContentBox from './ContentBox';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { getDateTime, themeImagePath } from '../utils/metadata';
-import { numberWithCommas } from '../utils/general';
-import { supportedChains } from '../utils/chain';
+import { ccoDaoResolver } from '../utils/resolvers';
 import { ccoProgressBarData, CCO_CONSTANTS } from '../utils/cco';
 import { graphFetchAll } from '../utils/theGraph';
-import { ccoDaoResolver } from '../utils/resolvers';
+import { numberWithCommas } from '../utils/general';
+import { supportedChains } from '../utils/chain';
 
 const CcoCard = ({
   daoMetaData,

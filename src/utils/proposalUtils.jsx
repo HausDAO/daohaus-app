@@ -2,6 +2,7 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import { IsJsonString, timeToNow } from './general';
+
 import TextBox from '../components/TextBox';
 
 export const ProposalStatus = {
@@ -257,6 +258,16 @@ export const raribleHashMaker = proposal => {
     const parsed =
       IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.orderIpfsHash || '';
+  } catch (e) {
+    return '';
+  }
+};
+
+export const proposalTypeMaker = proposal => {
+  try {
+    const parsed =
+      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    return parsed.proposalType || '';
   } catch (e) {
     return '';
   }

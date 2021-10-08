@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { BsFillCircleFill } from 'react-icons/bs';
 import { Link as RouterLink } from 'react-router-dom';
 import { Flex, Icon, Input } from '@chakra-ui/react';
-import { BsFillCircleFill } from 'react-icons/bs';
 
-import NetworkDaoList from './networkDaoList';
 import { useUser } from '../contexts/UserContext';
 import ContentBox from './ContentBox';
+import NetworkDaoList from './networkDaoList';
 import TextBox from './TextBox';
 
 const NetworkList = () => {

@@ -2,13 +2,13 @@ import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import ActivitiesFeed from '../components/activitiesFeed';
-import MemberInfo from '../components/memberInfo';
-import OverviewCard from '../components/overviewCard';
-import { getDaoActivites } from '../utils/activities';
-import MainViewLayout from '../components/mainViewLayout';
 import CcoBanner from '../components/ccoBanner';
+import MainViewLayout from '../components/mainViewLayout';
+import MemberInfo from '../components/memberInfo';
+import OverviewBanner from '../components/overviewBanner';
+import OverviewCard from '../components/overviewCard';
 import ServicesBanner from '../components/servicesBanner';
-// import { getActiveMembers } from '../utils/dao';
+import { getDaoActivites } from '../utils/activities';
 
 const Overview = React.memo(function overview({
   daoOverview,
@@ -20,6 +20,7 @@ const Overview = React.memo(function overview({
   daoMetaData,
   daoVaults,
 }) {
+  console.log('daoMetaData', daoMetaData);
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao>
       <Box w='100%'>
@@ -38,6 +39,9 @@ const Overview = React.memo(function overview({
               />
               {daoMetaData?.boosts?.cco?.active ? <CcoBanner /> : null}
               {daoMetaData?.servicesUrl ? <ServicesBanner /> : null}
+              {daoMetaData?.tags.includes('haus party favor') ? (
+                <OverviewBanner bannerType='hausPartyFavors' />
+              ) : null}
             </Box>
           )}
           {isMember && (

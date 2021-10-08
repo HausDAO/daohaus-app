@@ -1,18 +1,17 @@
 import React from 'react';
-import { Box, Flex, Button, useBreakpointValue, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 import { useParams } from 'react-router';
-
-import ContentBox from '../components/ContentBox';
-import TextBox from '../components/TextBox';
-// import StakingSnapshot from '../components/stakingSnapshot';
-import ClanCard from '../components/clanCard';
-import RonanCard from '../components/ronanCard';
-import ShogunCard from '../components/shogunCard';
+import { Box, Flex, Button, useBreakpointValue, Icon } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
+import ContentBox from '../components/ContentBox';
+import ClanCard from '../components/clanCard';
 import MainViewLayout from '../components/mainViewLayout';
+import RonanCard from '../components/ronanCard';
+import ShogunCard from '../components/shogunCard';
+// import StakingSnapshot from '../components/stakingSnapshot';
+import TextBox from '../components/TextBox';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const Staking = () => {

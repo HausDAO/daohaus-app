@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Flex, Text } from '@chakra-ui/layout';
+
+import ContentBox from './ContentBox';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 import { countDownText } from '../utils/cco';
 import { timeToNow } from '../utils/general';
-import ContentBox from './ContentBox';
 
 const CcoContributionCard = ({
   raiseAtMax,

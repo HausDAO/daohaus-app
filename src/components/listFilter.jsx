@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 import {
   Menu,
   MenuButton,
@@ -8,7 +9,6 @@ import {
   Icon,
   Text,
 } from '@chakra-ui/react';
-import { RiArrowDropDownFill } from 'react-icons/ri';
 
 const ListFilter = ({ filter, setFilter, options, labelText }) => {
   const [filterOptions, setFilterOptions] = useState();

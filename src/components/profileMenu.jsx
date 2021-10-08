@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useParams } from 'react-router-dom';
 import {
   Menu,
@@ -9,22 +11,22 @@ import {
   Link,
   useToast,
 } from '@chakra-ui/react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useFormModal, useOverlay } from '../contexts/OverlayContext';
+
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
+import { useAppModal } from '../hooks/useModals';
 import { CORE_FORMS, FORM } from '../data/forms';
-import { daoConnectedAndSameChain } from '../utils/general';
+import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
+import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
-  const { openFormModal } = useFormModal();
+  const { formModal } = useAppModal();
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
   const { errorToast } = useOverlay();
@@ -33,25 +35,15 @@ const ProfileMenu = ({ member }) => {
   const [canRageQuit, setCanRageQuit] = useState(false);
 
   const handleGuildKickClick = () => {
-    openFormModal({
-      lego: {
-        ...FORM.GUILDKICK,
-        localValues: { memberAddress: member.memberAddress },
-      },
+    formModal({
+      ...FORM.GUILDKICK,
+      localValues: { memberAddress: member.memberAddress },
     });
   };
 
-  const handleRageQuitClick = () => {
-    openFormModal({
-      lego: CORE_FORMS.RAGE_QUIT,
-    });
-  };
+  const handleRageQuitClick = () => formModal(CORE_FORMS.RAGE_QUIT);
 
-  const handleUpdateDelegateClick = () => {
-    openFormModal({
-      lego: CORE_FORMS.UPDATE_DELEGATE,
-    });
-  };
+  const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
   const copiedToast = () => {
     toast({

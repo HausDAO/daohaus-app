@@ -1,7 +1,6 @@
+import React from 'react';
 import { Box, Flex } from '@chakra-ui/layout';
 import { v4 as uuid } from 'uuid';
-
-import React from 'react';
 
 import TextBox from '../components/TextBox';
 

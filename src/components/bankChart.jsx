@@ -7,6 +7,7 @@ import {
   AreaSeries,
   GradientDefs,
 } from 'react-vis';
+import { FaChevronDown } from 'react-icons/fa';
 import {
   Box,
   Flex,
@@ -17,12 +18,12 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { FaChevronDown } from 'react-icons/fa';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
+import { getCurrentPrices } from '../utils/vaults';
 import {
   getDateRange,
   balancesWithValue,
@@ -30,7 +31,6 @@ import {
   groupBalancesToDateRange,
   subtractDays,
 } from '../utils/charts';
-import { getCurrentPrices } from '../utils/vaults';
 
 const bankChartTimeframes = [
   { name: 'Lifetime', value: 'lifetime' },
@@ -39,7 +39,7 @@ const bankChartTimeframes = [
   { name: '6 months', value: 6 },
 ];
 
-const BankChart = ({ overview, daoVaults, balanceData, visibleVaults }) => {
+const BankChart = ({ daoVaults, balanceData, visibleVaults }) => {
   const [daoBalances, setDaoBalances] = useState(null);
   const { theme } = useCustomTheme();
   const [chartData, setChartData] = useState([]);
@@ -57,13 +57,10 @@ const BankChart = ({ overview, daoVaults, balanceData, visibleVaults }) => {
       const filteredBalances = balancesWithValue(daoBalances, currentPrices);
 
       if (filteredBalances[0]) {
-        const dateRange = getDateRange(
-          timeframe,
-          filteredBalances,
-          overview.summoningTime,
-        );
+        const dateRange = getDateRange(timeframe, filteredBalances);
 
         const dates = getDatesArray(dateRange.start, dateRange.end);
+
         const groupedBalances = groupBalancesToDateRange(
           filteredBalances,
           dates,
@@ -78,6 +75,7 @@ const BankChart = ({ overview, daoVaults, balanceData, visibleVaults }) => {
         });
 
         if (timeframe.value === 'lifetime' || data.length === 1) {
+          console.log('data', data.length);
           data.unshift({
             x: subtractDays(data[0].x, 7),
             y: 0,

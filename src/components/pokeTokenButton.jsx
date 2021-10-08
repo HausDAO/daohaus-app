@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
-import { useOverlay } from '../contexts/OverlayContext';
-import { useTX } from '../contexts/TXContext';
+import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
+
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { isDelegating, daoConnectedAndSameChain } from '../utils/general';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
 import { TX } from '../data/contractTX';
+import { isDelegating, daoConnectedAndSameChain } from '../utils/general';
 
 const PokeTokenButton = ({ wnzAddress }) => {
   const { errorToast } = useOverlay();
