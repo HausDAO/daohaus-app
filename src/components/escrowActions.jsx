@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
 
 import { useUser } from '../contexts/UserContext';
-import { MINION_TYPES } from '../utils/proposalUtils';
 import { MinionService } from '../services/minionService';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';

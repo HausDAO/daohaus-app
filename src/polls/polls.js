@@ -18,7 +18,6 @@ import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import {
   MINION_ACTION_FUNCTION_NAMES,
   PROPOSAL_TYPES,
-  MINION_TYPES,
 } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { NFTService } from '../services/nftService';

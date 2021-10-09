@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Button, Spinner } from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
-import Web3 from 'web3';
-import { MaxUint256 } from '@ethersproject/constants';
 
 import { SubmitFormError } from './staticElements';
-import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { NFTService } from '../services/nftService';
 import { useTX } from '../contexts/TXContext';
@@ -15,7 +12,6 @@ import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import FieldWrapper from './fieldWrapper';
 import { supportedChains } from '../utils/chain';
-import NFTAbi from '../contracts/nft.json';
 
 const NftApproval = props => {
   const [loading, setLoading] = useState(false);

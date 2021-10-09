@@ -53,7 +53,6 @@ export const MINION_TYPES = {
   SUPERFLUID: 'Superfluid minion',
   SAFE: 'SAFE MINION V0',
   UBER: 'UberHaus minion',
-  ESCROW: 'Escrow minion',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {

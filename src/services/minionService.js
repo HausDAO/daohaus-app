@@ -1,6 +1,5 @@
 import Web3 from 'web3';
 
-import { MINION_TYPES } from '../utils/proposalUtils';
 import MinionAbi from '../contracts/minion.json';
 import MinionNiftyAbi from '../contracts/minionNifty.json';
 import EscrowMinionAbi from '../contracts/escrowMinion.json';
