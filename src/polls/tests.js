@@ -122,6 +122,16 @@ export const cancelProposalTest = (data, shouldEqual, pollId) => {
   );
 };
 
+export const withdrawEscrowTokensTest = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data.executed === shouldEqual;
+  }
+  clearInterval(pollId);
+  throw new Error(
+    `Poll test did not recieve the expected results from the graph: ${data}`,
+  );
+};
+
 export const minionExecuteTest = (data, shouldEqual, pollId) => {
   if (data !== null || data !== undefined) {
     return data === shouldEqual;

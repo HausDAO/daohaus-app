@@ -248,7 +248,6 @@ export const DETAILS = {
     description: '.values.description',
     link: '.values.link',
     proposalType: '.formData.type',
-    // minionType: MINION_TYPES.ESCROW, // REVIEW: Adding Escrow to minion types causes issues elsewhere
   },
 };
 

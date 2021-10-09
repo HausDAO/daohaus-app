@@ -445,6 +445,9 @@ export const FORM = {
       'tokenId',
       'selectedMinion',
       'nftApproval',
+      'sharesRequested',
+      'lootRequested',
+      'paymentRequested',
     ],
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],

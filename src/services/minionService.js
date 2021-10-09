@@ -1,7 +1,9 @@
 import Web3 from 'web3';
 
+import { MINION_TYPES } from '../utils/proposalUtils';
 import MinionAbi from '../contracts/minion.json';
 import MinionNiftyAbi from '../contracts/minionNifty.json';
+import EscrowMinionAbi from '../contracts/escrowMinion.json';
 import { chainByID } from '../utils/chain';
 
 export const MinionService = ({ web3, minion, chainID, minionType }) => {
@@ -19,6 +21,8 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
   if (minionType === 'niftyMinion') {
     console.log('minion nifty abi');
     abi = MinionNiftyAbi;
+  } else if (minionType === 'escrowMinion') {
+    abi = EscrowMinionAbi;
   } else {
     abi = MinionAbi;
   }
@@ -32,6 +36,12 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
         return action;
       };
     }
+    if (service === 'escrowBalances') {
+      return async ({ args }) => {
+        const action = await contract.methods.escrowBalances(...args).call();
+        return action;
+      };
+    }
     // proposeAction args: [ target contract, ether value, function call data, details ]
     // executeAction args: [ proposal id ]
     // crossWithdraw args: [ target dao address, token address, amount, transfer (bool)]
@@ -39,7 +49,8 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
       service === 'proposeAction' ||
       service === 'executeAction' ||
       service === 'crossWithdraw' ||
-      service === 'cancelAction'
+      service === 'cancelAction' ||
+      service === 'withdrawToDestination'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
         console.log('MINION ASYNC');

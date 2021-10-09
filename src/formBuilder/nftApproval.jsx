@@ -42,7 +42,6 @@ const NftApproval = props => {
 
     if (nftAddress && validAddress) {
       const escrow = supportedChains[daochain].escrow_minion;
-      console.log(escrow);
       const args = [address, escrow];
       NFTService({
         web3: injectedProvider,

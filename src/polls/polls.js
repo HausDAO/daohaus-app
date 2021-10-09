@@ -18,6 +18,7 @@ import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import {
   MINION_ACTION_FUNCTION_NAMES,
   PROPOSAL_TYPES,
+  MINION_TYPES,
 } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { NFTService } from '../services/nftService';
@@ -87,6 +88,24 @@ export const pollProposal = async ({ proposalId, chainID, daoID }) => {
       id: proposalId,
     },
   });
+};
+
+export const pollEscrowWithdrawal = async ({ proposalId, chainID, daoID }) => {
+  const minion = supportedChains[chainID].escrow_minion;
+  console.log({
+    minion,
+    chainID,
+    minionType: 'escrowMinion',
+    args: [daoID, proposalId, 0],
+  });
+  const escrowBalances = await MinionService({
+    minion,
+    chainID,
+    minionType: 'escrowMinion',
+  })('escrowBalances')({
+    args: [daoID, proposalId, 0],
+  });
+  return escrowBalances;
 };
 
 export const pollTokenAllowances = async ({

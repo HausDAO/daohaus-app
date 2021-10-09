@@ -53,6 +53,7 @@ export const MINION_TYPES = {
   SUPERFLUID: 'Superfluid minion',
   SAFE: 'SAFE MINION V0',
   UBER: 'UberHaus minion',
+  ESCROW: 'Escrow minion',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {
@@ -597,7 +598,7 @@ export const multicallActionsFromProposal = prop => {
 };
 
 export const hasMinionActions = (prop, minionDeets) => {
-  if (prop.minion.minionType === MINION_TYPES.SAFE) {
+  if (prop.minion?.minionType === MINION_TYPES.SAFE) {
     return prop.actions > 0;
   }
   return (

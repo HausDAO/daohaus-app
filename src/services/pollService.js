@@ -11,6 +11,7 @@ import {
   pollTokenAllowances,
   pollTokenApproval,
   pollUberHausDelegateSet,
+  pollEscrowWithdrawal,
   syncTokenPoll,
   updateDelegateFetch,
   withdrawTokenFetch,
@@ -35,6 +36,7 @@ import {
   processProposalTest,
   rageQuitTest,
   sponsorProposalTest,
+  withdrawEscrowTokensTest,
   submitProposalTest,
   submitVoteTest,
   tokenAllowanceTest,
@@ -512,6 +514,39 @@ export const createPoll = ({
           unresolvedMsg: 'Cancelling proposal',
           successMsg: `Proposal #${proposalId} Cancelled for ${daoID} on ${chainID}`,
           errorMsg: `Error Cancelling proposal #${proposalId} for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            chainID,
+            proposalId,
+          },
+        });
+      }
+    };
+  } else if (action === 'withdrawEscrowTokens') {
+    return ({ daoID, chainID, proposalId, actions }) => txHash => {
+      startPoll({
+        pollFetch: pollEscrowWithdrawal,
+        testFn: withdrawEscrowTokensTest,
+        shouldEqual: true,
+        args: { daoID, chainID, proposalId },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Tokens Withdrawn',
+          unresolvedMsg: 'Withdrawing Tokens',
+          successMsg: `Tokens Withdrawn from Escrow`,
+          errorMsg: `Error Withdrawing Tokens from Escrow`,
           pollData: {
             action,
             interval,
