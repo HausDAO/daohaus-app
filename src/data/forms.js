@@ -559,6 +559,7 @@ const MULTI_FORMS = {
     logValues: true,
     isTxBuilder: true,
     type: 'multiForm',
+    tx: TX.GENERIC_SAFE_MULTICALL,
     title: 'Safe Minion TX Builder',
     description: 'Create a multi-transaction proposal',
     footer: 'end',

@@ -107,6 +107,7 @@ const StaticMultiForm = props => {
     txForms,
     setParentFields,
     parentForm,
+    tx,
   } = props;
 
   return forms?.map((form, index) => {
@@ -114,7 +115,7 @@ const StaticMultiForm = props => {
       return (
         <TxFormSection
           key={`${form.id}-${form.txID}`}
-          form={form}
+          form={tx ? { ...form, tx } : form}
           isLastItem={isLastItem(forms, index)}
           txIndex={form.txIndex}
           handleAddTx={handleAddTx}
@@ -127,9 +128,10 @@ const StaticMultiForm = props => {
     return (
       <FormSection
         key={`${form.id}-${index}`}
-        form={form}
+        form={tx ? { ...form, tx } : form}
         isLastItem={isLastItem(forms, index)}
         parentForm={parentForm}
+        tx={tx}
       />
     );
   });

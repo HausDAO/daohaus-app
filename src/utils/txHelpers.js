@@ -118,6 +118,11 @@ const argBuilderCallback = Object.freeze({
       values.paymentRequested,
     ];
   },
+  genericActionSafe({ values, formData }) {
+    console.log(`ARGS_FROM_CALLBACK`);
+    console.log(`values`, values);
+    console.log(`formData`, formData);
+  },
   proposeActionSafe({ values, formData }) {
     const inputVals = collapse(values, '*ABI_ARG*', 'array');
     const hexData = safeEncodeHexFunction(
