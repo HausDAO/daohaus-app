@@ -19,6 +19,7 @@ const GenericSelect = props => {
   return (
     <FieldWrapper {...props} containerProps={containerProps} mb={mb}>
       <Select
+        key={name}
         placeholder={placeholder}
         ref={register}
         id={htmlFor}

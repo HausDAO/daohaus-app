@@ -32,6 +32,7 @@ const GenericTextarea = ({
       layout={layout}
     >
       <Textarea
+        key={name}
         id={htmlFor}
         name={name}
         placeholder={placeholder || label || htmlFor}

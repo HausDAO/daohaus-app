@@ -38,7 +38,6 @@ const FormBuilder = props => {
     formConditions,
     logValues,
     footer = true,
-    setParentFields,
   } = props;
 
   const [formState, setFormState] = useState(null);

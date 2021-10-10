@@ -55,6 +55,7 @@ const MultiForm = props => {
       }
       //  If key value is the same TX as txIndex, but a different number
       if (key.includes('*TX')) {
+        parentForm.unregister(key);
         const checkSerial = key => {
           // possibly replace the tag with another decremented tag
           return key.replace(getTagRegex('TX'), tag => {
@@ -71,7 +72,6 @@ const MultiForm = props => {
       }
       return { ...acc, [key]: value };
     }, {});
-    console.log(`newFormValues`, newFormValues);
     parentForm.reset(newFormValues);
     setTxForms(newForms);
   };

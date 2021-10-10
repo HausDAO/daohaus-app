@@ -31,6 +31,7 @@ const GenericInput = props => {
           </InputLeftAddon>
         )}
         <Input
+          key={name}
           id={htmlFor}
           name={name}
           onChange={onChange}

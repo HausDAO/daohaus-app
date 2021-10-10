@@ -7,7 +7,6 @@ const TargetContract = props => {
   const { localForm } = props;
 
   const selectedMinion = localForm.watch('selectedMinion');
-  console.log(`selectedMinion`, selectedMinion);
   const isDisabled = !validate.address(selectedMinion);
   const getHelperText = () => {
     if (isDisabled) {
