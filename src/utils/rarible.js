@@ -1,7 +1,6 @@
 import deepEqual from 'deep-equal';
 import { TypedDataUtils } from 'eth-sig-util';
 import { bufferToHex } from 'ethereumjs-util';
-import Web3 from 'web3';
 import { supportedChains } from './chain';
 
 import { ipfsPrePost, ipfsJsonPin, getNftMeta } from './metadata';
@@ -11,7 +10,7 @@ export const buildEncodeOrder = args => {
   const salt = Math.floor(Math.random() * 1000);
   return {
     type: 'RARIBLE_V2',
-    maker: args.minionAddress,
+    maker: args.makerAddress,
     make: {
       assetType: {
         assetClass: 'ERC721',
@@ -119,18 +118,6 @@ export const getMessageHash = encodedOrder => {
     message: encodedOrder.signMessage.struct,
   };
   return bufferToHex(TypedDataUtils.sign(typeData));
-};
-
-export const arbitrarySignature =
-  '0xc531a1d9046945d3732c73d049da2810470c3b0663788dca9e9f329a35c8a0d56add77ed5ea610b36140641860d13849abab295ca46c350f50731843c6517eee1c';
-
-export const getSignatureHash = () => {
-  const arbitrarySignatureHash = Web3.utils.soliditySha3({
-    t: 'bytes',
-    v: arbitrarySignature,
-  });
-
-  return arbitrarySignatureHash;
 };
 
 export const pinOrderToIpfs = async (order, daoid) => {
