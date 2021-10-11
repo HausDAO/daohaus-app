@@ -323,10 +323,8 @@ export const supportedChains = {
   // },
 };
 
-export const chainByID = chainID => {
-  console.log(chainID, supportedChains);
-  return supportedChains[chainID];
-};
+export const chainByID = chainID => supportedChains[chainID];
+
 export const getGraphEndpoint = (chainID, endpointType) =>
   chainByID(chainID)[endpointType];
 
