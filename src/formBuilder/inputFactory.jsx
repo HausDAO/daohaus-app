@@ -29,6 +29,7 @@ import ColorPicker from './colorPicker';
 import DiscourseMeta from './discourseMeta';
 import ConditionalInput from './conditionalInput';
 import NftApproval from './nftApproval';
+import TokenInfoInput from './tokenInfoInput';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -119,6 +120,9 @@ export const InputFactory = props => {
   }
   if (type === 'nftApproval') {
     return <NftApproval {...props} />;
+  }
+  if (type === 'tokenInfoInput') {
+    return <TokenInfoInput {...props} />;
   }
   return null;
 };

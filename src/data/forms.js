@@ -454,7 +454,7 @@ export const FORM = {
       [
         FIELD.NFT_INPUT,
         FIELD.NFT_APPROVAL,
-        FIELD.TOKEN_ID_INPUT,
+        FIELD.TOKEN_INFO_INPUT,
         FIELD.MINION_SELECT,
         FIELD.SHARES_REQUEST,
         FIELD.LOOT_REQUEST,

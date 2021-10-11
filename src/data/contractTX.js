@@ -944,7 +944,11 @@ export const TX = {
         gatherArgs: [
           {
             type: 'nestedArgs',
-            gatherArgs: ['2', '.values.tokenId', '1'],
+            gatherArgs: [
+              '.values.tokenType',
+              '.values.tokenId',
+              '.values.numTokens || 0',
+            ],
           },
         ],
       }, // typesTokensIdsAmounts

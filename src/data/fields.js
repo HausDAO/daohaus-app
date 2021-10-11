@@ -200,12 +200,12 @@ export const FIELD = {
     label: 'Token Address',
     expectType: 'address',
   },
-  TOKEN_ID_INPUT: {
-    type: 'input',
+  TOKEN_INFO_INPUT: {
+    type: 'tokenInfoInput',
     htmlFor: 'tokenId',
     name: 'tokenId',
     placeholder: '0',
-    label: 'Token ID',
+    label: 'Token Info',
     expectType: 'number',
   },
   NFT_APPROVAL: {
