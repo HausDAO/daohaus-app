@@ -35,6 +35,7 @@ import {
 } from '../utils/general';
 
 import { TX } from '../data/contractTX';
+import EscrowActions from './escrowActions';
 
 const MotionBox = motion(Box);
 
@@ -542,6 +543,18 @@ const ProposalVote = ({
               )}
             </Stack>
           )}
+          {proposal?.escrow &&
+            (proposal?.status === 'Failed' ||
+              proposal?.status === 'Cancelled') && (
+              <Flex justify='center'>
+                <EscrowActions
+                  proposal={proposal}
+                  address={address}
+                  injectedProvider={injectedProvider}
+                  daochain={daochain}
+                />
+              </Flex>
+            )}
         </Stack>
       </ContentBox>
     </>

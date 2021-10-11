@@ -58,6 +58,7 @@ const EscrowActions = ({ proposal, address, injectedProvider, daochain }) => {
             successToast({
               title: 'Tokens Withdrawn to vault!',
             });
+            setTokensAvailable(false);
             refreshDao();
             resolvePoll(txHash);
             setLoading(false);
@@ -92,7 +93,7 @@ const EscrowActions = ({ proposal, address, injectedProvider, daochain }) => {
 
   return (
     <Flex alignItems='center' flexDir='row'>
-      {tokensAvailable ? (
+      {tokensAvailable && !proposal.executed ? (
         <Button onClick={withdrawEscrowTokens}>Withdraw from Escrow</Button>
       ) : (
         <Text>Tokens Withdrawn</Text>

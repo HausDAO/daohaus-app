@@ -25,10 +25,12 @@ const MinionCancel = ({ proposal }) => {
   const [loading, setLoading] = useState(false);
 
   const cancelMinion = async () => {
-    if (!proposal?.minion) return;
+    if (!proposal?.minion && !proposal?.escrow) return;
 
     setLoading(true);
-    const args = [proposal.proposalId];
+    const args = proposal.escrow
+      ? [proposal.proposalId, proposal.molochAddress]
+      : [proposal.proposalId];
     try {
       const poll = createPoll({ action: 'cancelProposal', cachePoll })({
         daoID: daoid,
@@ -62,6 +64,7 @@ const MinionCancel = ({ proposal }) => {
         web3: injectedProvider,
         minion: proposal.minionAddress,
         chainID: daochain,
+        minionType: proposal.escrow ? 'escrowMinion' : null,
       })('cancelAction')({
         args,
         address,
