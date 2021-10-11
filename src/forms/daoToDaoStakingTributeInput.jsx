@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import { RiInformationLine } from 'react-icons/ri';
 import {
   Button,
   FormLabel,
@@ -8,12 +10,10 @@ import {
   Tooltip,
   Icon,
 } from '@chakra-ui/react';
-import { RiInformationLine } from 'react-icons/ri';
 import { utils } from 'web3';
 
-import React, { useState, useEffect } from 'react';
-import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
+import TextBox from '../components/TextBox';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {

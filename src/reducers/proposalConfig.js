@@ -1,3 +1,4 @@
+import { BLACKLIST } from '../data/blacklist';
 import { devList, createPlaylist, generateNewConfig } from '../utils/playlists';
 
 const handleDevForms = (data = {}) => {
@@ -6,11 +7,29 @@ const handleDevForms = (data = {}) => {
   return isDev ? { ...data, devList } : data;
 };
 
-const handleInit = payload => {
-  if (payload?.proposalConfig) {
-    return handleDevForms(payload.proposalConfig);
+const handleFormBlacklist = (data = {}) => {
+  const checkBlacklist = (formList = []) => {
+    return formList.filter(formID => !BLACKLIST.FORMS.includes(formID));
+  };
+
+  return {
+    ...data,
+    allForms: { ...data.allForms, forms: checkBlacklist(data.allForms.forms) },
+    playlists: data.playlists?.map(list => ({
+      ...list,
+      forms: checkBlacklist(list.forms),
+    })),
+  };
+};
+
+const handleInit = daoMetaData => {
+  if (daoMetaData?.proposalConfig) {
+    return handleDevForms(handleFormBlacklist(daoMetaData.proposalConfig));
   }
-  return handleDevForms(generateNewConfig({ daoMetaData: payload }));
+  console.warn('DID NOT RECIEVE PROPOSAL CONFIG FROM DAO METADATA');
+  return handleDevForms(
+    handleFormBlacklist(generateNewConfig({ daoMetaData })),
+  );
 };
 
 const handleEditPlaylist = (state, params) => {

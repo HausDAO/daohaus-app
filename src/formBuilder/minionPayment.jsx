@@ -2,15 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
-import { ModButton } from './staticElements';
-
-import { validate } from '../utils/validation';
+import ModButton from './modButton';
 import { handleDecimals } from '../utils/general';
 import {
   getReadableBalanceFromList,
   getReadableBalance,
   getVaultERC20s,
 } from '../utils/vaults';
+import { validate } from '../utils/validation';
 
 const MinionToken = props => {
   const { daoVaults } = useDao();
@@ -101,8 +100,8 @@ const MinionToken = props => {
       btn={
         selectedMinion && (
           <ModButton
-            callback={setMax}
-            label={
+            fn={setMax}
+            text={
               displayableBalance != null ? `Max: ${displayableBalance}` : '--'
             }
           />

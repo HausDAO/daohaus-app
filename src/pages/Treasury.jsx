@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { BiArrowBack } from 'react-icons/bi';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { RiAddFill } from 'react-icons/ri';
 import { useParams, Link } from 'react-router-dom';
 import { Button, Flex, Icon, useToast } from '@chakra-ui/react';
-import { RiAddFill } from 'react-icons/ri';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { BiArrowBack } from 'react-icons/bi';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import BalanceList from '../components/balanceList';
 import BankChart from '../components/bankChart';

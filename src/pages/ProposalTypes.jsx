@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Flex, Spinner } from '@chakra-ui/react';
 
-import { useParams } from 'react-router-dom';
-import {
-  useConfirmation,
-  useFormModal,
-  useOverlay,
-} from '../contexts/OverlayContext';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-
-import PlaylistSelector from '../components/playlistSelector';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
+import PlaylistSelector from '../components/playlistSelector';
 import ProposalList from '../components/formList';
 import SaveButton from '../components/saveButton';
-import { updateProposalConfig } from '../utils/metadata';
 import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
+import { updateProposalConfig } from '../utils/metadata';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -31,11 +27,11 @@ const ProposalTypes = () => {
     refetchMetaData,
   } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
-  const { openFormModal, closeModal } = useFormModal();
   const { successToast, errorToast } = useOverlay();
-  const { openConfirmation } = useConfirmation();
+  const { formModal, confirmModal, closeModal } = useAppModal();
   const { playlists, allForms = {}, customData, devList } = daoProposals || {};
   const { daochain } = useParams();
+
   const [selectedListID, setListID] = useState(
     dev && devList?.forms?.length ? 'dev' : 'all',
   );
@@ -50,9 +46,9 @@ const ProposalTypes = () => {
     }
   };
 
-  const saveConfig = async () => {
+  const saveConfig = async updateSaveButton => {
     setLoading(true);
-    await updateProposalConfig(daoProposals, {
+    updateProposalConfig(daoProposals, {
       injectedProvider,
       meta: daoMetaData,
       address,
@@ -60,6 +56,7 @@ const ProposalTypes = () => {
       onSuccess: () => {
         successToast({ title: 'Proposal data updated!' });
         refetchMetaData();
+        updateSaveButton?.();
         setLoading(false);
       },
       onError: error => {
@@ -72,26 +69,12 @@ const ProposalTypes = () => {
     });
   };
 
-  const handleSaveConfig = () => {
-    if (dev) {
-      openConfirmation({
-        onSubmit: async () => {
-          closeModal();
-          await saveConfig();
-        },
-        title: 'DEV WARNING',
-        header: 'DEV WARNING',
-        body:
-          'Local DEV builds may have data that is out of sync with the app branch. If you are pushing a form to the DAO metadata, make sure the form exists on the app branch first.',
-      });
-    } else {
-      saveConfig();
-    }
-  };
-
   const editPlaylist = id => {
-    openFormModal({
-      lego: CORE_FORMS.EDIT_PLAYLIST,
+    const playlist = playlists?.find(list => list.id === id);
+
+    formModal({
+      ...CORE_FORMS.EDIT_PLAYLIST,
+      title: `Edit ${playlist?.name || 'Playlist'}?`,
       onSubmit: ({ values }) => {
         const name = values?.title;
         if (name && id) {
@@ -104,19 +87,22 @@ const ProposalTypes = () => {
 
   const deletePlaylist = id => {
     const playlist = playlists.find(list => list.id === id);
-    openConfirmation({
-      title: 'Delete Playlist',
-      header: `Are you sure you want to delete '${playlist?.name}'?`,
+    confirmModal({
+      subtitle: 'Delete Playlist',
+      title: `Delete '${playlist?.name}'?`,
+      description:
+        'Requires member signature. Boost playlists can be restored on the Boosts Marketplace page.',
       onSubmit() {
         dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
+        setListID('all');
         closeModal();
       },
     });
   };
 
   const addPlaylist = () => {
-    openFormModal({
-      lego: CORE_FORMS.ADD_PLAYLIST,
+    formModal({
+      ...CORE_FORMS.ADD_PLAYLIST,
       onSubmit: ({ values }) => {
         dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
         closeModal();
@@ -134,7 +120,7 @@ const ProposalTypes = () => {
         <Flex mb={[6, 12]} justifyContent='flex-end'>
           <SaveButton
             watch={orderPlaylistForms(playlists)}
-            saveFn={handleSaveConfig}
+            saveFn={saveConfig}
             disabled={loading}
             blockRouteOnDiff
             undoChanges={undoChanges}

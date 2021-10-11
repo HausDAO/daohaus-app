@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Flex, useBreakpointValue } from '@chakra-ui/react';
-import WithdrawForm from './uberWithdraw';
+
 import PullForm from './uberPullForm';
+import WithdrawForm from './uberWithdraw';
 
 const WithdrawPullForm = ({
   uberMembers,

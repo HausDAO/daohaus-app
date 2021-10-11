@@ -6,18 +6,25 @@ import GenericSelect from './genericSelect';
 const MinionSelect = props => {
   const { name, localValues, localForm } = props;
   const { setValue } = localForm;
-  const { daoOverview } = useDao();
+  const { daoOverview, daoVaults } = useDao();
   const minions = useMemo(() => {
     return daoOverview.minions
-      .filter(minion => minion.minionType === props.minionType)
-      .map(
-        minion => ({
-          value: minion.safeAddress || minion.minionAddress,
-          name: minion.details,
-        }),
-        [],
-      );
-  });
+      .filter(minion => {
+        const customFilter = props.filters?.[minion.minionType];
+        return (
+          minion.minionType === props.minionType &&
+          (!customFilter ||
+            customFilter({
+              ...minion,
+              ...daoVaults.find(v => v.address === minion.minionAddress),
+            }))
+        );
+      })
+      .map(minion => ({
+        value: minion.minionAddress,
+        name: minion.details,
+      }));
+  }, []);
 
   useEffect(() => {
     if (localValues && localValues.minionAddress) {

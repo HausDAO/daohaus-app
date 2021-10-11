@@ -3,12 +3,12 @@ import Web3 from 'web3';
 
 import SuperfluidMinionAbi from '../contracts/superfluidMinion.json';
 import SuperfluidResolverAbi from '../contracts/iSuperfluidResolver.json';
+import { TokenService } from './tokenService';
 import {
   MINION_STREAMS,
   SF_ACTIVE_STREAMS,
   SF_STREAMS,
 } from '../graphQL/superfluid-queries';
-import { TokenService } from './tokenService';
 import { chainByID, getGraphEndpoint } from '../utils/chain';
 import { graphFetchAll } from '../utils/theGraph';
 import { graphQuery } from '../utils/apollo';

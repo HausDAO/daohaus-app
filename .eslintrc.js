@@ -68,6 +68,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-curly-newline': 'off', // priority 2, harder conflicting with prettier
     'react/display-name': 'off',
+    'react/destructuring-assignment': 'off',
     'jsx-quotes': ['error', 'prefer-single'], // leave
     'prettier/prettier': 'error',
   },

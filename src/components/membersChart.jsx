@@ -9,21 +9,21 @@ import {
   GradientDefs,
 } from 'react-vis';
 import { Box, Flex, Spinner, RadioGroup, Stack, Radio } from '@chakra-ui/react';
-import { useSessionStorage } from '../hooks/useSessionStorage';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import ContentBox from './ContentBox';
+import TextBox from './TextBox';
+import { getTerm } from '../utils/metadata';
+import { getActiveMembers } from '../utils/dao';
 import {
   getDateRange,
   getDatesArray,
   groupBalancesMemberToDateRange,
   subtractDays,
 } from '../utils/charts';
-import ContentBox from './ContentBox';
-import TextBox from './TextBox';
 import { fetchBankValues } from '../utils/theGraph';
 import { numberWithCommas } from '../utils/general';
-import { getTerm } from '../utils/metadata';
-import { getActiveMembers } from '../utils/dao';
 
 const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   const { daochain, daoid } = useParams();

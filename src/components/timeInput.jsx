@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Input,
@@ -6,7 +7,7 @@ import {
   Select,
   Text,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+
 import { calcSeconds } from '../utils/general';
 
 const units = [
@@ -48,7 +49,6 @@ const TimeInput = ({
     if (currentUnit && amt && !errors.enforceNumber) {
       const seconds = calcSeconds(amt, currentUnit);
       setTimePeriod(seconds);
-      console.log(seconds);
       setTotalSeconds(seconds);
     } else {
       setTimePeriod(0);

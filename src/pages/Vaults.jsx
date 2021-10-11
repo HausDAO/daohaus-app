@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { RiAddFill } from 'react-icons/ri';
 import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { RiAddFill } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import MainViewLayout from '../components/mainViewLayout';
 import BankChart from '../components/bankChart';
-import VaultCard from '../components/vaultCard';
 import ListFilter from '../components/listFilter';
+import MainViewLayout from '../components/mainViewLayout';
+import VaultCard from '../components/vaultCard';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { vaultFilterOptions } from '../utils/vaults';
 

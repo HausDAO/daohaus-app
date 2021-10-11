@@ -1,38 +1,44 @@
 import React from 'react';
-import AbiInput from './abiInput';
 
+import AbiInput from './abiInput';
 import AddressInput from './addressInput';
+import BuyoutPaymentInput from './buyoutPaymentInput';
+import ColorPicker from './colorPicker';
+import ConditionalInput from './conditionalInput';
+import DateRange from './dateRange';
+import DiscourseMeta from './discourseMeta';
+import GatedInput from './gatedInput';
+import GenericFormDisplay from './genericFormDisplay';
 import GenericInput from './genericInput';
 import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
 import LinkInput from './linkInput';
-import MinionSelect from './minionSelect';
-import PaymentInput from './paymentInput';
-import TributeInput from './tributeInput';
-import TargetContract from './targetContract';
-import MultiInput from './multiInput';
-import NftSelect from './nftSelect';
-import GatedInput from './gatedInput';
-import GenericFormDisplay from './genericFormDisplay';
 import LootGrabDisplay from './lootGrabDisplay';
 import MinionPayment from './minionPayment';
-import DateRange from './dateRange';
-import PriceInput from './priceInput';
-import NiftyInkUrl from './niftyInkUrl';
+import MinionSelect from './minionSelect';
 import MinionTypeSelect from './minionTypeSelect';
-import SuperfluidRate from './superfluidRate';
-import SuperfluidPaymentInput from './superfluidPaymentInput';
-import BuyoutPaymentInput from './buyoutPaymentInput';
+import MultiInput from './multiInput';
+import NftSelect from './nftSelect';
+import NiftyInkUrl from './niftyInkUrl';
+import PaymentInput from './paymentInput';
+import PriceInput from './priceInput';
 import RageInput from './rageInput';
 import RaribleNftSelect from './raribleNftData';
-import ColorPicker from './colorPicker';
-import DiscourseMeta from './discourseMeta';
-import ConditionalInput from './conditionalInput';
 import NftApproval from './nftApproval';
 import TokenInfoInput from './tokenInfoInput';
+import CheckSwitch from './checkSwitch';
+import CheckGate from './checkGate';
+import SuperfluidPaymentInput from './superfluidPaymentInput';
+import SuperfluidRate from './superfluidRate';
+import TargetContract from './targetContract';
+import TributeInput from './tributeInput';
 
 export const InputFactory = props => {
-  const { type } = props;
+  const { type, formCondition } = props;
+
+  if (type === 'formCondition' && props[formCondition]) {
+    return <InputFactory {...props} {...props[formCondition]} />;
+  }
 
   if (type === 'input') {
     return <GenericInput {...props} />;
@@ -123,6 +129,12 @@ export const InputFactory = props => {
   }
   if (type === 'tokenInfoInput') {
     return <TokenInfoInput {...props} />;
+  }
+  if (type === 'checkSwitch') {
+    return <CheckSwitch {...props} />;
+  }
+  if (type === 'checkGate') {
+    return <CheckGate {...props} />;
   }
   return null;
 };

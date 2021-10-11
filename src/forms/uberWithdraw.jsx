@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
-import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from '@emotion/styled';
 
-import { useOverlay } from '../contexts/OverlayContext';
-import { displayBalance, valToDecimalString } from '../utils/tokenValue';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
-// import { useParams } from 'react-router-dom';
-import { createPoll } from '../services/pollService';
-import { UberHausMinionService } from '../services/uberHausMinionService';
-import { useUser } from '../contexts/UserContext';
-import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import MaxOutInput from '../components/maxInput';
 import TokenSelect from './tokenSelect';
+import { createPoll } from '../services/pollService';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+import { displayBalance, valToDecimalString } from '../utils/tokenValue';
 
 const FormWrapper = styled.form`
   width: 100%;

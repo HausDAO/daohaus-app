@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Flex, Box, Stack, Link, Icon, IconButton } from '@chakra-ui/react';
-import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -10,8 +10,8 @@ import ProposalActions from '../components/proposalActions';
 import ProposalDetails from '../components/proposalDetails';
 import TextBox from '../components/TextBox';
 import { createContract } from '../utils/contract';
-import { getTerm, getTitle } from '../utils/metadata';
 import { getProposalHistories } from '../utils/activities';
+import { getTerm, getTitle } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
 import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
 import { transactionByProposalType } from '../utils/txHelpers';

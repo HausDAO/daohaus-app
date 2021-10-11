@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Box, Button, Icon, HStack } from '@chakra-ui/react';
-import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
+import { Flex, Box, Button, Icon, HStack } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { defaultTheme } from '../themes/defaultTheme';
 import CustomThemeForm from '../forms/customTheme';
-import ThemePreview from '../components/themePreview';
-import MainViewLayout from '../components/mainViewLayout';
-import { useMetaData } from '../contexts/MetaDataContext';
 import GenericModal from '../modals/genericModal';
+import MainViewLayout from '../components/mainViewLayout';
+import ThemePreview from '../components/themePreview';
 // import { boostPost } from '../utils/requests';
 import { put } from '../utils/metadata';
 

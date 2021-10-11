@@ -66,7 +66,6 @@ export const createPoll = ({
     actions,
     txHash,
   }) => {
-    console.log(`txHash`, txHash);
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {

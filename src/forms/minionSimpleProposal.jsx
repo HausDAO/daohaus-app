@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Web3 from 'web3';
-
+import { AiOutlineCaretDown } from 'react-icons/ai';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   FormLabel,
@@ -17,9 +18,7 @@ import {
   Switch,
   Spinner,
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
-import { RiErrorWarningLine } from 'react-icons/ri';
-import { AiOutlineCaretDown } from 'react-icons/ai';
+import Web3 from 'web3';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
@@ -27,17 +26,17 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
-import TextBox from '../components/TextBox';
 import PaymentInput from './paymentInput';
+import TextBox from '../components/TextBox';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
+import { createForumTopic } from '../utils/discourse';
 import {
   detailsToJSON,
   daoConnectedAndSameChain,
   IsJsonString,
 } from '../utils/general';
-import { createForumTopic } from '../utils/discourse';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionProposalForm = () => {

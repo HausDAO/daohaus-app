@@ -6,27 +6,26 @@ import { chainByID } from './chain';
 import { createContract } from './contract';
 import { IsJsonString } from './general';
 
-import MOLOCH_V2 from '../contracts/molochV2.json';
+import DAO_CONDITIONAL_HELPER from '../contracts/daoConditionalHelper.json';
 import ERC_20 from '../contracts/erc20a.json';
-import VANILLA_MINION from '../contracts/minion.json';
 import ERC_721 from '../contracts/nft.json';
 import ERC_1155 from '../contracts/erc1155.json';
+import GNOSIS_IPROXY from '../contracts/iProxy.json';
+import MOLOCH_V2 from '../contracts/molochV2.json';
 import NIFTY_INK from '../contracts/niftyInk.json';
-import UBERHAUS_MINION from '../contracts/uberHausMinion.json';
-import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
-import NEAPOLITAN_MINION_FACTORY from '../contracts/neapolitanMinionFactory.json';
-import NEAPOLITAN_MINION from '../contracts/neapolitanMinion.json';
-import SAFE_MINION_FACTORY from '../contracts/safeMinionFactory.json';
-import SAFE_MINION from '../contracts/safeMinion.json';
-import SAFE_MULTISEND from '../contracts/safeMultisend.json';
-import SAFE_SIGNLIB from '../contracts/safeSignMessageLib.json';
-import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import NIFTY_MINION_FACTORY from '../contracts/minionNiftyFactory.json';
 import NIFTY_MINION from '../contracts/minionNifty.json';
+import SAFE_MINION from '../contracts/safeMinion.json';
+import SAFE_MINION_FACTORY from '../contracts/safeMinionFactory.json';
+import SAFE_MULTISEND from '../contracts/safeMultisend.json';
+import SAFE_SIGNLIB from '../contracts/safeSignMessageLib.json';
+import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
+import SUPERFLUID_MINION_FACTORY from '../contracts/superfluidMinionFactory.json';
+import UBERHAUS_MINION from '../contracts/uberHausMinion.json';
+import VANILLA_MINION from '../contracts/minion.json';
+import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
-import DAO_CONDITIONAL_HELPER from '../contracts/daoConditionalHelper.json';
-import SUPERFLUID_MINION_FACTORY from '../contracts/superfluidMinionFactory.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
 
 export const LOCAL_ABI = Object.freeze({
@@ -40,8 +39,6 @@ export const LOCAL_ABI = Object.freeze({
   UBERHAUS_MINION,
   SUPERFLUID_MINION,
   SUPERFLUID_MINION_FACTORY,
-  NEAPOLITAN_MINION_FACTORY,
-  NEAPOLITAN_MINION,
   SAFE_MINION_FACTORY,
   SAFE_MINION,
   SAFE_MULTISEND,
@@ -81,10 +78,23 @@ const isProxyABI = response => {
   }
 };
 
+const isGnosisProxy = response => {
+  return (
+    response.length === 2 &&
+    response.every(fn => ['constructor', 'fallback'].includes(fn.type))
+  );
+};
+
 const getImplementationOf = async (address, chainID, abi) => {
   const web3Contract = createContract({ address, abi, chainID });
   const newAddress = await web3Contract.methods.implementation().call();
   return newAddress;
+};
+
+const getGnosisMasterCopy = async (address, chainID) => {
+  const web3Contract = createContract({ address, abi: GNOSIS_IPROXY, chainID });
+  const masterCopy = await web3Contract.methods.masterCopy().call();
+  return masterCopy;
 };
 
 export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
@@ -97,13 +107,12 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     const data = await response.json();
     if (data.message === 'OK' && IsJsonString(data?.result) && parseJSON) {
       const abiData = JSON.parse(data.result);
-      if (isProxyABI(abiData)) {
-        const originalAddress = await getImplementationOf(
-          contractAddress,
-          chainID,
-          abiData,
-        );
-        const newData = await fetchABI(originalAddress, chainID, parseJSON);
+      const proxyAddress = isProxyABI(abiData)
+        ? await getImplementationOf(contractAddress, chainID, abiData)
+        : isGnosisProxy(abiData) &&
+          (await getGnosisMasterCopy(contractAddress, chainID));
+      if (proxyAddress) {
+        const newData = await fetchABI(proxyAddress, chainID, parseJSON);
         return newData;
       }
       return abiData;

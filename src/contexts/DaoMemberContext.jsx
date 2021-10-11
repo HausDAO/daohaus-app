@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { checkIfUserIsDelegate } from '../utils/general';
 import { initMemberWallet } from '../utils/wallet';
 

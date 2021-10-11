@@ -1,9 +1,9 @@
 import React from 'react';
 import { Flex, Box, useBreakpointValue } from '@chakra-ui/react';
 
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 import DesktopNav from '../nav/desktopNav';
 import MobileNav from '../nav/mobileNav';
-import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
 
 import '../global.css';

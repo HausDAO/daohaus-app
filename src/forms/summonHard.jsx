@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -10,12 +11,11 @@ import {
   Tooltip,
   Flex,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import { validateSummonresAndShares } from '../utils/summoning';
 import TimeInput from '../components/timeInput';
+import { validateSummonresAndShares } from '../utils/summoning';
 
 const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
   const [currentError, setCurrentError] = useState(null);
@@ -229,7 +229,7 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
             <Textarea
               className='inline-field'
               name='summonerAndShares'
-              placeholder={`${daoData.summoner} 1`}
+              placeholder={`${daoData?.summoner} 1`}
               ref={register({
                 required: true,
                 validate: {

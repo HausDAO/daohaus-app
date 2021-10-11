@@ -1,5 +1,6 @@
-import { generateNonce } from '../utils/general';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
+import { generateNonce } from '../utils/general';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const INFO_TEXT = {
   SHARES_REQUEST:
@@ -25,6 +26,7 @@ export const INFO_TEXT = {
   QUORUM:
     'Allows the DAO to execute proposals once a set percentage of passed votes has been reached. We recommend 50% or higher. This cannot be changed once deployed.',
   RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
+  SAFE_ADDRESS: 'Address of an already deployed Gnosis Safe.',
 };
 
 export const FIELD = {
@@ -92,7 +94,7 @@ export const FIELD = {
     htmlFor: 'applicant',
     name: 'applicant',
     placeholder: '0x',
-    label: 'Applicant',
+    label: 'Recipient',
     info: INFO_TEXT.APPLICANT,
     expectType: 'address',
   },
@@ -134,6 +136,16 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'address',
   },
+  ONLY_SAFE: {
+    type: 'gatedInput',
+    only: CONTRACT_MODELS.GNOSIS_SAFE,
+    label: 'Gnosis Safe Address',
+    name: 'safeAddress',
+    htmlFor: 'safeAddress',
+    placeholder: '0x',
+    info: INFO_TEXT.SAFE_ADDRESS,
+    expectType: 'address',
+  },
   //  Plain old input until token price API can be built
   MINION_PAYMENT: {
     type: 'minionPayment',
@@ -153,6 +165,11 @@ export const FIELD = {
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
     expectType: 'address',
+    filters: {
+      [MINION_TYPES.SAFE]: minionVault => {
+        return minionVault.isMinionModule;
+      },
+    },
   },
   ABI_INPUT: {
     type: 'abiInput',
@@ -268,7 +285,7 @@ export const FIELD = {
     placeholder: '50',
     info: INFO_TEXT.MINION_QUORUM,
     expectType: 'number',
-    defaultValue: 0,
+    defaultValue: () => 0,
   },
   SALT_NONCE: {
     type: 'input',
@@ -365,6 +382,33 @@ export const FIELD = {
     type: 'discourseMeta',
     name: 'discourseMeta',
     htmlFor: 'discourseMeta',
+    expectType: 'any',
+  },
+
+  TEST_SWITCH: {
+    type: 'checkSwitch',
+    listenTo: 'formCondition',
+    checked: 'token',
+    unchecked: 'signal',
+    label: {
+      type: 'formCondition',
+      token: 'checked',
+      signal: 'not checked',
+    },
+    title: 'Create a token proposal',
+    description: {
+      type: 'formCondition',
+      token: 'This creates a WhiteList Token TX',
+      signal: 'This creates a signal proposal',
+    },
+    expectType: 'any',
+  },
+  TEST_GATE: {
+    type: 'checkGate',
+    startsChecked: false,
+    label: 'Toggle Field State',
+    title: 'Check to render Description',
+    description: 'You bet',
     expectType: 'any',
   },
 };

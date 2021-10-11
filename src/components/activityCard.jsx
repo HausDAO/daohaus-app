@@ -11,10 +11,10 @@ import {
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
-import { handleGetProfile } from '../utils/3box';
-import { timeToNow, truncateAddr } from '../utils/general';
 import ContentBox from './ContentBox';
 import { chainByName } from '../utils/chain';
+import { handleGetProfile } from '../utils/3box';
+import { timeToNow, truncateAddr } from '../utils/general';
 
 const handleName = (activity, profile) => {
   if (profile?.name) {

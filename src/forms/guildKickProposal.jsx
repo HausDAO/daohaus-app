@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { useForm } from 'react-hook-form';
+import { useLocation, useParams } from 'react-router-dom';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 
+import { useDao } from '../contexts/DaoContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
+import AddressInput from './addressInput';
+import DetailsFields from './detailFields';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { chainByID } from '../utils/chain';
+import { createForumTopic } from '../utils/discourse';
 import {
   createHash,
   detailsToJSON,
   daoConnectedAndSameChain,
 } from '../utils/general';
-import { createPoll } from '../services/pollService';
-import { MolochService } from '../services/molochService';
-import { useDao } from '../contexts/DaoContext';
-import DetailsFields from './detailFields';
-import AddressInput from './addressInput';
-import { chainByID } from '../utils/chain';
-import { useMetaData } from '../contexts/MetaDataContext';
-import { createForumTopic } from '../utils/discourse';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);

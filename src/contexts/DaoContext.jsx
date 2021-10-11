@@ -6,18 +6,18 @@ import React, {
   useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import { bigGraphQuery } from '../utils/theGraph';
-import { useSessionStorage } from '../hooks/useSessionStorage';
 
-import { supportedChains } from '../utils/chain';
-import { useInjectedProvider } from './InjectedProviderContext';
+import { DaoMemberProvider } from './DaoMemberContext';
 import { MetaDataProvider } from './MetaDataContext';
 import { TokenProvider } from './TokenContext';
 import { TXProvider } from './TXContext';
-import { DaoMemberProvider } from './DaoMemberContext';
 import { useUser } from './UserContext';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { useInjectedProvider } from './InjectedProviderContext';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { bigGraphQuery } from '../utils/theGraph';
+import { supportedChains } from '../utils/chain';
 import { putRefreshApiVault } from '../utils/metadata';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 export const DaoContext = createContext();
 

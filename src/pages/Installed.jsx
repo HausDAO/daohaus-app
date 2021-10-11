@@ -1,25 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Flex, Spinner, Button, InputGroup, Input } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router';
+import { Flex, Spinner, Button, InputGroup, Input } from '@chakra-ui/react';
 
-import { useMetaData } from '../contexts/MetaDataContext';
-import { useFormModal } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
-import ListSelectorItem from '../components/ListSelectorItem';
-import TextBox from '../components/TextBox';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useTX } from '../contexts/TXContext';
+import { useAppModal } from '../hooks/useModals';
+import BoostItemButton from '../components/boostItemButton';
 import List from '../components/list';
-import NoListItem from '../components/NoListItem';
-import ListSelector from '../components/ListSelector';
 import ListItem from '../components/listItem';
-
+import ListItemButton from '../components/listItemButton';
+import ListSelector from '../components/ListSelector';
+import ListSelectorItem from '../components/ListSelectorItem';
+import NoListItem from '../components/NoListItem';
+import TextBox from '../components/TextBox';
 import { daoConnectedAndSameChain, isLastItem } from '../utils/general';
 import { generateLists } from '../utils/marketplace';
-import { CORE_FORMS } from '../data/forms';
-import BoostItemButton from '../components/boostItemButton';
-import ListItemButton from '../components/listItemButton';
-import { useTX } from '../contexts/TXContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
+import { STEPS } from '../data/boosts';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -94,7 +93,7 @@ const InstalledList = ({
 }) => {
   const { daoid, daochain } = useParams();
   const history = useHistory();
-  const { openFormModal } = useFormModal();
+  const { stepperModal } = useAppModal();
   const { hydrateString } = useTX();
   const { address, injectedChain } = useInjectedProvider();
   const { daoMember } = useDaoMember();
@@ -106,7 +105,6 @@ const InstalledList = ({
     +daoMember?.shares > 0;
 
   const currentList = useMemo(() => {
-    console.log(`lists`, lists);
     if (listID && lists) {
       return handleSearch(
         lists?.find(list => list.id === listID).types,
@@ -116,21 +114,8 @@ const InstalledList = ({
     }
   }, [listID, lists, searchStr]);
 
-  const handleClick = () => {
-    openFormModal({
-      steps: {
-        STEP1: {
-          start: true,
-          type: 'form',
-          next: 'STEP2',
-          lego: CORE_FORMS.SUMMON_MINION_SELECTOR,
-        },
-        STEP2: {
-          type: 'summoner',
-          finish: true,
-        },
-      },
-    });
+  const handleSummon = () => {
+    stepperModal(STEPS.SUMMON_ANY);
   };
 
   const handleMinionSettings = ({ data, id }) => {
@@ -211,7 +196,11 @@ const InstalledList = ({
             />
           </InputGroup>
           {canInteract && (
-            <Button variant='outline' onClick={handleClick} width='fit-content'>
+            <Button
+              variant='outline'
+              onClick={handleSummon}
+              width='fit-content'
+            >
               Summon Minion
             </Button>
           )}

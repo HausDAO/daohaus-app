@@ -1,12 +1,11 @@
 import React, { createContext, useEffect } from 'react';
 
-import { getApiMetadata } from '../utils/metadata';
-
 import { useSessionStorage } from '../hooks/useSessionStorage';
-import { exploreChainQuery } from '../utils/theGraph';
-import { supportedChains } from '../utils/chain';
 import { EXPLORER_DAOS } from '../graphQL/explore-queries';
+import { exploreChainQuery } from '../utils/theGraph';
+import { getApiMetadata } from '../utils/metadata';
 import { SORT_OPTIONS, EXPLORE_FILTER_OPTIONS } from '../utils/exploreContent';
+import { supportedChains } from '../utils/chain';
 
 export const ExploreContext = createContext();
 

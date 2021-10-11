@@ -1,6 +1,7 @@
 import React from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import { format } from 'date-fns';
+
 import TextBox from './TextBox';
 import ProfileMenu from './profileMenu';
 import AddressAvatar from './addressAvatar';

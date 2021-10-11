@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
+import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { isDelegating, daoConnectedAndSameChain } from '../utils/general';
 import { TX } from '../data/contractTX';
+import { isDelegating, daoConnectedAndSameChain } from '../utils/general';
 
 const SyncTokenButton = ({ token }) => {
   const { errorToast } = useOverlay();

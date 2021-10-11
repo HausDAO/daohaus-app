@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
 import {
   RiDiscordFill,
   RiTelegramFill,
@@ -9,6 +8,7 @@ import {
   RiMediumFill,
   RiLinksLine,
 } from 'react-icons/ri';
+import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';

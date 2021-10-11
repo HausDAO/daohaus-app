@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { FiAlertOctagon } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
@@ -15,7 +16,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { FiAlertOctagon } from 'react-icons/fi';
+
 import { pokemolUrlHubList, themeImagePath } from '../utils/metadata';
 
 const LinkForVersion = ({ children, dao, unReadCount, network }) => {

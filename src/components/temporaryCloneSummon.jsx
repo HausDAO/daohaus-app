@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { AiOutlineCaretDown } from 'react-icons/ai';
+import { useForm } from 'react-hook-form';
+import { RiCheckLine, RiErrorWarningLine, RiSearchLine } from 'react-icons/ri';
 import {
   Box,
   Button,
@@ -9,17 +12,15 @@ import {
   Select,
   Spinner,
 } from '@chakra-ui/react';
-import { RiCheckLine, RiErrorWarningLine, RiSearchLine } from 'react-icons/ri';
-import ContentBox from './ContentBox';
-import { useForm } from 'react-hook-form';
-import { HOME_DAO } from '../graphQL/dao-queries';
-import { capitalize, isEthAddress } from '../utils/general';
-import { getGraphEndpoint, supportedChains } from '../utils/chain';
-import { graphQuery } from '../utils/apollo';
+
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import { AiOutlineCaretDown } from 'react-icons/ai';
+import ContentBox from './ContentBox';
+import { HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
+import { capitalize, isEthAddress } from '../utils/general';
 import { graphFetchAll } from '../utils/theGraph';
+import { graphQuery } from '../utils/apollo';
+import { getGraphEndpoint, supportedChains } from '../utils/chain';
 
 const TemporaryCloneSummon = ({ handleCloneDAO }) => {
   const { register, handleSubmit } = useForm();
@@ -27,7 +28,7 @@ const TemporaryCloneSummon = ({ handleCloneDAO }) => {
 
   const { theme } = useCustomTheme();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     const daoID = data?.cloneByAddress.trim();
     const daoChain = data?.network;
     if (isEthAddress(daoID) && daoChain) {
@@ -78,7 +79,7 @@ const TemporaryCloneSummon = ({ handleCloneDAO }) => {
           color='white'
           mb={6}
         >
-          {Object.values(supportedChains)?.map((chain) => {
+          {Object.values(supportedChains)?.map(chain => {
             return (
               <option
                 key={chain.chain_id}

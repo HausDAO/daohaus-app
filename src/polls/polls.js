@@ -1,6 +1,10 @@
 import Web3 from 'web3';
-import { graphQuery } from '../utils/apollo';
-import { PROPOSALS_LIST, PROPOSAL_BY_ID } from '../graphQL/proposal-queries';
+
+import { MinionService } from '../services/minionService';
+import { SuperfluidMinionService } from '../services/superfluidMinionService';
+import { TokenService } from '../services/tokenService';
+import { NFTService } from '../services/nftService';
+import { UberHausMinionService } from '../services/uberHausMinionService';
 import {
   DAO_POLL,
   MINION_POLL,
@@ -8,27 +12,23 @@ import {
   RAGE_QUIT_POLL,
   MINION_PROPOSAL_POLL,
 } from '../graphQL/dao-queries';
+import { GET_TRANSMUTATIONS, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
+import { PROPOSALS_LIST, PROPOSAL_BY_ID } from '../graphQL/proposal-queries';
 import {
   RAGE_KICK_POLL,
   MEMBERS_LIST,
   MEMBER_DELEGATE_KEY,
 } from '../graphQL/member-queries';
-import { GET_TRANSMUTATIONS, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
+import { TX_HASH } from '../graphQL/general';
+import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
+import { createContract } from '../utils/contract';
+import { getContractABI } from '../utils/abi';
 import { getGraphEndpoint, supportedChains } from '../utils/chain';
+import { graphQuery } from '../utils/apollo';
 import {
   MINION_ACTION_FUNCTION_NAMES,
   PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
-import { TokenService } from '../services/tokenService';
-import { NFTService } from '../services/nftService';
-
-import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
-import { MinionService } from '../services/minionService';
-import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import { UberHausMinionService } from '../services/uberHausMinionService';
-import { TX_HASH } from '../graphQL/general';
-import { createContract } from '../utils/contract';
-import { getContractABI } from '../utils/abi';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({

@@ -1,3 +1,5 @@
+import { utils as Web3Utils } from 'web3';
+
 const metadataApiUrl = 'https://data.daohaus.club';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
 const apiPricedataUrl =
@@ -123,6 +125,7 @@ export const getApiPriceData = async () => {
 
 export const getApiGnosis = async (networkName, endpoint) => {
   const apiGnosisUrl = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
+
   try {
     const response = await fetch(apiGnosisUrl);
     if (response.status >= 400) {
@@ -132,7 +135,20 @@ export const getApiGnosis = async (networkName, endpoint) => {
     }
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
+    // throw new Error(err);
+  }
+};
+
+export const fetchSafeDetails = async (networkName, vault) => {
+  try {
+    return await getApiGnosis(
+      networkName,
+      `safes/${Web3Utils.toChecksumAddress(vault.safeAddress)}`,
+    );
+  } catch (error) {
+    console.error(error);
+    // throw new Error(error);
   }
 };
 

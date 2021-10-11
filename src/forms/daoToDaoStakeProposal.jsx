@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FaCopy } from 'react-icons/fa';
+import { RiErrorWarningLine, RiLoginBoxLine } from 'react-icons/ri';
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -11,29 +15,24 @@ import {
   useToast,
   Link,
 } from '@chakra-ui/react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { RiErrorWarningLine, RiLoginBoxLine } from 'react-icons/ri';
 
-import { FaCopy } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
-
-import TextBox from '../components/TextBox';
-import molochAbi from '../contracts/molochV2.json';
-import DetailsFields from './detailFields';
-import { createHash, detailsToJSON } from '../utils/general';
-import { useOverlay } from '../contexts/OverlayContext';
-import DaoToDaoStakingTributeInput from './daoToDaoStakingTributeInput';
 import { useDao } from '../contexts/DaoContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import DetailsFields from './detailFields';
+import TextBox from '../components/TextBox';
+import DaoToDaoStakingTributeInput from './daoToDaoStakingTributeInput';
+import { createPoll } from '../services/pollService';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+import { TokenService } from '../services/tokenService';
+import molochAbi from '../contracts/molochV2.json';
+import { createForumTopic } from '../utils/discourse';
+import { createHash, detailsToJSON } from '../utils/general';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { valToDecimalString } from '../utils/tokenValue';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
-import { useTX } from '../contexts/TXContext';
-import { createForumTopic } from '../utils/discourse';
-import { useMetaData } from '../contexts/MetaDataContext';
-import { UberHausMinionService } from '../services/uberHausMinionService';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { TokenService } from '../services/tokenService';
 
 const StakeProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();

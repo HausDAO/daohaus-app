@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { Flex, Box, Image, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
+import { useParams } from 'react-router';
+import { Flex, Box, Image, useToast, Icon } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';

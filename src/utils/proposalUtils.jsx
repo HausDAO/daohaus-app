@@ -2,6 +2,7 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import { IsJsonString, timeToNow } from './general';
+
 import TextBox from '../components/TextBox';
 
 export const ProposalStatus = {

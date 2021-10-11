@@ -51,11 +51,12 @@ export const checkFormTypes = (values, fields) => {
   const errors = fields.reduce((arr, field) => {
     const inputVal = values[field.name];
     //  check if empty
-    if (inputVal === '' || field.expectType === 'any') {
+    if (inputVal === '' || field.expectType === 'any' || !field.expectType) {
       return arr;
     }
     const isValid = validate[field.expectType];
     if (typeof isValid !== 'function') {
+      console.log(field);
       throw new Error(`Could not find validator function ${field.expectType}`);
     }
     if (!isValid(inputVal)) {
@@ -107,7 +108,7 @@ export const customValidations = {
   },
   superFluidStreamMinimum({ values }) {
     const minDeposit = Web3.utils.toWei(values.paymentRequested);
-    if (+minDeposit < +values.weiRatePerSec * 3600) {
+    if (Number(minDeposit) < Number(values.weiRatePerSec) * 3600) {
       return {
         name: 'paymentRequested',
         message: 'Funds requested must be at least one-hour of stream value',
@@ -119,7 +120,7 @@ export const customValidations = {
     const { daoMember } = appState;
     const { tributeOffered } = values;
     // TODO allowance should be tracked by token. but lazy check based on dropdown?
-    if (+tributeOffered > +daoMember.allowance) {
+    if (Number(tributeOffered) > Number(daoMember.allowance)) {
       return {
         name: 'tributeOffered',
         message: 'Please unlock the tribute token.',
@@ -137,6 +138,22 @@ export const customValidations = {
     }
     return false;
   },
+  canRagequit({ appState }) {
+    const proposalId = appState.daoMember.highestIndexYesVote
+      ? appState.daoMember.highestIndexYesVote
+      : null;
+    const proposal = appState.daoProposals.find(
+      p => p.proposalId === proposalId,
+    );
+    if (proposal && !proposal.processed) {
+      return {
+        name: 'shares',
+        message:
+          'Cannot process this request until all pending proposal that voted YES are processed',
+      };
+    }
+    return false;
+  },
   rageQuitMinimum({ values }) {
     if (!Number(values.shares) && !Number(values.loot)) {
       return {
@@ -147,14 +164,14 @@ export const customValidations = {
     return false;
   },
   rageQuitMax({ appState, values }) {
-    if (values.shares > appState.daoMember.shares) {
+    if (Number(values.shares) > Number(appState.daoMember.shares)) {
       return {
         name: 'shares',
         message: `Shares to Rage Quit may not exceed ${appState.daoMember.shares}.`,
       };
     }
 
-    if (values.loot > appState.daoMember.loot) {
+    if (Number(values.loot) > Number(appState.daoMember.loot)) {
       return {
         name: 'loot',
         message: `Loot to Rage Quit may not exceed ${appState.daoMember.loot} loot.`,
@@ -165,11 +182,11 @@ export const customValidations = {
   enoughBalance({ appState, values }) {
     const { daoMember } = appState;
     const { tributeOffered, tributeToken } = values;
-    if (+tributeOffered > 0) {
+    if (Number(tributeOffered) > 0) {
       const token = daoMember.tokenBalances.find(
         t => t.token.tokenAddress === tributeToken,
       );
-      if (+tributeOffered > +token.tokenBalance) {
+      if (Number(tributeOffered) > Number(token.tokenBalance)) {
         return {
           name: 'tributeOffered',
           message: 'Tribute must be less than your balance.',
@@ -181,17 +198,30 @@ export const customValidations = {
   enoughDaoBalance({ appState, values }) {
     const { daoOverview } = appState;
     const { paymentRequested, paymentToken } = values;
-    if (+paymentRequested > 0) {
+    if (Number(paymentRequested) > 0) {
       const token = daoOverview.tokenBalances.find(
         t => t.token.tokenAddress === paymentToken,
       );
       console.log(token);
-      if (+paymentRequested > +token.tokenBalance) {
+      if (Number(paymentRequested) > Number(token.tokenBalance)) {
         return {
           name: 'paymentRequested',
           message: 'Payment must be less than the DAO balance.',
         };
       }
+    }
+    return false;
+  },
+  noExistingSafeMinion({ appState, values }) {
+    const { minions } = appState.daoOverview;
+    const foundSafe = minions?.find(
+      m => m.safeAddress === values.safeAddress.toLowerCase(),
+    );
+    if (foundSafe) {
+      return {
+        name: 'safeAddress',
+        message: 'This Gnosis Safe has already been assigned to a Minion',
+      };
     }
     return false;
   },

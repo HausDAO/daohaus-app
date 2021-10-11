@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import {
   Button,
   FormControl,
@@ -9,24 +11,22 @@ import {
   Tooltip,
   Text,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
-import { useParams } from 'react-router-dom';
 
-import TextBox from '../components/TextBox';
-import DetailsFields from './detailFields';
-import AddressInput from './addressInput';
-import { createHash, detailsToJSON, JANUARY_2024 } from '../utils/general';
-import { useOverlay } from '../contexts/OverlayContext';
-import DelegateMenu from '../components/delegateMenu';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { useUser } from '../contexts/UserContext';
-import { createPoll } from '../services/pollService';
-import { createForumTopic } from '../utils/discourse';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { UberHausMinionService } from '../services/uberHausMinionService';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
 import AddressAvatar from '../components/addressAvatar';
+import AddressInput from './addressInput';
+import DelegateMenu from '../components/delegateMenu';
+import DetailsFields from './detailFields';
+import TextBox from '../components/TextBox';
+import { createPoll } from '../services/pollService';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+import { createForumTopic } from '../utils/discourse';
+import { createHash, detailsToJSON, JANUARY_2024 } from '../utils/general';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 // TODO pass delegate to delegate menu
 // TODO replace delegate with user avatar

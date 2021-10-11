@@ -1,13 +1,12 @@
 import React, { useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 import { Flex } from '@chakra-ui/layout';
 
-import { useParams } from 'react-router';
-import { MINION_TYPES } from '../utils/proposalUtils';
-import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
 import GenericSelect from './genericSelect';
 import Paragraphs from './Paragraphs';
-import Header from './header';
 import TextBox from '../components/TextBox';
+import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const noneSelected = {
   title: 'Minion',
@@ -49,9 +48,6 @@ const MinionTypeSelect = props => {
 
   return (
     <Flex flexDir='column'>
-      <Header mb={4}>
-        Summon a {currentMinion?.title || noneSelected.title}
-      </Header>
       <TextBox variant='body' size='sm' mb={4}>
         {currentMinion?.description || noneSelected.description}
       </TextBox>

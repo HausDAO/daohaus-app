@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, Skeleton, Image, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
+import { Flex, Box, Skeleton, Image, useToast, Icon } from '@chakra-ui/react';
 
-import { numberWithCommas } from '../utils/general';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import SyncTokenButton from './syncTokenButton';
 import Withdraw from './withdraw';
-import { useDaoMember } from '../contexts/DaoMemberContext';
+import { numberWithCommas } from '../utils/general';
 
 const TokenListCard = ({
   token,

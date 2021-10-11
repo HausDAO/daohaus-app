@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { AiOutlineCaretDown } from 'react-icons/ai';
+import { SketchPicker } from 'react-color';
 import {
   Image,
   Button,
@@ -19,8 +21,7 @@ import {
   SliderFilledTrack,
   SliderThumb,
 } from '@chakra-ui/react';
-import { AiOutlineCaretDown } from 'react-icons/ai';
-import { SketchPicker } from 'react-color';
+
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';

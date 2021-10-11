@@ -1,6 +1,5 @@
-import { MINION_TYPES } from '../utils/proposalUtils';
-
 import { FORM } from './forms';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: {
@@ -27,7 +26,7 @@ export const MINION_NETWORKS = {
     '0x2a': '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
     '0x64': '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
     '0x89': '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
-    // '0xa4b1': '',
+    '0xa4b1': '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
   },
   // [MINION_TYPES.UBER]: {
   //   '0x2a': '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
@@ -133,6 +132,7 @@ export const MINIONS = {
     minionType: MINION_TYPES.SAFE,
     content: MINION_CONTENT[MINION_TYPES.SAFE],
     networks: MINION_NETWORKS[MINION_TYPES.SAFE],
+    // summonForm: [FORM.NEW_SAFE_MINION, FORM.NEW_SAFE_MINION_ADVANCED],
     summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },

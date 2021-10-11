@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Flex } from '@chakra-ui/react';
+
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useTX } from '../contexts/TXContext';
+import CcoCard from '../components/ccoCard';
+import CcoContributionCard from '../components/ccoContributeCard';
+import CcoClaimCard from '../components/ccoClaimCard';
+import CcoEligibility from '../components/ccoEligibility';
+import CcoResources from '../components/ccoResources';
 import MainViewLayout from '../components/mainViewLayout';
+import { ccoDaoResolver } from '../utils/resolvers';
+import { getDateTime } from '../utils/metadata';
 import {
   isCcoProposalForAddress,
   isCcoProposal,
   contributionTotalValue,
 } from '../utils/cco';
-import { getDateTime } from '../utils/metadata';
-
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useTX } from '../contexts/TXContext';
 import { MM_ADDCHAIN_DATA } from '../utils/chain';
-import CcoCard from '../components/ccoCard';
-import CcoEligibility from '../components/ccoEligibility';
-import CcoResources from '../components/ccoResources';
-import CcoContributionCard from '../components/ccoContributeCard';
-import CcoClaimCard from '../components/ccoClaimCard';
-import { ccoDaoResolver } from '../utils/resolvers';
 
 const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const { daochain } = useParams();

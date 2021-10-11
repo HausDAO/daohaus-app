@@ -1,7 +1,7 @@
 import React from 'react';
+import { FaRegHandshake } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Box, Button, Icon } from '@chakra-ui/react';
-import { FaRegHandshake } from 'react-icons/fa';
 
 import ContentBox from './ContentBox';
 

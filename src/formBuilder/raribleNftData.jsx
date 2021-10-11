@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Button, Spinner } from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
+import { Flex, Button, Spinner } from '@chakra-ui/react';
+
+import { useDao } from '../contexts/DaoContext';
+import ErrorList from './ErrorList';
 import FieldWrapper from './fieldWrapper';
+import { addZeros } from '../utils/tokenValue';
 import {
   arbitrarySignature,
   buildEncodeOrder,
@@ -11,9 +15,6 @@ import {
   getSignatureHash,
   pinOrderToIpfs,
 } from '../utils/rarible';
-import { SubmitFormError } from './staticElements';
-import { useDao } from '../contexts/DaoContext';
-import { addZeros } from '../utils/tokenValue';
 
 const RaribleNftSelect = props => {
   const { localForm, name, error } = props;
@@ -80,6 +81,9 @@ const RaribleNftSelect = props => {
     setLoading(false);
   };
 
+  //  REVIEW
+  //  Can this component use the usual FieldWrapper pattern?
+
   return (
     <FieldWrapper>
       <Flex alignItems='flex-end'>
@@ -103,7 +107,7 @@ const RaribleNftSelect = props => {
         )}
         {loading && <Spinner />}
       </Flex>
-      {error && <SubmitFormError message={error.message} />}
+      {error && <ErrorList message={error.message} />}
     </FieldWrapper>
   );
 };

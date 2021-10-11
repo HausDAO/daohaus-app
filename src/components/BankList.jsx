@@ -1,8 +1,9 @@
 import React from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
-import TextBox from './TextBox';
-import ContentBox from './ContentBox';
+
 import BankListCard from './bankListCard';
+import ContentBox from './ContentBox';
+import TextBox from './TextBox';
 
 const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
   const hasAction = hasBalance || needsSync;
