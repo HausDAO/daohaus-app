@@ -449,9 +449,32 @@ export const FORM = {
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   NEW_SAFE_MINION: {
+    customValidations: ['noExistingSafeMinion'], // TODO: deal with conditionalForm
+    formConditions: ['easy', 'advanced'],
+    tx: {
+      type: 'formCondition',
+      easy: TX.SUMMON_MINION_AND_SAFE,
+      advanced: TX.SUMMON_MINION_SAFE,
+    },
+    // required: { // TODO: how to do required input validation dinamically
+    //   type: 'formCondition',
+    //   easy: ['minionName', 'minQuorum', 'saltNonce'],
+    //   advanced: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
+    // },
     required: ['minionName', 'minQuorum', 'saltNonce'],
-    tx: TX.SUMMON_MINION_AND_SAFE,
-    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
+    fields: [
+      [
+        FIELD.SUMMON_MODE_SWITCH,
+        FIELD.MINION_NAME,
+        {
+          type: 'formCondition',
+          easy: null,
+          advanced: FIELD.ONLY_SAFE,
+        },
+        FIELD.MINION_QUORUM,
+        FIELD.SALT_NONCE,
+      ],
+    ],
   },
   NEW_SAFE_MINION_ADVANCED: {
     customValidations: ['noExistingSafeMinion'],

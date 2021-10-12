@@ -606,7 +606,7 @@ export const TX = {
     gatherArgs: [
       '.contextData.daoid',
       '.values.minionName',
-      '.values.minQuorum',
+      '.values.minQuorum || 0',
       '.values.saltNonce',
     ],
   },
@@ -621,7 +621,7 @@ export const TX = {
       '.contextData.daoid',
       '.values.safeAddress',
       '.values.minionName',
-      '.values.minQuorum',
+      '.values.minQuorum || 0',
       '.values.saltNonce',
     ],
   },
