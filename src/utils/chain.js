@@ -280,13 +280,13 @@ export const supportedChains = {
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-celo',
     minion_factory_addr: '',
-    moloch_factory_addr: '0x9100A2489B2998B1331Fd33714187d895c919075', // moloch v2.1.sol
-    dai_contract: '0x765DE816845861e75A25fCA122bb6898B8B1282a', // This is cUSD for Celo
-    wrapper_contract: '0x471EcE3750Da237f93B8E339c536989b8978a438',
-    wrap_n_zap_factory_addr: '0x07269699bc441FC97d12d5478Cb09522EF32f76A',
+    moloch_factory_addr: '0x9100a2489b2998b1331fd33714187d895c919075', // moloch v2.1.sol
+    dai_contract: '0x765de816845861e75a25fca122bb6898b8b1282a', // This is cUSD for Celo
+    wrapper_contract: '0x471ece3750da237f93b8e339c536989b8978a438',
+    wrap_n_zap_factory_addr: '0x07269699bc441fc97d12d5478cb09522ef32f76a',
     block_explorer: 'https://explorer.celo.org',
     niftyMinion: {
-      minion_factory_addr: '0xaD791Ef059A25b6C82e56977C6489974333C5A0C',
+      minion_factory_addr: '0xad791ef059a25b6c82e56977c6489974333c5a0c',
       version: 'v1',
     },
     safeMinion: {
@@ -404,7 +404,7 @@ export const MM_ADDCHAIN_DATA = {
   '0xa4ec': {
     chainId: '0xa4ec',
     chainName: 'Celo',
-    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    rpcUrls: ['https://forno.celo.org'],
     blockExplorerUrls: ['https://explorer.celo.org'],
     nativeCurrency: {
       name: 'celo',
