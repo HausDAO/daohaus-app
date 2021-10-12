@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
@@ -38,9 +38,10 @@ const FormBuilder = props => {
     formConditions,
     logValues,
     footer = true,
+    indicatorStates,
   } = props;
-
-  const [formState, setFormState] = useState(null);
+  console.log(`indicatorStates`, indicatorStates);
+  const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
@@ -275,7 +276,7 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} />
+        <ProgressIndicator currentState={formState} states={indicatorStates} />
         {footer && (
           <FormFooter
             options={options}

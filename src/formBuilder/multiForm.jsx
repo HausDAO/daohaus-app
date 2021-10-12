@@ -3,7 +3,15 @@ import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 
-import { BiChevronDown, BiChevronUp, BiMinus, BiPlus } from 'react-icons/bi';
+import {
+  BiChevronDown,
+  BiChevronUp,
+  BiErrorCircle,
+  BiMinus,
+  BiPlus,
+} from 'react-icons/bi';
+import { BsCheckCircle } from 'react-icons/bs';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
@@ -11,6 +19,29 @@ import { isLastItem } from '../utils/general';
 import { getTagRegex, serializeFields } from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
+
+const indicatorStates = {
+  loading: {
+    spinner: true,
+    title: 'Submitting...',
+    explorerLink: true,
+  },
+  success: {
+    icon: BsCheckCircle,
+    title: 'Form Submitted',
+    explorerLink: true,
+  },
+  error: {
+    icon: BiErrorCircle,
+    title: 'Error Submitting Transaction',
+    errorMessage: true,
+  },
+  idle: {
+    icon: RiErrorWarningLine,
+    titleSm:
+      'Early execution will not be available for this proposal. Forwarded funds must be within available minion funds. ',
+  },
+};
 
 const serializeTXs = (forms = []) =>
   forms.map((form, index) => ({
@@ -173,6 +204,7 @@ const FormSection = props => {
           fields={serializedFields || form?.fields}
           setParentFields={setParentFields}
           parentFields={parentFields}
+          indicatorStates={isLastItem && indicatorStates}
         />
       )}
       {isOpen && <> {after} </>}
