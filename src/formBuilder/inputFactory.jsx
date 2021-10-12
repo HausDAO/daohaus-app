@@ -4,7 +4,6 @@ import AbiInput from './abiInput';
 import AddressInput from './addressInput';
 import BuyoutPaymentInput from './buyoutPaymentInput';
 import ColorPicker from './colorPicker';
-import ConditionalInput from './conditionalInput';
 import DateRange from './dateRange';
 import DiscourseMeta from './discourseMeta';
 import GatedInput from './gatedInput';
