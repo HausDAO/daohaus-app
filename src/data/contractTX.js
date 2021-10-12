@@ -772,7 +772,7 @@ export const TX = {
                 type: 'encodeHex',
                 contract: CONTRACTS.LOCAL_SAFE_SIGNLIB,
                 fnName: 'signMessage',
-                gatherArgs: ['.values.signatureHash'],
+                gatherArgs: ['.values.eip712HashValue'],
               },
             ],
           },

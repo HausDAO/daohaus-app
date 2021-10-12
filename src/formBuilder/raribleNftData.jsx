@@ -8,11 +8,9 @@ import ErrorList from './ErrorList';
 import FieldWrapper from './fieldWrapper';
 import { addZeros } from '../utils/tokenValue';
 import {
-  arbitrarySignature,
   buildEncodeOrder,
   encodeOrder,
   getMessageHash,
-  getSignatureHash,
   pinOrderToIpfs,
 } from '../utils/rarible';
 
@@ -64,18 +62,17 @@ const RaribleNftSelect = props => {
       tokenId,
       tokenAddress: paymentToken,
       price: addZeros(sellPrice, guildToken.token.decimals),
-      minionAddress: currentMinion.safeAddress || currentMinion.minionAddress,
+      makerAddress: currentMinion.safeAddress || currentMinion.minionAddress,
       startDate: isNaN(startDate) ? '0' : startDate,
       endDate: isNaN(endDate) ? '0' : endDate,
     });
     const encodedOrder = await encodeOrder(orderObj, daochain);
     const eip712 = getMessageHash(encodedOrder);
-    orderObj.signature = arbitrarySignature;
+    orderObj.signature = '0x'; // zero-length signature to be compliant with Gnosis Asafe EIP-1271
     const ipfsHash = await pinOrderToIpfs(orderObj, daoid);
 
     setValue('eip712HashValue', eip712);
     setValue('ipfsOrderHash', ipfsHash.IpfsHash);
-    setValue('signatureHash', getSignatureHash());
     setValue(name, true);
 
     setLoading(false);

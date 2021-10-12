@@ -21,15 +21,14 @@ const defaultConfig = {
       localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
       minionTypeOverride: true,
     },
-    // REVIEW: Should this be under nftConfigs or default config?
-    // sellRarible: {
-    //   menuLabel: 'Sell NFT on Rarible',
-    //   tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
-    //   modalName: 'sell721',
-    //   formLego: FORM.SELL_NFT_RARIBLE,
-    //   localValues: ['tokenId', 'contractAddress'],
-    //   minionTypeOverride: false,
-    // },
+    sellRarible: {
+      menuLabel: 'Sell NFT on Rarible',
+      tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
+      modalName: 'sell721',
+      formLego: FORM.SELL_NFT_RARIBLE,
+      localValues: ['tokenId', 'contractAddress'],
+      minionTypeOverride: false,
+    },
   },
 };
 
