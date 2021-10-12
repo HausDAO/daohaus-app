@@ -33,23 +33,25 @@ const NftApproval = props => {
 
   // Check isApprovedForAll
   useEffect(() => {
-    const validAddress = /^0x[a-fA-F0-9]{40}$/.test(nftAddress);
-    setIsValidAddress(validAddress);
+    if (nftAddress && injectedProvider && daochain) {
+      const validAddress = /^0x[a-fA-F0-9]{40}$/.test(nftAddress);
+      setIsValidAddress(validAddress);
 
-    if (nftAddress && validAddress) {
-      const escrow = supportedChains[daochain].escrow_minion;
-      const args = [address, escrow];
-      NFTService({
-        web3: injectedProvider,
-        chainID: daochain,
-        tokenAddress: nftAddress,
-      })('isApprovedForAll')({ args, address }).then(result => {
-        setValue(name, result);
-      });
-    } else {
-      setValue(name, false);
+      if (nftAddress && validAddress) {
+        const escrow = supportedChains[daochain].escrow_minion;
+        const args = [address, escrow];
+        NFTService({
+          web3: injectedProvider,
+          chainID: daochain,
+          tokenAddress: nftAddress,
+        })('isApprovedForAll')({ args, address }).then(result => {
+          setValue(name, result);
+        });
+      } else {
+        setValue(name, false);
+      }
     }
-  }, [nftAddress]);
+  }, [nftAddress, injectedProvider, daochain]);
 
   // Call setApprovalForAll on Escrow Minion
   const unlock = async () => {

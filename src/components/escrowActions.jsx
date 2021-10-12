@@ -11,12 +11,20 @@ const EscrowActions = ({ proposal, address, injectedProvider, daochain }) => {
   const { errorToast, successToast, setTxInfoModal } = useOverlay();
   const { molochAddress, minionAddress, proposalId } = proposal;
   const { cachePoll, resolvePoll } = useUser();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
   const [tokensAvailable, setTokensAvailable] = useState(false);
   const { refreshDao } = useTX();
 
   useEffect(() => {
-    if (loading) {
+    if (
+      !loading &&
+      injectedProvider &&
+      minionAddress &&
+      daochain &&
+      molochAddress &&
+      proposalId
+    ) {
+      setLoading(true);
       MinionService({
         web3: injectedProvider,
         minion: minionAddress,
@@ -34,7 +42,7 @@ const EscrowActions = ({ proposal, address, injectedProvider, daochain }) => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [injectedProvider, minionAddress, daochain, molochAddress, proposalId]);
 
   const withdrawEscrowTokens = async () => {
     const args = [proposalId, molochAddress, [0]];
