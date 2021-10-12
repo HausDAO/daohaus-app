@@ -22,6 +22,7 @@ import Layout from '../components/layout';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
 import Members from '../pages/Members';
 import Meta from '../pages/Meta';
+import MetaAudit from '../pages/MetaAudit';
 import MinionGallery from '../pages/MinionGallery';
 import MinionVault from '../pages/MinionVault';
 import MintGate from '../pages/MintGate';
@@ -172,6 +173,9 @@ const DaoRouter = () => {
             isMember={isMember}
             refetchMetaData={refetchMetaData}
           />
+        </Route>
+        <Route exact path={`${path}/settings/audit`}>
+          <MetaAudit daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/settings/proposals`}>
           <ProposalTypes
