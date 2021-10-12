@@ -426,13 +426,13 @@ export const FORM = {
       ],
     ],
   },
-  MINION_BUYOUT_ERC721_TOKEN: {
-    id: 'MINION_BUYOUT_ERC721_TOKEN',
+  MINION_BUYOUT_TOKEN: {
+    id: 'MINION_BUYOUT_TOKEN',
     title: 'Buyout Proposal',
     description: 'Request funds as buyout',
     type: PROPOSAL_TYPES.MINION_BUYOUT,
     minionType: MINION_TYPES.SAFE,
-    tx: TX.SET_BUYOUT_NFT,
+    tx: TX.SET_BUYOUT_TOKEN,
     required: ['selectedMinion', 'title', 'paymentRequested'],
     fields: [
       [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
