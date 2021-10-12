@@ -30,12 +30,7 @@ const AuditJsonDisplay = ({ log }) => {
           </AccordionButton>
         </h2>
         <AccordionPanel pb={4}>
-          <pre
-            /* eslint-disable */
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(log.update, null, 2),
-            }}
-          />
+          <pre>{JSON.stringify(log.update, null, 2)}</pre>
         </AccordionPanel>
       </AccordionItem>
     </Accordion>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
@@ -53,6 +53,15 @@ const renderRow = (log, daoid, daochain) => {
 const MetaAudit = ({ daoMetaData }) => {
   const { daoid, daochain } = useParams();
 
+  const sortedLogs = useMemo(() => {
+    if (daoMetaData) {
+      return daoMetaData.logs.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+    }
+    return [];
+  }, [daoMetaData]);
+
   return (
     <MainViewLayout header='Metadata Audit Log' isDao>
       <ContentBox w='100%'>
@@ -68,18 +77,14 @@ const MetaAudit = ({ daoMetaData }) => {
               </Tr>
             </Thead>
             <Tbody>
-              {daoMetaData?.logs
-                .sort((a, b) => {
-                  return new Date(b.createdAt) - new Date(a.createdAt);
-                })
-                .map(log => {
-                  return renderRow(log, daoid, daochain);
-                })}
+              {sortedLogs.map(log => {
+                return renderRow(log, daoid, daochain);
+              })}
             </Tbody>
           </Table>
         )}
 
-        {!daoMetaData || (!daoMetaData?.logs?.length && <Box>No Logs</Box>)}
+        {!daoMetaData || (!sortedLogs.length && <Box m={5}>No Logs</Box>)}
       </ContentBox>
     </MainViewLayout>
   );
