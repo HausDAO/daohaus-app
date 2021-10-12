@@ -236,7 +236,7 @@ export const DETAILS = {
     description: '.values.description',
     link: '.values.link',
     proposalType: '.formData.type',
-    minionType: MINION_TYPES.NEAPOLITAN,
+    minionType: MINION_TYPES.SAFE,
   },
   OFFER_NFT_TRIBUTE: {
     title: '.values.title',
