@@ -24,7 +24,9 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
+import EscrowActions from './escrowActions';
 import { TokenService } from '../services/tokenService';
+import { TX } from '../data/contractTX';
 import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import {
@@ -32,9 +34,7 @@ import {
   daoConnectedAndSameChain,
   isDelegating,
 } from '../utils/general';
-import EscrowActions from './escrowActions';
 import { supportedChains } from '../utils/chain';
-import { TX } from '../data/contractTX';
 
 const MotionBox = motion(Box);
 

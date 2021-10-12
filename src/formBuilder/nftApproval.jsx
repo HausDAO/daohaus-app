@@ -3,14 +3,14 @@ import { Flex, Button, Spinner } from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 
-import { SubmitFormError } from './staticElements';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { NFTService } from '../services/nftService';
 import { useTX } from '../contexts/TXContext';
-import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { SubmitFormError } from './staticElements';
 import FieldWrapper from './fieldWrapper';
+import { createPoll } from '../services/pollService';
+import { NFTService } from '../services/nftService';
 import { supportedChains } from '../utils/chain';
 
 const NftApproval = props => {

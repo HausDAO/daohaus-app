@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
 
 import { useUser } from '../contexts/UserContext';
-import { MinionService } from '../services/minionService';
-import { useOverlay } from '../contexts/OverlayContext';
-import { createPoll } from '../services/pollService';
 import { useTX } from '../contexts/TXContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { MinionService } from '../services/minionService';
+import { createPoll } from '../services/pollService';
 
 const EscrowActions = ({ proposal, address, injectedProvider, daochain }) => {
   const { errorToast, successToast, setTxInfoModal } = useOverlay();

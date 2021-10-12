@@ -6,6 +6,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
+import EscrowActions from './escrowActions';
 import RaribleSellOrder from './raribleSellOrder';
 import { TokenService } from '../services/tokenService';
 import {
@@ -15,7 +16,6 @@ import {
 } from '../utils/proposalUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import EscrowActions from './escrowActions';
 import { supportedChains } from '../utils/chain';
 
 const MinionExecute = ({
