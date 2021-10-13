@@ -532,7 +532,10 @@ export const PROPOSAL_FORMS = {
     required: ['title'],
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION],
-      [FIELD.LINK, FIELD.MINION_SELECT],
+      [
+        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        FIELD.MINION_SELECT,
+      ],
     ],
   },
   CREATE_TX: {
@@ -543,6 +546,7 @@ export const PROPOSAL_FORMS = {
       [
         FIELD.TARGET_CONTRACT,
         { ...FIELD.ABI_INPUT, listenTo: 'targetContract' },
+        FIELD.MINION_VALUE,
       ],
       [],
     ],
