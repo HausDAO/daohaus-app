@@ -92,28 +92,24 @@ const MultiForm = props => {
 
     const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
       // IF key value is the same txIndex
-      if (key.includes(`*TX${txIndex}`)) {
+      if (key.includes(`${txIndex}*TX*`)) {
         return acc;
       }
       //  If key value is the same TX as txIndex, but a different number
-      if (key.includes('*TX')) {
+      if (key.includes('*TX*')) {
         parentForm.unregister(key);
         const checkSerial = key => {
-          // possibly replace the tag with another decremented tag
-          return key.replace(getTagRegex('TX'), tag => {
-            //  pull number from the tag
-            return tag.replace(/\d+/, tagNumString => {
-              const tagIndex = Number(tagNumString);
-              //  If the value is higher than txIndex,
-              //  reduce it by one
-              return tagIndex > txIndex ? tagIndex - 1 : tagIndex;
-            });
-          });
+          const splitKey = key.split('*TX*');
+          const tagIndex = Number(splitKey[0]);
+          const rest = splitKey.slice(1).join('');
+          return tagIndex > txIndex ? `${tagIndex - 1}*TX*${rest}` : key;
         };
+        console.log(`checkSerial(key)`, checkSerial(key));
         return { ...acc, [checkSerial(key)]: value };
       }
       return { ...acc, [key]: value };
     }, {});
+    console.log(`newFormValues`, newFormValues);
     parentForm.reset(newFormValues);
     setTxForms(newForms);
   };
