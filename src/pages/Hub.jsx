@@ -1,10 +1,10 @@
 import React, { useEffect, useContext } from 'react';
 
-import Layout from '../components/layout';
 import { CustomThemeContext } from '../contexts/CustomThemeContext';
 import HubAccountModal from '../modals/hubAccountModal';
-import { defaultHubData } from '../utils/navLinks';
+import Layout from '../components/layout';
 import Main from './Main';
+import { defaultHubData } from '../utils/navLinks';
 
 const Hub = () => {
   const { theme, resetTheme } = useContext(CustomThemeContext);

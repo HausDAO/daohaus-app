@@ -7,6 +7,7 @@ import {
   FormLabel,
   Box,
 } from '@chakra-ui/react';
+
 import TextBox from '../components/TextBox';
 
 const RageInput = ({ register, setValue, label, type, max, mb = 2 }) => {

@@ -1,7 +1,9 @@
 import { ethers } from 'ethers';
-import { supportedChains } from './chain';
+import { utils as Web3Utils } from 'web3';
+import { chainByID, supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
+import { fetchSafeDetails } from './requests';
 import { FORM } from '../data/forms';
 import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
 
@@ -175,5 +177,25 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
+  }
+};
+
+export const validateSafeMinion = async (chainId, vault) => {
+  try {
+    const safeDetails = await fetchSafeDetails(
+      chainByID(chainId).network,
+      vault,
+    );
+    return {
+      isMinionModule: safeDetails.modules.includes(
+        Web3Utils.toChecksumAddress(vault.address),
+      ),
+      safeDetails,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      isMinionModule: false,
+    };
   }
 };

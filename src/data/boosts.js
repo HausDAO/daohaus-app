@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from '../utils/playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { BOOST_FORMS } from './forms';
+import { BOOST_FORMS, CORE_FORMS } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -27,6 +27,21 @@ export const CONTENT = {
       'Want a simple way to execute smart contract calls automatically based on the outcome of your proposals?',
       'Also known as a vanilla minion, it is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed. ',
       'This way, you can upgrade your DAO experience by seamlessly go from voting to execution without any coordination lags.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
+  SAFE_DEV_SUITE: {
+    title: 'Safe Minion DEV Suite',
+    description:
+      'Enable interactions with other smart contracts from your Safe Minion/Gnosis Safe vault via DAO proposals.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.00',
+    pars: [
+      'Deploying a Minion and a Gnosis Safe, this Boost enables your DAO to manage funds in a Gnosis Safe, as well as do complex multi-call transactions via the Minion.',
+      'This Boost is perfect for advanced DAOs looking to trade NFTs, manage LP positions in AMMs or do other arbitrary transactions',
+      'To increase proposal velocity for less critical proposals, the ability to set quorum levels enable early execution when a minimum quorum is met.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
@@ -81,7 +96,6 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-
   DISCORD: {
     title: 'Discord Notifications',
     description:
@@ -97,7 +111,7 @@ export const CONTENT = {
     ],
   },
   MINTGATE: {
-    title: 'MintGate',
+    title: 'Mint Gate',
     description: 'Gate links to restrict view access to DAO members only',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',
@@ -161,100 +175,87 @@ export const CONTENT = {
   // },
 };
 
-const STEPS = {
+const COMMON_STEPS = {
+  DISPLAY: {
+    type: 'boostDetails',
+    title: { type: 'boostName' },
+    subtitle: 'Install Boost',
+    next: 'STEP1',
+    start: true,
+  },
+  SIGNER: {
+    type: 'signer',
+    title: 'Member Signature',
+    stepLabel: 'Add Proposals & Sign',
+    finish: true,
+    isUserStep: true,
+  },
+};
+
+export const STEPS = {
   MINION_BOOST: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'summoner',
-      next: 'STEP2',
+      title: { type: 'minionName' },
+      next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Summon' },
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Proposals & Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_DISCORD: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'discordForm',
       next: 'STEP2',
       stepLabel: 'Setup Discord Bot',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_DISCOURSE: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      lego: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
+      form: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_WRAP_N_ZAP: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
-      type: 'launcher',
-      lego: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
-      next: 'STEP2',
+      type: 'form',
+      form: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
+      next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Deploy' },
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
     },
-    STEP2: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
-      finish: true,
-      isUserStep: true,
-    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
   ADD_MINTGATE: {
-    DISPLAY: {
-      type: 'boostDetails',
-      next: 'STEP1',
-      start: true,
-      isUserStep: false,
-    },
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: COMMON_STEPS.SIGNER,
+  },
+  SUMMON_ANY: {
     STEP1: {
-      type: 'signer',
-      stepLabel: 'Add Boost and Sign',
+      start: true,
+      type: 'form',
+      next: 'STEP2',
+      form: CORE_FORMS.SUMMON_MINION_SELECTOR,
+      isUserStep: true,
+      stepLabel: 'Choose a Minion',
+    },
+    STEP2: {
+      type: 'summoner',
       finish: true,
       isUserStep: true,
+      title: 'Summon',
+      stepLabel: 'Summon',
+      next: { type: 'awaitTx', then: 'FINISH', ctaText: 'Summon' },
     },
   },
 };
@@ -282,17 +283,17 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  // TODO: coming later with neapolitan minion
-  // DEV_SUITE: {
-  //   id: 'DEV_SUITE',
-  //   boostContent: CONTENT.DEV_SUITE,
-  //   minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
-  //   categories: ['devTools'],
-  //   steps: STEPS.MINION_BOOST,
-  //   playlist: BOOST_PLAYLISTS.DEV_SUITE,
-  //   networks: MINIONS[MINION_TYPES.NEAPOLITAN].networks,
-  //   cost: 'free',
-  // },
+  SAFE_DEV_SUITE: {
+    id: 'SAFE_DEV_SUITE',
+    boostContent: CONTENT.SAFE_DEV_SUITE,
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    categories: ['devTools'],
+    steps: STEPS.MINION_BOOST,
+    playlist: BOOST_PLAYLISTS.SAFE_DEV_SUITE,
+    networks: MINIONS[MINION_TYPES.SAFE].networks,
+    cost: 'free',
+    settings: 'none',
+  },
   // RARIBLE: {
   //   id: 'RARIBLE',
   //   minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
@@ -401,3 +402,40 @@ export const categories = categoryStarter.map(cat => ({
     .filter(boost => boost.categories.includes(cat.id) && !boost.dev)
     .map(cat => cat.id),
 }));
+
+export const notificationBoostContent = {
+  actions: [
+    {
+      id: 'votingPeriod',
+      label: 'Proposal Ready for Voting',
+    },
+    {
+      id: 'newProposal',
+      label: 'Proposal Needs Sponsor',
+    },
+    {
+      id: 'proposalClosing',
+      label: 'Proposal Needs a Vote',
+      comingSoon: true,
+    },
+    {
+      id: 'newMember',
+      label: 'New Member is Official',
+      comingSoon: true,
+    },
+    {
+      id: 'rageQuit',
+      label: 'New Ragequit',
+    },
+  ],
+  channels: [
+    { name: 'discord' },
+    { name: 'telegram', comingSoon: true },
+    { name: 'email', comingSoon: true },
+    { name: 'twitter', comingSoon: true },
+  ],
+  inviteLinks: {
+    discord:
+      'https://discord.com/api/oauth2/authorize?client_id=736999684471521321&permissions=23552&scope=bot',
+  },
+};

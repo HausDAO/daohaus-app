@@ -44,6 +44,12 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'network',
     default: true,
   },
+  {
+    name: 'Celo',
+    value: 42220,
+    type: 'network',
+    default: true,
+  },
   // {
   //   name: 'IDChain',
   //   value: 74,

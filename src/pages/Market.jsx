@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from 'react';
+import { RiArrowDropDownFill } from 'react-icons/ri';
+import { useParams } from 'react-router';
 import {
   Flex,
   Spinner,
@@ -10,21 +12,17 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
-import { RiArrowDropDownFill } from 'react-icons/ri';
 
-import { useParams } from 'react-router';
 import { useMetaData } from '../contexts/MetaDataContext';
+import BoostItemButton from '../components/boostItemButton';
 import ListSelectorItem from '../components/ListSelectorItem';
 import List from '../components/list';
-import ListSelector from '../components/ListSelector';
 import ListItem from '../components/listItem';
-import TextBox from '../components/TextBox';
+import ListSelector from '../components/ListSelector';
 import NoListItem from '../components/NoListItem';
-
-import { isLastItem } from '../utils/general';
+import TextBox from '../components/TextBox';
 import { BOOSTS, allBoosts, categories } from '../data/boosts';
-// import { validate } from '../utils/validation';
-import BoostItemButton from '../components/boostItemButton';
+import { isLastItem } from '../utils/general';
 
 const checkAvailable = (boostData, daochain) =>
   boostData.networks === 'all' || boostData.networks[daochain];

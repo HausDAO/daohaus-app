@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Flex, Icon } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { RiLoginBoxLine } from 'react-icons/ri';
+import { Box, Flex, Icon } from '@chakra-ui/react';
 
 const DaoToDaoUberAlly = ({ dao }) => {
   return (

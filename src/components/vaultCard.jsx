@@ -3,12 +3,12 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Flex, Text, Badge } from '@chakra-ui/react';
 
 import ContentBox from './ContentBox';
+import CopyButton from './copyButton';
 import TextBox from './TextBox';
 import VaultCardTokenList from './vaultCardTokenList';
-import CopyButton from './copyButton';
 import { capitalize, numberWithCommas } from '../utils/general';
-import { vaultUrlPart, getVaultListData } from '../utils/vaults';
 import { tallyUSDs } from '../utils/tokenValue';
+import { vaultUrlPart, getVaultListData } from '../utils/vaults';
 
 const VaultCard = ({ vault, currentDaoTokens }) => {
   const { daoid, daochain } = useParams();
@@ -61,7 +61,10 @@ const VaultCard = ({ vault, currentDaoTokens }) => {
             {capitalize(vault.type)}
           </TextBox>
           {vaultBadge}
-          <CopyButton text={vault.address} iconProps={{ color: 'grey' }} />
+          <CopyButton
+            text={vault.safeAddress || vault.address}
+            iconProps={{ color: 'grey' }}
+          />
         </Flex>
         <RouterLink
           to={`/dao/${daochain}/${daoid}/vaults/${vaultUrlPart(vault)}`}

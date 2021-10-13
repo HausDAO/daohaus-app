@@ -1,8 +1,8 @@
 import React from 'react';
+import { RiDiscordFill, RiLoginBoxLine } from 'react-icons/ri';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Link, Text } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
-import { RiDiscordFill, RiLoginBoxLine } from 'react-icons/ri';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';

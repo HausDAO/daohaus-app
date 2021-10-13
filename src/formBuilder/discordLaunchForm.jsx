@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Box,
   Button,
@@ -9,13 +10,12 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
 
-import { notificationBoostContent } from '../content/boost-content';
 import { get } from '../utils/requests';
+import { notificationBoostContent } from '../data/boosts';
 
 const DiscordNotificationsLaunch = props => {
-  const { stepOverride, goToNext, setStepperStorage } = props;
+  const { stepOverride, goToNext, setStepperStorage, next } = props;
 
   const { handleSubmit, register, getValues, watch } = useForm();
   const [connectionError, setConnectionError] = useState();
@@ -48,7 +48,7 @@ const DiscordNotificationsLaunch = props => {
         actions: ['votingPeriod', 'rageQuit', 'newProposal'],
       },
     ]);
-    goToNext();
+    goToNext(next);
   };
 
   const testConnection = async () => {

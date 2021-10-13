@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
 import { Flex, Avatar, Box, Text } from '@chakra-ui/react';
+import makeBlockie from 'ethereum-blockies-base64';
 
-import { truncateAddr } from '../utils/general';
 import CopyButton from './copyButton';
+import { truncateAddr } from '../utils/general';
 
 const StaticAvatar = ({ address, avatarImg, name, hideCopy, emoji }) => {
   const blockie = useMemo(() => {

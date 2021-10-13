@@ -9,7 +9,6 @@ import { useUser } from '../contexts/UserContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import SuperTokenListItem from './SuperTokenListItem';
-
 import { createPoll } from '../services/pollService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 

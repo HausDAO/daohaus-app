@@ -1,5 +1,6 @@
 import React from 'react';
 import { Flex, Box, Spinner, Stack } from '@chakra-ui/react';
+
 import TextBox from './TextBox';
 
 const Loading = ({ message }) => (

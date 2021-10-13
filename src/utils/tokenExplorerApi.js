@@ -1,7 +1,7 @@
-import { NFTService } from '../services/nftService';
-import { fetchABI } from './abi';
 import { chainByID } from './chain';
+import { fetchABI } from './abi';
 import { fetchTokenData } from './tokenValue';
+import { NFTService } from '../services/nftService';
 
 export const CONTRACT_MODELS = {
   //  SRC https://ethereum.org/en/developers/docs/standards/tokens/erc-20/
@@ -31,6 +31,23 @@ export const CONTRACT_MODELS = {
       'setApprovalForAll',
       'getApproved',
       'isApprovedForAll',
+    ],
+  },
+  // SRC https://github.com/gnosis/safe-contracts/blob/v1.3.0/contracts/GnosisSafe.sol
+  GNOSIS_SAFE: {
+    name: 'GnosisSafe',
+    model: [
+      'setup',
+      'execTransaction',
+      'requiredTxGas',
+      'approveHash',
+      'domainSeparator',
+      'encodeTransactionData',
+      'getTransactionHash',
+      'enableModule',
+      'disableModule',
+      'execTransactionFromModule',
+      'execTransactionFromModuleReturnData',
     ],
   },
 };
@@ -300,8 +317,8 @@ export const getExplorerLink = (tokenAddress, chainID) => {
 
 export const checkContractType = async (address, chainID, model) => {
   const abi = await fetchABI(address, chainID);
-  if (abi.status === '0') {
-    console.log(abi);
+  if (!abi || abi.status === '0') {
+    console.log('Failed to fetch contract ABI', abi);
     return false;
   }
   const names = abi.filter(fn => fn.name).map(fn => fn.name);

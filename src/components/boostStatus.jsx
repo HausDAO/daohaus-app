@@ -1,8 +1,9 @@
 import React from 'react';
 import { Box, Flex, Button } from '@chakra-ui/react';
+
 import ComingSoonOverlay from './comingSoonOverlay';
-import TextBox from './TextBox';
 import ContentBox from './ContentBox';
+import TextBox from './TextBox';
 
 const BoostStatus = () => {
   return (

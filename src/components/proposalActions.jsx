@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import {
   Box,
   Button,
@@ -10,11 +12,9 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
-import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
-import { motion } from 'framer-motion';
 import { MaxUint256 } from '@ethersproject/constants';
+import { motion } from 'framer-motion';
 import { utils } from 'ethers';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -25,16 +25,15 @@ import TextBox from './TextBox';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
 import { TokenService } from '../services/tokenService';
+import { TX } from '../data/contractTX';
 import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
-import { supportedChains } from '../utils/chain';
 import { getTerm, getTitle } from '../utils/metadata';
 import {
   capitalize,
   daoConnectedAndSameChain,
   isDelegating,
 } from '../utils/general';
-
-import { TX } from '../data/contractTX';
+import { supportedChains } from '../utils/chain';
 
 const MotionBox = motion(Box);
 
@@ -76,6 +75,13 @@ const ProposalVote = ({
   const [loading, setLoading] = useState(false);
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [quorumNeeded, setQuorumNeeded] = useState(null);
+
+  const earlyExecuteMinionType = proposal => {
+    return (
+      proposal?.minion?.minionType === MINION_TYPES.NIFTY ||
+      proposal?.minion?.minionType === MINION_TYPES.SAFE
+    );
+  };
 
   const currentlyVoting = proposal => {
     return (
@@ -508,7 +514,7 @@ const ProposalVote = ({
             ))}
 
           {((proposal?.status === 'Passed' && proposal?.minionAddress) ||
-            proposal?.minion?.minionType === MINION_TYPES.NIFTY) && (
+            earlyExecuteMinionType(proposal)) && (
             <Stack mt='15px' justify='center'>
               {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
               proposal.yesShares >= quorumNeeded ? (
@@ -517,7 +523,7 @@ const ProposalVote = ({
                   minionAction={minionAction}
                   proposal={proposal}
                   early={
-                    proposal?.minion?.minionType === MINION_TYPES.NIFTY &&
+                    earlyExecuteMinionType(proposal) &&
                     proposal.yesShares >= quorumNeeded &&
                     !proposal?.status === 'Passed'
                   }

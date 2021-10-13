@@ -12,10 +12,10 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import HubProfileCard from '../components/hubProfileCard';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import HubProfileCard from '../components/hubProfileCard';
 import TxList from '../components/TxList';
 
 const HubAccountModal = () => {

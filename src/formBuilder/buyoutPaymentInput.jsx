@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
 
-import { tallyUSDs } from '../utils/tokenValue';
-import { useToken } from '../contexts/TokenContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useDao } from '../contexts/DaoContext';
+import { useToken } from '../contexts/TokenContext';
 import PaymentInput from './paymentInput';
+import { tallyUSDs } from '../utils/tokenValue';
 
 const BuyoutPaymentInput = props => {
   const { isMember, daoMember } = useDaoMember();

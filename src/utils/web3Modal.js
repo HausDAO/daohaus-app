@@ -28,6 +28,7 @@ const addNetworkProviders = chainData => {
           100: 'https://dai.poa.network',
           137: 'https://rpc-mainnet.maticvigil.com',
           42161: 'https://arb1.arbitrum.io/rpc',
+          42220: 'https://forno.celo.org',
         },
       },
     };

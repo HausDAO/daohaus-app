@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Text, Spinner, Flex, Icon, Stack } from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
+import { Box, Text, Spinner, Flex, Icon, Stack } from '@chakra-ui/react';
 
-import { useUser } from '../contexts/UserContext';
 import ExplorerLink from './explorerLink';
+import { useUser } from '../contexts/UserContext';
 
 const TxList = ({ limit = 5 }) => {
   const { outstandingTXs } = useUser();

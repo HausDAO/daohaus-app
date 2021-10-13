@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { useParams, Link } from 'react-router-dom';
 import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
-import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { format } from 'date-fns';
 
-import { numberWithCommas } from '../utils/general';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import ContentBox from './ContentBox';
 import {
   determineProposalStatus,
   getProposalCardDetailStatus,
   memberVote,
   PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
-import ContentBox from './ContentBox';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCustomProposalTerm } from '../utils/metadata';
+import { numberWithCommas } from '../utils/general';
 
 const formatStatus = status => {
   return status.split(/(?=[A-Z])/).join(' ');
