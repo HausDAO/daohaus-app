@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
@@ -40,7 +40,7 @@ const FormBuilder = props => {
     footer = true,
     indicatorStates,
   } = props;
-  console.log(`indicatorStates`, indicatorStates);
+
   const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
@@ -82,10 +82,8 @@ const FormBuilder = props => {
 
       if (originalFields.length > 1) {
         setFields([originalFields[0], updatedFields]);
-        // setParentFields?.([originalFields[0], updatedFields]);
       } else {
         setFields([updatedFields]);
-        // setParentFields?.([originalFields[0], updatedFields]);
       }
     }
   };

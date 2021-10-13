@@ -122,6 +122,11 @@ const argBuilderCallback = Object.freeze({
     console.log(`ARGS_FROM_CALLBACK`);
     console.log(`values`, values);
     console.log(`formData`, formData);
+
+    const txValues = values.txIDs.map((id, index) => {
+      return filterObject(values, (val, key) => key.includes(`*TX${index}*`));
+    });
+    console.log(`txValues`, txValues);
   },
   proposeActionSafe({ values, formData }) {
     const inputVals = collapse(values, '*ABI_ARG*', 'array');
@@ -140,10 +145,10 @@ const argBuilderCallback = Object.freeze({
           contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
           fnName: 'multiSend',
         }),
-        [values.targetContract],
-        [values.minionValue || '0'],
-        [hexData],
-        [0],
+        [values.targetContract], // tos
+        [values.minionValue || '0'], // values
+        [hexData], // actions
+        [0], // operations
       ),
       values.paymentToken,
       values.paymentRequested || '0',

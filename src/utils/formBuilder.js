@@ -1,6 +1,9 @@
 import { filterObject, isObjectEmpty } from './general';
 import { logFormError } from './errorLog';
 
+export const splitTX = (key, value) => {
+  const splitKey = key.split('*');
+};
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
   return { key: splitKey[0], value, order: splitKey[1] };
@@ -151,14 +154,14 @@ export const ignoreAwaitStep = next => {
   return typeof next === 'string' ? next : next?.then;
 };
 
-export const getTagRegex = tag => new RegExp(`(\\*${tag}\\d+\\*)+`);
+export const getTagRegex = tag => new RegExp(`(\\d+\\*${tag}\\*)+`);
 
 const serializeParam = (name, index, tag) => {
-  const regex = new RegExp(`(\\*${tag}\\d+\\*)+`);
+  const regex = getTagRegex(tag);
   if (regex.test(name)) {
-    return name.replace(regex, `*${tag}${index}*`);
+    return name.replace(regex, `${index}*${tag}*`);
   }
-  return `*${tag}${index}*${name}`;
+  return `${index}*${tag}*${name}`;
 };
 
 export const serializeFields = (fields = [], index, tag) =>

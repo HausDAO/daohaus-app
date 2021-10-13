@@ -52,8 +52,15 @@ const serializeTXs = (forms = []) =>
 
 const MultiForm = props => {
   const { forms, isTxBuilder, logValues } = props;
-  const parentForm = useForm({ shouldUnregister: true });
-  const values = parentForm?.watch();
+  const parentForm = useForm({
+    shouldUnregister: true,
+  });
+  const { watch, register, setValue } = parentForm;
+  const values = watch();
+
+  const [txForms, setTxForms] = useState(
+    serializeTXs(forms.filter(form => form.isTx)),
+  );
 
   useEffect(() => {
     if (logValues && dev && values) {
@@ -61,12 +68,16 @@ const MultiForm = props => {
     }
   }, [values]);
 
+  useEffect(() => {
+    register('txIDs');
+    setValue(
+      'txIDs',
+      txForms?.map(tx => tx.txID),
+    );
+  }, [txForms]);
+
   const preTxForm = forms[0];
   const confirmationForm = forms[forms.length - 1];
-
-  const [txForms, setTxForms] = useState(
-    serializeTXs(forms.filter(form => form.isTx)),
-  );
 
   const handleAddTx = form =>
     setTxForms(prevState =>

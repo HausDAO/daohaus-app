@@ -11,6 +11,7 @@ import {
   getABIfunctions,
   formatFNsAsSelectOptions,
 } from '../utils/abi';
+import { getTagRegex } from '../utils/formBuilder';
 
 const AbiInput = props => {
   const { localForm, listenTo, name, tag = 'TX' } = props;
@@ -46,7 +47,7 @@ const AbiInput = props => {
 
   useEffect(() => {
     if (abiInput) {
-      const serialTag = name?.match(new RegExp(`(\\*${tag}\\d+\\*)+`))?.[0];
+      const serialTag = name?.match(getTagRegex(tag))?.[0];
       props.buildABIOptions(abiInput, serialTag);
     } else if (isRawHex) {
       props.buildABIOptions('hex');
