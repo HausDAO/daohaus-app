@@ -243,7 +243,7 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0xff0184056B7865F924ea3c0C1823882ad388421b',
     block_explorer: 'https://arbiscan.io/',
     safeMinion: {
-      minion_factory_addr: '',
+      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
