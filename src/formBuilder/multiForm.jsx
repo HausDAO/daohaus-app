@@ -16,7 +16,7 @@ import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
 import { isLastItem } from '../utils/general';
-import { getTagRegex, serializeFields } from '../utils/formBuilder';
+import { serializeFields } from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -104,7 +104,6 @@ const MultiForm = props => {
           const rest = splitKey.slice(1).join('');
           return tagIndex > txIndex ? `${tagIndex - 1}*TX*${rest}` : key;
         };
-        console.log(`checkSerial(key)`, checkSerial(key));
         return { ...acc, [checkSerial(key)]: value };
       }
       return { ...acc, [key]: value };

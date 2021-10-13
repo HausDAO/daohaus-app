@@ -1,9 +1,6 @@
 import { filterObject, isObjectEmpty } from './general';
 import { logFormError } from './errorLog';
 
-export const splitTX = (key, value) => {
-  const splitKey = key.split('*');
-};
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
   return { key: splitKey[0], value, order: splitKey[1] };
@@ -36,7 +33,10 @@ export const collapse = (values, flag, collapseType) => {
     (value, key) => !key.includes(flag) && value,
   );
   if (collapseType === 'objOfArrays') {
-    return { ...collapseToObjOfArrays(groupedItems, flag), ...nonGrouped };
+    return {
+      ...collapseToObjOfArrays(groupedItems, flag),
+      ...nonGrouped,
+    };
   }
   const orderedArray = Object.entries(groupedItems)
     .map(([key, value]) => splitMulti(key, value, flag))
