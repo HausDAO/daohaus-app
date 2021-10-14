@@ -326,6 +326,15 @@ export const TX = {
     errMsg: 'Approve Token Failed',
     successMsg: 'Approved Token!',
   },
+  UNLOCK_NFTS: {
+    contract: CONTRACTS.LOCAL_ERC_721,
+    name: 'setApprovalForAll',
+    specialPoll: 'approveAllTokens',
+    onTxHash: null,
+    display: 'Approve All Tokens',
+    errMsg: 'Approve Tokens Failed',
+    successMsg: 'Approved Tokens!',
+  },
   MINION_PROPOSE_ACTION: {
     contract: CONTRACTS.SELECTED_MINION,
     name: 'proposeAction',

@@ -109,13 +109,13 @@ export const pollTokenAllowances = async ({
 
 export const pollTokenApproval = async ({
   chainID,
-  tokenAddress,
+  contractAddress,
   userAddress,
   controllerAddress,
 }) => {
   const tokenContract = NFTService({
     chainID,
-    tokenAddress,
+    tokenAddress: contractAddress,
   });
 
   const args = [userAddress, controllerAddress];

@@ -342,9 +342,10 @@ export const createPoll = ({
     return ({
       daoID,
       chainID,
-      tokenAddress,
       userAddress,
+      contractAddress,
       controllerAddress,
+      address,
       actions,
     }) => txHash => {
       startPoll({
@@ -354,8 +355,8 @@ export const createPoll = ({
         args: {
           daoID,
           chainID,
-          tokenAddress,
-          userAddress,
+          contractAddress,
+          userAddress: userAddress || address,
           controllerAddress,
         },
         actions,
@@ -378,9 +379,9 @@ export const createPoll = ({
           },
           pollArgs: {
             daoID,
-            tokenAddress,
+            contractAddress,
             chainID,
-            userAddress,
+            userAddress: userAddress || address,
             controllerAddress,
           },
         });

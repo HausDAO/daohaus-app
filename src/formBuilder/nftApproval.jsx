@@ -5,12 +5,10 @@ import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
-import { useUser } from '../contexts/UserContext';
-import { useOverlay } from '../contexts/OverlayContext';
 import { SubmitFormError } from './staticElements';
 import FieldWrapper from './fieldWrapper';
-import { createPoll } from '../services/pollService';
 import { NFTService } from '../services/nftService';
+import { TX } from '../data/contractTX';
 import { supportedChains } from '../utils/chain';
 
 const NftApproval = props => {
@@ -18,11 +16,9 @@ const NftApproval = props => {
   const [isValidAddress, setIsValidAddress] = useState(false);
   const { localForm, name, error } = props;
   const { register, setValue, watch } = localForm;
-  const { errorToast, successToast } = useOverlay();
-  const { daochain, daoid } = useParams();
+  const { daochain } = useParams();
   const { injectedProvider, address } = useInjectedProvider();
-  const { refreshDao } = useTX();
-  const { cachePoll, resolvePoll } = useUser();
+  const { submitTransaction } = useTX();
 
   const nftAddress = watch('nftAddress');
   const approved = watch(name);
@@ -33,7 +29,7 @@ const NftApproval = props => {
 
   // Check isApprovedForAll
   useEffect(() => {
-    if (nftAddress && injectedProvider && daochain) {
+    if (nftAddress && injectedProvider && daochain && !loading) {
       const validAddress = /^0x[a-fA-F0-9]{40}$/.test(nftAddress);
       setIsValidAddress(validAddress);
 
@@ -51,51 +47,22 @@ const NftApproval = props => {
         setValue(name, false);
       }
     }
-  }, [nftAddress, injectedProvider, daochain]);
+  }, [nftAddress, injectedProvider, daochain, loading]);
 
   // Call setApprovalForAll on Escrow Minion
   const unlock = async () => {
     if (nftAddress && isValidAddress) {
       setLoading(true);
       const escrow = supportedChains[daochain].escrow_minion;
-      const args = [escrow, 'true'];
-
-      try {
-        const poll = createPoll({ action: 'approveAllTokens', cachePoll })({
-          daoID: daoid,
-          chainID: daochain,
-          tokenAddress: nftAddress,
-          userAddress: address,
+      await submitTransaction({
+        tx: TX.UNLOCK_NFTS,
+        args: [escrow, 'true'],
+        localValues: {
+          contractAddress: nftAddress,
           controllerAddress: escrow,
-          actions: {
-            onError: (error, txHash) => {
-              errorToast({
-                title: 'There was an error.',
-              });
-              resolvePoll(txHash);
-              console.error(`Could not find a matching proposal: ${error}`);
-              setLoading(false);
-            },
-            onSuccess: txHash => {
-              successToast({
-                title: 'Tribute NFT unlocked',
-              });
-              refreshDao();
-              resolvePoll(txHash);
-              setValue(name, true);
-              setLoading(false);
-            },
-          },
-        });
-        await NFTService({
-          web3: injectedProvider,
-          chainID: daochain,
-          tokenAddress: nftAddress,
-        })('setApprovalForAll')({ args, address, poll });
-      } catch (err) {
-        console.error('error:', err);
-        setLoading(false);
-      }
+        },
+      });
+      setLoading(false);
     }
   };
 
