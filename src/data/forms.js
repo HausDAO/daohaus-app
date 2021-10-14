@@ -434,6 +434,7 @@ export const FORM = {
     minionType: MINION_TYPES.SAFE,
     tx: TX.SET_BUYOUT_TOKEN,
     required: ['selectedMinion', 'title', 'paymentRequested'],
+    dev: true,
     fields: [
       [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [FIELD.BUYOUT_PAYMENT_REQUEST],

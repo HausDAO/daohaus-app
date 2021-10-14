@@ -127,6 +127,7 @@ const FormBuilder = props => {
     // const typeErrors = checkFormTypes(values, formFields);
     const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
     if (typeErrors) {
+      console.log('typeErrors', typeErrors);
       updateErrors(typeErrors);
       return;
     }
@@ -148,6 +149,7 @@ const FormBuilder = props => {
     });
 
     if (customValErrors) {
+      console.log('customValErrors', customValErrors);
       updateErrors(customValErrors);
       return;
     }
@@ -171,7 +173,6 @@ const FormBuilder = props => {
       }
     };
     const handleSubmitTX = async then => {
-      console.log('submit', then);
       try {
         setFormState('loading');
         const res = await submitTransaction({
