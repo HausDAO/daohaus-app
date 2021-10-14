@@ -13,7 +13,7 @@ export const fetchMetaData = async endpoint => {
     const response = await fetch(url);
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -24,7 +24,7 @@ export const getApiMetadata = async () => {
     );
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -37,7 +37,7 @@ export const fetchApiVaultData = async (network, minions) => {
 
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -53,7 +53,7 @@ export const putRefreshApiVault = async args => {
 
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -206,7 +206,7 @@ export const boostPost = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -223,7 +223,7 @@ export const ccoPost = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -240,7 +240,7 @@ export const ipfsPrePost = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -257,7 +257,7 @@ export const ipfsPost = async (creds, file) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -275,7 +275,7 @@ export const ipfsJsonPin = async (creds, obj) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -292,7 +292,7 @@ export const post = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -309,7 +309,7 @@ export const put = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -321,7 +321,7 @@ export const getForumTopics = async categoryId => {
 
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -332,7 +332,7 @@ export const getEligibility = async (ccoId, address) => {
     );
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -341,7 +341,7 @@ export const getDateTime = async () => {
     const response = await fetch('https://data.daohaus.club/dao/get-utc');
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -351,7 +351,7 @@ export const getNftMeta = async url => {
 
     return response.json();
   } catch (error) {
-    throw new Error(error);
+    console.error(error);
   }
 };
 
