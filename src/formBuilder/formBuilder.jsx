@@ -171,6 +171,7 @@ const FormBuilder = props => {
       }
     };
     const handleSubmitTX = async then => {
+      console.log('submit', then);
       try {
         setFormState('loading');
         const res = await submitTransaction({
