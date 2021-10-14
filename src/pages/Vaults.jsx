@@ -25,6 +25,8 @@ const Vaults = ({
   const [chartBalances, setChartBalances] = useState([]);
   const [hasNfts, setHasNfts] = useState(false);
 
+  console.log('daoVaults', daoVaults);
+
   useEffect(() => {
     if (daoVaults) {
       setHasNfts(daoVaults.flatMap(vault => vault.nfts).length > 0);
