@@ -2,7 +2,6 @@ import Web3 from 'web3';
 
 import MinionAbi from '../contracts/minion.json';
 import MinionNiftyAbi from '../contracts/minionNifty.json';
-import EscrowMinionAbi from '../contracts/escrowMinion.json';
 import { chainByID } from '../utils/chain';
 
 export const MinionService = ({ web3, minion, chainID, minionType }) => {
@@ -20,8 +19,6 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
   if (minionType === 'niftyMinion') {
     console.log('minion nifty abi');
     abi = MinionNiftyAbi;
-  } else if (minionType === 'escrowMinion') {
-    abi = EscrowMinionAbi;
   } else {
     abi = MinionAbi;
   }
