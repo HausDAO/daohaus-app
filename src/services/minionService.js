@@ -35,12 +35,6 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
         return action;
       };
     }
-    if (service === 'escrowBalances') {
-      return async ({ args }) => {
-        const action = await contract.methods.escrowBalances(...args).call();
-        return action;
-      };
-    }
     // proposeAction args: [ target contract, ether value, function call data, details ]
     // executeAction args: [ proposal id ]
     // crossWithdraw args: [ target dao address, token address, amount, transfer (bool)]
@@ -48,8 +42,7 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
       service === 'proposeAction' ||
       service === 'executeAction' ||
       service === 'crossWithdraw' ||
-      service === 'cancelAction' ||
-      service === 'withdrawToDestination'
+      service === 'cancelAction'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
         console.log('MINION ASYNC');

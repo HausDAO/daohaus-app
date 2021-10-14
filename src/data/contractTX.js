@@ -899,4 +899,13 @@ export const TX = {
       },
     ],
   },
+  WITHDRAW_ESCROW: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'withdrawToDestination',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Withdraw Balance from Escrow',
+    errMsg: 'Error Withdrawing Balance from Escrow',
+    successMsg: 'Balance Withdrawn from Escrow!',
+  },
 };

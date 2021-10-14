@@ -544,12 +544,7 @@ const ProposalVote = ({
             (proposal?.status === 'Failed' ||
               proposal?.status === 'Cancelled') && (
               <Flex justify='center'>
-                <EscrowActions
-                  proposal={proposal}
-                  address={address}
-                  injectedProvider={injectedProvider}
-                  daochain={daochain}
-                />
+                <EscrowActions proposal={proposal} />
               </Flex>
             )}
         </Stack>

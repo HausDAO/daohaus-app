@@ -25,7 +25,7 @@ const MinionExecute = ({
   early,
 }) => {
   const { daochain } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
+  const { injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
   const { refreshMinionVault, daoMembers } = useDao();
   const proposalType = useMemo(() => proposalTypeMaker(proposal.details), [
@@ -143,14 +143,7 @@ const MinionExecute = ({
     }
 
     if (isEscrowMinion) {
-      return (
-        <EscrowActions
-          daochain={daochain}
-          injectedProvider={injectedProvider}
-          address={address}
-          proposal={proposal}
-        />
-      );
+      return <EscrowActions proposal={proposal} />;
     }
 
     if (proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {

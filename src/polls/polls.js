@@ -89,24 +89,6 @@ export const pollProposal = async ({ proposalId, chainID, daoID }) => {
   });
 };
 
-export const pollEscrowWithdrawal = async ({ proposalId, chainID, daoID }) => {
-  const minion = supportedChains[chainID].escrow_minion;
-  console.log({
-    minion,
-    chainID,
-    minionType: 'escrowMinion',
-    args: [daoID, proposalId, 0],
-  });
-  const escrowBalances = await MinionService({
-    minion,
-    chainID,
-    minionType: 'escrowMinion',
-  })('escrowBalances')({
-    args: [daoID, proposalId, 0],
-  });
-  return escrowBalances;
-};
-
 export const pollTokenAllowances = async ({
   chainID,
   daoID,
