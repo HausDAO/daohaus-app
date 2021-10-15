@@ -846,6 +846,6 @@ export const TX = {
     display: 'Submitting Safe Minion Proposal',
     errMsg: 'Error Submitting Safe Proposal',
     successMsg: 'Safe Minion Proposal Submitted!',
-    argsFromCallback: 'genericActionSafe',
+    argsFromCallback: 'multiActionSafe',
   },
 };

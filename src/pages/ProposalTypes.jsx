@@ -14,7 +14,7 @@ import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
 import { updateProposalConfig } from '../utils/metadata';
 
-const dev = process.env.REACT_APP_DEV;
+const dev = process.env.REACT_APP_DEV === 'true';
 
 const orderPlaylistForms = playlists =>
   playlists?.map(list => ({ ...list, forms: list.forms.sort() }));

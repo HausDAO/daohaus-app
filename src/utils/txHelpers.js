@@ -13,7 +13,7 @@ import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
-import { PROPOSAL_TYPES } from './proposalUtils';
+import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { CONTRACTS, TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
@@ -193,11 +193,12 @@ const argBuilderCallback = Object.freeze({
     ];
   },
   multiActionSafe({ values }) {
+    console.log(`values`, values);
     return [
       encodeMulti(collapseToCallData(values)),
       values.paymentToken,
       values.paymentRequested || '0',
-      JSON.stringify({ title: 'test' }),
+      detailsToJSON({ ...values, minionType: MINION_TYPES.SAFE }),
       true,
     ];
   },
@@ -218,10 +219,10 @@ const argBuilderCallback = Object.freeze({
           contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
           fnName: 'multiSend',
         }),
-        [values.targetContract], // tos
-        [values.minionValue || '0'], // values
-        [hexData], // actions
-        [0], // operations
+        [values.targetContract],
+        [values.minionValue || '0'],
+        [hexData],
+        [0],
       ),
       values.paymentToken,
       values.paymentRequested || '0',
@@ -437,6 +438,7 @@ export const fieldModifiers = Object.freeze({
     );
   },
   addPaymentDecimals(fieldValue, data) {
+    console.log('MODIFIER');
     if (!fieldValue) return null;
     return valToDecimalString(
       fieldValue,
