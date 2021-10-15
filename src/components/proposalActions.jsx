@@ -517,7 +517,7 @@ const ProposalVote = ({
             earlyExecuteMinionType(proposal)) && (
             <Stack mt='15px' justify='center'>
               {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
-              proposal.yesShares >= quorumNeeded ? (
+              (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
                 <MinionExecute
                   hideMinionExecuteButton={hideMinionExecuteButton}
                   minionAction={minionAction}
