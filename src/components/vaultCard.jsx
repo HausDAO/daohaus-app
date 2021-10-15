@@ -61,7 +61,10 @@ const VaultCard = ({ vault, currentDaoTokens }) => {
             {capitalize(vault.type)}
           </TextBox>
           {vaultBadge}
-          <CopyButton text={vault.address} iconProps={{ color: 'grey' }} />
+          <CopyButton
+            text={vault.safeAddress || vault.address}
+            iconProps={{ color: 'grey' }}
+          />
         </Flex>
         <RouterLink
           to={`/dao/${daochain}/${daoid}/vaults/${vaultUrlPart(vault)}`}
