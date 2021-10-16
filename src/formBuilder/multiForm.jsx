@@ -15,7 +15,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
-import { isLastItem } from '../utils/general';
+import { IsJsonString, isLastItem } from '../utils/general';
 import { serializeFields } from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
@@ -59,7 +59,11 @@ const MultiForm = props => {
   const values = watch();
 
   const [txForms, setTxForms] = useState(
-    serializeTXs(forms.filter(form => form.isTx)),
+    serializeTXs(
+      forms
+        .filter(form => form.isTx)
+        .map(form => ({ ...form, isVisible: true })),
+    ),
   );
 
   useEffect(() => {
@@ -184,32 +188,25 @@ const FormSection = props => {
     serializedFields,
     setParentFields,
     parentFields,
-    txIndex,
+    toggleVisible,
+    isVisible = true,
   } = props;
-  const abiSnippet = parentForm.watch(`${txIndex}*TX*abiInput`);
-  const [isVisible, setIsOpen] = useState(true);
-  const [fnName, setFnName] = useState(true);
-
-  useEffect(() => {
-    if (abiSnippet) {
-      console.log(abiSnippet);
-    }
-  }, [abiSnippet]);
-
-  const toggleMenu = () => setIsOpen(prevState => !prevState);
 
   return (
     <Box>
-      <Flex mb={3} justifyContent='space-between'>
+      <Flex mb={3} justifyContent='flexStart'>
         <TextBox>{form?.title || title}</TextBox>
-        <Icon
-          as={isVisible ? BiChevronDown : BiChevronUp}
-          w='25px'
-          h='25px'
-          cursor='pointer'
-          color='secondary.400'
-          onClick={toggleMenu}
-        />
+        {toggleVisible && (
+          <Icon
+            as={isVisible ? BiChevronDown : BiChevronUp}
+            ml='auto'
+            w='25px'
+            h='25px'
+            cursor='pointer'
+            color='secondary.400'
+            onClick={toggleVisible}
+          />
+        )}
       </Flex>
 
       <Box
@@ -243,8 +240,23 @@ const TxFormSection = props => {
     parentForm,
     setParentFields,
   } = props;
+  const abiSnippet = parentForm.watch(`${txIndex}*TX*abiInput`);
+  const [isVisible, setIsVisible] = useState(true);
+  const [fnName, setFnName] = useState('');
 
-  const handleClickAdd = () => handleAddTx(form);
+  useEffect(() => {
+    if (abiSnippet && IsJsonString(abiSnippet)) {
+      setFnName(JSON.parse(abiSnippet)?.name);
+    } else {
+      setFnName('');
+    }
+  }, [abiSnippet]);
+
+  const toggleVisible = () => setIsVisible(prevState => !prevState);
+  const handleClickAdd = () => {
+    setIsVisible(false);
+    handleAddTx(form);
+  };
   const handleClickRemove = () => handleRemoveTx(txIndex);
   const handleSetParentFields = newFields =>
     setParentFields(txIndex, newFields);
@@ -253,8 +265,10 @@ const TxFormSection = props => {
   return (
     <FormSection
       key={form.txID}
-      title={`Transaction ${txIndex + 1}`}
+      title={`Transaction ${txIndex + 1} ${fnName && ` (${fnName})`}`}
       isLastItem={isLastItem}
+      toggleVisible={toggleVisible}
+      isVisible={isVisible}
       form={form}
       txIndex={txIndex}
       parentForm={parentForm}
