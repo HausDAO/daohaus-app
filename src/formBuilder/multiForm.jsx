@@ -184,9 +184,18 @@ const FormSection = props => {
     serializedFields,
     setParentFields,
     parentFields,
+    txIndex,
   } = props;
+  const abiSnippet = parentForm.watch(`${txIndex}*TX*abiInput`);
+  const [isVisible, setIsOpen] = useState(true);
+  const [fnName, setFnName] = useState(true);
 
-  const [isOpen, setIsOpen] = useState(true);
+  useEffect(() => {
+    if (abiSnippet) {
+      console.log(abiSnippet);
+    }
+  }, [abiSnippet]);
+
   const toggleMenu = () => setIsOpen(prevState => !prevState);
 
   return (
@@ -194,7 +203,7 @@ const FormSection = props => {
       <Flex mb={3} justifyContent='space-between'>
         <TextBox>{form?.title || title}</TextBox>
         <Icon
-          as={isOpen ? BiChevronDown : BiChevronUp}
+          as={isVisible ? BiChevronDown : BiChevronUp}
           w='25px'
           h='25px'
           cursor='pointer'
@@ -202,7 +211,11 @@ const FormSection = props => {
           onClick={toggleMenu}
         />
       </Flex>
-      {isOpen && (
+
+      <Box
+        visibility={isVisible ? 'visible' : 'hidden'}
+        height={isVisible ? 'fitContent' : '0'}
+      >
         <FormBuilder
           {...form}
           footer={isLastItem}
@@ -212,8 +225,8 @@ const FormSection = props => {
           parentFields={parentFields}
           indicatorStates={isLastItem && indicatorStates}
         />
-      )}
-      {isOpen && <> {after} </>}
+      </Box>
+      {isVisible && <Flex justifyContent='flex-end'> {after} </Flex>}
       <Divider my={4} />
     </Box>
   );
@@ -243,6 +256,7 @@ const TxFormSection = props => {
       title={`Transaction ${txIndex + 1}`}
       isLastItem={isLastItem}
       form={form}
+      txIndex={txIndex}
       parentForm={parentForm}
       serializedFields={serializeFields(form.fields, form.txIndex, 'TX')}
       setParentFields={handleSetParentFields}

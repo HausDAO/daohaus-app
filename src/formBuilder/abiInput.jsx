@@ -48,6 +48,7 @@ const AbiInput = props => {
   useEffect(() => {
     if (abiInput) {
       const serialTag = name?.match(getTagRegex(tag))?.[0];
+      console.log(`serialTag`, serialTag);
       props.buildABIOptions(abiInput, serialTag);
     } else if (isRawHex) {
       props.buildABIOptions('hex');
