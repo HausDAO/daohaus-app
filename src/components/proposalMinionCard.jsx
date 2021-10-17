@@ -108,22 +108,33 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                     if (action.data.slice(2).length === 0) {
                       return buildEthTransferAction(action);
                     }
-                    const json = await decodeFromEtherscan(action);
+                    let json = await decodeFromEtherscan(action);
                     if (json.status === '0') {
-                      return null;
+                      return {
+                        to: action.to,
+                        value: Web3Utils.toBN(action.value).toString(),
+                      };
                     }
-                    const parsed = JSON.parse(json.result);
+                    let parsed = JSON.parse(json.result);
                     const imp = parsed.find(p => p.name === 'implementation');
                     if (imp) {
                       hydratedAction.proxyTo = await checkIfProxy(
                         parsed,
                         action.to,
                       );
-                      return null;
+                      json = await decodeFromEtherscan(hydratedAction);
+                      if (json.status === '0') {
+                        return {
+                          to: action.to,
+                          value: Web3Utils.toBN(action.value).toString(),
+                        };
+                      }
+                      parsed = JSON.parse(json.result);
                     }
                     abiDecoder.addABI(parsed);
                     return {
                       ...abiDecoder.decodeMethod(action.data),
+                      to: action.to,
                       value: Web3Utils.toBN(action.value).toString(),
                     };
                   }),
@@ -185,15 +196,17 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   const displayActionData = (action, idx) => (
     <Box key={idx}>
       <HStack spacing={3}>
-        <TextBox size='xs'>{`Param${idx + 1}:`}</TextBox>
+        <TextBox size='xs'>{`- Param${idx + 1}:`}</TextBox>
         <TextBox variant='value'>{action.name}</TextBox>
       </HStack>
-      <HStack spacing={3}>
+      <HStack spacing={3} pl={3}>
         <TextBox size='xs'>Type:</TextBox>
         <TextBox variant='value'>{action.type}</TextBox>
       </HStack>
-      <TextBox size='xs'>Value:</TextBox>
-      <TextBox variant='value'>{action.value.toString()}</TextBox>
+      <HStack spacing={3} pl={3}>
+        <TextBox size='xs'>Value:</TextBox>
+        <TextBox variant='value'>{action.value.toString()}</TextBox>
+      </HStack>
       <Divider my={2} />
     </Box>
   );
@@ -214,24 +227,30 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           <Divider my={2} />
           {data.decodedData?.params?.map(displayActionData)}
           {data.decodedData?.actions?.map((action, idx) => {
-            return action ? (
+            return (
               <Box key={`subaction_${idx}`}>
                 <HStack spacing={3}>
                   <TextBox size='xs'>
-                    {`Action ${idx + 1}: ${action.name}`}
+                    {`Action ${idx + 1}: ${action?.name || ''}`}
                   </TextBox>
                 </HStack>
-                {+action.value > 0 && (
-                  <HStack spacing={3}>
-                    <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
-                  </HStack>
+                {action?.to && (
+                  <TextBox size='xs'>{`To: ${action.to}`}</TextBox>
                 )}
-                {action.params.map(displayActionData)}
+                {action?.value && (
+                  <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
+                )}
+                {action?.params ? (
+                  <Box>{action.params.map(displayActionData)}</Box>
+                ) : (
+                  <Box>
+                    <TextBox mt={2} size='sm' key={`decerror_${idx}`}>
+                      Could not decode action data
+                    </TextBox>
+                    <Divider my={2} />
+                  </Box>
+                )}
               </Box>
-            ) : (
-              <TextBox mt={2} size='sm' key={`decerror_${idx}`}>
-                Could not decode action data
-              </TextBox>
             );
           })}
         </>
