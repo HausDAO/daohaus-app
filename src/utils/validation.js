@@ -212,19 +212,4 @@ export const customValidations = {
     }
     return false;
   },
-  noExistingSafeMinion({ appState, values }) {
-    if (values.safeAddress) {
-      const { minions } = appState.daoOverview;
-      const foundSafe = minions?.find(
-        m => m.safeAddress === values.safeAddress.toLowerCase(),
-      );
-      if (foundSafe) {
-        return {
-          name: 'safeAddress',
-          message: 'This Gnosis Safe has already been assigned to a Minion',
-        };
-      }
-    }
-    return false;
-  },
 };

@@ -483,7 +483,6 @@ export const FORM = {
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   NEW_SAFE_MINION: {
-    customValidations: ['noExistingSafeMinion'], // TODO: deal with conditionalForm
     formConditions: ['easy', 'advanced'],
     tx: {
       type: 'formCondition',
