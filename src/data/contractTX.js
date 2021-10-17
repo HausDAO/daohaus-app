@@ -231,6 +231,13 @@ export const DETAILS = {
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
   },
+  SET_BUYOUT_TOKEN: {
+    title: '.values.title',
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+  },
   SET_BUYOUT_NFT: {
     title: '.values.title',
     description: '.values.description',
@@ -892,7 +899,7 @@ export const TX = {
       '.values.paymentRequested', // _withdrawAmount
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.SET_BUYOUT_NFT,
+        gatherFields: DETAILS.SET_BUYOUT_TOKEN,
       },
       true, // _memberOnlyEnabled
     ],
