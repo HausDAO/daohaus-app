@@ -192,13 +192,20 @@ const argBuilderCallback = Object.freeze({
       values.paymentRequested,
     ];
   },
-  multiActionSafe({ values }) {
-    console.log(`values`, values);
+  multiActionSafe(data) {
+    const { values } = data;
+    const detailsModel = {
+      title: `.values.title`,
+      description: `.values.description || ${HASH.EMPTY_FIELD}`,
+      proposalType: PROPOSAL_TYPES.MULTI_TX_SAFE,
+      minionType: MINION_TYPES.SAFE,
+    };
+
     return [
       encodeMulti(collapseToCallData(values)),
       values.paymentToken,
       values.paymentRequested || '0',
-      detailsToJSON({ ...values, minionType: MINION_TYPES.SAFE }),
+      buildJSONdetails(data, detailsModel),
       true,
     ];
   },
