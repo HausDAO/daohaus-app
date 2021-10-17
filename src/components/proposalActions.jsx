@@ -49,7 +49,7 @@ const getAllowance = (daoMember, delegate) => {
 };
 
 const canInteract = (daoMember, delegate) => {
-  if (+daoMember?.shares > 0 && !isDelegating(daoMember)) {
+  if (Number(daoMember?.shares) > 0 && !isDelegating(daoMember)) {
     return true;
   }
   if (delegate) {
