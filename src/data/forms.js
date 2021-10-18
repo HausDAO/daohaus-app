@@ -140,6 +140,89 @@ export const FORM = {
     ],
     customValidations: ['nonDaoApplicant'],
   },
+  PROFILEx: {
+    id: 'PROFILEx',
+    title: 'Membership Proposal Example',
+    dev: true,
+    description: 'Proposal for DAO membership',
+    type: PROPOSAL_TYPES.MEMBER,
+    required: ['title', 'sharesRequested'], // Use name key from proposal type object
+    tx: TX.SUBMIT_PROPOSAL,
+    fields: [
+      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.SHARES_REQUEST, FIELD.TRIBUTE],
+    ],
+    additionalOptions: [
+      {
+        ...FIELD.APPLICANT,
+        label: 'Applicant',
+      },
+      FIELD.LOOT_REQUEST,
+      FIELD.PAYMENT_REQUEST,
+    ],
+    customValidations: ['nonDaoApplicant'],
+  },
+  PROFILE: {
+    id: 'PROFILE',
+    title: 'Update Basic Profile',
+    dev: true,
+    description:
+      'Editing this profile will update your profile everywhere IDX is used',
+    required: [], // Use name key from proposal type object
+    tx: TX.SUBMIT_PROPOSAL,
+    fields: [
+      [
+        {
+          ...FIELD.TITLE,
+          label: 'Name',
+          name: 'name',
+          placeholder: 'A name for your porfile',
+          htmlFor: 'name',
+          expectType: 'string',
+        },
+        {
+          ...FIELD.DESCRIPTION,
+          label: 'Bio',
+          name: 'bio',
+          htmlFor: 'bio',
+          placeholder: 'A description about yourself',
+          expectType: 'string',
+        },
+        {
+          ...FIELD.TITLE,
+          label: 'Spirit Emoji',
+          name: 'emoji',
+          placeholder: 'An emoji to represent who you are',
+          htmlFor: 'emoji',
+          expectType: 'string',
+        },
+      ],
+      [
+        {
+          ...FIELD.TITLE,
+          label: 'Location',
+          name: 'homeLocation',
+          placeholder: 'A location where you are or hope to be',
+          htmlFor: 'homeLocation',
+          expectType: 'string',
+        },
+        {
+          ...FIELD.TITLE,
+          label: '2-Letter Country Code',
+          name: 'residenceLocation',
+          placeholder: 'US',
+          htmlFor: 'residenceLocation',
+          expectType: 'string',
+        },
+        {
+          ...FIELD.LINK,
+          placeholder: 'A url to find out more about you',
+        },
+      ],
+    ],
+    additionalOptions: [],
+    customValidations: [],
+  },
   FUNDING: {
     id: 'FUNDING',
     title: 'Funding Proposal',
