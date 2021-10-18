@@ -124,7 +124,7 @@ const BankChart = ({ daoVaults, balanceData, visibleVaults }) => {
         {daoBalances?.length ? (
           <ContentBox minH='360px'>
             <Flex wrap='wrap' align='center' position='relative'>
-              <Box position='absolute' top='0px' left='10px'>
+              <Box position='absolute' top='30px' left='10px'>
                 <VaultTotal vaults={visibleVaults} />
               </Box>
 
