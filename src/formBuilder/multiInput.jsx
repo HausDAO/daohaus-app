@@ -1,25 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/button';
 import { Flex } from '@chakra-ui/layout';
 
 import GenericInput from './genericInput';
 
-const MultiInput = props => {
-  const { name } = props;
-  const [inputs, setInputs] = useState([
+const checkExistingMultis = props => {
+  const { name, localForm } = props;
+  const values = localForm?.watch?.();
+
+  if (Array.isArray(values[name])) {
+    console.log(`values FROM INSIDE`, values);
+
+    return values[name].map((multi, index) => ({
+      ...props,
+      name: `${name}.${index}`,
+      htmlFor: `${name}.${index}`,
+    }));
+  }
+  return [
     {
       ...props,
-      name: `${name}*MULTI*${0}`,
-      htmlFor: `${name}*MULTI*${0}`,
+      name: `${name}.0`,
+      htmlFor: `${name}.0`,
     },
-  ]);
+  ];
+};
 
+const MultiInput = props => {
+  const { name } = props;
+  const [inputs, setInputs] = useState(null);
+
+  // const values = parentForm?.watch();
+  useEffect(() => {
+    setInputs(checkExistingMultis(props));
+  }, []);
   const addCopy = () => {
     const nextIndex = inputs.length;
     const nextInput = {
       ...props,
-      name: `${name}*MULTI*${nextIndex}`,
-      htmlFor: `${name}-${nextIndex}`,
+      name: `${name}.${nextIndex}`,
+      htmlFor: `${name}.${nextIndex}`,
     };
     setInputs([...inputs, nextInput]);
   };

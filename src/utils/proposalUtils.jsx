@@ -31,6 +31,7 @@ export const PROPOSAL_TYPES = {
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
   MINION_SAFE: 'SAFE MINION V0',
+  MULTI_TX_SAFE: 'Safe Minion Proposal',
   MINION_NIFTY: 'Nifty Minion',
   MINION_SUPERFLUID: 'Superfluid Proposal',
   MINION_RARIBLE: 'Rarible Proposal',
