@@ -111,6 +111,7 @@ export const DAO_ACTIVITIES = gql`
         actions {
           target
           data
+          memberOnly
         }
         moloch {
           gracePeriodLength

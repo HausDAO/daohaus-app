@@ -9,6 +9,7 @@ import ApproveUberHausToken from './approveUberHausToken';
 import EscrowActions from './escrowActions';
 import RaribleSellOrder from './raribleSellOrder';
 import { TokenService } from '../services/tokenService';
+import TextBox from './TextBox';
 import {
   MINION_TYPES,
   proposalTypeMaker,
@@ -25,7 +26,7 @@ const MinionExecute = ({
   early,
 }) => {
   const { daochain } = useParams();
-  const { injectedProvider } = useInjectedProvider();
+  const { address, injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
   const { refreshMinionVault, daoMembers } = useDao();
   const proposalType = useMemo(() => proposalTypeMaker(proposal.details), [
@@ -147,21 +148,32 @@ const MinionExecute = ({
     }
 
     if (proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
-      const isMember =
-        daoMembers.filter(member => member.memberAddress === proposal.proposer)
-          .length > 0;
-      return (
+      const isMember = daoMembers.find(
+        member => member.memberAddress === address,
+      );
+      const memberApplicant = daoMembers.find(
+        member => member.memberAddress === proposal.createdBy,
+      );
+
+      return proposal?.status === 'Passed' ? (
         <Flex alignItems='center' flexDir='column'>
-          <Button onClick={handleExecute} mb={4} disabled={isMember}>
+          <Button
+            onClick={handleExecute}
+            mb={4}
+            disabled={
+              !memberApplicant?.didRagequit ||
+              (minionAction?.memberOnlyEnabled && !isMember)
+            }
+          >
             Execute Minion
           </Button>
-          <Box>
-            {isMember
-              ? 'Proposer Must Rage Quit Before This Minion Can Be Executed.'
-              : null}
-          </Box>
+          {!memberApplicant?.didRagequit && (
+            <TextBox size='xs' align='center' w='100%'>
+              Proposer Must Rage Quit Before This Minion Can Be Executed.
+            </TextBox>
+          )}
         </Flex>
-      );
+      ) : null;
     }
 
     if (
