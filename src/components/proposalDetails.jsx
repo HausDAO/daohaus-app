@@ -212,7 +212,7 @@ const ProposalDetails = ({
           w='100%'
         >
           <MemberIndicator
-            address={proposal?.proposer}
+            address={proposal?.createdBy}
             label='submitted by'
             shouldFetchProfile
           />
