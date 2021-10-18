@@ -156,21 +156,25 @@ export const ignoreAwaitStep = next => {
 
 export const getTagRegex = tag => new RegExp(`(\\d+\\*${tag}\\*)+`);
 
-const serializeParam = (name, index, tag) => {
-  const regex = getTagRegex(tag);
-  if (regex.test(name)) {
-    return name.replace(regex, `${index}*${tag}*`);
-  }
-  return `${index}*${tag}*${name}`;
-};
+// const serializeParam = (name, index, tag) => {
+//   const regex = getTagRegex(tag);
+//   if (regex.test(name)) {
+//     return name.replace(regex, `${index}*${tag}*`);
+//   }
+//   return `${index}*${tag}*${name}`;
+// };
 
-export const serializeFields = (fields = [], index, tag) =>
+const serializeFields = (fields = [], formIndex) =>
   fields.map(column =>
     column.map(field => ({
       ...field,
-      name: serializeParam(field.name, index, tag),
-      listenTo: field.listenTo
-        ? serializeParam(field.listenTo, index, tag)
-        : null,
+      name: `TX.${formIndex}.${field.name}`,
+      listenTo: field.listenTo ? `TX.${formIndex}.${field.listenTo}` : null,
     })),
   );
+
+export const serializeTXs = (forms = []) =>
+  forms.map((form, index) => ({
+    ...form,
+    fields: serializeFields(form.fields, index),
+  }));

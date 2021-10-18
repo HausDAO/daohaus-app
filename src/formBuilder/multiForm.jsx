@@ -16,7 +16,7 @@ import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
 import { IsJsonString, isLastItem } from '../utils/general';
-import { serializeFields } from '../utils/formBuilder';
+import { serializeTXs } from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -43,14 +43,7 @@ const indicatorStates = {
   },
 };
 
-const serializeTXs = (forms = []) =>
-  forms.map((form, index) => ({
-    ...form,
-    txIndex: index,
-    txID: form.txID || uuid(),
-  }));
-
-const MultiForm = props => {
+const MultiTXForm = props => {
   const { forms, isTxBuilder, logValues } = props;
   const parentForm = useForm();
   const { watch, register, setValue } = parentForm;
@@ -120,20 +113,18 @@ const MultiForm = props => {
       ),
     );
   };
-  if (isTxBuilder) {
-    return (
-      <StaticMultiForm
-        {...props}
-        forms={[preTxForm, ...txForms, confirmationForm]}
-        handleAddTx={handleAddTx}
-        handleRemoveTx={handleRemoveTx}
-        txForms={txForms}
-        setParentFields={setParentFields}
-        parentForm={parentForm}
-      />
-    );
-  }
-  return <StaticMultiForm {...props} parentForm={parentForm} />;
+
+  return (
+    <StaticMultiForm
+      {...props}
+      forms={[preTxForm, ...txForms, confirmationForm]}
+      handleAddTx={handleAddTx}
+      handleRemoveTx={handleRemoveTx}
+      txForms={txForms}
+      setParentFields={setParentFields}
+      parentForm={parentForm}
+    />
+  );
 };
 
 const StaticMultiForm = props => {
@@ -268,7 +259,6 @@ const TxFormSection = props => {
       form={form}
       txIndex={txIndex}
       parentForm={parentForm}
-      serializedFields={serializeFields(form.fields, txIndex, 'TX')}
       setParentFields={handleSetParentFields}
       after={
         <Flex justifyContent='flex-end'>
@@ -289,4 +279,4 @@ const TxFormSection = props => {
   );
 };
 
-export default MultiForm;
+export default MultiTXForm;

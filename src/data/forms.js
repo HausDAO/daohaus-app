@@ -541,7 +541,6 @@ export const PROPOSAL_FORMS = {
   CREATE_TX: {
     id: 'CREATE_TX',
     isTx: true,
-    addForm: { type: 'self', at: 'indexAbove' },
     fields: [
       [
         FIELD.TARGET_CONTRACT,
