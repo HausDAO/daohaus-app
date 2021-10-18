@@ -7,16 +7,17 @@ import GenericInput from './genericInput';
 const checkExistingMultis = props => {
   const { name, localForm } = props;
   const values = localForm?.watch?.();
-
+  console.log(`INSIDE: values`, values);
+  console.log(`FIRED INIT FN`);
   if (Array.isArray(values[name])) {
-    console.log(`values FROM INSIDE`, values);
-
+    console.log('FOUND ARRAY OF VALS');
     return values[name].map((multi, index) => ({
       ...props,
       name: `${name}.${index}`,
       htmlFor: `${name}.${index}`,
     }));
   }
+  console.log('USED SINGLE VALS');
   return [
     {
       ...props,
@@ -32,6 +33,7 @@ const MultiInput = props => {
 
   // const values = parentForm?.watch();
   useEffect(() => {
+    console.log('COMPONENT MOUNT');
     setInputs(checkExistingMultis(props));
   }, []);
   const addCopy = () => {
@@ -53,7 +55,7 @@ const MultiInput = props => {
 
   const getLabel = index => (index === 0 ? props.label : null);
   return (
-    <Flex flexDirection='column' maxH='200px' overflow='auto'>
+    <Flex flexDirection='column' maxH='200px' overflow='auto' key={name}>
       {inputs?.map((input, index) => {
         return (
           <GenericInput

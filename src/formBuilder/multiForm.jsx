@@ -52,18 +52,12 @@ const serializeTXs = (forms = []) =>
 
 const MultiForm = props => {
   const { forms, isTxBuilder, logValues } = props;
-  const parentForm = useForm({
-    shouldUnregister: true,
-  });
+  const parentForm = useForm();
   const { watch, register, setValue } = parentForm;
   const values = watch();
 
   const [txForms, setTxForms] = useState(
-    serializeTXs(
-      forms
-        .filter(form => form.isTx)
-        .map(form => ({ ...form, isVisible: true })),
-    ),
+    serializeTXs(forms.filter(form => form.isTx)),
   );
 
   useEffect(() => {
@@ -101,7 +95,6 @@ const MultiForm = props => {
       }
       //  If key value is the same TX as txIndex, but a different number
       if (key.includes('*TX*')) {
-        parentForm.unregister(key);
         const checkSerial = key => {
           const splitKey = key.split('*TX*');
           const tagIndex = Number(splitKey[0]);
@@ -112,7 +105,10 @@ const MultiForm = props => {
       }
       return { ...acc, [key]: value };
     }, {});
-    console.log(`newFormValues`, newFormValues);
+    const unregisterList = Object.keys(values).filter(([key]) =>
+      key.includes('*TX*'),
+    );
+    parentForm.unregister(unregisterList);
     parentForm.reset(newFormValues);
     setTxForms(newForms);
   };
@@ -155,7 +151,7 @@ const StaticMultiForm = props => {
     if (form.isTx)
       return (
         <TxFormSection
-          key={`${form.id}-${form.txID}`}
+          key={form.txID}
           form={tx ? { ...form, tx } : form}
           isLastItem={isLastItem(forms, index)}
           txIndex={form.txIndex}
@@ -168,7 +164,7 @@ const StaticMultiForm = props => {
       );
     return (
       <FormSection
-        key={`${form.id}-${index}`}
+        key={form.id || uuid()}
         form={tx ? { ...form, tx } : form}
         isLastItem={isLastItem(forms, index)}
         parentForm={parentForm}
@@ -272,7 +268,7 @@ const TxFormSection = props => {
       form={form}
       txIndex={txIndex}
       parentForm={parentForm}
-      serializedFields={serializeFields(form.fields, form.txIndex, 'TX')}
+      serializedFields={serializeFields(form.fields, txIndex, 'TX')}
       setParentFields={handleSetParentFields}
       after={
         <Flex justifyContent='flex-end'>
