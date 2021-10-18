@@ -11,10 +11,10 @@ import {
   getABIfunctions,
   formatFNsAsSelectOptions,
 } from '../utils/abi';
-import { getTagRegex } from '../utils/formBuilder';
+import { getTxFromName } from '../utils/txHelpers';
 
 const AbiInput = props => {
-  const { localForm, listenTo, name, tag = 'TX' } = props;
+  const { localForm, listenTo, name, buildABIOptions } = props;
   const { daochain } = useParams();
   const [isRawHex, setRawHex] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -47,23 +47,22 @@ const AbiInput = props => {
 
   useEffect(() => {
     if (abiInput) {
-      const serialTag = name?.match(getTagRegex(tag))?.[0];
-      console.log(`serialTag`, serialTag);
-      props.buildABIOptions(abiInput, serialTag);
+      const tag = getTxFromName(name);
+      buildABIOptions(abiInput, tag);
     } else if (isRawHex) {
-      props.buildABIOptions('hex');
+      buildABIOptions('hex');
     } else {
-      props.buildABIOptions('clear');
+      buildABIOptions('clear');
     }
   }, [abiInput]);
 
   const switchElement = () => {
     if (isRawHex) {
       setRawHex(false);
-      props.buildABIOptions('clear');
+      buildABIOptions('clear');
     } else {
       setRawHex(true);
-      props.buildABIOptions('hex');
+      buildABIOptions('hex');
     }
   };
 

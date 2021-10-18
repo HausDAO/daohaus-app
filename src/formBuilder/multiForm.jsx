@@ -44,10 +44,11 @@ const indicatorStates = {
 };
 
 const MultiTXForm = props => {
-  const { forms, isTxBuilder, logValues } = props;
+  const { forms, logValues } = props;
   const parentForm = useForm();
   const { watch, register, setValue } = parentForm;
   const values = watch();
+  const templateTXForm = forms[1];
 
   const [txForms, setTxForms] = useState(
     serializeTXs(forms.filter(form => form.isTx)),
@@ -65,22 +66,21 @@ const MultiTXForm = props => {
       'txIDs',
       txForms?.map(tx => tx.txID),
     );
+    console.log(txForms);
   }, [txForms]);
 
   const preTxForm = forms[0];
   const confirmationForm = forms[forms.length - 1];
 
-  const handleAddTx = form =>
-    setTxForms(prevState =>
-      serializeTXs([...prevState, { ...form, txID: uuid() }]),
-    );
+  const handleAddTx = () =>
+    setTxForms(prevState => serializeTXs([...prevState, templateTXForm]));
 
   const handleRemoveTx = txIndex => {
     if (txIndex == null) return;
     const newForms = serializeTXs(
       txForms.filter(form => form.txIndex !== txIndex),
     );
-
+    console.log(newForms);
     const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
       // IF key value is the same txIndex
       if (key.includes(`${txIndex}*TX*`)) {
@@ -101,42 +101,25 @@ const MultiTXForm = props => {
     const unregisterList = Object.keys(values).filter(([key]) =>
       key.includes('*TX*'),
     );
-    parentForm.unregister(unregisterList);
+    // parentForm.unregister(unregisterList);
     parentForm.reset(newFormValues);
     setTxForms(newForms);
   };
 
-  const setParentFields = (txIndex, newFields) => {
-    setTxForms(prevState =>
-      prevState.map(form =>
-        form.txIndex === txIndex ? { ...form, fields: newFields } : form,
-      ),
-    );
-  };
-
   return (
-    <StaticMultiForm
+    <MultiForm
       {...props}
       forms={[preTxForm, ...txForms, confirmationForm]}
       handleAddTx={handleAddTx}
       handleRemoveTx={handleRemoveTx}
       txForms={txForms}
-      setParentFields={setParentFields}
       parentForm={parentForm}
     />
   );
 };
 
-const StaticMultiForm = props => {
-  const {
-    forms,
-    handleAddTx,
-    handleRemoveTx,
-    txForms,
-    setParentFields,
-    parentForm,
-    tx,
-  } = props;
+const MultiForm = props => {
+  const { forms, handleAddTx, handleRemoveTx, txForms, parentForm, tx } = props;
 
   return forms?.map((form, index) => {
     if (form.isTx)
@@ -149,7 +132,6 @@ const StaticMultiForm = props => {
           handleAddTx={handleAddTx}
           handleRemoveTx={handleRemoveTx}
           parentForm={parentForm}
-          setParentFields={setParentFields}
           txForms={txForms}
         />
       );
@@ -172,9 +154,6 @@ const FormSection = props => {
     parentForm,
     isLastItem,
     form,
-    serializedFields,
-    setParentFields,
-    parentFields,
     toggleVisible,
     isVisible = true,
   } = props;
@@ -204,9 +183,6 @@ const FormSection = props => {
           {...form}
           footer={isLastItem}
           parentForm={parentForm}
-          fields={serializedFields || form?.fields}
-          setParentFields={setParentFields}
-          parentFields={parentFields}
           indicatorStates={isLastItem && indicatorStates}
         />
       </Box>
@@ -225,9 +201,8 @@ const TxFormSection = props => {
     form,
     isLastItem,
     parentForm,
-    setParentFields,
   } = props;
-  const abiSnippet = parentForm.watch(`${txIndex}*TX*abiInput`);
+  const abiSnippet = parentForm.watch(`TX.${txIndex}.abiInput`);
   const [isVisible, setIsVisible] = useState(true);
   const [fnName, setFnName] = useState('');
 
@@ -245,8 +220,6 @@ const TxFormSection = props => {
     handleAddTx(form);
   };
   const handleClickRemove = () => handleRemoveTx(txIndex);
-  const handleSetParentFields = newFields =>
-    setParentFields(txIndex, newFields);
   const isLastTx = txIndex === txForms?.length - 1;
 
   return (
@@ -259,7 +232,6 @@ const TxFormSection = props => {
       form={form}
       txIndex={txIndex}
       parentForm={parentForm}
-      setParentFields={handleSetParentFields}
       after={
         <Flex justifyContent='flex-end'>
           {isLastTx ? (

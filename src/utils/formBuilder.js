@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import { filterObject, isObjectEmpty } from './general';
 import { logFormError } from './errorLog';
 
@@ -95,8 +96,8 @@ export const inputDataFromABI = (inputs, serialTag) => {
     const isMulti = input.type.includes('[]');
 
     const fieldName = serialTag
-      ? `${serialTag}${input.name}*ABI_ARG*${index}`
-      : `${input.name}*ABI_ARG*${index}`;
+      ? `${serialTag}.abiArgs.${index}`
+      : `abiArgs.${index}`;
     return {
       type: isMulti ? 'multiInput' : 'input',
       label: input.name,
@@ -177,4 +178,6 @@ export const serializeTXs = (forms = []) =>
   forms.map((form, index) => ({
     ...form,
     fields: serializeFields(form.fields, index),
+    txIndex: index,
+    txID: form.txID || uuid(),
   }));

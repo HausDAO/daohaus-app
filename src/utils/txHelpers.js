@@ -492,6 +492,17 @@ export const handleFieldModifiers = appData => {
   return newValues;
 };
 
+export const getTxFromName = name => {
+  if (name?.includes('TX')) {
+    const justTag = name
+      .split('.')
+      .filter(str => str === 'TX' || /[\d]/.test(str))
+      .join('.');
+    return justTag;
+  }
+  return null;
+};
+
 export const transactionByProposalType = proposal => {
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
     return TX.UBERHAUS_MINION_EXECUTE_APPOINTMENT;
