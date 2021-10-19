@@ -37,6 +37,7 @@ const FormBuilder = props => {
     secondaryBtn,
     formConditions,
     logValues,
+		onLoad,
   } = props;
 
   const [formState, setFormState] = useState(null);
@@ -47,8 +48,21 @@ const FormBuilder = props => {
   const localForm = parentForm || useForm({ shouldUnregister: false });
   const { handleSubmit, watch } = localForm;
   const values = watch();
+	console.log("Builder")
+	console.log(fields)
+	console.log(formFields)
 
   useEffect(() => logValues && dev && console.log(`values`, values), [values]);
+
+	useEffect(() => {
+		setFields(mapInRequired(fields, required))
+	}, [fields])
+
+	useEffect(() => {
+		if (onLoad) {
+			onLoad()
+		}
+	}, [onLoad])
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -160,6 +174,7 @@ const FormBuilder = props => {
             formData: props,
             onSubmit: props.onSubmit,
           });
+					// don't indicate on form
           setFormState('success');
           return res;
         } catch (error) {
@@ -214,7 +229,9 @@ const FormBuilder = props => {
       return handleSubmitCallback();
 
     //  HANDLE CONTRACT TX ON SUBMIT
-    return handleSubmitTX();
+		if (props.tx) {
+      return handleSubmitTX();
+		}
   };
 
   const useFormError = () => ({

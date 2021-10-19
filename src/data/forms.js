@@ -171,10 +171,10 @@ export const FORM = {
     description:
       'Editing this profile will update your profile everywhere IDX is used',
     required: [], // Use name key from proposal type object
+    tx: null,
     ctaText: 'Connect',
     fields: [
       [
-        FIELD.BLUR,
         {
           ...FIELD.TITLE,
           label: 'Name',
