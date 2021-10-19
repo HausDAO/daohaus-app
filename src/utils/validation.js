@@ -37,6 +37,9 @@ export const validate = {
   greaterThanZero(val) {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },
+  boolean(val) {
+    return val;
+  },
 };
 
 export const checkFormTypes = (values, fields) => {
@@ -206,19 +209,6 @@ export const customValidations = {
           message: 'Payment must be less than the DAO balance.',
         };
       }
-    }
-    return false;
-  },
-  noExistingSafeMinion({ appState, values }) {
-    const { minions } = appState.daoOverview;
-    const foundSafe = minions?.find(
-      m => m.safeAddress === values.safeAddress.toLowerCase(),
-    );
-    if (foundSafe) {
-      return {
-        name: 'safeAddress',
-        message: 'This Gnosis Safe has already been assigned to a Minion',
-      };
     }
     return false;
   },

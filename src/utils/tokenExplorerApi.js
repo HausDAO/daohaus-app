@@ -216,7 +216,8 @@ export const fetchNativeBalance = async (address, daochain) => {
     daochain === '0x1' ||
     daochain === '0x4' ||
     daochain === '0x2a' ||
-    daochain === '0x89'
+    daochain === '0x89' ||
+    daochain === '0xa4b1'
   ) {
     try {
       const json = await fetchEtherscanAPIData(
