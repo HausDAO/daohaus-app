@@ -346,8 +346,8 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
-  '0xA4B1': {
-    chainId: '0xA4B1',
+  '0xa4b1': {
+    chainId: '0xa4b1',
     chainName: 'Arbitrum',
     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
     blockExplorerUrls: ['https://arbiscan.io/'],
@@ -364,7 +364,7 @@ export const EIP3085 = {
     '0x64': true,
     '0x89': true,
     '0x4a': true,
-    '0xA4B1': true,
+    '0xa4b1': true,
   },
   NOT_SUPPORTED: {
     '0x1': true,
