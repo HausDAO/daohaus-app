@@ -101,6 +101,9 @@ const ProposalVote = ({
       align='center'
       justify='center'
       style={{ backdropFilter: 'blur(6px)' }}
+      sx={{ '-webkit-backdrop-filter': 'blur(6px)' }}
+      w='100%'
+      h='100%'
     >
       <Box
         maxW={['70%', null, null, 'auto']}
@@ -518,7 +521,7 @@ const ProposalVote = ({
             earlyExecuteMinionType(proposal)) && (
             <Stack mt='15px' justify='center'>
               {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
-              proposal.yesShares >= quorumNeeded ? (
+              (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
                 <MinionExecute
                   hideMinionExecuteButton={hideMinionExecuteButton}
                   minionAction={minionAction}

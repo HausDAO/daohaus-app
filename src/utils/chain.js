@@ -239,7 +239,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
     minion_factory_addr: '',
     moloch_factory_addr: '0x9232dea84e91b49fef6b604eea0455692fc27ba8',
-    dai_contract: '',
+    dai_contract: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
     wrapper_contract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
     wrap_n_zap_factory_addr: '0xff0184056B7865F924ea3c0C1823882ad388421b',
     block_explorer: 'https://arbiscan.io/',

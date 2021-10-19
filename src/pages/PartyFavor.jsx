@@ -80,7 +80,7 @@ const PartyFavor = ({ isMember }) => {
         </Flex>
         {address && (
           <Box fontSize='md'>
-            If you already claimed, withdraw your tokens your {` `}
+            If you already claimed, withdraw your tokens on your {` `}
             <Link to={`/dao/${daochain}/${daoid}/profile/${address}`}>
               DAO profile.
             </Link>
