@@ -56,18 +56,11 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
     "@babel/helper-builder-react-jsx": "^7.12.13",
@@ -83,7 +76,7 @@
     "@storybook/react": "^6.2.8",
     "@storybook/theming": "^6.1.20",
     "@types/deep-equal": "^1.0.1",
-    "babel-loader": "8.1.0",
+    "babel-loader": "8.2.2",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-standard": "^14.1.0",
