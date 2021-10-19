@@ -35,7 +35,7 @@ export const CONTRACTS = {
   SELECTED_MINION_SAFE: {
     location: 'local',
     abiName: 'SAFE_MINION',
-    contractAddress: '.values.selectedMinion',
+    contractAddress: '.values.selectedSafeAddress',
   },
   ERC_20: {
     location: 'local',
@@ -1012,7 +1012,7 @@ export const TX = {
           },
         ],
       }, // typesTokensIdsAmounts
-      '.values.selectedMinion', // vaultAddress (Minion Address?)
+      '.values.selectedSafeAddress || .values.selectedMinion', // vaultAddress (Minion Address?)
       {
         type: 'nestedArgs',
         gatherArgs: [
