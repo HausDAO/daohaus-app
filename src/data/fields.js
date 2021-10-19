@@ -1,5 +1,4 @@
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
-import { generateNonce } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const INFO_TEXT = {
@@ -275,26 +274,27 @@ export const FIELD = {
     expectType: 'any',
   },
   MINION_QUORUM: {
-    type: 'conditionalInput',
-    append: '%',
-    conditionalLabel: 'Allow Minimum Quorum',
-    conditionalDesc: INFO_TEXT.QUORUM,
-    label: 'Minumum Quorum',
-    name: 'minQuorum',
-    htmlFor: 'minQuorum',
-    placeholder: '50',
-    info: INFO_TEXT.MINION_QUORUM,
-    expectType: 'number',
-    defaultValue: () => 0,
+    type: 'checkGate',
+    title: 'Allow Minimum Quorum',
+    description: INFO_TEXT.QUORUM,
+    renderOnCheck: {
+      type: 'input',
+      label: 'Minumum Quorum',
+      append: '%',
+      name: 'minQuorum',
+      htmlFor: 'minQuorum',
+      placeholder: '51',
+      info: INFO_TEXT.MINION_QUORUM,
+      expectType: 'number',
+    },
   },
   SALT_NONCE: {
-    type: 'input',
+    type: 'saltGenerator',
     label: 'Salt Nonce',
     name: 'saltNonce',
     hidden: true,
     htmlFor: 'saltNonce',
     expectType: 'any',
-    defaultValue: generateNonce,
   },
   NIFTY_MINION_PAYMENT_REQUEST: {
     type: 'paymentInput',
@@ -384,7 +384,19 @@ export const FIELD = {
     htmlFor: 'discourseMeta',
     expectType: 'any',
   },
-
+  SUMMON_MODE_SWITCH: {
+    type: 'toggleForm',
+    listenTo: 'formCondition',
+    checked: 'advanced',
+    unchecked: 'easy',
+    label: {
+      type: 'formCondition',
+      easy: 'Easy Mode',
+      advanced: 'Advanced Mode',
+    },
+    title: 'Minion Setup',
+    expectType: 'any',
+  },
   TEST_SWITCH: {
     type: 'checkSwitch',
     listenTo: 'formCondition',

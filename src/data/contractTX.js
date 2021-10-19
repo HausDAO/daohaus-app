@@ -651,7 +651,7 @@ export const TX = {
     gatherArgs: [
       '.contextData.daoid',
       '.values.minionName',
-      '.values.minQuorum',
+      '.values.minQuorum || 0',
       '.values.saltNonce',
     ],
   },
@@ -666,7 +666,7 @@ export const TX = {
       '.contextData.daoid',
       '.values.safeAddress',
       '.values.minionName',
-      '.values.minQuorum',
+      '.values.minQuorum || 0',
       '.values.saltNonce',
     ],
   },
@@ -817,7 +817,7 @@ export const TX = {
                 type: 'encodeHex',
                 contract: CONTRACTS.LOCAL_SAFE_SIGNLIB,
                 fnName: 'signMessage',
-                gatherArgs: ['.values.signatureHash'],
+                gatherArgs: ['.values.eip712HashValue'],
               },
             ],
           },
@@ -838,7 +838,7 @@ export const TX = {
       true, // _memberOnlyEnabled
     ],
   },
-  SET_BUYOUT_NFT: {
+  SET_BUYOUT_TOKEN: {
     contract: CONTRACTS.SELECTED_MINION_SAFE,
     name: 'proposeAction',
     poll: 'subgraph',
@@ -848,19 +848,26 @@ export const TX = {
     successMsg: 'Buyout Proposal Submitted',
     gatherArgs: [
       {
-        type: 'nestedArgs',
-        gatherArgs: [
-          '.contextData.chainConfig.dao_conditional_helper_addr',
-          '.values.paymentToken',
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.contextData.chainConfig.dao_conditional_helper_addr',
+              '.values.paymentToken',
+            ],
+          },
         ],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['0', '0'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: [
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+        data: [
           {
             type: 'encodeHex',
             contract: CONTRACTS.DAO_CONDITIONAL_HELPER,
@@ -874,14 +881,20 @@ export const TX = {
             gatherArgs: ['.contextData.address', '.values.paymentRequested'],
           },
         ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
       },
-      '.values.paymentToken',
-      '0',
+      '.values.paymentToken', // _withdrawToken
+      '.values.paymentRequested', // _withdrawAmount
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.SET_BUYOUT_NFT,
       },
-      'false',
+      true, // _memberOnlyEnabled
     ],
   },
   OFFER_NFT_TRIBUTE: {
