@@ -270,6 +270,7 @@ export const BOOSTS = {
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
     settings: 'none',
     networks: MINIONS[MINION_TYPES.VANILLA].networks,
+    // networks: {},
     cost: 'free',
   },
   NIFTY_DEV_SUITE: {
