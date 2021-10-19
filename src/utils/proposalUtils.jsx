@@ -265,10 +265,9 @@ export const raribleHashMaker = proposal => {
   }
 };
 
-export const proposalTypeMaker = proposal => {
+export const proposalTypeMaker = proposalDetails => {
   try {
-    const parsed =
-      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    const parsed = IsJsonString(proposalDetails) && JSON.parse(proposalDetails);
     return parsed.proposalType || '';
   } catch (e) {
     return '';
