@@ -100,11 +100,11 @@ export const inputDataFromABI = (inputs, serialTag) => {
       ? `${serialTag}.abiArgs.${index}`
       : `abiArgs.${index}`;
     return {
-      type: isMulti ? 'multiInput' : 'input',
+      type: isMulti ? 'listBox' : 'input',
       label: input.name,
       name: fieldName,
       htmlFor: fieldName,
-      placeholder: labels[localType] || input.type,
+      placeholder: isMulti ? input.type : labels[localType],
       expectType: isMulti ? 'any' : getType(localType),
       required: false,
     };

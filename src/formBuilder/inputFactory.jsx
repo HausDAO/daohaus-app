@@ -30,6 +30,7 @@ import SuperfluidPaymentInput from './superfluidPaymentInput';
 import SuperfluidRate from './superfluidRate';
 import TargetContract from './targetContract';
 import TributeInput from './tributeInput';
+import ListBox from './listBox';
 
 export const InputFactory = props => {
   const { type, formCondition } = props;
@@ -127,6 +128,9 @@ export const InputFactory = props => {
   }
   if (type === 'checkGate') {
     return <CheckGate {...props} />;
+  }
+  if (type === 'listBox') {
+    return <ListBox {...props} />;
   }
   return null;
 };

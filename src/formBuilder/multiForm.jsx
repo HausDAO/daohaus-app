@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { v4 as uuid } from 'uuid';
 
 import {
   BiChevronDown,
@@ -16,11 +15,7 @@ import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
 import { IsJsonString, isLastItem } from '../utils/general';
-import {
-  decrementTxIndex,
-  getTxIndex,
-  serializeTXs,
-} from '../utils/formBuilder';
+import { serializeTXs } from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -85,11 +80,12 @@ const MultiTXForm = props => {
     const newForms = serializeTXs(
       txForms.filter(form => form.txIndex !== txIndex),
     );
-
+    console.log(`newForms`, newForms);
     const newFormValues = {
       ...values,
       TX: values.TX.filter((tx, index) => index !== txIndex),
     };
+    console.log(`newFormValues`, newFormValues);
     // const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
     //   // IF key value is the same txIndex
     //   if (key.includes(`TX.${txIndex}`)) {

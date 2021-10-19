@@ -26,6 +26,7 @@ const AbiInput = props => {
   const helperText = isDisabled && 'Please enter a target contract';
 
   const abiRef = useRef(null);
+  const contractRef = useRef(null);
   useEffect(() => {
     const getABI = async () => {
       try {
@@ -39,10 +40,10 @@ const AbiInput = props => {
         console.error(error);
       }
     };
-    if (targetContract && validate.address(targetContract) && !abiRef.current) {
+    if (targetContract && validate.address(targetContract)) {
+      if (targetContract === contractRef.current) return;
       getABI();
-    } else {
-      setIsDisabled(true);
+      contractRef.current = targetContract;
     }
   }, [targetContract]);
 
@@ -51,9 +52,6 @@ const AbiInput = props => {
       if (abiInput === abiRef.current) return;
       const tag = getTxFromName(name);
       buildABIOptions(abiInput, tag);
-      console.log(`FIRED ABI INPUT`);
-      console.log(`abiInput`, abiInput);
-      console.log(`abiRef.current`, abiRef.current);
       abiRef.current = abiInput;
     }
   }, [abiInput]);
