@@ -65,7 +65,6 @@ const MultiTXForm = props => {
       'txIDs',
       txForms?.map(tx => tx.txID),
     );
-    console.log(txForms);
   }, [txForms]);
 
   const preTxForm = forms[0];
@@ -75,17 +74,14 @@ const MultiTXForm = props => {
     setTxForms(prevState => serializeTXs([...prevState, templateTXForm]));
 
   const handleRemoveTx = txIndex => {
-    console.log(`txIndex`, txIndex);
     if (txIndex == null) return;
     const newForms = serializeTXs(
       txForms.filter(form => form.txIndex !== txIndex),
     );
-    console.log(`newForms`, newForms);
     const newFormValues = {
       ...values,
       TX: values.TX.filter((tx, index) => index !== txIndex),
     };
-    console.log(`newFormValues`, newFormValues);
     // const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
     //   // IF key value is the same txIndex
     //   if (key.includes(`TX.${txIndex}`)) {
@@ -104,7 +100,6 @@ const MultiTXForm = props => {
     //   console.log('FIELD SKIPPED', key);
     //   return { ...acc, [key]: value };
     // }, {});
-    console.log('nweFormValues', newFormValues);
     // const unregisterList = Object.keys(values).filter(([key]) =>
     //   key.includes('*TX*'),
     // );
@@ -114,8 +109,6 @@ const MultiTXForm = props => {
   };
 
   const setParentFields = (txID, fields) => {
-    console.log('FIRING SET PARENT FIELDS FOR SOME REASON');
-    console.log(`fields`, fields);
     setTxForms(prevState =>
       prevState.map(form => (form.txID === txID ? { ...form, fields } : form)),
     );

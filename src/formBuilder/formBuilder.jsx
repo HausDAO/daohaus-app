@@ -75,8 +75,6 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = (abiString, serialTag = false) => {
-    console.log('FIRED BUILD ABI OPTIONS');
-    console.log(`abiString`, abiString);
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
     if (abiString === 'clear' || abiString === 'hex') {

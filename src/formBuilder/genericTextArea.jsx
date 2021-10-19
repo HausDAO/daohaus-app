@@ -17,9 +17,11 @@ const GenericTextarea = ({
   disabled,
   w,
   layout,
+  control,
+  registerOptions,
 }) => {
   const { register } = localForm;
-
+  // console.log(`registerOptions`, registerOptions);
   return (
     <FieldWrapper
       label={label}
@@ -35,10 +37,12 @@ const GenericTextarea = ({
         key={name}
         id={htmlFor}
         name={name}
-        placeholder={placeholder || label || htmlFor}
+        // placeholder={placeholder || label || htmlFor}
         h={h}
-        ref={register}
+        ref={registerOptions ? register(registerOptions) : register}
+        // ref={registerOptions ? register(registerOptions) : register}
         disabled={disabled}
+        control={control}
       />
     </FieldWrapper>
   );
