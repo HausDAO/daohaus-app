@@ -45,6 +45,13 @@ const ProfileMenu = ({ member }) => {
 
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
+	const handleEditProfile = () => formModal({...FORM.PROFILE, onSubmit: ({values}) => {
+
+		// authenticate profile
+		// open modal modal
+		// then user can fill out
+	})})
+
   const copiedToast = () => {
     toast({
       title: 'Copied Address',
@@ -118,13 +125,7 @@ const ProfileMenu = ({ member }) => {
           <MenuItem>Copy Address</MenuItem>
         </CopyToClipboard>
 
-        <Link
-          href={`https://3box.io/${member?.memberAddress}`}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <MenuItem>View 3box Profile</MenuItem>
-        </Link>
+        <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
 
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <>

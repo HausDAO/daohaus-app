@@ -362,7 +362,6 @@ export const FIELD = {
     htmlFor: 'discourseMeta',
     expectType: 'any',
   },
-
   TEST_SWITCH: {
     type: 'checkSwitch',
     listenTo: 'formCondition',
@@ -388,6 +387,18 @@ export const FIELD = {
     title: 'Check to render Description',
     description: 'You bet',
     expectType: 'any',
+  },
+  TEST_GATE: {
+    type: 'checkGate',
+    startsChecked: false,
+    label: 'Toggle Field State',
+    title: 'Check to render Description',
+    description: 'You bet',
+    expectType: 'any',
+  },
+  BLUR: {
+    type: 'genericBlur',
+    title: 'Connect to update your profile',
   },
 };
 
