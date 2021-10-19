@@ -4,15 +4,15 @@ import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 
 import {
   buildRaribleUrl,
-  compareOrder,
+  compareSellOrder,
   createOrder,
   getOrderByItem,
   getOrderDataFromProposal,
 } from '../utils/rarible';
 
-const RaribleOrder = ({ proposal, orderType }) => {
+const RaribleSellOrder = ({ proposal }) => {
   const { daochain } = useParams();
-  const [needOrder, setNeedOrder] = useState(false);
+  const [needSellOrder, setNeedSellOrder] = useState(false);
   const [orderUrl, setOrderUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,29 +21,28 @@ const RaribleOrder = ({ proposal, orderType }) => {
       setLoading(true);
       const orderData = await getOrderDataFromProposal(proposal);
       const orderRes = await getOrderByItem(
-        orderData.make.assetType.tokenId
-          ? orderData.make.assetType.contract
-          : orderData.take.assetType.contract,
-        orderData.make.assetType.tokenId || orderData.take.assetType.tokenId,
+        orderData.make.assetType.contract,
+        orderData.make.assetType.tokenId,
         orderData.maker,
-        orderData.make.assetType.tokenId ? 'sell' : 'bids',
         daochain,
       );
+
       setOrderUrl(buildRaribleUrl(orderData, daochain));
-      setNeedOrder(!compareOrder(orderData, orderRes.orders));
+      setNeedSellOrder(!compareSellOrder(orderData, orderRes.orders));
       setLoading(false);
     };
 
     getOrder();
   }, []);
 
-  const makeOrder = async () => {
+  const makeSellOrder = async () => {
     setLoading(true);
 
     const orderData = await getOrderDataFromProposal(proposal);
-    await createOrder(orderData, daochain);
+    const res = await createOrder(orderData, daochain);
+    console.log('order res', res);
 
-    setNeedOrder(false);
+    setNeedSellOrder(false);
     setLoading(false);
   };
 
@@ -51,7 +50,7 @@ const RaribleOrder = ({ proposal, orderType }) => {
     return <Spinner />;
   }
 
-  if (!needOrder) {
+  if (!needSellOrder) {
     return (
       <Flex direction='column' alignItems='center'>
         <Box>Executed</Box>
@@ -63,9 +62,9 @@ const RaribleOrder = ({ proposal, orderType }) => {
   }
 
   return (
-    <Button disabled={loading} onClick={makeOrder}>
-      {`Create ${orderType} Order`}
+    <Button disabled={loading} onClick={makeSellOrder}>
+      Create Sell Order
     </Button>
   );
 };
-export default RaribleOrder;
+export default RaribleSellOrder;

@@ -64,7 +64,6 @@ export const DAO_ACTIVITIES = gql`
         cancelled
         cancelledAt
         createdAt
-        createdBy
         details
         didPass
         executed
@@ -111,7 +110,6 @@ export const DAO_ACTIVITIES = gql`
         actions {
           target
           data
-          memberOnly
         }
         moloch {
           gracePeriodLength
@@ -126,12 +124,6 @@ export const DAO_ACTIVITIES = gql`
           uintVote
           createdAt
           molochAddress
-        }
-        escrow {
-          tokenAddresses
-          tokenTypes
-          tokenIds
-          amounts
         }
       }
       rageQuits {

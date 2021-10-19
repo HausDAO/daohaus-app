@@ -23,7 +23,7 @@ export const BOOST_PLAYLISTS = {
     forms: [
       'MINION_SAFE_SIMPLE',
       // 'PAYROLL_SAFE',
-      'MINION_BUYOUT_TOKEN',
+      // 'MINION_BUYOUT_ERC721_TOKEN',
     ],
   },
   RARIBLE: {
