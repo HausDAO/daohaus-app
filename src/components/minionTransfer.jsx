@@ -20,14 +20,6 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
   const enableTransfer =
     isMember &&
     (!vault.safeAddress || (vault.safeAddress && vault.isMinionModule));
-  const sameChain = daoConnectedAndSameChain(
-    address,
-    daochain,
-    injectedChain?.chainId,
-  );
-  const tooltip =
-    ((!sameChain || !isMember) && LABELS.NO_MEMBER) ||
-    (!enableTransfer && LABELS.MINION_NOT_READY);
 
   const transferFormLego = useMemo(() => {
     const tokenType = isNativeToken ? 'network' : 'erc20';
@@ -48,7 +40,8 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
 
   return (
     <>
-      {sameChain && enableTransfer ? (
+      {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
+      enableTransfer ? (
         <Button size='md' variant='outline' ml={6} onClick={openSendModal}>
           Transfer
         </Button>
@@ -57,7 +50,7 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
           hasArrow
           shouldWrapChildren
           placement='bottom'
-          label={tooltip}
+          label={!isMember ? LABELS.NO_MEMBER : LABELS.MINION_NOT_READY}
           bg='secondary.500'
         >
           <Button size='md' variant='outline' disabled>

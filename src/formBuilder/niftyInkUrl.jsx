@@ -78,9 +78,7 @@ const NiftyInkUrl = props => {
     <Box>
       <LinkInput {...props} />
 
-      {invalidLink && (
-        <ErrorList singleError={{ message: 'Invalid NiftyInk Url' }} />
-      )}
+      {invalidLink && <ErrorList message='Invalid NiftyInk Url' />}
       {nftData ? (
         <>
           <Image src={nftData.metadata.image} w='300px' h='300px' />

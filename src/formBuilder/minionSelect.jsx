@@ -4,12 +4,9 @@ import { useDao } from '../contexts/DaoContext';
 import GenericSelect from './genericSelect';
 
 const MinionSelect = props => {
+  const { name, localValues, localForm } = props;
+  const { setValue } = localForm;
   const { daoOverview, daoVaults } = useDao();
-  const { name, localForm } = props;
-  const { setValue, watch } = localForm;
-
-  const minionAddress = watch(name);
-
   const minions = useMemo(() => {
     return daoOverview.minions
       .filter(minion => {
@@ -24,20 +21,16 @@ const MinionSelect = props => {
         );
       })
       .map(minion => ({
-        safe: minion.safeAddress,
         value: minion.minionAddress,
         name: minion.details,
       }));
   }, []);
 
   useEffect(() => {
-    if (minionAddress) {
-      const safeAddress = minions.filter(
-        minion => minion.value === minionAddress,
-      )?.[0]?.safe;
-      setValue('selectedSafeAddress', safeAddress);
+    if (localValues && localValues.minionAddress) {
+      setValue(name, localValues.minionAddress);
     }
-  }, [minionAddress]);
+  }, [name, localValues]);
 
   return <GenericSelect {...props} options={minions} />;
 };

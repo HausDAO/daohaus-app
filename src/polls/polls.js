@@ -3,7 +3,6 @@ import Web3 from 'web3';
 import { MinionService } from '../services/minionService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { TokenService } from '../services/tokenService';
-import { NFTService } from '../services/nftService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import {
   DAO_POLL,
@@ -105,25 +104,6 @@ export const pollTokenAllowances = async ({
     contractAddr: daoID,
   });
   return amountApproved;
-};
-
-export const pollTokenApproval = async ({
-  chainID,
-  contractAddress,
-  userAddress,
-  controllerAddress,
-}) => {
-  const tokenContract = NFTService({
-    chainID,
-    tokenAddress: contractAddress,
-  });
-
-  const args = [userAddress, controllerAddress];
-  const approved = await tokenContract('isApprovedForAll')({
-    args,
-    userAddress,
-  });
-  return approved;
 };
 
 export const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
