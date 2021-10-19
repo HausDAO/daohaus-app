@@ -120,13 +120,20 @@ export const createGnosisSafeTxProposal = async ({
     txHash,
   };
   // TODO: EIP-712 compliant?
-  const signature = await web3.eth.sign(txProposal.txHash, fromDelegate);
+  const signature = await web3.eth.personal.sign(
+    txProposal.txHash,
+    fromDelegate,
+  );
+  const r = signature.slice(0, 66);
+  const s = signature.slice(66, 130);
+  // eth_sign signature -> signature_type > 30 -> v = v + 4
+  const v = (parseInt(signature.slice(130, 132), 16) + 4).toString(16);
 
   const tx = {
     ...txProposal.tx,
     contractTransactionHash: txProposal.txHash,
     sender: fromDelegate,
-    signature,
+    signature: r + s + v,
     origin: 'Minion Safe enableModule Tx Proposal',
   };
 
