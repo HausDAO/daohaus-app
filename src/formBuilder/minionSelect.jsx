@@ -21,7 +21,7 @@ const MinionSelect = props => {
         );
       })
       .map(minion => ({
-        value: minion.minionAddress,
+        value: minion.safeAddress || minion.minionAddress,
         name: minion.details,
       }));
   }, []);

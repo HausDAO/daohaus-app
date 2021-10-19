@@ -23,6 +23,8 @@ import PaymentInput from './paymentInput';
 import PriceInput from './priceInput';
 import RageInput from './rageInput';
 import RaribleNftSelect from './raribleNftData';
+import NftApproval from './nftApproval';
+import TokenInfoInput from './tokenInfoInput';
 import CheckSwitch from './checkSwitch';
 import CheckGate from './checkGate';
 import SaltGenerator from './saltGenerator';
@@ -119,6 +121,12 @@ export const InputFactory = props => {
   }
   if (type === 'discourseMeta') {
     return <DiscourseMeta {...props} />;
+  }
+  if (type === 'nftApproval') {
+    return <NftApproval {...props} />;
+  }
+  if (type === 'tokenInfoInput') {
+    return <TokenInfoInput {...props} />;
   }
   if (type === 'checkSwitch') {
     return <CheckSwitch {...props} />;

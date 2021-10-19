@@ -24,6 +24,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
+import EscrowActions from './escrowActions';
 import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
 import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
@@ -100,6 +101,9 @@ const ProposalVote = ({
       align='center'
       justify='center'
       style={{ backdropFilter: 'blur(6px)' }}
+      sx={{ '-webkit-backdrop-filter': 'blur(6px)' }}
+      w='100%'
+      h='100%'
     >
       <Box
         maxW={['70%', null, null, 'auto']}
@@ -517,7 +521,7 @@ const ProposalVote = ({
             earlyExecuteMinionType(proposal)) && (
             <Stack mt='15px' justify='center'>
               {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
-              proposal.yesShares >= quorumNeeded ? (
+              (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
                 <MinionExecute
                   hideMinionExecuteButton={hideMinionExecuteButton}
                   minionAction={minionAction}
@@ -539,6 +543,13 @@ const ProposalVote = ({
               )}
             </Stack>
           )}
+          {proposal?.escrow &&
+            (proposal?.status === 'Failed' ||
+              proposal?.status === 'Cancelled') && (
+              <Flex justify='center'>
+                <EscrowActions proposal={proposal} />
+              </Flex>
+            )}
         </Stack>
       </ContentBox>
     </>

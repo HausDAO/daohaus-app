@@ -125,6 +125,12 @@ export const DAO_ACTIVITIES = gql`
           createdAt
           molochAddress
         }
+        escrow {
+          tokenAddresses
+          tokenTypes
+          tokenIds
+          amounts
+        }
       }
       rageQuits {
         id

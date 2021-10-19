@@ -157,6 +157,11 @@ export const CONTRACTS = {
     abiName: 'ERC_20',
     contractAddress: 'values.paymentToken',
   },
+  ESCROW_MINION: {
+    location: 'local',
+    abiName: 'ESCROW_MINION',
+    contractAddress: '.contextData.chainConfig.escrow_minion',
+  },
 };
 
 export const ACTIONS = {
@@ -225,6 +230,19 @@ export const DETAILS = {
     minionType: MINION_TYPES.SAFE,
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
+  },
+  SET_BUYOUT_NFT: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+  },
+  OFFER_NFT_TRIBUTE: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
   },
 };
 
@@ -307,6 +325,15 @@ export const TX = {
     display: 'Approve Spend Token',
     errMsg: 'Approve Token Failed',
     successMsg: 'Approved Token!',
+  },
+  UNLOCK_NFTS: {
+    contract: CONTRACTS.LOCAL_ERC_721,
+    name: 'setApprovalForAll',
+    specialPoll: 'approveAllTokens',
+    onTxHash: null,
+    display: 'Approve All Tokens',
+    errMsg: 'Approve Tokens Failed',
+    successMsg: 'Approved Tokens!',
   },
   MINION_PROPOSE_ACTION: {
     contract: CONTRACTS.SELECTED_MINION,
@@ -511,6 +538,24 @@ export const TX = {
     display: 'Transfer Balance',
     errMsg: 'Error Transferring Balance',
     successMsg: 'Balance Transferred!',
+  },
+  MINION_CANCEL: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'cancelAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Cancel Minion',
+    errMsg: 'Error Cancelling Minion',
+    successMsg: 'Cancelled Minion!',
+  },
+  ESCROW_MINION_CANCEL: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'cancelAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Cancel Minion',
+    errMsg: 'Error Cancelling Minion',
+    successMsg: 'Cancelled Minion!',
   },
   MINION_SELL_NIFTY: {
     contract: CONTRACTS.LOCAL_VANILLA_MINION,
@@ -851,5 +896,56 @@ export const TX = {
       },
       true, // _memberOnlyEnabled
     ],
+  },
+  OFFER_NFT_TRIBUTE: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'proposeTribute',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting NFT Tribute Proposal',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      '.contextData.daoid',
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['.values.nftAddress'],
+      }, // tokenAddresses
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.values.tokenType',
+              '.values.tokenId',
+              '.values.numTokens || 0',
+            ],
+          },
+        ],
+      }, // typesTokensIdsAmounts
+      '.values.selectedMinion', // vaultAddress (Minion Address?)
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          '.values.sharesRequested',
+          '.values.lootRequested',
+          '.values.paymentRequested', // Funds
+        ],
+      }, // tokenAddresses
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.OFFER_NFT_TRIBUTE,
+      },
+    ],
+  },
+  WITHDRAW_ESCROW: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'withdrawToDestination',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Withdraw Balance from Escrow',
+    errMsg: 'Error Withdrawing Balance from Escrow',
+    successMsg: 'Balance Withdrawn from Escrow!',
   },
 };

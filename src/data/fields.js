@@ -208,6 +208,28 @@ export const FIELD = {
     label: 'Vaild Rarible Order Data',
     expectType: 'any',
   },
+  NFT_INPUT: {
+    type: 'input',
+    htmlFor: 'nftAddress',
+    name: 'nftAddress',
+    placeholder: '0x',
+    label: 'Token Address',
+    expectType: 'address',
+  },
+  TOKEN_INFO_INPUT: {
+    type: 'tokenInfoInput',
+    htmlFor: 'tokenId',
+    name: 'tokenId',
+    placeholder: '0',
+    label: 'Token Info',
+    expectType: 'number',
+  },
+  NFT_APPROVAL: {
+    type: 'nftApproval',
+    htmlFor: 'nftApproval',
+    name: 'nftApproval',
+    expectType: 'boolean',
+  },
   DATE_RANGE: {
     type: 'dateRange',
     htmlFor: 'dateRange',

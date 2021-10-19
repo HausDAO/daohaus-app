@@ -43,6 +43,7 @@ export const PROPOSAL_TYPES = {
   MINION_ERC1155: 'Minion Erc1155 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
   MINION_BUYOUT: 'Minion Buyout Proposal',
+  MINION_TRIBUTE: 'Minion Tribute Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
   SELL_NFT: 'Sell NFT',
 };
@@ -597,7 +598,7 @@ export const multicallActionsFromProposal = prop => {
 };
 
 export const hasMinionActions = (prop, minionDeets) => {
-  if (prop.minion.minionType === MINION_TYPES.SAFE) {
+  if (prop.minion?.minionType === MINION_TYPES.SAFE) {
     return prop.actions > 0;
   }
   return (

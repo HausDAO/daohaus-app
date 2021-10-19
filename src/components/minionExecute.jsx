@@ -6,6 +6,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
+import EscrowActions from './escrowActions';
 import RaribleSellOrder from './raribleSellOrder';
 import { TokenService } from '../services/tokenService';
 import {
@@ -15,6 +16,7 @@ import {
 } from '../utils/proposalUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { supportedChains } from '../utils/chain';
 
 const MinionExecute = ({
   hideMinionExecuteButton,
@@ -41,6 +43,10 @@ const MinionExecute = ({
 
   const hasRaribleAction =
     proposal.title === 'Rarible NFT Sell Order' && proposal.executed;
+
+  const isEscrowMinion =
+    proposal?.minionAddress?.toLowerCase() ===
+    supportedChains[daochain].escrow_minion?.toLowerCase();
 
   useEffect(() => {
     const getMinionDetails = async () => {
@@ -135,6 +141,11 @@ const MinionExecute = ({
     if (hideMinionExecuteButton) {
       return null;
     }
+
+    if (isEscrowMinion) {
+      return <EscrowActions proposal={proposal} />;
+    }
+
     if (proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
       const isMember =
         daoMembers.filter(member => member.memberAddress === proposal.proposer)
