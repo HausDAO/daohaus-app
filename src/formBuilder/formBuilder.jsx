@@ -277,6 +277,7 @@ const FormBuilder = props => {
           goToNext={goToNext}
           errors={Object.values(formErrors)}
           customSecondaryBtn={secondaryBtn}
+          loading={formState === 'loading'}
         />
       </Flex>
     </form>
