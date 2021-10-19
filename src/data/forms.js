@@ -385,7 +385,7 @@ export const FORM = {
     id: 'SELL_NFT_RARIBLE',
     title: 'Sell NFT on Rarible',
     description: 'Post an NFT for sale on Rarible',
-    type: PROPOSAL_TYPES.SELL_NFT,
+    type: PROPOSAL_TYPES.SELL_NFT_RARIBLE,
     minionType: MINION_TYPES.SAFE,
     tx: TX.SELL_NFT_RARIBLE,
     required: ['selectedMinion', 'orderPrice', 'raribleNftData'],
@@ -554,12 +554,12 @@ export const FORM = {
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
     ],
   },
-  BUY_NFT: {
-    id: 'BUY_NFT',
+  BUY_NFT_RARIBLE: {
+    id: 'BUY_NFT_RARIBLE',
     title: 'Buy an NFT on Rarible',
     description:
       'Make a proposal to bid on an NFT on Rarible using a Minion Safe Vault',
-    type: PROPOSAL_TYPES.BUY_NFT,
+    type: PROPOSAL_TYPES.BUY_NFT_RARIBLE,
     minionType: MINION_TYPES.SAFE,
     tx: TX.BUY_NFT_RARIBLE,
     required: [
