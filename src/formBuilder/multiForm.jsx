@@ -16,7 +16,11 @@ import FormBuilder from './formBuilder';
 import TextBox from '../components/TextBox';
 
 import { IsJsonString, isLastItem } from '../utils/general';
-import { serializeTXs } from '../utils/formBuilder';
+import {
+  decrementTxIndex,
+  getTxIndex,
+  serializeTXs,
+} from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -76,34 +80,48 @@ const MultiTXForm = props => {
     setTxForms(prevState => serializeTXs([...prevState, templateTXForm]));
 
   const handleRemoveTx = txIndex => {
+    console.log(`txIndex`, txIndex);
     if (txIndex == null) return;
     const newForms = serializeTXs(
       txForms.filter(form => form.txIndex !== txIndex),
     );
-    console.log(newForms);
-    const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
-      // IF key value is the same txIndex
-      if (key.includes(`${txIndex}*TX*`)) {
-        return acc;
-      }
-      //  If key value is the same TX as txIndex, but a different number
-      if (key.includes('*TX*')) {
-        const checkSerial = key => {
-          const splitKey = key.split('*TX*');
-          const tagIndex = Number(splitKey[0]);
-          const rest = splitKey.slice(1).join('');
-          return tagIndex > txIndex ? `${tagIndex - 1}*TX*${rest}` : key;
-        };
-        return { ...acc, [checkSerial(key)]: value };
-      }
-      return { ...acc, [key]: value };
-    }, {});
-    const unregisterList = Object.keys(values).filter(([key]) =>
-      key.includes('*TX*'),
-    );
+
+    const newFormValues = {
+      ...values,
+      TX: values.TX.filter((tx, index) => index !== txIndex),
+    };
+    // const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
+    //   // IF key value is the same txIndex
+    //   if (key.includes(`TX.${txIndex}`)) {
+    //     console.log('FIELD DELETED', key);
+    //     // parentForm.unregister(key);
+    //     return acc;
+    //   }
+    //   //  If key value is the same TX as txIndex, but a different number
+    //   if (key.includes('TX')) {
+    //     console.log('FIELD EXAMINED ', key);
+    //     const currentIndex = Number(getTxIndex(key));
+    //     return currentIndex > txIndex
+    //       ? { ...acc, [decrementTxIndex(key)]: value }
+    //       : { [key]: value };
+    //   }
+    //   console.log('FIELD SKIPPED', key);
+    //   return { ...acc, [key]: value };
+    // }, {});
+    console.log('nweFormValues', newFormValues);
+    // const unregisterList = Object.keys(values).filter(([key]) =>
+    //   key.includes('*TX*'),
+    // );
     // parentForm.unregister(unregisterList);
     parentForm.reset(newFormValues);
     setTxForms(newForms);
+  };
+
+  const setParentFields = (txID, fields) => {
+    console.log(`fields`, fields);
+    setTxForms(prevState =>
+      prevState.map(form => (form.txID === txID ? { ...form, fields } : form)),
+    );
   };
 
   return (
@@ -114,12 +132,21 @@ const MultiTXForm = props => {
       handleRemoveTx={handleRemoveTx}
       txForms={txForms}
       parentForm={parentForm}
+      setParentFields={setParentFields}
     />
   );
 };
 
 const MultiForm = props => {
-  const { forms, handleAddTx, handleRemoveTx, txForms, parentForm, tx } = props;
+  const {
+    forms,
+    handleAddTx,
+    handleRemoveTx,
+    txForms,
+    parentForm,
+    tx,
+    setParentFields,
+  } = props;
 
   return forms?.map((form, index) => {
     if (form.isTx)
@@ -133,15 +160,17 @@ const MultiForm = props => {
           handleRemoveTx={handleRemoveTx}
           parentForm={parentForm}
           txForms={txForms}
+          setParentFields={setParentFields}
         />
       );
     return (
       <FormSection
-        key={form.id || uuid()}
+        key={form.id}
         form={tx ? { ...form, tx } : form}
         isLastItem={isLastItem(forms, index)}
         parentForm={parentForm}
         tx={tx}
+        setParentFields={setParentFields}
       />
     );
   });
@@ -155,6 +184,7 @@ const FormSection = props => {
     isLastItem,
     form,
     toggleVisible,
+    setParentFields,
     isVisible = true,
   } = props;
 
@@ -184,6 +214,7 @@ const FormSection = props => {
           footer={isLastItem}
           parentForm={parentForm}
           indicatorStates={isLastItem && indicatorStates}
+          setParentFields={setParentFields}
         />
       </Box>
       {isVisible && <Flex justifyContent='flex-end'> {after} </Flex>}
@@ -201,6 +232,7 @@ const TxFormSection = props => {
     form,
     isLastItem,
     parentForm,
+    setParentFields,
   } = props;
   const abiSnippet = parentForm.watch(`TX.${txIndex}.abiInput`);
   const [isVisible, setIsVisible] = useState(true);
@@ -224,7 +256,6 @@ const TxFormSection = props => {
 
   return (
     <FormSection
-      key={form.txID}
       title={`Transaction ${txIndex + 1} ${fnName && ` (${fnName})`}`}
       isLastItem={isLastItem}
       toggleVisible={toggleVisible}
@@ -232,6 +263,7 @@ const TxFormSection = props => {
       form={form}
       txIndex={txIndex}
       parentForm={parentForm}
+      setParentFields={setParentFields}
       after={
         <Flex justifyContent='flex-end'>
           {isLastTx ? (

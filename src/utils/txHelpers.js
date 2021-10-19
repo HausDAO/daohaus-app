@@ -496,7 +496,7 @@ export const getTxFromName = name => {
   if (name?.includes('TX')) {
     const justTag = name
       .split('.')
-      .filter(str => str === 'TX' || /[\d]/.test(str))
+      .slice(0, 2)
       .join('.');
     return justTag;
   }

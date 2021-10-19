@@ -551,6 +551,7 @@ export const PROPOSAL_FORMS = {
     ],
   },
   MULTICALL_CONFIRMATION: {
+    id: 'MULTICALL_CONFIRMATION',
     fields: [[], []],
   },
 };
@@ -562,6 +563,7 @@ const MULTI_FORMS = {
     logValues: true,
     isTxBuilder: true,
     type: 'multiForm',
+    minionType: MINION_TYPES.SAFE,
     tx: TX.GENERIC_SAFE_MULTICALL,
     title: 'Safe Minion TX Builder',
     description: 'Create a multi-transaction proposal',

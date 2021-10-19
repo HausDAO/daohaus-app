@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { filterObject, isObjectEmpty } from './general';
 import { logFormError } from './errorLog';
+import { validate } from './validation';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
@@ -165,13 +166,45 @@ export const getTagRegex = tag => new RegExp(`(\\d+\\*${tag}\\*)+`);
 //   return `${index}*${tag}*${name}`;
 // };
 
-const serializeFields = (fields = [], formIndex) =>
+const getOriginalName = name => {
+  return name
+    .split('.')
+    .slice(2)
+    .join('.');
+};
+
+export const getTxIndex = key => key.split('.')[1];
+
+export const decrementTxIndex = key => {
+  const segments = key.split('.');
+  const currentIndex = segments[1];
+  const rest = segments.slice(2).join('.');
+  if (validate.number(currentIndex)) {
+    return `TX.${Number(currentIndex) - 1}.${rest}`;
+  }
+  console.error('Did not recieve corrrect TX.[number] value');
+  return key;
+};
+
+const serializeFields = (fields = [], txIndex) =>
   fields.map(column =>
-    column.map(field => ({
-      ...field,
-      name: `TX.${formIndex}.${field.name}`,
-      listenTo: field.listenTo ? `TX.${formIndex}.${field.listenTo}` : null,
-    })),
+    column.map(field => {
+      const isSerialized = field.name.includes('TX.');
+      if (isSerialized) {
+        return {
+          ...field,
+          name: `TX.${txIndex}.${getOriginalName(field.name)}`,
+          listenTo: field.listenTo
+            ? `TX.${txIndex}.${getOriginalName(field.listenTo)}`
+            : null,
+        };
+      }
+      return {
+        ...field,
+        name: `TX.${txIndex}.${field.name}`,
+        listenTo: field.listenTo ? `TX.${txIndex}.${field.listenTo}` : null,
+      };
+    }),
   );
 
 export const serializeTXs = (forms = []) =>

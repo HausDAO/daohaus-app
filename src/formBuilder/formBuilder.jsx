@@ -39,11 +39,13 @@ const FormBuilder = props => {
     logValues,
     footer = true,
     indicatorStates,
+    setParentFields,
+    txID,
   } = props;
 
   const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
-  const [formFields, setFields] = useState(mapInRequired(fields, required));
+  const [formFields, setFields] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
@@ -55,6 +57,10 @@ const FormBuilder = props => {
       console.log(`values`, values);
     }
   }, [values]);
+
+  useEffect(() => {
+    setFields(mapInRequired(fields, required));
+  }, [fields]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -72,18 +78,29 @@ const FormBuilder = props => {
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
     if (abiString === 'clear' || abiString === 'hex') {
-      setFields(originalFields);
+      if (setParentFields) {
+        setParentFields(txID, originalFields);
+      } else {
+        setFields(originalFields);
+      }
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
       const updatedFields = [
         ...originalFields[originalFields.length - 1],
         ...inputDataFromABI(abiInputs, serialTag),
       ];
+      const payload =
+        originalFields.length > 1
+          ? [originalFields[0], updatedFields]
+          : [updatedFields];
 
-      if (originalFields.length > 1) {
-        setFields([originalFields[0], updatedFields]);
+      if (setParentFields) {
+        setParentFields(txID, [
+          originalFields[0],
+          inputDataFromABI(abiInputs, serialTag),
+        ]);
       } else {
-        setFields([updatedFields]);
+        setFields(payload);
       }
     }
   };
