@@ -57,6 +57,11 @@ export const CONTRACTS = {
     abiName: 'ERC_1155',
     contractAddress: '.localValues.contractAddress',
   },
+  LOCAL_ERC_1155_METADATA: {
+    location: 'local',
+    abiName: 'ERC_1155_METADATA',
+    contractAddress: '.localValues.contractAddress',
+  },
   LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -243,6 +248,15 @@ export const DETAILS = {
     description: '.values.description',
     link: '.values.link',
     proposalType: '.formData.type',
+  },
+  BUY_NFT_RARIBLE: {
+    title: 'Rarible NFT Buy Order',
+    description: '.values.nftDescription',
+    link: '.values.image',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+    orderIpfsHash: '.values.ipfsOrderHash',
+    eip712HashValue: '.values.eip712HashValue',
   },
 };
 
@@ -834,6 +848,73 @@ export const TX = {
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.SELL_NFT_RARIBLE,
+      },
+      true, // _memberOnlyEnabled
+    ],
+  },
+  BUY_NFT_RARIBLE: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting NFT Buy Proposal',
+    errMsg: 'Error Submitting Proposals',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      {
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.values.paymentToken',
+              '.contextData.chainConfig.safeMinion.safe_sign_lib_addr',
+            ],
+          },
+        ],
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+        data: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.ERC_20,
+                fnName: 'approve',
+                gatherArgs: [
+                  '.contextData.chainConfig.rarible.nft_transfer_proxy',
+                  '.values.orderPrice',
+                ],
+              },
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.LOCAL_SAFE_SIGNLIB,
+                fnName: 'signMessage',
+                gatherArgs: ['.values.eip712HashValue'],
+              },
+            ],
+          },
+        ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '1'],
+          },
+        ],
+      },
+      '.values.paymentToken', // _withdrawToken
+      '.values.orderPrice', // _withdrawAmount
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.BUY_NFT_RARIBLE,
       },
       true, // _memberOnlyEnabled
     ],

@@ -388,7 +388,7 @@ export const FORM = {
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.SAFE,
     tx: TX.SELL_NFT_RARIBLE,
-    required: ['selectedMinion', 'sellPrice', 'raribleNftData'],
+    required: ['selectedMinion', 'orderPrice', 'raribleNftData'],
     fields: [
       [FIELD.NFT_SELECT],
       [
@@ -553,6 +553,39 @@ export const FORM = {
     fields: [
       [FIELD.NIFTY_INK_URL],
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
+    ],
+  },
+  BUY_NFT: {
+    id: 'BUY_NFT',
+    title: 'Buy an NFT on Rarible',
+    description:
+      'Make a proposal to bid on an NFT on Rarible using a Minion Safe Vault',
+    type: PROPOSAL_TYPES.BUY_NFT,
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.BUY_NFT_RARIBLE,
+    required: [
+      'orderPrice',
+      'raribleNftData',
+      'selectedMinion',
+      'targetNft',
+      'title',
+    ],
+    fields: [
+      [FIELD.NFT_URI],
+      [
+        FIELD.MINION_SELECT,
+        {
+          ...FIELD.DESCRIPTION,
+          name: 'nftDescription',
+          htmlFor: 'nftDescription',
+        },
+        {
+          ...FIELD.PAYMENT_REQUEST,
+          name: 'orderPrice',
+          htmlFor: 'orderPrice',
+        },
+        FIELD.RARIBLE_NFT_DATA,
+      ],
     ],
   },
   SUPERFLUID_STREAM: {

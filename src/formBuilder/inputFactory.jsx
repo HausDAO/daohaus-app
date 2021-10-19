@@ -19,6 +19,7 @@ import MinionTypeSelect from './minionTypeSelect';
 import MultiInput from './multiInput';
 import NftSelect from './nftSelect';
 import NiftyInkUrl from './niftyInkUrl';
+import NftkUri from './nftUri';
 import PaymentInput from './paymentInput';
 import PriceInput from './priceInput';
 import RageInput from './rageInput';
@@ -97,6 +98,9 @@ export const InputFactory = props => {
   }
   if (type === 'targetInk') {
     return <NiftyInkUrl {...props} />;
+  }
+  if (type === 'targetNft') {
+    return <NftkUri {...props} />;
   }
   if (type === 'superfluidRate') {
     return <SuperfluidRate {...props} />;
