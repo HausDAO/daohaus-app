@@ -7,8 +7,12 @@ import GenericInput from './genericInput';
 const checkExistingMultis = props => {
   const { name, localForm } = props;
   const values = localForm?.watch?.();
-  // console.log(`INSIDE: values`, values);
-  // console.log(`FIRED INIT FN`);
+  console.log(`INSIDE: values`, values);
+  console.log(`FIRED INIT FN`);
+  console.log(`name`, name);
+  console.log(`values[name]`, values[name]);
+  console.log(`localForm`, localForm);
+  console.log(`props`, props);
   if (Array.isArray(values[name])) {
     // console.log('FOUND ARRAY OF VALS');
     return values[name].map((multi, index) => ({

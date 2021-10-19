@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { Spinner } from '@chakra-ui/spinner';
 
@@ -25,6 +25,7 @@ const AbiInput = props => {
   const abiInput = localForm.watch(name);
   const helperText = isDisabled && 'Please enter a target contract';
 
+  const abiRef = useRef(null);
   useEffect(() => {
     const getABI = async () => {
       try {
@@ -38,7 +39,7 @@ const AbiInput = props => {
         console.error(error);
       }
     };
-    if (targetContract && validate.address(targetContract)) {
+    if (targetContract && validate.address(targetContract) && !abiRef.current) {
       getABI();
     } else {
       setIsDisabled(true);
@@ -47,12 +48,13 @@ const AbiInput = props => {
 
   useEffect(() => {
     if (abiInput) {
+      if (abiInput === abiRef.current) return;
       const tag = getTxFromName(name);
       buildABIOptions(abiInput, tag);
-    } else if (isRawHex) {
-      buildABIOptions('hex');
-    } else {
-      buildABIOptions('clear');
+      console.log(`FIRED ABI INPUT`);
+      console.log(`abiInput`, abiInput);
+      console.log(`abiRef.current`, abiRef.current);
+      abiRef.current = abiInput;
     }
   }, [abiInput]);
 

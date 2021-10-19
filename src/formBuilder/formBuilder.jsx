@@ -75,6 +75,8 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = (abiString, serialTag = false) => {
+    console.log('FIRED BUILD ABI OPTIONS');
+    console.log(`abiString`, abiString);
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
     if (abiString === 'clear' || abiString === 'hex') {
@@ -85,21 +87,21 @@ const FormBuilder = props => {
       }
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      const updatedFields = [
-        ...originalFields[originalFields.length - 1],
-        ...inputDataFromABI(abiInputs, serialTag),
-      ];
-      const payload =
-        originalFields.length > 1
-          ? [originalFields[0], updatedFields]
-          : [updatedFields];
-
       if (setParentFields) {
         setParentFields(txID, [
           originalFields[0],
           inputDataFromABI(abiInputs, serialTag),
         ]);
       } else {
+        const updatedFields = [
+          ...originalFields[originalFields.length - 1],
+          ...inputDataFromABI(abiInputs, serialTag),
+        ];
+        const payload =
+          originalFields.length > 1
+            ? [originalFields[0], updatedFields]
+            : [updatedFields];
+
         setFields(payload);
       }
     }

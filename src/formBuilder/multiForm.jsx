@@ -118,6 +118,7 @@ const MultiTXForm = props => {
   };
 
   const setParentFields = (txID, fields) => {
+    console.log('FIRING SET PARENT FIELDS FOR SOME REASON');
     console.log(`fields`, fields);
     setTxForms(prevState =>
       prevState.map(form => (form.txID === txID ? { ...form, fields } : form)),
