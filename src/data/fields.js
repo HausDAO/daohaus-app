@@ -188,8 +188,8 @@ export const FIELD = {
   },
   SET_PRICE: {
     type: 'priceInput',
-    htmlFor: 'sellPrice',
-    name: 'sellPrice',
+    htmlFor: 'orderPrice',
+    name: 'orderPrice',
     placeholder: '0',
     label: 'Set Price (Take)',
     expectType: 'number',
@@ -311,6 +311,13 @@ export const FIELD = {
     htmlFor: 'targetInk',
     name: 'targetInk',
     label: 'Target NiftyInk Url',
+    expectType: 'any',
+  },
+  NFT_URI: {
+    type: 'targetNft',
+    htmlFor: 'targetNft',
+    name: 'targetNft',
+    label: 'Target NFT Uri',
     expectType: 'any',
   },
   PROPOSAL_NAME: {

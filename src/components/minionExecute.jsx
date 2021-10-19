@@ -7,7 +7,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
 import EscrowActions from './escrowActions';
-import RaribleSellOrder from './raribleSellOrder';
+import RaribleOrder from './raribleOrder';
 import { TokenService } from '../services/tokenService';
 import {
   MINION_TYPES,
@@ -41,8 +41,9 @@ const MinionExecute = ({
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
 
-  const hasRaribleAction =
-    proposal.title === 'Rarible NFT Sell Order' && proposal.executed;
+  const hasraribleOrder = proposal.title.match(/Rarible NFT (Buy|Sell) Order/);
+  const hasRaribleAction = hasraribleOrder && proposal.executed;
+  const orderType = hasraribleOrder && hasraribleOrder[1];
 
   const isEscrowMinion =
     proposal?.minionAddress?.toLowerCase() ===
@@ -122,7 +123,8 @@ const MinionExecute = ({
   };
 
   const getMinionAction = () => {
-    if (hasRaribleAction) return <RaribleSellOrder proposal={proposal} />;
+    if (hasRaribleAction)
+      return <RaribleOrder proposal={proposal} orderType={orderType} />;
 
     if (proposal.executed || minionDetails?.executed) {
       return <Box>Executed</Box>;

@@ -18,14 +18,21 @@ const getMaxBalance = (tokenData, tokenAddress) => {
 const PriceInput = props => {
   const { daoOverview } = useDao();
   const { localForm } = props;
-  const { getValues, watch } = localForm;
+  const { getValues, register, setValue, watch } = localForm;
 
   const [tokenName, setTokenName] = useState();
   const [daoTokens, setDaoTokens] = useState([]);
   const [, setBalance] = useState(null);
 
   const paymentToken = watch('paymentToken');
-  const sellPrice = watch('sellPrice');
+  const orderPrice = watch('orderPrice');
+
+  useEffect(() => {
+    register('market');
+    register('orderType');
+    setValue('market', 'Rarible');
+    setValue('orderType', 'sell');
+  }, []);
 
   useEffect(() => {
     if (daoOverview) {
@@ -73,7 +80,7 @@ const PriceInput = props => {
           <br />
           You will receive{' '}
           <b>
-            {sellPrice ? +sellPrice * 0.975 : 0} {tokenName}
+            {orderPrice ? Number(orderPrice) * 0.975 : 0} {tokenName}
           </b>
         </Text>
       </Flex>

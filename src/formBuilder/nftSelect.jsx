@@ -36,6 +36,7 @@ const NftSelect = props => {
     register('tokenBalance');
     register('raribleDescription');
     register('image');
+    register('nftType');
   }, []);
 
   useEffect(() => {
@@ -90,6 +91,7 @@ const NftSelect = props => {
         // selected.metadata?.image_url || selected.metadata?.image,
         selected.image,
       );
+      setValue('nftType', selected.type.replace('-', ''));
     };
     if (selected && selectedMinion) {
       setUpNftValues();

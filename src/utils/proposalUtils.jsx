@@ -45,6 +45,7 @@ export const PROPOSAL_TYPES = {
   MINION_BUYOUT: 'Minion Buyout Proposal',
   MINION_TRIBUTE: 'Minion Tribute Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
+  BUY_NFT: 'Buy NFT',
   SELL_NFT: 'Sell NFT',
 };
 
