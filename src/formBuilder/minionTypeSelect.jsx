@@ -33,8 +33,7 @@ const MinionTypeSelect = props => {
     return minions?.filter(
       minion =>
         MINION_NETWORKS?.[minion.value]?.[daochain] ||
-        MINION_NETWORKS?.[minion.value] === 'all' ||
-        MINION_NETWORKS?.[minion.value]?.legacy,
+        MINION_NETWORKS?.[minion.value] === 'all',
     );
   }, [minions, daochain]);
 

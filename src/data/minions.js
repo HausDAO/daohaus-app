@@ -3,7 +3,12 @@ import { MINION_TYPES } from '../utils/proposalUtils';
 
 export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: {
-    legacySupport: true,
+    // here for legacy support
+    '0x64': false,
+    '0x89': false,
+    '0x4': false,
+    '0x1': false,
+    '0x2a': false,
   },
   [MINION_TYPES.NIFTY]: {
     '0x64': true,
@@ -35,6 +40,7 @@ export const MINION_CONTENT = {
       'A vanilla minion is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed.',
     ],
     publisher: 'DAOhaus',
+    version: '1',
   },
   [MINION_TYPES.NIFTY]: {
     title: 'Nifty Minion',
@@ -44,6 +50,7 @@ export const MINION_CONTENT = {
       'This legacy boost is used for the Nifty Ink Boost, but will soon be phased out to the neapolitan minion.',
     ],
     publisher: 'DAOhaus',
+    version: '2',
   },
   [MINION_TYPES.UBER]: {
     title: 'Uberhaus Minion',
@@ -74,6 +81,7 @@ export const MINION_CONTENT = {
       'It also enables DAOs to upgrade their governance framework over time while keeping the assets in one location.',
       'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
     ],
+    version: '3',
   },
 };
 const SETTINGS_LINKS = {
