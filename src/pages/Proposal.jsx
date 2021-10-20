@@ -34,6 +34,8 @@ const Proposal = ({
     ? activities?.proposals?.find(proposal => proposal.proposalId === propid)
     : null;
 
+  console.log('currentProposal', currentProposal);
+
   const handleRefreshDao = () => {
     refreshDao();
   };
