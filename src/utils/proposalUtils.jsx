@@ -598,7 +598,7 @@ export const multicallActionsFromProposal = prop => {
 };
 
 export const hasMinionActions = (prop, minionDeets) => {
-  if (prop.minion.minionType === MINION_TYPES.SAFE) {
+  if (prop.minion?.minionType === MINION_TYPES.SAFE) {
     return prop.actions > 0;
   }
   return (
