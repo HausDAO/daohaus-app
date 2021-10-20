@@ -42,8 +42,8 @@ export const PROPOSAL_TYPES = {
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
   MINION_ERC1155: 'Minion Erc1155 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
-  MINION_BUYOUT: 'Minion Buyout Proposal',
-  MINION_TRIBUTE: 'Minion Tribute Proposal',
+  MINION_BUYOUT: 'Bank Buyout Proposal',
+  MINION_TRIBUTE: 'NFT Tribute Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
   BUY_NFT_RARIBLE: 'Buy NFT',
   SELL_NFT_RARIBLE: 'Sell NFT',
@@ -170,6 +170,10 @@ const getMinionProposalType = (proposal, details) => {
     console.error('Minion type not detected');
     return PROPOSAL_TYPES.MINION_DEFAULT;
   };
+
+  if (details.proposalType) {
+    return details.proposalType;
+  }
 
   if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
     return getUberTypeFromDetails(details);

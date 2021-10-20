@@ -143,13 +143,13 @@ const ProposalDetails = ({
                   Token Offered
                 </TextBox>
                 <TextBox size='xs'>
-                  Address: {proposal.escrow.tokenAddresses[0]}
-                </TextBox>
-                <TextBox size='xs'>ID: {proposal.escrow.tokenIds[0]} </TextBox>
-                <TextBox size='xs'>
                   Type:{' '}
                   {proposal.escrow.tokenTypes[0] === 1 ? 'ERC721' : 'ERC1155'}
                 </TextBox>
+                <TextBox size='xs'>
+                  Address: {proposal.escrow.tokenAddresses[0]}
+                </TextBox>
+                <TextBox size='xs'>ID: {proposal.escrow.tokenIds[0]} </TextBox>
                 <TextBox size='xs'>
                   Amount: {1 || proposal.escrow.amounts[0]}
                 </TextBox>

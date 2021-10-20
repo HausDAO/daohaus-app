@@ -26,6 +26,12 @@ export const INFO_TEXT = {
     'Allows the DAO to execute proposals once a set percentage of passed votes has been reached. We recommend 50% or higher. This cannot be changed once deployed.',
   RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
   SAFE_ADDRESS: 'Address of an already deployed Gnosis Safe.',
+  TRIBUTE_MINION:
+    'This is the minion that will receive the NFT after the proposal passes.',
+  NFT_ADDRESS: 'This should be the contract address for the NFT.',
+  NFT_TOKEN_ID:
+    'This should be the Token ID for your NFT and then select the correct NFT standard.',
+  BUYOUT_MINION: 'This proposal must be executed by a minion.',
 };
 
 export const FIELD = {
@@ -215,6 +221,7 @@ export const FIELD = {
     placeholder: '0x',
     label: 'Token Address',
     expectType: 'address',
+    info: INFO_TEXT.NFT_ADDRESS,
   },
   TOKEN_INFO_INPUT: {
     type: 'tokenInfoInput',
@@ -223,6 +230,7 @@ export const FIELD = {
     placeholder: '0',
     label: 'Token Info',
     expectType: 'number',
+    info: INFO_TEXT.NFT_TOKEN_ID,
   },
   NFT_APPROVAL: {
     type: 'nftApproval',

@@ -436,7 +436,12 @@ export const FORM = {
     required: ['selectedMinion', 'title', 'paymentRequested'],
     dev: true,
     fields: [
-      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [
+        { ...FIELD.MINION_SELECT, info: INFO_TEXT.BUYOUT_MINION },
+        FIELD.TITLE,
+        FIELD.DESCRIPTION,
+        FIELD.LINK,
+      ],
       [FIELD.BUYOUT_PAYMENT_REQUEST],
     ],
   },
@@ -461,12 +466,16 @@ export const FORM = {
       'paymentRequested',
     ],
     fields: [
-      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [
+        FIELD.TITLE,
+        FIELD.DESCRIPTION,
+        FIELD.LINK,
+        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
+      ],
       [
         FIELD.NFT_INPUT,
         FIELD.NFT_APPROVAL,
         FIELD.TOKEN_INFO_INPUT,
-        FIELD.MINION_SELECT,
         FIELD.SHARES_REQUEST,
         FIELD.LOOT_REQUEST,
         FIELD.PAYMENT_REQUEST,
