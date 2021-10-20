@@ -248,11 +248,7 @@ export const isDelegating = member => {
 export const checkIfUserIsDelegate = (address, daoMembers) => {
   if (address && daoMembers) {
     const lowCaseAddress = address?.toLowerCase();
-    return daoMembers.filter(
-      member =>
-        member.memberAddress !== lowCaseAddress &&
-        member.delegateKey === lowCaseAddress,
-    );
+    return daoMembers.filter(member => member.delegateKey === lowCaseAddress);
   }
 };
 

@@ -111,7 +111,7 @@ const Proposal = ({
             pt={[6, 0]}
           >
             <Flex justifyContent='space-between'>
-              {(!currentProposal?.cancelled || currentProposal?.escrow) && (
+              {!currentProposal?.cancelled && (
                 <TextBox size='md'>Actions</TextBox>
               )}
 
@@ -124,7 +124,7 @@ const Proposal = ({
               />
             </Flex>
             <Stack pt={6} spacing={6}>
-              {(!currentProposal?.cancelled || currentProposal?.escrow) && (
+              {!currentProposal?.cancelled && (
                 <ProposalActions
                   proposal={currentProposal}
                   overview={overview}

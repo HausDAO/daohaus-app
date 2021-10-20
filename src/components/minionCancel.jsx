@@ -3,34 +3,73 @@ import { useParams } from 'react-router-dom';
 import { Button, Flex, Spinner } from '@chakra-ui/react';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
+import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
+import { createPoll } from '../services/pollService';
+import { MinionService } from '../services/minionService';
 
 const MinionCancel = ({ proposal }) => {
-  const { daochain } = useParams();
-  const { injectedProvider } = useInjectedProvider();
-  const { submitTransaction } = useTX();
+  const { daochain, daoid } = useParams();
+  const {
+    errorToast,
+    successToast,
+    // setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { address, injectedProvider } = useInjectedProvider();
+  const { cachePoll, resolvePoll } = useUser();
+  const { refreshDao } = useTX();
 
   const [loading, setLoading] = useState(false);
 
   const cancelMinion = async () => {
-    if (proposal?.escrow) {
-      setLoading(true);
-      await submitTransaction({
-        tx: TX.ESCROW_MINION_CANCEL,
-        args: [proposal.proposalId, proposal.molochAddress],
-      });
-      setLoading(false);
-    } else if (proposal?.minion) {
-      setLoading(true);
-      await submitTransaction({
-        tx: TX.MINION_CANCEL,
-        args: [proposal.proposalId],
-        localValues: {
-          minionAddress: proposal.minionAddress,
+    if (!proposal?.minion) return;
+
+    setLoading(true);
+    const args = [proposal.proposalId];
+    try {
+      const poll = createPoll({ action: 'cancelProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        proposalId: proposal.proposalId,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: 'There was an error.',
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: txHash => {
+            successToast({
+              title: 'Cancelled proposal!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
         },
       });
+      const onTxHash = () => {
+        // setProposalModal(false);
+        setTxInfoModal(true);
+      };
+
+      await MinionService({
+        web3: injectedProvider,
+        minion: proposal.minionAddress,
+        chainID: daochain,
+      })('cancelAction')({
+        args,
+        address,
+        poll,
+        onTxHash,
+      });
+    } catch (err) {
+      console.log('error: ', err);
       setLoading(false);
     }
   };
