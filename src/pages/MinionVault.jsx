@@ -72,7 +72,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       if (vaultMatch.safeAddress) {
         try {
           const safe = await fetchSafeDetails(
-            chainByID(daochain).networkAlt || chainByID(daochain).network,
+            chainByID(daochain).network,
             vaultMatch,
           );
           if (safe) {

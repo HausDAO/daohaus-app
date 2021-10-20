@@ -6,8 +6,10 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
-import RaribleSellOrder from './raribleSellOrder';
+import EscrowActions from './escrowActions';
+import RaribleOrder from './raribleOrder';
 import { TokenService } from '../services/tokenService';
+import TextBox from './TextBox';
 import {
   MINION_TYPES,
   proposalTypeMaker,
@@ -15,6 +17,7 @@ import {
 } from '../utils/proposalUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { supportedChains } from '../utils/chain';
 
 const MinionExecute = ({
   hideMinionExecuteButton,
@@ -23,7 +26,7 @@ const MinionExecute = ({
   early,
 }) => {
   const { daochain } = useParams();
-  const { injectedProvider } = useInjectedProvider();
+  const { address, injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
   const { refreshMinionVault, daoMembers } = useDao();
   const proposalType = useMemo(() => proposalTypeMaker(proposal.details), [
@@ -39,8 +42,13 @@ const MinionExecute = ({
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
 
-  const hasRaribleAction =
-    proposal.title === 'Rarible NFT Sell Order' && proposal.executed;
+  const hasraribleOrder = proposal.title.match(/Rarible NFT (Buy|Sell) Order/);
+  const hasRaribleAction = hasraribleOrder && proposal.executed;
+  const orderType = hasraribleOrder && hasraribleOrder[1];
+
+  const isEscrowMinion =
+    proposal?.minionAddress?.toLowerCase() ===
+    supportedChains[daochain].escrow_minion?.toLowerCase();
 
   useEffect(() => {
     const getMinionDetails = async () => {
@@ -116,7 +124,8 @@ const MinionExecute = ({
   };
 
   const getMinionAction = () => {
-    if (hasRaribleAction) return <RaribleSellOrder proposal={proposal} />;
+    if (hasRaribleAction)
+      return <RaribleOrder proposal={proposal} orderType={orderType} />;
 
     if (proposal.executed || minionDetails?.executed) {
       return <Box>Executed</Box>;
@@ -135,22 +144,38 @@ const MinionExecute = ({
     if (hideMinionExecuteButton) {
       return null;
     }
+
+    if (isEscrowMinion) {
+      return <EscrowActions proposal={proposal} />;
+    }
+
     if (proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
-      const isMember =
-        daoMembers.filter(member => member.memberAddress === proposal.proposer)
-          .length > 0;
-      return (
+      const isMember = daoMembers.find(
+        member => member.memberAddress === address,
+      );
+      const memberApplicant = daoMembers.find(
+        member => member.memberAddress === proposal.createdBy,
+      );
+
+      return proposal?.status === 'Passed' ? (
         <Flex alignItems='center' flexDir='column'>
-          <Button onClick={handleExecute} mb={4} disabled={isMember}>
+          <Button
+            onClick={handleExecute}
+            mb={4}
+            disabled={
+              !memberApplicant?.didRagequit ||
+              (minionAction?.memberOnlyEnabled && !isMember)
+            }
+          >
             Execute Minion
           </Button>
-          <Box>
-            {isMember
-              ? 'Proposer Must Rage Quit Before This Minion Can Be Executed.'
-              : null}
-          </Box>
+          {!memberApplicant?.didRagequit && (
+            <TextBox size='xs' align='center' w='100%'>
+              Proposer Must Rage Quit Before This Minion Can Be Executed.
+            </TextBox>
+          )}
         </Flex>
-      );
+      ) : null;
     }
 
     if (
