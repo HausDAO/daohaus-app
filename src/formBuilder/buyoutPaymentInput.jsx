@@ -17,10 +17,11 @@ const BuyoutPaymentInput = props => {
 
   useEffect(() => {
     if (isMember && daoMember) {
-      const newSharesLoot = +daoMember.shares + +daoMember.loot;
+      const newSharesLoot = Number(daoMember.shares) + Number(daoMember.loot);
       setSharesLoot(newSharesLoot);
       setPercentSharesLoot(
-        newSharesLoot / (+daoOverview.totalShares + +daoOverview.totalLoot),
+        newSharesLoot /
+          (Number(daoOverview.totalShares) + Number(daoOverview.totalLoot)),
       );
     }
   }, [isMember, daoMember]);
