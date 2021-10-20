@@ -136,26 +136,6 @@ const ProposalDetails = ({
           {proposal?.proposalType === PROPOSAL_TYPES.WHITELIST && (
             <TokenDisplay tokenAddress={proposal.tributeToken} />
           )}
-          {proposal?.escrow?.tokenAddresses?.length > 0 && (
-            <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
-              <Box mb={3}>
-                <TextBox size='xs' mb={2}>
-                  Token Offered
-                </TextBox>
-                <TextBox size='xs'>
-                  Address: {proposal.escrow.tokenAddresses[0]}
-                </TextBox>
-                <TextBox size='xs'>ID: {proposal.escrow.tokenIds[0]} </TextBox>
-                <TextBox size='xs'>
-                  Type:{' '}
-                  {proposal.escrow.tokenTypes[0] === 1 ? 'ERC721' : 'ERC1155'}
-                </TextBox>
-                <TextBox size='xs'>
-                  Amount: {1 || proposal.escrow.amounts[0]}
-                </TextBox>
-              </Box>
-            </Flex>
-          )}
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link && <MediaBox link={proposal.link} />}
           </Box>
@@ -212,7 +192,7 @@ const ProposalDetails = ({
           w='100%'
         >
           <MemberIndicator
-            address={proposal?.createdBy}
+            address={proposal?.proposer}
             label='submitted by'
             shouldFetchProfile
           />

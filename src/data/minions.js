@@ -123,6 +123,7 @@ export const MINIONS = {
     minionType: MINION_TYPES.SAFE,
     content: MINION_CONTENT[MINION_TYPES.SAFE],
     networks: MINION_NETWORKS[MINION_TYPES.SAFE],
+    // summonForm: [FORM.NEW_SAFE_MINION, FORM.NEW_SAFE_MINION_ADVANCED],
     summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
   },

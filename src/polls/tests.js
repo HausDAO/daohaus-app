@@ -36,10 +36,6 @@ export const tokenAllowanceTest = (data, shouldEqual) => {
   return BigNumber.from(data).gte(shouldEqual);
 };
 
-export const tokenApprovedTest = (data, shouldEqual) => {
-  return data === shouldEqual;
-};
-
 export const molochSummonTest = (data, shouldEqual, pollId) => {
   if (data.moloches) {
     return data.moloches.length > 0;

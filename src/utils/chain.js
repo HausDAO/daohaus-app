@@ -89,7 +89,6 @@ export const supportedChains = {
       base_url: 'https://rinkeby.rarible.com',
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
-    escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -118,7 +117,6 @@ export const supportedChains = {
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
     wrapper_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
-    escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
     block_explorer: 'https://kovan.etherscan.io',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -151,7 +149,6 @@ export const supportedChains = {
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wrapper_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
-    escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     block_explorer: 'https://blockscout.com/poa/xdai',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -180,6 +177,7 @@ export const supportedChains = {
     short_name: 'matic',
     nativeCurrency: 'MATIC',
     network: 'matic',
+    networkAlt: 'polygon',
     network_id: 137,
     chain_id: '0x89',
     hub_sort_order: 3,
@@ -199,7 +197,6 @@ export const supportedChains = {
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
-    escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
     block_explorer: 'https://polygonscan.com',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -245,7 +242,6 @@ export const supportedChains = {
     dai_contract: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
     wrapper_contract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
     wrap_n_zap_factory_addr: '0xff0184056B7865F924ea3c0C1823882ad388421b',
-    escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     block_explorer: 'https://arbiscan.io/',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -395,8 +391,8 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
-  '0xA4B1': {
-    chainId: '0xA4B1',
+  '0xa4b1': {
+    chainId: '0xa4b1',
     chainName: 'Arbitrum',
     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
     blockExplorerUrls: ['https://arbiscan.io/'],
@@ -424,8 +420,8 @@ export const EIP3085 = {
     '0x64': true,
     '0x89': true,
     '0x4a': true,
-    '0xA4B1': true,
     '0xa4ec': true,
+    '0xa4b1': true,
   },
   NOT_SUPPORTED: {
     '0x1': true,
