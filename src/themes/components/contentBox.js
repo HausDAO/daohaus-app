@@ -6,7 +6,6 @@ const ContentBoxComponent = {
     borderColor: 'whiteAlpha.200',
     p: props.p || 6,
     color: 'mode.900',
-    minHeight: '166px',
   }),
 
   sizes: {
