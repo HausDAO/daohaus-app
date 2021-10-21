@@ -35,7 +35,7 @@ export const CONTRACTS = {
   SELECTED_MINION_SAFE: {
     location: 'local',
     abiName: 'SAFE_MINION',
-    contractAddress: '.values.selectedSafeAddress',
+    contractAddress: '.values.selectedMinion',
   },
   ERC_20: {
     location: 'local',
@@ -898,7 +898,7 @@ export const TX = {
                 fnName: 'approve',
                 gatherArgs: [
                   '.contextData.chainConfig.rarible.nft_transfer_proxy',
-                  '.values.orderPrice',
+                  '.values.totalOrderPrice',
                 ],
               },
               {
@@ -918,7 +918,7 @@ export const TX = {
         ],
       },
       '.values.paymentToken', // _withdrawToken
-      '.values.orderPrice', // _withdrawAmount
+      '.values.totalOrderPrice', // _withdrawAmount
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.BUY_NFT_RARIBLE,

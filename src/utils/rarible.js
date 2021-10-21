@@ -21,6 +21,7 @@ const buildEncodeOrder = ({ maker, make, take, start, end }) => {
     salt,
     start,
     end,
+    signature: '',
   };
 };
 
@@ -78,7 +79,13 @@ export const encodeOrder = async (order, daochain) => {
       },
       body: JSON.stringify(order),
     });
-    return response.json();
+    const data = await response.json();
+    if (data.status && data.code) {
+      throw new Error(
+        `An error occurred while trying to encode Rarible order: (${data.code}): ${data.message}`,
+      );
+    }
+    return data;
   } catch (err) {
     throw new Error(err);
   }
