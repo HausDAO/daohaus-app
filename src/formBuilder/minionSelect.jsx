@@ -10,11 +10,6 @@ const MinionSelect = props => {
 
   const minionAddress = watch(name);
 
-  // do we need this?
-  useEffect(() => {
-    register('selectedSafeAddress');
-  }, []);
-
   const minions = useMemo(() => {
     return daoOverview.minions
       .filter(minion => {
@@ -36,6 +31,8 @@ const MinionSelect = props => {
   }, []);
 
   useEffect(() => {
+    register('selectedSafeAddress');
+
     if (localValues && localValues.minionAddress) {
       setValue(name, localValues.minionAddress);
     }
@@ -45,13 +42,11 @@ const MinionSelect = props => {
   }, [name]);
 
   useEffect(() => {
-    if (minionAddress && !localValues?.safeAddress) {
-      console.log('firing minion address', minionAddress);
+    if (minionAddress) {
       const safeAddress = minions.filter(
         minion => minion.value === minionAddress,
       )?.[0]?.safe;
 
-      console.log('safeAddress', safeAddress);
       setValue('selectedSafeAddress', safeAddress);
     }
   }, [minionAddress]);
