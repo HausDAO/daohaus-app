@@ -394,7 +394,10 @@ export const FORM = {
       [
         FIELD.MINION_SELECT,
         FIELD.DATE_RANGE,
-        FIELD.SET_PRICE,
+        {
+          ...FIELD.SET_PRICE,
+          orderType: 'sell',
+        },
         FIELD.RARIBLE_NFT_DATA,
       ],
     ],
@@ -588,9 +591,8 @@ export const FORM = {
           htmlFor: 'nftDescription',
         },
         {
-          ...FIELD.PAYMENT_REQUEST,
-          name: 'orderPrice',
-          htmlFor: 'orderPrice',
+          ...FIELD.SET_PRICE,
+          orderType: 'buy',
         },
         FIELD.RARIBLE_NFT_DATA,
       ],
