@@ -15,7 +15,7 @@ import TextIndicator from './textIndicator';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
 import { handleRestorePlaylist } from '../utils/metadata';
-import { hasPlaylist } from '../utils/playlists';
+import { hasPlaylist } from '../data/playlists';
 
 const BoostDetails = ({
   boostContent = {},

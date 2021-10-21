@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { FORM } from '../data/forms';
+import { FORM } from './forms';
 
 export const BOOST_PLAYLISTS = {
   OLD_DEV_SUITE: {
