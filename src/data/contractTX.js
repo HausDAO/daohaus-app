@@ -1012,7 +1012,7 @@ export const TX = {
           },
         ],
       }, // typesTokensIdsAmounts
-      '.values.selectedSafeAddress || .values.selectedMinion', // vaultAddress (Minion Address?)
+      '.values.selectedSafeAddress', // vaultAddress (Minion Address?)
       {
         type: 'nestedArgs',
         gatherArgs: [
