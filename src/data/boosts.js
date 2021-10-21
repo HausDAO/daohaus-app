@@ -340,7 +340,7 @@ export const BOOSTS = {
   NFT_TRIBUTE: {
     id: 'NFT_TRIBUTE',
     boostContent: CONTENT.NFT_TRIBUTE,
-    categories: ['nft'],
+    categories: ['nft', 'membership'],
     minionData: MINIONS[MINION_TYPES.SAFE],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NFT_TRIBUTE,
@@ -358,7 +358,7 @@ export const BOOSTS = {
   BANK_BUYOUT: {
     id: 'BANK_BUYOUT',
     boostContent: CONTENT.BANK_BUYOUT,
-    categories: ['nft'],
+    categories: ['nft', 'membership'],
     minionData: MINIONS[MINION_TYPES.SAFE],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.BANK_BUYOUT,
@@ -460,8 +460,7 @@ const categoryStarter = [
   { name: 'Governance', id: 'governance' },
   { name: 'NFTs', id: 'nft' },
   { name: 'Dev Tools', id: 'devTools' },
-  // TODO: future categories
-  // { name: 'Membership', id: 'membership' },
+  { name: 'Membership', id: 'membership' },
   // { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({

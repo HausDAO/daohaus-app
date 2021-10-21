@@ -1012,6 +1012,7 @@ export const TX = {
           },
         ],
       }, // typesTokensIdsAmounts
+      // why both here?
       '.values.selectedSafeAddress || .values.selectedMinion', // vaultAddress (Minion Address?)
       {
         type: 'nestedArgs',
