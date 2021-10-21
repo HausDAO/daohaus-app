@@ -35,7 +35,7 @@ export const CONTRACTS = {
   SELECTED_MINION_SAFE: {
     location: 'local',
     abiName: 'SAFE_MINION',
-    contractAddress: '.values.selectedSafeAddress',
+    contractAddress: '.values.selectedMinion',
   },
   ERC_20: {
     location: 'local',
