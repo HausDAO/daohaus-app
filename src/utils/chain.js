@@ -218,6 +218,39 @@ export const supportedChains = {
       version: 'v1',
     },
   },
+  '0x63564c40': {
+    name: 'Harmony',
+    short_name: 'harmony',
+    nativeCurrency: 'ONE',
+    network: 'harmony',
+    network_id: 1666600000,
+    chain_id: '0x63564c40',
+    hub_sort_order: 3,
+    providers: ['walletconnect'],
+    rpc_url: 'https://api.harmony.one',
+    abi_api_url: 'https://ctrver.t.hmny.io/fetchContractCode?contractAddress=',
+    tokenlist_api_url: 'https://api.harmony.one',
+    subgraph_url: 'https://graph.t.hmny.io/subgraphs/name/harmony/daohaus',
+    stats_graph_url:
+      'https://graph.t.hmny.io/subgraphs/name/harmony/daohaus-stats',
+    boosts_graph_url:
+      'https://graph.t.hmny.io/subgraphs/name/harmony/daohaus-boost',
+    minion_factory_addr: '0x47373e8A3bEBb4920a64713AcA10aD9786eF8990',
+    moloch_factory_addr: '0x2880A45ad9121F6dB41463d81E598D7dD4D040cE',
+    wrapper_contract: '0xcf664087a5bb0237a0bad6742852ec6c8d69a27a',
+    wrap_n_zap_factory_addr: '0x3906c18c555122c59c40Aedf62Ce8DD627B134f4',
+    dai_contract: '0xef977d2f931c1978db5f6747666fa1eacb0d0339',
+    block_explorer: 'https://explorer.harmony.one/',
+    niftyMinion: {
+      minion_factory_addr: '0x29Fa6dF2514DDB8De516829C89B0caED84D74648',
+      version: 'v1',
+    },
+    safeMinion: {
+      minion_factory_addr: '0xb6890e1E323A3ec44a789AE9Eba5F222a6cb1a76',
+      safe_mutisend_addr: '0xB2b0875c54Dad0dD67DEbdc9e8109a78c2cbBb13',
+      safe_sign_lib_addr: '0x035bACd91CB7ad9C400cbe1B2712b4A55F5c007c',
+    },
+  },
   '0xa4b1': {
     name: 'Arbitrum',
     short_name: 'arb1',
@@ -288,6 +321,7 @@ export const supportedChains = {
 };
 
 export const chainByID = chainID => supportedChains[chainID];
+
 export const getGraphEndpoint = (chainID, endpointType) =>
   chainByID(chainID)[endpointType];
 
@@ -300,6 +334,7 @@ export const chainByNetworkId = networkId => {
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
     42161: supportedChains['0xa4b1'],
+    1666700000: supportedChains['0x6357d2e0'],
   };
 
   return idMapping[networkId];

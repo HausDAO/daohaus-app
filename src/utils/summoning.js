@@ -190,6 +190,28 @@ export const daoPresets = chainId => {
       return preset;
     });
   }
+
+  if (chainId === '0x63564c40') {
+    presets = presets.map(preset => {
+      preset.currency = '1DAI';
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
+
+      return preset;
+    });
+  }
+
+  if (chainId === '0x6357d2e0') {
+    presets = presets.map(preset => {
+      preset.currency = '`1DAI`';
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
+
+      return preset;
+    });
+  }
   return presets;
 };
 
