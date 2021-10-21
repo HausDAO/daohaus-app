@@ -898,7 +898,7 @@ export const TX = {
                 fnName: 'approve',
                 gatherArgs: [
                   '.contextData.chainConfig.rarible.nft_transfer_proxy',
-                  '.values.orderPrice',
+                  '.values.totalOrderPrice',
                 ],
               },
               {
@@ -918,7 +918,7 @@ export const TX = {
         ],
       },
       '.values.paymentToken', // _withdrawToken
-      '.values.orderPrice', // _withdrawAmount
+      '.values.totalOrderPrice', // _withdrawAmount
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.BUY_NFT_RARIBLE,

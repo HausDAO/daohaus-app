@@ -28,8 +28,6 @@ const NftUri = props => {
     register('image');
     register('market');
     register('nftType');
-    register('orderType');
-    setValue('orderType', 'buy');
     register('tokenId');
   }, []);
 
