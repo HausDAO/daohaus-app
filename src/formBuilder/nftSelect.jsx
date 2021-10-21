@@ -104,11 +104,11 @@ const NftSelect = props => {
       nfts
     ) {
       setSelected(
-        nfts.filter(
+        nfts.find(
           item =>
             item.tokenId === localValues.tokenId &&
             item.contractAddess === localValues.contractAddess,
-        )[0],
+        ),
       );
     }
   }, [localValues, nfts]);
