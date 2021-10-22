@@ -108,6 +108,24 @@ export const getTotalBankValue = (tokenBalances, prices) => {
   }, 0);
 };
 
+export const getReadableBalance = tokenData => {
+  if (tokenData?.balance && tokenData.decimals) {
+    const { balance, decimals } = tokenData;
+    return Number(balance) / 10 ** Number(decimals);
+  }
+};
+export const getContractBalance = (readableBalance, decimals) => {
+  if (!readableBalance || !decimals) return null;
+  const floatPoint = readableBalance.split('.')[1]?.length;
+  const exponent = ethers.BigNumber.from(10).pow(
+    floatPoint ? decimals - floatPoint : decimals,
+  );
+  return ethers.utils
+    .parseUnits(readableBalance, floatPoint || 0)
+    .mul(exponent)
+    .toString();
+};
+
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string

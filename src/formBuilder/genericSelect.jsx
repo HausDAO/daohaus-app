@@ -14,6 +14,7 @@ const GenericSelect = props => {
     onChange,
     containerProps,
     mb,
+    registerOptions,
   } = props;
   const { register } = localForm || {};
   return (
@@ -21,11 +22,11 @@ const GenericSelect = props => {
       <Select
         key={name}
         placeholder={placeholder}
-        ref={register}
         id={htmlFor}
         name={name}
         disabled={disabled}
         onChange={onChange}
+        ref={registerOptions ? register(registerOptions) : register}
       >
         {options?.map(option => (
           <option value={option.value} key={option.key || option.value}>

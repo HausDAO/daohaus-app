@@ -20,6 +20,7 @@ const GenericInput = props => {
     onChange = null,
     disabled,
     defaultValue,
+    registerOptions,
   } = props;
   const { register } = localForm;
   return (
@@ -36,7 +37,7 @@ const GenericInput = props => {
           name={name}
           onChange={onChange}
           placeholder={placeholder || label || htmlFor}
-          ref={register}
+          ref={registerOptions ? register(registerOptions) : register}
           disabled={disabled}
           defaultValue={
             defaultValue &&

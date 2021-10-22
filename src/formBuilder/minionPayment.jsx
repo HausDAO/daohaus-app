@@ -4,12 +4,9 @@ import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
 import { handleDecimals } from '../utils/general';
-import {
-  getReadableBalanceFromList,
-  getReadableBalance,
-  getVaultERC20s,
-} from '../utils/vaults';
+import { getReadableBalanceFromList, getVaultERC20s } from '../utils/vaults';
 import { validate } from '../utils/validation';
+import { getReadableBalance } from '../utils/tokenValue';
 
 const MinionToken = props => {
   const { daoVaults } = useDao();

@@ -2,7 +2,7 @@ import { encodeMultiSend } from '@gnosis.pm/safe-contracts';
 import Web3 from 'web3';
 
 import { detailsToJSON, filterObject, HASH } from './general';
-import { valToDecimalString } from './tokenValue';
+import { getContractBalance, valToDecimalString } from './tokenValue';
 import {
   encodeMultisendTx,
   getABIsnippet,
@@ -10,7 +10,7 @@ import {
   safeEncodeHexFunction,
 } from './abi';
 import { collapse } from './formBuilder';
-import { getContractBalance, getTokenData } from './vaults';
+import { getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
@@ -445,7 +445,6 @@ export const fieldModifiers = Object.freeze({
     );
   },
   addPaymentDecimals(fieldValue, data) {
-    console.log('MODIFIER');
     if (!fieldValue) return null;
     return valToDecimalString(
       fieldValue,

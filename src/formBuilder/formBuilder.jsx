@@ -49,12 +49,17 @@ const FormBuilder = props => {
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
-  const { handleSubmit, watch } = localForm;
+  const {
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = localForm;
   const values = watch();
 
   useEffect(() => {
     if (logValues && dev && values) {
       console.log(`values`, values);
+      console.log('errors', errors);
     }
   }, [values]);
 
