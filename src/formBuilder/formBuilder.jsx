@@ -57,11 +57,11 @@ const FormBuilder = props => {
   const values = watch();
 
   useEffect(() => {
-    if (logValues && dev && values) {
-      // console.log(`values`, values);
-      // console.log('errors', errors);
+    if (dev && values) {
+      console.log(`values`, values);
+      console.log('errors', errors);
     }
-  }, [values]);
+  }, [values, errors]);
 
   useEffect(() => {
     setFields(mapInRequired(fields, required));

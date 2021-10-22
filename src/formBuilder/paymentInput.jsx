@@ -67,7 +67,7 @@ const PaymentInput = props => {
     const tokenAddr = paymentToken || getValues('paymentToken');
     if (daoTokens?.length && tokenAddr) {
       const token = daoTokens.find(token => token.value === tokenAddr);
-      console.log('tokenBalance', token.balance);
+
       if (token?.balance && token.decimals) {
         setToken(token);
       }

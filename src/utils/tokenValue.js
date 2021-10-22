@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { TokenService } from '../services/tokenService';
 import { MolochService } from '../services/molochService';
 import { omit } from './general';
+import { validate } from './validation';
 
 const babe = '0x000000000000000000000000000000000000baBe';
 const tokenAPI =
@@ -115,7 +116,8 @@ export const getReadableBalance = tokenData => {
   }
 };
 export const getContractBalance = (readableBalance, decimals) => {
-  if (!readableBalance || !decimals) return null;
+  if (!validate.number(readableBalance) || !validate.number(decimals))
+    return null;
   const floatPoint = readableBalance.split('.')[1]?.length;
   const exponent = ethers.BigNumber.from(10).pow(
     floatPoint ? decimals - floatPoint : decimals,

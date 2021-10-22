@@ -12,13 +12,14 @@ import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
 import { handleDecimals } from '../utils/general';
 import { validate } from '../utils/validation';
+import { getContractBalance } from '../utils/tokenValue';
 
 const TributeInput = props => {
   const { submitTransaction } = useTX();
   const { address } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { daoOverview } = useDao();
-  const { localForm } = props;
+  const { localForm, registerOptions } = props;
   const { setValue, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
@@ -135,12 +136,24 @@ const TributeInput = props => {
     setValue('tributeOffered', balance / 10 ** decimals);
   };
 
+  const options = {
+    ...registerOptions,
+    setValueAs: value => getContractBalance(value, decimals),
+    validate: {
+      hasBalance: value =>
+        Number(value) <= Number(balance)
+          ? true
+          : 'Not enough balance in DAO treasury',
+    },
+  };
+
   return (
     <InputSelect
       {...props}
       selectName='tributeToken'
       options={daoTokens}
       helperText={helperText()}
+      registerOptions={options}
       btn={
         <ModButton
           text={btnDisplay()}
