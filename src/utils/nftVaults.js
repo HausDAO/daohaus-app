@@ -111,3 +111,29 @@ export const concatNftSearchData = nft => {
     nft.metadata?.description ? nft.metadata?.description : ''
   }`.toLowerCase();
 };
+
+export const filterUniqueNfts = (daoVaults, minionAddress = null) => {
+  return daoVaults
+    ?.reduce((acc, item) => {
+      const nftsWithMinionAddress = item.nfts.map(n => {
+        return {
+          ...n,
+          minionAddress: minionAddress || item.address,
+          minionType: item.minionType,
+        };
+      });
+      return [...acc, ...nftsWithMinionAddress];
+    }, [])
+    .reduce((acc, nft) => {
+      if (
+        !acc.find(
+          n =>
+            n.contractAddress === nft.contractAddress &&
+            n.tokenId === nft.tokenId,
+        )
+      ) {
+        acc = [...acc, nft];
+      }
+      return acc;
+    }, []);
+};
