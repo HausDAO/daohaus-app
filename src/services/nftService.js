@@ -40,6 +40,29 @@ export const NFTService = ({
         return null;
       };
     }
+    if (service === 'setApprovalForAll') {
+      return async ({ args, address, poll }) => {
+        const tx = await contract.methods[service](...args);
+        return tx
+          .send('eth_requestAccounts', { from: address })
+          .on('transactionHash', txHash => {
+            if (poll) {
+              poll(txHash);
+            }
+          })
+          .on('error', error => {
+            console.error(error);
+          });
+      };
+    }
+    if (service === 'isApprovedForAll') {
+      return async ({ args, address }) => {
+        const tx = await contract.methods[service](...args);
+        return tx.call({ from: address }).catch(err => {
+          console.error(err);
+        });
+      };
+    }
     return null;
   };
 };

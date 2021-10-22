@@ -59,8 +59,6 @@ const PaymentInput = props => {
     if (daoTokens?.length && tokenAddr) {
       const bal = getMaxBalance(daoTokens, tokenAddr);
 
-      console.log('bal', bal);
-
       setBalance(bal);
     }
   }, [daoTokens, paymentToken]);

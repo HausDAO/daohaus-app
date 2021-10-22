@@ -57,6 +57,11 @@ export const CONTRACTS = {
     abiName: 'ERC_1155',
     contractAddress: '.localValues.contractAddress',
   },
+  LOCAL_ERC_1155_METADATA: {
+    location: 'local',
+    abiName: 'ERC_1155_METADATA',
+    contractAddress: '.localValues.contractAddress',
+  },
   LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -157,6 +162,11 @@ export const CONTRACTS = {
     abiName: 'ERC_20',
     contractAddress: 'values.paymentToken',
   },
+  ESCROW_MINION: {
+    location: 'local',
+    abiName: 'ESCROW_MINION',
+    contractAddress: '.contextData.chainConfig.escrow_minion',
+  },
 };
 
 export const ACTIONS = {
@@ -220,6 +230,35 @@ export const DETAILS = {
   SELL_NFT_RARIBLE: {
     title: 'Rarible NFT Sell Order',
     description: '.values.raribleDescription',
+    link: '.values.image',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+    orderIpfsHash: '.values.ipfsOrderHash',
+    eip712HashValue: '.values.eip712HashValue',
+  },
+  SET_BUYOUT_TOKEN: {
+    title: '.values.title',
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+  },
+  SET_BUYOUT_NFT: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+  },
+  OFFER_NFT_TRIBUTE: {
+    title: '.values.title',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: '.formData.type',
+  },
+  BUY_NFT_RARIBLE: {
+    title: 'Rarible NFT Buy Order',
+    description: '.values.nftDescription',
     link: '.values.image',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
@@ -307,6 +346,15 @@ export const TX = {
     display: 'Approve Spend Token',
     errMsg: 'Approve Token Failed',
     successMsg: 'Approved Token!',
+  },
+  UNLOCK_NFTS: {
+    contract: CONTRACTS.LOCAL_ERC_721,
+    name: 'setApprovalForAll',
+    specialPoll: 'approveAllTokens',
+    onTxHash: null,
+    display: 'Approve All Tokens',
+    errMsg: 'Approve Tokens Failed',
+    successMsg: 'Approved Tokens!',
   },
   MINION_PROPOSE_ACTION: {
     contract: CONTRACTS.SELECTED_MINION,
@@ -512,6 +560,24 @@ export const TX = {
     errMsg: 'Error Transferring Balance',
     successMsg: 'Balance Transferred!',
   },
+  MINION_CANCEL: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'cancelAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Cancel Minion',
+    errMsg: 'Error Cancelling Minion',
+    successMsg: 'Cancelled Minion!',
+  },
+  ESCROW_MINION_CANCEL: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'cancelAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Cancel Minion',
+    errMsg: 'Error Cancelling Minion',
+    successMsg: 'Cancelled Minion!',
+  },
   MINION_SELL_NIFTY: {
     contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'proposeAction',
@@ -606,7 +672,7 @@ export const TX = {
     gatherArgs: [
       '.contextData.daoid',
       '.values.minionName',
-      '.values.minQuorum',
+      '.values.minQuorum || 0',
       '.values.saltNonce',
     ],
   },
@@ -621,7 +687,7 @@ export const TX = {
       '.contextData.daoid',
       '.values.safeAddress',
       '.values.minionName',
-      '.values.minQuorum',
+      '.values.minQuorum || 0',
       '.values.saltNonce',
     ],
   },
@@ -772,7 +838,7 @@ export const TX = {
                 type: 'encodeHex',
                 contract: CONTRACTS.LOCAL_SAFE_SIGNLIB,
                 fnName: 'signMessage',
-                gatherArgs: ['.values.signatureHash'],
+                gatherArgs: ['.values.eip712HashValue'],
               },
             ],
           },
@@ -793,7 +859,74 @@ export const TX = {
       true, // _memberOnlyEnabled
     ],
   },
-  SET_BUYOUT_NFT: {
+  BUY_NFT_RARIBLE: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting NFT Buy Proposal',
+    errMsg: 'Error Submitting Proposals',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      {
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.values.paymentToken',
+              '.contextData.chainConfig.safeMinion.safe_sign_lib_addr',
+            ],
+          },
+        ],
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+        data: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.ERC_20,
+                fnName: 'approve',
+                gatherArgs: [
+                  '.contextData.chainConfig.rarible.nft_transfer_proxy',
+                  '.values.totalOrderPrice',
+                ],
+              },
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.LOCAL_SAFE_SIGNLIB,
+                fnName: 'signMessage',
+                gatherArgs: ['.values.eip712HashValue'],
+              },
+            ],
+          },
+        ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '1'],
+          },
+        ],
+      },
+      '.values.paymentToken', // _withdrawToken
+      '.values.totalOrderPrice', // _withdrawAmount
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.BUY_NFT_RARIBLE,
+      },
+      true, // _memberOnlyEnabled
+    ],
+  },
+  SET_BUYOUT_TOKEN: {
     contract: CONTRACTS.SELECTED_MINION_SAFE,
     name: 'proposeAction',
     poll: 'subgraph',
@@ -803,19 +936,26 @@ export const TX = {
     successMsg: 'Buyout Proposal Submitted',
     gatherArgs: [
       {
-        type: 'nestedArgs',
-        gatherArgs: [
-          '.contextData.chainConfig.dao_conditional_helper_addr',
-          '.values.paymentToken',
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.contextData.chainConfig.dao_conditional_helper_addr',
+              '.values.paymentToken',
+            ],
+          },
         ],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: ['0', '0'],
-      },
-      {
-        type: 'nestedArgs',
-        gatherArgs: [
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+        data: [
           {
             type: 'encodeHex',
             contract: CONTRACTS.DAO_CONDITIONAL_HELPER,
@@ -829,14 +969,71 @@ export const TX = {
             gatherArgs: ['.contextData.address', '.values.paymentRequested'],
           },
         ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
       },
-      '.values.paymentToken',
-      '0',
+      '.values.paymentToken', // _withdrawToken
+      '.values.paymentRequested', // _withdrawAmount
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.SET_BUYOUT_NFT,
+        gatherFields: DETAILS.SET_BUYOUT_TOKEN,
       },
-      'false',
+      true, // _memberOnlyEnabled
     ],
+  },
+  OFFER_NFT_TRIBUTE: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'proposeTribute',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting NFT Tribute Proposal',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      '.contextData.daoid',
+      {
+        type: 'nestedArgs',
+        gatherArgs: ['.values.nftAddress'],
+      }, // tokenAddresses
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.values.tokenType',
+              '.values.tokenId',
+              '.values.numTokens || 0',
+            ],
+          },
+        ],
+      }, // typesTokensIdsAmounts
+      '.values.selectedSafeAddress', // vaultAddress (Minion Address?)
+      {
+        type: 'nestedArgs',
+        gatherArgs: [
+          '.values.sharesRequested',
+          '.values.lootRequested',
+          '.values.paymentRequested', // Funds
+        ],
+      }, // tokenAddresses
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.OFFER_NFT_TRIBUTE,
+      },
+    ],
+  },
+  WITHDRAW_ESCROW: {
+    contract: CONTRACTS.ESCROW_MINION,
+    name: 'withdrawToDestination',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Withdraw Balance from Escrow',
+    errMsg: 'Error Withdrawing Balance from Escrow',
+    successMsg: 'Balance Withdrawn from Escrow!',
   },
 };

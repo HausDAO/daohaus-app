@@ -157,7 +157,8 @@ export const postApiGnosis = async (
   data,
   getJSONResponse = true,
 ) => {
-  const url = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
+  const network = networkName === 'matic' ? 'polygon' : networkName;
+  const url = `https://safe-transaction.${network}.gnosis.io/api/v1/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',

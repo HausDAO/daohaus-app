@@ -89,6 +89,7 @@ export const supportedChains = {
       base_url: 'https://rinkeby.rarible.com',
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
+    escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -97,7 +98,7 @@ export const supportedChains = {
     network: 'kovan',
     network_id: 42,
     chain_id: '0x2a',
-    hub_sort_order: 5,
+    hub_sort_order: 7,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
@@ -117,6 +118,7 @@ export const supportedChains = {
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
     wrapper_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
+    escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
     block_explorer: 'https://kovan.etherscan.io',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -149,6 +151,7 @@ export const supportedChains = {
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wrapper_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
+    escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     block_explorer: 'https://blockscout.com/poa/xdai',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -197,6 +200,7 @@ export const supportedChains = {
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
+    escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
     block_explorer: 'https://polygonscan.com',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -225,7 +229,7 @@ export const supportedChains = {
     network: 'arbitrum',
     network_id: 42161,
     chain_id: '0xa4b1',
-    hub_sort_order: 3,
+    hub_sort_order: 4,
     providers: ['walletconnect'],
     rpc_url: 'https://arb1.arbitrum.io/rpc',
     abi_api_url:
@@ -242,6 +246,7 @@ export const supportedChains = {
     dai_contract: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
     wrapper_contract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
     wrap_n_zap_factory_addr: '0xff0184056B7865F924ea3c0C1823882ad388421b',
+    escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     block_explorer: 'https://arbiscan.io/',
     safeMinion: {
       minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
@@ -259,6 +264,49 @@ export const supportedChains = {
     },
     niftyMinion: {
       minion_factory_addr: '0xA92CbC525EabFa5baE4e0ff7bDa8E011B43B9aCC',
+      version: 'v1',
+    },
+  },
+  '0xa4ec': {
+    name: 'Celo',
+    short_name: 'celo',
+    nativeCurrency: 'CELO',
+    network_id: 42220,
+    chain_id: '0xa4ec',
+    hub_sort_order: 5,
+    providers: ['walletconnect'],
+    rpc_url: 'https://forno.celo.org',
+    abi_api_url:
+      'https://explorer.celo.org/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://explorer.celo.org/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-celo',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-celo',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-celo',
+    minion_factory_addr: '',
+    moloch_factory_addr: '0x9100a2489b2998b1331fd33714187d895c919075', // moloch v2.1.sol
+    dai_contract: '0x765de816845861e75a25fca122bb6898b8b1282a', // This is cUSD for Celo
+    wrapper_contract: '0x471ece3750da237f93b8e339c536989b8978a438',
+    wrap_n_zap_factory_addr: '0x07269699bc441fc97d12d5478cb09522ef32f76a',
+    block_explorer: 'https://explorer.celo.org',
+    niftyMinion: {
+      minion_factory_addr: '0xad791ef059a25b6c82e56977c6489974333c5a0c',
+      version: 'v1',
+    },
+    safeMinion: {
+      minion_factory_addr: '',
+      safe_mutisend_addr: '',
+      safe_sign_lib_addr: '',
+    },
+    superfluid: {
+      minion_factory_addr: '',
+      resolver: '',
+      subgraph_url: '',
+      superapp_addr: {
+        v1: '',
+      },
       version: 'v1',
     },
   },
@@ -300,6 +348,7 @@ export const chainByNetworkId = networkId => {
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
     42161: supportedChains['0xa4b1'],
+    42220: supportedChains['0xa4ec'],
   };
 
   return idMapping[networkId];
@@ -358,6 +407,17 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
+  '0xa4ec': {
+    chainId: '0xa4ec',
+    chainName: 'Celo',
+    rpcUrls: ['https://forno.celo.org'],
+    blockExplorerUrls: ['https://explorer.celo.org'],
+    nativeCurrency: {
+      name: 'celo',
+      symbol: 'CELO',
+      decimals: 18,
+    },
+  },
 };
 
 export const EIP3085 = {
@@ -366,6 +426,7 @@ export const EIP3085 = {
     '0x89': true,
     '0x4a': true,
     '0xa4b1': true,
+    '0xa4ec': true,
   },
   NOT_SUPPORTED: {
     '0x1': true,
