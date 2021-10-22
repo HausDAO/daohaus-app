@@ -15,7 +15,7 @@ const FieldWrapper = ({
   helperText,
   hidden,
   btn,
-  error,
+  errors = {},
   required,
   containerProps,
   mb,
@@ -27,6 +27,14 @@ const FieldWrapper = ({
     // if (layout === 'singleRow') return '100%';
     // return ['100%', null, '48%'];
   }, [w, layout]);
+
+  // const errorMsgs = useMemo(() => {
+  //   if (!errors[name]) return;
+
+  //   return Object.values(errors[name]);
+  // }, [errors, name]);
+  // console.log(`errorMsgs`, errorMsgs);
+  const fieldError = errors[name];
   return (
     <Flex
       w={width}
@@ -67,7 +75,7 @@ const FieldWrapper = ({
 
       {children}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      {error && <ErrorList singleError={error} />}
+      {fieldError && <ErrorList singleError={fieldError} />}
     </Flex>
   );
 };

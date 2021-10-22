@@ -140,10 +140,8 @@ const TributeInput = props => {
     ...registerOptions,
     setValueAs: value => getContractBalance(value, decimals),
     validate: {
-      hasBalance: value =>
-        Number(value) <= Number(balance)
-          ? true
-          : 'Not enough balance in DAO treasury',
+      hasBalance: value => (validate.number(value) ? true : 'Number, dumbass'),
+      justWrong: value => "you're wrong",
     },
   };
 
