@@ -150,7 +150,7 @@ const MinionExecute = ({
     }
 
     if (proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
-      const isMember = daoMembers.find(
+      const isMember = daoMembers?.find(
         member => member.memberAddress === address,
       );
       const memberApplicant = daoMembers.find(

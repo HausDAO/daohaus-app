@@ -392,7 +392,6 @@ export const FORM = {
     fields: [
       [FIELD.NFT_SELECT],
       [
-        FIELD.MINION_SELECT,
         FIELD.DATE_RANGE,
         {
           ...FIELD.SET_PRICE,

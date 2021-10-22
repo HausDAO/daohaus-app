@@ -43,8 +43,8 @@ export const buildSellOrder = args => {
       },
       value: args.price,
     },
-    start: args.startDate,
-    end: args.endDate,
+    start: args.startDate ? args.startDate : null,
+    end: args.endDate ? args.endDate : null,
   });
 };
 
