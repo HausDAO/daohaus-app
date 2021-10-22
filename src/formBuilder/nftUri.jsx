@@ -6,7 +6,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ErrorList from './ErrorList';
 import LinkInput from './linkInput';
 import { getNftType } from '../utils/contract';
-import { fetchNftMeta } from '../utils/rarible';
+import { fetchLazyNftMeta, fetchNftMeta } from '../utils/rarible';
 
 const RARIBLE_URI = /(0x[a-zA-Z0-9]+):([0-9]+)/;
 const MARKETS = {
@@ -49,12 +49,14 @@ const NftUri = props => {
         const tokenId =
           market === MARKETS.RARIBLE && targetNft.match(RARIBLE_URI)[2];
 
-        const nftType = await getNftType(
-          daochain,
-          injectedProvider,
-          nftAddress,
-          tokenId,
-        );
+        const lazyNftMeta =
+          market === MARKETS.RARIBLE &&
+          (await fetchLazyNftMeta(daochain, targetNft.match(RARIBLE_URI)[0]));
+
+        const nftType = lazyNftMeta
+          ? lazyNftMeta['@type']
+          : await getNftType(daochain, injectedProvider, nftAddress, tokenId);
+
         const metadata =
           market === MARKETS.RARIBLE &&
           (await fetchNftMeta(daochain, targetNft.match(RARIBLE_URI)[0]));
