@@ -215,3 +215,26 @@ export const serializeTXs = (forms = []) =>
     txIndex: index,
     txID: form.txID || uuid(),
   }));
+
+export const spreadOptions = ({ registerOptions, setValueAs, validate }) => {
+  const existingValidation = registerOptions?.validate;
+  const existingSetValueAs = registerOptions?.setValueAs;
+  let newObj = {};
+  if (validate) {
+    if (existingValidation) {
+      newObj = { ...newObj, validate: { ...existingValidation, validate } };
+    } else {
+      newObj = { ...newObj, validate };
+    }
+  }
+  if (setValueAs) {
+    if (existingSetValueAs) {
+      throw new Error(
+        'formBuilder.js => spreadOptions: Cannot have more than one setValueAs property',
+      );
+    } else {
+      newObj = { ...newObj, setValueAs };
+    }
+  }
+  return newObj;
+};

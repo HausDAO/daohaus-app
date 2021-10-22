@@ -13,6 +13,7 @@ import { TX } from '../data/contractTX';
 import { handleDecimals } from '../utils/general';
 import { validate } from '../utils/validation';
 import { getContractBalance } from '../utils/tokenValue';
+import { spreadOptions } from '../utils/formBuilder';
 
 const TributeInput = props => {
   const { submitTransaction } = useTX();
@@ -136,14 +137,22 @@ const TributeInput = props => {
     setValue('tributeOffered', balance / 10 ** decimals);
   };
 
-  const options = {
-    ...registerOptions,
-    setValueAs: value => getContractBalance(value, decimals),
+  const options = spreadOptions({
+    setValueAs: val => getContractBalance(val, decimals),
     validate: {
-      hasBalance: value => (validate.number(value) ? true : 'Number, dumbass'),
-      justWrong: value => "you're wrong",
+      exceedsAllowance: val =>
+        getContractBalance(val, decimals) > Number(allowance)
+          ? `Amount entered exceeds token allowance.`
+          : true,
+
+      hasBalance: val =>
+        getContractBalance(val, decimals) > Number(balance)
+          ? `Amount entered exceeds wallet balance.`
+          : true,
     },
-  };
+  });
+
+  console.log(options);
 
   return (
     <InputSelect
