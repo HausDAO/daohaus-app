@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 
+import { useOverlay } from '../contexts/OverlayContext';
 import {
   buildRaribleUrl,
   compareOrder,
@@ -12,6 +13,7 @@ import {
 
 const RaribleOrder = ({ proposal, orderType }) => {
   const { daochain } = useParams();
+  const { errorToast } = useOverlay();
   const [needOrder, setNeedOrder] = useState(false);
   const [orderUrl, setOrderUrl] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -40,10 +42,16 @@ const RaribleOrder = ({ proposal, orderType }) => {
   const makeOrder = async () => {
     setLoading(true);
 
-    const orderData = await getOrderDataFromProposal(proposal);
-    await createOrder(orderData, daochain);
-
-    setNeedOrder(false);
+    try {
+      const orderData = await getOrderDataFromProposal(proposal);
+      await createOrder(orderData, daochain);
+      setNeedOrder(false);
+    } catch (error) {
+      errorToast({
+        title: 'Order Submission Error',
+        description: error.message,
+      });
+    }
     setLoading(false);
   };
 
