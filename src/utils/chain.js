@@ -26,8 +26,8 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://etherscan.io',
     rarible: {
-      api_url: 'https://ethereum-api.rarible.org/protocol/v0.1/ethereum',
-      nft_transfer_proxy: '0x0',
+      api_url: 'https://ethereum-api.rarible.org/v0.1',
+      nft_transfer_proxy: '0x4fee7b061c97c9c496b01dbce9cdb10c02f0a0be',
       base_url: 'https://rarible.com',
     },
     niftyMinion: {
@@ -82,9 +82,7 @@ export const supportedChains = {
       version: 'v1',
     },
     rarible: {
-      api_url:
-        // 'https://ethereum-api-staging.rarible.org/protocol/v0.1/ethereum',
-        'https://api-staging.rarible.com/protocol/v0.1/ethereum',
+      api_url: 'https://ethereum-api-staging.rarible.org/v0.1',
       nft_transfer_proxy: '0x7d47126a2600E22eab9eD6CF0e515678727779A6',
       base_url: 'https://rinkeby.rarible.com',
     },
