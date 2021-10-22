@@ -35,6 +35,7 @@ const TributeInput = props => {
 
   const displayBalance = useMemo(() => {
     if (balance && decimals) {
+      console.log('in tribute input', balance);
       const commified = handleDecimals(balance, decimals)?.toFixed(4);
       return commified;
     }

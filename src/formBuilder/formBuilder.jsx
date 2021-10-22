@@ -58,8 +58,8 @@ const FormBuilder = props => {
 
   useEffect(() => {
     if (logValues && dev && values) {
-      console.log(`values`, values);
-      console.log('errors', errors);
+      // console.log(`values`, values);
+      // console.log('errors', errors);
     }
   }, [values]);
 
