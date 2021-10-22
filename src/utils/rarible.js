@@ -101,7 +101,13 @@ export const createOrder = async (order, daochain) => {
       },
       body: JSON.stringify(order),
     });
-    return response.json();
+    const data = await response.json();
+    if (data.status && data.code) {
+      throw new Error(
+        `An error occurred while trying to submit an order to Rarible: (${data.code}): ${data.message}`,
+      );
+    }
+    return data;
   } catch (err) {
     throw new Error(err);
   }
