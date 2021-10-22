@@ -5,6 +5,7 @@ import { supportedChains } from './chain';
 
 import { ipfsPrePost, ipfsJsonPin, getNftMeta } from './metadata';
 import { raribleHashMaker } from './proposalUtils';
+import { getRaribleApi } from './requests';
 
 const buildEncodeOrder = ({ maker, make, take, start, end }) => {
   const salt = Math.floor(Math.random() * 1000);
@@ -120,19 +121,8 @@ export const getOrderByItem = async (
   orderType,
   daochain,
 ) => {
-  const url = `${supportedChains[daochain].rarible.api_url}/order/orders/${orderType}/byItem`;
-  const params = `?contract=${contract}&tokenId=${tokenId}&maker=${maker}`;
-  try {
-    const response = await fetch(`${url}${params}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
+  const endpoint = `order/orders/${orderType}/byItem?contract=${contract}&tokenId=${tokenId}&maker=${maker}`;
+  return getRaribleApi(daochain, endpoint);
 };
 
 const DOMAIN_TYPE = [
@@ -230,18 +220,14 @@ export const buildRaribleUrl = (orderData, daochain) => {
   return `${supportedChains[daochain].rarible.base_url}/token/${contract}:${tokenId}`;
 };
 
-
 export const fetchNftMeta = async (daochain, itemId) => {
-  const url = `${supportedChains[daochain].rarible.api_url}/nft/items/${itemId}/meta`;
+  return getRaribleApi(daochain, `nft/items/${itemId}/meta`);
+}
+
+export const fetchLazyNftMeta = async (daochain, itemId) => {
   try {
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return await response.json();
-  } catch (err) {
-    throw new Error(err);
+    return getRaribleApi(daochain, `nft/items/${itemId}/lazy`);
+  } catch (error) {
+    console.error(error);
   }
 }
