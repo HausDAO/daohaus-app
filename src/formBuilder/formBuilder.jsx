@@ -296,19 +296,18 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} states={indicatorStates} />
-        {footer && (
-          <FormFooter
-            options={options}
-            addOption={addOption}
-            formState={formState}
-            ctaText={ctaText}
-            next={next}
-            goToNext={goToNext}
-            errors={Object.values(formErrors)}
-            customSecondaryBtn={secondaryBtn}
-          />
-        )}
+        <ProgressIndicator currentState={formState} />
+        <FormFooter
+          options={options}
+          addOption={addOption}
+          formState={formState}
+          ctaText={ctaText}
+          next={next}
+          goToNext={goToNext}
+          errors={Object.values(formErrors)}
+          customSecondaryBtn={secondaryBtn}
+          loading={formState === 'loading'}
+        />
       </Flex>
     </form>
   );

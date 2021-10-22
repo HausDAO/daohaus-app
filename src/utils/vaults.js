@@ -166,7 +166,7 @@ export const getVaultListData = (minion, daochain, daoid) => {
 export const validateSafeMinion = async (chainId, vault) => {
   try {
     const safeDetails = await fetchSafeDetails(
-      chainByID(chainId).network,
+      chainByID(chainId).networkAlt || chainByID(chainId).network,
       vault,
     );
     return {

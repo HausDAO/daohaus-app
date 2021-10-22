@@ -177,6 +177,7 @@ export const supportedChains = {
     short_name: 'matic',
     nativeCurrency: 'MATIC',
     network: 'matic',
+    networkAlt: 'polygon',
     network_id: 137,
     chain_id: '0x89',
     hub_sort_order: 3,
@@ -238,7 +239,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
     minion_factory_addr: '',
     moloch_factory_addr: '0x9232dea84e91b49fef6b604eea0455692fc27ba8',
-    dai_contract: '',
+    dai_contract: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
     wrapper_contract: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1',
     wrap_n_zap_factory_addr: '0xff0184056B7865F924ea3c0C1823882ad388421b',
     block_explorer: 'https://arbiscan.io/',
@@ -346,8 +347,8 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
-  '0xA4B1': {
-    chainId: '0xA4B1',
+  '0xa4b1': {
+    chainId: '0xa4b1',
     chainName: 'Arbitrum',
     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
     blockExplorerUrls: ['https://arbiscan.io/'],
@@ -364,7 +365,7 @@ export const EIP3085 = {
     '0x64': true,
     '0x89': true,
     '0x4a': true,
-    '0xA4B1': true,
+    '0xa4b1': true,
   },
   NOT_SUPPORTED: {
     '0x1': true,
