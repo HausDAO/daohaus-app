@@ -106,7 +106,6 @@ export const FIELD = {
     label: 'Tribute Offered',
     info: INFO_TEXT.TOKEN_TRIBUTE,
     expectType: 'number',
-    modifiers: ['addTributeDecimals'],
   },
   PAYMENT_REQUEST: {
     type: 'paymentInput',
@@ -116,7 +115,6 @@ export const FIELD = {
     label: 'Payment Requested',
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
-    modifiers: ['addPaymentDecimals'],
   },
   ONLY_ERC20: {
     type: 'gatedInput',

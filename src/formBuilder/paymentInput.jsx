@@ -7,6 +7,7 @@ import ModButton from './modButton';
 import { getContractBalance } from '../utils/tokenValue';
 import { validate } from '../utils/validation';
 import { handleDecimals } from '../utils/general';
+import { spreadOptions } from '../utils/formBuilder';
 
 // const getMaxBalance = (tokenData, tokenAddress) => {
 //   //  Uses token select data structure
@@ -79,8 +80,8 @@ const PaymentInput = props => {
     setValue('paymentRequested', token.balance / 10 ** token.decimals);
   };
 
-  const options = {
-    ...registerOptions,
+  const options = spreadOptions({
+    registerOptions,
     setValueAs: value => getContractBalance(value, token?.decimals),
     validate: {
       hasBalance: value =>
@@ -88,7 +89,7 @@ const PaymentInput = props => {
           ? true
           : 'Not enough balance in DAO treasury',
     },
-  };
+  });
 
   return (
     <InputSelect

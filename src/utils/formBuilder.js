@@ -222,7 +222,7 @@ export const spreadOptions = ({ registerOptions, setValueAs, validate }) => {
   let newObj = {};
   if (validate) {
     if (existingValidation) {
-      newObj = { ...newObj, validate: { ...existingValidation, validate } };
+      newObj = { ...newObj, validate: { ...existingValidation, ...validate } };
     } else {
       newObj = { ...newObj, validate };
     }

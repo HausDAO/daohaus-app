@@ -144,15 +144,12 @@ const TributeInput = props => {
         getContractBalance(val, decimals) > Number(allowance)
           ? `Amount entered exceeds token allowance.`
           : true,
-
       hasBalance: val =>
         getContractBalance(val, decimals) > Number(balance)
           ? `Amount entered exceeds wallet balance.`
           : true,
     },
   });
-
-  console.log(options);
 
   return (
     <InputSelect

@@ -6,7 +6,8 @@ import ModButton from './modButton';
 import { handleDecimals } from '../utils/general';
 import { getReadableBalanceFromList, getVaultERC20s } from '../utils/vaults';
 import { validate } from '../utils/validation';
-import { getReadableBalance } from '../utils/tokenValue';
+import { getContractBalance, getReadableBalance } from '../utils/tokenValue';
+import { spreadOptions } from '../utils/formBuilder';
 
 const MinionToken = props => {
   const { daoVaults } = useDao();
@@ -16,10 +17,12 @@ const MinionToken = props => {
     name,
     listenTo = 'selectedMinion',
     selectName = 'minionToken',
+    registerOptions,
   } = props;
   const { watch, setValue } = localForm;
 
   const [minionTokens, setMinionTokens] = useState(null);
+  const [selectedToken, setSelectedToken] = useState(null);
 
   const selectedMinion = localValues?.minionAddress || watch(listenTo);
   const minionToken = watch(selectName);
@@ -43,14 +46,17 @@ const MinionToken = props => {
       const tokenData = minionTokens?.find(
         token => token.contractAddress === minionToken,
       );
-      const commified = handleDecimals(
-        tokenData.balance,
-        tokenData.decimals,
-      )?.toFixed(4);
-      return commified;
+      if (tokenData) {
+        const { balance, decimals } = tokenData;
+        const commified = handleDecimals(balance, decimals)?.toFixed(4);
+
+        setSelectedToken(tokenData);
+        return commified;
+      }
     }
 
-    if (localValues?.balance) {
+    if (localValues?.balance && localValues?.decimals) {
+      setSelectedToken(localValues);
       return handleDecimals(
         localValues.balance,
         localValues.tokenDecimals,
@@ -86,6 +92,10 @@ const MinionToken = props => {
       setValue(name, formattedBalance);
     }
   };
+  const options = spreadOptions({
+    registerOptions,
+    setValueAs: val => getContractBalance(val, selectedToken?.decimals),
+  });
 
   return (
     <InputSelect
@@ -94,6 +104,7 @@ const MinionToken = props => {
       options={minionTokenDisplay}
       disabled={isDisabled}
       helperText={!selectedMinion && 'Please select a minion'}
+      registerOptions={options}
       btn={
         selectedMinion && (
           <ModButton
