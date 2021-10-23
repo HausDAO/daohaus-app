@@ -213,3 +213,13 @@ export const customValidations = {
     return false;
   },
 };
+
+export const buildRHFvalFn = valString => {
+  const valFn = validate[valString];
+  const valMsg = TYPE_ERR_MSGS[valString];
+  if (!valFn || !valMsg)
+    throw new Error(
+      `validation.js => buildRHFvalFn(): type validation is not valid. It may not match the registry of existing val callbacks or errMsgs`,
+    );
+  return val => (valFn(val) ? true : valMsg);
+};

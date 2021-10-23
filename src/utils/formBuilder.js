@@ -1,7 +1,8 @@
 import { v4 as uuid } from 'uuid';
-import { filterObject, isObjectEmpty } from './general';
+import { filterObject, isObjectEmpty, pipe } from './general';
 import { logFormError } from './errorLog';
-import { validate } from './validation';
+import { buildRHFvalFn, validate } from './validation';
+import { FIELD } from '../data/fields';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
@@ -238,21 +239,32 @@ export const spreadOptions = ({ registerOptions, setValueAs, validate }) => {
   }
   return newReg;
 };
-const addTypeValidation = () => {};
-export const createRegisterOptions = (field, required = []) => {
-  const isRequired = required.includes(field.name);
-  // const hasType = field.expectType === 'any' ? false : field.expectType;
-  let registerOptions = {};
-  if (isRequired) {
-    registerOptions = {
-      required: `${field.label} is required`,
-    };
-  }
-  // if (hasType) {
-  //   registerOptions = addTypeValidation(registerOptions);
-  // }
-  // if(field.maxLength){
-  //   registerOptions = {...}
-  // }
-  return registerOptions;
-};
+const addTypeValidation = (regOptions, valStr) => ({
+  ...regOptions,
+  validate: buildRHFvalFn(valStr),
+});
+const handleRequired = ({ name, label }, required) => regOptions =>
+  required.includes(name)
+    ? { ...regOptions, required: `${label} is required` }
+    : regOptions;
+const handleType = ({ expectType }) => regOptions =>
+  expectType === 'any' ? regOptions : addTypeValidation(regOptions, expectType);
+const handleMinLength = ({ minLength }) => regOptions =>
+  minLength ? { ...regOptions, minLength } : regOptions;
+const handleMaxLength = ({ maxLength }) => regOptions =>
+  maxLength ? { ...regOptions, maxLength } : regOptions;
+
+export const createRegisterOptions = (field, required = []) =>
+  pipe([
+    handleRequired(field, required),
+    handleType(field),
+    handleMinLength(field),
+    handleMaxLength(field),
+  ])({});
+
+console.log(
+  `createRegisterOptions`,
+  createRegisterOptions({ ...FIELD.TARGET_CONTRACT, minLength: 20 }, [
+    'targetContract',
+  ]),
+);

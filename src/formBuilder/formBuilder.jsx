@@ -263,6 +263,7 @@ const FormBuilder = props => {
         <InputFactory
           {...field}
           key={`${depth}-${index}`}
+          // registerOptions={{}}
           registerOptions={createRegisterOptions(field, requiredFields)}
           errors={errors}
           minionType={props.minionType}

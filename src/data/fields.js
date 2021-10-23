@@ -184,7 +184,6 @@ export const FIELD = {
   },
   TARGET_CONTRACT: {
     type: 'targetContract',
-
     label: 'Contract Address',
     name: 'targetContract',
     htmlFor: 'targetContract',
