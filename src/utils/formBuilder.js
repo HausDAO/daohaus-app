@@ -2,7 +2,6 @@ import { v4 as uuid } from 'uuid';
 import { filterObject, isObjectEmpty, pipe } from './general';
 import { logFormError } from './errorLog';
 import { buildRHFvalFn, validate } from './validation';
-import { FIELD } from '../data/fields';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);

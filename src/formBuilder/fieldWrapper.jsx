@@ -16,7 +16,6 @@ const FieldWrapper = ({
   hidden,
   btn,
   errors = {},
-  required,
   containerProps,
   mb,
   layout,

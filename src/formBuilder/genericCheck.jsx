@@ -6,7 +6,6 @@ import Paragraphs from './Paragraphs';
 
 const GenericCheck = props => {
   const {
-    label,
     title,
     description,
     isChecked = true,

@@ -6,23 +6,20 @@ import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
 import FormFooter from './formFooter';
-import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
   checkConditionalTx,
-  collapse,
   createRegisterOptions,
   inputDataFromABI,
   mapInRequired,
 } from '../utils/formBuilder';
-import { omit } from '../utils/general';
 
 const dev = process.env.REACT_APP_DEV;
 
 const FormBuilder = props => {
   const {
     submitTransaction,
-    handleCustomValidation,
-    modifyFields,
+    // handleCustomValidation,
+    // modifyFields,
     submitCallback,
   } = useTX();
   const {
@@ -37,9 +34,6 @@ const FormBuilder = props => {
     ctaText,
     secondaryBtn,
     formConditions,
-    logValues,
-    footer = true,
-    indicatorStates,
     setParentFields,
     txID,
   } = props;
@@ -47,8 +41,8 @@ const FormBuilder = props => {
   const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(null);
-  const [formErrors, setFormErrors] = useState({});
-  const [requiredFields, setRequiredFields] = useState(required);
+  const [formErrors] = useState({});
+  const [requiredFields] = useState(required);
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
   const { handleSubmit, watch, errors } = localForm;
@@ -61,9 +55,7 @@ const FormBuilder = props => {
     }
   }, [values, errors]);
 
-  useEffect(() => {
-    setFields(mapInRequired(fields, required));
-  }, [fields]);
+  useEffect(() => setFields(fields), [fields]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -108,31 +100,31 @@ const FormBuilder = props => {
     }
   };
 
-  const updateErrors = errors => {
-    // REVIEW
-    setFields(prevFields => {
-      const update = field => {
-        // TODO: how to handle validation errors on fields within formCondition and checkGate input types
-        if (Array.isArray(field)) {
-          return field.map(update);
-        }
-        const error = errors.find(error => error.name === field.name);
-        return { ...field, error };
-      };
-      return prevFields.map(update);
-    });
-  };
-  const clearErrors = () => {
-    // REVIEW
-    setFields(prevFields => {
-      const clear = f =>
-        Array.isArray(f) ? f.map(clear) : { ...f, error: false };
-      return prevFields.map(clear);
-    });
-  };
+  // const updateErrors = errors => {
+  //   // REVIEW
+  //   setFields(prevFields => {
+  //     const update = field => {
+  //       // TODO: how to handle validation errors on fields within formCondition and checkGate input types
+  //       if (Array.isArray(field)) {
+  //         return field.map(update);
+  //       }
+  //       const error = errors.find(error => error.name === field.name);
+  //       return { ...field, error };
+  //     };
+  //     return prevFields.map(update);
+  //   });
+  // };
+  // const clearErrors = () => {
+  //   // REVIEW
+  //   setFields(prevFields => {
+  //     const clear = f =>
+  //       Array.isArray(f) ? f.map(clear) : { ...f, error: false };
+  //     return prevFields.map(clear);
+  //   });
+  // };
 
   const onSubmit = async values => {
-    clearErrors();
+    // clearErrors();
 
     //  Checks for required values
     // TODO: how to handle required values from inputs within formCondition & checkGate
@@ -160,26 +152,26 @@ const FormBuilder = props => {
     // }
     // const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
 
-    const modifiedValues = modifyFields({
-      values,
-      // REVIEW
-      // activeFields: formFields,
-      activeFields: formFields.flat(Infinity),
-      formData: props,
-      tx: props.tx,
-    });
+    // const modifiedValues = modifyFields({
+    //   values,
+    //   // REVIEW
+    //   // activeFields: formFields,
+    //   activeFields: formFields.flat(Infinity),
+    //   formData: props,
+    //   tx: props.tx,
+    // });
     //  Checks for custom validation
 
-    const customValErrors = handleCustomValidation({
-      values: modifiedValues,
-      formData: props,
-    });
+    // const customValErrors = handleCustomValidation({
+    //   values: modifiedValues,
+    //   formData: props,
+    // });
 
-    if (customValErrors) {
-      console.log('customValErrors', customValErrors);
-      updateErrors(customValErrors);
-      return;
-    }
+    // if (customValErrors) {
+    //   console.log('customValErrors', customValErrors);
+    //   updateErrors(customValErrors);
+    //   return;
+    // }
 
     const handleSubmitCallback = async () => {
       //  checks if submit is not a contract interaction and is a callback
@@ -187,7 +179,7 @@ const FormBuilder = props => {
         try {
           setFormState('loading');
           const res = await submitCallback({
-            values: modifiedValues,
+            values,
             formData: props,
             onSubmit: props.onSubmit,
           });
@@ -203,7 +195,7 @@ const FormBuilder = props => {
       try {
         setFormState('loading');
         const res = await submitTransaction({
-          values: modifiedValues,
+          values,
           formData: props,
           localValues,
           tx: checkConditionalTx({ tx: props.tx, condition: formCondition }),
