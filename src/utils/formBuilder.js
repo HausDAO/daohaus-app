@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { filterObject, isObjectEmpty } from './general';
+import { capitalize, filterObject, isObjectEmpty } from './general';
 import { logFormError } from './errorLog';
 import { validate } from './validation';
 
@@ -237,4 +237,22 @@ export const spreadOptions = ({ registerOptions, setValueAs, validate }) => {
     }
   }
   return newObj;
+};
+const addTypeValidation = () => {};
+export const createRegisterOptions = (field, required = []) => {
+  const isRequired = required.includes(field.name);
+  // const hasType = field.expectType === 'any' ? false : field.expectType;
+  let registerOptions = {};
+  if (isRequired) {
+    registerOptions = {
+      required: `${field.label} is required`,
+    };
+  }
+  // if (hasType) {
+  //   registerOptions = addTypeValidation(registerOptions);
+  // }
+  // if(field.maxLength){
+  //   registerOptions = {...}
+  // }
+  return registerOptions;
 };

@@ -10,6 +10,7 @@ import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
   checkConditionalTx,
   collapse,
+  createRegisterOptions,
   inputDataFromABI,
   mapInRequired,
 } from '../utils/formBuilder';
@@ -47,6 +48,7 @@ const FormBuilder = props => {
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(null);
   const [formErrors, setFormErrors] = useState({});
+  const [requiredFields, setRequiredFields] = useState(required);
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
   const { handleSubmit, watch, errors } = localForm;
@@ -257,6 +259,7 @@ const FormBuilder = props => {
         <InputFactory
           {...field}
           key={`${depth}-${index}`}
+          registerOptions={createRegisterOptions(field, requiredFields)}
           errors={errors}
           minionType={props.minionType}
           formCondition={formCondition}
