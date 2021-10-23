@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { capitalize, filterObject, isObjectEmpty } from './general';
+import { filterObject, isObjectEmpty } from './general';
 import { logFormError } from './errorLog';
 import { validate } from './validation';
 

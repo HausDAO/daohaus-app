@@ -1027,7 +1027,6 @@ export const TX = {
       },
     ],
   },
-<<<<<<< HEAD
   GENERIC_SAFE_MULTICALL: {
     contract: CONTRACTS.SELECTED_MINION_SAFE,
     name: 'proposeAction',
@@ -1036,7 +1035,7 @@ export const TX = {
     errMsg: 'Error Submitting Safe Proposal',
     successMsg: 'Safe Minion Proposal Submitted!',
     argsFromCallback: 'multiActionSafe',
-=======
+  },
   WITHDRAW_ESCROW: {
     contract: CONTRACTS.ESCROW_MINION,
     name: 'withdrawToDestination',
@@ -1045,6 +1044,5 @@ export const TX = {
     display: 'Withdraw Balance from Escrow',
     errMsg: 'Error Withdrawing Balance from Escrow',
     successMsg: 'Balance Withdrawn from Escrow!',
->>>>>>> 8d112c5273fd60da677843aa9e30dd6271629851
   },
 };
