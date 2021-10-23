@@ -136,32 +136,32 @@ const FormBuilder = props => {
 
     //  Checks for required values
     // TODO: how to handle required values from inputs within formCondition & checkGate
-    const missingVals = validateRequired(
-      values,
-      // REVIEW
-      // formFields.filter(field => field.required),
-      formFields.flat(Infinity).filter(field => field.required),
-    );
+    // const missingVals = validateRequired(
+    //   values,
+    //   // REVIEW
+    //   // formFields.filter(field => field.required),
+    //   formFields.flat(Infinity).filter(field => field.required),
+    // );
 
-    if (missingVals) {
-      console.log('missingVals', missingVals);
-      updateErrors(missingVals);
-      return;
-    }
+    // if (missingVals) {
+    //   console.log('missingVals', missingVals);
+    //   updateErrors(missingVals);
+    //   return;
+    // }
 
     //  Checks for type errors
     // REVIEW
     // const typeErrors = checkFormTypes(values, formFields);
-    const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
-    if (typeErrors) {
-      console.log('typeErrors', typeErrors);
-      updateErrors(typeErrors);
-      return;
-    }
-    const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
+    // const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
+    // if (typeErrors) {
+    //   console.log('typeErrors', typeErrors);
+    //   updateErrors(typeErrors);
+    //   return;
+    // }
+    // const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
 
     const modifiedValues = modifyFields({
-      values: collapsedValues,
+      values,
       // REVIEW
       // activeFields: formFields,
       activeFields: formFields.flat(Infinity),
@@ -265,6 +265,7 @@ const FormBuilder = props => {
           key={`${depth}-${index}`}
           // registerOptions={{}}
           registerOptions={createRegisterOptions(field, requiredFields)}
+          requiredFields={requiredFields}
           errors={errors}
           minionType={props.minionType}
           formCondition={formCondition}

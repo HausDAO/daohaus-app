@@ -226,7 +226,9 @@ const handleRequired = ({ name, label }, required) => regOptions =>
     ? { ...regOptions, required: `${label} is required` }
     : regOptions;
 const handleType = ({ expectType }) => regOptions =>
-  expectType === 'any' ? regOptions : addTypeValidation(regOptions, expectType);
+  !expectType || expectType === 'any'
+    ? regOptions
+    : addTypeValidation(regOptions, expectType);
 const handleMinLength = ({ minLength }) => regOptions =>
   minLength ? { ...regOptions, minLength } : regOptions;
 const handleMaxLength = ({ maxLength }) => regOptions =>
@@ -252,18 +254,3 @@ export const spreadOptions = ({ registerOptions, validate, setValueAs }) =>
   pipe([overwriteSetValueAs(setValueAs), spreadValidation(validate)])(
     registerOptions,
   );
-
-console.log(
-  `spreadOptions`,
-  spreadOptions({
-    registerOptions: createRegisterOptions(
-      { ...FIELD.TARGET_CONTRACT, minLength: 20 },
-      ['targetContract'],
-    ),
-    setValueAs: () => console.log('PISSS!'),
-    validate: {
-      newOne: () => console.log('new'),
-      newerOne: () => console.log('new'),
-    },
-  }),
-);

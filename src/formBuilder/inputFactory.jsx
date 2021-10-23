@@ -35,12 +35,25 @@ import TargetContract from './targetContract';
 import ToggleForm from './toggleForm';
 import TributeInput from './tributeInput';
 import ListBox from './listBox';
+import { createRegisterOptions } from '../utils/formBuilder';
 
 export const InputFactory = props => {
   const { type, formCondition } = props;
 
   if (type === 'formCondition' && props[formCondition]) {
-    return <InputFactory {...props} {...props[formCondition]} />;
+    const nestedInput = { ...props[formCondition] };
+    if (nestedInput) {
+      return (
+        <InputFactory
+          {...props}
+          {...nestedInput}
+          registerOptions={createRegisterOptions(
+            nestedInput,
+            props.requiredFields,
+          )}
+        />
+      );
+    }
   }
 
   if (type === 'input') {

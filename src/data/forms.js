@@ -505,7 +505,7 @@ export const PROPOSAL_FORMS = {
     //   easy: ['minionName', 'minQuorum', 'saltNonce'],
     //   advanced: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
     // },
-    required: ['minionName', 'minQuorum', 'saltNonce'],
+    required: ['minionName', 'minQuorum', 'saltNonce', 'safeAddress'],
     fields: [
       [
         FIELD.SUMMON_MODE_SWITCH,

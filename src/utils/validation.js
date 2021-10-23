@@ -221,5 +221,5 @@ export const buildRHFvalFn = valString => {
     throw new Error(
       `validation.js => buildRHFvalFn(): type validation is not valid. It may not match the registry of existing val callbacks or errMsgs`,
     );
-  return val => (valFn(val) ? true : valMsg);
+  return val => (valFn(val) || val === '' ? true : valMsg);
 };

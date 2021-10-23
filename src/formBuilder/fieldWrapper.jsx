@@ -20,6 +20,7 @@ const FieldWrapper = ({
   containerProps,
   mb,
   layout,
+  registerOptions,
   w,
 }) => {
   const width = useMemo(() => {
@@ -50,7 +51,7 @@ const FieldWrapper = ({
           htmlFor={htmlFor || name}
           position='relative'
         >
-          {required && (
+          {registerOptions?.required && (
             <Box display='inline' position='absolute' left='-1rem'>
               {'* '}
             </Box>

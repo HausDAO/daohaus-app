@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFormConditions } from '../utils/formBuilder';
+import { createRegisterOptions, useFormConditions } from '../utils/formBuilder';
 import GenericCheck from './genericCheck';
 import { InputFactory } from './inputFactory';
 
@@ -15,7 +15,14 @@ const CheckGate = props => {
   return (
     <>
       {isChecked ? (
-        <InputFactory {...props} {...renderOnCheck} />
+        <InputFactory
+          {...props}
+          {...renderOnCheck}
+          registerOptions={createRegisterOptions(
+            renderOnCheck,
+            props.requiredFields,
+          )}
+        />
       ) : (
         <GenericCheck
           isChecked={isChecked}
