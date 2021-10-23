@@ -217,31 +217,9 @@ export const serializeTXs = (forms = []) =>
     txID: form.txID || uuid(),
   }));
 
-export const spreadOptions = ({ registerOptions, setValueAs, validate }) => {
-  const existingValidation = registerOptions?.validate;
-  const existingSetValueAs = registerOptions?.setValueAs;
-  let newReg = { ...registerOptions };
-  if (validate) {
-    if (existingValidation) {
-      newReg = { ...newReg, validate: { ...existingValidation, ...validate } };
-    } else {
-      newReg = { ...newReg, validate };
-    }
-  }
-  if (setValueAs) {
-    if (existingSetValueAs) {
-      throw new Error(
-        'formBuilder.js => spreadOptions: Cannot have more than one setValueAs property',
-      );
-    } else {
-      newReg = { ...newReg, setValueAs };
-    }
-  }
-  return newReg;
-};
 const addTypeValidation = (regOptions, valStr) => ({
   ...regOptions,
-  validate: buildRHFvalFn(valStr),
+  validate: { [`type-${valStr}`]: buildRHFvalFn(valStr) },
 });
 const handleRequired = ({ name, label }, required) => regOptions =>
   required.includes(name)
@@ -253,6 +231,15 @@ const handleMinLength = ({ minLength }) => regOptions =>
   minLength ? { ...regOptions, minLength } : regOptions;
 const handleMaxLength = ({ maxLength }) => regOptions =>
   maxLength ? { ...regOptions, maxLength } : regOptions;
+const overwriteSetValueAs = setValueAs => regOptions =>
+  setValueAs ? { ...regOptions, setValueAs } : regOptions;
+const spreadValidation = newValidation => regOptions =>
+  newValidation
+    ? {
+        ...regOptions,
+        validate: { ...(regOptions?.validate || {}), ...newValidation },
+      }
+    : regOptions;
 
 export const createRegisterOptions = (field, required = []) =>
   pipe([
@@ -261,10 +248,22 @@ export const createRegisterOptions = (field, required = []) =>
     handleMinLength(field),
     handleMaxLength(field),
   ])({});
+export const spreadOptions = ({ registerOptions, validate, setValueAs }) =>
+  pipe([overwriteSetValueAs(setValueAs), spreadValidation(validate)])(
+    registerOptions,
+  );
 
 console.log(
-  `createRegisterOptions`,
-  createRegisterOptions({ ...FIELD.TARGET_CONTRACT, minLength: 20 }, [
-    'targetContract',
-  ]),
+  `spreadOptions`,
+  spreadOptions({
+    registerOptions: createRegisterOptions(
+      { ...FIELD.TARGET_CONTRACT, minLength: 20 },
+      ['targetContract'],
+    ),
+    setValueAs: () => console.log('PISSS!'),
+    validate: {
+      newOne: () => console.log('new'),
+      newerOne: () => console.log('new'),
+    },
+  }),
 );
