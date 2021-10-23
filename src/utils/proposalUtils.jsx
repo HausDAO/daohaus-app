@@ -43,9 +43,11 @@ export const PROPOSAL_TYPES = {
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
   MINION_ERC1155: 'Minion Erc1155 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
-  MINION_BUYOUT: 'Minion Buyout Proposal',
+  MINION_BUYOUT: 'Bank Buyout Proposal',
+  MINION_TRIBUTE: 'NFT Tribute Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
-  SELL_NFT: 'Sell NFT',
+  BUY_NFT_RARIBLE: 'Buy NFT',
+  SELL_NFT_RARIBLE: 'Sell NFT',
 };
 
 export const MINION_TYPES = {
@@ -170,6 +172,10 @@ const getMinionProposalType = (proposal, details) => {
     return PROPOSAL_TYPES.MINION_DEFAULT;
   };
 
+  if (details.proposalType) {
+    return details.proposalType;
+  }
+
   if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
     return getUberTypeFromDetails(details);
   }
@@ -264,10 +270,9 @@ export const raribleHashMaker = proposal => {
   }
 };
 
-export const proposalTypeMaker = proposal => {
+export const proposalTypeMaker = proposalDetails => {
   try {
-    const parsed =
-      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    const parsed = IsJsonString(proposalDetails) && JSON.parse(proposalDetails);
     return parsed.proposalType || '';
   } catch (e) {
     return '';
@@ -598,7 +603,7 @@ export const multicallActionsFromProposal = prop => {
 };
 
 export const hasMinionActions = (prop, minionDeets) => {
-  if (prop.minion.minionType === MINION_TYPES.SAFE) {
+  if (prop.minion?.minionType === MINION_TYPES.SAFE) {
     return prop.actions > 0;
   }
   return (
