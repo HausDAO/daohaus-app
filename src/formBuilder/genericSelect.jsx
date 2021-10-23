@@ -26,7 +26,7 @@ const GenericSelect = props => {
         name={name}
         disabled={disabled}
         onChange={onChange}
-        ref={registerOptions ? register(registerOptions) : register}
+        ref={register(registerOptions)}
       >
         {options?.map(option => (
           <option value={option.value} key={option.key || option.value}>

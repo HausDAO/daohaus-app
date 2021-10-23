@@ -36,7 +36,7 @@ const GenericTextarea = ({
         id={htmlFor}
         name={name}
         h={h}
-        ref={registerOptions ? register(registerOptions) : register}
+        ref={register(registerOptions)}
         disabled={disabled}
         control={control}
       />

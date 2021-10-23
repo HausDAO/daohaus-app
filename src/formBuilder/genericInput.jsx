@@ -37,7 +37,7 @@ const GenericInput = props => {
           name={name}
           onChange={onChange}
           placeholder={placeholder || label || htmlFor}
-          ref={registerOptions ? register(registerOptions) : register}
+          ref={register(registerOptions)}
           disabled={disabled}
           defaultValue={defaultValue}
         />

@@ -25,6 +25,7 @@ const CheckGate = props => {
         />
       ) : (
         <GenericCheck
+          {...props}
           isChecked={isChecked}
           onChange={handleChange}
           label={checkLabel}
