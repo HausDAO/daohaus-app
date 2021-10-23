@@ -1,20 +1,37 @@
 import deepEqual from 'deep-equal';
 import { TypedDataUtils } from 'eth-sig-util';
 import { bufferToHex } from 'ethereumjs-util';
-import Web3 from 'web3';
 import { supportedChains } from './chain';
 
 import { ipfsPrePost, ipfsJsonPin, getNftMeta } from './metadata';
 import { raribleHashMaker } from './proposalUtils';
+import { getRaribleApi } from './requests';
 
-export const buildEncodeOrder = args => {
+const buildEncodeOrder = ({ maker, make, take, start, end }) => {
   const salt = Math.floor(Math.random() * 1000);
   return {
     type: 'RARIBLE_V2',
-    maker: args.minionAddress,
+    maker,
+    make,
+    take,
+    data: {
+      dataType: 'RARIBLE_V2_DATA_V1',
+      payouts: [],
+      originFees: [],
+    },
+    salt,
+    start,
+    end,
+    signature: '',
+  };
+};
+
+export const buildSellOrder = args => {
+  return buildEncodeOrder({
+    maker: args.makerAddress,
     make: {
       assetType: {
-        assetClass: 'ERC721',
+        assetClass: args.nftType,
         contract: args.nftContract,
         tokenId: args.tokenId,
       },
@@ -27,15 +44,30 @@ export const buildEncodeOrder = args => {
       },
       value: args.price,
     },
-    data: {
-      dataType: 'RARIBLE_V2_DATA_V1',
-      payouts: [],
-      originFees: [],
+    start: args.startDate ? args.startDate : null,
+    end: args.endDate ? args.endDate : null,
+  });
+};
+
+export const buildBuyOrder = args => {
+  return buildEncodeOrder({
+    maker: args.makerAddress,
+    make: {
+      assetType: {
+        assetClass: 'ERC20',
+        contract: args.tokenAddress,
+      },
+      value: args.price,
     },
-    salt,
-    start: args.startDate,
-    end: args.endDate,
-  };
+    take: {
+      assetType: {
+        assetClass: args.nftType,
+        contract: args.nftContract,
+        tokenId: args.tokenId,
+      },
+      value: '1',
+    },
+  });
 };
 
 export const encodeOrder = async (order, daochain) => {
@@ -48,7 +80,13 @@ export const encodeOrder = async (order, daochain) => {
       },
       body: JSON.stringify(order),
     });
-    return response.json();
+    const data = await response.json();
+    if (data.status && data.code) {
+      throw new Error(
+        `An error occurred while trying to encode Rarible order: (${data.code}): ${data.message}`,
+      );
+    }
+    return data;
   } catch (err) {
     throw new Error(err);
   }
@@ -64,26 +102,27 @@ export const createOrder = async (order, daochain) => {
       },
       body: JSON.stringify(order),
     });
-    return response.json();
+    const data = await response.json();
+    if (data.status && data.code) {
+      throw new Error(
+        `An error occurred while trying to submit an order to Rarible: (${data.code}): ${data.message}`,
+      );
+    }
+    return data;
   } catch (err) {
     throw new Error(err);
   }
 };
 
-export const getOrderByItem = async (contract, tokenId, maker, daochain) => {
-  const url = `${supportedChains[daochain].rarible.api_url}/order/orders/sell/byItem`;
-  const params = `?contract=${contract}&tokenId=${tokenId}&maker=${maker}`;
-  try {
-    const response = await fetch(`${url}${params}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
+export const getOrderByItem = async (
+  contract,
+  tokenId,
+  maker,
+  orderType,
+  daochain,
+) => {
+  const endpoint = `order/orders/${orderType}/byItem?contract=${contract}&tokenId=${tokenId}&maker=${maker}`;
+  return getRaribleApi(daochain, endpoint);
 };
 
 const DOMAIN_TYPE = [
@@ -121,18 +160,6 @@ export const getMessageHash = encodedOrder => {
   return bufferToHex(TypedDataUtils.sign(typeData));
 };
 
-export const arbitrarySignature =
-  '0xc531a1d9046945d3732c73d049da2810470c3b0663788dca9e9f329a35c8a0d56add77ed5ea610b36140641860d13849abab295ca46c350f50731843c6517eee1c';
-
-export const getSignatureHash = () => {
-  const arbitrarySignatureHash = Web3.utils.soliditySha3({
-    t: 'bytes',
-    v: arbitrarySignature,
-  });
-
-  return arbitrarySignatureHash;
-};
-
 export const pinOrderToIpfs = async (order, daoid) => {
   const keyRes = await ipfsPrePost('dao/ipfs-key', {
     daoAddress: daoid,
@@ -159,18 +186,24 @@ export const getOrderDataFromProposal = async proposal => {
   }
 };
 
-export const compareSellOrder = (ipfsData, orderRes) => {
+export const compareOrder = (ipfsData, orderRes) => {
   return orderRes.some(order => {
     const propOrderData = {
-      ...ipfsData.make,
-      ...ipfsData.take,
-      start: +ipfsData.start,
-      end: +ipfsData.end,
+      make: ipfsData.make,
+      take: ipfsData.take,
+      start: ipfsData.start && Number(ipfsData.start),
+      end: ipfsData.end && Number(ipfsData.end),
     };
 
     const raribleOrderData = {
-      ...order.make,
-      ...order.take,
+      make: {
+        assetType: order.make.assetType,
+        value: order.make.value,
+      },
+      take: {
+        assetType: order.take.assetType,
+        value: order.take.value,
+      },
       start: order.start,
       end: order.end,
     };
@@ -179,5 +212,22 @@ export const compareSellOrder = (ipfsData, orderRes) => {
 };
 
 export const buildRaribleUrl = (orderData, daochain) => {
-  return `${supportedChains[daochain].rarible.base_url}/token/${orderData.make.assetType.contract}:${orderData.make.assetType.tokenId}`;
+  const tokenId = orderData.make.assetType.tokenId || orderData.take.assetType.tokenId;
+  const contract =
+    orderData.make.assetType.tokenId
+      ? orderData.make.assetType.contract
+      : orderData.take.assetType.contract;
+  return `${supportedChains[daochain].rarible.base_url}/token/${contract}:${tokenId}`;
 };
+
+export const fetchNftMeta = async (daochain, itemId) => {
+  return getRaribleApi(daochain, `nft/items/${itemId}/meta`);
+}
+
+export const fetchLazyNftMeta = async (daochain, itemId) => {
+  try {
+    return getRaribleApi(daochain, `nft/items/${itemId}/lazy`);
+  } catch (error) {
+    console.error(error);
+  }
+}

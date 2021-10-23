@@ -9,6 +9,7 @@ import {
   pollProposals,
   pollRageQuit,
   pollTokenAllowances,
+  pollTokenApproval,
   pollUberHausDelegateSet,
   syncTokenPoll,
   updateDelegateFetch,
@@ -37,6 +38,7 @@ import {
   submitProposalTest,
   submitVoteTest,
   tokenAllowanceTest,
+  tokenApprovedTest,
   uberHausDelegateSetTest,
   updateDelegateTest,
   withdrawTokenTest,
@@ -332,6 +334,55 @@ export const createPoll = ({
             chainID,
             userAddress: userAddress || address,
             unlockAmount,
+          },
+        });
+      }
+    };
+  } else if (action === 'approveAllTokens') {
+    return ({
+      daoID,
+      chainID,
+      userAddress,
+      contractAddress,
+      controllerAddress,
+      address,
+      actions,
+    }) => txHash => {
+      startPoll({
+        pollFetch: pollTokenApproval,
+        testFn: tokenApprovedTest,
+        shouldEqual: true,
+        args: {
+          daoID,
+          chainID,
+          contractAddress,
+          userAddress: userAddress || address,
+          controllerAddress,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Unlocked Token',
+          unresolvedMsg: 'Unlocking token',
+          successMsg: `Unlocking token for ${daoID} on ${chainID}`,
+          errorMsg: `Error unlocking token for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            contractAddress,
+            chainID,
+            userAddress: userAddress || address,
+            controllerAddress,
           },
         });
       }

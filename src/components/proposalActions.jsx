@@ -24,6 +24,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
+import EscrowActions from './escrowActions';
 import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
 import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
@@ -48,7 +49,7 @@ const getAllowance = (daoMember, delegate) => {
 };
 
 const canInteract = (daoMember, delegate) => {
-  if (+daoMember?.shares > 0 && !isDelegating(daoMember)) {
+  if (Number(daoMember?.shares) > 0 && !isDelegating(daoMember)) {
     return true;
   }
   if (delegate) {
@@ -542,6 +543,13 @@ const ProposalVote = ({
               )}
             </Stack>
           )}
+          {proposal?.escrow &&
+            (proposal?.status === 'Failed' ||
+              proposal?.status === 'Cancelled') && (
+              <Flex justify='center'>
+                <EscrowActions proposal={proposal} />
+              </Flex>
+            )}
         </Stack>
       </ContentBox>
     </>

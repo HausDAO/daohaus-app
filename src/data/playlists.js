@@ -12,24 +12,25 @@ export const BOOST_PLAYLISTS = {
     id: 'niftyMinionClassics',
     forms: ['MINION_NIFTY', 'PAYROLL_NIFTY'],
   },
-  // NFT: {
-  //   name: 'NFT Suite',
-  //   id: 'nifty minion',
-  //   forms: ['MINION_NIFTY', 'BUY_NIFTY_INK', 'PAYROLL_NIFTY'],
-  // },
   SAFE_DEV_SUITE: {
     name: 'Safe Minion Classics',
     id: 'safeMinionClassics',
-    forms: [
-      'MINION_SAFE_SIMPLE',
-      // 'PAYROLL_SAFE',
-      // 'MINION_BUYOUT_ERC721_TOKEN',
-    ],
+    forms: ['MINION_SAFE_SIMPLE', 'MINION_BUYOUT_TOKEN'],
   },
   RARIBLE: {
     name: 'Rarible',
     id: 'rarible',
-    forms: ['SELL_NFT_RARIBLE'],
+    forms: ['SELL_NFT_RARIBLE', 'BUY_NFT_RARIBLE'],
+  },
+  NFT_TRIBUTE: {
+    name: 'NFT Tribute',
+    id: 'nftTribute',
+    forms: ['MINION_TRIBUTE'],
+  },
+  BANK_BUYOUT: {
+    name: 'Bank Buyout',
+    id: 'bankBuyout',
+    forms: ['MINION_BUYOUT_TOKEN'],
   },
   NIFTY_INK: {
     name: 'NiftyInk',

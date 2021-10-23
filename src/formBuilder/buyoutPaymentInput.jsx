@@ -58,7 +58,7 @@ const BuyoutPaymentInput = props => {
       </Box>
       <PaymentInput {...props} />
       <Text color='secondary.500' fontFamily='heading' fontSize='sm'>
-        ! IF the proposal passes, the Funds will only be available after you
+        If the proposal passes, the Funds will only be available after you
         ragequit
       </Text>
     </Flex>
