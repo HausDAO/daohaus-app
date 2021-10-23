@@ -242,15 +242,6 @@ const FormBuilder = props => {
     return handleSubmitTX();
   };
 
-  const useFormError = () => ({
-    removeError(fieldName) {
-      setFormErrors(prevState => omit(fieldName, prevState));
-    },
-    addError(fieldName, error) {
-      setFormErrors(prevState => ({ ...prevState, [fieldName]: error }));
-    },
-  });
-
   const renderInputs = (fields, depth = 0) => {
     return fields?.map((field, index) =>
       Array.isArray(field) ? (
@@ -274,7 +265,6 @@ const FormBuilder = props => {
           localForm={localForm}
           localValues={localValues}
           buildABIOptions={buildABIOptions}
-          useFormError={useFormError}
           formState={formState}
         />
       ),
