@@ -138,6 +138,7 @@ const TributeInput = props => {
   };
 
   const options = spreadOptions({
+    registerOptions,
     setValueAs: val => getContractBalance(val, decimals),
     validate: {
       exceedsAllowance: val =>
@@ -150,7 +151,7 @@ const TributeInput = props => {
           : true,
     },
   });
-
+  console.log(`options`, options);
   return (
     <InputSelect
       {...props}

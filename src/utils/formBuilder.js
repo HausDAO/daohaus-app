@@ -219,12 +219,12 @@ export const serializeTXs = (forms = []) =>
 export const spreadOptions = ({ registerOptions, setValueAs, validate }) => {
   const existingValidation = registerOptions?.validate;
   const existingSetValueAs = registerOptions?.setValueAs;
-  let newObj = {};
+  let newReg = { ...registerOptions };
   if (validate) {
     if (existingValidation) {
-      newObj = { ...newObj, validate: { ...existingValidation, ...validate } };
+      newReg = { ...newReg, validate: { ...existingValidation, ...validate } };
     } else {
-      newObj = { ...newObj, validate };
+      newReg = { ...newReg, validate };
     }
   }
   if (setValueAs) {
@@ -233,10 +233,10 @@ export const spreadOptions = ({ registerOptions, setValueAs, validate }) => {
         'formBuilder.js => spreadOptions: Cannot have more than one setValueAs property',
       );
     } else {
-      newObj = { ...newObj, setValueAs };
+      newReg = { ...newReg, setValueAs };
     }
   }
-  return newObj;
+  return newReg;
 };
 const addTypeValidation = () => {};
 export const createRegisterOptions = (field, required = []) => {
