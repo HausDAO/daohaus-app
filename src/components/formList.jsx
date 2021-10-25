@@ -30,7 +30,7 @@ const handleSearch = (formsArr, str) => {
   );
 };
 
-const ProposalList = ({
+const FormList = ({
   playlists,
   customData,
   selectedListID,
@@ -171,7 +171,7 @@ const ProposalList = ({
   );
 };
 
-export default ProposalList;
+export default FormList;
 
 const ProposalMenuList = ({
   handleEditProposal,

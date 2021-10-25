@@ -67,10 +67,10 @@ const NiftyInkUrl = props => {
         setValue('targetInk', '');
       }
     };
-    if (targetInk) {
+    if (targetInk && daochain && injectedProvider) {
       getNiftyData();
     }
-  }, [targetInk]);
+  }, [targetInk, daochain, injectedProvider]);
   //  REVIEW
   //  Can this component use the usual FieldWrapper pattern?
 

@@ -150,6 +150,20 @@ export const areAnyFields = (param, obj) => {
   }
 };
 
+export const minionFromDaoOverview = ({
+  searchBy,
+  daoOverview,
+  searchParam,
+}) => {
+  if (!daoOverview || !searchBy || !searchParam) return;
+  if (searchBy === 'type')
+    return daoOverview.minions?.filter(
+      minion => minion.minionType === searchParam,
+    );
+  if (searchBy === 'name')
+    return daoOverview.minions.find(minion => minion.details === searchParam);
+};
+
 export const numberWithCommas = num => {
   if (num === 0) return 0;
   if (!num) return;
