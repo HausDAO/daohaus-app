@@ -388,14 +388,6 @@ export const FIELD = {
     description: 'You bet',
     expectType: 'any',
   },
-  TEST_GATE: {
-    type: 'checkGate',
-    startsChecked: false,
-    label: 'Toggle Field State',
-    title: 'Check to render Description',
-    description: 'You bet',
-    expectType: 'any',
-  },
   BLUR: {
     type: 'genericBlur',
     title: 'Connect to update your profile',

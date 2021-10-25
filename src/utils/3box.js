@@ -40,10 +40,10 @@ export const authenticateDid = async address => {
 
 export const getBasicProfile = async ceramic => {
   const model = new DataModel({ ceramic, model: publishedBasicProfileModel });
-  const schemaURL = model.getSchemaURL('BasicProfile');
+  // const schemaURL = model.getSchemaURL('BasicProfile');
   const dataStore = new DIDDataStore({ ceramic, model });
   await dataStore.set('basicProfile', { record: 'content' }); // Expected schema error
-  return await dataStore.get('basicProfile');
+  return dataStore.get('basicProfile');
 };
 
 export const fetchProfile = async address => {

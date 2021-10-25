@@ -8,7 +8,6 @@ import {
   Icon,
   MenuButton,
   MenuItem,
-  Link,
   useToast,
 } from '@chakra-ui/react';
 
@@ -28,7 +27,7 @@ import { FIELD } from '../data/fields';
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
-  const { formModal, closeModal } = useAppModal();
+  const { formModal } = useAppModal();
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
   const { errorToast } = useOverlay();
@@ -47,27 +46,36 @@ const ProfileMenu = ({ member }) => {
 
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
-	const handleEditProfile = () => formModal({...FORM.PROFILE, fields: [FIELD.BLUR, ...FORM.PROFILE.fields], onSubmit: ({values}) => {
-		// How does the loader work with async
-		const submit = async () => {
-		  const ceramic = await authenticateDid(member.memberAddress)
-			console.log(ceramic)
-			if (ceramic.did.authenticated) {
-				console.log("Pop")
-				// onLoad hook
-				formModal({...FORM.PROFILE, onLoad: async () => {
-					// fetch values
-					// update field values
-					console.log('hi')
-				}})
-			}
-		}
-			submit()
-		
-		// authenticate profile
-		// open modal modal
-		// then user can fill out
-	}})
+  const handleEditProfile = () =>
+    formModal({
+      ...FORM.PROFILE,
+      fields: [FIELD.BLUR, ...FORM.PROFILE.fields],
+      onSubmit: ({ values }) => {
+        // How does the loader work with async
+        const submit = async () => {
+          const ceramic = await authenticateDid(member.memberAddress);
+          console.log(ceramic);
+          if (ceramic.did.authenticated) {
+            console.log('Pop');
+            console.log(values);
+            // onLoad hook
+            formModal({
+              ...FORM.PROFILE,
+              onLoad: async () => {
+                // fetch values
+                // update field values
+                console.log('hi');
+              },
+            });
+          }
+        };
+        submit();
+
+        // authenticate profile
+        // open modal modal
+        // then user can fill out
+      },
+    });
 
   const copiedToast = () => {
     toast({
