@@ -17,6 +17,7 @@ const PlaylistSelector = ({
   deletePlaylist,
   editPlaylist,
   devList,
+  dev,
 }) => {
   return (
     <ListSelector
@@ -32,7 +33,7 @@ const PlaylistSelector = ({
       }
       topListItem={
         <>
-          {devList?.forms?.length > 0 && (
+          {devList?.forms?.length > 0 && dev && (
             <ListSelectorItem
               lists={allForms?.forms}
               id='dev'
