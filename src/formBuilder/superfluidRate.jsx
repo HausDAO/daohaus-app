@@ -29,18 +29,23 @@ const SuperfluidRate = props => {
   }, []);
 
   useEffect(() => {
-    if (superfluidRate && +superfluidRate > 0) {
-      const newRate = parseFloat(+superfluidRate / +baseRate).toFixed(10);
+    if (superfluidRate && Number(superfluidRate) > 0) {
+      const newRate = parseFloat(
+        Number(superfluidRate) / Number(baseRate),
+      ).toFixed(10);
       const selectedTokenDecimals = currentDaoTokens.find(token => {
         return token.tokenAddress === paymentToken;
       }).decimals;
       const weiRatePerSec = parseInt(
-        (+superfluidRate * 10 ** +selectedTokenDecimals) / +baseRate,
+        (Number(superfluidRate) * 10 ** Number(selectedTokenDecimals)) /
+          Number(baseRate),
       );
       setPerSecond(newRate);
       setValue(
         'rateString',
-        `${superfluidRate} ${rates.find(r => r.value === +baseRate).name}`,
+        `${superfluidRate} ${
+          rates.find(r => r.value === Number(baseRate)).name
+        }`,
       );
       setValue('weiRatePerSec', weiRatePerSec);
     }
