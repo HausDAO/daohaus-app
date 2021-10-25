@@ -63,8 +63,7 @@
     "test": "craco test",
     "eject": "craco eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
-    "format": "prettier --config ./.prettierrc --write \"**/*.{js,json,md,sol,ts}\""
+    "build-storybook": "build-storybook -s public"
   },
   "browserslist": {
     "production": [
