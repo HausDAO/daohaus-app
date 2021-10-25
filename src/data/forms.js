@@ -402,7 +402,7 @@ export const FORM = {
     ],
   },
   SAMPLE_CONDITIONAL: {
-    dev: true,
+    // dev: true,
     // logValues: true,
     id: 'SAMPLE_CONDITIONAL',
     formConditions: ['signal', 'token'],
@@ -436,7 +436,6 @@ export const FORM = {
     minionType: MINION_TYPES.SAFE,
     tx: TX.SET_BUYOUT_TOKEN,
     required: ['selectedMinion', 'title', 'paymentRequested'],
-    dev: true,
     fields: [
       [
         { ...FIELD.MINION_SELECT, info: INFO_TEXT.BUYOUT_MINION },
@@ -450,7 +449,6 @@ export const FORM = {
   MINION_TRIBUTE: {
     id: 'MINION_TRIBUTE',
     title: 'NFT Tribute',
-    dev: true,
     subtitle: 'Offer NFT as Tribute',
     description:
       'Offer an NFT as tribute to the DAO. Optionally, offer or request some funds as well.',
