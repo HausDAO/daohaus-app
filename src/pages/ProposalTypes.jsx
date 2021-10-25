@@ -15,7 +15,7 @@ import { chainByID } from '../utils/chain';
 import { updateProposalConfig } from '../utils/metadata';
 
 const dev = process.env.REACT_APP_DEV;
-console.log(`dev`, dev);
+
 const orderPlaylistForms = playlists =>
   playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
 
@@ -35,10 +35,9 @@ const ProposalTypes = () => {
   const [selectedListID, setListID] = useState(
     dev && devList?.forms?.length ? 'dev' : 'all',
   );
-  console.log(`selectedListID`, selectedListID);
-  console.log(`daoProposals`, daoProposals);
-  const [loading, setLoading] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+  console.log(`daoProposals`, daoProposals);
   const selectList = id => {
     if (!id) return;
     if (id === selectedListID) {
