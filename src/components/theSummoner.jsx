@@ -11,17 +11,7 @@ import TextBox from './TextBox';
 
 import { ignoreAwaitStep } from '../utils/formBuilder';
 import { MINIONS } from '../data/minions';
-
-// Make avaiable across app
-const minionFromDaoOverview = ({ searchBy, daoOverview, searchParam }) => {
-  if (!daoOverview || !searchBy || !searchParam) return;
-  if (searchBy === 'type')
-    return daoOverview.minions?.filter(
-      minion => minion.minionType === searchParam,
-    );
-  if (searchBy === 'name')
-    return daoOverview.minions.find(minion => minion.details === searchParam);
-};
+import { minionFromDaoOverview } from '../utils/general';
 
 const MinionFound = props => {
   const { minionType = 'minion' } = props;
