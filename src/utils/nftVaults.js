@@ -21,15 +21,14 @@ const defaultConfig = {
       localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
       minionTypeOverride: true,
     },
-    // REVIEW: Should this be under nftConfigs or default config?
-    // sellRarible: {
-    //   menuLabel: 'Sell NFT on Rarible',
-    //   tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
-    //   modalName: 'sell721',
-    //   formLego: FORM.SELL_NFT_RARIBLE,
-    //   localValues: ['tokenId', 'contractAddress'],
-    //   minionTypeOverride: false,
-    // },
+    sellRarible: {
+      menuLabel: 'Sell NFT on Rarible',
+      tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
+      modalName: 'sell721',
+      formLego: FORM.SELL_NFT_RARIBLE,
+      localValues: ['tokenId', 'contractAddress'],
+      minionTypeOverride: false,
+    },
   },
 };
 
@@ -111,4 +110,30 @@ export const concatNftSearchData = nft => {
   return `${nft.name} ${nft.metadata?.name ? nft.metadata?.name : ''} ${
     nft.metadata?.description ? nft.metadata?.description : ''
   }`.toLowerCase();
+};
+
+export const filterUniqueNfts = (daoVaults, minionAddress = null) => {
+  return daoVaults
+    ?.reduce((acc, item) => {
+      const nftsWithMinionAddress = item.nfts.map(n => {
+        return {
+          ...n,
+          minionAddress: minionAddress || item.address,
+          minionType: item.minionType,
+        };
+      });
+      return [...acc, ...nftsWithMinionAddress];
+    }, [])
+    .reduce((acc, nft) => {
+      if (
+        !acc.find(
+          n =>
+            n.contractAddress === nft.contractAddress &&
+            n.tokenId === nft.tokenId,
+        )
+      ) {
+        acc = [...acc, nft];
+      }
+      return acc;
+    }, []);
 };

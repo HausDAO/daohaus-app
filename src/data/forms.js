@@ -385,16 +385,18 @@ export const FORM = {
     id: 'SELL_NFT_RARIBLE',
     title: 'Sell NFT on Rarible',
     description: 'Post an NFT for sale on Rarible',
-    type: PROPOSAL_TYPES.SELL_NFT,
+    type: PROPOSAL_TYPES.SELL_NFT_RARIBLE,
     minionType: MINION_TYPES.SAFE,
     tx: TX.SELL_NFT_RARIBLE,
-    required: ['selectedMinion', 'sellPrice', 'raribleNftData'],
+    required: ['selectedMinion', 'orderPrice', 'raribleNftData'],
     fields: [
       [FIELD.NFT_SELECT],
       [
-        FIELD.MINION_SELECT,
         FIELD.DATE_RANGE,
-        FIELD.SET_PRICE,
+        {
+          ...FIELD.SET_PRICE,
+          orderType: 'sell',
+        },
         FIELD.RARIBLE_NFT_DATA,
       ],
     ],
@@ -426,17 +428,60 @@ export const FORM = {
       ],
     ],
   },
-  MINION_BUYOUT_ERC721_TOKEN: {
-    id: 'MINION_BUYOUT_ERC721_TOKEN',
+  MINION_BUYOUT_TOKEN: {
+    id: 'MINION_BUYOUT_TOKEN',
     title: 'Buyout Proposal',
     description: 'Request funds as buyout',
     type: PROPOSAL_TYPES.MINION_BUYOUT,
     minionType: MINION_TYPES.SAFE,
-    tx: TX.SET_BUYOUT_NFT,
+    tx: TX.SET_BUYOUT_TOKEN,
     required: ['selectedMinion', 'title', 'paymentRequested'],
+    dev: true,
     fields: [
-      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [
+        { ...FIELD.MINION_SELECT, info: INFO_TEXT.BUYOUT_MINION },
+        FIELD.TITLE,
+        FIELD.DESCRIPTION,
+        FIELD.LINK,
+      ],
       [FIELD.BUYOUT_PAYMENT_REQUEST],
+    ],
+  },
+  MINION_TRIBUTE: {
+    id: 'MINION_TRIBUTE',
+    title: 'NFT Tribute',
+    dev: true,
+    subtitle: 'Offer NFT as Tribute',
+    description:
+      'Offer an NFT as tribute to the DAO. Optionally, offer or request some funds as well.',
+    type: PROPOSAL_TYPES.MINION_TRIBUTE,
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.OFFER_NFT_TRIBUTE,
+    required: [
+      'title',
+      'nftAddress',
+      'tokenId',
+      'selectedMinion',
+      'nftApproval',
+      'sharesRequested',
+      'lootRequested',
+      'paymentRequested',
+    ],
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.DESCRIPTION,
+        FIELD.LINK,
+        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
+      ],
+      [
+        FIELD.NFT_INPUT,
+        FIELD.NFT_APPROVAL,
+        FIELD.TOKEN_INFO_INPUT,
+        FIELD.SHARES_REQUEST,
+        FIELD.LOOT_REQUEST,
+        FIELD.PAYMENT_REQUEST,
+      ],
     ],
   },
   MINION_SELL_NIFTY: {
@@ -449,9 +494,31 @@ export const FORM = {
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
   NEW_SAFE_MINION: {
+    formConditions: ['easy', 'advanced'],
+    tx: {
+      type: 'formCondition',
+      easy: TX.SUMMON_MINION_AND_SAFE,
+      advanced: TX.SUMMON_MINION_SAFE,
+    },
+    // required: { // TODO: how to do required input validation dinamically
+    //   type: 'formCondition',
+    //   easy: ['minionName', 'minQuorum', 'saltNonce'],
+    //   advanced: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
+    // },
     required: ['minionName', 'minQuorum', 'saltNonce'],
-    tx: TX.SUMMON_MINION_AND_SAFE,
-    fields: [[FIELD.MINION_NAME, FIELD.MINION_QUORUM, FIELD.SALT_NONCE]],
+    fields: [
+      [
+        FIELD.SUMMON_MODE_SWITCH,
+        FIELD.MINION_NAME,
+        {
+          type: 'formCondition',
+          easy: null,
+          advanced: FIELD.ONLY_SAFE,
+        },
+        FIELD.MINION_QUORUM,
+        FIELD.SALT_NONCE,
+      ],
+    ],
   },
   NEW_SAFE_MINION_ADVANCED: {
     customValidations: ['noExistingSafeMinion'],
@@ -496,6 +563,38 @@ export const FORM = {
     fields: [
       [FIELD.NIFTY_INK_URL],
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
+    ],
+  },
+  BUY_NFT_RARIBLE: {
+    id: 'BUY_NFT_RARIBLE',
+    title: 'Buy an NFT on Rarible',
+    description:
+      'Make a proposal to bid on an NFT on Rarible using a Minion Safe Vault',
+    type: PROPOSAL_TYPES.BUY_NFT_RARIBLE,
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.BUY_NFT_RARIBLE,
+    required: [
+      'orderPrice',
+      'raribleNftData',
+      'selectedMinion',
+      'targetNft',
+      'title',
+    ],
+    fields: [
+      [FIELD.NFT_URI],
+      [
+        FIELD.MINION_SELECT,
+        {
+          ...FIELD.DESCRIPTION,
+          name: 'nftDescription',
+          htmlFor: 'nftDescription',
+        },
+        {
+          ...FIELD.SET_PRICE,
+          orderType: 'buy',
+        },
+        FIELD.RARIBLE_NFT_DATA,
+      ],
     ],
   },
   SUPERFLUID_STREAM: {

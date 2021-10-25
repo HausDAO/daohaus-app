@@ -1,5 +1,7 @@
 import { utils as Web3Utils } from 'web3';
 
+import { supportedChains } from './chain';
+
 const metadataApiUrl = 'https://data.daohaus.club';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
 const apiPricedataUrl =
@@ -157,7 +159,8 @@ export const postApiGnosis = async (
   data,
   getJSONResponse = true,
 ) => {
-  const url = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
+  const network = networkName === 'matic' ? 'polygon' : networkName;
+  const url = `https://safe-transaction.${network}.gnosis.io/api/v1/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -242,6 +245,27 @@ export const getSnapshotSpaces = async () => {
   try {
     const response = await fetch(snapshotSpacesUrl);
     return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getRaribleApi = async (daochain, endpoint) => {
+  const url = `${supportedChains[daochain].rarible.api_url}/${endpoint}`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (data.status && data.code) {
+      throw new Error(
+        `An error occurred while calling Rarible GET (${endpoint}) API (${data.code}): ${data.message}`,
+      );
+    }
+    return data;
   } catch (err) {
     throw new Error(err);
   }

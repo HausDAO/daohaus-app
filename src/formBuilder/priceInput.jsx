@@ -5,6 +5,7 @@ import { Flex, Icon, Text } from '@chakra-ui/react';
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
 import { handleDecimals } from '../utils/general';
+import { addZeros } from '../utils/tokenValue';
 
 const getMaxBalance = (tokenData, tokenAddress) => {
   //  Uses token select data structure
@@ -15,17 +16,91 @@ const getMaxBalance = (tokenData, tokenAddress) => {
   }
 };
 
+const SellOrderFees = ({ orderPrice, serviceFeePercentage, tokenName }) => {
+  return (
+    <Flex align='center'>
+      <Icon m={2} as={RiInformationLine} />
+      <Text fontSize='xs'>
+        Service fee <b>{`${serviceFeePercentage}%`}</b>
+        <br />
+        You will receive{' '}
+        <b>
+          {orderPrice
+            ? Number(orderPrice) * (1 - serviceFeePercentage / 100)
+            : 0}{' '}
+          {tokenName}
+        </b>
+      </Text>
+    </Flex>
+  );
+};
+
+const BuyOrderFees = ({
+  orderPrice,
+  originFeePercentage = 0,
+  protocolFeePercentage = 0,
+  tokenName,
+}) => {
+  const totalFees = protocolFeePercentage + originFeePercentage;
+  return (
+    <Flex align='center'>
+      <Icon m={2} as={RiInformationLine} />
+      <Text fontSize='xs'>
+        Buy Fees: Protocol (<b>{`${protocolFeePercentage}`}%</b>) + Origin (
+        <b>{`${originFeePercentage}`}%</b>) Fees
+        <br />
+        You will pay{' '}
+        <b>
+          {orderPrice ? Number(orderPrice) * (1 + totalFees / 100) : 0}{' '}
+          {tokenName}
+        </b>
+      </Text>
+    </Flex>
+  );
+};
+
 const PriceInput = props => {
   const { daoOverview } = useDao();
-  const { localForm } = props;
-  const { getValues, watch } = localForm;
+  const { localForm, orderType } = props;
+  const { getValues, register, setValue, watch } = localForm;
 
   const [tokenName, setTokenName] = useState();
   const [daoTokens, setDaoTokens] = useState([]);
   const [, setBalance] = useState(null);
 
   const paymentToken = watch('paymentToken');
-  const sellPrice = watch('sellPrice');
+  const orderPrice = watch('orderPrice');
+
+  // TODO: get fees from protocol contracts
+  const protocolFeePerc = 0;
+  const originFeePerc = 0;
+  const serviceFeePerc = 2.5;
+
+  useEffect(() => {
+    register('market');
+    register('orderType');
+    register('totalOrderPrice');
+    setValue('market', 'Rarible');
+    setValue('orderType', orderType || 'sell');
+  }, []);
+
+  useEffect(() => {
+    const currentToken = daoOverview.tokenBalances.find(token => {
+      return token.token.tokenAddress === paymentToken;
+    });
+    if (currentToken && orderPrice) {
+      const finalOrderPrice = addZeros(
+        orderType === 'buy'
+          ? (() => {
+              const totalFees = protocolFeePerc + originFeePerc;
+              return Number(orderPrice) * (1 + totalFees / 100);
+            })()
+          : orderPrice,
+        currentToken.token.decimals,
+      );
+      setValue('totalOrderPrice', finalOrderPrice);
+    }
+  }, [orderPrice, paymentToken]);
 
   useEffect(() => {
     if (daoOverview) {
@@ -66,17 +141,21 @@ const PriceInput = props => {
   return (
     <>
       <InputSelect {...props} selectName='paymentToken' options={daoTokens} />
-      <Flex align='center'>
-        <Icon m={2} as={RiInformationLine} />
-        <Text fontSize='xs'>
-          Service fee <b>2.5%</b>
-          <br />
-          You will receive{' '}
-          <b>
-            {sellPrice ? +sellPrice * 0.975 : 0} {tokenName}
-          </b>
-        </Text>
-      </Flex>
+      {(!orderType || orderType === 'sell') && (
+        <SellOrderFees
+          serviceFeePercentage={serviceFeePerc}
+          orderPrice={orderPrice}
+          tokenName={tokenName}
+        />
+      )}
+      {orderType === 'buy' && (
+        <BuyOrderFees
+          orderPrice={orderPrice}
+          originFeePercentage={originFeePerc}
+          protocolFeePercentage={protocolFeePerc}
+          tokenName={tokenName}
+        />
+      )}
     </>
   );
 };

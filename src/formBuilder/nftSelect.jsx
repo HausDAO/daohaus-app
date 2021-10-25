@@ -17,10 +17,11 @@ import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import FieldWrapper from './fieldWrapper';
 import GenericModal from '../modals/genericModal';
+import { filterUniqueNfts } from '../utils/nftVaults';
 
 const NftSelect = props => {
   const { label, localForm, htmlFor, name, localValues } = props;
-  const { register, setValue, watch } = localForm;
+  const { register, setValue } = localForm;
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
@@ -29,13 +30,14 @@ const NftSelect = props => {
   const [collections, setCollections] = useState();
   const [filter, setFilter] = useState();
 
-  const selectedMinion = watch('selectedMinion');
-
   useEffect(() => {
     register('tokenId');
     register('tokenBalance');
     register('raribleDescription');
     register('image');
+    register('nftType');
+    register('selectedMinion');
+    register('selectedSafeAddress');
   }, []);
 
   useEffect(() => {
@@ -53,7 +55,7 @@ const NftSelect = props => {
 
   useEffect(() => {
     if (daoVaults) {
-      const data = daoVaults.reduce((acc, item) => [...acc, ...item.nfts], []);
+      const data = filterUniqueNfts(daoVaults, localValues?.minionAddress);
       setNftData(data);
       setNfts(data);
     }
@@ -90,11 +92,14 @@ const NftSelect = props => {
         // selected.metadata?.image_url || selected.metadata?.image,
         selected.image,
       );
+      setValue('nftType', selected.type.replace('-', ''));
+      setValue('selectedMinion', selected.minionAddress);
+      setValue('selectedSafeAddress', selected.safeAddress);
     };
-    if (selected && selectedMinion) {
+    if (selected) {
       setUpNftValues();
     }
-  }, [selected, selectedMinion]);
+  }, [selected]);
 
   useEffect(() => {
     if (
@@ -104,11 +109,11 @@ const NftSelect = props => {
       nfts
     ) {
       setSelected(
-        nfts.filter(
+        nfts.find(
           item =>
             item.tokenId === localValues.tokenId &&
             item.contractAddess === localValues.contractAddess,
-        )[0],
+        ),
       );
     }
   }, [localValues, nfts]);

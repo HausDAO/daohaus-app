@@ -59,6 +59,12 @@ const baseListFields = `
     createdAt
     molochAddress
   }
+  escrow {
+    tokenAddresses
+    tokenTypes
+    tokenIds
+    amounts
+  }
   `;
 
 export const PROPOSALS_LIST = gql`

@@ -8,7 +8,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
 import PlaylistSelector from '../components/playlistSelector';
-import ProposalList from '../components/formList';
+import FormList from '../components/formList';
 import SaveButton from '../components/saveButton';
 import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
@@ -140,7 +140,7 @@ const ProposalTypes = () => {
               editPlaylist={editPlaylist}
               devList={devList}
             />
-            <ProposalList
+            <FormList
               playlists={playlists}
               customData={customData}
               selectedListID={selectedListID}

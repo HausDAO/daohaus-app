@@ -1,4 +1,4 @@
-import { BOOST_PLAYLISTS } from '../utils/playlists';
+import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { BOOST_FORMS, CORE_FORMS } from './forms';
 import { MINIONS } from './minions';
@@ -18,7 +18,7 @@ export const CONTENT = {
     ],
   },
   OLD_DEV_SUITE: {
-    title: 'Basic Minion DEV Suite',
+    title: 'Minion DEV Suite v1 (Vanilla Minion)',
     description:
       'Enable one-time interactions with other smart contracts via DAO proposals.',
     publisher: PUBLISHERS.DAOHAUS,
@@ -32,8 +32,22 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  NIFTY_DEV_SUITE: {
+    title: 'Minion DEV Suite v2 (Nifty Minion)',
+    description:
+      'Enable one-time interactions with other smart contracts via DAO proposals with early execution capabilites.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.00',
+    pars: [
+      'The V2 Minion is similar to the vanilla minion with the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met',
+      'Also know as a Nifty Minion',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   SAFE_DEV_SUITE: {
-    title: 'Safe Minion DEV Suite',
+    title: 'Minion DEV Suite v3 (Safe Minion)',
     description:
       'Enable interactions with other smart contracts from your Safe Minion/Gnosis Safe vault via DAO proposals.',
     publisher: PUBLISHERS.DAOHAUS,
@@ -42,20 +56,6 @@ export const CONTENT = {
       'Deploying a Minion and a Gnosis Safe, this Boost enables your DAO to manage funds in a Gnosis Safe, as well as do complex multi-call transactions via the Minion.',
       'This Boost is perfect for advanced DAOs looking to trade NFTs, manage LP positions in AMMs or do other arbitrary transactions',
       'To increase proposal velocity for less critical proposals, the ability to set quorum levels enable early execution when a minimum quorum is met.',
-    ],
-    externalLinks: [
-      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
-    ],
-  },
-  NIFTY_DEV_SUITE: {
-    title: 'Advanced Minion DEV Suite',
-    description:
-      'Enable one-time interactions with other smart contracts via DAO proposals with early execution capabilites.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '1.00',
-    pars: [
-      'The Advanced Minion is similar to the vanilla minion with the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met',
-      'Also know as a Nifty Minion',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
@@ -150,18 +150,49 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-  // RARIBLE: {
-  //   title: 'Rarible',
-  //   description: 'Buy and sell NFTs on Rarible from your DAO.',
-  //   publisher: PUBLISHERS.DAOHAUS,
-  //   version: '1.0',
-  //   pars: [
-  //     'This boost helps your DAO create NFT sell and buy orders on the Rarible marketplace.',
-  //   ],
-  //   externalLinks: [
-  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
-  //   ],
-  // },
+  RARIBLE: {
+    title: 'Rarible Boost',
+    description: 'Buy and sell NFTs on Rarible.',
+    publisher: PUBLISHERS.BOOST_FOUNDRY,
+    version: '1.0',
+    pars: [
+      'Does your DAO collect, trade or manage NFTs?',
+      'This Rarible Boost enables your DAO to buy and sell NFTs directly through a DAOhaus proposal.',
+      'Once a proposal is passed, the trade will execute via our integration with Rarible.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
+  NFT_TRIBUTE: {
+    title: 'NFT Tribute Boost',
+    description:
+      'Enable new members to tribute NFTs for Funds, Shares and Loot.',
+    publisher: PUBLISHERS.BOOST_FOUNDRY,
+    version: '1.0',
+    pars: [
+      'Does your DAO collect NFTs? This Boost empowers your DAO to accept NFT tributes from new DAO members.',
+      'In exchange for the NFTs tributes, members are able to request Shares, Funds and Loot all within 1 transaction, making it seamless to recruit more collectors into your DAO.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
+  BANK_BUYOUT: {
+    title: 'Bank Buyout Boost',
+    description:
+      'Set aside Bank assets for Ragequit members to account for their share of Minion Vaults.',
+    publisher: PUBLISHERS.BOOST_FOUNDRY,
+    version: '1.0',
+    pars: [
+      'Does your DAO use Minions? If yes, your DAO’s assets are likely to be siloed into different Minion Vaults, creating issues when calculating RageQuit amounts.',
+      'This Boost helps calculate a RageQuit members’ pro-rated share from the Bank for the DAO’s approval.',
+      'Once the proposal is passed, the funds are set aside for incoming Rage Quits, ensuring that the RageQuit process is fair and efficient.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   // SNAPSHOT: {
   //   title: 'Snapshot Proposals',
   //   description:
@@ -236,7 +267,7 @@ export const STEPS = {
     },
     STEP2: COMMON_STEPS.SIGNER,
   },
-  ADD_MINTGATE: {
+  BASIC_BOOST: {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: COMMON_STEPS.SIGNER,
   },
@@ -296,15 +327,50 @@ export const BOOSTS = {
   },
   // RARIBLE: {
   //   id: 'RARIBLE',
-  //   minionData: MINIONS[MINION_TYPES.NEAPOLITAN],
-  //   steps: STEPS.MINION_BOOST,
   //   boostContent: CONTENT.RARIBLE,
+  //   minionData: MINIONS[MINION_TYPES.SAFE],
   //   categories: ['nft'],
-  //   networks: { '0x4': true },
+  //   steps: STEPS.MINION_BOOST,
   //   playlist: BOOST_PLAYLISTS.RARIBLE,
+  //   networks: { '0x4': true },
+  //   // networks: { '0x4': true, '0x1': true },
   //   cost: 'free',
   //   settings: 'none',
   // },
+  NFT_TRIBUTE: {
+    id: 'NFT_TRIBUTE',
+    boostContent: CONTENT.NFT_TRIBUTE,
+    categories: ['nft', 'membership'],
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    steps: STEPS.MINION_BOOST,
+    playlist: BOOST_PLAYLISTS.NFT_TRIBUTE,
+    networks: {
+      '0x4': true,
+      '0x1': false,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+    },
+    cost: 'free',
+    settings: 'none',
+  },
+  BANK_BUYOUT: {
+    id: 'BANK_BUYOUT',
+    boostContent: CONTENT.BANK_BUYOUT,
+    categories: ['nft', 'membership'],
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    steps: STEPS.MINION_BOOST,
+    playlist: BOOST_PLAYLISTS.BANK_BUYOUT,
+    networks: {
+      '0x4': true,
+      '0x1': true,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+    },
+    cost: 'free',
+    settings: 'none',
+  },
   NIFTY_INK: {
     id: 'NIFTY_INK',
     boostContent: CONTENT.NIFTY_INK,
@@ -342,7 +408,7 @@ export const BOOSTS = {
   },
   MINTGATE: {
     id: 'MINTGATE',
-    steps: STEPS.ADD_MINTGATE,
+    steps: STEPS.BASIC_BOOST,
     boostContent: CONTENT.MINTGATE,
     categories: ['community'],
     networks: 'all',
@@ -392,8 +458,7 @@ const categoryStarter = [
   { name: 'Governance', id: 'governance' },
   { name: 'NFTs', id: 'nft' },
   { name: 'Dev Tools', id: 'devTools' },
-  // TODO: future categories
-  // { name: 'Membership', id: 'membership' },
+  { name: 'Membership', id: 'membership' },
   // { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({

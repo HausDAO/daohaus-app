@@ -93,7 +93,7 @@ export const formatNativeData = (daochain, balance) => {
 const tokenFormsString = {
   erc20: 'MINION_SEND_ERC20_TOKEN',
   erc721: 'MINION_SEND_ERC721_TOKEN',
-  erc1155: 'MINION_SEND_ERC155_TOKEN',
+  erc1155: 'MINION_SEND_ERC1155_TOKEN',
   network: 'MINION_SEND_NETWORK_TOKEN',
   sellNifty: 'MINION_SELL_NIFTY',
 };
