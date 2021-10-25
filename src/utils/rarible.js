@@ -226,7 +226,8 @@ export const fetchNftMeta = async (daochain, itemId) => {
 
 export const fetchLazyNftMeta = async (daochain, itemId) => {
   try {
-    return getRaribleApi(daochain, `nft/items/${itemId}/lazy`);
+    const lazyMeta = await getRaribleApi(daochain, `nft/items/${itemId}/lazy`);
+    return lazyMeta;
   } catch (error) {
     console.error(error);
   }

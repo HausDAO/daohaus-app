@@ -17,6 +17,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import FieldWrapper from './fieldWrapper';
 import GenericModal from '../modals/genericModal';
+import { filterUniqueNfts } from '../utils/nftVaults';
 
 const NftSelect = props => {
   const { label, localForm, htmlFor, name, localValues } = props;
@@ -54,17 +55,7 @@ const NftSelect = props => {
 
   useEffect(() => {
     if (daoVaults) {
-      const data = daoVaults.reduce(
-        (acc, item) => [
-          ...acc,
-          ...item.nfts.map(nft => ({
-            ...nft,
-            minionAddress: item.address,
-            safeAddress: item.safeAddress,
-          })),
-        ],
-        [],
-      );
+      const data = filterUniqueNfts(daoVaults, localValues?.minionAddress);
       setNftData(data);
       setNfts(data);
     }
