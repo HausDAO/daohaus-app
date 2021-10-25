@@ -67,7 +67,7 @@ const NiftyInkUrl = props => {
         setValue('targetInk', '');
       }
     };
-    if (targetInk) {
+    if (targetInk && daochain && injectedProvider) {
       getNiftyData();
     }
   }, [targetInk, daochain, injectedProvider]);
