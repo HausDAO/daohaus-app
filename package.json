@@ -63,7 +63,8 @@
     "test": "craco test",
     "eject": "craco eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "format": "prettier --config ./.prettierrc --write \"**/*.{js,json,md,sol,ts}\""
   },
   "browserslist": {
     "production": [
@@ -92,7 +93,7 @@
     "@storybook/react": "^6.2.8",
     "@storybook/theming": "^6.1.20",
     "@types/deep-equal": "^1.0.1",
-    "babel-loader": "8.1.0",
+    "babel-loader": "8.2.2",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-standard": "^14.1.0",

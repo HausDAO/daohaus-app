@@ -14,6 +14,16 @@ module.exports = {
           process: require.resolve('process/browser'),
         },
       },
+      module: {
+        rules: [
+          {
+            test: /\.m?js$/,
+            resolve: {
+              fullySpecified: false, // disable the behaviour
+            },
+          },
+        ],
+      },
     },
     plugins: {
       add: [
