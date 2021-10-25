@@ -37,7 +37,7 @@ const ProposalTypes = () => {
   );
 
   const [loading, setLoading] = useState(false);
-  console.log(`daoProposals`, daoProposals);
+
   const selectList = id => {
     if (!id) return;
     if (id === selectedListID) {

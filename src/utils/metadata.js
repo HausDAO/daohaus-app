@@ -359,7 +359,7 @@ export const getNftMeta = async url => {
   }
 };
 
-export const updateProposalConfig = async (proposalConfig, params) => {
+export const updateProposalConfig = async (daoProposals, params) => {
   const {
     meta,
     injectedProvider,
@@ -369,6 +369,8 @@ export const updateProposalConfig = async (proposalConfig, params) => {
     onSuccess,
   } = params;
 
+  const proposalConfig = omit(['devList'], daoProposals);
+  console.log(`proposalConfig`, proposalConfig);
   if (!meta || !injectedProvider || !proposalConfig || !network)
     throw new Error('proposalConfig => handlePostNewConfig');
   try {
@@ -405,6 +407,8 @@ export const addBoost = async ({
   onSuccess,
   onError,
 }) => {
+  const propConfig = omit(['devList'], proposalConfig);
+  console.log(`propConfig`, propConfig);
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
 
@@ -422,11 +426,8 @@ export const addBoost = async ({
       signature,
     };
 
-    if (proposalConfig) {
-      const newPropConfig = addBoostPlaylist(
-        proposalConfig,
-        boostData.playlist,
-      );
+    if (propConfig) {
+      const newPropConfig = addBoostPlaylist(propConfig, boostData.playlist);
       updateData.proposalConfig = newPropConfig;
     }
 
