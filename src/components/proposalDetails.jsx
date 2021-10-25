@@ -144,7 +144,7 @@ const ProposalDetails = ({
                 </TextBox>
                 <TextBox size='xs'>
                   Type:{' '}
-                  {proposal.escrow.tokenTypes[0] === 1 ? 'ERC721' : 'ERC1155'}
+                  {proposal.escrow.tokenTypes[0] === '1' ? 'ERC721' : 'ERC1155'}
                 </TextBox>
                 <TextBox size='xs'>
                   Address: {proposal.escrow.tokenAddresses[0]}
