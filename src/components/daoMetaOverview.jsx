@@ -41,7 +41,7 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
           </Flex>
           <Flex mt={5}>{daoMetaData.description}</Flex>
           <Flex mt={5}>{daoMetaData.purpose}</Flex>
-          {daoMetaData.tags ? (
+          {daoMetaData.tags && (
             <>
               <Flex mt={5}>
                 <Stack direction='row'>
@@ -51,54 +51,55 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                 </Stack>
               </Flex>
             </>
-          ) : null}
+          )}
           {daoConnectedAndSameChain(
             address,
             daochain,
             injectedChain?.chainId,
-          ) && +daoMember?.shares > 0 ? (
-            <>
-              <Link
-                as={RouterLink}
-                color='secondary.500'
-                fontFamily='heading'
-                fontSize='xs'
-                textTransform='uppercase'
-                letterSpacing='0.15em'
-                to={`/dao/${daochain}/${daoid}/settings/meta`}
-                mt={5}
-                mb={3}
-              >
-                Edit Metadata
-              </Link>
-              <Link
-                as={RouterLink}
-                color='secondary.500'
-                fontFamily='heading'
-                fontSize='xs'
-                textTransform='uppercase'
-                letterSpacing='0.15em'
-                to={`/dao/${daochain}/${daoid}/settings/theme`}
-                mb={3}
-              >
-                Edit Custom Theme
-              </Link>
-              <Link
-                as={RouterLink}
-                color='secondary.500'
-                fontFamily='heading'
-                fontSize='xs'
-                textTransform='uppercase'
-                letterSpacing='0.15em'
-                to={`/dao/${daochain}/${daoid}/settings/audit`}
-              >
-                View Metadata Edit Log
-              </Link>
-            </>
-          ) : null}
+          ) &&
+            +daoMember?.shares > 0 && (
+              <>
+                <Link
+                  as={RouterLink}
+                  color='secondary.500'
+                  fontFamily='heading'
+                  fontSize='xs'
+                  textTransform='uppercase'
+                  letterSpacing='0.15em'
+                  to={`/dao/${daochain}/${daoid}/settings/meta`}
+                  mt={5}
+                  mb={3}
+                >
+                  Edit Metadata
+                </Link>
+                <Link
+                  as={RouterLink}
+                  color='secondary.500'
+                  fontFamily='heading'
+                  fontSize='xs'
+                  textTransform='uppercase'
+                  letterSpacing='0.15em'
+                  to={`/dao/${daochain}/${daoid}/settings/theme`}
+                  mb={3}
+                >
+                  Edit Custom Theme
+                </Link>
+                <Link
+                  as={RouterLink}
+                  color='secondary.500'
+                  fontFamily='heading'
+                  fontSize='xs'
+                  textTransform='uppercase'
+                  letterSpacing='0.15em'
+                  to={`/dao/${daochain}/${daoid}/settings/audit`}
+                >
+                  View Metadata Edit Log
+                </Link>
+              </>
+            )}
           {daoMetaData.name && (
             <Flex mt={3}>
-              {daoMetaData.links?.website ? (
+              {daoMetaData.links?.website && (
                 <Link
                   href={daoMetaData.links.website}
                   target='_blank'
@@ -113,8 +114,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.discord ? (
+              )}
+              {daoMetaData.links?.discord && (
                 <Link
                   href={fixSocialLink('discord', daoMetaData.links.discord)}
                   target='_blank'
@@ -128,8 +129,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.telegram ? (
+              )}
+              {daoMetaData.links?.telegram && (
                 <Link
                   href={fixSocialLink('telegram', daoMetaData.links.telegram)}
                   target='_blank'
@@ -143,8 +144,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.twitter ? (
+              )}
+              {daoMetaData.links?.twitter && (
                 <Link
                   href={fixSocialLink('twitter', daoMetaData.links.twitter)}
                   target='_blank'
@@ -158,8 +159,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.medium ? (
+              )}
+              {daoMetaData.links?.medium && (
                 <Link
                   href={fixSocialLink('medium', daoMetaData.links.medium)}
                   target='_blank'
@@ -173,9 +174,9 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
+              )}
 
-              {daoMetaData.links?.other ? (
+              {daoMetaData.links?.other && (
                 <Link
                   href={daoMetaData.links.other}
                   target='_blank'
@@ -189,7 +190,7 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
+              )}
             </Flex>
           )}
         </>

@@ -1,7 +1,11 @@
 import { BOOSTS } from '../data/boosts';
 import { capitalize, omit } from './general';
 import { chainByNetworkId } from './chain';
-import { addBoostPlaylist, checkIsPlaylist, hasPlaylist } from './playlists';
+import {
+  addBoostPlaylist,
+  checkIsPlaylist,
+  hasPlaylist,
+} from '../data/playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 const ccoApiUrl = 'https://cco.daohaus.club';
