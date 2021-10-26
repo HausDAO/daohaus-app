@@ -45,7 +45,7 @@ const indicatorStates = {
 const MultiTXForm = props => {
   const { forms, logValues } = props;
   const parentForm = useForm();
-  const { watch, register, setValue, errors } = parentForm;
+  const { watch, register, setValue } = parentForm;
   const values = watch();
   const templateTXForm = forms[1];
 
@@ -56,8 +56,6 @@ const MultiTXForm = props => {
   useEffect(() => {
     if (logValues && dev && values) {
       console.log(`values`, values);
-      console.log(`errors`, errors);
-      console.log(`parentForm`, parentForm);
     }
   }, [values]);
 

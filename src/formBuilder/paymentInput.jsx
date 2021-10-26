@@ -85,9 +85,10 @@ const PaymentInput = props => {
     setValueAs: value => getContractBalance(value, token?.decimals),
     validate: {
       hasBalance: value =>
-        getContractBalance(value, token?.decimals) <= Number(token?.balance)
+        Number(getContractBalance(value, token?.decimals)) <=
+        Number(token?.balance)
           ? true
-          : 'Not enough balance in DAO treasury',
+          : 'Not enough balance in Wallet',
     },
   });
 

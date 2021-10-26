@@ -87,42 +87,6 @@ const buildJSONdetails = (data, fields) => {
   return JSON.stringify(cleanValues);
 };
 
-// const testValues = {
-//   '0*TX*abiInput':
-//     '{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"tokens","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}',
-//   '0*TX*spender*ABI_ARG*0': '0xfab5ed5f6818f94559a7189e97c79458da569e4c',
-//   '0*TX*targetContract': '0xE6421E9aF92aca6a81C9fD0BAbacE4a9c5691c60',
-//   '0*TX*tokens*ABI_ARG*1': '3',
-//   '1*TX*abiInput':
-//     '{"constant":false,"inputs":[{"name":"token","type":"address"},{"name":"recipients","type":"address[]"},{"name":"values","type":"uint256[]"}],"name":"disperseToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}',
-//   '1*TX*recipients*ABI_ARG*1*MULTI*0':
-//     '0xDE6bcde54CF040088607199FC541f013bA53C21E',
-//   '1*TX*recipients*ABI_ARG*1*MULTI*1':
-//     '0x57abda4ee50Bb3079A556C878b2c345310057569',
-//   '1*TX*targetContract': '0xD152f549545093347A162Dce210e7293f1452150',
-//   '1*TX*token*ABI_ARG*0': '0xE6421E9aF92aca6a81C9fD0BAbacE4a9c5691c60',
-//   '1*TX*values*ABI_ARG*2*MULTI*0': '2',
-//   '1*TX*values*ABI_ARG*2*MULTI*1': '1',
-//   description: 'This is a description',
-//   link: 'www.google.com',
-//   selectedMinion: '0x992fcdda64e9d02de3725a5acba5299149eecf62',
-//   title: 'Title',
-//   txIDs: [
-//     '666e2d13-866d-4d39-8b2b-78c426c40fa1',
-//     '31572f49-5a69-4a48-b6cf-f322eea40d4c',
-//   ],
-// };
-
-const groupTxData = (values, txFlag) => {
-  return Object.entries(values).reduce((obj, [key, value]) => {
-    if (key.includes(txFlag)) {
-      const splitKey = key.split('*TX*');
-      return { ...obj, [splitKey[1]]: value };
-    }
-    return obj;
-  }, {});
-};
-
 const getMultiSendFn = () => {
   return getABIsnippet({
     contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
@@ -139,19 +103,12 @@ const encodeMulti = encodedTXs => {
 };
 
 const collapseToCallData = values =>
-  values.txIDs.map((id, index) => {
-    const txFlag = `${index}*TX*`;
-    const groupedTxData = groupTxData(values, txFlag);
-    const abiArgs = collapse(groupedTxData, '*ABI_ARG*', 'array');
-    const to = groupedTxData.targetContract;
-    const data = safeEncodeHexFunction(
-      JSON.parse(groupedTxData.abiInput),
-      Array.isArray(abiArgs) ? abiArgs : [],
-    );
-    const value = values.minionValue || '0';
-    const operation = 0;
-    return { to, data, value, operation };
-  });
+  values.TX.map(tx => ({
+    to: tx.targetContract,
+    data: safeEncodeHexFunction(JSON.parse(tx.abiInput), tx.abiArgs),
+    value: tx.minionValue || '0',
+    operation: tx.operation || '0',
+  }));
 
 // console.log(
 //   'TEST',
@@ -241,8 +198,6 @@ const argBuilderCallback = Object.freeze({
 
 export const handleSearch = (data, arg, shouldThrow) => {
   const path = getPath(arg);
-  console.log(`path`, path);
-  console.log(`data`, data);
   if (!path.length)
     throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
   return searchData(data, path, shouldThrow);

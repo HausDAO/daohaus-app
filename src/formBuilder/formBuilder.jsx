@@ -10,7 +10,6 @@ import {
   checkConditionalTx,
   createRegisterOptions,
   inputDataFromABI,
-  mapInRequired,
 } from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
