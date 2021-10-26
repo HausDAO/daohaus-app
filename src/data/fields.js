@@ -236,6 +236,7 @@ export const FIELD = {
     type: 'nftApproval',
     htmlFor: 'nftApproval',
     name: 'nftApproval',
+    label: 'NFT Approval',
     expectType: 'boolean',
   },
   DATE_RANGE: {
