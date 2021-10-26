@@ -18,7 +18,7 @@ const dev = process.env.REACT_APP_DEV;
 const FormBuilder = props => {
   const {
     submitTransaction,
-    // handleCustomValidation,
+    handleCustomValidation,
     // modifyFields,
     submitCallback,
   } = useTX();
@@ -32,18 +32,19 @@ const FormBuilder = props => {
     goToNext,
     handleThen,
     ctaText,
-    footer,
+    footer = true,
     secondaryBtn,
     formConditions,
     setParentFields,
     indicatorStates,
     txID,
+    logValues,
   } = props;
 
   const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(null);
-  const [formErrors] = useState({});
+  const [formErrors, setFormErrors] = useState([]);
 
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
@@ -53,9 +54,8 @@ const FormBuilder = props => {
   console.log(`required`, required);
 
   useEffect(() => {
-    if (dev && values) {
-      // console.log(`values`, values);
-      // console.log('errors', errors);
+    if (dev && values && logValues) {
+      console.log(`values`, values);
     }
   }, [values, errors]);
 
@@ -75,107 +75,42 @@ const FormBuilder = props => {
 
   const buildABIOptions = (abiString, serialTag = false) => {
     if (!abiString || typeof abiString !== 'string') return;
-    const originalFields = mapInRequired(fields, required);
+
     if (abiString === 'clear' || abiString === 'hex') {
       if (setParentFields) {
-        setParentFields(txID, originalFields);
+        setParentFields(txID, fields);
       } else {
-        setFields(originalFields);
+        setFields(fields);
       }
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
       if (setParentFields) {
         setParentFields(txID, [
-          originalFields[0],
+          fields[0],
           inputDataFromABI(abiInputs, serialTag),
         ]);
       } else {
         const updatedFields = [
-          ...originalFields[originalFields.length - 1],
+          ...fields[fields.length - 1],
           ...inputDataFromABI(abiInputs, serialTag),
         ];
         const payload =
-          originalFields.length > 1
-            ? [originalFields[0], updatedFields]
-            : [updatedFields];
-
+          fields.length > 1 ? [fields[0], updatedFields] : [updatedFields];
         setFields(payload);
       }
     }
   };
 
-  // const updateErrors = errors => {
-  //   // REVIEW
-  //   setFields(prevFields => {
-  //     const update = field => {
-  //       // TODO: how to handle validation errors on fields within formCondition and checkGate input types
-  //       if (Array.isArray(field)) {
-  //         return field.map(update);
-  //       }
-  //       const error = errors.find(error => error.name === field.name);
-  //       return { ...field, error };
-  //     };
-  //     return prevFields.map(update);
-  //   });
-  // };
-  // const clearErrors = () => {
-  //   // REVIEW
-  //   setFields(prevFields => {
-  //     const clear = f =>
-  //       Array.isArray(f) ? f.map(clear) : { ...f, error: false };
-  //     return prevFields.map(clear);
-  //   });
-  // };
-
   const onSubmit = async values => {
-    // clearErrors();
+    const customValErrors = handleCustomValidation({
+      values,
+      formData: props,
+    });
 
-    //  Checks for required values
-    // TODO: how to handle required values from inputs within formCondition & checkGate
-    // const missingVals = validateRequired(
-    //   values,
-    //   // REVIEW
-    //   // formFields.filter(field => field.required),
-    //   formFields.flat(Infinity).filter(field => field.required),
-    // );
-
-    // if (missingVals) {
-    //   console.log('missingVals', missingVals);
-    //   updateErrors(missingVals);
-    //   return;
-    // }
-
-    //  Checks for type errors
-    // REVIEW
-    // const typeErrors = checkFormTypes(values, formFields);
-    // const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
-    // if (typeErrors) {
-    //   console.log('typeErrors', typeErrors);
-    //   updateErrors(typeErrors);
-    //   return;
-    // }
-    // const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-
-    // const modifiedValues = modifyFields({
-    //   values,
-    //   // REVIEW
-    //   // activeFields: formFields,
-    //   activeFields: formFields.flat(Infinity),
-    //   formData: props,
-    //   tx: props.tx,
-    // });
-    //  Checks for custom validation
-
-    // const customValErrors = handleCustomValidation({
-    //   values: modifiedValues,
-    //   formData: props,
-    // });
-
-    // if (customValErrors) {
-    //   console.log('customValErrors', customValErrors);
-    //   updateErrors(customValErrors);
-    //   return;
-    // }
+    if (customValErrors) {
+      setFormErrors(customValErrors);
+      return;
+    }
 
     const handleSubmitCallback = async () => {
       //  checks if submit is not a contract interaction and is a callback
@@ -259,7 +194,6 @@ const FormBuilder = props => {
         <InputFactory
           {...field}
           key={`${depth}-${index}`}
-          // registerOptions={{}}
           registerOptions={createRegisterOptions(field, required)}
           required={required}
           errors={errors}

@@ -42,60 +42,6 @@ export const validate = {
   },
 };
 
-export const checkFormTypes = (values, fields) => {
-  if (!values || !fields) {
-    throw new Error(
-      `Did not receive truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,
-    );
-  }
-  const errors = fields.reduce((arr, field) => {
-    const inputVal = values[field.name];
-    //  check if empty
-    if (inputVal === '' || field.expectType === 'any' || !field.expectType) {
-      return arr;
-    }
-    const isValid = validate[field.expectType];
-    if (typeof isValid !== 'function') {
-      console.log(field);
-      throw new Error(`Could not find validator function ${field.expectType}`);
-    }
-    if (!isValid(inputVal)) {
-      return [
-        ...arr,
-        { message: TYPE_ERR_MSGS[field.expectType], name: field.name },
-      ];
-    }
-    return arr;
-  }, []);
-  console.log(`errors`, errors);
-  if (!errors.length) {
-    return false;
-  }
-  return errors;
-};
-
-export const validateRequired = (values, required) => {
-  //  takes in array of required fields
-  if (!values || !required?.length) return;
-  const errors = required.reduce((arr, field) => {
-    if (!values[field.name]) {
-      return [
-        ...arr,
-        {
-          message: `${field.label} is required.`,
-          name: field.name,
-        },
-      ];
-    }
-    return arr;
-  }, []);
-
-  if (!errors.length) {
-    return false;
-  }
-  return errors;
-};
-
 export const customValidations = {
   nonDaoApplicant({ appState, values }) {
     const { apiData } = appState;

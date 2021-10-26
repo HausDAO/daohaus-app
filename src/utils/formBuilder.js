@@ -107,7 +107,11 @@ export const inputDataFromABI = (inputs, serialTag) => {
       htmlFor: fieldName,
       placeholder: isMulti ? input.type : labels[localType],
       expectType: isMulti ? 'any' : getType(localType),
-      required: false,
+      registerOptions: {
+        required: `${
+          serialTag ? input.name : fieldName
+        } is a required contract argument`,
+      },
     };
   });
 };
@@ -257,7 +261,8 @@ export const createRegisterOptions = (field, required = []) =>
     handleType(field),
     handleMinLength(field),
     handleMaxLength(field),
-  ])({});
+  ])(field.registerOptions || {});
+
 export const spreadOptions = ({ registerOptions, validate, setValueAs }) =>
   pipe([overwriteSetValueAs(setValueAs), spreadValidation(validate)])(
     registerOptions,

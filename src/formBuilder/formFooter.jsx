@@ -62,7 +62,7 @@ const FormFooter = ({
             onClick={customPrimaryBtn && customPrimaryBtn?.fn}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
             isLoading={loading}
-            disabled={loading || errors?.length}
+            disabled={loading}
             mb={[2, 0]}
           >
             {ctaText || customPrimaryBtn?.text || 'Submit'}
