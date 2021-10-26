@@ -193,6 +193,21 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  DAO_BOOKS: {
+    title: 'DAO Books',
+    description:
+      'Transparently see the transactions and assets of your vaults.',
+    publisher: PUBLISHERS.BOOST_FOUNDRY,
+    version: '1.0',
+    pars: [
+      'DAO Books will enable you to analyse your vault transactions with easy to read tables. ',
+      'Once you set it up, the vaults pages will show a link to directly go to the vault books.',
+      'This is useful to members who would like to quickly understand the flow of their transactions.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   // SNAPSHOT: {
   //   title: 'Snapshot Proposals',
   //   description:
@@ -437,6 +452,15 @@ export const BOOSTS = {
       appendToDaoPath: 'settings',
     },
   },
+  DAO_BOOKS: {
+    id: 'DAO_BOOKS',
+    steps: STEPS.BASIC_BOOST,
+    boostContent: CONTENT.DAO_BOOKS,
+    categories: ['finance'],
+    networks: 'all',
+    cost: 'free',
+    settings: 'none',
+  },
   // SNAPSHOT: {
   //   id: 'SNAPSHOT',
   //   boostContent: CONTENT.SNAPSHOT,
@@ -459,7 +483,7 @@ const categoryStarter = [
   { name: 'NFTs', id: 'nft' },
   { name: 'Dev Tools', id: 'devTools' },
   { name: 'Membership', id: 'membership' },
-  // { name: 'Finance', id: 'finance' },
+  { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({
   ...cat,
