@@ -370,7 +370,6 @@ export const updateProposalConfig = async (daoProposals, params) => {
   } = params;
 
   const proposalConfig = omit(['devList'], daoProposals);
-  console.log(`proposalConfig`, proposalConfig);
   if (!meta || !injectedProvider || !proposalConfig || !network)
     throw new Error('proposalConfig => handlePostNewConfig');
   try {
@@ -408,7 +407,6 @@ export const addBoost = async ({
   onError,
 }) => {
   const propConfig = omit(['devList'], proposalConfig);
-  console.log(`propConfig`, propConfig);
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
 
