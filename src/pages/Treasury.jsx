@@ -17,6 +17,7 @@ import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { DAO_BOOKS_HOST } from '../data/boosts';
 
 const Treasury = ({
   overview,
@@ -34,7 +35,7 @@ const Treasury = ({
   const treasuryVaultData = daoVaults?.find(vault => vault.type === 'treasury');
   const { daoMetaData } = useMetaData();
 
-  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active === true;
+  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
   const handleCopy = () => {
     toast({
@@ -100,7 +101,7 @@ const Treasury = ({
             variant='outline'
             as={ChakraLink}
             isExternal
-            href={`${process.env.REACT_APP_DAO_BOOKS_HOST}/dao/${daoid}/treasury`}
+            href={`${DAO_BOOKS_HOST}/dao/${daoid}/treasury`}
           >
             Vault Books
           </Button>

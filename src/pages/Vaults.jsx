@@ -17,6 +17,7 @@ import VaultCard from '../components/vaultCard';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { vaultFilterOptions } from '../utils/vaults';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { DAO_BOOKS_HOST } from '../data/boosts';
 
 const Vaults = ({
   overview,
@@ -33,7 +34,7 @@ const Vaults = ({
   const [hasNfts, setHasNfts] = useState(false);
   const { daoMetaData } = useMetaData();
 
-  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active === true;
+  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
   useEffect(() => {
     if (daoVaults) {
@@ -113,7 +114,7 @@ const Vaults = ({
             <Button
               as={ChakraLink}
               isExternal
-              href={`${process.env.REACT_APP_DAO_BOOKS_HOST}/dao/${daoid}`}
+              href={`${DAO_BOOKS_HOST}/dao/${daoid}`}
             >
               View Books
             </Button>

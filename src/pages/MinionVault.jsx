@@ -28,6 +28,7 @@ import { formatNativeData } from '../utils/vaults';
 import { fetchSafeDetails } from '../utils/requests';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { DAO_BOOKS_HOST } from '../data/boosts';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
@@ -41,7 +42,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
 
   const { daoMetaData } = useMetaData();
 
-  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active === true;
+  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
   const handleCopy = () => {
     toast({
@@ -157,7 +158,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
             variant='outline'
             as={ChakraLink}
             isExternal
-            href={`${process.env.REACT_APP_DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
+            href={`${DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
           >
             Vault Books
           </Button>

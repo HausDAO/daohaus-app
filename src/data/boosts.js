@@ -528,3 +528,5 @@ export const notificationBoostContent = {
       'https://discord.com/api/oauth2/authorize?client_id=736999684471521321&permissions=23552&scope=bot',
   },
 };
+
+export const DAO_BOOKS_HOST = 'https://books.daohaus.club/#';
