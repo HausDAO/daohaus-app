@@ -381,26 +381,6 @@ export const FORM = {
       ],
     ],
   },
-  SELL_NFT_RARIBLE: {
-    id: 'SELL_NFT_RARIBLE',
-    title: 'Sell NFT on Rarible',
-    description: 'Post an NFT for sale on Rarible',
-    type: PROPOSAL_TYPES.SELL_NFT_RARIBLE,
-    minionType: MINION_TYPES.SAFE,
-    tx: TX.SELL_NFT_RARIBLE,
-    required: ['selectedMinion', 'orderPrice', 'raribleNftData'],
-    fields: [
-      [FIELD.NFT_SELECT],
-      [
-        FIELD.DATE_RANGE,
-        {
-          ...FIELD.SET_PRICE,
-          orderType: 'sell',
-        },
-        FIELD.RARIBLE_NFT_DATA,
-      ],
-    ],
-  },
   SAMPLE_CONDITIONAL: {
     // dev: true,
     // logValues: true,
@@ -561,6 +541,26 @@ export const FORM = {
     fields: [
       [FIELD.NIFTY_INK_URL],
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
+    ],
+  },
+  SELL_NFT_RARIBLE: {
+    id: 'SELL_NFT_RARIBLE',
+    title: 'Sell NFT on Rarible',
+    description: 'Post an NFT for sale on Rarible',
+    type: PROPOSAL_TYPES.SELL_NFT_RARIBLE,
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.SELL_NFT_RARIBLE,
+    required: ['selectedMinion', 'orderPrice', 'raribleNftData'],
+    fields: [
+      [FIELD.NFT_SELECT],
+      [
+        FIELD.DATE_RANGE,
+        {
+          ...FIELD.SET_PRICE,
+          orderType: 'sell',
+        },
+        FIELD.RARIBLE_NFT_DATA,
+      ],
     ],
   },
   BUY_NFT_RARIBLE: {
