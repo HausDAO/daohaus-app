@@ -239,11 +239,13 @@ const argBuilderCallback = Object.freeze({
   },
 });
 
-const handleSearch = (data, arg) => {
+export const handleSearch = (data, arg, shouldThrow) => {
   const path = getPath(arg);
+  console.log(`path`, path);
+  console.log(`data`, data);
   if (!path.length)
     throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
-  return searchData(data, path);
+  return searchData(data, path, shouldThrow);
 };
 
 const gatherArgs = data => {

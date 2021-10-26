@@ -5,6 +5,7 @@ import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 import TextBox from '../components/TextBox';
 import ErrorList from './ErrorList';
 import { ToolTipWrapper } from '../staticElements/wrappers';
+import { handleCheckError } from '../utils/formBuilder';
 
 const FieldWrapper = ({
   children,
@@ -34,7 +35,7 @@ const FieldWrapper = ({
   //   return Object.values(errors[name]);
   // }, [errors, name]);
   // console.log(`errorMsgs`, errorMsgs);
-  const fieldError = errors[name];
+  const fieldError = handleCheckError(errors, name);
   return (
     <Flex
       w={width}

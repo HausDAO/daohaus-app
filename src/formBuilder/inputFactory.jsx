@@ -38,7 +38,7 @@ import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
 
 export const InputFactory = props => {
-  const { type, formCondition } = props;
+  const { type, formCondition, required } = props;
 
   if (type === 'formCondition' && props[formCondition]) {
     const nestedInput = { ...props[formCondition] };
@@ -47,10 +47,7 @@ export const InputFactory = props => {
         <InputFactory
           {...props}
           {...nestedInput}
-          registerOptions={createRegisterOptions(
-            nestedInput,
-            props.requiredFields,
-          )}
+          registerOptions={createRegisterOptions(nestedInput, required)}
         />
       );
     }

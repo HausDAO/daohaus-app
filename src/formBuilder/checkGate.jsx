@@ -4,7 +4,14 @@ import GenericCheck from './genericCheck';
 import { InputFactory } from './inputFactory';
 
 const CheckGate = props => {
-  const { formCondition, label, title, description, renderOnCheck } = props;
+  const {
+    formCondition,
+    label,
+    title,
+    description,
+    renderOnCheck,
+    required,
+  } = props;
   const [checkLabel, checkTitle, checkDescription] = useFormConditions({
     values: [label, title, description],
     condition: formCondition,
@@ -18,10 +25,7 @@ const CheckGate = props => {
         <InputFactory
           {...props}
           {...renderOnCheck}
-          registerOptions={createRegisterOptions(
-            renderOnCheck,
-            props.requiredFields,
-          )}
+          registerOptions={createRegisterOptions(renderOnCheck, required)}
         />
       ) : (
         <GenericCheck

@@ -32,9 +32,11 @@ const FormBuilder = props => {
     goToNext,
     handleThen,
     ctaText,
+    footer,
     secondaryBtn,
     formConditions,
     setParentFields,
+    indicatorStates,
     txID,
   } = props;
 
@@ -42,16 +44,18 @@ const FormBuilder = props => {
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(null);
   const [formErrors] = useState({});
-  const [requiredFields] = useState(required);
+
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
   const { handleSubmit, watch, errors } = localForm;
   const values = watch();
 
+  console.log(`required`, required);
+
   useEffect(() => {
     if (dev && values) {
-      console.log(`values`, values);
-      console.log('errors', errors);
+      // console.log(`values`, values);
+      // console.log('errors', errors);
     }
   }, [values, errors]);
 
@@ -256,8 +260,8 @@ const FormBuilder = props => {
           {...field}
           key={`${depth}-${index}`}
           // registerOptions={{}}
-          registerOptions={createRegisterOptions(field, requiredFields)}
-          requiredFields={requiredFields}
+          registerOptions={createRegisterOptions(field, required)}
+          required={required}
           errors={errors}
           minionType={props.minionType}
           formCondition={formCondition}
@@ -284,18 +288,20 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} />
-        <FormFooter
-          options={options}
-          addOption={addOption}
-          formState={formState}
-          ctaText={ctaText}
-          next={next}
-          goToNext={goToNext}
-          errors={Object.values(formErrors)}
-          customSecondaryBtn={secondaryBtn}
-          loading={formState === 'loading'}
-        />
+        <ProgressIndicator currentState={formState} states={indicatorStates} />
+        {footer && (
+          <FormFooter
+            options={options}
+            addOption={addOption}
+            formState={formState}
+            ctaText={ctaText}
+            next={next}
+            goToNext={goToNext}
+            errors={Object.values(formErrors)}
+            customSecondaryBtn={secondaryBtn}
+            loading={formState === 'loading'}
+          />
+        )}
       </Flex>
     </form>
   );

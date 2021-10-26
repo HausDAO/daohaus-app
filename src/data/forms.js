@@ -506,6 +506,9 @@ export const PROPOSAL_FORMS = {
     //   advanced: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
     // },
     required: ['minionName', 'minQuorum', 'saltNonce', 'safeAddress'],
+    //  Solution above. The required list will check these items. If they are
+    //  rendered, it will check to see if the have existing values.
+    //  if they aren't rendered, validation simply skips them.
     fields: [
       [
         FIELD.SUMMON_MODE_SWITCH,
@@ -640,6 +643,7 @@ export const PROPOSAL_FORMS = {
   CREATE_TX: {
     id: 'CREATE_TX',
     isTx: true,
+    required: ['targetContract', 'abiInput'],
     fields: [
       [
         FIELD.TARGET_CONTRACT,

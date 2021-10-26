@@ -38,14 +38,14 @@ const indicatorStates = {
   idle: {
     icon: RiErrorWarningLine,
     titleSm:
-      'Early execution will not be available for this proposal. Forwarded funds must be within available minion funds. ',
+      'This is some untested, alpha stage, super-user shit right here. So do us a favour and check each field and test with a small TX before accidentally aping the whole vault into the zero address.',
   },
 };
 
 const MultiTXForm = props => {
   const { forms, logValues } = props;
   const parentForm = useForm();
-  const { watch, register, setValue } = parentForm;
+  const { watch, register, setValue, errors } = parentForm;
   const values = watch();
   const templateTXForm = forms[1];
 
@@ -56,6 +56,8 @@ const MultiTXForm = props => {
   useEffect(() => {
     if (logValues && dev && values) {
       console.log(`values`, values);
+      console.log(`errors`, errors);
+      console.log(`parentForm`, parentForm);
     }
   }, [values]);
 
@@ -82,37 +84,14 @@ const MultiTXForm = props => {
       ...values,
       TX: values.TX.filter((tx, index) => index !== txIndex),
     };
-    // const newFormValues = Object.entries(values).reduce((acc, [key, value]) => {
-    //   // IF key value is the same txIndex
-    //   if (key.includes(`TX.${txIndex}`)) {
-    //     console.log('FIELD DELETED', key);
-    //     // parentForm.unregister(key);
-    //     return acc;
-    //   }
-    //   //  If key value is the same TX as txIndex, but a different number
-    //   if (key.includes('TX')) {
-    //     console.log('FIELD EXAMINED ', key);
-    //     const currentIndex = Number(getTxIndex(key));
-    //     return currentIndex > txIndex
-    //       ? { ...acc, [decrementTxIndex(key)]: value }
-    //       : { [key]: value };
-    //   }
-    //   console.log('FIELD SKIPPED', key);
-    //   return { ...acc, [key]: value };
-    // }, {});
-    // const unregisterList = Object.keys(values).filter(([key]) =>
-    //   key.includes('*TX*'),
-    // );
-    // parentForm.unregister(unregisterList);
     parentForm.reset(newFormValues);
     setTxForms(newForms);
   };
 
-  const setParentFields = (txID, fields) => {
+  const setParentFields = (txID, fields) =>
     setTxForms(prevState =>
       prevState.map(form => (form.txID === txID ? { ...form, fields } : form)),
     );
-  };
 
   return (
     <MultiForm

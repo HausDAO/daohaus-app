@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { filterObject, isObjectEmpty, pipe } from './general';
 import { logFormError } from './errorLog';
 import { buildRHFvalFn, validate } from './validation';
+import { handleSearch } from './txHelpers';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
@@ -186,17 +187,24 @@ export const decrementTxIndex = key => {
   return key;
 };
 
+const serializeRequired = (required = [], index) =>
+  required?.map(fieldName =>
+    fieldName.includes('TX.')
+      ? `TX.${index}.${getOriginalName(fieldName)}`
+      : `TX.${index}.${fieldName}`,
+  );
+
 const serializeFields = (fields = [], txIndex) =>
   fields.map(column =>
     column.map(field => {
-      const isSerialized = field.name.includes('TX.');
-      if (isSerialized) {
+      const alreadyHasSerial = field.name.includes('TX.');
+      if (alreadyHasSerial) {
+        const originalName = getOriginalName(field.name);
         return {
           ...field,
-          name: `TX.${txIndex}.${getOriginalName(field.name)}`,
-          listenTo: field.listenTo
-            ? `TX.${txIndex}.${getOriginalName(field.listenTo)}`
-            : null,
+          name: `TX.${txIndex}.${originalName}`,
+          htmlFor: `TX.${txIndex}.${originalName}`,
+          listenTo: field.listenTo ? `TX.${txIndex}.${originalName}` : null,
         };
       }
       return {
@@ -212,6 +220,7 @@ export const serializeTXs = (forms = []) =>
   forms.map((form, index) => ({
     ...form,
     fields: serializeFields(form.fields, index),
+    required: serializeRequired(form.required, index),
     txIndex: index,
     txID: form.txID || uuid(),
   }));
@@ -253,3 +262,12 @@ export const spreadOptions = ({ registerOptions, validate, setValueAs }) =>
   pipe([overwriteSetValueAs(setValueAs), spreadValidation(validate)])(
     registerOptions,
   );
+
+const isNestedValue = name => name.includes('.');
+const checkNestedError = (errors, name) =>
+  handleSearch(errors, `.${name}`, false);
+
+export const handleCheckError = (errors, name) => {
+  if (!name || !errors) return;
+  return isNestedValue(name) ? checkNestedError(errors, name) : errors[name];
+};
