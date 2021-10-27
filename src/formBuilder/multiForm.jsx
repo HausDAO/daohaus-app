@@ -27,6 +27,7 @@ const MultiTXForm = props => {
   const templateTXForm = forms[1];
   const preTxForm = forms[0];
   const confirmationForm = forms[forms.length - 1];
+  const allForms = [preTxForm, ...txForms, confirmationForm];
 
   const handleAddTx = () =>
     setTxForms(prevState => serializeTXs([...prevState, templateTXForm]));
@@ -49,7 +50,6 @@ const MultiTXForm = props => {
       prevState.map(form => (form.txID === txID ? { ...form, fields } : form)),
     );
 
-  const allForms = [preTxForm, ...txForms, confirmationForm];
   return allForms?.map((form, index) => {
     if (form.isTx)
       return (

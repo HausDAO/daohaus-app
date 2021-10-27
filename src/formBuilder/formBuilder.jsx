@@ -50,8 +50,6 @@ const FormBuilder = props => {
   const { handleSubmit, watch, errors } = localForm;
   const values = watch();
 
-  console.log(`required`, required);
-
   useEffect(() => {
     if (dev && values && logValues) {
       console.log(`values`, values);
