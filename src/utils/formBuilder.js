@@ -161,16 +161,6 @@ export const ignoreAwaitStep = next => {
   return typeof next === 'string' ? next : next?.then;
 };
 
-export const getTagRegex = tag => new RegExp(`(\\d+\\*${tag}\\*)+`);
-
-// const serializeParam = (name, index, tag) => {
-//   const regex = getTagRegex(tag);
-//   if (regex.test(name)) {
-//     return name.replace(regex, `${index}*${tag}*`);
-//   }
-//   return `${index}*${tag}*${name}`;
-// };
-
 const getOriginalName = name => {
   return name
     .split('.')
@@ -233,20 +223,26 @@ const addTypeValidation = (regOptions, valStr) => ({
   ...regOptions,
   validate: { [`type-${valStr}`]: buildRHFvalFn(valStr) },
 });
+
 const handleRequired = ({ name, label }, required) => regOptions =>
   required.includes(name)
     ? { ...regOptions, required: `${label} is required` }
     : regOptions;
+
 const handleType = ({ expectType }) => regOptions =>
   !expectType || expectType === 'any'
     ? regOptions
     : addTypeValidation(regOptions, expectType);
+
 const handleMinLength = ({ minLength }) => regOptions =>
   minLength ? { ...regOptions, minLength } : regOptions;
+
 const handleMaxLength = ({ maxLength }) => regOptions =>
   maxLength ? { ...regOptions, maxLength } : regOptions;
+
 const overwriteSetValueAs = setValueAs => regOptions =>
   setValueAs ? { ...regOptions, setValueAs } : regOptions;
+
 const spreadValidation = newValidation => regOptions =>
   newValidation
     ? {

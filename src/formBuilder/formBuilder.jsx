@@ -11,16 +11,11 @@ import {
   createRegisterOptions,
   inputDataFromABI,
 } from '../utils/formBuilder';
+import { useAppModal } from '../hooks/useModals';
 
 const dev = process.env.REACT_APP_DEV;
 
 const FormBuilder = props => {
-  const {
-    submitTransaction,
-    handleCustomValidation,
-    // modifyFields,
-    submitCallback,
-  } = useTX();
   const {
     fields,
     additionalOptions = null,
@@ -39,7 +34,9 @@ const FormBuilder = props => {
     txID,
     logValues,
   } = props;
+  const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
 
+  const { closeModal } = useAppModal();
   const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(null);
@@ -226,6 +223,7 @@ const FormBuilder = props => {
             addOption={addOption}
             formState={formState}
             ctaText={ctaText}
+            closeModal={closeModal}
             next={next}
             goToNext={goToNext}
             errors={Object.values(formErrors)}
