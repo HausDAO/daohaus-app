@@ -7,7 +7,7 @@ import deepEqual from 'deep-eql';
 import MainViewLayout from '../components/mainViewLayout';
 import NftCard from '../components/nftCard';
 import NftFilter from '../components/nftFilter';
-import { concatNftSearchData } from '../utils/nftVaults';
+import { concatNftSearchData, filterUniqueNfts } from '../utils/nftVaults';
 import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
@@ -28,16 +28,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
           return vault.address === minion;
         })?.nfts;
       } else {
-        nfts = daoVaults?.reduce((acc, item) => {
-          const nftsWithMinionAddress = item.nfts.map(n => {
-            return {
-              ...n,
-              minionAddress: item.address,
-              minionType: item.minionType,
-            };
-          });
-          return [...acc, ...nftsWithMinionAddress];
-        }, []);
+        nfts = filterUniqueNfts(daoVaults);
       }
       setNftData(nfts);
       setNfts(nfts);

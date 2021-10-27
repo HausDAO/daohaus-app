@@ -4,7 +4,6 @@ import AbiInput from './abiInput';
 import AddressInput from './addressInput';
 import BuyoutPaymentInput from './buyoutPaymentInput';
 import ColorPicker from './colorPicker';
-import ConditionalInput from './conditionalInput';
 import DateRange from './dateRange';
 import DiscourseMeta from './discourseMeta';
 import GatedInput from './gatedInput';
@@ -21,15 +20,20 @@ import MinionTypeSelect from './minionTypeSelect';
 import MultiInput from './multiInput';
 import NftSelect from './nftSelect';
 import NiftyInkUrl from './niftyInkUrl';
+import NftkUri from './nftUri';
 import PaymentInput from './paymentInput';
 import PriceInput from './priceInput';
 import RageInput from './rageInput';
 import RaribleNftSelect from './raribleNftData';
+import NftApproval from './nftApproval';
+import TokenInfoInput from './tokenInfoInput';
 import CheckSwitch from './checkSwitch';
 import CheckGate from './checkGate';
+import SaltGenerator from './saltGenerator';
 import SuperfluidPaymentInput from './superfluidPaymentInput';
 import SuperfluidRate from './superfluidRate';
 import TargetContract from './targetContract';
+import ToggleForm from './toggleForm';
 import TributeInput from './tributeInput';
 
 export const InputFactory = props => {
@@ -96,6 +100,9 @@ export const InputFactory = props => {
   if (type === 'targetInk') {
     return <NiftyInkUrl {...props} />;
   }
+  if (type === 'targetNft') {
+    return <NftkUri {...props} />;
+  }
   if (type === 'superfluidRate') {
     return <SuperfluidRate {...props} />;
   }
@@ -120,8 +127,11 @@ export const InputFactory = props => {
   if (type === 'discourseMeta') {
     return <DiscourseMeta {...props} />;
   }
-  if (type === 'conditionalInput') {
-    return <ConditionalInput {...props} />;
+  if (type === 'nftApproval') {
+    return <NftApproval {...props} />;
+  }
+  if (type === 'tokenInfoInput') {
+    return <TokenInfoInput {...props} />;
   }
   if (type === 'checkSwitch') {
     return <CheckSwitch {...props} />;
@@ -132,6 +142,11 @@ export const InputFactory = props => {
   if (type === 'genericBlur') {
     return <GenericBlur {...props} />;
   }
-
+  if (type === 'toggleForm') {
+    return <ToggleForm {...props} />;
+  }
+  if (type === 'saltGenerator') {
+    return <SaltGenerator {...props} />;
+  }
   return null;
 };

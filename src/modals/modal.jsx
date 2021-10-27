@@ -28,6 +28,7 @@ const Modal = () => {
       onClose={handleClose}
       closeOnOverlayClick={false}
       isCentered
+      scrollBehavior='inside'
     >
       <ModalOverlay
         bgColor={rgba(theme.colors.background[500], 0.8)}

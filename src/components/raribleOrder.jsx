@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 
+import { useOverlay } from '../contexts/OverlayContext';
 import {
   buildRaribleUrl,
-  compareSellOrder,
+  compareOrder,
   createOrder,
   getOrderByItem,
   getOrderDataFromProposal,
 } from '../utils/rarible';
 
-const RaribleSellOrder = ({ proposal }) => {
+const RaribleOrder = ({ proposal, orderType }) => {
   const { daochain } = useParams();
-  const [needSellOrder, setNeedSellOrder] = useState(false);
+  const { errorToast } = useOverlay();
+  const [needOrder, setNeedOrder] = useState(false);
   const [orderUrl, setOrderUrl] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,28 +23,35 @@ const RaribleSellOrder = ({ proposal }) => {
       setLoading(true);
       const orderData = await getOrderDataFromProposal(proposal);
       const orderRes = await getOrderByItem(
-        orderData.make.assetType.contract,
-        orderData.make.assetType.tokenId,
+        orderData.make.assetType.tokenId
+          ? orderData.make.assetType.contract
+          : orderData.take.assetType.contract,
+        orderData.make.assetType.tokenId || orderData.take.assetType.tokenId,
         orderData.maker,
+        orderData.make.assetType.tokenId ? 'sell' : 'bids',
         daochain,
       );
-
       setOrderUrl(buildRaribleUrl(orderData, daochain));
-      setNeedSellOrder(!compareSellOrder(orderData, orderRes.orders));
+      setNeedOrder(!compareOrder(orderData, orderRes.orders));
       setLoading(false);
     };
 
     getOrder();
   }, []);
 
-  const makeSellOrder = async () => {
+  const makeOrder = async () => {
     setLoading(true);
 
-    const orderData = await getOrderDataFromProposal(proposal);
-    const res = await createOrder(orderData, daochain);
-    console.log('order res', res);
-
-    setNeedSellOrder(false);
+    try {
+      const orderData = await getOrderDataFromProposal(proposal);
+      await createOrder(orderData, daochain);
+      setNeedOrder(false);
+    } catch (error) {
+      errorToast({
+        title: 'Order Submission Error',
+        description: error.message,
+      });
+    }
     setLoading(false);
   };
 
@@ -50,7 +59,7 @@ const RaribleSellOrder = ({ proposal }) => {
     return <Spinner />;
   }
 
-  if (!needSellOrder) {
+  if (!needOrder) {
     return (
       <Flex direction='column' alignItems='center'>
         <Box>Executed</Box>
@@ -62,9 +71,9 @@ const RaribleSellOrder = ({ proposal }) => {
   }
 
   return (
-    <Button disabled={loading} onClick={makeSellOrder}>
-      Create Sell Order
+    <Button disabled={loading} onClick={makeOrder}>
+      {`Create ${orderType} Order`}
     </Button>
   );
 };
-export default RaribleSellOrder;
+export default RaribleOrder;

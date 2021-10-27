@@ -99,6 +99,7 @@ const FormBuilder = props => {
     // REVIEW
     setFields(prevFields => {
       const update = field => {
+        // TODO: how to handle validation errors on fields within formCondition and checkGate input types
         if (Array.isArray(field)) {
           return field.map(update);
         }
@@ -121,6 +122,7 @@ const FormBuilder = props => {
     clearErrors();
 
     //  Checks for required values
+    // TODO: how to handle required values from inputs within formCondition & checkGate
     const missingVals = validateRequired(
       values,
       // REVIEW
@@ -139,6 +141,7 @@ const FormBuilder = props => {
     // const typeErrors = checkFormTypes(values, formFields);
     const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
     if (typeErrors) {
+      console.log('typeErrors', typeErrors);
       updateErrors(typeErrors);
       return;
     }
@@ -160,6 +163,7 @@ const FormBuilder = props => {
     });
 
     if (customValErrors) {
+      console.log('customValErrors', customValErrors);
       updateErrors(customValErrors);
       return;
     }
@@ -294,6 +298,7 @@ const FormBuilder = props => {
           goToNext={goToNext}
           errors={Object.values(formErrors)}
           customSecondaryBtn={secondaryBtn}
+          loading={formState === 'loading'}
         />
       </Flex>
     </form>
