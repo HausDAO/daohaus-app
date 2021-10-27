@@ -39,6 +39,7 @@ export const supportedChains = {
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
+    escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
