@@ -1,4 +1,4 @@
-import { BOOST_PLAYLISTS } from '../utils/playlists';
+import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { BOOST_FORMS, CORE_FORMS } from './forms';
 import { MINIONS } from './minions';
@@ -325,18 +325,18 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  RARIBLE: {
-    id: 'RARIBLE',
-    boostContent: CONTENT.RARIBLE,
-    minionData: MINIONS[MINION_TYPES.SAFE],
-    categories: ['nft'],
-    steps: STEPS.MINION_BOOST,
-    playlist: BOOST_PLAYLISTS.RARIBLE,
-    networks: { '0x4': true },
-    // networks: { '0x4': true, '0x1': true },
-    cost: 'free',
-    settings: 'none',
-  },
+  // RARIBLE: {
+  //   id: 'RARIBLE',
+  //   boostContent: CONTENT.RARIBLE,
+  //   minionData: MINIONS[MINION_TYPES.SAFE],
+  //   categories: ['nft'],
+  //   steps: STEPS.MINION_BOOST,
+  //   playlist: BOOST_PLAYLISTS.RARIBLE,
+  //   networks: { '0x4': true },
+  //   // networks: { '0x4': true, '0x1': true },
+  //   cost: 'free',
+  //   settings: 'none',
+  // },
   NFT_TRIBUTE: {
     id: 'NFT_TRIBUTE',
     boostContent: CONTENT.NFT_TRIBUTE,
@@ -344,14 +344,13 @@ export const BOOSTS = {
     minionData: MINIONS[MINION_TYPES.SAFE],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NFT_TRIBUTE,
-    networks: { '0x4': true },
-    // networks: {
-    //   '0x4': true,
-    //   '0x1': true,
-    //   '0x64': true,
-    //   '0x89': true,
-    //   '0xa4b1': true,
-    // },
+    networks: {
+      '0x4': true,
+      '0x1': true,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+    },
     cost: 'free',
     settings: 'none',
   },
@@ -362,14 +361,13 @@ export const BOOSTS = {
     minionData: MINIONS[MINION_TYPES.SAFE],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.BANK_BUYOUT,
-    networks: { '0x4': true },
-    // networks: {
-    //   '0x4': true,
-    //   '0x1': true,
-    //   '0x64': true,
-    //   '0x89': true,
-    //   '0xa4b1': true,
-    // },
+    networks: {
+      '0x4': true,
+      '0x1': true,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+    },
     cost: 'free',
     settings: 'none',
   },

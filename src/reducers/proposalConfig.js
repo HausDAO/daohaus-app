@@ -1,10 +1,10 @@
 import { BLACKLIST } from '../data/blacklist';
-import { devList, createPlaylist, generateNewConfig } from '../utils/playlists';
+import { devList, createPlaylist, generateNewConfig } from '../data/playlists';
 
 const handleDevForms = (data = {}) => {
   const isDev = process.env.REACT_APP_DEV;
 
-  return isDev ? { ...data, devList } : data;
+  return isDev ? { ...data, devList } : { ...data, devList: null };
 };
 
 const handleFormBlacklist = (data = {}) => {

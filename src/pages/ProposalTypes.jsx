@@ -8,11 +8,12 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
 import PlaylistSelector from '../components/playlistSelector';
-import ProposalList from '../components/formList';
+import FormList from '../components/formList';
 import SaveButton from '../components/saveButton';
 import { CORE_FORMS } from '../data/forms';
 import { chainByID } from '../utils/chain';
 import { updateProposalConfig } from '../utils/metadata';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const dev = process.env.REACT_APP_DEV === 'true';
 
@@ -26,6 +27,7 @@ const ProposalTypes = () => {
     dispatchPropConfig,
     refetchMetaData,
   } = useMetaData();
+  const { isMember } = useDaoMember();
   const { injectedProvider, address } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
   const { formModal, confirmModal, closeModal } = useAppModal();
@@ -35,6 +37,7 @@ const ProposalTypes = () => {
   const [selectedListID, setListID] = useState(
     dev && devList?.forms?.length ? 'dev' : 'all',
   );
+
   const [loading, setLoading] = useState(false);
 
   const selectList = id => {
@@ -121,7 +124,7 @@ const ProposalTypes = () => {
           <SaveButton
             watch={orderPlaylistForms(playlists)}
             saveFn={saveConfig}
-            disabled={loading}
+            disabled={loading || !isMember}
             blockRouteOnDiff
             undoChanges={undoChanges}
           >
@@ -131,6 +134,7 @@ const ProposalTypes = () => {
         {daoProposals ? (
           <Flex flexDir={['column', 'column', 'row']}>
             <PlaylistSelector
+              dev={dev}
               selectList={selectList}
               addPlaylist={addPlaylist}
               allForms={allForms}
@@ -140,7 +144,7 @@ const ProposalTypes = () => {
               editPlaylist={editPlaylist}
               devList={devList}
             />
-            <ProposalList
+            <FormList
               playlists={playlists}
               customData={customData}
               selectedListID={selectedListID}

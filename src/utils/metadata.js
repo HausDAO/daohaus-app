@@ -1,7 +1,11 @@
 import { BOOSTS } from '../data/boosts';
 import { capitalize, omit } from './general';
 import { chainByNetworkId } from './chain';
-import { addBoostPlaylist, checkIsPlaylist, hasPlaylist } from './playlists';
+import {
+  addBoostPlaylist,
+  checkIsPlaylist,
+  hasPlaylist,
+} from '../data/playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 const ccoApiUrl = 'https://cco.daohaus.club';
@@ -355,7 +359,7 @@ export const getNftMeta = async url => {
   }
 };
 
-export const updateProposalConfig = async (proposalConfig, params) => {
+export const updateProposalConfig = async (daoProposals, params) => {
   const {
     meta,
     injectedProvider,
@@ -365,6 +369,7 @@ export const updateProposalConfig = async (proposalConfig, params) => {
     onSuccess,
   } = params;
 
+  const proposalConfig = omit(['devList'], daoProposals);
   if (!meta || !injectedProvider || !proposalConfig || !network)
     throw new Error('proposalConfig => handlePostNewConfig');
   try {
@@ -401,6 +406,7 @@ export const addBoost = async ({
   onSuccess,
   onError,
 }) => {
+  const propConfig = omit(['devList'], proposalConfig);
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
 
@@ -418,11 +424,8 @@ export const addBoost = async ({
       signature,
     };
 
-    if (proposalConfig) {
-      const newPropConfig = addBoostPlaylist(
-        proposalConfig,
-        boostData.playlist,
-      );
+    if (propConfig) {
+      const newPropConfig = addBoostPlaylist(propConfig, boostData.playlist);
       updateData.proposalConfig = newPropConfig;
     }
 
