@@ -38,6 +38,7 @@ const FormBuilder = props => {
     formConditions,
     logValues,
     onLoad,
+		defaultValues,
   } = props;
 
   const [formState, setFormState] = useState(null);
@@ -45,7 +46,7 @@ const FormBuilder = props => {
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
-  const localForm = parentForm || useForm({ shouldUnregister: false });
+	const localForm = parentForm || useForm({ shouldUnregister: false, defaultValues: defaultValues });
   const { handleSubmit, watch } = localForm;
   const values = watch();
   console.log('Builder');

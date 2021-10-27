@@ -1,52 +1,47 @@
 import Ceramic from '@ceramicnetwork/http-client';
-import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect';
 import { DataModel } from '@glazed/datamodel';
 import { DIDDataStore } from '@glazed/did-datastore';
 import { model as publishedBasicProfileModel } from '@datamodels/identity-profile-basic';
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
 import { DID } from 'dids';
-
-const ceramicInstance = new Ceramic('https://ceramic-clay.3boxlabs.com');
-
-export const getCeramic = () => {
-  try {
-    const resolver = {
-      ...ThreeIdResolver.getResolver(ceramicInstance),
-    };
-    const did = new DID({ resolver });
-    ceramicInstance.did = did;
-    return ceramicInstance;
-  } catch (err) {
-    console.log(err);
-  }
-};
+import { EthereumAuthProvider, SelfID, WebClient } from '@self.id/web';
+import { Core } from '@self.id/core';
 
 export const authenticateDid = async address => {
-  const ceramic = getCeramic();
-
-  console.log(address);
-  console.log(window.ethereum);
-  const threeIdConnect = new ThreeIdConnect();
   const authProvider = new EthereumAuthProvider(window.ethereum, address);
-  await threeIdConnect.connect(authProvider);
-  const provider = await threeIdConnect.getDidProvider();
-  await ceramic.did.setProvider(provider);
-  console.log('authenticating');
-  await ceramic.did.authenticate();
-  console.log('authenticated');
+  const client = new WebClient({
+    ceramic: 'testnet-clay',
+    connectNetwork: 'testnet-clay',
+  });
+  const did = await client.authenticate(authProvider);
 
-  return ceramic;
+  return [client, did];
 };
 
-export const getBasicProfile = async ceramic => {
-  const model = new DataModel({ ceramic, model: publishedBasicProfileModel });
-  // const schemaURL = model.getSchemaURL('BasicProfile');
-  const dataStore = new DIDDataStore({ ceramic, model });
-  await dataStore.set('basicProfile', { record: 'content' }); // Expected schema error
-  return dataStore.get('basicProfile');
+export const getAuthenticatedBasicProfile = async (client, did) => {
+  const self = new SelfID({ client, did });
+  return self.get('basicProfile');
+};
+
+export const getBasicProfile = async did => {
+  const core = new Core({ ceramic: 'testnet-clay' });
+  console.log(did);
+  return await core.get('basicProfile', did);
 };
 
 export const fetchProfile = async address => {
+  console.log('Fetching profile');
+  // Try fetch if exists return
+  // getAccountDid
+  const core = new Core({ ceramic: 'testnet-clay' });
+  // const did = core.toDID(`${address.toLowerCase()}@eip155:1`);
+
+  const values = getBasicProfile(
+    'did:3:kjzl6cwe1jw1497znxmep1z712k51jyftw3znlkm1crbcxq1boofrbs25hbayb3',
+  );
+  if (values) {
+    return values;
+  }
   try {
     const response = await fetch(
       `https://ipfs.3box.io/profile?address=${address}`,

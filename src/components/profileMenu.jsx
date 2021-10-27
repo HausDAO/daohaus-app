@@ -21,7 +21,7 @@ import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
-import { authenticateDid } from '../utils/3box';
+import { authenticateDid, getBasicProfile } from '../utils/3box';
 import { FIELD } from '../data/fields';
 
 const ProfileMenu = ({ member }) => {
@@ -53,18 +53,25 @@ const ProfileMenu = ({ member }) => {
       onSubmit: ({ values }) => {
         // How does the loader work with async
         const submit = async () => {
-          const ceramic = await authenticateDid(member.memberAddress);
-          console.log(ceramic);
-          if (ceramic.did.authenticated) {
+          const [client, did] = await authenticateDid(member.memberAddress);
+          if (did.authenticated) {
             console.log('Pop');
-            console.log(values);
             // onLoad hook
+						// Add set value functionality in the profile
+						const values = await getBasicProfile(did.id)
+						console.log(values)
             formModal({
               ...FORM.PROFILE,
+							defaultValues: {
+								name: values.name || "",
+								emoji: values.emoji || "",
+							},
               onLoad: async () => {
                 // fetch values
                 // update field values
-                console.log('hi');
+                // console.log('basicProfile');
+								// const values = await getBasicProfile(client, did)
+								// console.log(values)
               },
             });
           }
