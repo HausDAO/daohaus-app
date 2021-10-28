@@ -102,7 +102,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
 
       const internalBalanceRes = await fetchMinionInternalBalances({
         chainID: daochain,
-        minionAddress: minion,
+        minionAddress: vaultMatch.safeAddress || minion,
       });
       const internalBalanceData = internalBalanceRes
         .flatMap(dao => {
