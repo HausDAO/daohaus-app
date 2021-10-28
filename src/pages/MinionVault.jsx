@@ -2,7 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Button, Flex, useToast, Icon } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  useToast,
+  Icon,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 import { utils as Web3Utils } from 'web3';
 
 import { useToken } from '../contexts/TokenContext';
@@ -20,6 +27,8 @@ import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { formatNativeData } from '../utils/vaults';
 import { fetchSafeDetails } from '../utils/requests';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { DAO_BOOKS_HOST } from '../data/boosts';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
@@ -30,6 +39,10 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const [nativeBalance, setNativeBalance] = useState(null);
   const [internalBalances, setInternalBalances] = useState(null);
   const [safeDetails, setSafeDetails] = useState(null);
+
+  const { daoMetaData } = useMetaData();
+
+  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
   const handleCopy = () => {
     toast({
@@ -130,14 +143,26 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       headerEl={vault ? ctaButton : null}
       isDao
     >
-      <Flex
-        as={Link}
-        to={`/dao/${daochain}/${daoid}/vaults`}
-        align='center'
-        mb={3}
-      >
-        <Icon as={BiArrowBack} color='secondary.500' mr={2} />
-        All Vaults
+      <Flex justify='space-between' py='2'>
+        <Flex
+          as={Link}
+          to={`/dao/${daochain}/${daoid}/vaults`}
+          align='center'
+          mb={3}
+        >
+          <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+          All Vaults
+        </Flex>
+        {isBooksBoostEnabled && (
+          <Button
+            variant='outline'
+            as={ChakraLink}
+            isExternal
+            href={`${DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
+          >
+            Vault Books
+          </Button>
+        )}
       </Flex>
       {!vault && <Loading message='Fetching treasury holdings...' />}
       {vault && (
