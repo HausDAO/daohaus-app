@@ -28,6 +28,8 @@ export const supportedChains = {
     rarible: {
       api_url: 'https://ethereum-api.rarible.org/v0.1',
       nft_transfer_proxy: '0x4fee7b061c97c9c496b01dbce9cdb10c02f0a0be',
+      erc721_lazy_transfer_proxy: '0xbb7829BFdD4b557EB944349b2E2c965446052497',
+      erc1155_lazy_transfer_proxy: '0x75a8B7c0B22D973E0B46CfBD3e2f6566905AA79f',
       base_url: 'https://rarible.com',
     },
     niftyMinion: {
@@ -39,6 +41,7 @@ export const supportedChains = {
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
+    escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
@@ -84,6 +87,8 @@ export const supportedChains = {
     rarible: {
       api_url: 'https://ethereum-api-staging.rarible.org/v0.1',
       nft_transfer_proxy: '0x7d47126a2600E22eab9eD6CF0e515678727779A6',
+      erc721_lazy_transfer_proxy: '0x75fDbe19C2dc673384dDc14C9F453dB86F5f32E8',
+      erc1155_lazy_transfer_proxy: '0x0cF0AAb68432a3710ECbf2f1b112a11cEe31a83C',
       base_url: 'https://rinkeby.rarible.com',
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',

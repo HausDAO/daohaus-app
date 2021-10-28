@@ -381,28 +381,8 @@ export const FORM = {
       ],
     ],
   },
-  SELL_NFT_RARIBLE: {
-    id: 'SELL_NFT_RARIBLE',
-    title: 'Sell NFT on Rarible',
-    description: 'Post an NFT for sale on Rarible',
-    type: PROPOSAL_TYPES.SELL_NFT_RARIBLE,
-    minionType: MINION_TYPES.SAFE,
-    tx: TX.SELL_NFT_RARIBLE,
-    required: ['selectedMinion', 'orderPrice', 'raribleNftData'],
-    fields: [
-      [FIELD.NFT_SELECT],
-      [
-        FIELD.DATE_RANGE,
-        {
-          ...FIELD.SET_PRICE,
-          orderType: 'sell',
-        },
-        FIELD.RARIBLE_NFT_DATA,
-      ],
-    ],
-  },
   SAMPLE_CONDITIONAL: {
-    dev: true,
+    // dev: true,
     // logValues: true,
     id: 'SAMPLE_CONDITIONAL',
     formConditions: ['signal', 'token'],
@@ -436,7 +416,6 @@ export const FORM = {
     minionType: MINION_TYPES.SAFE,
     tx: TX.SET_BUYOUT_TOKEN,
     required: ['selectedMinion', 'title', 'paymentRequested'],
-    dev: true,
     fields: [
       [
         { ...FIELD.MINION_SELECT, info: INFO_TEXT.BUYOUT_MINION },
@@ -450,7 +429,6 @@ export const FORM = {
   MINION_TRIBUTE: {
     id: 'MINION_TRIBUTE',
     title: 'NFT Tribute',
-    dev: true,
     subtitle: 'Offer NFT as Tribute',
     description:
       'Offer an NFT as tribute to the DAO. Optionally, offer or request some funds as well.',
@@ -563,6 +541,26 @@ export const FORM = {
     fields: [
       [FIELD.NIFTY_INK_URL],
       [FIELD.MINION_SELECT, FIELD.NIFTY_MINION_PAYMENT_REQUEST],
+    ],
+  },
+  SELL_NFT_RARIBLE: {
+    id: 'SELL_NFT_RARIBLE',
+    title: 'Sell NFT on Rarible',
+    description: 'Post an NFT for sale on Rarible',
+    type: PROPOSAL_TYPES.SELL_NFT_RARIBLE,
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.SELL_NFT_RARIBLE,
+    required: ['selectedMinion', 'orderPrice', 'raribleNftData'],
+    fields: [
+      [FIELD.NFT_SELECT],
+      [
+        FIELD.DATE_RANGE,
+        {
+          ...FIELD.SET_PRICE,
+          orderType: 'sell',
+        },
+        FIELD.RARIBLE_NFT_DATA,
+      ],
     ],
   },
   BUY_NFT_RARIBLE: {
