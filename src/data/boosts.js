@@ -193,6 +193,20 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  DAO_BOOKS: {
+    title: 'DAO Books',
+    description:
+      'Visualise & track the inflows, outflows & consolidated closing for your DAO vaults',
+    publisher: PUBLISHERS.BOOST_FOUNDRY,
+    version: '1.0',
+    pars: [
+      'The DAO Books Boost helps you break down & visualise your DAO vault balances into transactions (inflows and outflows), so you can better understand how the vault funds are being spent or added. This is especially helpful for transactional analytics, book-keeping and financial reporting. ',
+      "By installing this Boost, your DAO's vaults will now have a new button which leads to your Vault Book (i.e. book-keeping view of your vault). In your Vault Book, you will see a breakdown of every transaction (inflows and outflows) as well as a consolidated closing for your vaults. For further analysis & reporting, you can also export your Vault Book into a CSV format.",
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   // SNAPSHOT: {
   //   title: 'Snapshot Proposals',
   //   description:
@@ -437,6 +451,15 @@ export const BOOSTS = {
       appendToDaoPath: 'settings',
     },
   },
+  DAO_BOOKS: {
+    id: 'DAO_BOOKS',
+    steps: STEPS.BASIC_BOOST,
+    boostContent: CONTENT.DAO_BOOKS,
+    categories: ['finance'],
+    networks: 'all',
+    cost: 'free',
+    settings: 'none',
+  },
   // SNAPSHOT: {
   //   id: 'SNAPSHOT',
   //   boostContent: CONTENT.SNAPSHOT,
@@ -459,7 +482,7 @@ const categoryStarter = [
   { name: 'NFTs', id: 'nft' },
   { name: 'Dev Tools', id: 'devTools' },
   { name: 'Membership', id: 'membership' },
-  // { name: 'Finance', id: 'finance' },
+  { name: 'Finance', id: 'finance' },
 ];
 export const categories = categoryStarter.map(cat => ({
   ...cat,
@@ -504,3 +527,5 @@ export const notificationBoostContent = {
       'https://discord.com/api/oauth2/authorize?client_id=736999684471521321&permissions=23552&scope=bot',
   },
 };
+
+export const DAO_BOOKS_HOST = 'https://books.daohaus.club/#';
