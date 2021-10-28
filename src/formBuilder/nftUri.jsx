@@ -6,6 +6,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ErrorList from './ErrorList';
 import LinkInput from './linkInput';
 import { getNftType } from '../utils/contract';
+import { supportedChains } from '../utils/chain';
 import { fetchLazyNftMeta, fetchNftMeta } from '../utils/rarible';
 
 const RARIBLE_URI = /(0x[a-zA-Z0-9]+):([0-9]+)/;
@@ -29,6 +30,7 @@ const NftUri = props => {
     register('market');
     register('nftType');
     register('tokenId');
+    register('raribleTransferProxy');
   }, []);
 
   useEffect(() => {
@@ -57,6 +59,10 @@ const NftUri = props => {
           ? lazyNftMeta['@type']
           : await getNftType(daochain, injectedProvider, nftAddress, tokenId);
 
+        const raribleConfig = supportedChains[daochain].rarible;
+        const raribleTransferProxy = lazyNftMeta
+          ? raribleConfig[`${nftType.toLowerCase()}_lazy_transfer_proxy`]
+          : raribleConfig.nft_transfer_proxy;
         const metadata =
           market === MARKETS.RARIBLE &&
           (await fetchNftMeta(daochain, targetNft.match(RARIBLE_URI)[0]));
@@ -86,6 +92,7 @@ const NftUri = props => {
             `Buying ${metadata.name} tokenId ${tokenId} on ${market}`,
           );
           setValue('tokenId', tokenId);
+          setValue('raribleTransferProxy', raribleTransferProxy);
         } else {
           setInvalidLink(true);
           setValue('targetNft', '');
