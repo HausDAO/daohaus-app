@@ -196,13 +196,12 @@ export const CONTENT = {
   DAO_BOOKS: {
     title: 'DAO Books',
     description:
-      'Transparently see the transactions and assets of your vaults.',
+      'Visualise & track the inflows, outflows & consolidated closing for your DAO vaults',
     publisher: PUBLISHERS.BOOST_FOUNDRY,
     version: '1.0',
     pars: [
-      'DAO Books will enable you to analyse your vault transactions with easy to read tables. ',
-      'Once you set it up, the vaults pages will show a link to directly go to the vault books.',
-      'This is useful to members who would like to quickly understand the flow of their transactions.',
+      'The DAO Books Boost helps you break down & visualise your DAO vault balances into transactions (inflows and outflows), so you can better understand how the vault funds are being spent or added. This is especially helpful for transactional analytics, book-keeping and financial reporting. ',
+      "By installing this Boost, your DAO's vaults will now have a new button which leads to your Vault Book (i.e. book-keeping view of your vault). In your Vault Book, you will see a breakdown of every transaction (inflows and outflows) as well as a consolidated closing for your vaults. For further analysis & reporting, you can also export your Vault Book into a CSV format.",
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
