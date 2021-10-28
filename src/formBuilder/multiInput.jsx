@@ -28,7 +28,6 @@ const MultiInput = props => {
   const { name } = props;
   const [inputs, setInputs] = useState(null);
 
-  // const values = parentForm?.watch();
   useEffect(() => {
     console.log('COMPONENT MOUNT');
     setInputs(checkExistingMultis(props));

@@ -10,10 +10,6 @@ import FormBuilder from './formBuilder';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
 
-// const getFormCtaText = (currentStep) => {
-//   if()
-// }
-
 const getStepTitle = (currentStep, props) => {
   if (typeof currentStep?.title === 'string') return currentStep.title;
   if (currentStep?.form) return currentStep?.form?.title;
@@ -34,7 +30,7 @@ const StepperForm = props => {
     metaFields,
     updateModalUI,
   } = props;
-  const [localSteps, setLocalSteps] = useState(steps);
+
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
@@ -44,13 +40,13 @@ const StepperForm = props => {
   const [stepperStorage, setStepperStorage] = useState();
 
   const userSteps = useMemo(() => {
-    if (localSteps) {
-      return Object.values(localSteps)
+    if (steps) {
+      return Object.values(steps)
         .filter(step => step.isUserStep)
         .map((step, index) => ({ ...step, position: index + 1 }));
     }
     return [];
-  }, [localSteps]);
+  }, [steps]);
 
   useEffect(() => {
     if (!currentStep || !userSteps || typeof updateModalUI !== 'function')
@@ -75,7 +71,7 @@ const StepperForm = props => {
 
   const goToNext = next => {
     const handleNextStep = nextString => {
-      const nextStep = localSteps[nextString];
+      const nextStep = steps[nextString];
       if (nextStep) {
         setCurrentStep(nextStep);
       } else {
@@ -164,7 +160,7 @@ const StepperForm = props => {
         goToNext={goToNext}
         next={currentStep.next}
         userSteps={userSteps}
-        steps={localSteps}
+        steps={steps}
         secondaryBtn={secondaryBtn}
       />
     );
@@ -212,24 +208,6 @@ const StepperForm = props => {
     );
   }
   return null;
-
-  // if (userSteps?.length && position > 0)
-  //   return (
-  //     <Flex flexDir='column'>
-  //       <Box
-  //         fontFamily='heading'
-  //         textTransform='uppercase'
-  //         fontSize='sm'
-  //         fontWeight={700}
-  //         color='secondary.400'
-  //         mb={2}
-  //       >
-  //         {`Step ${position} of ${userSteps.length}`}
-  //         {currentStep?.stepLabel && `: ${currentStep.stepLabel}`}
-  //       </Box>
-  //       {getFrame()}
-  //     </Flex>
-  //   );
 };
 
 export default StepperForm;

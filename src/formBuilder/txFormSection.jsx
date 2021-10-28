@@ -3,9 +3,9 @@ import { Button, Flex, Icon } from '@chakra-ui/react';
 import { BiMinus, BiPlus } from 'react-icons/bi';
 
 import TextBox from '../components/TextBox';
+import FormSection from './formSection';
 
 import { IsJsonString } from '../utils/general';
-import FormSection from './formSection';
 
 const TxFormSection = props => {
   const {

@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { filterObject, isObjectEmpty, pipe } from './general';
 import { logFormError } from './errorLog';
-import { buildRHFvalFn, validate } from './validation';
+import { collectTypeValidations, validate } from './validation';
 import { handleSearch } from './txHelpers';
 
 export const splitMulti = (key, value, flag) => {
@@ -221,7 +221,7 @@ export const serializeTXs = (forms = []) =>
 
 const addTypeValidation = (regOptions, valStr) => ({
   ...regOptions,
-  validate: { [`type-${valStr}`]: buildRHFvalFn(valStr) },
+  validate: { [`type-${valStr}`]: collectTypeValidations(valStr) },
 });
 
 const handleRequired = ({ name, label }, required) => regOptions =>

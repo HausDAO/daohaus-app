@@ -25,16 +25,8 @@ const FieldWrapper = ({
 }) => {
   const width = useMemo(() => {
     if (w) return w;
-    // if (layout === 'singleRow') return '100%';
-    // return ['100%', null, '48%'];
   }, [w, layout]);
 
-  // const errorMsgs = useMemo(() => {
-  //   if (!errors[name]) return;
-
-  //   return Object.values(errors[name]);
-  // }, [errors, name]);
-  // console.log(`errorMsgs`, errorMsgs);
   const fieldError = handleCheckError(errors, name);
   return (
     <Flex

@@ -45,7 +45,7 @@ const AbiInput = props => {
       getABI();
       contractRef.current = targetContract;
     }
-  }, [targetContract]);
+  }, [targetContract, daochain]);
 
   useEffect(() => {
     if (abiInput) {

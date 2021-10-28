@@ -16,7 +16,6 @@ import { validate } from './validation';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { CONTRACTS, TX } from '../data/contractTX';
 
-// const isSearchPath = string => string[0] === '.';
 const getPath = pathString =>
   pathString
     .slice(1)
@@ -109,13 +108,6 @@ const collapseToCallData = values =>
     value: tx.minionValue || '0',
     operation: tx.operation || '0',
   }));
-
-// console.log(
-//   'TEST',
-//   encodeMulti(
-//     collapseToCallData(collapse(testValues, '*MULTI*', 'objOfArrays')),
-//   ),
-// );
 
 const argBuilderCallback = Object.freeze({
   proposeActionVanilla({ values, formData }) {

@@ -411,28 +411,6 @@ export const FIELD = {
     title: 'Minion Setup',
     expectType: 'any',
   },
-  TEST_SWITCH: {
-    type: 'checkSwitch',
-    listenTo: 'formCondition',
-    checked: 'token',
-    unchecked: 'signal',
-    label: {
-      type: 'formCondition',
-      token: 'checked',
-      signal: 'not checked',
-    },
-    title: 'Create a token proposal',
-    description: 'ssdfsd',
-    expectType: 'any',
-  },
-  TEST_GATE: {
-    type: 'checkGate',
-    startsChecked: false,
-    label: 'Toggle Field State',
-    title: 'Check to render Description',
-    description: 'You bet',
-    expectType: 'any',
-  },
 };
 
 export const FORM_DISPLAY = {

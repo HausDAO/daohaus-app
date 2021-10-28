@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { isLastItem } from '../utils/general';
-import { serializeTXs } from '../utils/formBuilder';
 import FormSection from './formSection';
 import TxFormSection from './txFormSection';
+
+import { isLastItem } from '../utils/general';
+import { serializeTXs } from '../utils/formBuilder';
 
 const dev = process.env.REACT_APP_DEV;
 

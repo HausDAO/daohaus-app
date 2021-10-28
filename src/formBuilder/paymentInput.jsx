@@ -9,18 +9,6 @@ import { validate } from '../utils/validation';
 import { handleDecimals } from '../utils/general';
 import { spreadOptions } from '../utils/formBuilder';
 
-// const getMaxBalance = (tokenData, tokenAddress) => {
-//   //  Uses token select data structure
-
-//   const token = tokenData.find(t => t.value === tokenAddress);
-
-//   if (token) {
-//     return handleDecimals(token.balance, token.decimals);
-//   }
-// };
-
-// const validateBalance = (balance, value) => Number(value) > Number(balance);
-
 const PaymentInput = props => {
   const { daoOverview } = useDao();
   const { localForm, registerOptions = {} } = props;

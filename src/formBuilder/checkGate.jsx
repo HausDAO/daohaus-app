@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { createRegisterOptions, useFormConditions } from '../utils/formBuilder';
+
 import GenericCheck from './genericCheck';
 import { InputFactory } from './inputFactory';
+
+import { createRegisterOptions, useFormConditions } from '../utils/formBuilder';
 
 const CheckGate = props => {
   const {

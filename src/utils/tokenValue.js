@@ -1,4 +1,7 @@
 import { ethers } from 'ethers';
+
+// Refactor utils to PURGE TokenService and MolochService
+
 import { TokenService } from '../services/tokenService';
 import { MolochService } from '../services/molochService';
 import { omit } from './general';
