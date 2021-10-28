@@ -6,7 +6,7 @@ import Web3 from 'web3';
 // import Erc20Abi from '../contracts/erc20a.json';
 import { getLocalABI } from './abi';
 import { chainByID } from './chain';
-import { postApiGnosis, postGnosisRelayApi } from './requests';
+import { getApiGnosis, postApiGnosis, postGnosisRelayApi } from './requests';
 import { CONTRACTS } from '../data/contractTX';
 
 export const createContract = ({ address, abi, chainID, web3 }) => {
@@ -79,14 +79,18 @@ export const createGnosisSafeTxProposal = async ({
     operation,
     gasToken: null,
   };
-  const gasEstimate = await postGnosisRelayApi(
-    network,
-    `safes/${safeAddress}/transactions/estimate/`,
-    txBase,
-  );
-  const { lastUsedNonce, safeTxGas } = gasEstimate.data;
+  const safeDetails = await getApiGnosis(network, `safes/${safeAddress}/`);
+  const gasEstimate =
+    ['mainnnet', 'rinkeby', 'goerli'].includes(network) &&
+    (await postGnosisRelayApi(
+      network,
+      `safes/${safeAddress}/transactions/estimate/`,
+      txBase,
+    ));
+
   // TODO: consider Txs in the queue?
-  const nonce = lastUsedNonce >= 0 ? lastUsedNonce + 1 : 0;
+  const { nonce } = safeDetails;
+  const safeTxGas = gasEstimate ? gasEstimate.data.safeTxGas : 0;
   const txRefund = {
     gasToken: ethers.constants.AddressZero,
     baseGas: 0,
