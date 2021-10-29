@@ -123,8 +123,8 @@ const fetchAllActivity = async (args, items = [], skip = 0) => {
       },
     });
     const { proposals } = result.moloch;
-    if (proposals.length === 1000) {
-      return fetchAllActivity(args, [...items, ...proposals], skip + 1000);
+    if (proposals.length === 100) {
+      return fetchAllActivity(args, [...items, ...proposals], skip + 100);
     }
     return { ...result.moloch, proposals: [...items, ...proposals] };
   } catch (error) {
