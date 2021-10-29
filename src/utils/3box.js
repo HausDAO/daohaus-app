@@ -7,13 +7,17 @@ import { DID } from 'dids';
 import { EthereumAuthProvider, SelfID, WebClient } from '@self.id/web';
 import { Core } from '@self.id/core';
 
+import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
+
 export const authenticateDid = async address => {
   const authProvider = new EthereumAuthProvider(window.ethereum, address);
   const client = new WebClient({
     ceramic: 'testnet-clay',
     connectNetwork: 'testnet-clay',
   });
-  const did = await client.authenticate(authProvider);
+  const did = await client.authenticate(authProvider, true);
+  // Always associate current chain with mainnet
+  // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
 
   return [client, did];
 };
@@ -25,8 +29,13 @@ export const getAuthenticatedBasicProfile = async (client, did) => {
 
 export const getBasicProfile = async did => {
   const core = new Core({ ceramic: 'testnet-clay' });
-  console.log(did);
   return await core.get('basicProfile', did);
+};
+
+export const setBasicProfile = async (client, did, values) => {
+  const selfId = new SelfID({ client, did });
+  console.log(did);
+  return await selfId.set('basicProfile', values);
 };
 
 export const fetchProfile = async address => {
@@ -34,11 +43,13 @@ export const fetchProfile = async address => {
   // Try fetch if exists return
   // getAccountDid
   const core = new Core({ ceramic: 'testnet-clay' });
-  // const did = core.toDID(`${address.toLowerCase()}@eip155:1`);
+  const ethAuthProvider = new EthereumAuthProvider(window.ethereum, address);
+  const accountId = await ethAuthProvider.accountId();
+  const link = await Caip10Link.fromAccount(core.ceramic, accountId);
 
-  const values = getBasicProfile(
-    'did:3:kjzl6cwe1jw1497znxmep1z712k51jyftw3znlkm1crbcxq1boofrbs25hbayb3',
-  );
+  const values = await getBasicProfile(link.did);
+  console.log('values');
+  console.log(values);
   if (values) {
     return values;
   }

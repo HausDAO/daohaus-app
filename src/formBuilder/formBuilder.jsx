@@ -49,9 +49,6 @@ const FormBuilder = props => {
 	const localForm = parentForm || useForm({ shouldUnregister: false, defaultValues: defaultValues });
   const { handleSubmit, watch } = localForm;
   const values = watch();
-  console.log('Builder');
-  console.log(fields);
-  console.log(formFields);
 
   useEffect(() => logValues && dev && console.log(`values`, values), [values]);
 

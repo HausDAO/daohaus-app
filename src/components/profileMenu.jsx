@@ -21,16 +21,16 @@ import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
-import { authenticateDid, getBasicProfile } from '../utils/3box';
+import { authenticateDid, getBasicProfile, setBasicProfile, cacheProfile } from '../utils/3box';
 import { FIELD } from '../data/fields';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
-  const { formModal } = useAppModal();
+  const { formModal, closeModal } = useAppModal();
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
-  const { errorToast } = useOverlay();
+  const { successToast, errorToast } = useOverlay();
   const { submitTransaction } = useTX();
 
   const [canRageQuit, setCanRageQuit] = useState(false);
@@ -55,24 +55,29 @@ const ProfileMenu = ({ member }) => {
         const submit = async () => {
           const [client, did] = await authenticateDid(member.memberAddress);
           if (did.authenticated) {
-            console.log('Pop');
             // onLoad hook
 						// Add set value functionality in the profile
 						const values = await getBasicProfile(did.id)
-						console.log(values)
             formModal({
               ...FORM.PROFILE,
+							ctaText: "Submit",
 							defaultValues: {
 								name: values.name || "",
 								emoji: values.emoji || "",
+								description: values.description || "",
+								homeLocation: values.homeLocation || "",
+								residenceCountry: values.residenceCountry || "",
+								url: values.url || ""
 							},
-              onLoad: async () => {
-                // fetch values
-                // update field values
-                // console.log('basicProfile');
-								// const values = await getBasicProfile(client, did)
-								// console.log(values)
-              },
+							onSubmit: ({ values }) => {
+								const submit = async (values) => {
+								await setBasicProfile(client, did, values)
+								cacheProfile(values, member.memberAddress)
+								successToast({ title: 'Updated Profile!' });
+								closeModal()
+								}
+								submit(values)
+							},
             });
           }
         };
