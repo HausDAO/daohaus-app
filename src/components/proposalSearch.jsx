@@ -112,7 +112,7 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
       mt='1'
       zIndex='5'
     >
-      <Popover placement='bottom-end'>
+      <Popover placement='bottom-end' isLazy>
         <PopoverTrigger>
           <Button
             textTransform='uppercase'
