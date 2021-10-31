@@ -104,7 +104,7 @@ const encodeMulti = encodedTXs => {
 const collapseToCallData = values =>
   values.TX.map(tx => ({
     to: tx.targetContract,
-    data: safeEncodeHexFunction(JSON.parse(tx.abiInput), tx.abiArgs),
+    data: safeEncodeHexFunction(JSON.parse(tx.abiInput), tx.abiArgs || []),
     value: tx.minionValue || '0',
     operation: tx.operation || '0',
   }));
@@ -113,7 +113,7 @@ const argBuilderCallback = Object.freeze({
   proposeActionVanilla({ values, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
-      collapse(values, '*ABI_ARG*', 'array'),
+      values?.abiArgs || [],
     );
     const details = detailsToJSON({
       ...values,
@@ -124,7 +124,7 @@ const argBuilderCallback = Object.freeze({
   proposeActionNifty({ values, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
-      collapse(values, '*ABI_ARG*', 'array'),
+      values?.abiArgs || [],
     );
 
     const details = detailsToJSON({
@@ -159,10 +159,9 @@ const argBuilderCallback = Object.freeze({
     ];
   },
   proposeActionSafe({ values, formData }) {
-    const inputVals = collapse(values, '*ABI_ARG*', 'array');
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
-      Array.isArray(inputVals) ? inputVals : [],
+      values?.abiArgs || [],
     );
 
     const details = detailsToJSON({

@@ -57,7 +57,7 @@ const MultiTXForm = props => {
         <TxFormSection
           key={form.txID}
           form={tx ? { ...form, tx } : form}
-          isLastItem={isLastItem(forms, index)}
+          isLastItem={isLastItem(allForms, index)}
           txIndex={form.txIndex}
           handleAddTx={handleAddTx}
           handleRemoveTx={handleRemoveTx}
@@ -70,7 +70,7 @@ const MultiTXForm = props => {
       <FormSection
         key={form.id}
         form={tx ? { ...form, tx } : form}
-        isLastItem={isLastItem(forms, index)}
+        isLastItem={isLastItem(allForms, index)}
         parentForm={parentForm}
         tx={tx}
         setParentFields={setParentFields}
