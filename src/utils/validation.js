@@ -13,6 +13,7 @@ export const TYPE_ERR_MSGS = {
   string: 'Must be a valid string',
   address: 'Must be a valid Ethereum Address',
   urlNoHTTP: 'Must be a URL. Http not needed.',
+  url: 'Must be a URL.',
   greaterThanZero: 'Must be greater than zero.',
 };
 
@@ -34,6 +35,10 @@ export const validate = {
   urlNoHTTP(val) {
     return !val.includes('http') && val.includes('.');
   },
+  url(val) {
+    return val.includes('http') && val.includes('.');
+  },
+
   greaterThanZero(val) {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },

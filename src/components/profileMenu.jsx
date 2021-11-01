@@ -49,39 +49,41 @@ const ProfileMenu = ({ member }) => {
   const handleEditProfile = () =>
     formModal({
       ...FORM.PROFILE,
+			formLoadingMessage: "Connecting...",
+			formErrorMessage: "Failed to connect",
       fields: [FIELD.BLUR, ...FORM.PROFILE.fields],
-      onSubmit: ({ values }) => {
+      onSubmit: async ({ values }) => {
+				const x = values
         // How does the loader work with async
-        const submit = async () => {
-          const [client, did] = await authenticateDid(member.memberAddress);
-          if (did.authenticated) {
-            // onLoad hook
-						// Add set value functionality in the profile
-						const values = await getBasicProfile(did.id)
-            formModal({
-              ...FORM.PROFILE,
-							ctaText: "Submit",
-							defaultValues: {
-								name: values.name || "",
-								emoji: values.emoji || "",
-								description: values.description || "",
-								homeLocation: values.homeLocation || "",
-								residenceCountry: values.residenceCountry || "",
-								url: values.url || ""
-							},
-							onSubmit: ({ values }) => {
-								const submit = async (values) => {
-								await setBasicProfile(client, did, values)
-								cacheProfile(values, member.memberAddress)
-								successToast({ title: 'Updated Profile!' });
-								closeModal()
-								}
-								submit(values)
-							},
-            });
-          }
-        };
-        submit();
+        const [client, did] = await authenticateDid(member.memberAddress);
+        if (did.authenticated) {
+          // onLoad hook
+					// Add set value functionality in the profile
+					const profile = await getBasicProfile(did.id)
+					closeModal()
+          formModal({
+            ...FORM.PROFILE,
+						ctaText: "Submit",
+			      formSuccessMessage: "Connected",
+						defaultValues: {
+							name: profile?.name || "",
+							emoji: profile?.emoji || "",
+							description: profile?.description || "",
+							homeLocation: profile?.homeLocation || "",
+							residenceCountry: profile?.residenceCountry || "",
+							url: profile?.url || ""
+						},
+						onSubmit: async ({ values }) => {
+							console.log(x)
+							console.log("Submitted values")
+							console.log(values)
+							await setBasicProfile(client, did, values)
+							cacheProfile(values, member.memberAddress)
+							successToast({ title: 'Updated Profile!' });
+							closeModal()
+						},
+          });
+        }
 
         // authenticate profile
         // open modal modal

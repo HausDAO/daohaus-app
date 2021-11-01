@@ -140,28 +140,6 @@ export const FORM = {
     ],
     customValidations: ['nonDaoApplicant'],
   },
-  PROFILEx: {
-    id: 'PROFILEx',
-    title: 'Membership Proposal Example',
-    dev: true,
-    description: 'Proposal for DAO membership',
-    type: PROPOSAL_TYPES.MEMBER,
-    required: ['title', 'sharesRequested'], // Use name key from proposal type object
-    tx: TX.SUBMIT_PROPOSAL,
-    fields: [
-      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
-      [FIELD.SHARES_REQUEST, FIELD.TRIBUTE],
-    ],
-    additionalOptions: [
-      {
-        ...FIELD.APPLICANT,
-        label: 'Applicant',
-      },
-      FIELD.LOOT_REQUEST,
-      FIELD.PAYMENT_REQUEST,
-    ],
-    customValidations: ['nonDaoApplicant'],
-  },
   PROFILE: {
     // Have blur field
     // If
@@ -214,7 +192,7 @@ export const FORM = {
           label: '2-Letter Country Code',
           name: 'residenceCountry',
           placeholder: 'US',
-          htmlFor: 'residenceLocation',
+          htmlFor: 'residenceCountry',
           expectType: 'string',
         },
         {
@@ -223,7 +201,7 @@ export const FORM = {
           name: 'url',
           placeholder: 'https://localhost:5000',
           htmlFor: 'url',
-          expectType: 'string',
+          expectType: 'url',
         },
       ],
     ],

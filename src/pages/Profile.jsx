@@ -34,7 +34,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     const getProfile = async () => {
       try {
         const profile = await handleGetProfile(userid);
-        if (profile.status === 'error') return;
+        // if (profile.status === 'error') return;
         setProfile(profile);
       } catch (error) {
         console.error(error);

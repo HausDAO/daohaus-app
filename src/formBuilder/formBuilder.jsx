@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
+import { BsCheckCircle } from 'react-icons/bs';
+import { BiErrorCircle } from 'react-icons/bi';
 
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
@@ -39,6 +41,9 @@ const FormBuilder = props => {
     logValues,
     onLoad,
 		defaultValues,
+		formSuccessMessage,
+		formLoadingMessage,
+		formErrorMessage,
   } = props;
 
   const [formState, setFormState] = useState(null);
@@ -245,6 +250,30 @@ const FormBuilder = props => {
     },
   });
 
+
+
+	console.log("formSuccessMessage");
+	console.log(formSuccessMessage);
+	const defaultIndicatorStates = {
+  loading: {
+    spinner: true,
+    title: formLoadingMessage || 'Submitting...',
+    explorerLink: true,
+  },
+  success: {
+    icon: BsCheckCircle,
+    title: formSuccessMessage || 'Form Submitted',
+    explorerLink: true,
+  },
+  error: {
+    icon: BiErrorCircle,
+    title: formErrorMessage || 'Error Submitting Transaction',
+    errorMessage: true,
+  },
+};
+
+
+
   const renderInputs = (fields, depth = 0) => {
     return fields.map((field, index) =>
       Array.isArray(field) ? (
@@ -286,7 +315,7 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} />
+        <ProgressIndicator currentState={formState} states={defaultIndicatorStates} />
         <FormFooter
           options={options}
           addOption={addOption}

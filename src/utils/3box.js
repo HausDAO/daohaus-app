@@ -10,12 +10,32 @@ import { Core } from '@self.id/core';
 import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
 
 export const authenticateDid = async address => {
+  console.log(window.ethereum);
+  await ethereum.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: '0x1' }],
+  });
+
   const authProvider = new EthereumAuthProvider(window.ethereum, address);
   const client = new WebClient({
     ceramic: 'testnet-clay',
     connectNetwork: 'testnet-clay',
   });
-  const did = await client.authenticate(authProvider, true);
+  let did = null;
+  try {
+    did = await client.authenticate(authProvider, true);
+
+    const link = await Caip10Link.fromAccount(
+      client.ceramic,
+      `${address}@eip155:1`,
+      {},
+    );
+    if (!link.did) {
+      await link.setDid(did, authProvider, {});
+    }
+  } catch (err) {
+    console.log(err);
+  }
   // Always associate current chain with mainnet
   // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
 
@@ -42,29 +62,36 @@ export const fetchProfile = async address => {
   console.log('Fetching profile');
   // Try fetch if exists return
   // getAccountDid
-  const core = new Core({ ceramic: 'testnet-clay' });
-  const ethAuthProvider = new EthereumAuthProvider(window.ethereum, address);
-  const accountId = await ethAuthProvider.accountId();
-  const link = await Caip10Link.fromAccount(core.ceramic, accountId);
-
-  const values = await getBasicProfile(link.did);
-  console.log('values');
-  console.log(values);
-  if (values) {
-    return values;
-  }
   try {
-    const response = await fetch(
-      `https://ipfs.3box.io/profile?address=${address}`,
+    const core = new Core({ ceramic: 'testnet-clay' });
+    const link = await Caip10Link.fromAccount(
+      core.ceramic,
+      `${address}@eip155:1`,
     );
-    if (response.status === 'error') {
-      console.log('Profile does not exist');
-    }
+    console.log('link');
+    console.log(link);
 
-    const boxProfile = response.json();
-    return boxProfile;
-  } catch (error) {
-    console.log(error);
+    const values = await getBasicProfile(link.did);
+    console.log('values');
+    console.log(values);
+    if (values) {
+      return values;
+    }
+  } catch (err) {
+    console.error(err);
+    try {
+      const response = await fetch(
+        `https://ipfs.3box.io/profile?address=${address}`,
+      );
+      if (response.status === 'error') {
+        console.log('Profile does not exist');
+      }
+
+      const boxProfile = response.json();
+      return boxProfile;
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
