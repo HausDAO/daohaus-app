@@ -23,7 +23,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
           daoToken.tokenAddress.toLowerCase()
         );
       });
-    setTokenWhitelisted(!isWhitelisted);
+    setTokenWhitelisted(!!isWhitelisted);
   }, [currentDaoTokens]);
 
   return (
@@ -82,13 +82,11 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
               targetDao={token}
               tokenWhitelisted={tokenWhitelisted}
               token={token}
-              daoConnectedAndSameChain={
-                !daoConnectedAndSameChain(
-                  address,
-                  daochain,
-                  injectedChain?.chainId,
-                )
-              }
+              daoConnectedAndSameChain={daoConnectedAndSameChain(
+                address,
+                daochain,
+                injectedChain?.chainId,
+              )}
             />
           </Box>
         )}
