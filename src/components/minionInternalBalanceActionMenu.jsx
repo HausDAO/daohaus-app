@@ -76,7 +76,7 @@ const MinionInternalBalanceActionMenu = ({
       </MenuButton>
       <MenuList>
         <MenuItem
-          isDisabled={daoConnectedAndSameChain || !isMember}
+          isDisabled={!daoConnectedAndSameChain || !isMember}
           onClick={() => handleWithdraw({ transfer: false })}
         >
           <Tooltip
@@ -89,7 +89,9 @@ const MinionInternalBalanceActionMenu = ({
           </Tooltip>{' '}
         </MenuItem>
         <MenuItem
-          isDisabled={tokenWhitelisted || daoConnectedAndSameChain || !isMember}
+          isDisabled={
+            !tokenWhitelisted || !daoConnectedAndSameChain || !isMember
+          }
           onClick={() => handleWithdraw({ transfer: true })}
         >
           <Tooltip
@@ -97,7 +99,7 @@ const MinionInternalBalanceActionMenu = ({
             shouldWrapChildren
             placement='bottom'
             label={
-              tokenWhitelisted
+              !tokenWhitelisted
                 ? 'Token must be whitelisted in the DAO'
                 : 'Pull tokens through the minion into this DAOs Treasury'
             }

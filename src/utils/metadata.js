@@ -406,7 +406,7 @@ export const addBoost = async ({
   onSuccess,
   onError,
 }) => {
-  const propConfig = omit(['devList'], proposalConfig);
+  const propConfig = proposalConfig && omit(['devList'], proposalConfig);
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
 

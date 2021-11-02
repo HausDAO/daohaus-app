@@ -1,6 +1,11 @@
 import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
-import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
+import {
+  ALT_ACTIVITIES,
+  ALT_AGAIN,
+  DAO_ACTIVITIES,
+  HOME_DAO,
+} from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
@@ -16,6 +21,7 @@ import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
 import { validateSafeMinion } from './vaults';
+import { ALT } from '../data/temp';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -112,11 +118,16 @@ export const fetchMinionInternalBalances = async args => {
   });
 };
 
-const fetchAllActivity = async (args, items = [], skip = 0) => {
+const fetchAllActivity = async (
+  args,
+  items = [],
+  skip = 0,
+  query = DAO_ACTIVITIES,
+) => {
   try {
     const result = await graphQuery({
       endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
-      query: DAO_ACTIVITIES,
+      query,
       variables: {
         contractAddr: args.daoID,
         skip,
@@ -124,12 +135,34 @@ const fetchAllActivity = async (args, items = [], skip = 0) => {
     });
     const { proposals } = result.moloch;
     if (proposals.length === 100) {
-      return fetchAllActivity(args, [...items, ...proposals], skip + 100);
+      //  TESTING ONLY
+      // if (skip === 400) {
+      //   return { ...result.moloch, proposals: [...items, ...proposals] };
+      // }
+      return fetchAllActivity(
+        args,
+        [...items, ...proposals],
+        skip + 100,
+        query,
+      );
     }
     return { ...result.moloch, proposals: [...items, ...proposals] };
   } catch (error) {
     throw new Error(error);
   }
+};
+
+const fetchAltActivity = async (args, items = [], skip = 0) => {
+  const sponsored = await fetchAllActivity(args, items, skip, ALT_ACTIVITIES);
+  const unsponsored = await fetchAllActivity(args, items, skip, ALT_AGAIN);
+
+  return {
+    id: sponsored.id,
+    rageQuits: sponsored.rageQuits,
+    title: sponsored.title,
+    version: sponsored.version,
+    proposals: [...sponsored?.proposals, ...unsponsored?.proposals],
+  };
 };
 
 const completeQueries = {
@@ -207,7 +240,10 @@ const completeQueries = {
   },
   async getActivities(args, setter) {
     try {
-      const activity = await fetchAllActivity(args);
+      const isAlt = ALT.includes(args.daoID);
+      const activity = isAlt
+        ? await fetchAltActivity(args)
+        : await fetchAllActivity(args);
 
       const resolvedActivity = {
         // manually copying to prevent unnecessary copies of proposals
