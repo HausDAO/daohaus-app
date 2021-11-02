@@ -10,6 +10,7 @@ const GenericTextarea = ({
   name,
   btn,
   helperText,
+	defaultValue,
   localForm,
   info,
   h = 10,
@@ -36,6 +37,7 @@ const GenericTextarea = ({
         name={name}
         placeholder={placeholder || label || htmlFor}
         h={h}
+				defaultValue={defaultValue}
         ref={register}
         disabled={disabled}
       />

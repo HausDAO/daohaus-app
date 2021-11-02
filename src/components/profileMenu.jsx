@@ -46,23 +46,24 @@ const ProfileMenu = ({ member }) => {
 
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
-  const handleEditProfile = () =>
+  const handleEditProfile = () => {
+		let client = null;
+	  let did = null;
     formModal({
       ...FORM.PROFILE,
 			formLoadingMessage: "Connecting...",
 			formErrorMessage: "Failed to connect",
-      fields: [FIELD.BLUR, ...FORM.PROFILE.fields],
-      onSubmit: async ({ values }) => {
-				const x = values
-        // How does the loader work with async
-        const [client, did] = await authenticateDid(member.memberAddress);
-        if (did.authenticated) {
+      fields: [...FORM.PROFILE.fields],
+			onSubmit: async ({ value }) => {
+				console.log("On submit")
+        if (did?.authenticated) {
+				console.log("Triggering")
           // onLoad hook
 					// Add set value functionality in the profile
 					const profile = await getBasicProfile(did.id)
-					closeModal()
+				console.log(profile)
           formModal({
-            ...FORM.PROFILE,
+      ...FORM.PROFILE,
 						ctaText: "Submit",
 			      formSuccessMessage: "Connected",
 						defaultValues: {
@@ -74,8 +75,6 @@ const ProfileMenu = ({ member }) => {
 							url: profile?.url || ""
 						},
 						onSubmit: async ({ values }) => {
-							console.log(x)
-							console.log("Submitted values")
 							console.log(values)
 							await setBasicProfile(client, did, values)
 							cacheProfile(values, member.memberAddress)
@@ -84,12 +83,17 @@ const ProfileMenu = ({ member }) => {
 						},
           });
         }
-
+			},
+      removeBlurCallback: async () => {
+        // How does the loader work with async
+        [client, did] = await authenticateDid(member.memberAddress);
+				return true
         // authenticate profile
         // open modal modal
         // then user can fill out
       },
     });
+	}
 
   const copiedToast = () => {
     toast({

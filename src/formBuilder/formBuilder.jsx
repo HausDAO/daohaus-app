@@ -4,6 +4,7 @@ import { Flex, FormControl } from '@chakra-ui/react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { BiErrorCircle } from 'react-icons/bi';
 
+import TextBox from '../components/TextBox';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -19,6 +20,13 @@ import { omit } from '../utils/general';
 
 const dev = process.env.REACT_APP_DEV;
 
+// Callback that disables or enables a blocker field
+// react-hook-form, returns string if passes
+//
+// tx contexts trigger refreshes of the graph
+// refetch, not refresh the context
+//
+// onPullSuccess - in the react component
 const FormBuilder = props => {
   const {
     submitTransaction,
@@ -45,17 +53,27 @@ const FormBuilder = props => {
 		formLoadingMessage,
 		formErrorMessage,
   } = props;
+	// Pass in callback
+	// If callback active show blur
+	// if blur callback reutrns true 
+	// then show form 
 
   const [formState, setFormState] = useState(null);
+  const [removeBlur, setRemoveBlur] = useState(null);
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
+	console.log("defaultValues")
+	console.log(defaultValues)
+	console.log("parentForm")
+	console.log(parentForm)
 	const localForm = parentForm || useForm({ shouldUnregister: false, defaultValues: defaultValues });
+	console.log(localForm)
   const { handleSubmit, watch } = localForm;
   const values = watch();
 
-  useEffect(() => logValues && dev && console.log(`values`, values), [values]);
+  useEffect(() => logValues && dev && console.log(`values`, values, fields), [values]);
 
   useEffect(() => {
     setFields(mapInRequired(fields, required));
@@ -174,6 +192,7 @@ const FormBuilder = props => {
     const handleSubmitCallback = async () => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+				console.log("handleSubmitCallback")
         try {
           setFormState('loading');
           const res = await submitCallback({
@@ -230,13 +249,31 @@ const FormBuilder = props => {
         return handleSubmitTX(() => handleThen(next));
       }
     }
+		let shouldRemove = true
+		if (props.removeBlurCallback) {
+			console.log("Removing")
+        try {
+        setFormState('loading');
+				shouldRemove = await props.removeBlurCallback()
+					console.log(shouldRemove)
+				setRemoveBlur(shouldRemove)
+          // don't indicate on form
+          setFormState('success');
+					console.log("Should remove")
+					console.log(shouldRemove)
+        } catch (error) {
+          console.error(error);
+          setFormState('error');
+        }
 
+		}
     //  HANDLE CALLBACK ON SUBMIT
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function')
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function' && shouldRemove)
+			console.log("Calling submit callback")
       return handleSubmitCallback();
 
     //  HANDLE CONTRACT TX ON SUBMIT
-    if (props.tx) {
+    if (props.tx && shouldRemove) {
       return handleSubmitTX();
     }
   };
@@ -275,8 +312,15 @@ const FormBuilder = props => {
 
 
   const renderInputs = (fields, depth = 0) => {
-    return fields.map((field, index) =>
-      Array.isArray(field) ? (
+
+    return fields.map((field, index) => {
+
+			let value = ""
+			if (defaultValues) {
+			   value = defaultValues[field?.name]
+			}
+
+      return Array.isArray(field) ? (
         <Flex
           flex={1}
           flexDir='column'
@@ -288,6 +332,7 @@ const FormBuilder = props => {
       ) : (
         <InputFactory
           {...field}
+					defaultValue={value || field?.defaultValue}
           key={`${depth}-${index}`}
           minionType={props.minionType}
           formCondition={formCondition}
@@ -299,14 +344,39 @@ const FormBuilder = props => {
           useFormError={useFormError}
           formState={formState}
         />
-      ),
+      )
+	}
     );
   };
 
+  console.log("Here")
+  console.log(props.removeBlurCallback && !removeBlur)
+  console.log(props.removeBlurCallback)
+  console.log(removeBlur)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl display='flex'>
+				          {!removeBlur ?
+            <Flex
+              display='flex'
+              w='106%'
+              h='105%'
+              top='-5'
+              left='-5'
+              backdropFilter='blur(6px)'
+              position='absolute'
+              zIndex={5}
+              justify='center'
+              align='center'
+            >
+              <TextBox w='40%' textAlign='center'>
+                Connect to update your profile
+              </TextBox>
+            </Flex> : <></>
+          }
+
+
           <Flex
             width='100%'
             flexDirection={['column', null, 'row']}

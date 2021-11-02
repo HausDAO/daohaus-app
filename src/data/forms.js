@@ -151,6 +151,7 @@ export const FORM = {
     required: [], // Use name key from proposal type object
     tx: null,
     ctaText: 'Connect',
+    logValues: true,
     fields: [
       [
         {
@@ -165,7 +166,7 @@ export const FORM = {
           ...FIELD.DESCRIPTION,
           label: 'Bio',
           name: 'description',
-          htmlFor: 'bio',
+          htmlFor: 'description',
           placeholder: 'A description about yourself',
           expectType: 'string',
         },
@@ -181,12 +182,21 @@ export const FORM = {
       [
         {
           ...FIELD.TITLE,
+          label: 'Url',
+          name: 'url',
+          placeholder: 'https://localhost:5000',
+          htmlFor: 'url',
+          expectType: 'any',
+        },
+        {
+          ...FIELD.TITLE,
           label: 'Location',
           name: 'homeLocation',
           placeholder: 'A location where you are or hope to be',
           htmlFor: 'homeLocation',
           expectType: 'string',
         },
+
         {
           ...FIELD.TITLE,
           label: '2-Letter Country Code',
@@ -194,14 +204,6 @@ export const FORM = {
           placeholder: 'US',
           htmlFor: 'residenceCountry',
           expectType: 'string',
-        },
-        {
-          ...FIELD.TITLE,
-          label: 'Url',
-          name: 'url',
-          placeholder: 'https://localhost:5000',
-          htmlFor: 'url',
-          expectType: 'url',
         },
       ],
     ],
