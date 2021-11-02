@@ -198,7 +198,9 @@ const serializeFields = (fields = [], txIndex) =>
           ...field,
           name: `TX.${txIndex}.${originalName}`,
           htmlFor: `TX.${txIndex}.${originalName}`,
-          listenTo: field.listenTo ? `TX.${txIndex}.${originalName}` : null,
+          listenTo: field.listenTo
+            ? `TX.${txIndex}.${getOriginalName(field.listenTo)}`
+            : null,
         };
       }
       return {

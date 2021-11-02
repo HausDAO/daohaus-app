@@ -381,31 +381,7 @@ export const PROPOSAL_FORMS = {
       ],
     ],
   },
-  SAMPLE_CONDITIONAL: {
-    id: 'SAMPLE_CONDITIONAL',
-    formConditions: ['signal', 'token'],
-    title: 'Conditional Form',
-    description: 'Conditional Description',
-    type: PROPOSAL_TYPES.FUNDING,
-    tx: {
-      type: 'formCondition',
-      token: TX.WHITELIST_TOKEN_PROPOSAL,
-      signal: TX.SUBMIT_PROPOSAL,
-    },
-    required: ['title'],
-    fields: [
-      [
-        FIELD.TEST_SWITCH,
-        FIELD.TITLE,
-        { ...FIELD.TEST_GATE, renderOnCheck: FIELD.DESCRIPTION },
-        {
-          type: 'formCondition',
-          token: { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
-          signal: FIELD.LINK,
-        },
-      ],
-    ],
-  },
+
   MINION_BUYOUT_TOKEN: {
     id: 'MINION_BUYOUT_TOKEN',
     title: 'Buyout Proposal',
