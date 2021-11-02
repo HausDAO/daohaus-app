@@ -137,7 +137,7 @@ const fetchAllActivity = async (
 
     const { proposals } = result;
     count = proposals.length;
-    while (count > 0) {
+    if (count > 0) {
       const lastRecord = proposals[count - 1];
       createdAt = lastRecord && lastRecord.createdAt;
 
