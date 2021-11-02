@@ -12,18 +12,31 @@ import {
   AspectRatio,
 } from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
+import { useParams } from 'react-router-dom';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import FieldWrapper from './fieldWrapper';
 import GenericModal from '../modals/genericModal';
 import { filterUniqueNfts } from '../utils/nftVaults';
+import { fetchErc721s, fetchErc1155s } from '../utils/theGraph';
+import { hydrateNfts } from '../utils/nftData';
 
 const NftSelect = props => {
-  const { label, localForm, htmlFor, name, localValues } = props;
-  const { register, setValue } = localForm;
-  const { setGenericModal } = useOverlay();
+  const { address } = useInjectedProvider();
   const { daoVaults } = useDao();
+  const { setGenericModal } = useOverlay();
+  const { daochain } = useParams();
+  const {
+    label,
+    localForm,
+    htmlFor,
+    name,
+    localValues,
+    source = 'dao',
+  } = props;
+  const { register, setValue } = localForm;
   const [nftData, setNftData] = useState();
   const [nfts, setNfts] = useState();
   const [selected, setSelected] = useState();
@@ -38,6 +51,21 @@ const NftSelect = props => {
     register('nftType');
     register('selectedMinion');
     register('selectedSafeAddress');
+
+    if (source === 'user') {
+      fetchErc721s({ address, chainID: daochain })
+        .then(async res => {
+          const data = await hydrateNfts(res.tokens, 'ERC-721');
+          setNftData(data);
+          setNfts(data);
+        })
+        .catch(err => console.log(err));
+      fetchErc1155s({ address, chainID: daochain })
+        .then(res => {
+          console.log('1155s: ', res);
+        })
+        .catch(err => console.log(err));
+    }
   }, []);
 
   useEffect(() => {
@@ -54,10 +82,11 @@ const NftSelect = props => {
   }, [nfts]);
 
   useEffect(() => {
-    if (daoVaults) {
+    if (daoVaults /* && source === 'dao' */) {
       const data = filterUniqueNfts(daoVaults, localValues?.minionAddress);
-      setNftData(data);
-      setNfts(data);
+      console.log(data);
+      // setNftData(data);
+      // setNfts(data);
     }
   }, [daoVaults]);
 

@@ -453,9 +453,10 @@ export const FORM = {
         { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
       ],
       [
-        FIELD.NFT_INPUT,
-        FIELD.NFT_APPROVAL,
-        FIELD.TOKEN_INFO_INPUT,
+        { ...FIELD.NFT_SELECT, source: 'user' },
+        // FIELD.NFT_INPUT,
+        // FIELD.NFT_APPROVAL,
+        // FIELD.TOKEN_INFO_INPUT,
         FIELD.SHARES_REQUEST,
         FIELD.LOOT_REQUEST,
         FIELD.PAYMENT_REQUEST,

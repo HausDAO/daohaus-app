@@ -53,3 +53,35 @@ export const GET_POAP = gql`
 //     }
 //   }
 // }
+
+export const GET_ERC721 = gql`
+  query tokens($tokenHolder: String!) {
+    tokens(where: { owner: $tokenHolder }) {
+      id
+      identifier
+      uri
+      registry {
+        id
+        name
+        symbol
+      }
+    }
+  }
+`;
+
+export const GET_ERC1155 = gql`
+  query balances($tokenHolder: String!) {
+    balances(where: { account: $tokenHolder }) {
+      id
+      value
+      token {
+        id
+        identifier
+        URI
+        registry {
+          id
+        }
+      }
+    }
+  }
+`;
