@@ -121,7 +121,8 @@ export const fetchMinionInternalBalances = async args => {
 const fetchAllActivity = async (
   args,
   items = [],
-  skip = 0,
+  createdAt = '0',
+  count = 1,
   query = DAO_ACTIVITIES,
 ) => {
   try {
@@ -130,37 +131,54 @@ const fetchAllActivity = async (
       query,
       variables: {
         contractAddr: args.daoID,
-        skip,
+        createdAt,
       },
     });
-    const { proposals } = result.moloch;
-    if (proposals.length === 100) {
-      //  TESTING ONLY
-      // if (skip === 400) {
-      //   return { ...result.moloch, proposals: [...items, ...proposals] };
-      // }
+
+    const { proposals } = result;
+    count = proposals.length;
+    if (count > 0) {
+      const lastRecord = proposals[count - 1];
+      createdAt = lastRecord && lastRecord.createdAt;
+
       return fetchAllActivity(
         args,
         [...items, ...proposals],
-        skip + 100,
+        createdAt,
+        count,
         query,
       );
     }
-    return { ...result.moloch, proposals: [...items, ...proposals] };
+    return { ...result, proposals: [...items, ...proposals] };
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const fetchAltActivity = async (args, items = [], skip = 0) => {
-  const sponsored = await fetchAllActivity(args, items, skip, ALT_ACTIVITIES);
-  const unsponsored = await fetchAllActivity(args, items, skip, ALT_AGAIN);
+const fetchAltActivity = async (
+  args,
+  items = [],
+  createdAt = '0',
+  count = 1,
+) => {
+  const sponsored = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    ALT_ACTIVITIES,
+  );
+  const unsponsored = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    ALT_AGAIN,
+  );
 
   return {
-    id: sponsored.id,
+    id: args.daoID,
     rageQuits: sponsored.rageQuits,
-    title: sponsored.title,
-    version: sponsored.version,
     proposals: [...sponsored?.proposals, ...unsponsored?.proposals],
   };
 };
@@ -246,11 +264,8 @@ const completeQueries = {
         : await fetchAllActivity(args);
 
       const resolvedActivity = {
-        // manually copying to prevent unnecessary copies of proposals
-        id: activity.id,
+        id: args.daoID,
         rageQuits: activity.rageQuits,
-        title: activity.title,
-        version: activity.version,
         proposals: activity.proposals.map(proposal =>
           proposalResolver(proposal, {
             status: true,
