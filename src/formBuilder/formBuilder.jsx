@@ -360,10 +360,8 @@ const FormBuilder = props => {
 				          {!removeBlur ?
             <Flex
               display='flex'
-              w='106%'
-              h='105%'
-              top='-5'
-              left='-5'
+              w='100%'
+              h='100%'
               backdropFilter='blur(6px)'
               position='absolute'
               zIndex={5}

@@ -1,5 +1,6 @@
 import React, {
   useContext,
+	useCallback,
   createContext,
   useEffect,
   useState,
@@ -9,6 +10,7 @@ import { useParams } from 'react-router-dom';
 
 import { checkIfUserIsDelegate } from '../utils/general';
 import { initMemberWallet } from '../utils/wallet';
+import { handleGetProfile } from '../utils/3box';
 
 export const DaoMemberContext = createContext();
 
@@ -22,9 +24,28 @@ export const DaoMemberProvider = ({
   const [daoMember, setDaoMember] = useState(null);
   const [delegate, setDelegate] = useState(null);
   const [isMember, setIsMember] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   const currentMemberRef = useRef(false);
   const memberWalletRef = useRef(false);
+
+	const refreshProfile = useCallback( async () => {
+		if (!address) {
+			return
+		}
+    try {
+			console.log("Get address")
+			console.log(address)
+        const profile = await handleGetProfile(address);
+        // if (profile.status === 'error') return;
+			  console.log("profile XXX")
+			  console.log(profile)
+        setProfile(profile);
+      } catch (error) {
+        console.error(error);
+      }
+
+	}, [profile, address])
 
   useEffect(() => {
     const checkForMember = daoMembers => {
@@ -56,6 +77,12 @@ export const DaoMemberProvider = ({
       }
     }
   }, [daoMembers, address]);
+
+  useEffect(() => {
+    if (address && !profile) {
+      refreshProfile();
+    }
+  }, [address, profile, refreshProfile]);
 
   useEffect(() => {
     const assembleMemberWallet = async () => {
@@ -110,6 +137,8 @@ export const DaoMemberProvider = ({
         daoMember,
         memberWalletRef,
         delegate,
+				profile,
+				refreshProfile,
       }}
     >
       {children}
@@ -123,6 +152,8 @@ export const useDaoMember = () => {
     daoMember,
     memberWalletRef,
     delegate,
+		profile,
+		refreshProfile,
   } = useContext(DaoMemberContext);
   return {
     currentMemberRef,
@@ -130,5 +161,7 @@ export const useDaoMember = () => {
     daoMember,
     memberWalletRef,
     delegate,
+		profile,
+		refreshProfile,
   };
 };

@@ -3,36 +3,36 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import StaticAvatar from './staticAvatar';
 import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const AddressAvatar = React.memo(({ addr, hideCopy }) => {
-  const [profile, setProfile] = useState(null);
+  const { profile } = useDaoMember();
 
   const shouldFetchENS = useRef(false);
 
-  useEffect(() => {
-    let shouldUpdate = true;
-    const getProfile = async () => {
-      try {
-        const localProfile = await handleGetProfile(addr);
-        if (shouldUpdate) {
-          if (localProfile.status === 'error') {
-            setProfile(false);
-            shouldFetchENS.current = true;
-            return;
-          }
-          setProfile(localProfile);
-        }
-      } catch (error) {
-        console.log("Member doesn't have a profile");
-      }
-    };
-    if (addr) {
-      getProfile();
-    }
-    return () => {
-      shouldUpdate = false;
-    };
-  }, [addr]);
+  //   let shouldUpdate = true;
+  //   const getProfile = async () => {
+  //     try {
+  //       const localProfile = await handleGetProfile(addr);
+  //       if (shouldUpdate) {
+  //         if (localProfile.status === 'error') {
+  //           setProfile(false);
+  //           shouldFetchENS.current = true;
+  //           return;
+  //         }
+  //         setProfile(localProfile);
+  //       }
+  //     } catch (error) {
+  //       console.log("Member doesn't have a profile");
+  //     }
+  //   };
+  //   if (addr) {
+  //     getProfile();
+  //   }
+  //   return () => {
+  //     shouldUpdate = false;
+  //   };
+  // }, [addr]);
 
   useEffect(() => {
     const tryENS = async () => {

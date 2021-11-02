@@ -26,6 +26,7 @@ import { FIELD } from '../data/fields';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
+  const { refreshProfile } = useDaoMember();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { formModal, closeModal } = useAppModal();
   const { daochain, daoid } = useParams();
@@ -78,6 +79,7 @@ const ProfileMenu = ({ member }) => {
 							console.log(values)
 							await setBasicProfile(client, did, values)
 							cacheProfile(values, member.memberAddress)
+							refreshProfile()
 							successToast({ title: 'Updated Profile!' });
 							closeModal()
 						},

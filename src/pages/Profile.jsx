@@ -10,13 +10,14 @@ import MainViewLayout from '../components/mainViewLayout';
 import { getProfileActivites } from '../utils/activities';
 import { handleGetProfile } from '../utils/3box';
 import { initTokenData } from '../utils/tokenValue';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const Profile = ({ members, overview, daoTokens, activities }) => {
   const { userid, daochain } = useParams();
   const { address } = useInjectedProvider();
+  const { profile } = useDaoMember();
 
   const [memberEntity, setMemberEntity] = useState(null);
-  const [profile, setProfile] = useState(null);
   const [tokensReceivable, setTokensReceivable] = useState([]);
 
   useEffect(() => {
@@ -29,21 +30,6 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
       );
     }
   }, [members]);
-
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const profile = await handleGetProfile(userid);
-        // if (profile.status === 'error') return;
-        setProfile(profile);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (userid && !profile) {
-      getProfile();
-    }
-  }, [userid, profile]);
 
   useEffect(() => {
     const initMemberTokens = async tokensWithBalance => {
