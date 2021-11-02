@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   Box,
@@ -65,8 +65,8 @@ const ProposalWatcher = ({ daoProposals }) => {
 
   const renderRow = proposal => {
     return (
-      <>
-        <Tr key={proposal.proposalId}>
+      <Fragment key={proposal.proposalId}>
+        <Tr>
           <Td>{proposal.proposalId}</Td>
           {/* <Td>{JSON.stringify(proposal.details)}</Td> */}
           <Td>{proposal.sharesRequested}</Td>
@@ -95,14 +95,14 @@ const ProposalWatcher = ({ daoProposals }) => {
           </Td>
         </Tr>
         <Tr key={`${proposal.proposalId}-2`}>
-          <Td colspan='2'>{proposal.proposalType}</Td>
-          <Td colspan='2'>{proposal.title}</Td>
-          <Td colspan='5'>{proposal.description}</Td>
+          <Td colSpan='2'>{proposal.proposalType}</Td>
+          <Td colSpan='2'>{proposal.title}</Td>
+          <Td colSpan='5'>{proposal.description}</Td>
         </Tr>
         <Tr key={`${proposal.proposalId}-3`}>
-          <Td colspan='9' backgroundColor='gray.900' />
+          <Td colSpan='9' backgroundColor='gray.900' />
         </Tr>
-      </>
+      </Fragment>
     );
   };
 
