@@ -1027,6 +1027,15 @@ export const TX = {
       },
     ],
   },
+  GENERIC_SAFE_MULTICALL: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    display: 'Submitting Safe Minion Proposal',
+    errMsg: 'Error Submitting Safe Proposal',
+    successMsg: 'Safe Minion Proposal Submitted!',
+    argsFromCallback: 'multiActionSafe',
+  },
   WITHDRAW_ESCROW: {
     contract: CONTRACTS.ESCROW_MINION,
     name: 'withdrawToDestination',

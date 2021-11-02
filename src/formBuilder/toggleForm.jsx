@@ -27,6 +27,7 @@ const ToggleForm = props => {
     isChecked ? setFormCondition(unchecked) : setFormCondition(checked);
   return (
     <GenericSwitch
+      {...props}
       isChecked={isChecked}
       onChange={handleChange}
       label={checkLabel}

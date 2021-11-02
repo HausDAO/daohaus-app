@@ -11,19 +11,40 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 
-import { useAppModal } from '../hooks/useModals';
 import ErrorList from './ErrorList';
 
-const FormFooter = ({
-  options,
-  loading,
-  addOption,
-  errors,
-  ctaText,
-  customSecondaryBtn,
-  customPrimaryBtn,
-}) => {
-  const { closeModal } = useAppModal();
+const buttonTextByFormState = formState => {
+  if (!formState) return;
+  if (formState === 'idle') return 'Submit';
+  if (formState === 'loading') return 'Submitting';
+  if (formState === 'success') return 'Finish';
+  if (formState === 'error') return 'Try Again';
+};
+const getPrimaryButtonFn = props => {
+  const { customPrimaryBtn, closeModal } = props;
+  if (customPrimaryBtn?.fn) {
+    return customPrimaryBtn.fn;
+  }
+  if (props.formState === 'success') {
+    return closeModal;
+  }
+  return null;
+};
+const FormFooter = props => {
+  const {
+    options,
+    loading,
+    addOption,
+    formState,
+    errors,
+    ctaText,
+    customSecondaryBtn,
+    customPrimaryBtn,
+    handleAddStep,
+    addStep,
+    closeModal,
+  } = props;
+
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
 
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
@@ -38,9 +59,9 @@ const FormFooter = ({
             addOption={addOption}
           />
         )}
+        {addStep && <Button onClick={handleAddStep}>Add Step</Button>}
         <Flex
           ml={['0', 'auto']}
-          // wrap={['wrap-reverse', 'wrap']}
           w={['100%', 'inherit']}
           flexDir={['column-reverse', 'row']}
         >
@@ -55,14 +76,19 @@ const FormFooter = ({
           </Button>
 
           <Button
-            type={customPrimaryBtn ? 'button' : 'submit'}
-            onClick={customPrimaryBtn && customPrimaryBtn?.fn}
+            type={
+              customPrimaryBtn || formState === 'success' ? 'button' : 'submit'
+            }
+            onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
             isLoading={loading}
-            disabled={loading || errors?.length}
+            disabled={loading}
             mb={[2, 0]}
           >
-            {ctaText || customPrimaryBtn?.text || 'Submit'}
+            {ctaText ||
+              customPrimaryBtn?.text ||
+              buttonTextByFormState(formState) ||
+              'Submit'}
           </Button>
         </Flex>
       </Flex>

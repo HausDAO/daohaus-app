@@ -4,14 +4,27 @@ import TextBox from '../components/TextBox';
 import FieldWrapper from './fieldWrapper';
 
 const GenericSwitch = props => {
-  const { label, title, isChecked = true, onChange } = props;
+  const {
+    label,
+    title,
+    isChecked = true,
+    onChange,
+    name,
+    registerOptions,
+    localForm,
+  } = props;
+
+  const { register } = localForm;
+
   return (
     <FieldWrapper {...props} label={title}>
       <Flex flexDir='row'>
         <Switch
+          name={name}
           value={isChecked}
           onChange={onChange}
           size='lg'
+          ref={name ? register(registerOptions) : null}
           borderColor='grey'
           width='fit-content'
         />

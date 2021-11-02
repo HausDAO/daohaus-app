@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
+
+import { getContractBalance } from '../utils/tokenValue';
+import { validate } from '../utils/validation';
 import { handleDecimals } from '../utils/general';
-
-const getMaxBalance = (tokenData, tokenAddress) => {
-  //  Uses token select data structure
-
-  const token = tokenData.find(t => t.value === tokenAddress);
-
-  if (token) {
-    return handleDecimals(token.balance, token.decimals);
-  }
-};
+import { spreadOptions } from '../utils/formBuilder';
 
 const PaymentInput = props => {
   const { daoOverview } = useDao();
-  const { localForm } = props;
+  const { localForm, registerOptions = {} } = props;
   const { getValues, setValue, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
-  const [balance, setBalance] = useState(null);
+  const [token, setToken] = useState(null);
 
   const paymentToken = watch('paymentToken');
-  const maxBtnDisplay =
-    (balance !== '--' && balance) || balance === 0
-      ? `Max: ${balance.toFixed(4)}`
-      : 'Error: Not found.';
+  const maxBtnDisplay = useMemo(() => {
+    if (validate.number(token?.balance) || token?.balance === 0) {
+      return `Max: ${handleDecimals(token.balance, token.decimals)?.toFixed(
+        4,
+      )}`;
+    }
+    return 'Error: Not found.';
+  }, [token]);
 
   useEffect(() => {
     if (daoOverview) {
@@ -57,19 +55,35 @@ const PaymentInput = props => {
   useEffect(() => {
     const tokenAddr = paymentToken || getValues('paymentToken');
     if (daoTokens?.length && tokenAddr) {
-      const bal = getMaxBalance(daoTokens, tokenAddr);
+      const token = daoTokens.find(token => token.value === tokenAddr);
 
-      setBalance(bal);
+      if (token?.balance && token.decimals) {
+        setToken(token);
+      }
     }
   }, [daoTokens, paymentToken]);
 
   const setMax = () => {
-    setValue('paymentRequested', balance);
+    if (!token?.balance) return;
+    setValue('paymentRequested', token.balance / 10 ** token.decimals);
   };
+
+  const options = spreadOptions({
+    registerOptions,
+    setValueAs: value => getContractBalance(value, token?.decimals),
+    validate: {
+      hasBalance: value =>
+        Number(getContractBalance(value, token?.decimals)) <=
+        Number(token?.balance)
+          ? true
+          : 'Not enough balance in Wallet',
+    },
+  });
 
   return (
     <InputSelect
       {...props}
+      registerOptions={options}
       selectName='paymentToken'
       options={daoTokens}
       // helperText={unlocked || 'Unlock to tokens to submit proposal'}

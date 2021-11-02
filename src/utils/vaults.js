@@ -1,4 +1,3 @@
-import { ethers } from 'ethers';
 import { utils as Web3Utils } from 'web3';
 import { chainByID, supportedChains } from './chain';
 import { isSameAddress } from './general';
@@ -6,23 +5,7 @@ import { MINION_TYPES } from './proposalUtils';
 import { fetchSafeDetails } from './requests';
 import { FORM } from '../data/forms';
 import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
-
-export const getReadableBalance = tokenData => {
-  if (tokenData?.balance && tokenData.decimals) {
-    const { balance, decimals } = tokenData;
-    return Number(balance) / 10 ** Number(decimals);
-  }
-};
-export const getContractBalance = (readableBalance, decimals) => {
-  const floatPoint = readableBalance.split('.')[1]?.length;
-  const exponent = ethers.BigNumber.from(10).pow(
-    floatPoint ? decimals - floatPoint : decimals,
-  );
-  return ethers.utils
-    .parseUnits(readableBalance, floatPoint || 0)
-    .mul(exponent)
-    .toString();
-};
+import { getReadableBalance } from './tokenValue';
 
 export const getVaultERC20s = (daoVaults, vaultAddress) =>
   daoVaults?.find(vault => isSameAddress(vault.address, vaultAddress))?.erc20s;

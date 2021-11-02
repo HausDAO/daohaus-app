@@ -1,5 +1,8 @@
-import { filterObject, isObjectEmpty } from './general';
+import { v4 as uuid } from 'uuid';
+import { filterObject, isObjectEmpty, pipe } from './general';
 import { logFormError } from './errorLog';
+import { collectTypeValidations, validate } from './validation';
+import { handleSearch } from './txHelpers';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
@@ -33,7 +36,10 @@ export const collapse = (values, flag, collapseType) => {
     (value, key) => !key.includes(flag) && value,
   );
   if (collapseType === 'objOfArrays') {
-    return { ...collapseToObjOfArrays(groupedItems, flag), ...nonGrouped };
+    return {
+      ...collapseToObjOfArrays(groupedItems, flag),
+      ...nonGrouped,
+    };
   }
   const orderedArray = Object.entries(groupedItems)
     .map(([key, value]) => splitMulti(key, value, flag))
@@ -65,7 +71,7 @@ export const mapInRequired = (fields, required) => {
   return res;
 };
 
-export const inputDataFromABI = inputs => {
+export const inputDataFromABI = (inputs, serialTag) => {
   const getType = type => {
     if (type === 'string' || type === 'address') {
       return type;
@@ -82,7 +88,7 @@ export const inputDataFromABI = inputs => {
   const labels = {
     string: 'Enter text here',
     number: 'Numbers only',
-    integer: 'Whole numbers only',
+    integer: 'uInt 256',
     address: '0x',
     urlNoHttp: 'www.example.fake',
   };
@@ -90,14 +96,22 @@ export const inputDataFromABI = inputs => {
   return inputs.map((input, index) => {
     const localType = getType(input.type);
     const isMulti = input.type.includes('[]');
+
+    const fieldName = serialTag
+      ? `${serialTag}.abiArgs.${index}`
+      : `abiArgs.${index}`;
     return {
-      type: isMulti ? 'multiInput' : 'input',
+      type: isMulti ? 'listBox' : 'input',
       label: input.name,
-      name: `${input.name}*ABI_ARG*${index}`,
-      htmlFor: `${input.name}*ABI_ARG*${index}`,
-      placeholder: labels[localType] || input.type,
+      name: fieldName,
+      htmlFor: fieldName,
+      placeholder: isMulti ? input.type : labels[localType],
       expectType: isMulti ? 'any' : getType(localType),
-      required: false,
+      registerOptions: {
+        required: `${
+          serialTag ? input.name : fieldName
+        } is a required contract argument`,
+      },
     };
   });
 };
@@ -145,4 +159,118 @@ export const checkConditionalTx = ({ tx, condition }) => {
 
 export const ignoreAwaitStep = next => {
   return typeof next === 'string' ? next : next?.then;
+};
+
+const getOriginalName = name => {
+  return name
+    .split('.')
+    .slice(2)
+    .join('.');
+};
+
+export const getTxIndex = key => key.split('.')[1];
+
+export const decrementTxIndex = key => {
+  const segments = key.split('.');
+  const currentIndex = segments[1];
+  const rest = segments.slice(2).join('.');
+  if (validate.number(currentIndex)) {
+    return `TX.${Number(currentIndex) - 1}.${rest}`;
+  }
+  console.error('Did not recieve corrrect TX.[number] value');
+  return key;
+};
+
+const serializeRequired = (required = [], index) =>
+  required?.map(fieldName =>
+    fieldName.includes('TX.')
+      ? `TX.${index}.${getOriginalName(fieldName)}`
+      : `TX.${index}.${fieldName}`,
+  );
+
+const serializeFields = (fields = [], txIndex) =>
+  fields.map(column =>
+    column.map(field => {
+      const alreadyHasSerial = field.name.includes('TX.');
+      if (alreadyHasSerial) {
+        const originalName = getOriginalName(field.name);
+        return {
+          ...field,
+          name: `TX.${txIndex}.${originalName}`,
+          htmlFor: `TX.${txIndex}.${originalName}`,
+          listenTo: field.listenTo
+            ? `TX.${txIndex}.${getOriginalName(field.listenTo)}`
+            : null,
+        };
+      }
+      return {
+        ...field,
+        name: `TX.${txIndex}.${field.name}`,
+        htmlFor: `TX.${txIndex}.${field.name}`,
+        listenTo: field.listenTo ? `TX.${txIndex}.${field.listenTo}` : null,
+      };
+    }),
+  );
+
+export const serializeTXs = (forms = []) =>
+  forms.map((form, index) => ({
+    ...form,
+    fields: serializeFields(form.fields, index),
+    required: serializeRequired(form.required, index),
+    txIndex: index,
+    txID: form.txID || uuid(),
+  }));
+
+const addTypeValidation = (regOptions, valStr) => ({
+  ...regOptions,
+  validate: { [`type-${valStr}`]: collectTypeValidations(valStr) },
+});
+
+const handleRequired = ({ name, label }, required) => regOptions =>
+  required.includes(name)
+    ? { ...regOptions, required: `${label} is required` }
+    : regOptions;
+
+const handleType = ({ expectType }) => regOptions =>
+  !expectType || expectType === 'any'
+    ? regOptions
+    : addTypeValidation(regOptions, expectType);
+
+const handleMinLength = ({ minLength }) => regOptions =>
+  minLength ? { ...regOptions, minLength } : regOptions;
+
+const handleMaxLength = ({ maxLength }) => regOptions =>
+  maxLength ? { ...regOptions, maxLength } : regOptions;
+
+const overwriteSetValueAs = setValueAs => regOptions =>
+  setValueAs ? { ...regOptions, setValueAs } : regOptions;
+
+const spreadValidation = newValidation => regOptions =>
+  newValidation
+    ? {
+        ...regOptions,
+        validate: { ...(regOptions?.validate || {}), ...newValidation },
+      }
+    : regOptions;
+
+export const createRegisterOptions = (field, required = []) =>
+  pipe([
+    handleRequired(field, required),
+    handleType(field),
+    handleMinLength(field),
+    handleMaxLength(field),
+  ])(field.registerOptions || {});
+
+export const spreadOptions = ({ registerOptions, validate, setValueAs }) =>
+  pipe([overwriteSetValueAs(setValueAs), spreadValidation(validate)])(
+    registerOptions,
+  );
+
+const isNestedValue = name => name.includes('.');
+const checkNestedError = (errors, name) =>
+  handleSearch(errors, `.${name}`, false);
+
+export const handleCheckError = (errors, name) => {
+  if (!name || !errors) return;
+  return isNestedValue(name) ? checkNestedError(errors, name) : errors[name];
 };

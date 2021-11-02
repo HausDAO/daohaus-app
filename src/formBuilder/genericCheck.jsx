@@ -5,13 +5,24 @@ import FieldWrapper from './fieldWrapper';
 import Paragraphs from './Paragraphs';
 
 const GenericCheck = props => {
-  const { label, title, description, isChecked = true, onChange } = props;
+  const {
+    title,
+    description,
+    isChecked = true,
+    onChange,
+    name,
+    localForm,
+    registerOptions,
+  } = props;
+  const { register } = localForm;
   return (
-    <FieldWrapper {...props} label={label}>
+    <FieldWrapper {...props}>
       <Flex flexDir='column'>
         <Checkbox
           isChecked={isChecked}
           onChange={onChange}
+          name={name}
+          ref={name ? register(registerOptions) : null}
           size='lg'
           borderColor='grey'
           width='fit-content'

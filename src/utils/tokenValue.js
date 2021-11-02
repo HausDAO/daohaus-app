@@ -1,7 +1,11 @@
 import { ethers } from 'ethers';
+
+// Refactor utils to PURGE TokenService and MolochService
+
 import { TokenService } from '../services/tokenService';
 import { MolochService } from '../services/molochService';
 import { omit } from './general';
+import { validate } from './validation';
 
 const babe = '0x000000000000000000000000000000000000baBe';
 const tokenAPI =
@@ -106,6 +110,25 @@ export const getTotalBankValue = (tokenBalances, prices) => {
     }
     return sum;
   }, 0);
+};
+
+export const getReadableBalance = tokenData => {
+  if (tokenData?.balance && tokenData.decimals) {
+    const { balance, decimals } = tokenData;
+    return Number(balance) / 10 ** Number(decimals);
+  }
+};
+export const getContractBalance = (readableBalance, decimals) => {
+  if (!validate.number(readableBalance) || !validate.number(decimals))
+    return null;
+  const floatPoint = readableBalance.split('.')[1]?.length;
+  const exponent = ethers.BigNumber.from(10).pow(
+    floatPoint ? decimals - floatPoint : decimals,
+  );
+  return ethers.utils
+    .parseUnits(readableBalance, floatPoint || 0)
+    .mul(exponent)
+    .toString();
 };
 
 export const valToDecimalString = (value, tokenAddress, tokens) => {
