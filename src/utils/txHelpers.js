@@ -9,7 +9,6 @@ import {
   getContractABI,
   safeEncodeHexFunction,
 } from './abi';
-import { collapse } from './formBuilder';
 import { getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
