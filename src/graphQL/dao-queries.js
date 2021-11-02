@@ -130,7 +130,7 @@ escrow {
 }
 `;
 
-export const DAO_ACTIVITIES_NEW = gql`
+export const DAO_ACTIVITIES = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
       where: { molochAddress: $contractAddr, createdAt_gt: $createdAt }
@@ -150,7 +150,7 @@ export const DAO_ACTIVITIES_NEW = gql`
   }
 `;
 
-export const ALT_ACTIVITIES_NEW = gql`
+export const ALT_ACTIVITIES = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
       where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: true }
@@ -170,7 +170,7 @@ export const ALT_ACTIVITIES_NEW = gql`
   }
 `;
 
-export const ALT_AGAIN_NEW = gql`
+export const ALT_AGAIN = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
       where: { 
@@ -193,72 +193,6 @@ export const ALT_AGAIN_NEW = gql`
       memberAddress
       shares
       loot
-    }
-  }
-`;
-
-export const DAO_ACTIVITIES = gql`
-  query molochActivities($contractAddr: String!, $skip: Int) {
-    moloch(id: $contractAddr) {
-      id
-      version
-      proposals(orderBy: createdAt, orderDirection: desc, skip: $skip) {
-        ${proposalFields}
-      }
-      rageQuits {
-        id
-        createdAt
-        memberAddress
-        shares
-        loot
-      }
-    }
-  }
-`;
-
-export const ALT_ACTIVITIES = gql`
-  query molochActivities($contractAddr: String!, $skip: Int) {
-    moloch(id: $contractAddr) {
-      id
-      version
-      proposals(where: { sponsored: true }, first: 100, skip: $skip) {
-        ${proposalFields}
-      }
-      rageQuits {
-        id
-        createdAt
-        memberAddress
-        shares
-        loot
-      }
-    }
-  }
-`;
-
-export const ALT_AGAIN = gql`
-  query molochActivities($contractAddr: String!, $skip: Int) {
-    moloch(id: $contractAddr) {
-      id
-      version
-      proposals(
-        where: {
-          sponsored: false
-          sharesRequested_gt: 0
-          tributeOffered_gte: "1000000000000000000"
-          tributeToken: "0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb"
-        }
-        first: 100
-        skip: $skip
-      ) {
-        ${proposalFields}
-      }
-      rageQuits {
-        id
-        createdAt
-        memberAddress
-        shares
-        loot
-      }
     }
   }
 `;
