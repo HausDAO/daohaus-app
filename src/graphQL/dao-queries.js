@@ -52,87 +52,158 @@ export const HOME_DAO = gql`
   }
 `;
 
+const proposalFields = `
+id
+aborted
+applicant
+cancelled
+cancelledAt
+createdAt
+createdBy
+details
+didPass
+executed
+gracePeriodEnds
+guildkick
+isMinion
+lootRequested
+memberAddress
+newMember
+noShares
+noVotes
+paymentRequested
+paymentTokenDecimals
+paymentTokenSymbol
+processed
+processor
+processedAt
+proposer
+proposalId
+proposalIndex
+sharesRequested
+sponsored
+sponsor
+sponsoredAt
+startingPeriod
+trade
+tributeOffered
+tributeTokenDecimals
+tributeTokenSymbol
+tributeToken
+votingPeriodStarts
+votingPeriodEnds
+whitelist
+yesShares
+yesVotes
+molochAddress
+molochVersion
+minionAddress
+uberHausMinionExecuted
+minion {
+  minionType
+  minQuorum
+}
+actions {
+  target
+  data
+  memberOnly
+}
+moloch {
+  gracePeriodLength
+  periodDuration
+  version
+  votingPeriodLength
+}
+votes {
+  id
+  memberAddress
+  memberPower
+  uintVote
+  createdAt
+  molochAddress
+}
+escrow {
+  tokenAddresses
+  tokenTypes
+  tokenIds
+  amounts
+}
+`;
+
+export const DAO_ACTIVITIES_NEW = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const ALT_ACTIVITIES_NEW = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: true }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const ALT_AGAIN_NEW = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { 
+        molochAddress: $contractAddr
+        createdAt_gt: $createdAt
+        sponsored: false
+        sharesRequested_gt: 0
+        tributeOffered_gte: "1000000000000000000"
+        tributeToken: "0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb" 
+      }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
 export const DAO_ACTIVITIES = gql`
   query molochActivities($contractAddr: String!, $skip: Int) {
     moloch(id: $contractAddr) {
       id
       version
       proposals(orderBy: createdAt, orderDirection: desc, skip: $skip) {
-        id
-        aborted
-        applicant
-        cancelled
-        cancelledAt
-        createdAt
-        createdBy
-        details
-        didPass
-        executed
-        gracePeriodEnds
-        guildkick
-        isMinion
-        lootRequested
-        memberAddress
-        newMember
-        noShares
-        noVotes
-        paymentRequested
-        paymentTokenDecimals
-        paymentTokenSymbol
-        processed
-        processor
-        processedAt
-        proposer
-        proposalId
-        proposalIndex
-        sharesRequested
-        sponsored
-        sponsor
-        sponsoredAt
-        startingPeriod
-        trade
-        tributeOffered
-        tributeTokenDecimals
-        tributeTokenSymbol
-        tributeToken
-        votingPeriodStarts
-        votingPeriodEnds
-        whitelist
-        yesShares
-        yesVotes
-        molochAddress
-        molochVersion
-        minionAddress
-        uberHausMinionExecuted
-        minion {
-          minionType
-          minQuorum
-        }
-        actions {
-          target
-          data
-          memberOnly
-        }
-        moloch {
-          gracePeriodLength
-          periodDuration
-          version
-          votingPeriodLength
-        }
-        votes {
-          id
-          memberAddress
-          memberPower
-          uintVote
-          createdAt
-          molochAddress
-        }
-        escrow {
-          tokenAddresses
-          tokenTypes
-          tokenIds
-          amounts
-        }
+        ${proposalFields}
       }
       rageQuits {
         id
@@ -151,81 +222,7 @@ export const ALT_ACTIVITIES = gql`
       id
       version
       proposals(where: { sponsored: true }, first: 100, skip: $skip) {
-        id
-        aborted
-        applicant
-        cancelled
-        cancelledAt
-        createdAt
-        createdBy
-        details
-        didPass
-        executed
-        gracePeriodEnds
-        guildkick
-        isMinion
-        lootRequested
-        memberAddress
-        newMember
-        noShares
-        noVotes
-        paymentRequested
-        paymentTokenDecimals
-        paymentTokenSymbol
-        processed
-        processor
-        processedAt
-        proposer
-        proposalId
-        proposalIndex
-        sharesRequested
-        sponsored
-        sponsor
-        sponsoredAt
-        startingPeriod
-        trade
-        tributeOffered
-        tributeTokenDecimals
-        tributeTokenSymbol
-        tributeToken
-        votingPeriodStarts
-        votingPeriodEnds
-        whitelist
-        yesShares
-        yesVotes
-        molochAddress
-        molochVersion
-        minionAddress
-        uberHausMinionExecuted
-        minion {
-          minionType
-          minQuorum
-        }
-        actions {
-          target
-          data
-          memberOnly
-        }
-        moloch {
-          gracePeriodLength
-          periodDuration
-          version
-          votingPeriodLength
-        }
-        votes {
-          id
-          memberAddress
-          memberPower
-          uintVote
-          createdAt
-          molochAddress
-        }
-        escrow {
-          tokenAddresses
-          tokenTypes
-          tokenIds
-          amounts
-        }
+        ${proposalFields}
       }
       rageQuits {
         id
@@ -253,81 +250,7 @@ export const ALT_AGAIN = gql`
         first: 100
         skip: $skip
       ) {
-        id
-        aborted
-        applicant
-        cancelled
-        cancelledAt
-        createdAt
-        createdBy
-        details
-        didPass
-        executed
-        gracePeriodEnds
-        guildkick
-        isMinion
-        lootRequested
-        memberAddress
-        newMember
-        noShares
-        noVotes
-        paymentRequested
-        paymentTokenDecimals
-        paymentTokenSymbol
-        processed
-        processor
-        processedAt
-        proposer
-        proposalId
-        proposalIndex
-        sharesRequested
-        sponsored
-        sponsor
-        sponsoredAt
-        startingPeriod
-        trade
-        tributeOffered
-        tributeTokenDecimals
-        tributeTokenSymbol
-        tributeToken
-        votingPeriodStarts
-        votingPeriodEnds
-        whitelist
-        yesShares
-        yesVotes
-        molochAddress
-        molochVersion
-        minionAddress
-        uberHausMinionExecuted
-        minion {
-          minionType
-          minQuorum
-        }
-        actions {
-          target
-          data
-          memberOnly
-        }
-        moloch {
-          gracePeriodLength
-          periodDuration
-          version
-          votingPeriodLength
-        }
-        votes {
-          id
-          memberAddress
-          memberPower
-          uintVote
-          createdAt
-          molochAddress
-        }
-        escrow {
-          tokenAddresses
-          tokenTypes
-          tokenIds
-          amounts
-        }
+        ${proposalFields}
       }
       rageQuits {
         id

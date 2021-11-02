@@ -1,9 +1,12 @@
 import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import {
-  ALT_ACTIVITIES,
-  ALT_AGAIN,
-  DAO_ACTIVITIES,
+  // ALT_ACTIVITIES,
+  // ALT_AGAIN,
+  // DAO_ACTIVITIES,
+  DAO_ACTIVITIES_NEW,
+  ALT_ACTIVITIES_NEW,
+  ALT_AGAIN_NEW,
   HOME_DAO,
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
@@ -121,46 +124,89 @@ export const fetchMinionInternalBalances = async args => {
 const fetchAllActivity = async (
   args,
   items = [],
-  skip = 0,
-  query = DAO_ACTIVITIES,
+  // skip = 0,
+  createdAt = '0',
+  count = 1,
+  // query = DAO_ACTIVITIES,
+  query = DAO_ACTIVITIES_NEW,
 ) => {
   try {
+    console.log('items', items);
+    console.log('createdAt', createdAt);
+
     const result = await graphQuery({
       endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
       query,
       variables: {
         contractAddr: args.daoID,
-        skip,
+        // skip,
+        createdAt,
       },
     });
-    const { proposals } = result.moloch;
-    if (proposals.length === 100) {
-      //  TESTING ONLY
-      // if (skip === 400) {
-      //   return { ...result.moloch, proposals: [...items, ...proposals] };
-      // }
+
+    console.log('result', result);
+    // const { proposals } = result.moloch;
+    const { proposals } = result;
+    // const { rageQuits } = result;
+
+    // if (proposals.length === 1000) {
+    count = proposals.length;
+    const [lastRecord] = [...proposals].slice(-1);
+    createdAt = lastRecord && lastRecord.createdAt;
+
+    while (count > 0) {
+      console.log('new createdAt', createdAt);
+      console.log('new count', count);
+
       return fetchAllActivity(
         args,
         [...items, ...proposals],
-        skip + 100,
+        // skip + 1000,
+        createdAt,
+        count,
         query,
       );
     }
-    return { ...result.moloch, proposals: [...items, ...proposals] };
+    // return { ...result.moloch, proposals: [...items, ...proposals] };
+    // order is oldest to newest now
+    return { ...result, proposals: [...items, ...proposals] };
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const fetchAltActivity = async (args, items = [], skip = 0) => {
-  const sponsored = await fetchAllActivity(args, items, skip, ALT_ACTIVITIES);
-  const unsponsored = await fetchAllActivity(args, items, skip, ALT_AGAIN);
+// const fetchAltActivity = async (args, items = [], skip = 0) => {
+const fetchAltActivity = async (
+  args,
+  items = [],
+  createdAt = '0',
+  count = 1,
+) => {
+  // const sponsored = await fetchAllActivity(args, items, skip, ALT_ACTIVITIES);
+  // const unsponsored = await fetchAllActivity(args, items, skip, ALT_AGAIN);
+
+  const sponsored = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    ALT_ACTIVITIES_NEW,
+  );
+  const unsponsored = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    ALT_AGAIN_NEW,
+  );
 
   return {
-    id: sponsored.id,
+    // id: sponsored.id,
+    id: args.daoID,
     rageQuits: sponsored.rageQuits,
-    title: sponsored.title,
-    version: sponsored.version,
+    // remove
+    // title: sponsored.title,
+    // version: sponsored.version,
     proposals: [...sponsored?.proposals, ...unsponsored?.proposals],
   };
 };
@@ -241,16 +287,21 @@ const completeQueries = {
   async getActivities(args, setter) {
     try {
       const isAlt = ALT.includes(args.daoID);
+      // const isAlt = false;
+
       const activity = isAlt
         ? await fetchAltActivity(args)
         : await fetchAllActivity(args);
 
+      console.log('activity', activity, args);
+
       const resolvedActivity = {
         // manually copying to prevent unnecessary copies of proposals
-        id: activity.id,
+        // id: activity.id,
+        id: args.daoID,
         rageQuits: activity.rageQuits,
-        title: activity.title,
-        version: activity.version,
+        // title: activity.title,
+        // version: activity.version,
         proposals: activity.proposals.map(proposal =>
           proposalResolver(proposal, {
             status: true,
@@ -262,6 +313,8 @@ const completeQueries = {
           }),
         ),
       };
+
+      console.log('resolvedActivity', resolvedActivity);
 
       if (setter.setDaoActivities) {
         setter.setDaoActivities(resolvedActivity);
