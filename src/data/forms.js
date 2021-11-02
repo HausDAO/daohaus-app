@@ -619,7 +619,7 @@ export const PROPOSAL_FORMS = {
     fields: [
       [
         FIELD.TARGET_CONTRACT,
-        { ...FIELD.ABI_INPUT, listenTo: 'targetContract' },
+        { ...FIELD.ABI_INPUT, listenTo: 'targetContract', hideHex: true },
         FIELD.MINION_VALUE,
       ],
       [],

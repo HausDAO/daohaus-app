@@ -14,7 +14,7 @@ import {
 import { getTxFromName } from '../utils/txHelpers';
 
 const AbiInput = props => {
-  const { localForm, listenTo, name, buildABIOptions } = props;
+  const { localForm, listenTo, name, buildABIOptions, hideHex } = props;
   const { daochain } = useParams();
   const [isRawHex, setRawHex] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -57,6 +57,7 @@ const AbiInput = props => {
   }, [abiInput]);
 
   const switchElement = () => {
+    if (hideHex) return;
     if (isRawHex) {
       setRawHex(false);
       buildABIOptions('clear');
@@ -84,10 +85,12 @@ const AbiInput = props => {
           disabled={isDisabled}
           helperText={helperText}
           btn={
-            <ModButton
-              text={loading ? <Spinner size='sm' /> : 'Raw Hex'}
-              fn={switchElement}
-            />
+            hideHex || (
+              <ModButton
+                text={loading ? <Spinner size='sm' /> : 'Raw Hex'}
+                fn={switchElement}
+              />
+            )
           }
         />
       )}
