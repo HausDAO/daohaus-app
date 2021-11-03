@@ -197,6 +197,89 @@ export const ALT_AGAIN = gql`
   }
 `;
 
+export const SPAM_FILTER_ACTIVITIES = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: true }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_GK_WL = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { 
+        molochAddress: $contractAddr
+        createdAt_gt: $createdAt
+        sponsored: false
+        guildkickOrWhitelist: true
+      }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_TRIBUTE = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String! $tributeMin: String!) {
+    proposals(
+      where: { 
+        molochAddress: $contractAddr
+        createdAt_gt: $createdAt
+        sponsored: false
+        tributeOffered_gte: $tributeMin
+      }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_UNSPONSORED = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: false }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+  }
+`;
+
 export const DAO_POLL = gql`
   query moloches($summoner: String!, $createdAt: String!) {
     moloches(where: { summoner: $summoner, createdAt_gt: $createdAt }) {

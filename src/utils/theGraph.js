@@ -5,12 +5,14 @@ import {
   ALT_AGAIN,
   DAO_ACTIVITIES,
   HOME_DAO,
+  SPAM_FILTER_GK_WL,
+  SPAM_FILTER_TRIBUTE,
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
-import { getApiMetadata, fetchApiVaultData } from './metadata';
+import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
 import {
   GET_POAP,
   GET_TRANSMUTATION,
@@ -118,12 +120,13 @@ export const fetchMinionInternalBalances = async args => {
   });
 };
 
-const fetchAllActivity = async (
+export const fetchAllActivity = async (
   args,
   items = [],
   createdAt = '0',
   count = 1,
   query = DAO_ACTIVITIES,
+  variables,
 ) => {
   try {
     const result = await graphQuery({
@@ -132,6 +135,7 @@ const fetchAllActivity = async (
       variables: {
         contractAddr: args.daoID,
         createdAt,
+        tributeMin: variables?.tributeMin || null,
       },
     });
 
@@ -180,6 +184,48 @@ const fetchAltActivity = async (
     id: args.daoID,
     rageQuits: sponsored.rageQuits,
     proposals: [...sponsored?.proposals, ...unsponsored?.proposals],
+  };
+};
+
+const fetchSpamFilterActivity = async (
+  args,
+  items = [],
+  createdAt = '0',
+  count = 1,
+) => {
+  const sponsored = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    ALT_ACTIVITIES,
+  );
+  const unsponsoredGuildkickWhitelist = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    SPAM_FILTER_GK_WL,
+  );
+
+  // TODO: how to determine tribute min by network
+  const unsponsoredTribute = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    SPAM_FILTER_TRIBUTE,
+    { tributeMin: '1000000000000000' },
+  );
+
+  return {
+    id: args.daoID,
+    rageQuits: sponsored.rageQuits,
+    proposals: [
+      ...sponsored?.proposals,
+      ...unsponsoredGuildkickWhitelist?.proposals,
+      ...unsponsoredTribute?.proposals,
+    ],
   };
 };
 
@@ -258,9 +304,17 @@ const completeQueries = {
   },
   async getActivities(args, setter) {
     try {
-      const isAlt = ALT.includes(args.daoID);
-      const activity = isAlt
-        ? await fetchAltActivity(args)
+      const metadata = await fetchMetaData(args.daoID);
+      // const isAlt = ALT.includes(args.daoID);
+      // const activity = isAlt
+      //   ? await fetchAltActivity(args)
+      //   : await fetchAllActivity(args);
+      // can we get rid of alt and just use boost for foundations?
+
+      console.log('metadata', metadata);
+
+      const activity = metadata[0]?.boosts?.SPAM_FILTER?.active
+        ? await fetchSpamFilterActivity(args)
         : await fetchAllActivity(args);
 
       const resolvedActivity = {

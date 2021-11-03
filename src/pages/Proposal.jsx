@@ -37,7 +37,8 @@ const Proposal = ({
   console.log('currentProposal', currentProposal);
 
   const handleRefreshDao = () => {
-    refreshDao();
+    const skipVaults = true;
+    refreshDao(skipVaults);
   };
 
   useEffect(() => {

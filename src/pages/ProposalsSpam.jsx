@@ -16,16 +16,51 @@ import { useTX } from '../contexts/TXContext';
 import MainViewLayout from '../components/mainViewLayout';
 import ContentBox from '../components/ContentBox';
 import { timeToNow } from '../utils/general';
+import { fetchAllActivity } from '../utils/theGraph';
+import { SPAM_FILTER_UNSPONSORED } from '../graphQL/dao-queries';
+import { proposalResolver } from '../utils/resolvers';
 
-const ProposalWatcher = ({ daoProposals }) => {
+const ProposalsSpam = ({ daoMetaData }) => {
   const { daoid, daochain } = useParams();
   const { refreshDao } = useTX();
+  const [daoProposals, setDaoProposals] = useState(null);
   const [proposals, setProposals] = useState({});
 
   const handleRefreshDao = () => {
     const skipVaults = true;
     refreshDao(skipVaults);
   };
+
+  useEffect(() => {
+    const fetchProposals = async () => {
+      const res = await fetchAllActivity(
+        { daoID: daoid, chainID: daochain },
+        [],
+        '0',
+        1,
+        SPAM_FILTER_UNSPONSORED,
+      );
+
+      console.log('res', res);
+      setDaoProposals(
+        res.proposals.map(proposal =>
+          proposalResolver(proposal, {
+            status: true,
+            title: true,
+            description: true,
+            link: true,
+            hash: true,
+            proposalType: true,
+          }),
+        ),
+      );
+    };
+
+    if (daoMetaData?.boosts?.SPAM_FILTER?.active) {
+      console.log('fetch me some data');
+      fetchProposals();
+    }
+  }, [daoMetaData]);
 
   useEffect(() => {
     if (daoProposals) {
@@ -35,17 +70,18 @@ const ProposalWatcher = ({ daoProposals }) => {
         })
         .reduce(
           (sortedProps, prop) => {
+            console.log('prop.status', prop.status);
             sortedProps[prop.status].push(prop);
             return sortedProps;
           },
           {
             Unsponsored: [],
-            InQueue: [],
-            VotingPeriod: [],
-            GracePeriod: [],
-            ReadyForProcessing: [],
-            Passed: [],
-            Failed: [],
+            // InQueue: [],
+            // VotingPeriod: [],
+            // GracePeriod: [],
+            // ReadyForProcessing: [],
+            // Passed: [],
+            // Failed: [],
             Cancelled: [],
           },
         );
@@ -68,7 +104,6 @@ const ProposalWatcher = ({ daoProposals }) => {
       <Fragment key={proposal.proposalId}>
         <Tr>
           <Td>{proposal.proposalId}</Td>
-          {/* <Td>{JSON.stringify(proposal.details)}</Td> */}
           <Td>{proposal.sharesRequested}</Td>
           <Td>{proposal.lootRequested}</Td>
           <Td>
@@ -107,7 +142,7 @@ const ProposalWatcher = ({ daoProposals }) => {
   };
 
   return (
-    <MainViewLayout header='Proposal List' isDao>
+    <MainViewLayout header='Proposal Spam' isDao>
       <Box w='100%'>
         <Box my={5} w='100%'>
           <ContentBox w='100%' fontSize='xl' fontFamily='heading' ml={3}>
@@ -164,4 +199,4 @@ const ProposalWatcher = ({ daoProposals }) => {
   );
 };
 
-export default ProposalWatcher;
+export default ProposalsSpam;

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Flex, Spinner, Box } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import CsvDownloadButton from './csvDownloadButton';
 import GenericSelect from './genericSelect';
@@ -28,11 +29,13 @@ import {
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
+  const { daoMetaData } = useMetaData();
+
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const { daoid } = useParams();
+  const { daoid, daochain } = useParams();
 
   const [filterOptions, setFilterOptions] = useState(defaultFilterOptions);
   const [filter, setFilter] = useSessionStorage(`${daoid}-filter`, null);
@@ -131,6 +134,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
           label='Filter By'
           count={listProposals?.length}
         />
+
         <GenericSelect
           label='Sort By'
           currentOption={sort?.name}
@@ -144,12 +148,20 @@ const ProposalsList = ({ proposals, customTerms }) => {
             marginLeft: '5%',
           }}
         />
+
         <ProposalSearch
           performSearch={performSearch}
           resetSearch={resetSearch}
         />
         <CsvDownloadButton entityList={listProposals} typename='Proposals' />
       </Flex>
+
+      {daoMetaData?.boosts?.SPAM_FILTER?.active && (
+        <Flex>
+          <Box mr='3'>Spam filter is on</Box>
+          <Link to={`/dao/${daochain}/${daoid}/proposals/spam`}>View</Link>
+        </Flex>
+      )}
       {isLoaded &&
         paginatedProposals?.map(proposal => {
           return (

@@ -41,6 +41,7 @@ import SuperfluidMinion from '../pages/SuperfluidMinion';
 import ThemeBuilder from '../pages/ThemeBuilder';
 import Treasury from '../pages/Treasury';
 import Vaults from '../pages/Vaults';
+import ProposalsSpam from '../pages/ProposalsSpam';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -205,6 +206,9 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/proposals/hardcore`}>
           <ProposalWatcher daoProposals={daoProposals} />
+        </Route>
+        <Route exact path={`${path}/proposals/spam`}>
+          <ProposalsSpam daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal
