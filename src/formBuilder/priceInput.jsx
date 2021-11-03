@@ -4,6 +4,7 @@ import { Flex, Icon, Text } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
+import ModButton from './modButton';
 import { handleDecimals } from '../utils/general';
 import { addZeros } from '../utils/tokenValue';
 
@@ -66,10 +67,15 @@ const PriceInput = props => {
 
   const [tokenName, setTokenName] = useState();
   const [daoTokens, setDaoTokens] = useState([]);
-  const [, setBalance] = useState(null);
+  const [balance, setBalance] = useState(null);
 
   const paymentToken = watch('paymentToken');
   const orderPrice = watch('orderPrice');
+
+  const maxBtnDisplay =
+    (balance !== '--' && balance) || balance === 0
+      ? `Max: ${balance.toFixed(4)}`
+      : 'Error: Not found.';
 
   // TODO: get fees from protocol contracts
   const protocolFeePerc = 0;
@@ -138,9 +144,20 @@ const PriceInput = props => {
     }
   }, [daoTokens, paymentToken]);
 
+  const setMax = () => {
+    setValue('orderPrice', balance);
+  };
+
   return (
     <>
-      <InputSelect {...props} selectName='paymentToken' options={daoTokens} />
+      <InputSelect
+        {...props}
+        selectName='paymentToken'
+        options={daoTokens}
+        btn={
+          orderType === 'buy' && <ModButton text={maxBtnDisplay} fn={setMax} />
+        }
+      />
       {(!orderType || orderType === 'sell') && (
         <SellOrderFees
           serviceFeePercentage={serviceFeePerc}
