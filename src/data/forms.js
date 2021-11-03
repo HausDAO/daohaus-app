@@ -144,10 +144,11 @@ export const FORM = {
     id: 'PROFILE',
     title: 'Update Basic Profile',
     description:
-      'Editing this profile will update your profile everywhere IDX is used',
+      'Editing this profile will update your profile everywhere Ceramic is used',
     required: ['residenceCountry'], // Use name key from proposal type object
     tx: null,
     ctaText: 'Connect',
+    blurText: 'Connect to update your profile',
     fields: [
       [
         {
@@ -180,7 +181,7 @@ export const FORM = {
           ...FIELD.TITLE,
           label: 'Url',
           name: 'url',
-          placeholder: 'https://localhost:5000',
+          placeholder: 'https://example.com',
           htmlFor: 'url',
           expectType: 'url',
         },
@@ -200,6 +201,7 @@ export const FORM = {
           placeholder: 'US',
           htmlFor: 'residenceCountry',
           expectType: 'string',
+          info: 'An ISO 3166-1 alpha-2 compliant country code',
         },
       ],
     ],

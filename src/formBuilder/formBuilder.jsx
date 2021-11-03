@@ -45,6 +45,7 @@ const FormBuilder = props => {
     formSuccessMessage,
     formLoadingMessage,
     formErrorMessage,
+    blurText,
   } = props;
 
   const [formState, setFormState] = useState(null);
@@ -328,7 +329,7 @@ const FormBuilder = props => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl display='flex'>
-          {!removeBlur ? (
+          {!removeBlur && props.removeBlurCallback ? (
             <Flex
               display='flex'
               w='100%'
@@ -340,7 +341,7 @@ const FormBuilder = props => {
               align='center'
             >
               <TextBox w='40%' textAlign='center'>
-                Connect to update your profile
+                {blurText}
               </TextBox>
             </Flex>
           ) : (

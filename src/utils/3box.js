@@ -24,7 +24,7 @@ export const authenticateDid = async address => {
       `${address}@eip155:1`,
       {},
     );
-    if (!link.did || link.did !== did) {
+    if (!link.did || link.did !== did.id) {
       await link.setDid(did, authProvider, {});
     }
   } catch (err) {
