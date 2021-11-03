@@ -10,16 +10,15 @@ import MainViewLayout from '../components/mainViewLayout';
 import { getProfileActivites } from '../utils/activities';
 import { handleGetProfile } from '../utils/3box';
 import { initTokenData } from '../utils/tokenValue';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const Profile = ({ members, overview, daoTokens, activities }) => {
   const { userid, daochain } = useParams();
   const { address } = useInjectedProvider();
-	const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   const [memberEntity, setMemberEntity] = useState(null);
   const [tokensReceivable, setTokensReceivable] = useState([]);
-	
+
   useEffect(() => {
     const getProfile = async () => {
       try {
@@ -85,7 +84,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
             ens={profile?.ens}
             profile={profile}
             memberEntity={memberEntity}
-						refreshProfile={setProfile}
+            refreshProfile={setProfile}
           />
           <BankList
             tokens={tokensReceivable}

@@ -20,7 +20,6 @@ const GenericInput = props => {
     onChange = null,
     disabled,
     defaultValue,
-		localValues
   } = props;
   const { register } = localForm;
   return (

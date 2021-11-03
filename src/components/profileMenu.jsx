@@ -21,8 +21,12 @@ import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
-import { authenticateDid, getBasicProfile, setBasicProfile, cacheProfile } from '../utils/3box';
-import { FIELD } from '../data/fields';
+import {
+  authenticateDid,
+  getBasicProfile,
+  setBasicProfile,
+  cacheProfile,
+} from '../utils/3box';
 
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
@@ -47,54 +51,55 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
   const handleEditProfile = () => {
-		let client = null;
-	  let did = null;
+    let client = null;
+    let did = null;
     formModal({
       ...FORM.PROFILE,
-			formLoadingMessage: "Connecting...",
-			formErrorMessage: "Failed to connect",
+      formLoadingMessage: 'Connecting...',
+      formErrorMessage: 'Failed to connect',
       fields: [...FORM.PROFILE.fields],
-			onSubmit: async ({ value }) => {
-				console.log("On submit")
+      onSubmit: async ({ value }) => {
+        console.log('On submit');
         if (did?.authenticated) {
-				console.log("Triggering")
+          console.log('Triggering');
+          console.log(value);
           // onLoad hook
-					// Add set value functionality in the profile
-					const profile = await getBasicProfile(did.id)
-				console.log(profile)
+          // Add set value functionality in the profile
+          const profile = await getBasicProfile(did.id);
+          console.log(profile);
           formModal({
-      ...FORM.PROFILE,
-						ctaText: "Submit",
-			      formSuccessMessage: "Connected",
-						defaultValues: {
-							name: profile?.name || "",
-							emoji: profile?.emoji || "",
-							description: profile?.description || "",
-							homeLocation: profile?.homeLocation || "",
-							residenceCountry: profile?.residenceCountry || "",
-							url: profile?.url || ""
-						},
-						onSubmit: async ({ values }) => {
-							console.log(values)
-							await setBasicProfile(client, did, values)
-							cacheProfile(values, member.memberAddress)
-							refreshProfile(values)
-							successToast({ title: 'Updated Profile!' });
-							closeModal()
-						},
+            ...FORM.PROFILE,
+            ctaText: 'Submit',
+            formSuccessMessage: 'Connected',
+            defaultValues: {
+              name: profile?.name || '',
+              emoji: profile?.emoji || '',
+              description: profile?.description || '',
+              homeLocation: profile?.homeLocation || '',
+              residenceCountry: profile?.residenceCountry || '',
+              url: profile?.url || '',
+            },
+            onSubmit: async ({ values }) => {
+              console.log(values);
+              await setBasicProfile(client, did, values);
+              cacheProfile(values, member.memberAddress);
+              refreshProfile(values);
+              successToast({ title: 'Updated Profile!' });
+              closeModal();
+            },
           });
         }
-			},
+      },
       removeBlurCallback: async () => {
         // How does the loader work with async
         [client, did] = await authenticateDid(member.memberAddress);
-				return true
+        return true;
         // authenticate profile
         // open modal modal
         // then user can fill out
       },
     });
-	}
+  };
 
   const copiedToast = () => {
     toast({

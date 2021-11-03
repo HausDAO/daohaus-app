@@ -1,9 +1,3 @@
-import Ceramic from '@ceramicnetwork/http-client';
-import { DataModel } from '@glazed/datamodel';
-import { DIDDataStore } from '@glazed/did-datastore';
-import { model as publishedBasicProfileModel } from '@datamodels/identity-profile-basic';
-import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver';
-import { DID } from 'dids';
 import { EthereumAuthProvider, SelfID, WebClient } from '@self.id/web';
 import { Core } from '@self.id/core';
 
@@ -11,7 +5,7 @@ import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
 
 export const authenticateDid = async address => {
   console.log(window.ethereum);
-  await ethereum.request({
+  await window.ethereum.request({
     method: 'wallet_switchEthereumChain',
     params: [{ chainId: '0x1' }],
   });
@@ -49,13 +43,13 @@ export const getAuthenticatedBasicProfile = async (client, did) => {
 
 export const getBasicProfile = async did => {
   const core = new Core({ ceramic: 'testnet-clay' });
-  return await core.get('basicProfile', did);
+  return core.get('basicProfile', did);
 };
 
 export const setBasicProfile = async (client, did, values) => {
   const selfId = new SelfID({ client, did });
   console.log(did);
-  return await selfId.set('basicProfile', values);
+  return selfId.set('basicProfile', values);
 };
 
 export const fetchProfile = async address => {

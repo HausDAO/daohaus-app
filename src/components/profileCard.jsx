@@ -21,7 +21,14 @@ import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
 import { calcPower, calcValue } from '../utils/profile';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity, refreshProfile }) => {
+const ProfileCard = ({
+  overview,
+  daoTokens,
+  ens,
+  profile,
+  memberEntity,
+  refreshProfile,
+}) => {
   const { userid } = useParams();
   const handleAvatar = (member, profile) => {
     if (profile?.image?.length) {
@@ -133,7 +140,10 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity, refreshP
               </Box>
               <Box>
                 {memberEntity && (
-                  <ProfileMenu member={{ ...memberEntity, ...profile }} refreshProfile={refreshProfile}/>
+                  <ProfileMenu
+                    member={{ ...memberEntity, ...profile }}
+                    refreshProfile={refreshProfile}
+                  />
                 )}
               </Box>
             </Flex>

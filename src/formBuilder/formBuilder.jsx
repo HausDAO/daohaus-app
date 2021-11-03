@@ -48,15 +48,15 @@ const FormBuilder = props => {
     formConditions,
     logValues,
     onLoad,
-		defaultValues,
-		formSuccessMessage,
-		formLoadingMessage,
-		formErrorMessage,
+    defaultValues,
+    formSuccessMessage,
+    formLoadingMessage,
+    formErrorMessage,
   } = props;
-	// Pass in callback
-	// If callback active show blur
-	// if blur callback reutrns true 
-	// then show form 
+  // Pass in callback
+  // If callback active show blur
+  // if blur callback reutrns true
+  // then show form
 
   const [formState, setFormState] = useState(null);
   const [removeBlur, setRemoveBlur] = useState(null);
@@ -64,16 +64,19 @@ const FormBuilder = props => {
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
-	console.log("defaultValues")
-	console.log(defaultValues)
-	console.log("parentForm")
-	console.log(parentForm)
-	const localForm = parentForm || useForm({ shouldUnregister: false, defaultValues: defaultValues });
-	console.log(localForm)
+  console.log('defaultValues');
+  console.log(defaultValues);
+  console.log('parentForm');
+  console.log(parentForm);
+  const localForm =
+    parentForm || useForm({ shouldUnregister: false, defaultValues });
+  console.log(localForm);
   const { handleSubmit, watch } = localForm;
   const values = watch();
 
-  useEffect(() => logValues && dev && console.log(`values`, values, fields), [values]);
+  useEffect(() => logValues && dev && console.log(`values`, values, fields), [
+    values,
+  ]);
 
   useEffect(() => {
     setFields(mapInRequired(fields, required));
@@ -192,7 +195,7 @@ const FormBuilder = props => {
     const handleSubmitCallback = async () => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
-				console.log("handleSubmitCallback")
+        console.log('handleSubmitCallback');
         try {
           setFormState('loading');
           const res = await submitCallback({
@@ -249,28 +252,33 @@ const FormBuilder = props => {
         return handleSubmitTX(() => handleThen(next));
       }
     }
-		let shouldRemove = true
-		if (props.removeBlurCallback) {
-			console.log("Removing")
-        try {
+    let shouldRemove = true;
+    if (props.removeBlurCallback) {
+      console.log('Removing');
+      try {
         setFormState('loading');
-				shouldRemove = await props.removeBlurCallback()
-					console.log(shouldRemove)
-				setRemoveBlur(shouldRemove)
-          // don't indicate on form
-          setFormState('success');
-					console.log("Should remove")
-					console.log(shouldRemove)
-        } catch (error) {
-          console.error(error);
-          setFormState('error');
-        }
-
-		}
+        shouldRemove = await props.removeBlurCallback();
+        console.log(shouldRemove);
+        setRemoveBlur(shouldRemove);
+        // don't indicate on form
+        setFormState('success');
+        console.log('Should remove');
+        console.log(shouldRemove);
+      } catch (error) {
+        console.error(error);
+        setFormState('error');
+      }
+    }
     //  HANDLE CALLBACK ON SUBMIT
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function' && shouldRemove)
-			console.log("Calling submit callback")
+    if (
+      props.onSubmit &&
+      !props.tx &&
+      typeof props.onSubmit === 'function' &&
+      shouldRemove
+    ) {
+      console.log('Calling submit callback');
       return handleSubmitCallback();
+    }
 
     //  HANDLE CONTRACT TX ON SUBMIT
     if (props.tx && shouldRemove) {
@@ -287,38 +295,32 @@ const FormBuilder = props => {
     },
   });
 
-
-
-	console.log("formSuccessMessage");
-	console.log(formSuccessMessage);
-	const defaultIndicatorStates = {
-  loading: {
-    spinner: true,
-    title: formLoadingMessage || 'Submitting...',
-    explorerLink: true,
-  },
-  success: {
-    icon: BsCheckCircle,
-    title: formSuccessMessage || 'Form Submitted',
-    explorerLink: true,
-  },
-  error: {
-    icon: BiErrorCircle,
-    title: formErrorMessage || 'Error Submitting Transaction',
-    errorMessage: true,
-  },
-};
-
-
+  console.log('formSuccessMessage');
+  console.log(formSuccessMessage);
+  const defaultIndicatorStates = {
+    loading: {
+      spinner: true,
+      title: formLoadingMessage || 'Submitting...',
+      explorerLink: true,
+    },
+    success: {
+      icon: BsCheckCircle,
+      title: formSuccessMessage || 'Form Submitted',
+      explorerLink: true,
+    },
+    error: {
+      icon: BiErrorCircle,
+      title: formErrorMessage || 'Error Submitting Transaction',
+      errorMessage: true,
+    },
+  };
 
   const renderInputs = (fields, depth = 0) => {
-
     return fields.map((field, index) => {
-
-			let value = ""
-			if (defaultValues) {
-			   value = defaultValues[field?.name]
-			}
+      let value = '';
+      if (defaultValues) {
+        value = defaultValues[field?.name];
+      }
 
       return Array.isArray(field) ? (
         <Flex
@@ -332,7 +334,7 @@ const FormBuilder = props => {
       ) : (
         <InputFactory
           {...field}
-					defaultValue={value || field?.defaultValue}
+          defaultValue={value || field?.defaultValue}
           key={`${depth}-${index}`}
           minionType={props.minionType}
           formCondition={formCondition}
@@ -344,20 +346,19 @@ const FormBuilder = props => {
           useFormError={useFormError}
           formState={formState}
         />
-      )
-	}
-    );
+      );
+    });
   };
 
-  console.log("Here")
-  console.log(props.removeBlurCallback && !removeBlur)
-  console.log(props.removeBlurCallback)
-  console.log(removeBlur)
+  console.log('Here');
+  console.log(props.removeBlurCallback && !removeBlur);
+  console.log(props.removeBlurCallback);
+  console.log(removeBlur);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl display='flex'>
-				          {!removeBlur ?
+          {!removeBlur ? (
             <Flex
               display='flex'
               w='100%'
@@ -371,9 +372,10 @@ const FormBuilder = props => {
               <TextBox w='40%' textAlign='center'>
                 Connect to update your profile
               </TextBox>
-            </Flex> : <></>
-          }
-
+            </Flex>
+          ) : (
+            <></>
+          )}
 
           <Flex
             width='100%'
@@ -383,7 +385,10 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} states={defaultIndicatorStates} />
+        <ProgressIndicator
+          currentState={formState}
+          states={defaultIndicatorStates}
+        />
         <FormFooter
           options={options}
           addOption={addOption}

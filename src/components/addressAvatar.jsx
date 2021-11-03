@@ -3,14 +3,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import StaticAvatar from './staticAvatar';
 import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const AddressAvatar = React.memo(({ addr, hideCopy }) => {
-	const [profile, setProfile] = useState(null)
+  const [profile, setProfile] = useState(null);
 
   const shouldFetchENS = useRef(false);
 
-	 useEffect(() => {
+  useEffect(() => {
     let shouldUpdate = true;
     const getProfile = async () => {
       try {
