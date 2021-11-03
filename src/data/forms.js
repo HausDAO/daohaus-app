@@ -186,7 +186,7 @@ export const FORM = {
           name: 'url',
           placeholder: 'https://localhost:5000',
           htmlFor: 'url',
-          expectType: 'any',
+          expectType: 'url',
         },
         {
           ...FIELD.TITLE,

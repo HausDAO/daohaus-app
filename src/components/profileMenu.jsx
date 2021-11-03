@@ -24,9 +24,8 @@ import { LOCAL_ABI } from '../utils/abi';
 import { authenticateDid, getBasicProfile, setBasicProfile, cacheProfile } from '../utils/3box';
 import { FIELD } from '../data/fields';
 
-const ProfileMenu = ({ member }) => {
+const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
-  const { refreshProfile } = useDaoMember();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { formModal, closeModal } = useAppModal();
   const { daochain, daoid } = useParams();
@@ -79,7 +78,7 @@ const ProfileMenu = ({ member }) => {
 							console.log(values)
 							await setBasicProfile(client, did, values)
 							cacheProfile(values, member.memberAddress)
-							refreshProfile()
+							refreshProfile(values)
 							successToast({ title: 'Updated Profile!' });
 							closeModal()
 						},
