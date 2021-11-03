@@ -57,16 +57,11 @@ const ProfileMenu = ({ member, refreshProfile }) => {
       ...FORM.PROFILE,
       formLoadingMessage: 'Connecting...',
       formErrorMessage: 'Failed to connect',
+      required: [],
       fields: [...FORM.PROFILE.fields],
-      onSubmit: async ({ value }) => {
-        console.log('On submit');
+      onSubmit: async () => {
         if (did?.authenticated) {
-          console.log('Triggering');
-          console.log(value);
-          // onLoad hook
-          // Add set value functionality in the profile
           const profile = await getBasicProfile(did.id);
-          console.log(profile);
           formModal({
             ...FORM.PROFILE,
             ctaText: 'Submit',
@@ -80,7 +75,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
               url: profile?.url || '',
             },
             onSubmit: async ({ values }) => {
-              console.log(values);
               await setBasicProfile(client, did, values);
               cacheProfile(values, member.memberAddress);
               refreshProfile(values);
@@ -91,12 +85,8 @@ const ProfileMenu = ({ member, refreshProfile }) => {
         }
       },
       removeBlurCallback: async () => {
-        // How does the loader work with async
         [client, did] = await authenticateDid(member.memberAddress);
         return true;
-        // authenticate profile
-        // open modal modal
-        // then user can fill out
       },
     });
   };

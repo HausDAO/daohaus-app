@@ -438,10 +438,6 @@ export const FIELD = {
     description: 'You bet',
     expectType: 'any',
   },
-  BLUR: {
-    type: 'genericBlur',
-    title: 'Connect to update your profile',
-  },
 };
 
 export const FORM_DISPLAY = {

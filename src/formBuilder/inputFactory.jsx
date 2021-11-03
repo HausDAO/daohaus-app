@@ -8,7 +8,6 @@ import DateRange from './dateRange';
 import DiscourseMeta from './discourseMeta';
 import GatedInput from './gatedInput';
 import GenericFormDisplay from './genericFormDisplay';
-import GenericBlur from './genericBlur';
 import GenericInput from './genericInput';
 import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
@@ -138,9 +137,6 @@ export const InputFactory = props => {
   }
   if (type === 'checkGate') {
     return <CheckGate {...props} />;
-  }
-  if (type === 'genericBlur') {
-    return <GenericBlur {...props} />;
   }
   if (type === 'toggleForm') {
     return <ToggleForm {...props} />;

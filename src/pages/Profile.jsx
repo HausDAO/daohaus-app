@@ -20,6 +20,17 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
   const [tokensReceivable, setTokensReceivable] = useState([]);
 
   useEffect(() => {
+    if (members) {
+      setMemberEntity(
+        members?.find(
+          member =>
+            member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
+        ),
+      );
+    }
+  }, [members]);
+
+  useEffect(() => {
     const getProfile = async () => {
       try {
         const profile = await handleGetProfile(userid);
@@ -33,17 +44,6 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
       getProfile();
     }
   }, [userid, profile]);
-
-  useEffect(() => {
-    if (members) {
-      setMemberEntity(
-        members?.find(
-          member =>
-            member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
-        ),
-      );
-    }
-  }, [members]);
 
   useEffect(() => {
     const initMemberTokens = async tokensWithBalance => {

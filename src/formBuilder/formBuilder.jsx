@@ -20,13 +20,6 @@ import { omit } from '../utils/general';
 
 const dev = process.env.REACT_APP_DEV;
 
-// Callback that disables or enables a blocker field
-// react-hook-form, returns string if passes
-//
-// tx contexts trigger refreshes of the graph
-// refetch, not refresh the context
-//
-// onPullSuccess - in the react component
 const FormBuilder = props => {
   const {
     submitTransaction,
@@ -53,10 +46,6 @@ const FormBuilder = props => {
     formLoadingMessage,
     formErrorMessage,
   } = props;
-  // Pass in callback
-  // If callback active show blur
-  // if blur callback reutrns true
-  // then show form
 
   const [formState, setFormState] = useState(null);
   const [removeBlur, setRemoveBlur] = useState(null);
@@ -64,29 +53,12 @@ const FormBuilder = props => {
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [formErrors, setFormErrors] = useState({});
   const [options, setOptions] = useState(additionalOptions);
-  console.log('defaultValues');
-  console.log(defaultValues);
-  console.log('parentForm');
-  console.log(parentForm);
   const localForm =
     parentForm || useForm({ shouldUnregister: false, defaultValues });
-  console.log(localForm);
   const { handleSubmit, watch } = localForm;
   const values = watch();
 
-  useEffect(() => logValues && dev && console.log(`values`, values, fields), [
-    values,
-  ]);
-
-  useEffect(() => {
-    setFields(mapInRequired(fields, required));
-  }, [fields]);
-
-  useEffect(() => {
-    if (onLoad) {
-      onLoad();
-    }
-  }, [onLoad]);
+  useEffect(() => logValues && dev && console.log(`values`, values), [values]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -99,6 +71,16 @@ const FormBuilder = props => {
 
     setFields([...rest, [...lastCol, selectedOption]]);
   };
+
+  useEffect(() => {
+    setFields(mapInRequired(fields, required));
+  }, [fields]);
+
+  useEffect(() => {
+    if (onLoad) {
+      onLoad();
+    }
+  }, [onLoad]);
 
   const buildABIOptions = abiString => {
     if (!abiString || typeof abiString !== 'string') return;
@@ -195,7 +177,6 @@ const FormBuilder = props => {
     const handleSubmitCallback = async () => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
-        console.log('handleSubmitCallback');
         try {
           setFormState('loading');
           const res = await submitCallback({
@@ -254,16 +235,12 @@ const FormBuilder = props => {
     }
     let shouldRemove = true;
     if (props.removeBlurCallback) {
-      console.log('Removing');
       try {
         setFormState('loading');
         shouldRemove = await props.removeBlurCallback();
-        console.log(shouldRemove);
         setRemoveBlur(shouldRemove);
         // don't indicate on form
         setFormState('success');
-        console.log('Should remove');
-        console.log(shouldRemove);
       } catch (error) {
         console.error(error);
         setFormState('error');
@@ -276,7 +253,6 @@ const FormBuilder = props => {
       typeof props.onSubmit === 'function' &&
       shouldRemove
     ) {
-      console.log('Calling submit callback');
       return handleSubmitCallback();
     }
 
@@ -295,8 +271,6 @@ const FormBuilder = props => {
     },
   });
 
-  console.log('formSuccessMessage');
-  console.log(formSuccessMessage);
   const defaultIndicatorStates = {
     loading: {
       spinner: true,
@@ -350,10 +324,6 @@ const FormBuilder = props => {
     });
   };
 
-  console.log('Here');
-  console.log(props.removeBlurCallback && !removeBlur);
-  console.log(props.removeBlurCallback);
-  console.log(removeBlur);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>

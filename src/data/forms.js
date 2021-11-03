@@ -141,17 +141,13 @@ export const FORM = {
     customValidations: ['nonDaoApplicant'],
   },
   PROFILE: {
-    // Have blur field
-    // If
     id: 'PROFILE',
     title: 'Update Basic Profile',
-    dev: true,
     description:
       'Editing this profile will update your profile everywhere IDX is used',
-    required: [], // Use name key from proposal type object
+    required: ['residenceCountry'], // Use name key from proposal type object
     tx: null,
     ctaText: 'Connect',
-    logValues: true,
     fields: [
       [
         {

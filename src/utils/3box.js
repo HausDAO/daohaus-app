@@ -24,21 +24,16 @@ export const authenticateDid = async address => {
       `${address}@eip155:1`,
       {},
     );
-    if (!link.did) {
+    if (!link.did || link.did !== did) {
       await link.setDid(did, authProvider, {});
     }
   } catch (err) {
-    console.log(err);
+    console.warning(err);
   }
   // Always associate current chain with mainnet
   // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
 
   return [client, did];
-};
-
-export const getAuthenticatedBasicProfile = async (client, did) => {
-  const self = new SelfID({ client, did });
-  return self.get('basicProfile');
 };
 
 export const getBasicProfile = async did => {
@@ -48,26 +43,18 @@ export const getBasicProfile = async did => {
 
 export const setBasicProfile = async (client, did, values) => {
   const selfId = new SelfID({ client, did });
-  console.log(did);
   return selfId.set('basicProfile', values);
 };
 
 export const fetchProfile = async address => {
-  console.log('Fetching profile');
-  // Try fetch if exists return
-  // getAccountDid
   try {
     const core = new Core({ ceramic: 'testnet-clay' });
     const link = await Caip10Link.fromAccount(
       core.ceramic,
       `${address}@eip155:1`,
     );
-    console.log('link');
-    console.log(link);
 
     const values = await getBasicProfile(link.did);
-    console.log('values');
-    console.log(values);
     if (values) {
       return values;
     }
@@ -78,13 +65,13 @@ export const fetchProfile = async address => {
         `https://ipfs.3box.io/profile?address=${address}`,
       );
       if (response.status === 'error') {
-        console.log('Profile does not exist');
+        console.warning('Profile does not exist');
       }
 
       const boxProfile = response.json();
       return boxProfile;
     } catch (error) {
-      console.log(error);
+      console.warning(error);
     }
   }
 };
