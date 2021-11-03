@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { RiAddFill } from 'react-icons/ri';
 import { useParams, Link } from 'react-router-dom';
-import { Box, Button, Flex } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import BankChart from '../components/bankChart';
@@ -10,6 +16,8 @@ import MainViewLayout from '../components/mainViewLayout';
 import VaultCard from '../components/vaultCard';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { vaultFilterOptions } from '../utils/vaults';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { DAO_BOOKS_HOST } from '../data/boosts';
 
 const Vaults = ({
   overview,
@@ -24,6 +32,9 @@ const Vaults = ({
   const [listVaults, setListVaults] = useState(null);
   const [chartBalances, setChartBalances] = useState([]);
   const [hasNfts, setHasNfts] = useState(false);
+  const { daoMetaData } = useMetaData();
+
+  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
   useEffect(() => {
     if (daoVaults) {
@@ -78,8 +89,8 @@ const Vaults = ({
         balanceData={chartBalances}
         visibleVaults={listVaults}
       />
-      <Flex justify='space-between'>
-        <Box mt={5}>
+      <Flex justify='space-between' mt='5'>
+        <Box>
           <ListFilter
             filter={filter}
             setFilter={setFilter}
@@ -87,18 +98,28 @@ const Vaults = ({
             labelText='Showing'
           />
         </Box>
-        {hasNfts && (
-          <Box
-            mt={5}
-            texttransform='uppercase'
-            fontFamily='heading'
-            fontSize={['sm', null, null, 'md']}
-          >
-            <Link to={`/dao/${daochain}/${daoid}/gallery`}>
-              View NFT Gallery
-            </Link>
-          </Box>
-        )}
+        <HStack alignItems='center'>
+          {hasNfts && (
+            <Box
+              texttransform='uppercase'
+              fontFamily='heading'
+              fontSize={['sm', null, null, 'md']}
+            >
+              <Link to={`/dao/${daochain}/${daoid}/gallery`}>
+                View NFT Gallery
+              </Link>
+            </Box>
+          )}
+          {isBooksBoostEnabled && (
+            <Button
+              as={ChakraLink}
+              isExternal
+              href={`${DAO_BOOKS_HOST}/dao/${daoid}`}
+            >
+              View Books
+            </Button>
+          )}
+        </HStack>
       </Flex>
 
       <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>

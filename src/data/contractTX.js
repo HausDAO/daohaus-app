@@ -897,7 +897,7 @@ export const TX = {
                 contract: CONTRACTS.ERC_20,
                 fnName: 'approve',
                 gatherArgs: [
-                  '.contextData.chainConfig.rarible.nft_transfer_proxy',
+                  '.values.raribleTransferProxy',
                   '.values.totalOrderPrice',
                 ],
               },
