@@ -126,7 +126,7 @@ export const fetchAllActivity = async (
   createdAt = '0',
   count = 1,
   query = DAO_ACTIVITIES,
-  variables,
+  variables = {},
 ) => {
   try {
     const result = await graphQuery({
@@ -135,7 +135,7 @@ export const fetchAllActivity = async (
       variables: {
         contractAddr: args.daoID,
         createdAt,
-        tributeMin: variables?.tributeMin || null,
+        ...variables,
       },
     });
 
@@ -207,15 +207,16 @@ const fetchSpamFilterActivity = async (
     count,
     SPAM_FILTER_GK_WL,
   );
-
-  // TODO: how to determine tribute min by network
   const unsponsoredTribute = await fetchAllActivity(
     args,
     items,
     createdAt,
     count,
     SPAM_FILTER_TRIBUTE,
-    { tributeMin: '1000000000000000' },
+    {
+      requiredTributeMin: args.requiredTributeMin,
+      requiredTributeToken: args.requiredTributeToken,
+    },
   );
 
   return {
@@ -304,19 +305,23 @@ const completeQueries = {
   },
   async getActivities(args, setter) {
     try {
+      // let activity;
+      const isAlt = ALT.includes(args.daoID);
+      // if (isAlt) {
+      //   activity = await fetchAltActivity(args);
+      // } else {
       const metadata = await fetchMetaData(args.daoID);
-      // const isAlt = ALT.includes(args.daoID);
-      // const activity = isAlt
-      //   ? await fetchAltActivity(args)
-      //   : await fetchAllActivity(args);
-      // can we get rid of alt and just use boost for foundations?
-
-      console.log('metadata', metadata);
 
       const activity = metadata[0]?.boosts?.SPAM_FILTER?.active
-        ? await fetchSpamFilterActivity(args)
+        ? await fetchSpamFilterActivity({
+            ...args,
+            requiredTributeToken:
+              metadata[0].boosts.SPAM_FILTER.metadata.requiredTributeToken,
+            requiredTributeMin:
+              metadata[0].boosts.SPAM_FILTER.metadata.requiredTributeMin,
+          })
         : await fetchAllActivity(args);
-
+      // }
       const resolvedActivity = {
         id: args.daoID,
         rageQuits: activity.rageQuits,

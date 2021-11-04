@@ -41,7 +41,6 @@ const ProposalsSpam = ({ daoMetaData }) => {
         SPAM_FILTER_UNSPONSORED,
       );
 
-      console.log('res', res);
       setDaoProposals(
         res.proposals.map(proposal =>
           proposalResolver(proposal, {
@@ -57,7 +56,6 @@ const ProposalsSpam = ({ daoMetaData }) => {
     };
 
     if (daoMetaData?.boosts?.SPAM_FILTER?.active) {
-      console.log('fetch me some data');
       fetchProposals();
     }
   }, [daoMetaData]);
@@ -70,18 +68,11 @@ const ProposalsSpam = ({ daoMetaData }) => {
         })
         .reduce(
           (sortedProps, prop) => {
-            console.log('prop.status', prop.status);
             sortedProps[prop.status].push(prop);
             return sortedProps;
           },
           {
             Unsponsored: [],
-            // InQueue: [],
-            // VotingPeriod: [],
-            // GracePeriod: [],
-            // ReadyForProcessing: [],
-            // Passed: [],
-            // Failed: [],
             Cancelled: [],
           },
         );

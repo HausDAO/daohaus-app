@@ -635,4 +635,10 @@ export const BOOST_FORMS = {
     fields: [[]],
     tx: TX.CREATE_WRAP_N_ZAP,
   },
+  SPAM_FILTER: {
+    id: 'SPAM_FILTER',
+    title: 'Minimum Tribute',
+    required: ['tributeOffered'],
+    fields: [[{ ...FIELD.TRIBUTE, info: INFO_TEXT.SPAM_FILTER_AMOUNT }]],
+  },
 };

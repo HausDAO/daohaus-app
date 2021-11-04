@@ -177,7 +177,6 @@ export const ALT_AGAIN = gql`
         molochAddress: $contractAddr
         createdAt_gt: $createdAt
         sponsored: false
-        sharesRequested_gt: 0
         tributeOffered_gte: "1000000000000000000"
         tributeToken: "0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb" 
       }
@@ -243,13 +242,14 @@ export const SPAM_FILTER_GK_WL = gql`
 `;
 
 export const SPAM_FILTER_TRIBUTE = gql`
-  query molochActivities($contractAddr: String!, $createdAt: String! $tributeMin: String!) {
+  query molochActivities($contractAddr: String!, $createdAt: String! $requiredTributeMin: String!, $requiredTributeToken: String!) {
     proposals(
       where: { 
         molochAddress: $contractAddr
         createdAt_gt: $createdAt
         sponsored: false
-        tributeOffered_gte: $tributeMin
+        tributeOffered_gte: $requiredTributeMin
+        tributeToken: $requiredTributeToken
       }
       orderBy: createdAt
       orderDirection: asc

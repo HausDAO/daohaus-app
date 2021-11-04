@@ -207,6 +207,16 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  SPAM_FILTER: {
+    title: 'Proposal Spam Filter',
+    description: 'Filter out some bad proposals.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.0',
+    pars: ['Requires proposals to have a tribute.'],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   // SNAPSHOT: {
   //   title: 'Snapshot Proposals',
   //   description:
@@ -302,6 +312,17 @@ export const STEPS = {
       stepLabel: 'Summon',
       next: { type: 'awaitTx', then: 'FINISH', ctaText: 'Summon' },
     },
+  },
+  ADD_SPAM_FILTER: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'boostMetaForm',
+      form: BOOST_FORMS.SPAM_FILTER,
+      next: 'STEP2',
+      stepLabel: 'Set Minimum Tribute',
+      isUserStep: true,
+    },
+    STEP2: COMMON_STEPS.SIGNER,
   },
 };
 
@@ -459,6 +480,16 @@ export const BOOSTS = {
     networks: 'all',
     cost: 'free',
     settings: 'none',
+  },
+  SPAM_FILTER: {
+    id: 'SPAM_FILTER',
+    steps: STEPS.ADD_SPAM_FILTER,
+    boostContent: CONTENT.SPAM_FILTER,
+    categories: ['community', 'governance'],
+    networks: 'all',
+    cost: 'free',
+    metaFields: ['tributeOffered', 'tributeToken'],
+    settings: { type: 'internalLink', appendToDaoPath: 'settings/spam' },
   },
   // SNAPSHOT: {
   //   id: 'SNAPSHOT',
