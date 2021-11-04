@@ -455,8 +455,6 @@ export const FORM = {
         FIELD.TITLE,
         FIELD.DESCRIPTION,
         FIELD.LINK,
-        // FIELD.NFT_APPROVAL,
-        // FIELD.TOKEN_INFO_INPUT,
         FIELD.SHARES_REQUEST,
         FIELD.LOOT_REQUEST,
         FIELD.PAYMENT_REQUEST,
