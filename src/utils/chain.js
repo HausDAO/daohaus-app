@@ -65,7 +65,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-rinkeby',
     minion_factory_addr: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
-    dai_contract: '0x8f2e097e79b1c51be9cba42658862f0192c3e487',
+    dai_contract: '0x95b58a6bff3d14b7db2f5cb5f0ad413dc2940658',
     wrapper_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://rinkeby.etherscan.io',
