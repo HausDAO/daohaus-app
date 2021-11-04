@@ -70,7 +70,7 @@ export const supportedChains = {
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-rinkeby-subgraph',
     erc1155_graph_url:
-      'https://api.thegraph.com/subgraphs/name/sunguru98/erc1155-kovan-subgraph',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-rinkeby-subgraph',
     minion_factory_addr: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x8f2e097e79b1c51be9cba42658862f0192c3e487',
@@ -217,7 +217,7 @@ export const supportedChains = {
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
     erc1155_graph_url:
-      'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc1155-subgraph',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
     minion_factory_addr: '0x02e458B5eEF8f23e78AefaC0F15f5d294C3762e9',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
@@ -265,7 +265,7 @@ export const supportedChains = {
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
     erc721_graph_url:
-      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-arbitrum-subgraph',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-arbitrum-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-arbitrum-subgraph',
     minion_factory_addr: '',
