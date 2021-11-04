@@ -140,7 +140,7 @@ export const DAO_ACTIVITIES = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits {
+    rageQuits(where: {molochAddress: $contractAddr}) {
       id
       createdAt
       memberAddress
@@ -160,7 +160,7 @@ export const ALT_ACTIVITIES = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits {
+    rageQuits(where: {molochAddress: $contractAddr}) {
       id
       createdAt
       memberAddress
@@ -177,7 +177,6 @@ export const ALT_AGAIN = gql`
         molochAddress: $contractAddr
         createdAt_gt: $createdAt
         sponsored: false
-        sharesRequested_gt: 0
         tributeOffered_gte: "1000000000000000000"
         tributeToken: "0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb" 
       }
@@ -187,7 +186,7 @@ export const ALT_AGAIN = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits {
+    rageQuits(where: {molochAddress: $contractAddr}) {
       id
       createdAt
       memberAddress
