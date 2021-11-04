@@ -407,7 +407,11 @@ export const hubChainQuery = async ({
             (dao.meta && !dao.meta.hide) ||
             (!dao.meta &&
               variables.memberAddress.toLowerCase() === dao.moloch.summoner);
-          return notHiddenAndHasMetaOrIsUnregisteredSummoner;
+
+          const hasNoSharesLoot =
+            Number(dao.shares) > 0 || Number(dao.loot) > 0;
+
+          return notHiddenAndHasMetaOrIsUnregisteredSummoner && hasNoSharesLoot;
         });
 
       reactSetter(prevState => [
