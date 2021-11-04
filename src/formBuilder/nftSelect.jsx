@@ -19,8 +19,10 @@ import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import FieldWrapper from './fieldWrapper';
 import GenericInput from './genericInput';
+import TokenInfoInput from './tokenInfoInput';
 import NftApproval from './nftApproval';
 import GenericModal from '../modals/genericModal';
+import TextBox from '../components/TextBox';
 import { filterUniqueNfts } from '../utils/nftVaults';
 import { fetchErc721s, fetchErc1155s } from '../utils/theGraph';
 import { hydrate721s, hydrate1155s } from '../utils/nftData';
@@ -44,6 +46,7 @@ const NftSelect = props => {
   const [selected, setSelected] = useState();
   const [collections, setCollections] = useState();
   const [filter, setFilter] = useState();
+  const [manualInput, setManualInput] = useState(false);
 
   useEffect(() => {
     register('tokenId');
@@ -160,6 +163,10 @@ const NftSelect = props => {
 
   const onFilterChange = e => setFilter(e.nativeEvent.target.value);
 
+  const toggleManual = () => {
+    setManualInput(!manualInput);
+  };
+
   const selectModal = (
     <GenericModal closeOnOverlayClick modalId='nftSelect'>
       <Box>
@@ -201,32 +208,63 @@ const NftSelect = props => {
     <FieldWrapper>
       <Input type='hidden' id={htmlFor} name={name} ref={register} />
       <Box mb={5}>
-        <Text mb={3}>{label}</Text>
-        <AspectRatio
-          ratio={1}
-          width='100%'
-          className='aspect-box'
-          sx={{
-            '&>img': {
-              objectFit: 'contain',
-            },
-          }}
-        >
-          {selected ? (
-            <Image
-              onClick={openModal}
-              _hover={{
-                opacity: 0.5,
-                cursor: 'pointer',
-              }}
-              src={selected.image}
+        <TextBox mb={3} size='xs'>
+          {label}{' '}
+          <Text
+            color='secondary.500'
+            _hover={{
+              cursor: 'pointer',
+            }}
+            onClick={toggleManual}
+          >
+            {manualInput ? 'Manual' : 'Auto'}
+          </Text>
+        </TextBox>
+        {manualInput ? (
+          <>
+            <GenericInput
+              {...props}
+              required={false}
+              label='Token Address'
+              htmlfor='nftAddress'
+              placeholder='0x'
+              name='nftAddress'
             />
-          ) : (
-            <Button variant='nftSelect' onClick={openModal}>
-              <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
-            </Button>
-          )}
-        </AspectRatio>
+            <TokenInfoInput
+              {...props}
+              htmlFor='tokenId'
+              name='tokenId'
+              placeholder='0'
+              label='Token ID'
+            />
+          </>
+        ) : (
+          <AspectRatio
+            ratio={1}
+            width='100%'
+            className='aspect-box'
+            sx={{
+              '&>img': {
+                objectFit: 'contain',
+              },
+            }}
+          >
+            {selected ? (
+              <Image
+                onClick={openModal}
+                _hover={{
+                  opacity: 0.5,
+                  cursor: 'pointer',
+                }}
+                src={selected.image}
+              />
+            ) : (
+              <Button variant='nftSelect' onClick={openModal}>
+                <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
+              </Button>
+            )}
+          </AspectRatio>
+        )}
       </Box>
       {source === 'user' && (
         <>
