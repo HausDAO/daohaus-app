@@ -10,7 +10,9 @@ import { getMinionActionFormLego } from './vaults';
 
 const defaultConfig = {
   platform: 'unknown',
-  fields: {},
+  fields: {
+    image: 'hydrateImageURI',
+  },
   actions: {
     transfer: {
       menuLabel: 'Transfer NFT',
@@ -62,6 +64,14 @@ export const attributeModifiers = Object.freeze({
       return null;
     }
     return description.split(' ')[4];
+  },
+  hydrateImageURI(nft) {
+    if (nft.image.match(/^ipfs:\/\/(Qm[a-zA-Z0-9]+)/)) {
+      return `https://daohaus.mypinata.cloud/ipfs/${
+        nft.image.match(/^ipfs:\/\/(Qm[a-zA-Z0-9]+)/)[1]
+      }`;
+    }
+    return nft.image;
   },
 });
 
