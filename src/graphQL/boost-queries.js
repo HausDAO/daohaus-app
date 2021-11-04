@@ -77,6 +77,8 @@ export const GET_ERC1155 = gql`
       token {
         id
         identifier
+        name
+        symbol
         URI
         registry {
           id

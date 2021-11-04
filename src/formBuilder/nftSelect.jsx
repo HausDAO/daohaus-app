@@ -18,10 +18,12 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import FieldWrapper from './fieldWrapper';
+import GenericInput from './genericInput';
+import NftApproval from './nftApproval';
 import GenericModal from '../modals/genericModal';
 import { filterUniqueNfts } from '../utils/nftVaults';
 import { fetchErc721s, fetchErc1155s } from '../utils/theGraph';
-import { hydrateNfts } from '../utils/nftData';
+import { hydrate721s, hydrate1155s } from '../utils/nftData';
 
 const NftSelect = props => {
   const { address } = useInjectedProvider();
@@ -49,22 +51,22 @@ const NftSelect = props => {
     register('raribleDescription');
     register('image');
     register('nftType');
+    register('tokenType');
     register('selectedMinion');
     register('selectedSafeAddress');
 
+    const getUserNfts = async () => {
+      const raw721s = await fetchErc721s({ address, chainID: daochain });
+      const raw1155s = await fetchErc1155s({ address, chainID: daochain });
+      const erc721s = await hydrate721s(raw721s.tokens);
+      const erc1155s = await hydrate1155s(raw1155s.balances);
+      const allTokens = [...erc721s, ...erc1155s].filter(item => item);
+      setNftData(allTokens);
+      setNfts(allTokens);
+    };
+
     if (source === 'user') {
-      fetchErc721s({ address, chainID: daochain })
-        .then(async res => {
-          const data = await hydrateNfts(res.tokens, 'ERC-721');
-          setNftData(data);
-          setNfts(data);
-        })
-        .catch(err => console.log(err));
-      fetchErc1155s({ address, chainID: daochain })
-        .then(res => {
-          console.log('1155s: ', res);
-        })
-        .catch(err => console.log(err));
+      getUserNfts();
     }
   }, []);
 
@@ -84,9 +86,8 @@ const NftSelect = props => {
   useEffect(() => {
     if (daoVaults /* && source === 'dao' */) {
       const data = filterUniqueNfts(daoVaults, localValues?.minionAddress);
-      console.log(data);
-      // setNftData(data);
-      // setNfts(data);
+      setNftData(data);
+      setNfts(data);
     }
   }, [daoVaults]);
 
@@ -106,7 +107,6 @@ const NftSelect = props => {
 
   useEffect(() => {
     const setUpNftValues = async () => {
-      console.log('selected', selected);
       setValue(name, selected.contractAddress);
       setValue('tokenId', selected.tokenId);
       setValue('tokenBalance', selected.tokenBalance);
@@ -122,6 +122,7 @@ const NftSelect = props => {
         selected.image,
       );
       setValue('nftType', selected.type.replace('-', ''));
+      setValue('tokenType', selected.type === 'ERC-721' ? 1 : 2);
       setValue('selectedMinion', selected.minionAddress);
       setValue('selectedSafeAddress', selected.safeAddress);
     };
@@ -199,7 +200,7 @@ const NftSelect = props => {
   return (
     <FieldWrapper>
       <Input type='hidden' id={htmlFor} name={name} ref={register} />
-      <Box>
+      <Box mb={5}>
         <Text mb={3}>{label}</Text>
         <AspectRatio
           ratio={1}
@@ -227,6 +228,26 @@ const NftSelect = props => {
           )}
         </AspectRatio>
       </Box>
+      {source === 'user' && (
+        <>
+          {selected?.type === 'ERC-1155' && (
+            <GenericInput
+              {...props}
+              required={false}
+              label='Quantity'
+              htmlfor='numTokens'
+              placeholder='0'
+              name='numTokens'
+            />
+          )}
+          <NftApproval
+            {...props}
+            name='nftApproval'
+            htmlFor='nftApproval'
+            label='NFT Approval'
+          />
+        </>
+      )}
       {selectModal}
     </FieldWrapper>
   );

@@ -439,6 +439,7 @@ export const FORM = {
       'title',
       'nftAddress',
       'tokenId',
+      'tokenType',
       'selectedMinion',
       'nftApproval',
       'sharesRequested',
@@ -447,14 +448,13 @@ export const FORM = {
     ],
     fields: [
       [
+        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
+        { ...FIELD.NFT_SELECT, source: 'user' },
+      ],
+      [
         FIELD.TITLE,
         FIELD.DESCRIPTION,
         FIELD.LINK,
-        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
-      ],
-      [
-        { ...FIELD.NFT_SELECT, source: 'user' },
-        // FIELD.NFT_INPUT,
         // FIELD.NFT_APPROVAL,
         // FIELD.TOKEN_INFO_INPUT,
         FIELD.SHARES_REQUEST,
