@@ -268,7 +268,7 @@ const NftSelect = props => {
       </Box>
       {source === 'user' && (
         <>
-          {selected?.type === 'ERC-1155' && (
+          {selected?.type === 'ERC-1155' && !manualInput && (
             <GenericInput
               {...props}
               required={false}
