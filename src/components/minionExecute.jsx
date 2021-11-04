@@ -28,7 +28,7 @@ const MinionExecute = ({
   const { daochain } = useParams();
   const { address, injectedProvider } = useInjectedProvider();
   const { submitTransaction, refreshDao } = useTX();
-  const { refreshMinionVault, daoMembers } = useDao();
+  const { daoMembers } = useDao();
   const proposalType = useMemo(() => proposalTypeMaker(proposal.details), [
     proposal,
   ]);
@@ -117,8 +117,7 @@ const MinionExecute = ({
         proposalType: proposal.proposalType,
       },
     });
-    await refreshMinionVault(proposal.minionAddress);
-    refreshDao();
+    await refreshDao();
     setShouldFetch(true);
     setLoading(false);
   };
