@@ -12,23 +12,41 @@ import {
   AspectRatio,
 } from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
+import { useParams } from 'react-router-dom';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import FieldWrapper from './fieldWrapper';
+import GenericInput from './genericInput';
+import TokenInfoInput from './tokenInfoInput';
+import NftApproval from './nftApproval';
 import GenericModal from '../modals/genericModal';
+import TextBox from '../components/TextBox';
 import { filterUniqueNfts } from '../utils/nftVaults';
+import { fetchErc721s, fetchErc1155s } from '../utils/theGraph';
+import { hydrate721s, hydrate1155s } from '../utils/nftData';
 
 const NftSelect = props => {
-  const { label, localForm, htmlFor, name, localValues } = props;
-  const { register, setValue } = localForm;
-  const { setGenericModal } = useOverlay();
+  const { address } = useInjectedProvider();
   const { daoVaults } = useDao();
+  const { setGenericModal } = useOverlay();
+  const { daochain } = useParams();
+  const {
+    label,
+    localForm,
+    htmlFor,
+    name,
+    localValues,
+    source = 'dao',
+  } = props;
+  const { register, setValue } = localForm;
   const [nftData, setNftData] = useState();
   const [nfts, setNfts] = useState();
   const [selected, setSelected] = useState();
   const [collections, setCollections] = useState();
   const [filter, setFilter] = useState();
+  const [manualInput, setManualInput] = useState(false);
 
   useEffect(() => {
     register('tokenId');
@@ -36,8 +54,23 @@ const NftSelect = props => {
     register('raribleDescription');
     register('image');
     register('nftType');
+    register('tokenType');
     register('selectedMinion');
     register('selectedSafeAddress');
+
+    const getUserNfts = async () => {
+      const raw721s = await fetchErc721s({ address, chainID: daochain });
+      const raw1155s = await fetchErc1155s({ address, chainID: daochain });
+      const erc721s = await hydrate721s(raw721s.tokens);
+      const erc1155s = await hydrate1155s(raw1155s.balances);
+      const allTokens = [...erc721s, ...erc1155s].filter(item => item);
+      setNftData(allTokens);
+      setNfts(allTokens);
+    };
+
+    if (source === 'user') {
+      getUserNfts();
+    }
   }, []);
 
   useEffect(() => {
@@ -54,7 +87,7 @@ const NftSelect = props => {
   }, [nfts]);
 
   useEffect(() => {
-    if (daoVaults) {
+    if (daoVaults && source === 'dao') {
       const data = filterUniqueNfts(daoVaults, localValues?.minionAddress);
       setNftData(data);
       setNfts(data);
@@ -77,7 +110,6 @@ const NftSelect = props => {
 
   useEffect(() => {
     const setUpNftValues = async () => {
-      console.log('selected', selected);
       setValue(name, selected.contractAddress);
       setValue('tokenId', selected.tokenId);
       setValue('tokenBalance', selected.tokenBalance);
@@ -93,6 +125,7 @@ const NftSelect = props => {
         selected.image,
       );
       setValue('nftType', selected.type.replace('-', ''));
+      setValue('tokenType', selected.type === 'ERC-721' ? 1 : 2);
       setValue('selectedMinion', selected.minionAddress);
       setValue('selectedSafeAddress', selected.safeAddress);
     };
@@ -129,6 +162,10 @@ const NftSelect = props => {
   };
 
   const onFilterChange = e => setFilter(e.nativeEvent.target.value);
+
+  const toggleManual = () => {
+    setManualInput(!manualInput);
+  };
 
   const selectModal = (
     <GenericModal closeOnOverlayClick modalId='nftSelect'>
@@ -170,34 +207,85 @@ const NftSelect = props => {
   return (
     <FieldWrapper>
       <Input type='hidden' id={htmlFor} name={name} ref={register} />
-      <Box>
-        <Text mb={3}>{label}</Text>
-        <AspectRatio
-          ratio={1}
-          width='100%'
-          className='aspect-box'
-          sx={{
-            '&>img': {
-              objectFit: 'contain',
-            },
-          }}
-        >
-          {selected ? (
-            <Image
-              onClick={openModal}
-              _hover={{
-                opacity: 0.5,
-                cursor: 'pointer',
-              }}
-              src={selected.image}
+      <Box mb={5}>
+        <TextBox mb={3} size='xs'>
+          {label}{' '}
+          <Text
+            color='secondary.500'
+            _hover={{
+              cursor: 'pointer',
+            }}
+            onClick={toggleManual}
+          >
+            {manualInput ? 'Manual' : 'Auto'}
+          </Text>
+        </TextBox>
+        {manualInput ? (
+          <>
+            <GenericInput
+              {...props}
+              required={false}
+              label='Token Address'
+              htmlfor='nftAddress'
+              placeholder='0x'
+              name='nftAddress'
             />
-          ) : (
-            <Button variant='nftSelect' onClick={openModal}>
-              <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
-            </Button>
-          )}
-        </AspectRatio>
+            <TokenInfoInput
+              {...props}
+              htmlFor='tokenId'
+              name='tokenId'
+              placeholder='0'
+              label='Token ID'
+            />
+          </>
+        ) : (
+          <AspectRatio
+            ratio={1}
+            width='100%'
+            className='aspect-box'
+            sx={{
+              '&>img': {
+                objectFit: 'contain',
+              },
+            }}
+          >
+            {selected ? (
+              <Image
+                onClick={openModal}
+                _hover={{
+                  opacity: 0.5,
+                  cursor: 'pointer',
+                }}
+                src={selected.image}
+              />
+            ) : (
+              <Button variant='nftSelect' onClick={openModal}>
+                <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
+              </Button>
+            )}
+          </AspectRatio>
+        )}
       </Box>
+      {source === 'user' && (
+        <>
+          {selected?.type === 'ERC-1155' && !manualInput && (
+            <GenericInput
+              {...props}
+              required={false}
+              label='Quantity'
+              htmlfor='numTokens'
+              placeholder='0'
+              name='numTokens'
+            />
+          )}
+          <NftApproval
+            {...props}
+            name='nftApproval'
+            htmlFor='nftApproval'
+            label='NFT Approval'
+          />
+        </>
+      )}
       {selectModal}
     </FieldWrapper>
   );

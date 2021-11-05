@@ -19,6 +19,10 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/mainnet-erc721-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/mainnet-erc1155-subgraph',
     minion_factory_addr: '0x88207Daf515e0da1A32399b3f92D128B1BF45294',
     moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
     dai_contract: '0x6b175474e89094c44da98b954eedeac495271d0f',
@@ -62,6 +66,10 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-rinkeby',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-rinkeby',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-rinkeby-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-rinkeby-subgraph',
     minion_factory_addr: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x95b58a6bff3d14b7db2f5cb5f0ad413dc2940658',
@@ -112,6 +120,10 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-kovan-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-subgraph',
     minion_factory_addr: '0xCE63803E265617c55567a7A7b584fF2dbD76210B',
     uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
     transmutation_factory_addr: '0xbca622291fFe797C77a8Bc6D000584b22877e971',
@@ -146,6 +158,10 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-xdai',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-xdai',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-xdai-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/erc1155-xdai-subgraph',
     poap_graph_url:
       'https://api.thegraph.com/subgraphs/name/poap-xyz/poap-xdai',
     minion_factory_addr: '0x53508D981439Ce6A3283597a4775F6f23504d4A2',
@@ -196,6 +212,10 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-matic',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
     minion_factory_addr: '0x02e458B5eEF8f23e78AefaC0F15f5d294C3762e9',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
@@ -242,6 +262,10 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-arbitrum',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-arbitrum-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-arbitrum-subgraph',
     minion_factory_addr: '',
     moloch_factory_addr: '0x9232dea84e91b49fef6b604eea0455692fc27ba8',
     dai_contract: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
@@ -286,6 +310,10 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-celo',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-celo',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-celo-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-celo-subgraph',
     minion_factory_addr: '',
     moloch_factory_addr: '0x9100a2489b2998b1331fd33714187d895c919075', // moloch v2.1.sol
     dai_contract: '0x765de816845861e75a25fca122bb6898b8b1282a', // This is cUSD for Celo
