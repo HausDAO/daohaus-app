@@ -36,6 +36,7 @@ const NftSelect = props => {
     label,
     localForm,
     htmlFor,
+    minionType,
     name,
     localValues,
     source = 'dao',
@@ -88,7 +89,11 @@ const NftSelect = props => {
 
   useEffect(() => {
     if (daoVaults && source === 'dao') {
-      const data = filterUniqueNfts(daoVaults, localValues?.minionAddress);
+      const data = filterUniqueNfts(
+        daoVaults,
+        localValues?.minionAddress,
+        minionType,
+      );
       setNftData(data);
       setNfts(data);
     }
