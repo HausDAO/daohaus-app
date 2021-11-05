@@ -122,9 +122,14 @@ export const concatNftSearchData = nft => {
   }`.toLowerCase();
 };
 
-export const filterUniqueNfts = (daoVaults, minionAddress = null) => {
+export const filterUniqueNfts = (
+  daoVaults,
+  minionAddress = null,
+  minionType = null,
+) => {
   return daoVaults
-    ?.reduce((acc, item) => {
+    ?.filter(vault => !minionType || vault.minionType === minionType)
+    .reduce((acc, item) => {
       const nftsWithMinionAddress = item.nfts.map(n => {
         return {
           ...n,
