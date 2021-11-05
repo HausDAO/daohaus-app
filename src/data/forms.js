@@ -358,7 +358,7 @@ export const FORM = {
     tx: VAULT_TRANSFER_TX.MINION_SEND_ERC721_TOKEN,
     fields: [
       [
-        FIELD.NFT_SELECT,
+        { ...FIELD.NFT_SELECT, source: 'vault' },
         FIELD.MINION_SELECT,
         FIELD.APPLICANT,
         FIELD.DESCRIPTION,
@@ -374,7 +374,7 @@ export const FORM = {
     tx: VAULT_TRANSFER_TX.MINION_SEND_ERC1155_TOKEN,
     fields: [
       [
-        FIELD.NFT_SELECT,
+        { ...FIELD.NFT_SELECT, source: 'vault' },
         FIELD.MINION_SELECT,
         FIELD.APPLICANT,
         FIELD.DESCRIPTION,

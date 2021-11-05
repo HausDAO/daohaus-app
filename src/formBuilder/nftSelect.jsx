@@ -10,6 +10,10 @@ import {
   Image,
   Input,
   AspectRatio,
+  Spinner,
+  RadioGroup,
+  Stack,
+  Radio,
 } from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
 import { useParams } from 'react-router-dom';
@@ -47,7 +51,8 @@ const NftSelect = props => {
   const [selected, setSelected] = useState();
   const [collections, setCollections] = useState();
   const [filter, setFilter] = useState();
-  const [manualInput, setManualInput] = useState(false);
+  const [manualInput, setManualInput] = useState('auto');
+  const [loadingUserNfts, setLoadingUserNfts] = useState(false);
 
   useEffect(() => {
     register('tokenId');
@@ -60,6 +65,7 @@ const NftSelect = props => {
     register('selectedSafeAddress');
 
     const getUserNfts = async () => {
+      setLoadingUserNfts(true);
       const raw721s = await fetchErc721s({ address, chainID: daochain });
       const raw1155s = await fetchErc1155s({ address, chainID: daochain });
       const erc721s = await hydrate721s(raw721s.tokens);
@@ -67,12 +73,13 @@ const NftSelect = props => {
       const allTokens = [...erc721s, ...erc1155s].filter(item => item);
       setNftData(allTokens);
       setNfts(allTokens);
+      setLoadingUserNfts(false);
     };
 
     if (source === 'user') {
       getUserNfts();
     }
-  }, []);
+  }, [source]);
 
   useEffect(() => {
     if (nfts) {
@@ -88,7 +95,7 @@ const NftSelect = props => {
   }, [nfts]);
 
   useEffect(() => {
-    if (daoVaults && source === 'dao') {
+    if (daoVaults && source !== 'user') {
       const data = filterUniqueNfts(
         daoVaults,
         localValues?.minionAddress,
@@ -168,8 +175,8 @@ const NftSelect = props => {
 
   const onFilterChange = e => setFilter(e.nativeEvent.target.value);
 
-  const toggleManual = () => {
-    setManualInput(!manualInput);
+  const toggleManual = e => {
+    setManualInput(e);
   };
 
   const selectModal = (
@@ -213,19 +220,27 @@ const NftSelect = props => {
     <FieldWrapper>
       <Input type='hidden' id={htmlFor} name={name} ref={register} />
       <Box mb={5}>
-        <TextBox mb={3} size='xs'>
-          {label}{' '}
-          <Text
-            color='secondary.500'
-            _hover={{
-              cursor: 'pointer',
-            }}
-            onClick={toggleManual}
-          >
-            {manualInput ? 'Manual' : 'Auto'}
-          </Text>
-        </TextBox>
-        {manualInput ? (
+        {source !== 'vault' && (
+          <>
+            <TextBox mb={3} size='xs'>
+              {`${label} (must be in ${
+                source === 'user' ? 'your wallet' : "your DAO's minion safe"
+              })`}
+            </TextBox>
+
+            <RadioGroup defaultValue={manualInput} onChange={toggleManual}>
+              <Stack spacing={5} direction='row'>
+                <Radio size='sm' value='auto'>
+                  Auto
+                </Radio>
+                <Radio size='sm' value='manual'>
+                  Manual
+                </Radio>
+              </Stack>
+            </RadioGroup>
+          </>
+        )}
+        {manualInput === 'manual' ? (
           <>
             <GenericInput
               {...props}
@@ -255,18 +270,33 @@ const NftSelect = props => {
             }}
           >
             {selected ? (
-              <Image
-                onClick={openModal}
-                _hover={{
-                  opacity: 0.5,
-                  cursor: 'pointer',
-                }}
-                src={selected.image}
-              />
+              <>
+                {source === 'dao' ? (
+                  <Image
+                    onClick={openModal}
+                    _hover={{
+                      opacity: 0.5,
+                      cursor: 'pointer',
+                    }}
+                    src={selected.image}
+                  />
+                ) : (
+                  <Image src={selected.image} />
+                )}
+              </>
             ) : (
-              <Button variant='nftSelect' onClick={openModal}>
-                <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
-              </Button>
+              <>
+                {loadingUserNfts ? (
+                  <Flex direction='column'>
+                    <Box>Loading NFTs</Box>
+                    <Spinner />
+                  </Flex>
+                ) : (
+                  <Button variant='nftSelect' onClick={openModal}>
+                    <Icon w={50} h={50} color='primary.500' as={RiAddFill} />
+                  </Button>
+                )}
+              </>
             )}
           </AspectRatio>
         )}
