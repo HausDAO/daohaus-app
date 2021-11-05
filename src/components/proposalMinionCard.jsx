@@ -69,10 +69,15 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   };
 
   const checkIfProxy = async (abi, to) => {
-    const rpcUrl = chainByID(daochain).rpc_url;
-    const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-    const contract = new web3.eth.Contract(abi, to);
-    return contract.methods.implementation().call();
+    try {
+      const rpcUrl = chainByID(daochain).rpc_url;
+      const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+      const contract = new web3.eth.Contract(abi, to);
+      const implAddress = await contract.methods.implementation().call();
+      return implAddress;
+    } catch (error) {
+      console.log('Error getting Proxy implementation', error);
+    }
   };
 
   const buildEthTransferAction = action => ({
@@ -122,8 +127,10 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                         parsed,
                         action.to,
                       );
-                      json = await decodeFromEtherscan(hydratedAction);
-                      if (json.status === '0') {
+                      json =
+                        hydratedAction.proxyTo &&
+                        (await decodeFromEtherscan(hydratedAction));
+                      if (!json || json.status === '0') {
                         return {
                           to: action.to,
                           value: Web3Utils.toBN(action.value).toString(),
@@ -153,8 +160,10 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
             const imp = parsed.find(p => p.name === 'implementation');
             if (imp) {
               hydratedAction.proxyTo = await checkIfProxy(parsed, action.to);
-              json = await decodeFromEtherscan(hydratedAction);
-              if (json.status === '0') {
+              json =
+                hydratedAction.proxyTo &&
+                (await decodeFromEtherscan(hydratedAction));
+              if (!json || json.status === '0') {
                 return hydratedAction;
               }
               parsed = JSON.parse(json.result);
