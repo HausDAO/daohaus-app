@@ -21,6 +21,8 @@ export const HUB_MEMBERSHIPS = gql`
       id
       memberAddress
       molochAddress
+      shares
+      loot
       moloch {
         id
         version
