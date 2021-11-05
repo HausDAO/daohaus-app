@@ -36,6 +36,8 @@ const SellOrderFees = ({ orderPrice, serviceFeePercentage, tokenName }) => {
   );
 };
 
+// TODO: calculate fees using Rarible SDK
+// Source: https://github.com/rarible/protocol-ethereum-sdk/blob/d340e34d510e441edf3645f0942deab36c2d2738/packages/protocol-ethereum-sdk/src/order/fill-order/rarible-v2.ts#L86
 const BuyOrderFees = ({
   orderPrice,
   originFeePercentage = 0,

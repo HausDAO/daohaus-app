@@ -22,17 +22,36 @@ const RaribleOrder = ({ proposal, orderType }) => {
     const getOrder = async () => {
       setLoading(true);
       const orderData = await getOrderDataFromProposal(proposal);
-      const orderRes = await getOrderByItem(
-        orderData.make.assetType.tokenId
-          ? orderData.make.assetType.contract
-          : orderData.take.assetType.contract,
-        orderData.make.assetType.tokenId || orderData.take.assetType.tokenId,
-        orderData.maker,
-        orderData.make.assetType.tokenId ? 'sell' : 'bids',
-        daochain,
-      );
+      if (orderData.make.assetType.tokenId) {
+        const orderRes = await getOrderByItem(
+          orderData.make.assetType.contract,
+          orderData.make.assetType.tokenId,
+          orderData.maker,
+          'sell',
+          daochain,
+        );
+        setNeedOrder(!compareOrder(orderData, orderRes.orders));
+      } else {
+        const orders = (
+          await Promise.all(
+            ['ACTIVE', 'FILLED', 'INACTIVE', 'CANCELLED'].map(
+              async status =>
+                (
+                  await getOrderByItem(
+                    orderData.take.assetType.contract,
+                    orderData.take.assetType.tokenId,
+                    orderData.maker,
+                    'bids',
+                    daochain,
+                    status,
+                  )
+                ).orders,
+            ),
+          )
+        ).reduce((a, b) => [...a, ...b], []);
+        setNeedOrder(!compareOrder(orderData, orders));
+      }
       setOrderUrl(buildRaribleUrl(orderData, daochain));
-      setNeedOrder(!compareOrder(orderData, orderRes.orders));
       setLoading(false);
     };
 
