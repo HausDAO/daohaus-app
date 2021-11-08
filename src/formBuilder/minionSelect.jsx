@@ -51,7 +51,9 @@ const MinionSelect = props => {
     }
   }, [minionAddress]);
 
-  return <GenericSelect {...props} options={minions} />;
+  return (
+    <GenericSelect {...props} options={minions} helperText={minionAddress} />
+  );
 };
 
 export default MinionSelect;
