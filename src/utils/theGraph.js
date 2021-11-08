@@ -12,6 +12,8 @@ import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
 import { getApiMetadata, fetchApiVaultData } from './metadata';
 import {
+  GET_ERC721,
+  GET_ERC1155,
   GET_POAP,
   GET_TRANSMUTATION,
   GET_WRAP_N_ZAPS,
@@ -91,6 +93,26 @@ export const fetchTransmutation = async args => {
   });
 };
 
+export const fetchErc721s = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'erc721_graph_url'),
+    query: GET_ERC721,
+    variables: {
+      tokenHolder: args.address,
+    },
+  });
+};
+
+export const fetchErc1155s = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'erc1155_graph_url'),
+    query: GET_ERC1155,
+    variables: {
+      tokenHolder: args.address,
+    },
+  });
+};
+
 export const fetchPoapAddresses = async args => {
   return graphQuery({
     endpoint: getGraphEndpoint('0x64', 'poap_graph_url'),
@@ -121,7 +143,8 @@ export const fetchMinionInternalBalances = async args => {
 const fetchAllActivity = async (
   args,
   items = [],
-  skip = 0,
+  createdAt = '0',
+  count = 1,
   query = DAO_ACTIVITIES,
 ) => {
   try {
@@ -130,37 +153,54 @@ const fetchAllActivity = async (
       query,
       variables: {
         contractAddr: args.daoID,
-        skip,
+        createdAt,
       },
     });
-    const { proposals } = result.moloch;
-    if (proposals.length === 100) {
-      //  TESTING ONLY
-      // if (skip === 400) {
-      //   return { ...result.moloch, proposals: [...items, ...proposals] };
-      // }
+
+    const { proposals } = result;
+    count = proposals.length;
+    if (count > 0) {
+      const lastRecord = proposals[count - 1];
+      createdAt = lastRecord && lastRecord.createdAt;
+
       return fetchAllActivity(
         args,
         [...items, ...proposals],
-        skip + 100,
+        createdAt,
+        count,
         query,
       );
     }
-    return { ...result.moloch, proposals: [...items, ...proposals] };
+    return { ...result, proposals: [...items, ...proposals] };
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const fetchAltActivity = async (args, items = [], skip = 0) => {
-  const sponsored = await fetchAllActivity(args, items, skip, ALT_ACTIVITIES);
-  const unsponsored = await fetchAllActivity(args, items, skip, ALT_AGAIN);
+const fetchAltActivity = async (
+  args,
+  items = [],
+  createdAt = '0',
+  count = 1,
+) => {
+  const sponsored = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    ALT_ACTIVITIES,
+  );
+  const unsponsored = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    ALT_AGAIN,
+  );
 
   return {
-    id: sponsored.id,
+    id: args.daoID,
     rageQuits: sponsored.rageQuits,
-    title: sponsored.title,
-    version: sponsored.version,
     proposals: [...sponsored?.proposals, ...unsponsored?.proposals],
   };
 };
@@ -246,11 +286,8 @@ const completeQueries = {
         : await fetchAllActivity(args);
 
       const resolvedActivity = {
-        // manually copying to prevent unnecessary copies of proposals
-        id: activity.id,
+        id: args.daoID,
         rageQuits: activity.rageQuits,
-        title: activity.title,
-        version: activity.version,
         proposals: activity.proposals.map(proposal =>
           proposalResolver(proposal, {
             status: true,
@@ -392,7 +429,11 @@ export const hubChainQuery = async ({
             (dao.meta && !dao.meta.hide) ||
             (!dao.meta &&
               variables.memberAddress.toLowerCase() === dao.moloch.summoner);
-          return notHiddenAndHasMetaOrIsUnregisteredSummoner;
+
+          const hasNoSharesLoot =
+            Number(dao.shares) > 0 || Number(dao.loot) > 0;
+
+          return notHiddenAndHasMetaOrIsUnregisteredSummoner && hasNoSharesLoot;
         });
 
       reactSetter(prevState => [

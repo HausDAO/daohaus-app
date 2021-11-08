@@ -71,7 +71,8 @@ export const createGnosisSafeTxProposal = async ({
   data,
   operation,
 }) => {
-  const { network } = chainByID(chainID);
+  const { network, networkAlt } = chainByID(chainID);
+  const networkName = networkAlt || network;
   const txBase = {
     to: web3.utils.toChecksumAddress(to),
     value,
@@ -79,11 +80,11 @@ export const createGnosisSafeTxProposal = async ({
     operation,
     gasToken: null,
   };
-  const safeDetails = await getApiGnosis(network, `safes/${safeAddress}/`);
+  const safeDetails = await getApiGnosis(networkName, `safes/${safeAddress}/`);
   const gasEstimate =
-    ['mainnnet', 'rinkeby', 'goerli'].includes(network) &&
+    ['mainnnet', 'rinkeby', 'goerli'].includes(networkName) &&
     (await postGnosisRelayApi(
-      network,
+      networkName,
       `safes/${safeAddress}/transactions/estimate/`,
       txBase,
     ));
@@ -143,7 +144,7 @@ export const createGnosisSafeTxProposal = async ({
 
   try {
     await postApiGnosis(
-      network,
+      networkName,
       `safes/${safeAddress}/multisig-transactions/`,
       tx,
       false,

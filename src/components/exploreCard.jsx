@@ -13,14 +13,11 @@ const ExploreCard = ({ dao }) => {
   const { state, dispatch } = useContext(ExploreContext);
 
   const handleTagSelect = tag => {
-    console.log('state.tags', state.tags, tag);
     if (!state.tags.includes(tag)) {
       const tagUpdate = [...state.tags, tag];
       dispatch({ type: 'updateTags', payload: tagUpdate });
     }
   };
-
-  console.log('dao', dao);
 
   const renderTags = () => {
     if (dao.meta?.tags) {
