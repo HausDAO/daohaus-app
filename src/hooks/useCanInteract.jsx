@@ -3,9 +3,9 @@ import { useTX } from '../contexts/TXContext';
 const defaults = ['isConnected', 'isSameChain', 'isMember'];
 
 const useCanInteract = (params = {}) => {
-  const { checkList = defaults, errorDeliveryType = 'firstString' } = params;
+  const { checklist = defaults, errorDeliveryType = 'firstString' } = params;
   const { checkState } = useTX();
-  const result = checkState(checkList, errorDeliveryType);
+  const result = checkState(checklist, errorDeliveryType);
   if (
     errorDeliveryType === 'softErrors' ||
     errorDeliveryType === 'arrayOfStrings'

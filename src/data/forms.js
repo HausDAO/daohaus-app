@@ -106,6 +106,7 @@ export const PROPOSAL_FORMS = {
       [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.TRIBUTE, FIELD.DESCRIPTION],
     ],
     additionalOptions: [FIELD.LINK],
+    checklist: ['isConnected', 'isSameChain'],
   },
   SHARES_FOR_WORK: {
     id: 'SHARES_FOR_WORK',
@@ -619,7 +620,11 @@ export const PROPOSAL_FORMS = {
     fields: [
       [
         FIELD.TARGET_CONTRACT,
-        { ...FIELD.ABI_INPUT, listenTo: 'targetContract', hideHex: true },
+        {
+          ...FIELD.ABI_INPUT,
+          listenTo: 'targetContract',
+          hideHex: true,
+        },
         FIELD.MINION_VALUE,
       ],
       [],

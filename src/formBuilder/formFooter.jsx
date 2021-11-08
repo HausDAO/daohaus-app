@@ -44,11 +44,13 @@ const FormFooter = props => {
     handleAddStep,
     addStep,
     closeModal,
+    checklist,
   } = props;
 
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
   const { canInteract, interactErrors } = useCanInteract({
     errorDeliveryType: 'softErrors',
+    checklist,
   });
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
 

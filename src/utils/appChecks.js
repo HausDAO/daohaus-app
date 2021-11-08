@@ -2,7 +2,7 @@ const appCheckFns = Object.freeze({
   isConnected({ address }) {
     return address
       ? true
-      : 'Not connected to DAOhaus.app. Please check your provider.';
+      : 'Not connected to DAOhaus.app. Please check your wallet provider.';
   },
   isSameChain({ injectedChain, daochain }) {
     return injectedChain?.chainId === daochain
