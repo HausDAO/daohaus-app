@@ -34,7 +34,13 @@ const Modal = () => {
         bgColor={rgba(theme.colors.background[500], 0.8)}
         style={{ backdropFilter: 'blur(6px)' }}
       />
-      <ModalContent rounded='lg' bg='black' maxWidth={width}>
+      <ModalContent
+        rounded='lg'
+        bg='black'
+        maxWidth={width}
+        maxH='100vh'
+        overflowY='auto'
+      >
         <ModalBody>
           <Flex px={[3, 6]} py={[2, 4]} position='relative' flexDir='column'>
             <Box

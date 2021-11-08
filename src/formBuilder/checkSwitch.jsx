@@ -27,6 +27,7 @@ const CheckSwitch = props => {
     isChecked ? setFormCondition(unchecked) : setFormCondition(checked);
   return (
     <GenericCheck
+      {...props}
       isChecked={isChecked}
       onChange={handleChange}
       label={checkLabel}

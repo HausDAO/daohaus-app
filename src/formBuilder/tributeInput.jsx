@@ -12,13 +12,15 @@ import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
 import { handleDecimals } from '../utils/general';
 import { validate } from '../utils/validation';
+import { getContractBalance } from '../utils/tokenValue';
+import { spreadOptions } from '../utils/formBuilder';
 
 const TributeInput = props => {
   const { submitTransaction } = useTX();
   const { address } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { daoOverview } = useDao();
-  const { localForm } = props;
+  const { localForm, registerOptions } = props;
   const { setValue, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
@@ -134,12 +136,28 @@ const TributeInput = props => {
     setValue('tributeOffered', balance / 10 ** decimals);
   };
 
+  const options = spreadOptions({
+    registerOptions,
+    setValueAs: val => getContractBalance(val, decimals),
+    validate: {
+      exceedsAllowance: val =>
+        getContractBalance(val, decimals) > Number(allowance)
+          ? `Amount entered exceeds token allowance.`
+          : true,
+      hasBalance: val =>
+        getContractBalance(val, decimals) > Number(balance)
+          ? `Amount entered exceeds wallet balance.`
+          : true,
+    },
+  });
+
   return (
     <InputSelect
       {...props}
       selectName='tributeToken'
       options={daoTokens}
       helperText={helperText()}
+      registerOptions={options}
       btn={
         <ModButton
           text={btnDisplay()}

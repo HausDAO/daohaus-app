@@ -15,7 +15,7 @@ import { chainByID } from '../utils/chain';
 import { updateProposalConfig } from '../utils/metadata';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const dev = process.env.REACT_APP_DEV;
+const dev = process.env.REACT_APP_DEV === 'true';
 
 const orderPlaylistForms = playlists =>
   playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
