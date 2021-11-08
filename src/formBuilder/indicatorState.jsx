@@ -21,6 +21,6 @@ export const multiTXIndicatorStates = {
   idle: {
     icon: RiErrorWarningLine,
     titleSm:
-      'This is some untested, alpha stage, super-user shit right here. So do us a favour and check each field and test with a small TX before accidentally aping the whole vault into the zero address.',
+      'This feature is in alpha testing. Please check transactions carefully and test with small amounts before performing valuable or complicated transactions.',
   },
 };
