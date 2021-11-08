@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { RiAddFill } from 'react-icons/ri';
 import {
   Button,
@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import ErrorList from './ErrorList';
+import useCanInteract from '../hooks/useCanInteract';
 
 const buttonTextByFormState = formState => {
   if (!formState) return;
@@ -46,6 +47,18 @@ const FormFooter = props => {
   } = props;
 
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
+  const { canInteract, interactErrors } = useCanInteract({
+    errorDeliveryType: 'softErrors',
+  });
+  // const adaptedErrors = useMemo(
+  //   () =>
+  //     interactError
+  //       ? interactErrors.map(errorStr => ({ message: errorStr }))
+  //       : null,
+  //   [interactError],
+  // );
+  // console.log(`interactErrors`, interactErrors);
+  // console.log(`adaptedErrors`, adaptedErrors);
 
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
 
@@ -82,7 +95,7 @@ const FormFooter = props => {
             onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
             isLoading={loading}
-            disabled={loading}
+            disabled={loading || !canInteract}
             mb={[2, 0]}
           >
             {ctaText ||
@@ -93,6 +106,7 @@ const FormFooter = props => {
         </Flex>
       </Flex>
       <ErrorList errors={errors} />
+      {interactErrors && <ErrorList errors={interactErrors} />}
     </Flex>
   );
 };
