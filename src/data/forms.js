@@ -106,6 +106,7 @@ export const PROPOSAL_FORMS = {
       [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.TRIBUTE, FIELD.DESCRIPTION],
     ],
     additionalOptions: [FIELD.LINK],
+    checklist: ['isConnected', 'isSameChain'],
   },
   SHARES_FOR_WORK: {
     id: 'SHARES_FOR_WORK',
@@ -358,7 +359,7 @@ export const PROPOSAL_FORMS = {
     tx: VAULT_TRANSFER_TX.MINION_SEND_ERC721_TOKEN,
     fields: [
       [
-        FIELD.NFT_SELECT,
+        { ...FIELD.NFT_SELECT, source: 'vault' },
         FIELD.MINION_SELECT,
         FIELD.APPLICANT,
         FIELD.DESCRIPTION,
@@ -374,7 +375,7 @@ export const PROPOSAL_FORMS = {
     tx: VAULT_TRANSFER_TX.MINION_SEND_ERC1155_TOKEN,
     fields: [
       [
-        FIELD.NFT_SELECT,
+        { ...FIELD.NFT_SELECT, source: 'vault' },
         FIELD.MINION_SELECT,
         FIELD.APPLICANT,
         FIELD.DESCRIPTION,
@@ -413,6 +414,7 @@ export const PROPOSAL_FORMS = {
       'title',
       'nftAddress',
       'tokenId',
+      'tokenType',
       'selectedMinion',
       'nftApproval',
       'sharesRequested',
@@ -421,15 +423,13 @@ export const PROPOSAL_FORMS = {
     ],
     fields: [
       [
+        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
+        { ...FIELD.NFT_SELECT, source: 'user' },
+      ],
+      [
         FIELD.TITLE,
         FIELD.DESCRIPTION,
         FIELD.LINK,
-        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
-      ],
-      [
-        FIELD.NFT_INPUT,
-        FIELD.NFT_APPROVAL,
-        FIELD.TOKEN_INFO_INPUT,
         FIELD.SHARES_REQUEST,
         FIELD.LOOT_REQUEST,
         FIELD.PAYMENT_REQUEST,
@@ -607,7 +607,12 @@ export const PROPOSAL_FORMS = {
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION],
       [
-        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        {
+          ...FIELD.PAYMENT_REQUEST,
+          label: 'Forward Funds',
+          info:
+            'This proposal type will use funds from the Minion first, if its balance is sufficient. If you wish to use funds from the treasury instead, then enter the appropriate amount. Note: Early execution for Treasury funds is not allowed.',
+        },
         FIELD.MINION_SELECT,
       ],
     ],
@@ -619,7 +624,11 @@ export const PROPOSAL_FORMS = {
     fields: [
       [
         FIELD.TARGET_CONTRACT,
-        { ...FIELD.ABI_INPUT, listenTo: 'targetContract', hideHex: true },
+        {
+          ...FIELD.ABI_INPUT,
+          listenTo: 'targetContract',
+          hideHex: true,
+        },
         FIELD.MINION_VALUE,
       ],
       [],

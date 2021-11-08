@@ -21,8 +21,10 @@ const GenericInput = props => {
     disabled,
     defaultValue,
     registerOptions,
+    formState,
   } = props;
   const { register } = localForm;
+  console.log(`formState`, formState);
   return (
     <FieldWrapper {...props}>
       <InputGroup>
@@ -38,7 +40,7 @@ const GenericInput = props => {
           onChange={onChange}
           placeholder={placeholder || label || htmlFor}
           ref={register(registerOptions)}
-          disabled={disabled}
+          disabled={disabled || formState === 'loading'}
           defaultValue={defaultValue}
         />
         {append && (

@@ -13,6 +13,8 @@ const GenericCheck = props => {
     name,
     localForm,
     registerOptions,
+    disabled,
+    formState,
   } = props;
   const { register } = localForm;
   return (
@@ -28,6 +30,7 @@ const GenericCheck = props => {
           width='fit-content'
           colorScheme='transparent'
           iconColor='secondary.500'
+          disabled={disabled || formState === 'loading'}
         >
           <Flex flexDir='column'>
             {title && (

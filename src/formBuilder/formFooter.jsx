@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import ErrorList from './ErrorList';
+import useCanInteract from '../hooks/useCanInteract';
 
 const buttonTextByFormState = formState => {
   if (!formState) return;
@@ -43,10 +44,14 @@ const FormFooter = props => {
     handleAddStep,
     addStep,
     closeModal,
+    checklist,
   } = props;
 
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
-
+  const { canInteract, interactErrors } = useCanInteract({
+    errorDeliveryType: 'softErrors',
+    checklist,
+  });
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
 
   return (
@@ -82,7 +87,7 @@ const FormFooter = props => {
             onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
             isLoading={loading}
-            disabled={loading}
+            disabled={loading || !canInteract}
             mb={[2, 0]}
           >
             {ctaText ||
@@ -92,7 +97,16 @@ const FormFooter = props => {
           </Button>
         </Flex>
       </Flex>
-      <ErrorList errors={errors} />
+      {interactErrors && (
+        <Flex justifyContent='flex-end' mt={4}>
+          <ErrorList errors={interactErrors} />
+        </Flex>
+      )}
+      {errors && (
+        <Flex justifyContent='flex-end' mt={4}>
+          <ErrorList errors={errors} />
+        </Flex>
+      )}
     </Flex>
   );
 };

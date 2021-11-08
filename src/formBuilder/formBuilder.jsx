@@ -33,6 +33,7 @@ const FormBuilder = props => {
     indicatorStates,
     txID,
     logValues,
+    checklist,
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
 
@@ -229,6 +230,7 @@ const FormBuilder = props => {
             errors={Object.values(formErrors)}
             customSecondaryBtn={secondaryBtn}
             loading={formState === 'loading'}
+            checklist={checklist}
           />
         )}
       </Flex>

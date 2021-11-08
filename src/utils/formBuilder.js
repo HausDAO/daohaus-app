@@ -82,6 +82,10 @@ export const inputDataFromABI = (inputs, serialTag) => {
     if (type === 'fixed' || type === 'ufixed') {
       return 'number';
     }
+    if (type === 'bool') {
+      return 'boolean';
+    }
+
     return 'any';
   };
 
@@ -91,6 +95,36 @@ export const inputDataFromABI = (inputs, serialTag) => {
     integer: 'uInt 256',
     address: '0x',
     urlNoHttp: 'www.example.fake',
+    boolean: 'True/False',
+    bytes32: 'bytes32',
+  };
+
+  const assembleMulti = (input, fieldName) => {
+    return {
+      type: 'listBox',
+      label: input.name,
+      name: fieldName,
+      htmlFor: fieldName,
+      placeholder: input.type,
+      expectType: 'any',
+      registerOptions: {
+        required: `${input.name} is a required contract argument`,
+      },
+    };
+  };
+
+  const assembleBool = (input, fieldName) => {
+    return {
+      type: 'boolSelect',
+      label: input.name,
+      name: fieldName,
+      htmlFor: fieldName,
+      placeholder: labels.boolean,
+      expectType: 'boolean',
+      registerOptions: {
+        required: `${input.name} is a required contract argument`,
+      },
+    };
   };
 
   return inputs.map((input, index) => {
@@ -100,6 +134,13 @@ export const inputDataFromABI = (inputs, serialTag) => {
     const fieldName = serialTag
       ? `${serialTag}.abiArgs.${index}`
       : `abiArgs.${index}`;
+
+    if (isMulti) {
+      return assembleMulti(input, fieldName);
+    }
+    if (input.type === 'bool') {
+      return assembleBool(input, fieldName);
+    }
     return {
       type: isMulti ? 'listBox' : 'input',
       label: input.name,

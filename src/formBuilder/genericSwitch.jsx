@@ -12,6 +12,8 @@ const GenericSwitch = props => {
     name,
     registerOptions,
     localForm,
+    disabled,
+    formState,
   } = props;
 
   const { register } = localForm;
@@ -27,6 +29,7 @@ const GenericSwitch = props => {
           ref={name ? register(registerOptions) : null}
           borderColor='grey'
           width='fit-content'
+          disabled={disabled || formState === 'loading'}
         />
         <TextBox size='sm' variant='body' ml='4' mt='1'>
           {label}
