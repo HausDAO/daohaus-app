@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { RiRefreshLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
-import { IconButton } from '@chakra-ui/react';
+import { IconButton, Spinner } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -12,25 +12,20 @@ const MinionVaultRefreshButton = () => {
   const { isMember } = useDaoMember();
   const { refreshMinionVault } = useDao();
   const { refreshDao } = useTX();
-  const [hideRefresh, setHideRefresh] = useState(false);
-
-  useEffect(() => {
-    if (hideRefresh) {
-      // hide the button after a refresh to support rate limiting/prevent overloading the lambda
-      const interval = setInterval(() => {
-        setHideRefresh(false);
-      }, 600000);
-      return () => clearInterval(interval);
-    }
-  }, [hideRefresh]);
+  const [loading, setLoading] = useState(false);
 
   const handleRefreshMinion = async () => {
-    setHideRefresh(true);
+    setLoading(true);
     await refreshMinionVault(minion);
     refreshDao();
+    setLoading(false);
   };
 
-  if (!isMember || hideRefresh || !minion) {
+  if (loading) {
+    return <Spinner size='md' color='secondary.400' />;
+  }
+
+  if (!isMember || !minion) {
     return null;
   }
 
