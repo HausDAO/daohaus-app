@@ -12,7 +12,6 @@ import {
   inputDataFromABI,
 } from '../utils/formBuilder';
 import { useAppModal } from '../hooks/useModals';
-import useCanInteract from '../hooks/useCanInteract';
 
 const dev = process.env.REACT_APP_DEV;
 

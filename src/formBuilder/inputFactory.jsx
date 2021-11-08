@@ -36,6 +36,7 @@ import ToggleForm from './toggleForm';
 import TributeInput from './tributeInput';
 import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
+import BoolSelect from './boolSelect';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -157,6 +158,9 @@ export const InputFactory = props => {
   }
   if (type === 'saltGenerator') {
     return <SaltGenerator {...props} />;
+  }
+  if (type === 'boolSelect') {
+    return <BoolSelect {...props} />;
   }
   return null;
 };

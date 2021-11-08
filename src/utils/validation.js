@@ -14,6 +14,7 @@ export const TYPE_ERR_MSGS = {
   address: 'Must be a valid Ethereum Address',
   urlNoHTTP: 'Must be a URL. Http not needed.',
   greaterThanZero: 'Must be greater than zero.',
+  boolean: 'Must be a Booolean value',
 };
 
 export const validate = {
@@ -38,6 +39,9 @@ export const validate = {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },
   boolean(val) {
+    return val === 'true' || val === 'false' || val === true || val === false;
+  },
+  bytes32(val) {
     return val;
   },
 };
@@ -163,9 +167,12 @@ export const customValidations = {
 export const collectTypeValidations = valString => {
   const valFn = validate[valString];
   const valMsg = TYPE_ERR_MSGS[valString];
-  if (!valFn || !valMsg)
+  if (!valFn || !valMsg) {
+    console.log(`valFn`, valFn);
+    console.log(`valMsg`, valMsg);
     throw new Error(
       `validation.js => collectTypeValidations(): type validation is not valid. It may not match the registry of existing val callbacks or errMsgs`,
     );
+  }
   return val => (valFn(val) || val === '' ? true : valMsg);
 };
