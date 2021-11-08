@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { RiAddFill } from 'react-icons/ri';
 import {
   Button,
@@ -50,16 +50,6 @@ const FormFooter = props => {
   const { canInteract, interactErrors } = useCanInteract({
     errorDeliveryType: 'softErrors',
   });
-  // const adaptedErrors = useMemo(
-  //   () =>
-  //     interactError
-  //       ? interactErrors.map(errorStr => ({ message: errorStr }))
-  //       : null,
-  //   [interactError],
-  // );
-  // console.log(`interactErrors`, interactErrors);
-  // console.log(`adaptedErrors`, adaptedErrors);
-
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
 
   return (
@@ -105,8 +95,16 @@ const FormFooter = props => {
           </Button>
         </Flex>
       </Flex>
-      <ErrorList errors={errors} />
-      {interactErrors && <ErrorList errors={interactErrors} />}
+      {interactErrors && (
+        <Flex justifyContent='flex-end' mt={4}>
+          <ErrorList errors={interactErrors} />
+        </Flex>
+      )}
+      {errors && (
+        <Flex justifyContent='flex-end' mt={4}>
+          <ErrorList errors={errors} />
+        </Flex>
+      )}
     </Flex>
   );
 };

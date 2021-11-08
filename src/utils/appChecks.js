@@ -7,7 +7,7 @@ const appCheckFns = Object.freeze({
   isSameChain({ injectedChain, daochain }) {
     return injectedChain?.chainId === daochain
       ? true
-      : 'Not connected to the same network as the DAO. Please switch to teh DAOs network.';
+      : 'Your wallet is not connected to same network as the DAO.';
   },
   isMember({ isMember }) {
     return isMember ? true : 'For shareholding members only';
