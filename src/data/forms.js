@@ -608,7 +608,12 @@ export const PROPOSAL_FORMS = {
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION],
       [
-        { ...FIELD.PAYMENT_REQUEST, label: 'Forward Funds' },
+        {
+          ...FIELD.PAYMENT_REQUEST,
+          label: 'Forward Funds',
+          info:
+            'This proposal type will use funds from the Minion first, if its balance is sufficient. If you wish to use funds from the treasury instead, then enter the appropriate amount. Note: Early execution for Treasury funds is not allowed.',
+        },
         FIELD.MINION_SELECT,
       ],
     ],
