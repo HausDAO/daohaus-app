@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import {useUser} from '../contexts/UserContext'
+import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
@@ -39,7 +39,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const { submitTransaction } = useTX();
   const { refreshMemberProfile } = useUser(null);
 
-
   const [canRageQuit, setCanRageQuit] = useState(false);
 
   const handleGuildKickClick = () => {
@@ -62,7 +61,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
       formErrorMessage: 'Failed to connect',
       required: [],
       fields: [...FORM.PROFILE.fields],
-			checklist: ['isConnected', 'isMember'],
+      checklist: ['isConnected', 'isMember'],
       onSubmit: async () => {
         if (did?.authenticated) {
           closeModal();
@@ -71,7 +70,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
             ...FORM.PROFILE,
             ctaText: 'Submit',
             formSuccessMessage: 'Connected',
-						checklist: ['isConnected', 'isMember'],
+            checklist: ['isConnected', 'isMember'],
             defaultValues: {
               name: profile?.name || '',
               emoji: profile?.emoji || '',
@@ -84,7 +83,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
               await setBasicProfile(client, did, values);
               cacheProfile(values, member.memberAddress);
               refreshProfile(values);
-							refreshMemberProfile();
+              refreshMemberProfile();
               successToast({ title: 'Updated Profile!' });
               closeModal();
             },

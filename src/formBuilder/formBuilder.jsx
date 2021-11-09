@@ -201,9 +201,9 @@ const FormBuilder = props => {
   };
 
   const renderInputs = (fields, depth = 0) => {
-		if (!fields) {
-			return 
-		}
+    if (!fields) {
+      return;
+    }
 
     return fields.map((field, index) => {
       let value = '';

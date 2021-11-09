@@ -1,6 +1,6 @@
 import React, {
   useContext,
-	useCallback,
+  useCallback,
   createContext,
   useEffect,
   useState,
@@ -75,27 +75,25 @@ export const UserContextProvider = ({ children }) => {
     setOutstandingTXs(newUserCache);
   };
 
-	const refreshMemberProfile = useCallback(async () => { 
-      try {
-        const profile = await handleGetProfile(address);
-				console.log("SettingAddressProfile")
-        if (!profile) return;
-        setAddressProfile(profile);
-				return profile
-      } catch (error) {
-        console.error(error);
-        setAddressProfile(null);
-      }
-	}, [address])
+  const refreshMemberProfile = useCallback(async () => {
+    try {
+      const profile = await handleGetProfile(address);
+      console.log('SettingAddressProfile');
+      if (!profile) return;
+      setAddressProfile(profile);
+      return profile;
+    } catch (error) {
+      console.error(error);
+      setAddressProfile(null);
+    }
+  }, [address]);
 
-	useEffect(() => {
-		if (address) {
-			console.log(address)
-		  refreshMemberProfile()
-		}
-	}, [address])
-
-
+  useEffect(() => {
+    if (address) {
+      console.log(address);
+      refreshMemberProfile();
+    }
+  }, [address]);
 
   useEffect(() => {
     if (!address) return;
@@ -154,8 +152,8 @@ export const UserContextProvider = ({ children }) => {
         outstandingTXs,
         refetchUserHubDaos,
         apiData,
-		refreshMemberProfile,
-		addressProfile,
+        refreshMemberProfile,
+        addressProfile,
       }}
     >
       {children}
@@ -171,8 +169,8 @@ export const useUser = () => {
     resolvePoll,
     outstandingTXs,
     refetchUserHubDaos,
-		refreshMemberProfile,
-		addressProfile,
+    refreshMemberProfile,
+    addressProfile,
   } = useContext(UserContext);
   return {
     userHubDaos,
@@ -182,7 +180,7 @@ export const useUser = () => {
     resolvePoll,
     outstandingTXs,
     refetchUserHubDaos,
-		refreshMemberProfile,
-		addressProfile,
+    refreshMemberProfile,
+    addressProfile,
   };
 };

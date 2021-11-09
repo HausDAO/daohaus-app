@@ -1,6 +1,5 @@
 import React, {
   useContext,
-	useCallback,
   createContext,
   useEffect,
   useState,
@@ -10,7 +9,6 @@ import { useParams } from 'react-router-dom';
 
 import { checkIfUserIsDelegate } from '../utils/general';
 import { initMemberWallet } from '../utils/wallet';
-import { handleGetProfile } from '../utils/3box';
 
 export const DaoMemberContext = createContext();
 

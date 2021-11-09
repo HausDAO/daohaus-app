@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import StaticAvatar from './staticAvatar';
 import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
-import {useUser} from '../contexts/UserContext'
+import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const AddressAvatar = React.memo(({ addr, hideCopy }) => {
@@ -17,14 +17,14 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
     let shouldUpdate = true;
     const getProfile = async () => {
       try {
-					console.log("Getting Profile")
+        console.log('Getting Profile');
         if (shouldUpdate) {
-					let profile = addressProfile
-					if (address !== addr) {
-             profile = await handleGetProfile(addr);
-					}
-					console.log(profile)
-					console.log("Profile")
+          let profile = addressProfile;
+          if (address !== addr) {
+            profile = await handleGetProfile(addr);
+          }
+          console.log(profile);
+          console.log('Profile');
           if (!profile) {
             setProfile(false);
             shouldFetchENS.current = true;
