@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { BsThreeDotsVertical, BsCheckCircle } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { BiErrorCircle } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import {
   Menu,
@@ -55,10 +56,27 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const handleEditProfile = () => {
     let client = null;
     let did = null;
+    const indicatorStates = {
+      loading: {
+        spinner: true,
+        title: 'Connecting...',
+        explorerLink: true,
+      },
+      success: {
+        icon: BsCheckCircle,
+        title: 'Connected',
+        explorerLink: true,
+      },
+      error: {
+        icon: BiErrorCircle,
+        title: 'Failed to connect',
+        errorMessage: true,
+      },
+    };
+
     formModal({
       ...FORM.PROFILE,
-      formLoadingMessage: 'Connecting...',
-      formErrorMessage: 'Failed to connect',
+      indicatorStates,
       required: [],
       fields: [...FORM.PROFILE.fields],
       checklist: ['isConnected', 'isMember'],
