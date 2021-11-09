@@ -17,14 +17,11 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
     let shouldUpdate = true;
     const getProfile = async () => {
       try {
-        console.log('Getting Profile');
         if (shouldUpdate) {
           let profile = addressProfile;
           if (address !== addr) {
             profile = await handleGetProfile(addr);
           }
-          console.log(profile);
-          console.log('Profile');
           if (!profile) {
             setProfile(false);
             shouldFetchENS.current = true;
@@ -33,7 +30,7 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
           setProfile(profile);
         }
       } catch (error) {
-        console.log("Member doesn't have a profile");
+        console.warning("Member doesn't have a profile");
       }
     };
     if (addr) {

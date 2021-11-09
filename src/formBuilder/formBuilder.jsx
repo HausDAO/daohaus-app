@@ -122,7 +122,6 @@ const FormBuilder = props => {
             formData: props,
             onSubmit: props.onSubmit,
           });
-          // don't indicate on form
           setFormState('success');
           return res;
         } catch (error) {
@@ -177,7 +176,6 @@ const FormBuilder = props => {
         setFormState('loading');
         shouldRemove = await props.removeBlurCallback();
         setRemoveBlur(shouldRemove);
-        // don't indicate on form
         setFormState('success');
       } catch (error) {
         console.error(error);

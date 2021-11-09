@@ -4,7 +4,8 @@ import { Core } from '@self.id/core';
 import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
 
 export const authenticateDid = async address => {
-  console.log(window.ethereum);
+  // Always associate current chain with mainnet
+  // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
   await window.ethereum.request({
     method: 'wallet_switchEthereumChain',
     params: [{ chainId: '0x1' }],
@@ -30,8 +31,6 @@ export const authenticateDid = async address => {
   } catch (err) {
     console.warning(err);
   }
-  // Always associate current chain with mainnet
-  // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
 
   return [client, did];
 };
