@@ -14,6 +14,7 @@ export const TYPE_ERR_MSGS = {
   address: 'Must be a valid Ethereum Address',
   urlNoHTTP: 'Must be a URL. Http not needed.',
   url: 'Must be a URL.',
+  countryCode: 'Must be a valid country code.',
   greaterThanZero: 'Must be greater than zero.',
   boolean: 'Must be a Booolean value',
 };
@@ -37,9 +38,13 @@ export const validate = {
     return !val.includes('http') && val.includes('.');
   },
   url(val) {
-    return val.includes('http') && val.includes('.');
+    return /https?:\/\/(www.)?[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/.test(
+      val,
+    );
   },
-
+  countryCode(val) {
+    return /^[A-Z]{2}$/.test(val);
+  },
   greaterThanZero(val) {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },

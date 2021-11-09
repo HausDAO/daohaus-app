@@ -34,16 +34,17 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     const getProfile = async () => {
       try {
         const profile = await handleGetProfile(userid);
+				console.log
         if (!profile) return;
         setProfile(profile);
       } catch (error) {
         console.error(error);
       }
     };
-    if (userid && !profile) {
+    if (userid) {
       getProfile();
     }
-  }, [userid, profile]);
+  }, [userid]);
 
   useEffect(() => {
     const initMemberTokens = async tokensWithBalance => {

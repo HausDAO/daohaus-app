@@ -159,6 +159,10 @@ export const PROPOSAL_FORMS = {
           placeholder: 'A name for your porfile',
           htmlFor: 'name',
           expectType: 'string',
+          maxLength: {
+            value: 150,
+            message: 'Name must be less than 150 characters',
+          },
         },
         {
           ...FIELD.DESCRIPTION,
@@ -167,6 +171,10 @@ export const PROPOSAL_FORMS = {
           htmlFor: 'description',
           placeholder: 'A description about yourself',
           expectType: 'string',
+          maxLength: {
+            value: 420,
+            message: 'Bio must be less than 420 characters',
+          },
         },
         {
           ...FIELD.TITLE,
@@ -175,6 +183,7 @@ export const PROPOSAL_FORMS = {
           placeholder: 'An emoji to represent who you are',
           htmlFor: 'emoji',
           expectType: 'string',
+          maxLength: { value: 2, message: 'Not a valid emoji' },
         },
       ],
       [
@@ -193,6 +202,10 @@ export const PROPOSAL_FORMS = {
           placeholder: 'A location where you are or hope to be',
           htmlFor: 'homeLocation',
           expectType: 'string',
+          maxLength: {
+            value: 140,
+            message: 'Location must be less than 420 characters',
+          },
         },
 
         {
@@ -201,7 +214,7 @@ export const PROPOSAL_FORMS = {
           name: 'residenceCountry',
           placeholder: 'US',
           htmlFor: 'residenceCountry',
-          expectType: 'string',
+          expectType: 'countryCode',
           info: 'An ISO 3166-1 alpha-2 compliant country code',
         },
       ],
