@@ -69,17 +69,16 @@ export const fetchProfile = async address => {
       `${address}@eip155:1`,
     );
 
-    console.log(link.did);
     if (link.did) {
       const values = await getBasicProfile(link.did);
       if (values) {
         return values;
       }
     }
-    return await get3boxProfile(address);
+    return get3boxProfile(address);
   } catch (err) {
     console.error(err);
-    return await get3boxProfile(address);
+    return get3boxProfile(address);
   }
 };
 

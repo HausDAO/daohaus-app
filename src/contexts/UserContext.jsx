@@ -78,7 +78,6 @@ export const UserContextProvider = ({ children }) => {
   const refreshMemberProfile = useCallback(async () => {
     try {
       const profile = await handleGetProfile(address);
-      console.log('SettingAddressProfile');
       if (!profile) return;
       setAddressProfile(profile);
       return profile;
@@ -90,7 +89,6 @@ export const UserContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (address) {
-      console.log(address);
       refreshMemberProfile();
     }
   }, [address]);
