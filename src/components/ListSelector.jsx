@@ -6,8 +6,15 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 
 const ListSelector = props => {
+  const [expanded, setExpanded] = useState(false);
   const viewport = useBreakpointValue({
-    base: <DropdownSelector {...props} />,
+    base: (
+      <DropdownSelector
+        {...props}
+        expanded={expanded}
+        setExpanded={setExpanded}
+      />
+    ),
     md: <StaticSelector {...props} />,
   });
 
@@ -16,8 +23,14 @@ const ListSelector = props => {
 
 export default ListSelector;
 
-const DropdownSelector = ({ headerSection, topListItem, divider, lists }) => {
-  const [expanded, setExpanded] = useState(false);
+const DropdownSelector = ({
+  headerSection,
+  topListItem,
+  divider,
+  lists,
+  setExpanded,
+  expanded,
+}) => {
   const handleToggle = () => {
     setExpanded(prevState => !prevState);
   };

@@ -46,6 +46,22 @@ export const setBasicProfile = async (client, did, values) => {
   return selfId.set('basicProfile', values);
 };
 
+const get3boxProfile = async address => {
+  try {
+    const response = await fetch(
+      `https://ipfs.3box.io/profile?address=${address}`,
+    );
+    if (response.status === 'error') {
+      console.warning('Profile does not exist');
+    }
+
+    const boxProfile = response.json();
+    return boxProfile;
+  } catch (error) {
+    console.warning(error);
+  }
+};
+
 export const fetchProfile = async address => {
   try {
     const core = new Core({ ceramic: 'testnet-clay' });
@@ -54,25 +70,17 @@ export const fetchProfile = async address => {
       `${address}@eip155:1`,
     );
 
-    const values = await getBasicProfile(link.did);
-    if (values) {
-      return values;
+    console.log(link.did);
+    if (link.did) {
+      const values = await getBasicProfile(link.did);
+      if (values) {
+        return values;
+      }
     }
+    return await get3boxProfile(address);
   } catch (err) {
     console.error(err);
-    try {
-      const response = await fetch(
-        `https://ipfs.3box.io/profile?address=${address}`,
-      );
-      if (response.status === 'error') {
-        console.warning('Profile does not exist');
-      }
-
-      const boxProfile = response.json();
-      return boxProfile;
-    } catch (error) {
-      console.warning(error);
-    }
+    return await get3boxProfile(address);
   }
 };
 

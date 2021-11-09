@@ -139,19 +139,6 @@ export const formatFNsAsSelectOptions = abi => {
   }));
 };
 
-export const paramsToProposalForm = abiInputs => {
-  if (!abiInputs || !Array.isArray(abiInputs)) return null;
-
-  return abiInputs.map(input => ({
-    type: 'input',
-    label: input.name,
-    name: `*abiInput*${input.name}`,
-    htmlFor: `*abiInput*${input.name}`,
-    placeholder: input.type,
-    expectType: 'any',
-  }));
-};
-
 export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
   if (!selectedFunction || !Array.isArray(inputVals))
     throw new Error(

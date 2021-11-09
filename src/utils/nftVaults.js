@@ -10,7 +10,9 @@ import { getMinionActionFormLego } from './vaults';
 
 const defaultConfig = {
   platform: 'unknown',
-  fields: {},
+  fields: {
+    image: 'hydrateImageURI',
+  },
   actions: {
     transfer: {
       menuLabel: 'Transfer NFT',
@@ -21,14 +23,14 @@ const defaultConfig = {
       localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
       minionTypeOverride: true,
     },
-    sellRarible: {
-      menuLabel: 'Sell NFT on Rarible',
-      tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
-      modalName: 'sell721',
-      formLego: FORM.SELL_NFT_RARIBLE,
-      localValues: ['tokenId', 'contractAddress'],
-      minionTypeOverride: false,
-    },
+    // sellRarible: {
+    //   menuLabel: 'Sell NFT on Rarible',
+    //   tooltTipLabel: 'Make a proposal to sell this nft on Rarible',
+    //   modalName: 'sell721',
+    //   formLego: FORM.SELL_NFT_RARIBLE,
+    //   localValues: ['tokenId', 'contractAddress'],
+    //   minionTypeOverride: false,
+    // },
   },
 };
 
@@ -62,6 +64,14 @@ export const attributeModifiers = Object.freeze({
       return null;
     }
     return description.split(' ')[4];
+  },
+  hydrateImageURI(nft) {
+    if (nft.image.match(/^ipfs:\/\/(Qm[a-zA-Z0-9]+)/)) {
+      return `https://daohaus.mypinata.cloud/ipfs/${
+        nft.image.match(/^ipfs:\/\/(Qm[a-zA-Z0-9]+)/)[1]
+      }`;
+    }
+    return nft.image;
   },
 });
 
@@ -112,9 +122,14 @@ export const concatNftSearchData = nft => {
   }`.toLowerCase();
 };
 
-export const filterUniqueNfts = (daoVaults, minionAddress = null) => {
+export const filterUniqueNfts = (
+  daoVaults,
+  minionAddress = null,
+  minionType = null,
+) => {
   return daoVaults
-    ?.reduce((acc, item) => {
+    ?.filter(vault => !minionType || vault.minionType === minionType)
+    .reduce((acc, item) => {
       const nftsWithMinionAddress = item.nfts.map(n => {
         return {
           ...n,

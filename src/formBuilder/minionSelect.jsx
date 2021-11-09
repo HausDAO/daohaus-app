@@ -19,7 +19,7 @@ const MinionSelect = props => {
           (!customFilter ||
             customFilter({
               ...minion,
-              ...daoVaults.find(v => v.address === minion.minionAddress),
+              ...daoVaults?.find(v => v.address === minion.minionAddress),
             }))
         );
       })
@@ -28,7 +28,7 @@ const MinionSelect = props => {
         value: minion.minionAddress,
         name: minion.details,
       }));
-  }, []);
+  }, [daoOverview, daoVaults]);
 
   useEffect(() => {
     register('selectedSafeAddress');
@@ -51,7 +51,9 @@ const MinionSelect = props => {
     }
   }, [minionAddress]);
 
-  return <GenericSelect {...props} options={minions} />;
+  return (
+    <GenericSelect {...props} options={minions} helperText={minionAddress} />
+  );
 };
 
 export default MinionSelect;

@@ -137,7 +137,6 @@ export const getExplorerLink = (tokenAddress, chainID) => {
 
 export const checkContractType = async (address, chainID, model) => {
   const abi = await fetchABI(address, chainID);
-  // if (!abi || abi.status === '0') {
   if (!abi || ['0', '1'].includes(abi.status)) {
     console.log('Failed to fetch contract ABI', abi);
     return false;

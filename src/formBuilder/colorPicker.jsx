@@ -9,7 +9,7 @@ const ColorPicker = props => {
   const { label, name, localForm } = props;
   const { setValue, register } = localForm;
   const { theme } = useCustomTheme();
-  const [pickerOpen, setPickerOpen] = useState(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [colors, setColors] = useState({
     color: theme.colors.primary[500],
   });
@@ -29,38 +29,43 @@ const ColorPicker = props => {
     setValue(name, color.hex.replace('#', ''));
   };
 
+  const handleClick = () => setPickerOpen(prevState => !prevState);
   return (
-    <Flex justify='flex-start' align='center' mb={10}>
-      <TextBox size='sm'>{label}</TextBox>
-      <Box>
-        <Box
-          w='35px'
-          h='35px'
-          borderRadius='25px'
-          border='1px solid white'
-          bg={colors.color}
-          ml={5}
-          onClick={() => setPickerOpen('color')}
-          _hover={{ cursor: 'pointer' }}
-        />
-        {pickerOpen === 'color' ? (
-          <Box position='absolute' zIndex={5}>
-            <Box
-              position='fixed'
-              top='0px'
-              right='0px'
-              bottom='0px'
-              left='0px'
-              onClick={() => setPickerOpen(null)}
-            />
-            <SketchPicker
-              color={colors.color}
-              onChangeComplete={color => handleChange(color, 'color')}
-              disableAlpha
-            />
-          </Box>
-        ) : null}
-      </Box>
+    <Flex justify='flex-start' align='flex-start' h='295px'>
+      <Flex alignItems='center' mt={4}>
+        <TextBox size='sm'>{label}</TextBox>
+        <Box>
+          <Box
+            w='35px'
+            h='35px'
+            borderRadius='25px'
+            border='1px solid white'
+            bg={colors.color}
+            ml={5}
+            onClick={handleClick}
+            name='color'
+            _hover={{ cursor: 'pointer' }}
+          />
+          {pickerOpen && (
+            <Box position='absolute' zIndex={5}>
+              <Box
+                position='fixed'
+                name='close'
+                top='0px'
+                right='0px'
+                bottom='0px'
+                left='0px'
+                onClick={handleClick}
+              />
+              <SketchPicker
+                color={colors.color}
+                onChangeComplete={color => handleChange(color, 'color')}
+                disableAlpha
+              />
+            </Box>
+          )}
+        </Box>
+      </Flex>
     </Flex>
   );
 };

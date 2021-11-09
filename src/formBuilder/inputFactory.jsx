@@ -34,12 +34,24 @@ import SuperfluidRate from './superfluidRate';
 import TargetContract from './targetContract';
 import ToggleForm from './toggleForm';
 import TributeInput from './tributeInput';
+import ListBox from './listBox';
+import { createRegisterOptions } from '../utils/formBuilder';
+import BoolSelect from './boolSelect';
 
 export const InputFactory = props => {
-  const { type, formCondition } = props;
+  const { type, formCondition, required } = props;
 
   if (type === 'formCondition' && props[formCondition]) {
-    return <InputFactory {...props} {...props[formCondition]} />;
+    const nestedInput = { ...props[formCondition] };
+    if (nestedInput) {
+      return (
+        <InputFactory
+          {...props}
+          {...nestedInput}
+          registerOptions={createRegisterOptions(nestedInput, required)}
+        />
+      );
+    }
   }
 
   if (type === 'input') {
@@ -138,11 +150,17 @@ export const InputFactory = props => {
   if (type === 'checkGate') {
     return <CheckGate {...props} />;
   }
+  if (type === 'listBox') {
+    return <ListBox {...props} />;
+  }
   if (type === 'toggleForm') {
     return <ToggleForm {...props} />;
   }
   if (type === 'saltGenerator') {
     return <SaltGenerator {...props} />;
+  }
+  if (type === 'boolSelect') {
+    return <BoolSelect {...props} />;
   }
   return null;
 };

@@ -1,5 +1,6 @@
 import React, {
   useContext,
+	useCallback,
   createContext,
   useEffect,
   useState,
@@ -14,6 +15,7 @@ import { createPoll } from '../services/pollService';
 import { hubChainQuery } from '../utils/theGraph';
 import { supportedChains } from '../utils/chain';
 import { getApiMetadata } from '../utils/metadata';
+import { handleGetProfile } from '../utils/3box';
 
 const numOfSupportedChains = Object.keys(supportedChains).length;
 
@@ -22,6 +24,7 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const { address } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
+  const [addressProfile, setAddressProfile] = useState(null);
 
   const [apiData, setApiData] = useState(null);
   const [userHubDaos, setUserHubDaos] = useSessionStorage('userHubData', []);
@@ -71,6 +74,28 @@ export const UserContextProvider = ({ children }) => {
     localStorage.setItem('TXs', JSON.stringify(newCache));
     setOutstandingTXs(newUserCache);
   };
+
+	const refreshMemberProfile = useCallback(async () => { 
+      try {
+        const profile = await handleGetProfile(address);
+				console.log("SettingAddressProfile")
+        if (!profile) return;
+        setAddressProfile(profile);
+				return profile
+      } catch (error) {
+        console.error(error);
+        setAddressProfile(null);
+      }
+	}, [address])
+
+	useEffect(() => {
+		if (address) {
+			console.log(address)
+		  refreshMemberProfile()
+		}
+	}, [address])
+
+
 
   useEffect(() => {
     if (!address) return;
@@ -129,6 +154,8 @@ export const UserContextProvider = ({ children }) => {
         outstandingTXs,
         refetchUserHubDaos,
         apiData,
+		refreshMemberProfile,
+		addressProfile,
       }}
     >
       {children}
@@ -144,6 +171,8 @@ export const useUser = () => {
     resolvePoll,
     outstandingTXs,
     refetchUserHubDaos,
+		refreshMemberProfile,
+		addressProfile,
   } = useContext(UserContext);
   return {
     userHubDaos,
@@ -153,5 +182,7 @@ export const useUser = () => {
     resolvePoll,
     outstandingTXs,
     refetchUserHubDaos,
+		refreshMemberProfile,
+		addressProfile,
   };
 };

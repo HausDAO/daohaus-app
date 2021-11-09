@@ -6,7 +6,6 @@ import FieldWrapper from './fieldWrapper';
 const GenericTextarea = ({
   label,
   htmlFor,
-  placeholder,
   name,
   btn,
   helperText,
@@ -18,9 +17,11 @@ const GenericTextarea = ({
   disabled,
   w,
   layout,
+  control,
+  registerOptions,
+  formState,
 }) => {
   const { register } = localForm;
-
   return (
     <FieldWrapper
       label={label}
@@ -33,13 +34,14 @@ const GenericTextarea = ({
       layout={layout}
     >
       <Textarea
+        key={name}
         id={htmlFor}
         name={name}
-        placeholder={placeholder || label || htmlFor}
         h={h}
         defaultValue={defaultValue}
-        ref={register}
-        disabled={disabled}
+        ref={register(registerOptions)}
+        disabled={disabled || formState === 'loading'}
+        control={control}
       />
     </FieldWrapper>
   );
