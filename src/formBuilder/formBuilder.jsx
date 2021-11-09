@@ -33,7 +33,7 @@ const FormBuilder = props => {
     indicatorStates,
     txID,
     logValues,
-    checklist,
+    checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
 
