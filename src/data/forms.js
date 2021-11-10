@@ -106,7 +106,6 @@ export const PROPOSAL_FORMS = {
       [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.TRIBUTE, FIELD.DESCRIPTION],
     ],
     additionalOptions: [FIELD.LINK],
-    checklist: ['isConnected', 'isSameChain'],
   },
   SHARES_FOR_WORK: {
     id: 'SHARES_FOR_WORK',
@@ -724,7 +723,6 @@ export const PROPOSAL_FORMS = {
 const MULTI_FORMS = {
   SAFE_TX_BUILDER: {
     id: 'SAFE_TX_BUILDER',
-    dev: true,
     logValues: true,
     isTxBuilder: true,
     type: 'multiForm',

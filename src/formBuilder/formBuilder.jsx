@@ -37,7 +37,7 @@ const FormBuilder = props => {
     logValues,
     defaultValues,
     blurText,
-    checklist,
+    checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
 

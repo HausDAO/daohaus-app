@@ -70,7 +70,6 @@ export const fetchProfile = async address => {
       core.ceramic,
       `${address}@eip155:1`,
     );
-
     if (link.did) {
       const values = await getBasicProfile(link.did);
       if (values) {

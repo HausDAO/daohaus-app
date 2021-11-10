@@ -145,7 +145,7 @@ const FormList = ({
                 key={proposalID}
                 menuSection={
                   <Flex flexDir='column' justifyContent='space-between'>
-                    {form?.dev ? (
+                    {form?.dev && selectedListID === 'dev' ? (
                       <DevMenu form={form} handlePreview={handlePreview} />
                     ) : (
                       <ProposalMenuList
