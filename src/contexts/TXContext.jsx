@@ -22,11 +22,12 @@ import { createForumTopic } from '../utils/discourse';
 import { customValidations } from '../utils/validation';
 import { supportedChains } from '../utils/chain';
 import { TX } from '../data/contractTX';
+import { handleChecklist } from '../utils/appChecks';
 
 export const TXContext = createContext();
 
 export const TXProvider = ({ children }) => {
-  const { injectedProvider, address } = useInjectedProvider();
+  const { injectedProvider, address, injectedChain } = useInjectedProvider();
   const {
     resolvePoll,
     cachePoll,
@@ -202,6 +203,7 @@ export const TXProvider = ({ children }) => {
 
     try {
       const args = getArgs({ ...consolidatedData });
+      console.log(`args`, args);
       const poll = buildTXPoll({
         ...consolidatedData,
       });
@@ -264,6 +266,24 @@ export const TXProvider = ({ children }) => {
       injectedProvider,
     });
 
+  const checkState = (checklist, errorDeliveryType, checkApiData) =>
+    checkApiData
+      ? handleChecklist(
+          {
+            ...contextData,
+            ...apiData,
+            injectedProvider,
+            injectedChain,
+          },
+          checklist,
+          errorDeliveryType,
+        )
+      : handleChecklist(
+          { ...contextData, injectedProvider, injectedChain },
+          checklist,
+          errorDeliveryType,
+        );
+
   return (
     <TXContext.Provider
       value={{
@@ -273,6 +293,7 @@ export const TXProvider = ({ children }) => {
         modifyFields,
         submitCallback,
         hydrateString,
+        checkState,
       }}
     >
       {children}
@@ -288,6 +309,7 @@ export const useTX = () => {
     modifyFields,
     submitCallback,
     hydrateString,
+    checkState,
   } = useContext(TXContext) || {};
   return {
     refreshDao,
@@ -296,5 +318,6 @@ export const useTX = () => {
     modifyFields,
     submitCallback,
     hydrateString,
+    checkState,
   };
 };

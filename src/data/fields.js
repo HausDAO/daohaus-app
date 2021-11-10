@@ -111,7 +111,6 @@ export const FIELD = {
     label: 'Tribute Offered',
     info: INFO_TEXT.TOKEN_TRIBUTE,
     expectType: 'number',
-    modifiers: ['addTributeDecimals'],
   },
   PAYMENT_REQUEST: {
     type: 'paymentInput',
@@ -121,7 +120,6 @@ export const FIELD = {
     label: 'Payment Requested',
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
-    modifiers: ['addPaymentDecimals'],
   },
   ONLY_ERC20: {
     type: 'gatedInput',
@@ -287,14 +285,14 @@ export const FIELD = {
     title: 'Allow Minimum Quorum',
     description: INFO_TEXT.QUORUM,
     renderOnCheck: {
-      type: 'input',
-      label: 'Minumum Quorum',
-      append: '%',
       name: 'minQuorum',
       htmlFor: 'minQuorum',
-      placeholder: '51',
-      info: INFO_TEXT.MINION_QUORUM,
+      label: 'Minumum Quorum',
       expectType: 'number',
+      append: '%',
+      type: 'input',
+      info: INFO_TEXT.MINION_QUORUM,
+      placeholder: '51',
     },
   },
   SALT_NONCE: {
@@ -411,32 +409,6 @@ export const FIELD = {
       advanced: 'Advanced Mode',
     },
     title: 'Minion Setup',
-    expectType: 'any',
-  },
-  TEST_SWITCH: {
-    type: 'checkSwitch',
-    listenTo: 'formCondition',
-    checked: 'token',
-    unchecked: 'signal',
-    label: {
-      type: 'formCondition',
-      token: 'checked',
-      signal: 'not checked',
-    },
-    title: 'Create a token proposal',
-    description: {
-      type: 'formCondition',
-      token: 'This creates a WhiteList Token TX',
-      signal: 'This creates a signal proposal',
-    },
-    expectType: 'any',
-  },
-  TEST_GATE: {
-    type: 'checkGate',
-    startsChecked: false,
-    label: 'Toggle Field State',
-    title: 'Check to render Description',
-    description: 'You bet',
     expectType: 'any',
   },
 };

@@ -12,6 +12,8 @@ import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
 import { getApiMetadata, fetchApiVaultData } from './metadata';
 import {
+  GET_ERC721,
+  GET_ERC1155,
   GET_POAP,
   GET_TRANSMUTATION,
   GET_WRAP_N_ZAPS,
@@ -87,6 +89,26 @@ export const fetchTransmutation = async args => {
     query: GET_TRANSMUTATION,
     variables: {
       contractAddress: args.molochAddress,
+    },
+  });
+};
+
+export const fetchErc721s = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'erc721_graph_url'),
+    query: GET_ERC721,
+    variables: {
+      tokenHolder: args.address,
+    },
+  });
+};
+
+export const fetchErc1155s = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'erc1155_graph_url'),
+    query: GET_ERC1155,
+    variables: {
+      tokenHolder: args.address,
     },
   });
 };
@@ -407,7 +429,11 @@ export const hubChainQuery = async ({
             (dao.meta && !dao.meta.hide) ||
             (!dao.meta &&
               variables.memberAddress.toLowerCase() === dao.moloch.summoner);
-          return notHiddenAndHasMetaOrIsUnregisteredSummoner;
+
+          const hasNoSharesLoot =
+            Number(dao.shares) > 0 || Number(dao.loot) > 0;
+
+          return notHiddenAndHasMetaOrIsUnregisteredSummoner && hasNoSharesLoot;
         });
 
       reactSetter(prevState => [

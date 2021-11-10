@@ -94,7 +94,7 @@ export const CORE_FORMS = {
   },
 };
 
-export const FORM = {
+export const PROPOSAL_FORMS = {
   BUY_SHARES: {
     id: 'BUY_SHARES',
     title: 'Request shares for tokens',
@@ -358,7 +358,7 @@ export const FORM = {
     tx: VAULT_TRANSFER_TX.MINION_SEND_ERC721_TOKEN,
     fields: [
       [
-        FIELD.NFT_SELECT,
+        { ...FIELD.NFT_SELECT, source: 'vault' },
         FIELD.MINION_SELECT,
         FIELD.APPLICANT,
         FIELD.DESCRIPTION,
@@ -374,40 +374,14 @@ export const FORM = {
     tx: VAULT_TRANSFER_TX.MINION_SEND_ERC1155_TOKEN,
     fields: [
       [
-        FIELD.NFT_SELECT,
+        { ...FIELD.NFT_SELECT, source: 'vault' },
         FIELD.MINION_SELECT,
         FIELD.APPLICANT,
         FIELD.DESCRIPTION,
       ],
     ],
   },
-  SAMPLE_CONDITIONAL: {
-    // dev: true,
-    // logValues: true,
-    id: 'SAMPLE_CONDITIONAL',
-    formConditions: ['signal', 'token'],
-    title: 'Conditional Form',
-    description: 'Conditional Description',
-    type: PROPOSAL_TYPES.FUNDING,
-    tx: {
-      type: 'formCondition',
-      token: TX.WHITELIST_TOKEN_PROPOSAL,
-      signal: TX.SUBMIT_PROPOSAL,
-    },
-    required: ['title'],
-    fields: [
-      [
-        FIELD.TEST_SWITCH,
-        FIELD.TITLE,
-        { ...FIELD.TEST_GATE, renderOnCheck: FIELD.DESCRIPTION },
-        {
-          type: 'formCondition',
-          token: { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
-          signal: FIELD.LINK,
-        },
-      ],
-    ],
-  },
+
   MINION_BUYOUT_TOKEN: {
     id: 'MINION_BUYOUT_TOKEN',
     title: 'Buyout Proposal',
@@ -439,6 +413,7 @@ export const FORM = {
       'title',
       'nftAddress',
       'tokenId',
+      'tokenType',
       'selectedMinion',
       'nftApproval',
       'sharesRequested',
@@ -447,15 +422,13 @@ export const FORM = {
     ],
     fields: [
       [
+        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
+        { ...FIELD.NFT_SELECT, source: 'user' },
+      ],
+      [
         FIELD.TITLE,
         FIELD.DESCRIPTION,
         FIELD.LINK,
-        { ...FIELD.MINION_SELECT, info: INFO_TEXT.TRIBUTE_MINION },
-      ],
-      [
-        FIELD.NFT_INPUT,
-        FIELD.NFT_APPROVAL,
-        FIELD.TOKEN_INFO_INPUT,
         FIELD.SHARES_REQUEST,
         FIELD.LOOT_REQUEST,
         FIELD.PAYMENT_REQUEST,
@@ -483,7 +456,10 @@ export const FORM = {
     //   easy: ['minionName', 'minQuorum', 'saltNonce'],
     //   advanced: ['minionName', 'safeAddress', 'minQuorum', 'saltNonce'],
     // },
-    required: ['minionName', 'minQuorum', 'saltNonce'],
+    required: ['minionName', 'minQuorum', 'saltNonce', 'safeAddress'],
+    //  Solution above. The required list will check these items. If they are
+    //  rendered, it will check to see if the have existing values.
+    //  if they aren't rendered, validation simply skips them.
     fields: [
       [
         FIELD.SUMMON_MODE_SWITCH,
@@ -620,6 +596,68 @@ export const FORM = {
     ],
     customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
   },
+  START_SAFE_MULTI: {
+    id: 'START_SAFE_MULTI',
+    title: 'Safe Minion Transaction Builder',
+    description: 'Create a multi-transaction proposal',
+    type: PROPOSAL_TYPES.MINION_SAFE,
+    minionType: MINION_TYPES.SAFE,
+    required: ['title'],
+    fields: [
+      [FIELD.TITLE, FIELD.DESCRIPTION],
+      [
+        {
+          ...FIELD.PAYMENT_REQUEST,
+          label: 'Forward Funds',
+          info:
+            'This proposal type will use funds from the Minion first, if its balance is sufficient. If you wish to use funds from the treasury instead, then enter the appropriate amount. Note: Early execution for Treasury funds is not allowed.',
+        },
+        FIELD.MINION_SELECT,
+      ],
+    ],
+  },
+  CREATE_TX: {
+    id: 'CREATE_TX',
+    isTx: true,
+    required: ['targetContract', 'abiInput'],
+    fields: [
+      [
+        FIELD.TARGET_CONTRACT,
+        {
+          ...FIELD.ABI_INPUT,
+          listenTo: 'targetContract',
+          hideHex: true,
+        },
+        FIELD.MINION_VALUE,
+      ],
+      [],
+    ],
+  },
+  MULTICALL_CONFIRMATION: {
+    id: 'MULTICALL_CONFIRMATION',
+    fields: [[], []],
+  },
+};
+
+const MULTI_FORMS = {
+  SAFE_TX_BUILDER: {
+    id: 'SAFE_TX_BUILDER',
+    logValues: true,
+    isTxBuilder: true,
+    type: 'multiForm',
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.GENERIC_SAFE_MULTICALL,
+    title: 'Safe Minion TX Builder',
+    description: 'Create a multi-transaction proposal',
+    footer: 'end',
+    collapse: 'all',
+    customWidth: `900px`,
+    forms: [
+      PROPOSAL_FORMS.START_SAFE_MULTI,
+      PROPOSAL_FORMS.CREATE_TX,
+      PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
+    ],
+  },
 };
 
 export const BOOST_FORMS = {
@@ -636,3 +674,5 @@ export const BOOST_FORMS = {
     tx: TX.CREATE_WRAP_N_ZAP,
   },
 };
+
+export const FORM = { ...PROPOSAL_FORMS, ...MULTI_FORMS };

@@ -14,6 +14,7 @@ export const TYPE_ERR_MSGS = {
   address: 'Must be a valid Ethereum Address',
   urlNoHTTP: 'Must be a URL. Http not needed.',
   greaterThanZero: 'Must be greater than zero.',
+  boolean: 'Must be a Booolean value',
 };
 
 export const validate = {
@@ -38,62 +39,11 @@ export const validate = {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },
   boolean(val) {
+    return val === 'true' || val === 'false' || val === true || val === false;
+  },
+  bytes32(val) {
     return val;
   },
-};
-
-export const checkFormTypes = (values, fields) => {
-  if (!values || !fields) {
-    throw new Error(
-      `Did not receive truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,
-    );
-  }
-  const errors = fields.reduce((arr, field) => {
-    const inputVal = values[field.name];
-    //  check if empty
-    if (inputVal === '' || field.expectType === 'any' || !field.expectType) {
-      return arr;
-    }
-    const isValid = validate[field.expectType];
-    if (typeof isValid !== 'function') {
-      console.log(field);
-      throw new Error(`Could not find validator function ${field.expectType}`);
-    }
-    if (!isValid(inputVal)) {
-      return [
-        ...arr,
-        { message: TYPE_ERR_MSGS[field.expectType], name: field.name },
-      ];
-    }
-    return arr;
-  }, []);
-  console.log(`errors`, errors);
-  if (!errors.length) {
-    return false;
-  }
-  return errors;
-};
-
-export const validateRequired = (values, required) => {
-  //  takes in array of required fields
-  if (!values || !required?.length) return;
-  const errors = required.reduce((arr, field) => {
-    if (!values[field.name]) {
-      return [
-        ...arr,
-        {
-          message: `${field.label} is required.`,
-          name: field.name,
-        },
-      ];
-    }
-    return arr;
-  }, []);
-
-  if (!errors.length) {
-    return false;
-  }
-  return errors;
 };
 
 export const customValidations = {
@@ -212,4 +162,17 @@ export const customValidations = {
     }
     return false;
   },
+};
+
+export const collectTypeValidations = valString => {
+  const valFn = validate[valString];
+  const valMsg = TYPE_ERR_MSGS[valString];
+  if (!valFn || !valMsg) {
+    console.log(`valFn`, valFn);
+    console.log(`valMsg`, valMsg);
+    throw new Error(
+      `validation.js => collectTypeValidations(): type validation is not valid. It may not match the registry of existing val callbacks or errMsgs`,
+    );
+  }
+  return val => (valFn(val) || val === '' ? true : valMsg);
 };

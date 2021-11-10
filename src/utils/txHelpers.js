@@ -1,21 +1,20 @@
+import { encodeMultiSend } from '@gnosis.pm/safe-contracts';
 import Web3 from 'web3';
 
 import { detailsToJSON, filterObject, HASH } from './general';
-import { valToDecimalString } from './tokenValue';
+import { getContractBalance, valToDecimalString } from './tokenValue';
 import {
   encodeMultisendTx,
   getABIsnippet,
   getContractABI,
   safeEncodeHexFunction,
 } from './abi';
-import { collapse } from './formBuilder';
-import { getContractBalance, getTokenData } from './vaults';
+import { getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
-import { PROPOSAL_TYPES } from './proposalUtils';
+import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { CONTRACTS, TX } from '../data/contractTX';
 
-// const isSearchPath = string => string[0] === '.';
 const getPath = pathString =>
   pathString
     .slice(1)
@@ -86,11 +85,34 @@ const buildJSONdetails = (data, fields) => {
   return JSON.stringify(cleanValues);
 };
 
+const getMultiSendFn = () => {
+  return getABIsnippet({
+    contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+    fnName: 'multiSend',
+  });
+};
+
+const encodeMulti = encodedTXs => {
+  const web3 = new Web3();
+  const multiSendFn = getMultiSendFn();
+  return web3.eth.abi.encodeFunctionCall(multiSendFn, [
+    encodeMultiSend(encodedTXs),
+  ]);
+};
+
+const collapseToCallData = values =>
+  values.TX.map(tx => ({
+    to: tx.targetContract,
+    data: safeEncodeHexFunction(JSON.parse(tx.abiInput), tx.abiArgs || []),
+    value: tx.minionValue || '0',
+    operation: tx.operation || '0',
+  }));
+
 const argBuilderCallback = Object.freeze({
   proposeActionVanilla({ values, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
-      collapse(values, '*ABI_ARG*', 'array'),
+      values?.abiArgs || [],
     );
     const details = detailsToJSON({
       ...values,
@@ -101,7 +123,7 @@ const argBuilderCallback = Object.freeze({
   proposeActionNifty({ values, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
-      collapse(values, '*ABI_ARG*', 'array'),
+      values?.abiArgs || [],
     );
 
     const details = detailsToJSON({
@@ -118,11 +140,27 @@ const argBuilderCallback = Object.freeze({
       values.paymentRequested,
     ];
   },
+  multiActionSafe(data) {
+    const { values } = data;
+    const detailsModel = {
+      title: `.values.title`,
+      description: `.values.description || ${HASH.EMPTY_FIELD}`,
+      proposalType: PROPOSAL_TYPES.MULTI_TX_SAFE,
+      minionType: MINION_TYPES.SAFE,
+    };
+
+    return [
+      encodeMulti(collapseToCallData(values)),
+      values.paymentToken,
+      values.paymentRequested || '0',
+      buildJSONdetails(data, detailsModel),
+      true,
+    ];
+  },
   proposeActionSafe({ values, formData }) {
-    const inputVals = collapse(values, '*ABI_ARG*', 'array');
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
-      Array.isArray(inputVals) ? inputVals : [],
+      values?.abiArgs || [],
     );
 
     const details = detailsToJSON({
@@ -148,11 +186,11 @@ const argBuilderCallback = Object.freeze({
   },
 });
 
-const handleSearch = (data, arg) => {
+export const handleSearch = (data, arg, shouldThrow) => {
   const path = getPath(arg);
   if (!path.length)
     throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
-  return searchData(data, path);
+  return searchData(data, path, shouldThrow);
 };
 
 const gatherArgs = data => {
@@ -398,6 +436,17 @@ export const handleFieldModifiers = appData => {
     }
   });
   return newValues;
+};
+
+export const getTxFromName = name => {
+  if (name?.includes('TX')) {
+    const justTag = name
+      .split('.')
+      .slice(0, 2)
+      .join('.');
+    return justTag;
+  }
+  return null;
 };
 
 export const transactionByProposalType = proposal => {
