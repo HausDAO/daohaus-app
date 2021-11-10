@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
 import TextBox from '../components/TextBox';
+import Blur from './blur';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -204,10 +205,7 @@ const FormBuilder = props => {
     }
 
     return fields.map((field, index) => {
-      let value = '';
-      if (defaultValues) {
-        value = defaultValues[field?.name];
-      }
+      const value = defaultValues?.[field?.name] || '';
 
       return Array.isArray(field) ? (
         <Flex
@@ -244,20 +242,7 @@ const FormBuilder = props => {
       <Flex flexDir='column'>
         <FormControl display='flex'>
           {!removeBlur && props.removeBlurCallback ? (
-            <Flex
-              display='flex'
-              w='100%'
-              h='100%'
-              backdropFilter='blur(6px)'
-              position='absolute'
-              zIndex={5}
-              justify='center'
-              align='center'
-            >
-              <TextBox w='40%' textAlign='center'>
-                {blurText}
-              </TextBox>
-            </Flex>
+            <Blur text={blurText} />
           ) : (
             <></>
           )}

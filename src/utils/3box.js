@@ -3,6 +3,8 @@ import { Core } from '@self.id/core';
 
 import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
 
+const ceramicNetwork = process.env.REACT_APP_CERAMIC_NETWORK || 'testnet-clay';
+
 export const authenticateDid = async address => {
   // Always associate current chain with mainnet
   // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
@@ -13,8 +15,8 @@ export const authenticateDid = async address => {
 
   const authProvider = new EthereumAuthProvider(window.ethereum, address);
   const client = new WebClient({
-    ceramic: 'testnet-clay',
-    connectNetwork: 'testnet-clay',
+    ceramic: ceramicNetwork,
+    connectNetwork: ceramicNetwork,
   });
   let did = null;
   try {
@@ -36,7 +38,7 @@ export const authenticateDid = async address => {
 };
 
 export const getBasicProfile = async did => {
-  const core = new Core({ ceramic: 'testnet-clay' });
+  const core = new Core({ ceramic: ceramicNetwork });
   return core.get('basicProfile', did);
 };
 
@@ -63,7 +65,7 @@ const get3boxProfile = async address => {
 
 export const fetchProfile = async address => {
   try {
-    const core = new Core({ ceramic: 'testnet-clay' });
+    const core = new Core({ ceramic: ceramicNetwork });
     const link = await Caip10Link.fromAccount(
       core.ceramic,
       `${address}@eip155:1`,

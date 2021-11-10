@@ -76,6 +76,18 @@ const DaoAccountModal = () => {
                     View Member Profile
                   </Link>
                 )}
+                {address && daochain && daoid && (
+                  <Link
+                    as={RouterLink}
+                    to={`/dao/${daochain}/${daoid}/profile/${address}?edit=true`}
+                    onClick={handleClose}
+                    color='secondary.400'
+                    _hover={{ color: 'secondary.600' }}
+                    mb='4px'
+                  >
+                    Edit Member Profile
+                  </Link>
+                )}
                 <Box
                   onClick={handleSwitchWallet}
                   color='secondary.400'

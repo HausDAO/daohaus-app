@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BsThreeDotsVertical, BsCheckCircle } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { BiErrorCircle } from 'react-icons/bi';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import {
   Menu,
   MenuList,
@@ -39,6 +39,8 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const { successToast, errorToast } = useOverlay();
   const { submitTransaction } = useTX();
   const { refreshMemberProfile } = useUser(null);
+  const history = useHistory();
+  const location = useLocation();
 
   const [canRageQuit, setCanRageQuit] = useState(false);
 
@@ -53,7 +55,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
 
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
-  const handleEditProfile = () => {
+  const handleEditProfile = useCallback(() => {
     let client = null;
     let did = null;
     const indicatorStates = {
@@ -113,7 +115,15 @@ const ProfileMenu = ({ member, refreshProfile }) => {
         return true;
       },
     });
-  };
+    history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
+  }, [member.memberAddress]);
+
+  useEffect(() => {
+    const edit = new URLSearchParams(location.search).get('edit');
+    if (edit) {
+      handleEditProfile();
+    }
+  }, [handleEditProfile, location.search]);
 
   const copiedToast = () => {
     toast({
