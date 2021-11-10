@@ -6,7 +6,7 @@ import { Box, HStack, Icon, Image, Link } from '@chakra-ui/react';
 import TextBox from './TextBox';
 
 const hasImage = string => {
-  const imageExtensions = ['.jpg', '.png', '.gif', 'ipfs/Qm'];
+  const imageExtensions = ['.gif', '.jpg', '.png', '.svg', 'ipfs/Qm'];
   return imageExtensions.some(o => string.includes(o));
 };
 

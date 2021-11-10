@@ -10,10 +10,6 @@ import FormBuilder from './formBuilder';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
 
-// const getFormCtaText = (currentStep) => {
-//   if()
-// }
-
 const getStepTitle = (currentStep, props) => {
   if (typeof currentStep?.title === 'string') return currentStep.title;
   if (currentStep?.form) return currentStep?.form?.title;
@@ -34,6 +30,7 @@ const StepperForm = props => {
     metaFields,
     updateModalUI,
   } = props;
+
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
@@ -124,6 +121,7 @@ const StepperForm = props => {
       ctaText: getNewCtaText(nextObj),
     }));
   };
+
   const secondaryBtn = {
     text: 'Cancel',
     fn: () => closeModal(),
@@ -133,6 +131,7 @@ const StepperForm = props => {
     return (
       <FormBuilder
         {...currentStep.form}
+        key={currentStep.form.id}
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}
@@ -169,6 +168,7 @@ const StepperForm = props => {
   if (currentStep?.type === 'summoner') {
     return (
       <TheSummoner
+        // Todo clean current step stuff
         {...currentStep}
         parentForm={parentForm}
         currentStep={currentStep}
@@ -208,24 +208,6 @@ const StepperForm = props => {
     );
   }
   return null;
-
-  // if (userSteps?.length && position > 0)
-  //   return (
-  //     <Flex flexDir='column'>
-  //       <Box
-  //         fontFamily='heading'
-  //         textTransform='uppercase'
-  //         fontSize='sm'
-  //         fontWeight={700}
-  //         color='secondary.400'
-  //         mb={2}
-  //       >
-  //         {`Step ${position} of ${userSteps.length}`}
-  //         {currentStep?.stepLabel && `: ${currentStep.stepLabel}`}
-  //       </Box>
-  //       {getFrame()}
-  //     </Flex>
-  //   );
 };
 
 export default StepperForm;

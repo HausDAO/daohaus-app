@@ -5,6 +5,7 @@ import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 import TextBox from '../components/TextBox';
 import ErrorList from './ErrorList';
 import { ToolTipWrapper } from '../staticElements/wrappers';
+import { handleCheckError } from '../utils/formBuilder';
 
 const FieldWrapper = ({
   children,
@@ -15,18 +16,18 @@ const FieldWrapper = ({
   helperText,
   hidden,
   btn,
-  error,
-  required,
+  errors = {},
   containerProps,
   mb,
   layout,
+  registerOptions,
   w,
 }) => {
   const width = useMemo(() => {
     if (w) return w;
-    // if (layout === 'singleRow') return '100%';
-    // return ['100%', null, '48%'];
   }, [w, layout]);
+
+  const fieldError = handleCheckError(errors, name);
   return (
     <Flex
       w={width}
@@ -42,7 +43,7 @@ const FieldWrapper = ({
           htmlFor={htmlFor || name}
           position='relative'
         >
-          {required && (
+          {registerOptions?.required && (
             <Box display='inline' position='absolute' left='-1rem'>
               {'* '}
             </Box>
@@ -67,7 +68,7 @@ const FieldWrapper = ({
 
       {children}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      {error && <ErrorList singleError={error} />}
+      {fieldError && <ErrorList singleError={fieldError} />}
     </Flex>
   );
 };

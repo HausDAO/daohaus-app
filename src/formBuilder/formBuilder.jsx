@@ -6,24 +6,16 @@ import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
 import FormFooter from './formFooter';
-import { checkFormTypes, validateRequired } from '../utils/validation';
 import {
   checkConditionalTx,
-  collapse,
+  createRegisterOptions,
   inputDataFromABI,
-  mapInRequired,
 } from '../utils/formBuilder';
-import { omit } from '../utils/general';
+import { useAppModal } from '../hooks/useModals';
 
 const dev = process.env.REACT_APP_DEV;
 
 const FormBuilder = props => {
-  const {
-    submitTransaction,
-    handleCustomValidation,
-    modifyFields,
-    submitCallback,
-  } = useTX();
   const {
     fields,
     additionalOptions = null,
@@ -34,21 +26,35 @@ const FormBuilder = props => {
     goToNext,
     handleThen,
     ctaText,
+    footer = true,
     secondaryBtn,
     formConditions,
+    setParentFields,
+    indicatorStates,
+    txID,
     logValues,
+    checklist = ['isConnected', 'isSameChain'],
   } = props;
+  const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
 
-  const [formState, setFormState] = useState(null);
+  const { closeModal } = useAppModal();
+  const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
-  const [formFields, setFields] = useState(mapInRequired(fields, required));
-  const [formErrors, setFormErrors] = useState({});
+  const [formFields, setFields] = useState(null);
+  const [formErrors, setFormErrors] = useState([]);
+
   const [options, setOptions] = useState(additionalOptions);
   const localForm = parentForm || useForm({ shouldUnregister: false });
-  const { handleSubmit, watch } = localForm;
+  const { handleSubmit, watch, errors } = localForm;
   const values = watch();
 
-  useEffect(() => logValues && dev && console.log(`values`, values), [values]);
+  useEffect(() => {
+    if (dev && values && logValues) {
+      console.log(`values`, values);
+    }
+  }, [values, errors]);
+
+  useEffect(() => setFields(fields), [fields]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -62,95 +68,42 @@ const FormBuilder = props => {
     setFields([...rest, [...lastCol, selectedOption]]);
   };
 
-  const buildABIOptions = abiString => {
+  const buildABIOptions = (abiString, serialTag = false) => {
     if (!abiString || typeof abiString !== 'string') return;
-    const originalFields = mapInRequired(fields, required);
 
     if (abiString === 'clear' || abiString === 'hex') {
-      setFields(originalFields);
+      if (setParentFields) {
+        setParentFields(txID, fields);
+      } else {
+        setFields(fields);
+      }
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      let updatedFields = [
-        ...originalFields[originalFields.length - 1],
-        ...inputDataFromABI(abiInputs),
-      ];
-      if (originalFields.length > 1) {
-        updatedFields = [originalFields[0], updatedFields];
+      if (setParentFields) {
+        setParentFields(txID, [
+          fields[0],
+          inputDataFromABI(abiInputs, serialTag),
+        ]);
+      } else {
+        const updatedFields = [
+          ...fields[fields.length - 1],
+          ...inputDataFromABI(abiInputs, serialTag),
+        ];
+        const payload =
+          fields.length > 1 ? [fields[0], updatedFields] : [updatedFields];
+        setFields(payload);
       }
-      setFields(updatedFields);
     }
-  };
-
-  const updateErrors = errors => {
-    // REVIEW
-    setFields(prevFields => {
-      const update = field => {
-        // TODO: how to handle validation errors on fields within formCondition and checkGate input types
-        if (Array.isArray(field)) {
-          return field.map(update);
-        }
-        const error = errors.find(error => error.name === field.name);
-        return { ...field, error };
-      };
-      return prevFields.map(update);
-    });
-  };
-  const clearErrors = () => {
-    // REVIEW
-    setFields(prevFields => {
-      const clear = f =>
-        Array.isArray(f) ? f.map(clear) : { ...f, error: false };
-      return prevFields.map(clear);
-    });
   };
 
   const onSubmit = async values => {
-    clearErrors();
-
-    //  Checks for required values
-    // TODO: how to handle required values from inputs within formCondition & checkGate
-    const missingVals = validateRequired(
-      values,
-      // REVIEW
-      // formFields.filter(field => field.required),
-      formFields.flat(Infinity).filter(field => field.required),
-    );
-
-    if (missingVals) {
-      console.log('missingVals', missingVals);
-      updateErrors(missingVals);
-      return;
-    }
-
-    //  Checks for type errors
-    // REVIEW
-    // const typeErrors = checkFormTypes(values, formFields);
-    const typeErrors = checkFormTypes(values, formFields.flat(Infinity));
-    if (typeErrors) {
-      console.log('typeErrors', typeErrors);
-      updateErrors(typeErrors);
-      return;
-    }
-    const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
-
-    const modifiedValues = modifyFields({
-      values: collapsedValues,
-      // REVIEW
-      // activeFields: formFields,
-      activeFields: formFields.flat(Infinity),
-      formData: props,
-      tx: props.tx,
-    });
-    //  Checks for custom validation
-
     const customValErrors = handleCustomValidation({
-      values: modifiedValues,
+      values,
       formData: props,
     });
 
     if (customValErrors) {
-      console.log('customValErrors', customValErrors);
-      updateErrors(customValErrors);
+      setFormErrors(customValErrors);
       return;
     }
 
@@ -160,7 +113,7 @@ const FormBuilder = props => {
         try {
           setFormState('loading');
           const res = await submitCallback({
-            values: modifiedValues,
+            values,
             formData: props,
             onSubmit: props.onSubmit,
           });
@@ -176,7 +129,7 @@ const FormBuilder = props => {
       try {
         setFormState('loading');
         const res = await submitTransaction({
-          values: modifiedValues,
+          values,
           formData: props,
           localValues,
           tx: checkConditionalTx({ tx: props.tx, condition: formCondition }),
@@ -221,17 +174,8 @@ const FormBuilder = props => {
     return handleSubmitTX();
   };
 
-  const useFormError = () => ({
-    removeError(fieldName) {
-      setFormErrors(prevState => omit(fieldName, prevState));
-    },
-    addError(fieldName, error) {
-      setFormErrors(prevState => ({ ...prevState, [fieldName]: error }));
-    },
-  });
-
   const renderInputs = (fields, depth = 0) => {
-    return fields.map((field, index) =>
+    return fields?.map((field, index) =>
       Array.isArray(field) ? (
         <Flex
           flex={1}
@@ -245,6 +189,9 @@ const FormBuilder = props => {
         <InputFactory
           {...field}
           key={`${depth}-${index}`}
+          registerOptions={createRegisterOptions(field, required)}
+          required={required}
+          errors={errors}
           minionType={props.minionType}
           formCondition={formCondition}
           setFormCondition={setFormCondition}
@@ -252,7 +199,6 @@ const FormBuilder = props => {
           localForm={localForm}
           localValues={localValues}
           buildABIOptions={buildABIOptions}
-          useFormError={useFormError}
           formState={formState}
         />
       ),
@@ -271,18 +217,22 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} />
-        <FormFooter
-          options={options}
-          addOption={addOption}
-          formState={formState}
-          ctaText={ctaText}
-          next={next}
-          goToNext={goToNext}
-          errors={Object.values(formErrors)}
-          customSecondaryBtn={secondaryBtn}
-          loading={formState === 'loading'}
-        />
+        <ProgressIndicator currentState={formState} states={indicatorStates} />
+        {footer && (
+          <FormFooter
+            options={options}
+            addOption={addOption}
+            formState={formState}
+            ctaText={ctaText}
+            closeModal={closeModal}
+            next={next}
+            goToNext={goToNext}
+            errors={Object.values(formErrors)}
+            customSecondaryBtn={secondaryBtn}
+            loading={formState === 'loading'}
+            checklist={checklist}
+          />
+        )}
       </Flex>
     </form>
   );

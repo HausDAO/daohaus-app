@@ -11,6 +11,8 @@ import TextBox from './TextBox';
 import SuperTokenListItem from './SuperTokenListItem';
 import { createPoll } from '../services/pollService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
+import { TokenService } from '../services/tokenService';
+import { deriveValFromWei } from '../utils/general';
 
 const SuperTokenList = ({
   superTokenBalances,
@@ -101,10 +103,19 @@ const SuperTokenList = ({
 
   const upgradeSupertoken = async (superToken, superTokenAddress) => {
     try {
-      const underlyingTokenBalance = minionBalances.find(
+      const underlyingTokenInternalBalance = minionBalances.find(
         b => b.tokenAddress === superToken.underlyingTokenAddress,
       );
-      if (underlyingTokenBalance && +underlyingTokenBalance.tokenBalance > 0) {
+      const underlyingTokenBalance = await TokenService({
+        web3: injectedProvider,
+        chainID: daochain,
+        tokenAddress: superToken.underlyingTokenAddress,
+      })('balanceOf')(minion);
+      if (
+        (underlyingTokenInternalBalance &&
+          +underlyingTokenInternalBalance.tokenBalance > 0) ||
+        deriveValFromWei(underlyingTokenBalance) > 0
+      ) {
         setLoading({
           active: true,
           condition: superTokenAddress,
@@ -141,7 +152,7 @@ const SuperTokenList = ({
         };
         const args = [
           superToken.underlyingTokenAddress,
-          underlyingTokenBalance.tokenBalance,
+          underlyingTokenInternalBalance.tokenBalance,
         ];
         await SuperfluidMinionService({
           web3: injectedProvider,
@@ -160,7 +171,9 @@ const SuperTokenList = ({
       } else {
         errorToast({
           title: `No ${
-            underlyingTokenBalance ? `${underlyingTokenBalance.symbol}` : ''
+            underlyingTokenInternalBalance
+              ? `${underlyingTokenInternalBalance.symbol}`
+              : ''
           } token balance available in the Minion`,
         });
       }

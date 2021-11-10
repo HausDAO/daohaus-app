@@ -140,7 +140,7 @@ export const DAO_ACTIVITIES = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits {
+    rageQuits(where: {molochAddress: $contractAddr}) {
       id
       createdAt
       memberAddress
@@ -160,7 +160,7 @@ export const ALT_ACTIVITIES = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits {
+    rageQuits(where: {molochAddress: $contractAddr}) {
       id
       createdAt
       memberAddress
@@ -186,7 +186,7 @@ export const ALT_AGAIN = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits {
+    rageQuits(where: {molochAddress: $contractAddr}) {
       id
       createdAt
       memberAddress

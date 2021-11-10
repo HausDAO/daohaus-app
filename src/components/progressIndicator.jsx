@@ -38,7 +38,8 @@ const ProgressIndicator = ({
   const { injectedChain } = useInjectedProvider();
 
   const currentUI = states?.[currentState];
-  const msgText = message || description || currentUI?.fallbackText;
+  const msgText =
+    message || description || currentUI?.description || currentUI?.fallbackText;
 
   if (!currentUI) return null;
 
@@ -58,6 +59,11 @@ const ProgressIndicator = ({
         {currentUI?.title && (
           <TextBox variant='body'>{currentUI.title}</TextBox>
         )}
+        {currentUI?.titleSm && (
+          <TextBox variant='body' size='sm'>
+            {currentUI.titleSm}
+          </TextBox>
+        )}
         {currentUI?.explorerLink && injectedChain && txHash && (
           <ExplorerLink
             chainID={injectedChain?.id}
@@ -68,7 +74,7 @@ const ProgressIndicator = ({
         )}
       </Flex>
       {msgText && (
-        <TextBox variant='body' size='xs'>
+        <TextBox variant='body' size='sm' ml={9}>
           {msgText}
         </TextBox>
       )}

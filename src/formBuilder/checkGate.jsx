@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
-import { useFormConditions } from '../utils/formBuilder';
+
 import GenericCheck from './genericCheck';
 import { InputFactory } from './inputFactory';
 
+import { createRegisterOptions, useFormConditions } from '../utils/formBuilder';
+
 const CheckGate = props => {
-  const { formCondition, label, title, description, renderOnCheck } = props;
+  const {
+    formCondition,
+    label,
+    title,
+    description,
+    renderOnCheck,
+    required,
+  } = props;
   const [checkLabel, checkTitle, checkDescription] = useFormConditions({
     values: [label, title, description],
     condition: formCondition,
@@ -15,9 +24,14 @@ const CheckGate = props => {
   return (
     <>
       {isChecked ? (
-        <InputFactory {...props} {...renderOnCheck} />
+        <InputFactory
+          {...props}
+          {...renderOnCheck}
+          registerOptions={createRegisterOptions(renderOnCheck, required)}
+        />
       ) : (
         <GenericCheck
+          {...props}
           isChecked={isChecked}
           onChange={handleChange}
           label={checkLabel}

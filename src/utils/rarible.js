@@ -120,8 +120,11 @@ export const getOrderByItem = async (
   maker,
   orderType,
   daochain,
+  status = 'ACTIVE',
 ) => {
-  const endpoint = `order/orders/${orderType}/byItem?contract=${contract}&tokenId=${tokenId}&maker=${maker}`;
+  const endpoint = `order/orders/${orderType}/byItemAndByStatus?contract=${contract}&tokenId=${tokenId}&maker=${maker}${
+    orderType === 'bids' ? `&status=${status}` : ''
+  }`;
   return getRaribleApi(daochain, endpoint);
 };
 
@@ -197,16 +200,28 @@ export const compareOrder = (ipfsData, orderRes) => {
 
     const raribleOrderData = {
       make: {
-        assetType: order.make.assetType,
+        assetType: {
+          assetClass: order.make.assetType.assetClass.match(/ERC\d+/)[0],
+          contract: order.make.assetType.contract,
+        },
         value: order.make.value,
       },
       take: {
-        assetType: order.take.assetType,
+        assetType: {
+          assetClass: order.take.assetType.assetClass.match(/ERC\d+/)[0],
+          contract: order.take.assetType.contract,
+        },
         value: order.take.value,
       },
       start: order.start,
       end: order.end,
     };
+    if (order.make.assetType.tokenId) {
+      raribleOrderData.make.assetType.tokenId = order.make.assetType.tokenId;
+    }
+    if (order.take.assetType.tokenId) {
+      raribleOrderData.take.assetType.tokenId = order.take.assetType.tokenId;
+    }
     return deepEqual(propOrderData, raribleOrderData);
   });
 };
