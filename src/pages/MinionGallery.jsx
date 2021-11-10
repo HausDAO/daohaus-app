@@ -157,16 +157,6 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
               options={nftFilterOptions}
             />
           </Box>
-          {/* <Box
-            ml='auto'
-            mt={[5, 0, null, 0]}
-            mr={[0, 5, null, 5]}
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize={['sm', null, null, 'md']}
-          >
-            View Balances
-          </Box> */}
         </Flex>
         <Wrap flex={1} spacing={4} w='100%'>
           {nfts &&

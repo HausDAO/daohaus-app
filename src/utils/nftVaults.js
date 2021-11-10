@@ -8,6 +8,18 @@ import { getMinionActionFormLego } from './vaults';
 // - example with a link out to platform
 // - move to config to data folder
 
+export const NFT_ACTIONS = {
+  TRANSFER: {
+    menuLabel: 'Transfer NFT',
+    tooltTipLabel:
+      'Make a proposal to tranfer this nft to the applicant address',
+    modalName: 'transfer',
+    formLego: FORM.MINION_SEND_ERC721_TOKEN,
+    localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
+    minionTypeOverride: true,
+  },
+};
+
 const defaultConfig = {
   platform: 'unknown',
   fields: {

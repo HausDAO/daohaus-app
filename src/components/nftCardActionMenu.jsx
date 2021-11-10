@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { useParams } from 'react-router';
 import {
@@ -16,14 +16,22 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { getMinionActionFormLego } from '../utils/vaults';
+import { MINIONS } from '../data/minions';
 
-const NftCardActionMenu = ({ nft, minion, vault }) => {
+const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
   const { daoOverview } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
   const { address, injectedChain } = useInjectedProvider();
   const { formModal } = useAppModal();
   const [actionsEnabled, enableActions] = useState(false);
+
+  const nftActions = useMemo(() => {
+    if (minionType) {
+      return MINIONS[minionType].nftActions;
+    }
+  }, [minionType]);
 
   useEffect(() => {
     enableActions(
@@ -38,13 +46,22 @@ const NftCardActionMenu = ({ nft, minion, vault }) => {
     const currentMinion = daoOverview.minions.find(
       m => m.minionAddress === minion,
     );
-    formModal({
-      ...action.formLego,
-      localValues: {
-        ...action.localValues,
+    const localValues = action.localValues.reduce(
+      (vals, key) => {
+        vals[key] = nft[key];
+        return vals;
+      },
+      {
         minionAddress: currentMinion.minionAddress,
         safeAddress: currentMinion.safeAddress,
       },
+    );
+    const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
+    const formLego = getMinionActionFormLego(nftType, minionType);
+
+    formModal({
+      ...formLego,
+      localValues,
     });
   };
 
@@ -66,7 +83,7 @@ const NftCardActionMenu = ({ nft, minion, vault }) => {
           />
         </MenuButton>
         <MenuList>
-          {nft.actions.map(action => {
+          {nftActions.map(action => {
             return (
               <MenuItem
                 key={action.menuLabel}

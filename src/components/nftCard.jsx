@@ -44,7 +44,12 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
         >
           View
         </Box>
-        <NftCardActionMenu nft={hydratedNft} vault={vault} minion={minion} />
+        <NftCardActionMenu
+          nft={hydratedNft}
+          vault={vault}
+          minion={minion}
+          minionType={minionType}
+        />
       </Flex>
       <AspectRatio
         ratio={1}
