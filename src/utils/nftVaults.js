@@ -18,6 +18,15 @@ export const NFT_ACTIONS = {
     localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
     minionTypeOverride: true,
   },
+  SELL_NIFTY: {
+    menuLabel: 'Sell Nifty',
+    tooltTipLabel: 'Make a proposal to set the price of the nft on nifty.ink',
+    modalName: 'sellNifty',
+    formLego: CORE_FORMS.MINION_SELL_NIFTY,
+    localValues: ['tokenId', 'contractAddress'],
+    networks: { '0x64': true },
+    nftContractAddress: '0xcf964c89f509a8c0ac36391c5460df94b91daba5',
+  },
 };
 
 const defaultConfig = {
