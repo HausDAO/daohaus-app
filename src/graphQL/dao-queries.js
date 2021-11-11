@@ -150,52 +150,6 @@ export const DAO_ACTIVITIES = gql`
   }
 `;
 
-export const ALT_ACTIVITIES = gql`
-  query molochActivities($contractAddr: String!, $createdAt: String!) {
-    proposals(
-      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: true }
-      orderBy: createdAt
-      orderDirection: asc
-      first: 1000
-    ) {
-      ${proposalFields}
-    }
-    rageQuits(where: {molochAddress: $contractAddr}) {
-      id
-      createdAt
-      memberAddress
-      shares
-      loot
-    }
-  }
-`;
-
-export const ALT_AGAIN = gql`
-  query molochActivities($contractAddr: String!, $createdAt: String!) {
-    proposals(
-      where: { 
-        molochAddress: $contractAddr
-        createdAt_gt: $createdAt
-        sponsored: false
-        tributeOffered_gte: "1000000000000000000"
-        tributeToken: "0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb" 
-      }
-      orderBy: createdAt
-      orderDirection: asc
-      first: 1000
-    ) {
-      ${proposalFields}
-    }
-    rageQuits(where: {molochAddress: $contractAddr}) {
-      id
-      createdAt
-      memberAddress
-      shares
-      loot
-    }
-  }
-`;
-
 export const SPAM_FILTER_ACTIVITIES = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
@@ -223,7 +177,7 @@ export const SPAM_FILTER_GK_WL = gql`
         molochAddress: $contractAddr
         createdAt_gt: $createdAt
         sponsored: false
-        guildkickOrWhitelist: true
+        guildkickOrWhitelistOrMinion: true
       }
       orderBy: createdAt
       orderDirection: asc
@@ -270,7 +224,7 @@ export const SPAM_FILTER_TRIBUTE = gql`
 export const SPAM_FILTER_UNSPONSORED = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
-      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: false }
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: false, guildkickOrWhitelistOrMinion: false }
       orderBy: createdAt
       orderDirection: asc
       first: 1000

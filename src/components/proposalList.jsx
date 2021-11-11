@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Flex, Spinner, Box } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -25,6 +25,7 @@ import {
   handleListSort,
   searchProposals,
 } from '../utils/proposalUtils';
+import SpamFilterListNotification from './spamFilterListNotification';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
@@ -35,7 +36,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const [listProposals, setListProposals] = useState(null);
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
 
   const [filterOptions, setFilterOptions] = useState(defaultFilterOptions);
   const [filter, setFilter] = useSessionStorage(`${daoid}-filter`, null);
@@ -156,10 +157,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
       </Flex>
 
       {daoMetaData?.boosts?.SPAM_FILTER?.active && (
-        <Flex>
-          <Box mr='3'>Spam filter is on</Box>
-          <Link to={`/dao/${daochain}/${daoid}/proposals/spam`}>View</Link>
-        </Flex>
+        <SpamFilterListNotification />
       )}
       {isLoaded &&
         paginatedProposals?.map(proposal => {

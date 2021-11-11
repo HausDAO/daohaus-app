@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
+import { BiErrorCircle } from 'react-icons/bi';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -10,8 +11,12 @@ import {
   checkConditionalTx,
   createRegisterOptions,
   inputDataFromABI,
+  needsSpamNotice,
 } from '../utils/formBuilder';
 import { useAppModal } from '../hooks/useModals';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useDao } from '../contexts/DaoContext';
+import { getReadableBalance } from '../utils/tokenValue';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -33,12 +38,19 @@ const FormBuilder = props => {
     indicatorStates,
     txID,
     logValues,
+    tx,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
+  const { daoMetaData } = useMetaData();
+  const { daoOverview } = useDao();
+
+  console.log('daoOverview', daoOverview);
 
   const { closeModal } = useAppModal();
   const [formState, setFormState] = useState('idle');
+  const [indicatorStatesOverride, setIndicatorStatesOverride] = useState(null);
+
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
@@ -55,6 +67,24 @@ const FormBuilder = props => {
   }, [values, errors]);
 
   useEffect(() => setFields(fields), [fields]);
+
+  useEffect(() => {
+    if (daoMetaData) {
+      if (needsSpamNotice(tx, daoMetaData)) {
+        const depositAmount = `${getReadableBalance({
+          balance: daoMetaData.boosts.SPAM_FILTER.metadata.paymentRequested,
+          decimals: daoOverview.depositToken.decimals,
+        })}`;
+        const spamIndicatorState = {
+          idle: {
+            icon: BiErrorCircle,
+            title: `Spam filtering is ON for this DAO, a non-refundable tribute of ${depositAmount} ${daoOverview.depositToken.symbol} is needed to ensure it isn't hidden from the main proposal view.`,
+          },
+        };
+        setIndicatorStatesOverride(spamIndicatorState);
+      }
+    }
+  }, [daoMetaData, tx]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -217,7 +247,10 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} states={indicatorStates} />
+        <ProgressIndicator
+          currentState={formState}
+          states={indicatorStatesOverride || indicatorStates}
+        />
         {footer && (
           <FormFooter
             options={options}

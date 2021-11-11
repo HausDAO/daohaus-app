@@ -208,11 +208,17 @@ export const CONTENT = {
     ],
   },
   SPAM_FILTER: {
-    title: 'Proposal Spam Filter',
-    description: 'Filter out some bad proposals.',
+    title: 'Proposal Anti-Spam',
+    description:
+      'Filter & reduce proposal spam by requiring minimum tributes and hiding spam proposals.',
     publisher: PUBLISHERS.DAOHAUS,
     version: '1.0',
-    pars: ['Requires proposals to have a tribute.'],
+    pars: [
+      'This Boost gives you a suite of anti-spam features to filter and reduce spam proposals.',
+      'First, you can set a tribute minimum for proposals, filtering out proposals that do not meet the minimum amount.',
+      'To go even further, you can prevent non-members from submitting proposals temporarily by hiding the ‘Add Proposal’ button.',
+      'At any time, you can always reconfigure the minimum tribute, filter settings and visibility of the ‘Add Proposal’ button.',
+    ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
@@ -484,10 +490,10 @@ export const BOOSTS = {
     id: 'SPAM_FILTER',
     steps: STEPS.ADD_SPAM_FILTER,
     boostContent: CONTENT.SPAM_FILTER,
-    categories: ['community', 'governance'],
+    categories: ['devTools'],
     networks: 'all',
     cost: 'free',
-    metaFields: ['tributeOffered', 'tributeToken'],
+    metaFields: ['paymentRequested', 'paymentToken', 'membersOnly'],
     settings: { type: 'internalLink', appendToDaoPath: 'settings/spam' },
   },
   // SNAPSHOT: {

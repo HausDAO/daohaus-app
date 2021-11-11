@@ -413,6 +413,13 @@ export const FIELD = {
     title: 'Minion Setup',
     expectType: 'any',
   },
+  BASIC_SWITCH: {
+    type: 'switch',
+    checked: 'true',
+    unchecked: 'false',
+    label: 'Yes or No?',
+    expectType: 'any',
+  },
 };
 
 export const FORM_DISPLAY = {

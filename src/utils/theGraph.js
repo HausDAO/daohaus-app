@@ -1,10 +1,9 @@
 import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import {
-  ALT_ACTIVITIES,
-  ALT_AGAIN,
   DAO_ACTIVITIES,
   HOME_DAO,
+  SPAM_FILTER_ACTIVITIES,
   SPAM_FILTER_GK_WL,
   SPAM_FILTER_TRIBUTE,
 } from '../graphQL/dao-queries';
@@ -25,7 +24,6 @@ import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
 import { validateSafeMinion } from './vaults';
-import { ALT } from '../data/temp';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -181,34 +179,6 @@ export const fetchAllActivity = async (
   }
 };
 
-const fetchAltActivity = async (
-  args,
-  items = [],
-  createdAt = '0',
-  count = 1,
-) => {
-  const sponsored = await fetchAllActivity(
-    args,
-    items,
-    createdAt,
-    count,
-    ALT_ACTIVITIES,
-  );
-  const unsponsored = await fetchAllActivity(
-    args,
-    items,
-    createdAt,
-    count,
-    ALT_AGAIN,
-  );
-
-  return {
-    id: args.daoID,
-    rageQuits: sponsored.rageQuits,
-    proposals: [...sponsored?.proposals, ...unsponsored?.proposals],
-  };
-};
-
 const fetchSpamFilterActivity = async (
   args,
   items = [],
@@ -220,7 +190,7 @@ const fetchSpamFilterActivity = async (
     items,
     createdAt,
     count,
-    ALT_ACTIVITIES,
+    SPAM_FILTER_ACTIVITIES,
   );
   const unsponsoredGuildkickWhitelist = await fetchAllActivity(
     args,
@@ -327,23 +297,18 @@ const completeQueries = {
   },
   async getActivities(args, setter) {
     try {
-      // let activity;
-      const isAlt = ALT.includes(args.daoID);
-      // if (isAlt) {
-      //   activity = await fetchAltActivity(args);
-      // } else {
       const metadata = await fetchMetaData(args.daoID);
 
       const activity = metadata[0]?.boosts?.SPAM_FILTER?.active
         ? await fetchSpamFilterActivity({
             ...args,
             requiredTributeToken:
-              metadata[0].boosts.SPAM_FILTER.metadata.requiredTributeToken,
+              metadata[0].boosts.SPAM_FILTER.metadata.paymentToken,
             requiredTributeMin:
-              metadata[0].boosts.SPAM_FILTER.metadata.requiredTributeMin,
+              metadata[0].boosts.SPAM_FILTER.metadata.paymentRequested,
           })
         : await fetchAllActivity(args);
-      // }
+
       const resolvedActivity = {
         id: args.daoID,
         rageQuits: activity.rageQuits,
