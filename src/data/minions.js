@@ -4,11 +4,11 @@ import { MINION_TYPES } from '../utils/proposalUtils';
 export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: {
     // here for legacy support
-    '0x64': false,
-    '0x89': false,
-    '0x4': false,
-    '0x1': false,
-    '0x2a': false,
+    '0x64': true,
+    '0x89': true,
+    '0x4': true,
+    '0x1': true,
+    '0x2a': true,
   },
   [MINION_TYPES.NIFTY]: {
     '0x64': true,
