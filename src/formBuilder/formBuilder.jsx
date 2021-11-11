@@ -69,6 +69,7 @@ const FormBuilder = props => {
   useEffect(() => setFields(fields), [fields]);
 
   useEffect(() => {
+    // TODO: move to a hook - spamFilter hook or something
     if (daoMetaData) {
       if (needsSpamNotice(tx, daoMetaData)) {
         const depositAmount = `${getReadableBalance({

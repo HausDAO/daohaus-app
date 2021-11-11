@@ -12,6 +12,16 @@ const appCheckFns = Object.freeze({
   isMember({ isMember }) {
     return isMember ? true : 'For shareholding members only';
   },
+  // TODO: move to it's own hook?
+  isMemberSpamFilter({ isMember, daoMetaData }) {
+    const hasSpamFilterMemberOnly =
+      daoMetaData?.boosts?.SPAM_FILTER?.active &&
+      daoMetaData?.boosts?.SPAM_FILTER?.metadata?.membersOnly;
+
+    return !hasSpamFilterMemberOnly || isMember
+      ? true
+      : 'For shareholding members only';
+  },
 });
 
 export const handleChecklist = (data, checklist = [], errorDeliveryType) => {

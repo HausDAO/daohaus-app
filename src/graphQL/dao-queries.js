@@ -234,6 +234,14 @@ export const SPAM_FILTER_UNSPONSORED = gql`
   }
 `;
 
+export const SINGLE_PROPOSAL = gql`
+  query proposal($molochAddress: String!, $proposalId: String!) {
+    proposals(where: { molochAddress: $molochAddress, proposalId: $proposalId }) {
+      ${proposalFields}
+    }
+  }
+`;
+
 export const DAO_POLL = gql`
   query moloches($summoner: String!, $createdAt: String!) {
     moloches(where: { summoner: $summoner, createdAt_gt: $createdAt }) {

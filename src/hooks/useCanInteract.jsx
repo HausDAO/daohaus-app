@@ -1,6 +1,12 @@
 import { useTX } from '../contexts/TXContext';
 
-const defaults = ['isConnected', 'isSameChain', 'isMember'];
+// TODO: move spam into it's own thing??
+const defaults = [
+  'isConnected',
+  'isSameChain',
+  'isMember',
+  'isMemberSpamFilter',
+];
 
 const useCanInteract = (params = {}) => {
   const { checklist = defaults, errorDeliveryType = 'firstString' } = params;

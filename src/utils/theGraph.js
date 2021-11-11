@@ -3,6 +3,7 @@ import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import {
   DAO_ACTIVITIES,
   HOME_DAO,
+  SINGLE_PROPOSAL,
   SPAM_FILTER_ACTIVITIES,
   SPAM_FILTER_GK_WL,
   SPAM_FILTER_TRIBUTE,
@@ -119,6 +120,17 @@ export const fetchPoapAddresses = async args => {
     query: GET_POAP,
     variables: {
       eventId: args.eventId,
+    },
+  });
+};
+
+export const fetchSingleProposal = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: SINGLE_PROPOSAL,
+    variables: {
+      molochAddress: args.molochAddress,
+      proposalId: args.proposalId,
     },
   });
 };
