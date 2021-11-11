@@ -27,9 +27,8 @@ import TokenInfoInput from './tokenInfoInput';
 import NftApproval from './nftApproval';
 import GenericModal from '../modals/genericModal';
 import TextBox from '../components/TextBox';
-import { filterUniqueNfts } from '../utils/nftVaults';
+import { filterUniqueNfts, hydrate721s, hydrate1155s } from '../utils/nftData';
 import { fetchErc721s, fetchErc1155s } from '../utils/theGraph';
-import { hydrate721s, hydrate1155s } from '../utils/nftData';
 
 const NftSelect = props => {
   const { address } = useInjectedProvider();

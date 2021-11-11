@@ -6,14 +6,14 @@ import ContentBox from './ContentBox';
 import AddressAvatar from './addressAvatar';
 import NftViewModal from '../modals/nftViewModal';
 import NftCardActionMenu from './nftCardActionMenu';
-import { hydrateNftCard } from '../utils/nftVaults';
+import { hydrateNftCard } from '../utils/nftData';
 
 const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
   const { setNftViewModal } = useOverlay();
 
   const hydratedNft = useMemo(() => {
     if (nft) {
-      return hydrateNftCard(nft, vault?.minionType || minionType);
+      return hydrateNftCard(nft);
     }
   }, [nft]);
 

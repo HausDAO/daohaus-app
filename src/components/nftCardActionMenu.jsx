@@ -16,8 +16,8 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { getMinionActionFormLego } from '../utils/vaults';
-import { MINIONS } from '../data/minions';
+import { getMinionActionFormLego, getNftType } from '../utils/vaults';
+import { getNftCardActions } from '../utils/nftData';
 
 const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
   const { daoOverview } = useDao();
@@ -29,7 +29,7 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
 
   const nftActions = useMemo(() => {
     if (minionType) {
-      return MINIONS[minionType].nftActions;
+      return getNftCardActions(minionType, nft, daochain);
     }
   }, [minionType]);
 
@@ -56,9 +56,9 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
         safeAddress: currentMinion.safeAddress,
       },
     );
-    const nftType = nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
-    const formLego = getMinionActionFormLego(nftType, minionType);
-
+    const nftType = getNftType(nft, action.nftTypeOverride);
+    const formLego =
+      action.formLego || getMinionActionFormLego(nftType, minionType);
     formModal({
       ...formLego,
       localValues,

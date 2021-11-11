@@ -7,8 +7,12 @@ import deepEqual from 'deep-eql';
 import MainViewLayout from '../components/mainViewLayout';
 import NftCard from '../components/nftCard';
 import NftFilter from '../components/nftFilter';
-import { concatNftSearchData, filterUniqueNfts } from '../utils/nftVaults';
-import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
+import {
+  concatNftSearchData,
+  filterUniqueNfts,
+  nftFilterOptions,
+  nftSortOptions,
+} from '../utils/nftData';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
