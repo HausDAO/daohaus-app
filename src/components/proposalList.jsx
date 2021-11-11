@@ -7,7 +7,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import CsvDownloadButton from './csvDownloadButton';
-import GenericSelect from './genericSelect';
+import ListSelect from './listSelect';
 import NoListItem from './NoListItem';
 import ProposalSearch from './proposalSearch';
 import Paginator from './paginator';
@@ -127,15 +127,14 @@ const ProposalsList = ({ proposals, customTerms }) => {
   return (
     <>
       <Flex wrap='wrap' position='relative' justifyContent='space-between'>
-        <GenericSelect
+        <ListSelect
           currentOption={filter?.name}
           options={filterOptions}
           handleSelect={handleFilter}
           label='Filter By'
           count={listProposals?.length}
         />
-
-        <GenericSelect
+        <ListSelect
           label='Sort By'
           currentOption={sort?.name}
           options={sortOptions}

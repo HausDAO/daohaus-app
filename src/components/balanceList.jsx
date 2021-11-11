@@ -5,6 +5,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import BalanceCard from './balanceCard';
 import MinionVaultRefreshButton from './minionVaultRefreshButton';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const BalanceList = ({
   balances,
@@ -15,6 +16,8 @@ const BalanceList = ({
   isNativeToken,
   isTreasury,
 }) => {
+  const { isMember } = useDaoMember();
+
   const balanceListTitle = useMemo(() => {
     if (vault) {
       if (isNativeToken) {
@@ -34,7 +37,7 @@ const BalanceList = ({
         <TextBox size='xs' mb={6}>
           {balanceListTitle}
         </TextBox>
-        {!isNativeToken && !isTreasury && balances?.length > 0 && (
+        {!isNativeToken && !isTreasury && isMember && (
           <MinionVaultRefreshButton />
         )}
       </Flex>
