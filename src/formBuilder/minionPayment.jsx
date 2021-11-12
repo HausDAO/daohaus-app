@@ -68,8 +68,13 @@ const MinionToken = props => {
 
   useEffect(() => {
     if (daoVaults && selectedMinion) {
-      const minionErc20s = getVaultERC20s(daoVaults, selectedMinion);
-      if (minionErc20s?.length && !localValues?.tokenAddress) {
+      const minionErc20s = getVaultERC20s(
+        daoVaults,
+        selectedMinion,
+        localValues?.tokenAddress,
+      );
+
+      if (minionErc20s?.length) {
         setMinionTokens(minionErc20s);
       } else {
         setMinionTokens(false);
