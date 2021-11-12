@@ -15,8 +15,6 @@ const appCheckFns = Object.freeze({
 });
 
 export const handleChecklist = (data, checklist = [], errorDeliveryType) => {
-  console.log('CheckList');
-  console.log(data);
   const errorMsgs = checklist.reduce((array, check) => {
     const checkResult = appCheckFns[check](data);
     if (typeof checkResult === 'string') {
