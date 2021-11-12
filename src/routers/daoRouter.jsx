@@ -42,6 +42,7 @@ import ThemeBuilder from '../pages/ThemeBuilder';
 import Treasury from '../pages/Treasury';
 import Vaults from '../pages/Vaults';
 import ProposalsSpam from '../pages/ProposalsSpam';
+import SpamFilterSettings from '../pages/SpamFilterSettings';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -182,6 +183,12 @@ const DaoRouter = () => {
           <ProposalTypes
             daoMetaData={daoMetaData}
             refetchMetaData={refetchMetaData}
+          />
+        </Route>
+        <Route exact path={`${path}/settings/spam`}>
+          <SpamFilterSettings
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
           />
         </Route>
         <Route

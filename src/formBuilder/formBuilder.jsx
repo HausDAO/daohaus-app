@@ -64,9 +64,7 @@ const FormBuilder = props => {
   useEffect(() => setFields(fields), [fields]);
 
   useEffect(() => {
-    if (daoMetaData) {
-      setIndicatorStatesOverride(spamFilterNotice(tx));
-    }
+    setIndicatorStatesOverride(spamFilterNotice(tx));
   }, [daoMetaData, tx]);
 
   const addOption = e => {

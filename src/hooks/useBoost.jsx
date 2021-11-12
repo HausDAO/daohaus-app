@@ -13,6 +13,14 @@ const useBoost = () => {
     isActive(boostKey) {
       return daoMetaData?.boosts[boostKey]?.active;
     },
+    isLaunched(boostKey) {
+      // console.log(
+      //   'daoMetaData?.boosts[boostKey]',
+      //   daoMetaData?.boosts[boostKey],
+      //   daoMetaData?.boosts[boostKey] !== undefined,
+      // );
+      return daoMetaData?.boosts[boostKey] !== undefined;
+    },
     // custom boost related functions
     spamFilterNotice(tx) {
       const proposalTypeNeedsTribute =
@@ -27,7 +35,7 @@ const useBoost = () => {
         return {
           idle: {
             icon: BiErrorCircle,
-            title: `Spam filtering is ON for this DAO, a non-refundable tribute of ${depositAmount} ${daoOverview.depositToken.symbol} is needed to ensure it isn't hidden from the main proposal view.`,
+            title: `Spam filtering is ON for this DAO, a non-refundable tribute of at least ${depositAmount} ${daoOverview.depositToken.symbol} is needed to ensure it isn't hidden from the main proposal view. Use the Trubute Offered field on this form.`,
           },
         };
       }
