@@ -1,6 +1,5 @@
 import { useTX } from '../contexts/TXContext';
 
-// TODO: move spam into it's own thing??
 const defaults = [
   'isConnected',
   'isSameChain',

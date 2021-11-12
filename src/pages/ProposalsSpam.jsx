@@ -19,10 +19,12 @@ import { timeToNow } from '../utils/general';
 import { fetchAllActivity } from '../utils/theGraph';
 import { SPAM_FILTER_UNSPONSORED } from '../graphQL/dao-queries';
 import { proposalResolver } from '../utils/resolvers';
+import useBoost from '../hooks/useBoost';
 
 const ProposalsSpam = ({ daoMetaData }) => {
   const { daoid, daochain } = useParams();
   const { refreshDao } = useTX();
+  const { isActive } = useBoost();
   const [daoProposals, setDaoProposals] = useState(null);
   const [proposals, setProposals] = useState({});
 
@@ -55,7 +57,7 @@ const ProposalsSpam = ({ daoMetaData }) => {
       );
     };
 
-    if (daoMetaData?.boosts?.SPAM_FILTER?.active) {
+    if (isActive('SPAM_FILTER')) {
       fetchProposals();
     }
   }, [daoMetaData]);

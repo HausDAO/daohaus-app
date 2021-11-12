@@ -3,7 +3,6 @@ import { filterObject, isObjectEmpty, pipe } from './general';
 import { logFormError } from './errorLog';
 import { collectTypeValidations, validate } from './validation';
 import { handleSearch } from './txHelpers';
-import { CONTRACTS, TX } from '../data/contractTX';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
@@ -315,12 +314,4 @@ const checkNestedError = (errors, name) =>
 export const handleCheckError = (errors, name) => {
   if (!name || !errors) return;
   return isNestedValue(name) ? checkNestedError(errors, name) : errors[name];
-};
-
-export const needsSpamNotice = (tx, daoMetadata) => {
-  const proposalTypeNeedsTribute =
-    tx.name !== TX.WHITELIST_TOKEN_PROPOSAL.name &&
-    tx.name !== TX.GUILDKICK_PROPOSAL.name &&
-    tx.contract.abiName === CONTRACTS.CURRENT_MOLOCH.abiName;
-  return proposalTypeNeedsTribute && daoMetadata.boosts?.SPAM_FILTER?.active;
 };

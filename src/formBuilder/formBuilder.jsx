@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
-import { BiErrorCircle } from 'react-icons/bi';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -11,12 +10,10 @@ import {
   checkConditionalTx,
   createRegisterOptions,
   inputDataFromABI,
-  needsSpamNotice,
 } from '../utils/formBuilder';
 import { useAppModal } from '../hooks/useModals';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { useDao } from '../contexts/DaoContext';
-import { getReadableBalance } from '../utils/tokenValue';
+import useBoost from '../hooks/useBoost';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -43,9 +40,7 @@ const FormBuilder = props => {
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
   const { daoMetaData } = useMetaData();
-  const { daoOverview } = useDao();
-
-  console.log('daoOverview', daoOverview);
+  const { spamFilterNotice } = useBoost();
 
   const { closeModal } = useAppModal();
   const [formState, setFormState] = useState('idle');
@@ -69,21 +64,8 @@ const FormBuilder = props => {
   useEffect(() => setFields(fields), [fields]);
 
   useEffect(() => {
-    // TODO: move to a hook - spamFilter hook or something
     if (daoMetaData) {
-      if (needsSpamNotice(tx, daoMetaData)) {
-        const depositAmount = `${getReadableBalance({
-          balance: daoMetaData.boosts.SPAM_FILTER.metadata.paymentRequested,
-          decimals: daoOverview.depositToken.decimals,
-        })}`;
-        const spamIndicatorState = {
-          idle: {
-            icon: BiErrorCircle,
-            title: `Spam filtering is ON for this DAO, a non-refundable tribute of ${depositAmount} ${daoOverview.depositToken.symbol} is needed to ensure it isn't hidden from the main proposal view.`,
-          },
-        };
-        setIndicatorStatesOverride(spamIndicatorState);
-      }
+      setIndicatorStatesOverride(spamFilterNotice(tx));
     }
   }, [daoMetaData, tx]);
 
