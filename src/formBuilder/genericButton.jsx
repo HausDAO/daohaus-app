@@ -10,14 +10,13 @@ const GenericButton = props => {
     setValue,
     containerProps,
     mb,
-    setFormState,
     btnLoadingText,
   } = props;
   const [loading, setLoading] = useState(false);
 
   return (
     <FieldWrapper {...props} containerProps={containerProps} mb={mb}>
-      <label>{btnLabel}</label>
+      <h4>{btnLabel}</h4>
       <Button
         type='button'
         loadingText={btnLoadingText}

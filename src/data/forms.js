@@ -745,7 +745,6 @@ export const STEPPER_FORMS = {
   CERAMIC_AUTH: {
     id: 'CERAMIC_AUTH',
     title: 'IDX Connect',
-    // Button field must be added
     fields: [FORM_ACTION.CERAMIC_CONNECT],
   },
 };

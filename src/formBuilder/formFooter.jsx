@@ -22,7 +22,6 @@ const buttonTextByFormState = formState => {
   if (formState === 'error') return 'Try Again';
 };
 const getPrimaryButtonFn = props => {
-  console.log(props);
   const { customPrimaryBtn, closeModal } = props;
   if (customPrimaryBtn?.fn) {
     return customPrimaryBtn.fn;
@@ -46,7 +45,6 @@ const FormFooter = props => {
     addStep,
     closeModal,
     checklist,
-    canSubmit,
     disableCallback,
   } = props;
   const isLoading = loading === 'loading' || loading === 'loadingStepper';
@@ -57,17 +55,6 @@ const FormFooter = props => {
     checklist,
   });
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
-  console.log('Form button');
-  console.log(
-    loading || !canInteract || typeof disableCallback === 'function'
-      ? !disableCallback()
-      : false,
-  );
-  console.log(loading);
-  console.log(!canInteract);
-  console.log(
-    typeof disableCallback === 'function' ? !disableCallback() : false,
-  );
   return (
     <Flex flexDir='column'>
       <Flex alignItems={['flex-row', 'flex-end']} flexDir={['column', 'row']}>

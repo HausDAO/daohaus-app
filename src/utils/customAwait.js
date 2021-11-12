@@ -1,6 +1,3 @@
-import { authenticateDid } from './3box';
-
-// Maintains state through update by reference
 export const handleCustomAwait = async (
   awaitType,
   then,

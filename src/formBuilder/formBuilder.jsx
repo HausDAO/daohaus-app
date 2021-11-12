@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
-import TextBox from '../components/TextBox';
-import Blur from './blur';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -38,13 +36,11 @@ const FormBuilder = props => {
     txID,
     logValues,
     defaultValues,
-    blurText,
     disableCallback,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
 
-  const [removeBlur, setRemoveBlur] = useState(null);
   const { closeModal } = useAppModal();
   const [formState, setFormState] = useState('idle');
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
@@ -116,8 +112,6 @@ const FormBuilder = props => {
       return;
     }
 
-    console.log('Values');
-    console.log(values);
     const handleSubmitCallback = async () => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
@@ -176,15 +170,6 @@ const FormBuilder = props => {
         return handleSubmitTX(() => handleThen(next));
       }
       if (next?.type === 'awaitCustom') {
-        console.log('calling');
-        console.log(next);
-        console.log('handleThen');
-        console.log(handleThen);
-        //
-        // Take in a handle then callback
-        // Should be wrapped in a handleCustomAwait()
-        // which willl take a string as well to specify
-        // which hooks with be run
         return handleCustomAwait(
           next?.awaitDef,
           () => goToNext(next.next),
@@ -194,30 +179,13 @@ const FormBuilder = props => {
         );
       }
     }
-    let shouldRemove = true;
-    if (props.removeBlurCallback) {
-      try {
-        setFormState('loading');
-        shouldRemove = await props.removeBlurCallback();
-        setRemoveBlur(shouldRemove);
-        setFormState('success');
-      } catch (error) {
-        console.error(error);
-        setFormState('error');
-      }
-    }
     //  HANDLE CALLBACK ON SUBMIT
-    if (
-      props.onSubmit &&
-      !props.tx &&
-      typeof props.onSubmit === 'function' &&
-      shouldRemove
-    ) {
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
       return handleSubmitCallback();
     }
 
     //  HANDLE CONTRACT TX ON SUBMIT
-    if (props.tx && shouldRemove) {
+    if (props.tx) {
       return handleSubmitTX();
     }
   };
@@ -262,19 +230,10 @@ const FormBuilder = props => {
     });
   };
 
-  console.log('disable Callback');
-  console.log(disableCallback);
-  console.log(typeof disableCallback === 'function');
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl display='flex'>
-          {!removeBlur && props.removeBlurCallback ? (
-            <Blur text={blurText} />
-          ) : (
-            <></>
-          )}
-
           <Flex
             width='100%'
             flexDirection={['column', null, 'row']}

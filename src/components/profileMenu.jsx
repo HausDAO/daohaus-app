@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { BsThreeDotsVertical, BsCheckCircle } from 'react-icons/bs';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { BiErrorCircle } from 'react-icons/bi';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import {
   Menu,
@@ -18,17 +17,12 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
-import { BOOST_FORMS, CORE_FORMS, FORM, STEPPER_FORMS } from '../data/forms';
+import { CORE_FORMS, FORM, STEPPER_FORMS } from '../data/forms';
 import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
-import {
-  authenticateDid,
-  getBasicProfile,
-  setBasicProfile,
-  cacheProfile,
-} from '../utils/3box';
+import { getBasicProfile, setBasicProfile, cacheProfile } from '../utils/3box';
 
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
@@ -56,26 +50,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
   const handleEditProfile = useCallback(() => {
-    const client = null;
-    const did = null;
-    const indicatorStates = {
-      loading: {
-        spinner: true,
-        title: 'Connecting...',
-        explorerLink: true,
-      },
-      success: {
-        icon: BsCheckCircle,
-        title: 'Connected',
-        explorerLink: true,
-      },
-      error: {
-        icon: BiErrorCircle,
-        title: 'Failed to connect',
-        errorMessage: true,
-      },
-    };
-
     stepperModal({
       DISPLAY: {
         type: 'form',
@@ -87,9 +61,9 @@ const ProfileMenu = ({ member, refreshProfile }) => {
             func: async (setValue, values) => {
               if (values.ceramicDid) {
                 const profile = await getBasicProfile(values.ceramicDid.id);
-                setValue('name', profile?.name || ''),
-                  setValue('emoji', profile?.emoji || ''),
-                  setValue('description', profile?.description || '');
+                setValue('name', profile?.name || '');
+                setValue('emoji', profile?.emoji || '');
+                setValue('description', profile?.description || '');
                 setValue('homeLocation', profile?.homeLocation || '');
                 setValue('residenceCountry', profile?.residenceCountry || '');
                 setValue('url', profile?.url || '');
@@ -99,7 +73,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
           },
           next: 'STEP2',
         },
-        ctaText: 'Connect',
         start: true,
         form: {
           ...STEPPER_FORMS.CERAMIC_AUTH,
