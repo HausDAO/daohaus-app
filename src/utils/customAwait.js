@@ -8,7 +8,7 @@ export const handleCustomAwait = async (
   setValue,
   values,
 ) => {
-  setFormState('loading');
+  setFormState('loadingStepper');
   try {
     await awaitType.func(...awaitType.args, setValue, values);
     if (typeof then === 'function') {

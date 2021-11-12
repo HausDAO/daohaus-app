@@ -22,7 +22,7 @@ const buttonTextByFormState = formState => {
   if (formState === 'error') return 'Try Again';
 };
 const getPrimaryButtonFn = props => {
-	console.log(props)
+  console.log(props);
   const { customPrimaryBtn, closeModal } = props;
   if (customPrimaryBtn?.fn) {
     return customPrimaryBtn.fn;
@@ -46,9 +46,10 @@ const FormFooter = props => {
     addStep,
     closeModal,
     checklist,
-		canSubmit,
-		disableCallback
+    canSubmit,
+    disableCallback,
   } = props;
+  const isLoading = loading === 'loading' || loading === 'loadingStepper';
 
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
   const { canInteract, interactErrors } = useCanInteract({
@@ -56,7 +57,17 @@ const FormFooter = props => {
     checklist,
   });
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
-
+  console.log('Form button');
+  console.log(
+    loading || !canInteract || typeof disableCallback === 'function'
+      ? !disableCallback()
+      : false,
+  );
+  console.log(loading);
+  console.log(!canInteract);
+  console.log(
+    typeof disableCallback === 'function' ? !disableCallback() : false,
+  );
   return (
     <Flex flexDir='column'>
       <Flex alignItems={['flex-row', 'flex-end']} flexDir={['column', 'row']}>
@@ -76,7 +87,7 @@ const FormFooter = props => {
           <Button
             type='button'
             variant='outline'
-            disabled={loading}
+            disabled={isLoading}
             onClick={secondaryBtn.fn}
             mr={[0, 2]}
           >
@@ -89,8 +100,8 @@ const FormFooter = props => {
             }
             onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
-            isLoading={loading}
-						disabled={loading || !canInteract || typeof(disableCallback) === 'function' ? !disableCallback() : false} 
+            isLoading={isLoading}
+            disabled={isLoading || !canInteract || disableCallback()}
             mb={[2, 0]}
           >
             {ctaText ||

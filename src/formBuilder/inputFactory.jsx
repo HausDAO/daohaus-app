@@ -164,7 +164,6 @@ export const InputFactory = props => {
     return <BoolSelect {...props} />;
   }
   if (type === 'genericButton') {
-
     return <GenericButton {...props} />;
   }
   return null;

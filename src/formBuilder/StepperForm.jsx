@@ -115,8 +115,8 @@ const StepperForm = props => {
       return 'Next >';
     };
 
-		console.log("Next")
-		console.log(nextObj.then)
+    console.log('Next');
+    console.log(nextObj.then);
     setCurrentStep(prevState => ({
       ...prevState,
       next: nextObj.then,
@@ -129,10 +129,10 @@ const StepperForm = props => {
     fn: () => closeModal(),
   };
 
-		console.log(currentStep)
+  console.log(currentStep);
   if (currentStep?.type === 'form') {
-		console.log("Step 2 form")
-		console.log(currentStep)
+    console.log('Step 2 form');
+    console.log(currentStep);
     return (
       <FormBuilder
         {...currentStep.form}
@@ -140,7 +140,11 @@ const StepperForm = props => {
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}
-        ctaText={currentStep?.next?.ctaText || 'Next >'}
+        ctaText={
+          currentStep?.finish
+            ? 'Submit'
+            : currentStep?.next?.ctaText || 'Next >'
+        }
         handleThen={handleThen}
       />
     );
