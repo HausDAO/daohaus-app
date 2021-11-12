@@ -13,6 +13,10 @@ import {
   createRegisterOptions,
   inputDataFromABI,
 } from '../utils/formBuilder';
+import {
+  handleCustomAwait,
+} from '../utils/customAwait';
+
 import { useAppModal } from '../hooks/useModals';
 
 const dev = process.env.REACT_APP_DEV;
@@ -37,6 +41,7 @@ const FormBuilder = props => {
     logValues,
     defaultValues,
     blurText,
+		disableCallback,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
@@ -51,7 +56,7 @@ const FormBuilder = props => {
   const [options, setOptions] = useState(additionalOptions);
   const localForm =
     parentForm || useForm({ shouldUnregister: false, defaultValues });
-  const { handleSubmit, watch, errors } = localForm;
+  const { handleSubmit, watch, errors, setValue } = localForm;
   const values = watch();
 
   useEffect(() => {
@@ -113,6 +118,8 @@ const FormBuilder = props => {
       return;
     }
 
+		console.log("Values")
+		console.log(values)
     const handleSubmitCallback = async () => {
       //  checks if submit is not a contract interaction and is a callback
       if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
@@ -170,6 +177,19 @@ const FormBuilder = props => {
       if (next?.type === 'awaitTx') {
         return handleSubmitTX(() => handleThen(next));
       }
+      if (next?.type === 'awaitCustom') {
+				console.log("calling")
+				console.log(next)
+				console.log("handleThen")
+				console.log(handleThen)
+				//
+				// Take in a handle then callback
+				// Should be wrapped in a handleCustomAwait()
+				// which willl take a string as well to specify
+				// which hooks with be run
+        return handleCustomAwait(next?.awaitDef, () => goToNext(next.next), setFormState, setValue, values);
+      }
+
     }
     let shouldRemove = true;
     if (props.removeBlurCallback) {
@@ -232,11 +252,18 @@ const FormBuilder = props => {
           localValues={localValues}
           buildABIOptions={buildABIOptions}
           formState={formState}
+					setFormState={setFormState}
+					setValue={setValue}
         />
       );
     });
   };
 
+	console.log("Figuring out next")
+	console.log(goToNext)
+	console.log(next)
+	console.log("values")
+	console.log(values)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
@@ -269,6 +296,7 @@ const FormBuilder = props => {
             customSecondaryBtn={secondaryBtn}
             loading={formState === 'loading'}
             checklist={checklist}
+						disableCallback={() => typeof(disableCallback) === "function" ? disableCallback(values) : false}
           />
         )}
       </Flex>

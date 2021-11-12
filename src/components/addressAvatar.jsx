@@ -30,7 +30,7 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
           setProfile(profile);
         }
       } catch (error) {
-        console.warning("Member doesn't have a profile");
+        console.warn("Member doesn't have a profile");
       }
     };
     if (addr) {

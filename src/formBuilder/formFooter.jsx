@@ -22,6 +22,7 @@ const buttonTextByFormState = formState => {
   if (formState === 'error') return 'Try Again';
 };
 const getPrimaryButtonFn = props => {
+	console.log(props)
   const { customPrimaryBtn, closeModal } = props;
   if (customPrimaryBtn?.fn) {
     return customPrimaryBtn.fn;
@@ -45,6 +46,8 @@ const FormFooter = props => {
     addStep,
     closeModal,
     checklist,
+		canSubmit,
+		disableCallback
   } = props;
 
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
@@ -87,7 +90,7 @@ const FormFooter = props => {
             onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
             isLoading={loading}
-            disabled={loading || !canInteract}
+						disabled={loading || !canInteract || typeof(disableCallback) === 'function' ? !disableCallback() : false} 
             mb={[2, 0]}
           >
             {ctaText ||

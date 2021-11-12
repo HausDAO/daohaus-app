@@ -1,4 +1,4 @@
-import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
+import { FIELD, INFO_TEXT, FORM_DISPLAY, FORM_ACTION } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
@@ -738,6 +738,15 @@ const MULTI_FORMS = {
       PROPOSAL_FORMS.CREATE_TX,
       PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
     ],
+  },
+};
+
+export const STEPPER_FORMS = {
+  CERAMIC_AUTH: {
+    id: 'CERAMIC_AUTH',
+    title: 'IDX Connect',
+    // Button field must be added
+    fields: [FORM_ACTION.CERAMIC_CONNECT],
   },
 };
 

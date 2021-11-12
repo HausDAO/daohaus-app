@@ -1,5 +1,6 @@
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { authenticateDid } from '../utils/3box';
 
 export const INFO_TEXT = {
   SHARES_REQUEST:
@@ -420,5 +421,27 @@ export const FORM_DISPLAY = {
     label: 'Loot Requested',
     fallback: '0',
     expectType: 'number',
+  },
+};
+
+export const FORM_ACTION = {
+  CERAMIC_CONNECT: {
+    type: 'genericButton',
+    btnText: 'Connect',
+    btnLabel: 'Connect to Ceramic',
+    btnLoadingText: 'Connecting',
+    btnCallback: async (setValue, setLoading) => {
+      setLoading(true);
+      try {
+        const [client, did] = await authenticateDid(
+          window.ethereum.selectedAddress,
+        );
+        setValue('ceramicClient', client);
+        setValue('ceramicDid', did);
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+    },
   },
 };

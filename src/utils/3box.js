@@ -31,7 +31,7 @@ export const authenticateDid = async address => {
       await link.setDid(did, authProvider, {});
     }
   } catch (err) {
-    console.warning(err);
+    console.warn(err);
   }
 
   return [client, did];
@@ -53,13 +53,13 @@ const get3boxProfile = async address => {
       `https://ipfs.3box.io/profile?address=${address}`,
     );
     if (response.status === 'error') {
-      console.warning('Profile does not exist');
+      console.warn('Profile does not exist');
     }
 
     const boxProfile = response.json();
     return boxProfile;
   } catch (error) {
-    console.warning(error);
+    console.warn(error);
   }
 };
 

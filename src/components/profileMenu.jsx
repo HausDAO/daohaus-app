@@ -18,7 +18,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
-import { CORE_FORMS, FORM } from '../data/forms';
+import { BOOST_FORMS, CORE_FORMS, FORM, STEPPER_FORMS } from '../data/forms';
 import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
@@ -33,7 +33,7 @@ import {
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
-  const { formModal, closeModal } = useAppModal();
+  const { stepperModal, formModal, closeModal } = useAppModal();
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
   const { successToast, errorToast } = useOverlay();
@@ -76,46 +76,115 @@ const ProfileMenu = ({ member, refreshProfile }) => {
       },
     };
 
-    formModal({
-      ...FORM.PROFILE,
-      indicatorStates,
-      required: [],
-      fields: [...FORM.PROFILE.fields],
-      checklist: ['isConnected', 'isMember'],
-      onSubmit: async () => {
-        if (did?.authenticated) {
-          closeModal();
-          const profile = await getBasicProfile(did.id);
-          formModal({
-            ...FORM.PROFILE,
-            ctaText: 'Submit',
-            formSuccessMessage: 'Connected',
-            checklist: ['isConnected', 'isMember'],
-            defaultValues: {
-              name: profile?.name || '',
-              emoji: profile?.emoji || '',
-              description: profile?.description || '',
-              homeLocation: profile?.homeLocation || '',
-              residenceCountry: profile?.residenceCountry || '',
-              url: profile?.url || '',
-            },
-            onSubmit: async ({ values }) => {
-              await setBasicProfile(client, did, values);
-              cacheProfile(values, member.memberAddress);
-              refreshProfile(values);
-              refreshMemberProfile();
-              successToast({ title: 'Updated Profile!' });
-              closeModal();
-            },
-          });
-        }
-      },
-      removeBlurCallback: async () => {
-        [client, did] = await authenticateDid(member.memberAddress);
-        return true;
-      },
-    });
-    history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
+		stepperModal({
+			DISPLAY: {
+        type: 'form',
+        title: "Edit Ceramic Profile",
+        checklist: ['isConnected', 'isMember'],
+		    next: {
+					type: "awaitCustom",
+					awaitDef: {
+						func: async (setValue, values) => {
+							console.log("Has DID")
+							console.log(values)
+							if (values.ceramicDid) {
+                const profile = await getBasicProfile(values.ceramicDid.id)
+							console.log(profile)
+	              setValue("name", profile?.name || ''), 
+                setValue("emoji", profile?.emoji || ''),
+                setValue("description", profile?.description || '')
+                setValue("homeLocation", profile?.homeLocation || '')
+                setValue("residenceCountry", profile?.residenceCountry || '')
+                setValue("url", profile?.url || '')
+							}
+						},
+						args: []
+					},
+					next: "STEP2"
+				},
+		    ctaText: "Connect",
+        start: true,
+				form: {
+					...STEPPER_FORMS.CERAMIC_AUTH,
+          checklist: ['isConnected', 'isMember'],
+					disableCallback: (values) => {
+						console.log(values)
+						return values?.ceramicDid
+					},
+					ctaText: "Next",
+				}
+  },
+			STEP2: {
+				type: "form",
+        title: "Edit Ceramic Profile",
+				form: {
+          ...FORM.PROFILE,
+          ctaText: 'Submit',
+          formSuccessMessage: 'Connected',
+          checklist: ['isConnected', 'isMember'],
+          //defaultValues: {
+          //  name: profile?.name || '',
+          //  emoji: profile?.emoji || '',
+          //  description: profile?.description || '',
+          //  homeLocation: profile?.homeLocation || '',
+          //  residenceCountry: profile?.residenceCountry || '',
+          //  url: profile?.url || '',
+          //},
+          onSubmit: async ({ values }) => {
+            await setBasicProfile(client, did, values);
+            cacheProfile(values, member.memberAddress);
+            refreshProfile(values);
+            refreshMemberProfile();
+            successToast({ title: 'Updated Profile!' });
+            closeModal();
+          }
+        },
+				isUserStep: true,
+				finish: true,
+				stepLabel: "Update profile"
+      }
+		})
+
+    // formModal({
+    //   ...FORM.PROFILE,
+    //   indicatorStates,
+    //   required: [],
+    //   fields: [...FORM.PROFILE.fields],
+    //   checklist: ['isConnected', 'isMember'],
+    //   onSubmit: async () => {
+    //     if (did?.authenticated) {
+    //       closeModal();
+    //       const profile = await getBasicProfile(did.id);
+    //       formModal({
+    //         ...form.profile,
+    //         ctatext: 'submit',
+    //         formsuccessmessage: 'connected',
+    //         checklist: ['isconnected', 'ismember'],
+    //         defaultvalues: {
+    //           name: profile?.name || '',
+    //           emoji: profile?.emoji || '',
+    //           description: profile?.description || '',
+    //           homelocation: profile?.homelocation || '',
+    //           residencecountry: profile?.residencecountry || '',
+    //           url: profile?.url || '',
+    //         },
+    //         onsubmit: async ({ values }) => {
+    //           await setbasicprofile(client, did, values);
+    //           cacheprofile(values, member.memberaddress);
+    //           refreshprofile(values);
+    //           refreshmemberprofile();
+    //           successtoast({ title: 'updated profile!' });
+    //           closemodal();
+    //         },
+    //       });
+    //     }
+    //   },
+    //   removeBlurCallback: async () => {
+    //     [client, did] = await authenticateDid(member.memberAddress);
+    //     return true;
+    //   },
+    // });
+    // history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
   }, [member.memberAddress]);
 
   useEffect(() => {
