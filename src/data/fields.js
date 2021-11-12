@@ -425,12 +425,17 @@ export const FORM_DISPLAY = {
 };
 
 export const FORM_ACTION = {
+  // This will require the form to
+  // have a matching indicator state
   CERAMIC_CONNECT: {
     type: 'genericButton',
     btnText: 'Connect',
     btnLabel: 'Connect to Ceramic',
     btnLoadingText: 'Connecting',
-    btnCallback: async (setValue, setLoading) => {
+    btnHideCallback: values => {
+      return values?.ceramicDid;
+    },
+    btnCallback: async (setValue, setLoading, setFormState) => {
       setLoading(true);
       try {
         const [client, did] = await authenticateDid(
@@ -441,6 +446,7 @@ export const FORM_ACTION = {
       } catch (err) {
         console.error(err);
       }
+      setFormState('connected');
       setLoading(false);
     },
   },

@@ -77,6 +77,7 @@ export const UserContextProvider = ({ children }) => {
 
   const refreshMemberProfile = useCallback(async () => {
     try {
+      if (!address) return;
       const profile = await handleGetProfile(address);
       if (!profile) return;
       setAddressProfile(profile);

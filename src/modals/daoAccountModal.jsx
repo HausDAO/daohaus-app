@@ -64,7 +64,7 @@ const DaoAccountModal = () => {
           <Box>
             <Flex direction='row' justify='space-between' align='flex-start'>
               <Flex direction='column'>
-                {address && daochain && daoid && (
+                {address && daochain && daoid && daoMember && (
                   <Link
                     as={RouterLink}
                     to={`/dao/${daochain}/${daoid}/profile/${address}`}

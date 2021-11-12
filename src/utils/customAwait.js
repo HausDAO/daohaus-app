@@ -9,8 +9,8 @@ export const handleCustomAwait = async (
   try {
     await awaitType.func(...awaitType.args, setValue, values);
     if (typeof then === 'function') {
-      then();
       setFormState('');
+      then();
     } else {
       setFormState('');
     }

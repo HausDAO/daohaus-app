@@ -11,20 +11,34 @@ const GenericButton = props => {
     containerProps,
     mb,
     btnLoadingText,
+    btnHideCallback,
+    setFormState,
+    values,
   } = props;
   const [loading, setLoading] = useState(false);
+  console.log(values);
+  const hideButton =
+    typeof btnHideCallback === 'function' ? btnHideCallback(values) : false;
 
   return (
     <FieldWrapper {...props} containerProps={containerProps} mb={mb}>
-      <h4>{btnLabel}</h4>
-      <Button
-        type='button'
-        loadingText={btnLoadingText}
-        isLoading={loading}
-        onClick={async () => btnCallback(setValue, setLoading)}
-      >
-        {btnText}
-      </Button>
+      {hideButton ? (
+        <></>
+      ) : (
+        <>
+          <h4>{btnLabel}</h4>
+          <Button
+            type='button'
+            loadingText={btnLoadingText}
+            isLoading={loading}
+            onClick={async () =>
+              btnCallback(setValue, setLoading, setFormState)
+            }
+          >
+            {btnText}
+          </Button>
+        </>
+      )}
     </FieldWrapper>
   );
 };

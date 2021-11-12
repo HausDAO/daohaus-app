@@ -1,3 +1,4 @@
+import { BiErrorCircle } from 'react-icons/bi';
 import { FIELD, INFO_TEXT, FORM_DISPLAY, FORM_ACTION } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
@@ -746,6 +747,18 @@ export const STEPPER_FORMS = {
     id: 'CERAMIC_AUTH',
     title: 'IDX Connect',
     fields: [FORM_ACTION.CERAMIC_CONNECT],
+    indicatorStates: {
+      connected: {
+        icon: BiErrorCircle,
+        title: 'Connected to Ceramic Network',
+        explorerLink: true,
+      },
+      loadingStepper: {
+        icon: BiErrorCircle,
+        title: 'Connected to Ceramic Network',
+        explorerLink: true,
+      },
+    },
   },
 };
 
