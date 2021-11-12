@@ -16,10 +16,10 @@ import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from '../components/ContentBox';
 import GenericModal from '../modals/genericModal';
 import MainViewLayout from '../components/mainViewLayout';
-import NotificationsLaunch from '../components/notificationsLaunch';
 import TextBox from '../components/TextBox';
 import { boostPost } from '../utils/metadata';
 import { notificationBoostContent } from '../data/boosts';
+import DiscordNotificationsLaunch from '../formBuilder/discordLaunchForm';
 
 const Notifications = ({ daoMetaData, refetchMetaData }) => {
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
@@ -57,8 +57,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
         signature,
       };
 
-      const updateRes = await boostPost('dao/boost', updateNotifications);
-      console.log('updateRes', updateRes);
+      await boostPost('dao/boost', updateNotifications);
       setLoading(false);
       setHasChanges(false);
       setGenericModal({});
@@ -112,6 +111,10 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
 
   const openChannelIdModal = channel => {
     setGenericModal({ [`notificationBoostChannelForm-${channel.name}`]: true });
+  };
+
+  const closeChannelIdModal = () => {
+    setGenericModal(false);
   };
 
   const renderAction = message => {
@@ -173,10 +176,9 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
           modalId={`notificationBoostChannelForm-${channel.name}`}
           closeOnOverlayClick={false}
         >
-          <NotificationsLaunch
-            handleLaunch={handleSave}
-            loading={loading}
-            setLoading={setLoading}
+          <DiscordNotificationsLaunch
+            handleUpdate={handleSave}
+            goToNext={closeChannelIdModal}
             stepOverride='directions2'
           />
         </GenericModal>

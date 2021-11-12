@@ -12,7 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-const GenericSelect = ({
+const ListSelect = ({
   options = {},
   handleSelect,
   currentOption,
@@ -73,4 +73,4 @@ const GenericSelect = ({
   );
 };
 
-export default GenericSelect;
+export default ListSelect;
