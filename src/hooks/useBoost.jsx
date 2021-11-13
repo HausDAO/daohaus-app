@@ -23,6 +23,7 @@ const useBoost = () => {
     },
     // custom boost related functions
     spamFilterNotice(tx) {
+      if (!tx) return null;
       const proposalTypeNeedsTribute =
         tx.name !== TX.WHITELIST_TOKEN_PROPOSAL.name &&
         tx.name !== TX.GUILDKICK_PROPOSAL.name &&

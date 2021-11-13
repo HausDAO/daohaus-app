@@ -247,7 +247,7 @@ const COMMON_STEPS = {
   SIGNER: {
     type: 'signer',
     title: 'Member Signature',
-    stepLabel: 'Add Proposals & Sign',
+    stepLabel: 'Add Boost & Sign',
     finish: true,
     isUserStep: true,
   },
@@ -325,7 +325,7 @@ export const STEPS = {
       type: 'boostMetaForm',
       form: BOOST_FORMS.SPAM_FILTER,
       next: 'STEP2',
-      stepLabel: 'Set Minimum Tribute',
+      stepLabel: 'Select Filter Parameter',
       isUserStep: true,
     },
     STEP2: COMMON_STEPS.SIGNER,

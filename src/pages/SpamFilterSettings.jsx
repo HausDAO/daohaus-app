@@ -1,14 +1,37 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box, Text } from '@chakra-ui/react';
+import { Flex, Box, Text, Button } from '@chakra-ui/react';
 
 import MainViewLayout from '../components/mainViewLayout';
 import useBoost from '../hooks/useBoost';
 import { getReadableBalance } from '../utils/tokenValue';
+import { useAppModal } from '../hooks/useModals';
+import { BOOSTS } from '../data/boosts';
+import { FIELD } from '../data/fields';
+
+const prepareFormLegoForUpdate = () => {
+  // TODO: Review - editing this feel gross. maybe jsut create a new lego
+  const spamEditForm = JSON.parse(JSON.stringify(BOOSTS.SPAM_FILTER));
+  delete spamEditForm.steps.DISPLAY;
+  spamEditForm.steps.STEP1.start = true;
+  spamEditForm.steps.STEP1.form.fields[0] = [
+    ...spamEditForm.steps.STEP1.form.fields,
+    { ...FIELD.BASIC_SWITCH, label: 'Spam filter active?', name: 'active' },
+  ];
+  spamEditForm.steps.STEP2.stepLabel = 'Sign';
+  spamEditForm.metaFields = [...spamEditForm.metaFields, 'active'];
+
+  return spamEditForm;
+};
 
 const SpamFilterSettings = ({ daoMetaData, daoOverview }) => {
   const { daoid, daochain } = useParams();
   const { isActive, isLaunched } = useBoost();
+  const { boostModal } = useAppModal();
+
+  const handleEditClick = () => {
+    boostModal(prepareFormLegoForUpdate());
+  };
 
   return (
     <MainViewLayout header='Spam Filter' isDao>
@@ -16,44 +39,47 @@ const SpamFilterSettings = ({ daoMetaData, daoOverview }) => {
         <Flex direction='column' justify='flex-start' fontSize='lg'>
           <Flex mt={5}>
             Proposal list spam filter is{' '}
-            {isActive('SPAM_FILTER') ? (
-              <Text color='green' fontWeight='700' ml={2}>
-                ON
-              </Text>
-            ) : (
-              'OFF'
-            )}
+            <Text fontWeight='700' ml={2}>
+              {isActive('SPAM_FILTER') ? 'ON' : 'OFF'}
+            </Text>
           </Flex>
 
           <Box mt={5}>
-            {`When on, proposals without a minimum tribute of ${getReadableBalance(
-              {
+            When on, proposals without a minimum tribute will be filtered out of
+            the proposal list and only visible on the spam page. Minimum
+            tribute:
+            <Text fontWeight='700'>
+              {`${getReadableBalance({
                 balance:
                   daoMetaData.boosts.SPAM_FILTER.metadata.paymentRequested,
                 decimals: daoOverview.depositToken.decimals,
-              },
-            )} ${
-              daoOverview.depositToken.symbol
-            } will be filtered out of the proposal list. You can see those on the spam filter page.`}
+              })} ${daoOverview.depositToken.symbol}`}
+            </Text>
           </Box>
 
-          <Box mt={5}>
-            {`The new proposal button is hidden  ${
-              daoMetaData.boosts.SPAM_FILTER.metadata.membersOnly
+          <Flex mt={5}>
+            The new proposal button is{' '}
+            <Text fontWeight='700' mx={2}>
+              {daoMetaData.boosts.SPAM_FILTER.metadata.membersOnly
                 ? 'HIDDEN'
-                : 'NOT HIDDEN'
-            } for members`}
-          </Box>
+                : 'SHOWING'}
+            </Text>{' '}
+            for non DAO members.
+          </Flex>
 
-          <Box mt={5}>edit settings</Box>
-
-          {isActive('SPAM_FILTER') && (
-            <Box mt={5}>
-              <Link to={`/dao/${daochain}/${daoid}/proposals/spam`}>
+          <Flex mt={10}>
+            <Button onClick={handleEditClick}>Edit</Button>
+            {isActive('SPAM_FILTER') && (
+              <Button
+                to={`/dao/${daochain}/${daoid}/proposals/spam`}
+                as={Link}
+                variant='outline'
+                ml={5}
+              >
                 View spam page
-              </Link>
-            </Box>
-          )}
+              </Button>
+            )}
+          </Flex>
         </Flex>
       )}
     </MainViewLayout>
