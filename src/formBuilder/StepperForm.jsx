@@ -107,7 +107,6 @@ const StepperForm = props => {
       );
 
     const getNewCtaText = next => {
-      console.log(next);
       if (next?.then === 'FINISH') {
         return 'Finish';
       }
@@ -135,7 +134,11 @@ const StepperForm = props => {
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}
-        ctaText={currentStep?.next?.ctaText || 'Next >'}
+        ctaText={
+          currentStep?.finish
+            ? 'Submit'
+            : currentStep?.next?.ctaText || 'Next >'
+        }
         handleThen={handleThen}
       />
     );
@@ -150,6 +153,8 @@ const StepperForm = props => {
         next={currentStep.next}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}
+        checklist={currentStep.checklist}
+        handleThen={handleThen}
       />
     );
   }

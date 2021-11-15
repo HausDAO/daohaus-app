@@ -1,4 +1,5 @@
-import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
+import { BiErrorCircle } from 'react-icons/bi';
+import { FIELD, INFO_TEXT, FORM_DISPLAY, FORM_ACTION } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
@@ -139,6 +140,87 @@ export const PROPOSAL_FORMS = {
       FIELD.PAYMENT_REQUEST,
     ],
     customValidations: ['nonDaoApplicant'],
+  },
+  PROFILE: {
+    id: 'PROFILE',
+    title: 'Update Basic Profile',
+    description:
+      'Editing this profile will update your profile everywhere Ceramic is used',
+    required: ['residenceCountry'], // Use name key from proposal type object
+    tx: null,
+    ctaText: 'Connect',
+    blurText: 'Connect to update your profile',
+    fields: [
+      [
+        {
+          ...FIELD.TITLE,
+          label: 'Name',
+          name: 'name',
+          placeholder: 'A name for your porfile',
+          htmlFor: 'name',
+          expectType: 'string',
+          maxLength: {
+            value: 150,
+            message: 'Name must be less than 150 characters',
+          },
+        },
+        {
+          ...FIELD.DESCRIPTION,
+          label: 'Bio',
+          name: 'description',
+          htmlFor: 'description',
+          placeholder: 'A description about yourself',
+          expectType: 'string',
+          maxLength: {
+            value: 420,
+            message: 'Bio must be less than 420 characters',
+          },
+        },
+        {
+          ...FIELD.TITLE,
+          label: 'Spirit Emoji',
+          name: 'emoji',
+          placeholder: 'An emoji to represent who you are',
+          htmlFor: 'emoji',
+          expectType: 'string',
+          maxLength: { value: 2, message: 'Not a valid emoji' },
+        },
+      ],
+      [
+        {
+          ...FIELD.TITLE,
+          label: 'Url',
+          name: 'url',
+          placeholder: 'https://example.com',
+          htmlFor: 'url',
+          expectType: 'url',
+        },
+        {
+          ...FIELD.TITLE,
+          label: 'Location',
+          name: 'homeLocation',
+          placeholder: 'A location where you are or hope to be',
+          htmlFor: 'homeLocation',
+          expectType: 'string',
+          maxLength: {
+            value: 140,
+            message: 'Location must be less than 420 characters',
+          },
+        },
+
+        {
+          ...FIELD.TITLE,
+          label: '2-Letter Country Code',
+          name: 'residenceCountry',
+          placeholder: 'US',
+          htmlFor: 'residenceCountry',
+          expectType: 'countryCode',
+          info: 'An ISO 3166-1 alpha-2 compliant country code',
+        },
+      ],
+    ],
+    additionalOptions: [],
+    customValidations: [],
   },
   FUNDING: {
     id: 'FUNDING',
@@ -657,6 +739,26 @@ const MULTI_FORMS = {
       PROPOSAL_FORMS.CREATE_TX,
       PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
     ],
+  },
+};
+
+export const STEPPER_FORMS = {
+  CERAMIC_AUTH: {
+    id: 'CERAMIC_AUTH',
+    title: 'IDX Connect',
+    fields: [FORM_ACTION.CERAMIC_CONNECT],
+    indicatorStates: {
+      connected: {
+        icon: BiErrorCircle,
+        title: 'Connected to Ceramic Network',
+        explorerLink: true,
+      },
+      loadingStepper: {
+        icon: BiErrorCircle,
+        title: 'Connected to Ceramic Network',
+        explorerLink: true,
+      },
+    },
   },
 };
 

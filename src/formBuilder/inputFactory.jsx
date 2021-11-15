@@ -9,6 +9,7 @@ import DiscourseMeta from './discourseMeta';
 import GatedInput from './gatedInput';
 import GenericFormDisplay from './genericFormDisplay';
 import GenericInput from './genericInput';
+import GenericButton from './genericButton';
 import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
 import LinkInput from './linkInput';
@@ -161,6 +162,9 @@ export const InputFactory = props => {
   }
   if (type === 'boolSelect') {
     return <BoolSelect {...props} />;
+  }
+  if (type === 'genericButton') {
+    return <GenericButton {...props} />;
   }
   return null;
 };

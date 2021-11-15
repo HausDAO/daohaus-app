@@ -1,5 +1,6 @@
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { authenticateDid } from '../utils/3box';
 
 export const INFO_TEXT = {
   SHARES_REQUEST:
@@ -33,7 +34,6 @@ export const INFO_TEXT = {
     'This should be the Token ID for your NFT and then select the correct NFT standard.',
   BUYOUT_MINION: 'This proposal must be executed by a minion.',
 };
-
 export const FIELD = {
   TITLE: {
     type: 'input',
@@ -421,5 +421,33 @@ export const FORM_DISPLAY = {
     label: 'Loot Requested',
     fallback: '0',
     expectType: 'number',
+  },
+};
+
+export const FORM_ACTION = {
+  // This will require the form to
+  // have a matching indicator state
+  CERAMIC_CONNECT: {
+    type: 'genericButton',
+    btnText: 'Connect',
+    btnLabel: 'Connect to Ceramic',
+    btnLoadingText: 'Connecting',
+    btnHideCallback: values => {
+      return values?.ceramicDid;
+    },
+    btnCallback: async (setValue, setLoading, setFormState) => {
+      setLoading(true);
+      try {
+        const [client, did] = await authenticateDid(
+          window.ethereum.selectedAddress,
+        );
+        setValue('ceramicClient', client);
+        setValue('ceramicDid', did);
+      } catch (err) {
+        console.error(err);
+      }
+      setFormState('connected');
+      setLoading(false);
+    },
   },
 };

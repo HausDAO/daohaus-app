@@ -9,6 +9,7 @@ const GenericTextarea = ({
   name,
   btn,
   helperText,
+  defaultValue,
   localForm,
   info,
   h = 10,
@@ -37,6 +38,7 @@ const GenericTextarea = ({
         id={htmlFor}
         name={name}
         h={h}
+        defaultValue={defaultValue}
         ref={register(registerOptions)}
         disabled={disabled || formState === 'loading'}
         control={control}

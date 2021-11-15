@@ -11,17 +11,21 @@ const BoostMetaForm = props => {
     setStepperStorage,
     metaFields,
     secondaryBtn,
+    checklist,
+    handleThen,
   } = props;
   const { getValues } = parentForm;
 
   const handleGoToNext = () => {
     const formValues = getValues();
-    const metaUpdate = metaFields.reduce((update, fieldName) => {
-      update[fieldName] = formValues[fieldName];
-      return update;
-    }, {});
-    //  Does values still not persist through different steps?
-    setStepperStorage(prevState => ({ ...prevState, ...metaUpdate }));
+    if (metaFields) {
+      const metaUpdate = metaFields.reduce((update, fieldName) => {
+        update[fieldName] = formValues[fieldName];
+        return update;
+      }, {});
+      //  Does values still not persist through different steps?
+      setStepperStorage(prevState => ({ ...prevState, ...metaUpdate }));
+    }
     goToNext(next);
   };
 
@@ -33,6 +37,8 @@ const BoostMetaForm = props => {
       next={currentStep.next}
       ctaText={currentStep.ctaText || 'Next'}
       secondaryBtn={secondaryBtn}
+      checklist={checklist}
+      handleThen={handleThen}
     />
   );
 };

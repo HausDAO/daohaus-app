@@ -13,7 +13,7 @@ export const DefaultProvider = ({ children }) => {
   const [testOnLoad] = useState(false);
 
   useEffect(() => {
-    const handleNewProvider = async (provider) => {
+    const handleNewProvider = async provider => {
       if (testOnLoad) {
         await testProvider(provider, dappChain[connectBy], 'Dapp Provider');
       }
@@ -29,7 +29,7 @@ export const DefaultProvider = ({ children }) => {
     }
   }, [dappChain, connectBy, testOnLoad]);
 
-  const changeDappChain = (newChainID) => {
+  const changeDappChain = newChainID => {
     if (supportedChains[newChainID]) {
       setDappChain(supportedChains[newChainID]);
     } else {

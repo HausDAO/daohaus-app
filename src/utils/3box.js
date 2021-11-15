@@ -1,16 +1,85 @@
-export const fetchProfile = async address => {
+import { EthereumAuthProvider, SelfID, WebClient } from '@self.id/web';
+import { Core } from '@self.id/core';
+
+import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
+
+const ceramicNetwork = process.env.REACT_APP_CERAMIC_NETWORK || 'testnet-clay';
+
+export const authenticateDid = async address => {
+  // Always associate current chain with mainnet
+  // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
+  await window.ethereum.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: '0x1' }],
+  });
+
+  const authProvider = new EthereumAuthProvider(window.ethereum, address);
+  const client = new WebClient({
+    ceramic: ceramicNetwork,
+    connectNetwork: ceramicNetwork,
+  });
+  let did = null;
+  try {
+    did = await client.authenticate(authProvider, true);
+
+    const link = await Caip10Link.fromAccount(
+      client.ceramic,
+      `${address}@eip155:1`,
+      {},
+    );
+    if (!link.did || link.did !== did.id) {
+      await link.setDid(did, authProvider, {});
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+
+  return [client, did];
+};
+
+export const getBasicProfile = async did => {
+  const core = new Core({ ceramic: ceramicNetwork });
+  return core.get('basicProfile', did);
+};
+
+export const setBasicProfile = async (client, did, values) => {
+  const selfId = new SelfID({ client, did });
+  return selfId.set('basicProfile', values);
+};
+
+const get3boxProfile = async address => {
   try {
     const response = await fetch(
       `https://ipfs.3box.io/profile?address=${address}`,
     );
     if (response.status === 'error') {
-      console.log('Profile does not exist');
+      console.warn('Profile does not exist');
     }
 
     const boxProfile = response.json();
     return boxProfile;
   } catch (error) {
-    console.log(error);
+    console.warn(error);
+  }
+};
+
+export const fetchProfile = async address => {
+  try {
+    const core = new Core({ ceramic: ceramicNetwork });
+    const link = await Caip10Link.fromAccount(
+      core.ceramic,
+      `${address}@eip155:1`,
+    );
+    if (link.did) {
+      const values = await getBasicProfile(link.did);
+      if (values) {
+        return values;
+      }
+    }
+    return get3boxProfile(address);
+  } catch (err) {
+    console.error(err);
+    return get3boxProfile(address);
   }
 };
 
