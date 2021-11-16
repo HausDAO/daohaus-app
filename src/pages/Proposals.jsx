@@ -13,7 +13,12 @@ import useCanInteract from '../hooks/useCanInteract';
 const Proposals = React.memo(({ proposals, activities, customTerms }) => {
   const { setProposalSelector } = useOverlay();
   const { canInteract } = useCanInteract({
-    checklist: ['isConnected', 'isSameChain', 'isMemberSpamFilter'],
+    checklist: [
+      'isConnected',
+      'isSameChain',
+      'isMember',
+      'spamFilterMemberOnlyOff',
+    ],
   });
 
   const openProposalSelector = () => {

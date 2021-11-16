@@ -22,6 +22,7 @@ import { timeToNow } from '../utils/general';
 import { fetchAllActivity } from '../utils/theGraph';
 import { SPAM_FILTER_UNSPONSORED } from '../graphQL/dao-queries';
 import { proposalResolver } from '../utils/resolvers';
+import { displayBalance } from '../utils/tokenValue';
 
 const FILTERS = {
   main: [
@@ -31,24 +32,25 @@ const FILTERS = {
   ],
 };
 
-const proposalRow = (proposal, daochain, daoid) => {
+const ProposalRow = ({ proposal, daochain, daoid }) => {
   return (
     <Fragment key={proposal.proposalId}>
       <Tr>
         <Td border='none'>{proposal.proposalId}</Td>
         <Td border='none'>{proposal.sharesRequested}</Td>
         <Td border='none'>{proposal.lootRequested}</Td>
+
         <Td border='none'>
-          {`${proposal.paymentRequested /
-            10 **
-              proposal.paymentTokenDecimals} ${proposal.paymentTokenSymbol ||
-            ' '}`}
+          {`${displayBalance(
+            proposal.paymentRequested,
+            proposal.paymentTokenDecimals,
+          ) || 0} ${proposal.paymentTokenSymbol || ' '}`}
         </Td>
         <Td border='none'>
-          {`${proposal.tributeOffered /
-            10 **
-              proposal.tributeTokenDecimals} ${proposal.tributeTokenSymbol ||
-            ''}`}
+          {`${displayBalance(
+            proposal.tributeOffered,
+            proposal.tributeTokenDecimals,
+          ) || 0} ${proposal.tributeTokenSymbol || ''}`}
         </Td>
         <Td border='none'>{`yes: ${proposal.yesShares} / no: ${proposal.noShares}`}</Td>
         <Td border='none'>{timeToNow(proposal.createdAt)}</Td>
@@ -205,7 +207,14 @@ const ProposalsSpam = ({ daoMetaData }) => {
                   </Thead>
                   <Tbody>
                     {listProposals[section].map(prop => {
-                      return proposalRow(prop, daochain, daoid);
+                      return (
+                        <ProposalRow
+                          key={prop.id}
+                          proposal={prop}
+                          daochain={daochain}
+                          daoid={daoid}
+                        />
+                      );
                     })}
                   </Tbody>
                 </Table>

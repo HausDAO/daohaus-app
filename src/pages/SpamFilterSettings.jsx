@@ -2,27 +2,11 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
 
-import MainViewLayout from '../components/mainViewLayout';
 import useBoost from '../hooks/useBoost';
-import { getReadableBalance } from '../utils/tokenValue';
 import { useAppModal } from '../hooks/useModals';
-import { BOOSTS } from '../data/boosts';
-import { FIELD } from '../data/fields';
-
-const prepareFormLegoForUpdate = () => {
-  // TODO: Review - editing this feel gross. maybe jsut create a new lego
-  const spamEditForm = JSON.parse(JSON.stringify(BOOSTS.SPAM_FILTER));
-  delete spamEditForm.steps.DISPLAY;
-  spamEditForm.steps.STEP1.start = true;
-  spamEditForm.steps.STEP1.form.fields[0] = [
-    ...spamEditForm.steps.STEP1.form.fields,
-    { ...FIELD.BASIC_SWITCH, label: 'Spam filter active?', name: 'active' },
-  ];
-  spamEditForm.steps.STEP2.stepLabel = 'Sign';
-  spamEditForm.metaFields = [...spamEditForm.metaFields, 'active'];
-
-  return spamEditForm;
-};
+import MainViewLayout from '../components/mainViewLayout';
+import { getReadableBalance } from '../utils/tokenValue';
+import { BOOST_SETTING } from '../data/boostSettings';
 
 const SpamFilterSettings = ({ daoMetaData, daoOverview }) => {
   const { daoid, daochain } = useParams();
@@ -30,7 +14,7 @@ const SpamFilterSettings = ({ daoMetaData, daoOverview }) => {
   const { boostModal } = useAppModal();
 
   const handleEditClick = () => {
-    boostModal(prepareFormLegoForUpdate());
+    boostModal(BOOST_SETTING.SPAM_FILTER);
   };
 
   return (

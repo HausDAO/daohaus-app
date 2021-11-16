@@ -14,11 +14,6 @@ const useBoost = () => {
       return daoMetaData?.boosts[boostKey]?.active;
     },
     isLaunched(boostKey) {
-      // console.log(
-      //   'daoMetaData?.boosts[boostKey]',
-      //   daoMetaData?.boosts[boostKey],
-      //   daoMetaData?.boosts[boostKey] !== undefined,
-      // );
       return daoMetaData?.boosts[boostKey] !== undefined;
     },
     // custom boost related functions

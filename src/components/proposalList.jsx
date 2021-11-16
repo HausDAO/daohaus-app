@@ -156,7 +156,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
         <CsvDownloadButton entityList={listProposals} typename='Proposals' />
       </Flex>
 
-      {isActive('SPAM_FILTER') && <SpamFilterListNotification />}
+      {isLoaded && isActive('SPAM_FILTER') && <SpamFilterListNotification />}
 
       {isLoaded &&
         paginatedProposals?.map(proposal => {

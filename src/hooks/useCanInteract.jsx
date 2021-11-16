@@ -1,11 +1,6 @@
 import { useTX } from '../contexts/TXContext';
 
-const defaults = [
-  'isConnected',
-  'isSameChain',
-  'isMember',
-  'isMemberSpamFilter',
-];
+const defaults = ['isConnected', 'isSameChain', 'isMember'];
 
 const useCanInteract = (params = {}) => {
   const { checklist = defaults, errorDeliveryType = 'firstString' } = params;

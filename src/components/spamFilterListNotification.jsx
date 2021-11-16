@@ -2,13 +2,13 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Box, Flex, Badge } from '@chakra-ui/layout';
 
-import useCanInteract from '../hooks/useCanInteract';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import useBoost from '../hooks/useBoost';
 
 const SpamFilterListNotification = () => {
   const { theme } = useCustomTheme();
   const { daoid, daochain } = useParams();
-  const { canInteract } = useCanInteract();
+  const { isActive } = useBoost();
 
   return (
     <Flex
@@ -27,7 +27,7 @@ const SpamFilterListNotification = () => {
         </Badge>
       </Box>
       <Flex position='relative' justifyContent='space-between'>
-        {canInteract && (
+        {isActive('SPAM_FILTER') && (
           <Box mr={5}>
             <Link to={`/dao/${daochain}/${daoid}/proposals/spam`}>
               Filtered Proposals

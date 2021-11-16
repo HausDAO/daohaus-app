@@ -236,7 +236,7 @@ export const CONTENT = {
   // },
 };
 
-const COMMON_STEPS = {
+export const COMMON_STEPS = {
   DISPLAY: {
     type: 'boostDetails',
     title: { type: 'boostName' },
