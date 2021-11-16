@@ -9,6 +9,7 @@ import {
   Tbody,
   Td,
   IconButton,
+  Flex,
 } from '@chakra-ui/react';
 import { RiRefreshLine } from 'react-icons/ri';
 
@@ -20,6 +21,15 @@ import { fetchAllActivity } from '../utils/theGraph';
 import { SPAM_FILTER_UNSPONSORED } from '../graphQL/dao-queries';
 import { proposalResolver } from '../utils/resolvers';
 import useBoost from '../hooks/useBoost';
+import ListSelect from '../components/listSelect';
+
+const FILTERS = {
+  main: [
+    { name: 'All', value: 'all' },
+    { name: 'Unsponsored', value: 'Unsponsored' },
+    { name: 'Cancelled', value: 'Cancelled' },
+  ],
+};
 
 const ProposalsSpam = ({ daoMetaData }) => {
   const { daoid, daochain } = useParams();
@@ -27,10 +37,19 @@ const ProposalsSpam = ({ daoMetaData }) => {
   const { isActive } = useBoost();
   const [daoProposals, setDaoProposals] = useState(null);
   const [proposals, setProposals] = useState({});
+  const [listProposals, setListProposals] = useState({});
+  const [filter, setFilter] = useState(FILTERS[0]);
 
   const handleRefreshDao = () => {
     const skipVaults = true;
     refreshDao(skipVaults);
+  };
+
+  const handleFilter = e => {
+    setFilter(e);
+    setListProposals(
+      e.value === 'all' ? proposals : { [e.value]: proposals[e.value] },
+    );
   };
 
   useEffect(() => {
@@ -78,7 +97,10 @@ const ProposalsSpam = ({ daoMetaData }) => {
             Cancelled: [],
           },
         );
+
+      console.log('sorted', sorted);
       setProposals(sorted);
+      setListProposals(sorted);
     }
   }, [daoProposals]);
 
@@ -136,57 +158,68 @@ const ProposalsSpam = ({ daoMetaData }) => {
 
   return (
     <MainViewLayout header='Proposal Spam' isDao>
-      <Box w='100%'>
-        <Box my={5} w='100%'>
-          <ContentBox w='100%' fontSize='xl' fontFamily='heading' ml={3}>
-            {`${daoProposals?.length || 'looking for'} proposals`}
-            {daoProposals?.length && (
-              <IconButton
-                icon={<RiRefreshLine size='1rem' />}
-                p={0}
-                size='sm'
-                variant='outline'
-                onClick={handleRefreshDao}
-                ml={10}
-              />
-            )}
-          </ContentBox>
-        </Box>
+      <Flex
+        wrap='wrap'
+        position='relative'
+        justifyContent='space-between'
+        fontFamily='heading'
+        textTransform='uppercase'
+      >
+        <Box>{`${daoProposals?.length || 'looking for'} proposals`}</Box>
+        {daoProposals?.length && (
+          <Flex justifyContent='space-between' align='center'>
+            <ListSelect
+              currentOption={filter?.name}
+              options={FILTERS}
+              handleSelect={handleFilter}
+              label='Filter By'
+              count={listProposals?.length}
+            />
+            <IconButton
+              icon={<RiRefreshLine size='1rem' />}
+              p={0}
+              size='sm'
+              variant='outline'
+              onClick={handleRefreshDao}
+              ml={10}
+            />
+          </Flex>
+        )}
+      </Flex>
 
-        <Box w='100%' pr={[0, null, null, null, 6]} mb={6}>
-          <ContentBox w='100%'>
-            {Object.keys(proposals).map(section => {
-              return (
-                <Box key={section}>
-                  <Box mt={5} p={4} fontSize='xl' fontFamily='heading'>
-                    {`${section} (${proposals[section].length})`}
-                  </Box>
-
-                  <Table size='sm' variant='simple'>
-                    <Thead>
-                      <Tr>
-                        <Th>ID</Th>
-                        <Th>shares</Th>
-                        <Th>loot</Th>
-                        <Th>payment</Th>
-                        <Th>tribute</Th>
-                        <Th>votes</Th>
-                        <Th>status</Th>
-                        <Th>created</Th>
-                        <Th />
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {proposals[section].map(prop => {
-                        return renderRow(prop);
-                      })}
-                    </Tbody>
-                  </Table>
+      <Box w='100%' pr={[0, null, null, null, 6]} my={5}>
+        <ContentBox w='100%'>
+          {Object.keys(listProposals).map(section => {
+            return (
+              <Box key={section}>
+                <Box mt={5} p={4} fontSize='xl' fontFamily='heading'>
+                  {`${section} (${listProposals[section].length})`}
                 </Box>
-              );
-            })}
-          </ContentBox>
-        </Box>
+
+                <Table size='sm' variant='simple'>
+                  <Thead>
+                    <Tr>
+                      <Th>ID</Th>
+                      <Th>shares</Th>
+                      <Th>loot</Th>
+                      <Th>payment</Th>
+                      <Th>tribute</Th>
+                      <Th>votes</Th>
+                      <Th>status</Th>
+                      <Th>created</Th>
+                      <Th />
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {listProposals[section].map(prop => {
+                      return renderRow(prop);
+                    })}
+                  </Tbody>
+                </Table>
+              </Box>
+            );
+          })}
+        </ContentBox>
       </Box>
     </MainViewLayout>
   );
