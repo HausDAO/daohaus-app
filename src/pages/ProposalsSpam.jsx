@@ -14,14 +14,14 @@ import {
 import { RiRefreshLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
+import useBoost from '../hooks/useBoost';
 import MainViewLayout from '../components/mainViewLayout';
 import ContentBox from '../components/ContentBox';
+import ListSelect from '../components/listSelect';
 import { timeToNow } from '../utils/general';
 import { fetchAllActivity } from '../utils/theGraph';
 import { SPAM_FILTER_UNSPONSORED } from '../graphQL/dao-queries';
 import { proposalResolver } from '../utils/resolvers';
-import useBoost from '../hooks/useBoost';
-import ListSelect from '../components/listSelect';
 
 const FILTERS = {
   main: [
@@ -159,7 +159,7 @@ const ProposalsSpam = ({ daoMetaData }) => {
         fontFamily='heading'
         textTransform='uppercase'
       >
-        <Box>{`${daoProposals?.length || 'looking for'} proposals`}</Box>
+        <Box>{`${daoProposals?.length || 'looking for'} spam proposals`}</Box>
         {daoProposals?.length && (
           <Flex justifyContent='space-between' align='center'>
             <ListSelect
