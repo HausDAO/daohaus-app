@@ -31,6 +31,53 @@ const FILTERS = {
   ],
 };
 
+const proposalRow = (proposal, daochain, daoid) => {
+  return (
+    <Fragment key={proposal.proposalId}>
+      <Tr>
+        <Td border='none'>{proposal.proposalId}</Td>
+        <Td border='none'>{proposal.sharesRequested}</Td>
+        <Td border='none'>{proposal.lootRequested}</Td>
+        <Td border='none'>
+          {`${proposal.paymentRequested /
+            10 **
+              proposal.paymentTokenDecimals} ${proposal.paymentTokenSymbol ||
+            ' '}`}
+        </Td>
+        <Td border='none'>
+          {`${proposal.tributeOffered /
+            10 **
+              proposal.tributeTokenDecimals} ${proposal.tributeTokenSymbol ||
+            ''}`}
+        </Td>
+        <Td border='none'>{`yes: ${proposal.yesShares} / no: ${proposal.noShares}`}</Td>
+        <Td border='none'>{timeToNow(proposal.createdAt)}</Td>
+        <Td border='none'>
+          <Link
+            to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
+          >
+            View
+          </Link>
+        </Td>
+      </Tr>
+      <Tr key={`${proposal.proposalId}-2`}>
+        <Td border='none' colSpan='3'>
+          {proposal.proposalType}
+        </Td>
+        <Td border='none' colSpan='2'>
+          {proposal.title}
+        </Td>
+        <Td border='none' colSpan='3'>
+          {proposal.description}
+        </Td>
+      </Tr>
+      <Tr key={`${proposal.proposalId}-3`}>
+        <Td colSpan='8' />
+      </Tr>
+    </Fragment>
+  );
+};
+
 const ProposalsSpam = ({ daoMetaData }) => {
   const { daoid, daochain } = useParams();
   const { refreshDao } = useTX();
@@ -98,63 +145,10 @@ const ProposalsSpam = ({ daoMetaData }) => {
           },
         );
 
-      console.log('sorted', sorted);
       setProposals(sorted);
       setListProposals(sorted);
     }
   }, [daoProposals]);
-
-  const renderStatus = proposal => {
-    if (proposal.status === 'VotingPeriod') {
-      return `${proposal.status} ends ${timeToNow(proposal.votingPeriodEnds)}`;
-    }
-    if (proposal.status === 'GracePeriod') {
-      return `${proposal.status} ends ${timeToNow(proposal.gracePeriodEnds)}`;
-    }
-    return proposal.status;
-  };
-
-  const renderRow = proposal => {
-    return (
-      <Fragment key={proposal.proposalId}>
-        <Tr>
-          <Td>{proposal.proposalId}</Td>
-          <Td>{proposal.sharesRequested}</Td>
-          <Td>{proposal.lootRequested}</Td>
-          <Td>
-            {`${proposal.paymentRequested /
-              10 **
-                proposal.paymentTokenDecimals} ${proposal.paymentTokenSymbol ||
-              ' '}`}
-          </Td>
-          <Td>
-            {`${proposal.tributeOffered /
-              10 **
-                proposal.tributeTokenDecimals} ${proposal.tributeTokenSymbol ||
-              ''}`}
-          </Td>
-          <Td>{`yes: ${proposal.yesShares} - no: ${proposal.noShares}`}</Td>
-          <Td>{renderStatus(proposal)}</Td>
-          <Td>{timeToNow(proposal.createdAt)}</Td>
-          <Td>
-            <Link
-              to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
-            >
-              View
-            </Link>
-          </Td>
-        </Tr>
-        <Tr key={`${proposal.proposalId}-2`}>
-          <Td colSpan='2'>{proposal.proposalType}</Td>
-          <Td colSpan='2'>{proposal.title}</Td>
-          <Td colSpan='5'>{proposal.description}</Td>
-        </Tr>
-        <Tr key={`${proposal.proposalId}-3`}>
-          <Td colSpan='9' backgroundColor='gray.900' />
-        </Tr>
-      </Fragment>
-    );
-  };
 
   return (
     <MainViewLayout header='Proposal Spam' isDao>
@@ -191,8 +185,8 @@ const ProposalsSpam = ({ daoMetaData }) => {
         <ContentBox w='100%'>
           {Object.keys(listProposals).map(section => {
             return (
-              <Box key={section}>
-                <Box mt={5} p={4} fontSize='xl' fontFamily='heading'>
+              <Box key={section} mb={7}>
+                <Box mb={3} fontSize='xl' fontFamily='heading' fontWeight='700'>
                   {`${section} (${listProposals[section].length})`}
                 </Box>
 
@@ -205,14 +199,13 @@ const ProposalsSpam = ({ daoMetaData }) => {
                       <Th>payment</Th>
                       <Th>tribute</Th>
                       <Th>votes</Th>
-                      <Th>status</Th>
                       <Th>created</Th>
                       <Th />
                     </Tr>
                   </Thead>
                   <Tbody>
                     {listProposals[section].map(prop => {
-                      return renderRow(prop);
+                      return proposalRow(prop, daochain, daoid);
                     })}
                   </Tbody>
                 </Table>
