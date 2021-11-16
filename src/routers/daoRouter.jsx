@@ -41,6 +41,8 @@ import SuperfluidMinion from '../pages/SuperfluidMinion';
 import ThemeBuilder from '../pages/ThemeBuilder';
 import Treasury from '../pages/Treasury';
 import Vaults from '../pages/Vaults';
+import ProposalsSpam from '../pages/ProposalsSpam';
+import SpamFilterSettings from '../pages/SpamFilterSettings';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -183,6 +185,12 @@ const DaoRouter = () => {
             refetchMetaData={refetchMetaData}
           />
         </Route>
+        <Route exact path={`${path}/settings/spam`}>
+          <SpamFilterSettings
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
+          />
+        </Route>
         <Route
           exact
           path={`${path}/settings/superfluid-minion/:minion`} // path={`${path}/settings/superfluid-minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
@@ -205,6 +213,9 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/proposals/hardcore`}>
           <ProposalWatcher daoProposals={daoProposals} />
+        </Route>
+        <Route exact path={`${path}/proposals/spam`}>
+          <ProposalsSpam daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal

@@ -1,16 +1,18 @@
 import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import {
-  ALT_ACTIVITIES,
-  ALT_AGAIN,
   DAO_ACTIVITIES,
   HOME_DAO,
+  SINGLE_PROPOSAL,
+  SPAM_FILTER_ACTIVITIES,
+  SPAM_FILTER_GK_WL,
+  SPAM_FILTER_TRIBUTE,
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
-import { getApiMetadata, fetchApiVaultData } from './metadata';
+import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
 import {
   GET_ERC721,
   GET_ERC1155,
@@ -23,7 +25,6 @@ import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
 import { validateSafeMinion } from './vaults';
-import { ALT } from '../data/temp';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -123,6 +124,17 @@ export const fetchPoapAddresses = async args => {
   });
 };
 
+export const fetchSingleProposal = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: SINGLE_PROPOSAL,
+    variables: {
+      molochAddress: args.molochAddress,
+      proposalId: args.proposalId,
+    },
+  });
+};
+
 export const fetchMinionInternalBalances = async args => {
   const metadata = await getApiMetadata();
   const internalBalances = await graphQuery({
@@ -140,12 +152,13 @@ export const fetchMinionInternalBalances = async args => {
   });
 };
 
-const fetchAllActivity = async (
+export const fetchAllActivity = async (
   args,
   items = [],
   createdAt = '0',
   count = 1,
   query = DAO_ACTIVITIES,
+  variables = {},
 ) => {
   try {
     const result = await graphQuery({
@@ -154,6 +167,7 @@ const fetchAllActivity = async (
       variables: {
         contractAddr: args.daoID,
         createdAt,
+        ...variables,
       },
     });
 
@@ -177,7 +191,7 @@ const fetchAllActivity = async (
   }
 };
 
-const fetchAltActivity = async (
+const fetchSpamFilterActivity = async (
   args,
   items = [],
   createdAt = '0',
@@ -188,20 +202,35 @@ const fetchAltActivity = async (
     items,
     createdAt,
     count,
-    ALT_ACTIVITIES,
+    SPAM_FILTER_ACTIVITIES,
   );
-  const unsponsored = await fetchAllActivity(
+  const unsponsoredGuildkickWhitelist = await fetchAllActivity(
     args,
     items,
     createdAt,
     count,
-    ALT_AGAIN,
+    SPAM_FILTER_GK_WL,
+  );
+  const unsponsoredTribute = await fetchAllActivity(
+    args,
+    items,
+    createdAt,
+    count,
+    SPAM_FILTER_TRIBUTE,
+    {
+      requiredTributeMin: args.requiredTributeMin,
+      requiredTributeToken: args.requiredTributeToken,
+    },
   );
 
   return {
     id: args.daoID,
     rageQuits: sponsored.rageQuits,
-    proposals: [...sponsored?.proposals, ...unsponsored?.proposals],
+    proposals: [
+      ...sponsored?.proposals,
+      ...unsponsoredGuildkickWhitelist?.proposals,
+      ...unsponsoredTribute?.proposals,
+    ],
   };
 };
 
@@ -280,9 +309,16 @@ const completeQueries = {
   },
   async getActivities(args, setter) {
     try {
-      const isAlt = ALT.includes(args.daoID);
-      const activity = isAlt
-        ? await fetchAltActivity(args)
+      const metadata = await fetchMetaData(args.daoID);
+
+      const activity = metadata[0]?.boosts?.SPAM_FILTER?.active
+        ? await fetchSpamFilterActivity({
+            ...args,
+            requiredTributeToken:
+              metadata[0].boosts.SPAM_FILTER.metadata.paymentToken,
+            requiredTributeMin:
+              metadata[0].boosts.SPAM_FILTER.metadata.paymentRequested,
+          })
         : await fetchAllActivity(args);
 
       const resolvedActivity = {

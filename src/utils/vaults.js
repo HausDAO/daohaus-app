@@ -87,6 +87,11 @@ const tokenFormsString = {
   sellNifty: 'MINION_SELL_NIFTY',
 };
 
+export const getNftType = (nft, typeOverride) => {
+  if (typeOverride) return typeOverride;
+  return nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
+};
+
 export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
   const formLego = FORM[`${tokenFormsString[tokenType]}`];
 

@@ -14,7 +14,6 @@ import {
 
 import { useTX } from '../contexts/TXContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useDao } from '../contexts/DaoContext';
 import { TX } from '../data/contractTX';
 import { chainByName } from '../utils/chain';
 
@@ -26,7 +25,6 @@ const MinionInternalBalanceActionMenu = ({
 }) => {
   const { submitTransaction, refreshDao } = useTX();
   const { isMember } = useDaoMember();
-  const { refreshMinionVault } = useDao();
   const { minion } = useParams();
   const [loading, setLoading] = useState();
 
@@ -47,8 +45,7 @@ const MinionInternalBalanceActionMenu = ({
     });
 
     if (!options.transfer) {
-      await refreshMinionVault(minion);
-      refreshDao();
+      await refreshDao();
     }
 
     setLoading(false);

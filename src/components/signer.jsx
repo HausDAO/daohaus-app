@@ -68,8 +68,7 @@ const Signer = props => {
     <Flex flexDirection='column'>
       {!playlist && (
         <TextBox variant='body' mb={6}>
-          This boost is ready to launch. Sign with metamask to prove DAO
-          membership.
+          This boost is ready. Sign with metamask to prove DAO membership.
         </TextBox>
       )}
 

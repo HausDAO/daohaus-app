@@ -111,15 +111,17 @@ const ProposalWatcher = ({ daoProposals }) => {
       <Box w='100%'>
         <Box my={5} w='100%'>
           <ContentBox w='100%' fontSize='xl' fontFamily='heading' ml={3}>
-            {`${daoProposals?.length} proposals`}
-            <IconButton
-              icon={<RiRefreshLine size='1rem' />}
-              p={0}
-              size='sm'
-              variant='outline'
-              onClick={handleRefreshDao}
-              ml={10}
-            />
+            {`${daoProposals?.length || 'looking for'} proposals`}
+            {daoProposals?.length && (
+              <IconButton
+                icon={<RiRefreshLine size='1rem' />}
+                p={0}
+                size='sm'
+                variant='outline'
+                onClick={handleRefreshDao}
+                ml={10}
+              />
+            )}
           </ContentBox>
         </Box>
 

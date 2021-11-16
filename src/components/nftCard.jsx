@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, Flex, Image, AspectRatio } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
@@ -6,14 +6,19 @@ import ContentBox from './ContentBox';
 import AddressAvatar from './addressAvatar';
 import NftViewModal from '../modals/nftViewModal';
 import NftCardActionMenu from './nftCardActionMenu';
-import { hydrateNftCard } from '../utils/nftVaults';
+import { hydrateNftCard } from '../utils/nftData';
+
+import NFTImage from '../assets/img/nft-placeholder.png';
 
 const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
   const { setNftViewModal } = useOverlay();
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+
   const hydratedNft = useMemo(() => {
     if (nft) {
-      return hydrateNftCard(nft, vault?.minionType || minionType);
+      return hydrateNftCard(nft);
     }
   }, [nft]);
 
@@ -44,7 +49,12 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
         >
           View
         </Box>
-        <NftCardActionMenu nft={hydratedNft} vault={vault} minion={minion} />
+        <NftCardActionMenu
+          nft={hydratedNft}
+          vault={vault}
+          minion={minion}
+          minionType={minionType}
+        />
       </Flex>
       <AspectRatio
         ratio={1}
@@ -58,7 +68,17 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
           },
         }}
       >
-        <Image src={hydratedNft?.image} margin='auto' />
+        {/* <Image src={hydratedNft?.image} margin='auto' /> */}
+        <Image
+          src={
+            imageLoaded && !imageError && hydratedNft?.image
+              ? hydratedNft.image
+              : NFTImage
+          }
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageError(true)}
+          margin='auto'
+        />
       </AspectRatio>
       <Flex
         direction='row'
