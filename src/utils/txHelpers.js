@@ -188,7 +188,6 @@ const argBuilderCallback = Object.freeze({
 
 export const handleSearch = (data, arg, shouldThrow) => {
   const path = getPath(arg);
-  console.log(data, path);
   if (!path.length)
     throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
   return searchData(data, path, shouldThrow);
