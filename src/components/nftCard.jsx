@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Box, Flex, Image, AspectRatio } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
@@ -8,8 +8,13 @@ import NftViewModal from '../modals/nftViewModal';
 import NftCardActionMenu from './nftCardActionMenu';
 import { hydrateNftCard } from '../utils/nftData';
 
+import NFTImage from '../assets/img/nft-placeholder.png';
+
 const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
   const { setNftViewModal } = useOverlay();
+
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const hydratedNft = useMemo(() => {
     if (nft) {
@@ -63,7 +68,17 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
           },
         }}
       >
-        <Image src={hydratedNft?.image} margin='auto' />
+        {/* <Image src={hydratedNft?.image} margin='auto' /> */}
+        <Image
+          src={
+            imageLoaded && !imageError && hydratedNft?.image
+              ? hydratedNft.image
+              : NFTImage
+          }
+          onLoad={() => setImageLoaded(true)}
+          onError={() => setImageError(true)}
+          margin='auto'
+        />
       </AspectRatio>
       <Flex
         direction='row'
