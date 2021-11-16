@@ -15,6 +15,8 @@ import { getTerm, getTitle } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
 import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
+import { fetchSingleProposal } from '../utils/theGraph';
+import { proposalResolver } from '../utils/resolvers';
 
 const Proposal = ({
   activities,
@@ -29,13 +31,43 @@ const Proposal = ({
 
   const [minionAction, setMinionAction] = useState(null);
   const [hideMinionExecuteButton, setHideMinionExecuteButton] = useState(null);
+  const [currentProposal, setCurrentProposal] = useState(null);
 
-  const currentProposal = activities
-    ? activities?.proposals?.find(proposal => proposal.proposalId === propid)
-    : null;
+  useEffect(() => {
+    const setUpProposal = async () => {
+      const prop = activities.proposals?.find(
+        proposal => proposal.proposalId === propid,
+      );
+
+      if (!prop) {
+        const res = await fetchSingleProposal({
+          chainID: daochain,
+          molochAddress: daoid,
+          proposalId: propid,
+        });
+
+        if (res.proposals[0]) {
+          setCurrentProposal(
+            proposalResolver(res.proposals[0], {
+              proposalType: true,
+              description: true,
+              title: true,
+              activityFeed: true,
+            }),
+          );
+        }
+      } else {
+        setCurrentProposal(prop);
+      }
+    };
+    if (activities && propid.match(/^\d+$/)) {
+      setUpProposal();
+    }
+  }, [activities]);
 
   const handleRefreshDao = () => {
-    refreshDao();
+    const skipVaults = true;
+    refreshDao(skipVaults);
   };
 
   useEffect(() => {

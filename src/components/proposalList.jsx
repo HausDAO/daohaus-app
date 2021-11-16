@@ -5,6 +5,7 @@ import { Flex, Spinner, Box } from '@chakra-ui/react';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
+import useBoost from '../hooks/useBoost';
 import CsvDownloadButton from './csvDownloadButton';
 import ListSelect from './listSelect';
 import NoListItem from './NoListItem';
@@ -24,10 +25,13 @@ import {
   handleListSort,
   searchProposals,
 } from '../utils/proposalUtils';
+import SpamFilterListNotification from './spamFilterListNotification';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
+  const { isActive } = useBoost();
+
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
 
@@ -144,12 +148,16 @@ const ProposalsList = ({ proposals, customTerms }) => {
             marginLeft: '5%',
           }}
         />
+
         <ProposalSearch
           performSearch={performSearch}
           resetSearch={resetSearch}
         />
         <CsvDownloadButton entityList={listProposals} typename='Proposals' />
       </Flex>
+
+      {isLoaded && isActive('SPAM_FILTER') && <SpamFilterListNotification />}
+
       {isLoaded &&
         paginatedProposals?.map(proposal => {
           return (
