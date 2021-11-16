@@ -79,7 +79,7 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
             onError={() => setImageError(true)}
             margin='auto'
           />
-          {imageError && <Box marginTop='-80px'>Could not load NFT</Box>}
+          {imageError && <Box marginTop='-80px'>Could not load image</Box>}
         </Flex>
       </AspectRatio>
       <Flex

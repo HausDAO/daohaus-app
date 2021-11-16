@@ -68,7 +68,7 @@ const NftViewModal = () => {
                 />
                 {imageError && (
                   <Center>
-                    <Box marginTop='-120px'>Could not load NFT</Box>
+                    <Box marginTop='-120px'>Could not load image</Box>
                   </Center>
                 )}
               </Flex>
