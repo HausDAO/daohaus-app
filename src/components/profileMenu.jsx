@@ -22,7 +22,7 @@ import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
-import { getBasicProfile, setBasicProfile, cacheProfile } from '../utils/3box';
+import { getBasicProfile, setBasicProfile, cacheProfile, authenticateDid } from '../utils/3box';
 
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
@@ -52,40 +52,44 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const handleEditProfile = useCallback(() => {
     stepperModal({
       DISPLAY: {
-        type: 'form',
+        type: 'buttonAction',
         title: 'Edit Ceramic Profile',
         checklist: ['isConnected', 'isMember'],
-        next: {
-          type: 'awaitCustom',
-          awaitDef: {
-            func: async (setValue, values) => {
-              if (values.ceramicDid) {
-                const profile = await getBasicProfile(values.ceramicDid.id);
-                setValue('name', profile?.name || '');
-                setValue('emoji', profile?.emoji || '');
-                setValue('description', profile?.description || '');
-                setValue('homeLocation', profile?.homeLocation || '');
-                setValue('residenceCountry', profile?.residenceCountry || '');
-                setValue('url', profile?.url || '');
-              }
-            },
-            args: [],
-          },
-          next: 'STEP2',
+        btnText: 'Connect',
+        btnLabel: 'Connect to Ceramic',
+        btnLoadingText: 'Connecting',
+        btnNextCallback: values => {
+          return values?.ceramicDid;
         },
+        btnCallback: async (setValue, setLoading, setFormState) => {
+          setLoading(true);
+          try {
+            const [client, did] = await authenticateDid(
+              window.ethereum.selectedAddress,
+            );
+            setValue('ceramicClient', client);
+            setValue('ceramicDid', did);
+            const profile = await getBasicProfile(did.id);
+            setValue('name', profile?.name || '');
+            setValue('emoji', profile?.emoji || '');
+            setValue('description', profile?.description || '');
+            setValue('homeLocation', profile?.homeLocation || '');
+            setValue('residenceCountry', profile?.residenceCountry || '');
+            setValue('url', profile?.url || '');
+            setFormState("success");
+          } catch (err) {
+            console.error(err);
+            setFormState('failed');
+          }
+          setLoading(false);
+        },
+        next: 'STEP2',
         start: true,
-        form: {
-          ...STEPPER_FORMS.CERAMIC_AUTH,
-          checklist: ['isConnected', 'isMember'],
-          disableCallback: values => {
-            return !values?.ceramicDid;
-          },
-          ctaText: 'Next',
-        },
       },
       STEP2: {
         type: 'form',
         title: 'Edit Ceramic Profile',
+				subtitle: "Connected to Ceramic",
         form: {
           ...FORM.PROFILE,
           ctaText: 'Submit',
