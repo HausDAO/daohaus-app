@@ -183,6 +183,7 @@ export const fetchAllActivity = async (
         createdAt,
         count,
         query,
+        variables,
       );
     }
     return { ...result, proposals: [...items, ...proposals] };
