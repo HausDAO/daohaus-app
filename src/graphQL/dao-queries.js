@@ -196,7 +196,7 @@ export const SPAM_FILTER_GK_WL = gql`
 `;
 
 export const SPAM_FILTER_TRIBUTE = gql`
-  query molochActivities($contractAddr: String!, $createdAt: String! $requiredTributeMin: String!, $requiredTributeToken: String!) {
+  query molochActivities($contractAddr: String!, $createdAt: String!, $requiredTributeMin: String!, $requiredTributeToken: String!) {
     proposals(
       where: { 
         molochAddress: $contractAddr
