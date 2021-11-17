@@ -59,6 +59,7 @@ export const TXProvider = ({ children }) => {
     memberWalletRef,
     isMember,
     daoMember,
+    delegate,
   } = useDaoMember();
 
   const { daoid, daochain, minion } = useParams();
@@ -76,6 +77,7 @@ export const TXProvider = ({ children }) => {
     currentDaoTokens,
     isMember,
     daoMember,
+    delegate,
     userHubDaos,
     outstandingTXs,
     daoVaults,

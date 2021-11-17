@@ -31,11 +31,7 @@ import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
 import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
-import {
-  capitalize,
-  daoConnectedAndSameChain,
-  // isDelegating,
-} from '../utils/general';
+import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 
 const MotionBox = motion(Box);
@@ -50,16 +46,6 @@ const getAllowance = (daoMember, delegate) => {
   return null;
 };
 
-// const canInteract = (daoMember, delegate) => {
-//   if (Number(daoMember?.shares) > 0 && !isDelegating(daoMember)) {
-//     return true;
-//   }
-//   if (delegate) {
-//     return true;
-//   }
-//   return false;
-// };
-
 const ProposalVote = ({
   daoMember,
   daoProposals,
@@ -73,9 +59,9 @@ const ProposalVote = ({
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { submitTransaction } = useTX();
   const { customTerms } = useMetaData();
-  // const [canInteract] = useCanInteract(canInteract);
-  const { canInteract } = useCanInteract();
-
+  const { canInteract, interactErrors } = useCanInteract({
+    checklist: ['canSponsorAndVote'],
+  });
   const [enoughDeposit, setEnoughDeposit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nextProposalToProcess, setNextProposal] = useState(null);
@@ -268,7 +254,6 @@ const ProposalVote = ({
               </Flex>
             </Flex>
             <Flex justify='space-around'>
-              {/* canInteract(daoMember, delegate) ? */}
               {canInteract ? (
                 <>
                   {getAllowance(daoMember, delegate) *
@@ -296,7 +281,7 @@ const ProposalVote = ({
                   hasArrow
                   shouldWrapChildren
                   placement='bottom'
-                  label='You have no shares to vote with. Either you are not a member or you have delegated voting power to another member'
+                  label={interactErrors}
                   bg='secondary.500'
                 >
                   <Button isDisabled>Sponsor</Button>
