@@ -150,7 +150,7 @@ export const DAO_ACTIVITIES = gql`
   }
 `;
 
-export const ALT_ACTIVITIES = gql`
+export const SPAM_FILTER_ACTIVITIES = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
       where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: true }
@@ -160,7 +160,7 @@ export const ALT_ACTIVITIES = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits(where: {molochAddress: $contractAddr}) {
+    rageQuits {
       id
       createdAt
       memberAddress
@@ -170,15 +170,14 @@ export const ALT_ACTIVITIES = gql`
   }
 `;
 
-export const ALT_AGAIN = gql`
+export const SPAM_FILTER_GK_WL = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
       where: { 
         molochAddress: $contractAddr
         createdAt_gt: $createdAt
         sponsored: false
-        tributeOffered_gte: "1000000000000000000"
-        tributeToken: "0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb" 
+        guildkickOrWhitelistOrMinion: true
       }
       orderBy: createdAt
       orderDirection: asc
@@ -186,12 +185,59 @@ export const ALT_AGAIN = gql`
     ) {
       ${proposalFields}
     }
-    rageQuits(where: {molochAddress: $contractAddr}) {
+    rageQuits {
       id
       createdAt
       memberAddress
       shares
       loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_TRIBUTE = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String! $requiredTributeMin: String!, $requiredTributeToken: String!) {
+    proposals(
+      where: { 
+        molochAddress: $contractAddr
+        createdAt_gt: $createdAt
+        sponsored: false
+        tributeOffered_gte: $requiredTributeMin
+        tributeToken: $requiredTributeToken
+      }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_UNSPONSORED = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: false, guildkickOrWhitelistOrMinion: false }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+  }
+`;
+
+export const SINGLE_PROPOSAL = gql`
+  query proposal($molochAddress: String!, $proposalId: String!) {
+    proposals(where: { molochAddress: $molochAddress, proposalId: $proposalId }) {
+      ${proposalFields}
     }
   }
 `;

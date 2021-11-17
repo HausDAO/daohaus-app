@@ -18,6 +18,8 @@ export const INFO_TEXT = {
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
   MINION_VALUE: 'Value in wei of network token for payable functions.',
+  SPAM_FILTER_AMOUNT:
+    'Proposals with tribute offered less than this amount in the deposit token will be filterd out of your proposal list.',
   MINION_QUORUM:
     'Warning: 51% or more is recommended to ensure the community majority approve decisions.',
   NIFTY_REPAYMENT_REQUEST:
@@ -203,7 +205,7 @@ export const FIELD = {
     htmlFor: 'nftAddress',
     name: 'nftAddress',
     label: 'Select an NFT',
-    expectType: 'address',
+    expectType: 'any',
   },
   RARIBLE_NFT_DATA: {
     type: 'raribleNftData',
@@ -409,6 +411,13 @@ export const FIELD = {
       advanced: 'Advanced Mode',
     },
     title: 'Minion Setup',
+    expectType: 'any',
+  },
+  BASIC_SWITCH: {
+    type: 'switch',
+    checked: 'true',
+    unchecked: 'false',
+    label: 'Yes or No?',
     expectType: 'any',
   },
 };

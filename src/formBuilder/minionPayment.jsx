@@ -55,7 +55,7 @@ const MinionToken = props => {
       }
     }
 
-    if (localValues?.balance && localValues?.decimals) {
+    if (localValues?.balance && localValues?.tokenDecimals) {
       setSelectedToken(localValues);
       return handleDecimals(
         localValues.balance,
@@ -86,6 +86,7 @@ const MinionToken = props => {
   const setMax = () => {
     if (minionToken && minionTokens) {
       const balance = getReadableBalanceFromList(minionTokens, minionToken);
+
       setValue(name, balance);
     }
 
@@ -94,12 +95,17 @@ const MinionToken = props => {
         balance: localValues.balance,
         decimals: localValues.tokenDecimals,
       });
+
       setValue(name, formattedBalance);
     }
   };
   const options = spreadOptions({
     registerOptions,
-    setValueAs: val => getContractBalance(val, selectedToken?.decimals),
+    setValueAs: val =>
+      getContractBalance(
+        val,
+        localValues?.tokenDecimals || selectedToken?.decimals,
+      ),
   });
 
   return (
