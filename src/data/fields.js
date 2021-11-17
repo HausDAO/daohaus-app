@@ -205,7 +205,7 @@ export const FIELD = {
     htmlFor: 'nftAddress',
     name: 'nftAddress',
     label: 'Select an NFT',
-    expectType: 'address',
+    expectType: 'any',
   },
   RARIBLE_NFT_DATA: {
     type: 'raribleNftData',
