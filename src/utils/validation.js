@@ -15,6 +15,7 @@ export const TYPE_ERR_MSGS = {
   urlNoHTTP: 'Must be a URL. Http not needed.',
   greaterThanZero: 'Must be greater than zero.',
   boolean: 'Must be a Booolean value',
+  addressList: 'Must be a proper address list with token values',
 };
 
 export const validate = {
@@ -43,6 +44,19 @@ export const validate = {
   },
   bytes32(val) {
     return val;
+  },
+  addressList(val) {
+    return val
+      ?.split(/\r?\n/)
+      .reduce(
+        (acc, item) =>
+          acc &&
+          item.match(/0x[a-fA-F0-9]{40}/)?.[0] &&
+          Number(
+            item.match(/(?<=(0x[a-fA-F0-9]{40}).)([0-9]+).*([0-9]*)/)?.[0],
+          ),
+        true,
+      );
   },
 };
 

@@ -420,6 +420,14 @@ export const FIELD = {
     label: 'Yes or No?',
     expectType: 'any',
   },
+  DISPERSE_CSV: {
+    type: 'disperseListInput',
+    label: 'Address List (Any Format)',
+    name: 'addressList',
+    htmlFor: 'addressList',
+    placeholder: '0x1234...5678 1.23 \n0x8765...4321,3.21\n0x5678...1234=3.21',
+    expectType: 'addressList',
+  },
 };
 
 export const FORM_DISPLAY = {

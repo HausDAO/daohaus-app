@@ -19,8 +19,10 @@ const GenericTextarea = ({
   control,
   registerOptions,
   formState,
+  placeholder,
 }) => {
   const { register } = localForm;
+
   return (
     <FieldWrapper
       label={label}
@@ -40,6 +42,7 @@ const GenericTextarea = ({
         ref={register(registerOptions)}
         disabled={disabled || formState === 'loading'}
         control={control}
+        placeholder={placeholder}
       />
     </FieldWrapper>
   );
