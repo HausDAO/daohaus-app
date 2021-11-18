@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { RiRefreshLine } from 'react-icons/ri';
 import { useParams } from 'react-router';
-import { IconButton } from '@chakra-ui/react';
+import { Box, IconButton, Spinner } from '@chakra-ui/react';
 
-import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useTX } from '../contexts/TXContext';
 
 const MinionVaultRefreshButton = () => {
   const { minion } = useParams();
   const { isMember } = useDaoMember();
-  const { refreshMinionVault } = useDao();
   const { refreshDao } = useTX();
   const [hideRefresh, setHideRefresh] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (hideRefresh) {
@@ -25,12 +24,20 @@ const MinionVaultRefreshButton = () => {
   }, [hideRefresh]);
 
   const handleRefreshMinion = async () => {
+    setLoading(true);
     setHideRefresh(true);
-    await refreshMinionVault(minion);
-    refreshDao();
+    await refreshDao();
+    setLoading(false);
   };
 
-  if (!isMember || hideRefresh || !minion) {
+  if (loading) {
+    return <Spinner />;
+  }
+  if (hideRefresh) {
+    return <Box fontSize='xs'>Balances will update soon</Box>;
+  }
+
+  if (!isMember || !minion) {
     return null;
   }
 

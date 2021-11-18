@@ -7,8 +7,12 @@ import deepEqual from 'deep-eql';
 import MainViewLayout from '../components/mainViewLayout';
 import NftCard from '../components/nftCard';
 import NftFilter from '../components/nftFilter';
-import { concatNftSearchData, filterUniqueNfts } from '../utils/nftVaults';
-import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
+import {
+  concatNftSearchData,
+  filterUniqueNfts,
+  nftFilterOptions,
+  nftSortOptions,
+} from '../utils/nftData';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
@@ -157,16 +161,6 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
               options={nftFilterOptions}
             />
           </Box>
-          {/* <Box
-            ml='auto'
-            mt={[5, 0, null, 0]}
-            mr={[0, 5, null, 5]}
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize={['sm', null, null, 'md']}
-          >
-            View Balances
-          </Box> */}
         </Flex>
         <Wrap flex={1} spacing={4} w='100%'>
           {nfts &&

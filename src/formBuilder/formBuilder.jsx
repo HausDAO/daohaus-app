@@ -12,6 +12,8 @@ import {
   inputDataFromABI,
 } from '../utils/formBuilder';
 import { useAppModal } from '../hooks/useModals';
+import { useMetaData } from '../contexts/MetaDataContext';
+import useBoost from '../hooks/useBoost';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -33,12 +35,17 @@ const FormBuilder = props => {
     indicatorStates,
     txID,
     logValues,
+    tx,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
+  const { daoMetaData } = useMetaData();
+  const { spamFilterNotice } = useBoost();
 
   const { closeModal } = useAppModal();
   const [formState, setFormState] = useState('idle');
+  const [indicatorStatesOverride, setIndicatorStatesOverride] = useState(null);
+
   const [formCondition, setFormCondition] = useState(formConditions?.[0]);
   const [formFields, setFields] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
@@ -55,6 +62,10 @@ const FormBuilder = props => {
   }, [values, errors]);
 
   useEffect(() => setFields(fields), [fields]);
+
+  useEffect(() => {
+    setIndicatorStatesOverride(spamFilterNotice(tx));
+  }, [daoMetaData, tx]);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -217,7 +228,10 @@ const FormBuilder = props => {
             {renderInputs(formFields)}
           </Flex>
         </FormControl>
-        <ProgressIndicator currentState={formState} states={indicatorStates} />
+        <ProgressIndicator
+          currentState={formState}
+          states={indicatorStatesOverride || indicatorStates}
+        />
         {footer && (
           <FormFooter
             options={options}

@@ -7,8 +7,14 @@ import { FORM } from '../data/forms';
 import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
 import { getReadableBalance } from './tokenValue';
 
-export const getVaultERC20s = (daoVaults, vaultAddress) =>
-  daoVaults?.find(vault => isSameAddress(vault.address, vaultAddress))?.erc20s;
+export const getVaultERC20s = (daoVaults, vaultAddress, localTokenAddress) => {
+  const erc20s = daoVaults?.find(vault =>
+    isSameAddress(vault.address, vaultAddress),
+  )?.erc20s;
+  return localTokenAddress && erc20s.length
+    ? erc20s.filter(erc20 => erc20.tokenAddress === localTokenAddress)
+    : erc20s;
+};
 
 export const getTokenFromList = (erc20s, tokenAddress) =>
   erc20s?.find(token => isSameAddress(token.contractAddress, tokenAddress));
@@ -79,6 +85,11 @@ const tokenFormsString = {
   erc1155: 'MINION_SEND_ERC1155_TOKEN',
   network: 'MINION_SEND_NETWORK_TOKEN',
   sellNifty: 'MINION_SELL_NIFTY',
+};
+
+export const getNftType = (nft, typeOverride) => {
+  if (typeOverride) return typeOverride;
+  return nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
 };
 
 export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
