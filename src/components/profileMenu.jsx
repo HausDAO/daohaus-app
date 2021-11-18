@@ -17,12 +17,17 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
-import { CORE_FORMS, FORM, STEPPER_FORMS } from '../data/forms';
+import { CORE_FORMS, FORM } from '../data/forms';
 import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
-import { getBasicProfile, setBasicProfile, cacheProfile } from '../utils/3box';
+import {
+  getBasicProfile,
+  setBasicProfile,
+  cacheProfile,
+  authenticateDid,
+} from '../utils/3box';
 
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
@@ -50,65 +55,73 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
   const handleEditProfile = useCallback(() => {
+    let client = null;
+    let did = null;
     stepperModal({
       DISPLAY: {
-        type: 'form',
+        type: 'buttonAction',
         title: 'Edit Ceramic Profile',
         checklist: ['isConnected', 'isMember'],
-        next: {
-          type: 'awaitCustom',
-          awaitDef: {
-            func: async (setValue, values) => {
-              if (values.ceramicDid) {
-                const profile = await getBasicProfile(values.ceramicDid.id);
-                setValue('name', profile?.name || '');
-                setValue('emoji', profile?.emoji || '');
-                setValue('description', profile?.description || '');
-                setValue('homeLocation', profile?.homeLocation || '');
-                setValue('residenceCountry', profile?.residenceCountry || '');
-                setValue('url', profile?.url || '');
-              }
-            },
-            args: [],
-          },
-          next: 'STEP2',
+        btnText: 'Connect',
+        btnLabel: 'Connect to Ceramic',
+        btnLoadingText: 'Connecting',
+        btnNextCallback: values => {
+          return values?.ceramicDid;
         },
+        btnCallback: async (setValue, setLoading, setFormState) => {
+          setLoading(true);
+          try {
+            [client, did] = await authenticateDid(
+              window.ethereum.selectedAddress,
+            );
+            setValue('ceramicClient', client);
+            setValue('ceramicDid', did);
+            const profile = await getBasicProfile(did.id);
+            setValue('name', profile?.name || '');
+            setValue('emoji', profile?.emoji || '');
+            setValue('description', profile?.description || '');
+            setValue('homeLocation', profile?.homeLocation || '');
+            setValue('residenceCountry', profile?.residenceCountry || '');
+            setValue('url', profile?.url || '');
+            setFormState('success');
+          } catch (err) {
+            console.error(err);
+            setFormState('failed');
+          }
+          setLoading(false);
+        },
+        next: 'STEP2',
         start: true,
-        form: {
-          ...STEPPER_FORMS.CERAMIC_AUTH,
-          checklist: ['isConnected', 'isMember'],
-          disableCallback: values => {
-            return !values?.ceramicDid;
-          },
-          ctaText: 'Next',
-        },
       },
       STEP2: {
         type: 'form',
         title: 'Edit Ceramic Profile',
+        subtitle: 'Connected to Ceramic',
         form: {
           ...FORM.PROFILE,
           ctaText: 'Submit',
           formSuccessMessage: 'Connected',
           checklist: ['isConnected', 'isMember'],
           onSubmit: async ({ values }) => {
-            const profile = {
-              name: values?.name || '',
-              emoji: values?.emoji || '',
-              description: values?.description || '',
-              homeLocation: values?.homeLocation || '',
-              residenceCountry: values?.residenceCountry || '',
-              url: values?.url || '',
-            };
-            await setBasicProfile(
-              values.ceramicClient,
-              values.ceramicDid,
-              profile,
-            );
+            const profileArray = Object.entries({
+              name: values?.name || null,
+              emoji: values?.emoji || null,
+              description: values?.description || null,
+              homeLocation: values?.homeLocation || null,
+              residenceCountry: values?.residenceCountry.toUpperCase() || null,
+              url: values?.url || null,
+            }).filter(value => value[1] !== null);
+            const profile = Object.fromEntries(profileArray);
+
+            console.log('Values');
+            console.log(values);
+            await setBasicProfile(client, did, profile);
             cacheProfile(profile, member.memberAddress);
             refreshProfile(profile);
-            refreshMemberProfile();
+            await refreshMemberProfile();
             successToast({ title: 'Updated Profile!' });
+            client = null;
+            did = null;
             closeModal();
           },
         },
@@ -119,7 +132,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
       },
     });
     history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
-  }, [member.memberAddress]);
+  }, [member.memberAddress, refreshMemberProfile]);
 
   useEffect(() => {
     const edit = new URLSearchParams(location.search).get('edit');
@@ -201,8 +214,9 @@ const ProfileMenu = ({ member, refreshProfile }) => {
           <MenuItem>Copy Address</MenuItem>
         </CopyToClipboard>
 
-        <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
-
+        {address === member.memberAddress && (
+          <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
+        )}
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <>
             {isMember && hasSharesOrLoot && (

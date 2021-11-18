@@ -5,14 +5,14 @@ export const handleCustomAwait = async (
   setValue,
   values,
 ) => {
-  setFormState('loadingStepper');
+  setFormState(true);
   try {
     await awaitType.func(...awaitType.args, setValue, values);
     if (typeof then === 'function') {
-      setFormState('');
       then();
+      setFormState(false);
     } else {
-      setFormState('');
+      setFormState(false);
     }
   } catch (error) {
     console.error(error);

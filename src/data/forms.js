@@ -1,8 +1,8 @@
-import { BiErrorCircle } from 'react-icons/bi';
-import { FIELD, INFO_TEXT, FORM_DISPLAY, FORM_ACTION } from './fields';
+import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
+import { authenticateDid } from '../utils/3box';
 
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
@@ -146,7 +146,6 @@ export const PROPOSAL_FORMS = {
     title: 'Update Basic Profile',
     description:
       'Editing this profile will update your profile everywhere Ceramic is used',
-    required: ['residenceCountry'], // Use name key from proposal type object
     tx: null,
     ctaText: 'Connect',
     blurText: 'Connect to update your profile',
@@ -744,20 +743,29 @@ const MULTI_FORMS = {
 
 export const STEPPER_FORMS = {
   CERAMIC_AUTH: {
+    type: 'buttonAction',
     id: 'CERAMIC_AUTH',
     title: 'IDX Connect',
-    fields: [FORM_ACTION.CERAMIC_CONNECT],
-    indicatorStates: {
-      connected: {
-        icon: BiErrorCircle,
-        title: 'Connected to Ceramic Network',
-        explorerLink: true,
-      },
-      loadingStepper: {
-        icon: BiErrorCircle,
-        title: 'Connected to Ceramic Network',
-        explorerLink: true,
-      },
+    btnText: 'Connect',
+    btnLabel: 'Connect to Ceramic',
+    btnLoadingText: 'Connecting',
+    btnNextCallback: values => {
+      return values?.ceramicDid;
+    },
+    btnCallback: async (setValue, setLoading, setFormState) => {
+      setLoading(true);
+      try {
+        const [client, did] = await authenticateDid(
+          window.ethereum.selectedAddress,
+        );
+        setValue('ceramicClient', client);
+        setValue('ceramicDid', did);
+        setFormState('connected');
+      } catch (err) {
+        console.error(err);
+      }
+      setFormState('failed');
+      setLoading(false);
     },
   },
 };

@@ -9,6 +9,7 @@ import DiscordNotificationsLaunch from './discordLaunchForm';
 import FormBuilder from './formBuilder';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
+import ButtonAction from '../components/buttonAction';
 
 const getStepTitle = (currentStep, props) => {
   if (typeof currentStep?.title === 'string') return currentStep.title;
@@ -134,6 +135,7 @@ const StepperForm = props => {
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}
+        defaultValues={stepperStorage}
         ctaText={
           currentStep?.finish
             ? 'Submit'
@@ -209,6 +211,16 @@ const StepperForm = props => {
         goToNext={goToNext}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  if (currentStep?.type === 'buttonAction') {
+    return (
+      <ButtonAction
+        {...currentStep}
+        goToNext={goToNext}
+        setStepperStorage={setStepperStorage}
+        stepperStorage={stepperStorage}
       />
     );
   }

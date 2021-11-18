@@ -43,7 +43,9 @@ export const validate = {
     );
   },
   countryCode(val) {
-    return /^[A-Z]{2}$/.test(val);
+    if (val) {
+      return /^[A-Z]{2}$/.test(val.toUpperCase());
+    }
   },
   greaterThanZero(val) {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
