@@ -42,9 +42,6 @@ const ButtonAction = props => {
   };
 
   const handleClick = async () => {
-    // try / except with progress indicator
-    // Pass in stepper storage
-    // then in form pass in
     await btnCallback(setValue, setLoading, setFormState);
   };
 
@@ -64,8 +61,6 @@ const ButtonAction = props => {
     }
   }, [stepperStorage, formState]);
 
-  console.log('Form state');
-  console.log(formState);
   return (
     <>
       <Flex flexDirection='row' mb={3}>
@@ -87,44 +82,3 @@ const ButtonAction = props => {
 };
 
 export default ButtonAction;
-
-//    <Flex
-//      w={width}
-//      mb={mb || 3}
-//      flexDir='column'
-//      {...containerProps}
-//      hidden={hidden}
-//    >
-//      <Flex>
-//        <TextBox
-//          as={FormLabel}
-//          size='xs'
-//          htmlFor={htmlFor || name}
-//          position='relative'
-//        >
-//          {registerOptions?.required && (
-//            <Box display='inline' position='absolute' left='-1rem'>
-//              {'* '}
-//            </Box>
-//          )}
-//          {label}
-//          {info && (
-//            <ToolTipWrapper
-//              tooltip
-//              tooltipText={{ body: info }}
-//              placement='right'
-//              layoutProps={{
-//                transform: 'translateY(-2px)',
-//                display: 'inline-block',
-//              }}
-//            >
-//              <Icon as={RiInformationLine} ml={2} />
-//            </ToolTipWrapper>
-//          )}
-//        </TextBox>
-//        {btn && <Flex ml='auto'>{btn}</Flex>}
-//      </Flex>
-//
-//      {children}
-//      {helperText && <FormHelperText>{helperText}</FormHelperText>}
-//      {fieldError && <ErrorList singleError={fieldError} />}
