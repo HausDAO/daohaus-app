@@ -34,8 +34,8 @@ export const UserContextProvider = ({ children }) => {
   const hasLoadedHubData = userHubDaos?.length === numOfSupportedChains;
   const prevAddress = useRef(null);
 
-	console.log("Address")
-	console.log(address)
+  console.log('Address');
+  console.log(address);
 
   useEffect(() => {
     const bigQuery = () => {
@@ -80,12 +80,12 @@ export const UserContextProvider = ({ children }) => {
 
   const refreshMemberProfile = useCallback(async () => {
     try {
-			console.log("Refreshing")
-			console.log(address)
+      console.log('Refreshing');
+      console.log(address);
       if (!address) return;
-			console.log(address)
+      console.log(address);
       const profile = await handleGetProfile(address);
-			console.log(profile)
+      console.log(profile);
       if (!profile) return;
       setAddressProfile(profile);
       return profile;

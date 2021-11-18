@@ -38,7 +38,7 @@ export const InjectedProvider = ({ children }) => {
 
     if (!providerOptions) {
       setInjectedProvider(null);
-		  console.log("No provider Options")
+      console.log('No provider Options');
       setAddress(null);
       setWeb3Modal(defaultModal);
       window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER');
@@ -61,8 +61,8 @@ export const InjectedProvider = ({ children }) => {
       chainId,
     };
     const web3 = new Web3(provider);
-		console.log("Selected Provider")
-		console.log(web3?.currentProvider)
+    console.log('Selected Provider');
+    console.log(web3?.currentProvider);
     if (web3?.currentProvider?.selectedAddress) {
       setInjectedProvider(web3);
       setAddress(web3.currentProvider.selectedAddress);
@@ -127,7 +127,7 @@ export const InjectedProvider = ({ children }) => {
   };
 
   const disconnectDapp = async () => {
-		console.log("Disconnecting")
+    console.log('Disconnecting');
     setInjectedProvider(null);
     setAddress(null);
     setWeb3Modal(defaultModal);

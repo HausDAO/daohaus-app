@@ -16,7 +16,6 @@ const GenericButton = props => {
     values,
   } = props;
   const [loading, setLoading] = useState(false);
-	console.log(typeOf(setLoading))
   const hideButton =
     typeof btnHideCallback === 'function' ? btnHideCallback(values) : false;
 

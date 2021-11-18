@@ -17,12 +17,17 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
-import { CORE_FORMS, FORM, STEPPER_FORMS } from '../data/forms';
+import { CORE_FORMS, FORM } from '../data/forms';
 import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
-import { getBasicProfile, setBasicProfile, cacheProfile, authenticateDid } from '../utils/3box';
+import {
+  getBasicProfile,
+  setBasicProfile,
+  cacheProfile,
+  authenticateDid,
+} from '../utils/3box';
 
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
@@ -50,8 +55,8 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
   const handleEditProfile = useCallback(() => {
-		let client = null
-		let did = null
+    let client = null;
+    let did = null;
     stepperModal({
       DISPLAY: {
         type: 'buttonAction',
@@ -78,7 +83,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
             setValue('homeLocation', profile?.homeLocation || '');
             setValue('residenceCountry', profile?.residenceCountry || '');
             setValue('url', profile?.url || '');
-            setFormState("success");
+            setFormState('success');
           } catch (err) {
             console.error(err);
             setFormState('failed');
@@ -91,7 +96,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
       STEP2: {
         type: 'form',
         title: 'Edit Ceramic Profile',
-				subtitle: "Connected to Ceramic",
+        subtitle: 'Connected to Ceramic',
         form: {
           ...FORM.PROFILE,
           ctaText: 'Submit',
@@ -105,22 +110,18 @@ const ProfileMenu = ({ member, refreshProfile }) => {
               homeLocation: values?.homeLocation || null,
               residenceCountry: values?.residenceCountry.toUpperCase() || null,
               url: values?.url || null,
-						}).filter(([key, value]) => value !== null);
-						const profile = Object.fromEntries(profileArray)
-						
-						console.log("Values")
-						console.log(values)
-            await setBasicProfile(
-              client,
-              did,
-              profile,
-            );
+            }).filter(value => value[1] !== null);
+            const profile = Object.fromEntries(profileArray);
+
+            console.log('Values');
+            console.log(values);
+            await setBasicProfile(client, did, profile);
             cacheProfile(profile, member.memberAddress);
             refreshProfile(profile);
             await refreshMemberProfile();
             successToast({ title: 'Updated Profile!' });
-						client = null
-						did = null
+            client = null;
+            did = null;
             closeModal();
           },
         },
@@ -213,8 +214,9 @@ const ProfileMenu = ({ member, refreshProfile }) => {
           <MenuItem>Copy Address</MenuItem>
         </CopyToClipboard>
 
-				{ address === member.memberAddress && <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
-				}
+        {address === member.memberAddress && (
+          <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
+        )}
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <>
             {isMember && hasSharesOrLoot && (

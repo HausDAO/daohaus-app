@@ -7,41 +7,39 @@ import { handleCustomAwait } from '../utils/customAwait';
 
 const ButtonAction = props => {
   const {
-    title,
     btnText,
     btnNextCallback,
     btnLoadingText,
     btnCallback,
     goToNext,
     setStepperStorage,
-		stepperStorage,
-		btnLabel,
-		next,
+    stepperStorage,
+    btnLabel,
+    next,
   } = props;
   const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState('');
-  const [internalValue, setInternalValue] = useState({});
   const indicatorStates = {
-      connected: {
-        icon: BiErrorCircle,
-        title: 'Connected to Ceramic Network',
-        explorerLink: true,
-      },
-      loadingStepper: {
-        icon: BiErrorCircle,
-        title: 'Connected to Ceramic Network',
-        explorerLink: true,
-      },
-      failed: {
-        icon: BiErrorCircle,
-        title: 'Failed to connect please try again',
-        explorerLink: true,
+    connected: {
+      icon: BiErrorCircle,
+      title: 'Connected to Ceramic Network',
+      explorerLink: true,
+    },
+    loadingStepper: {
+      icon: BiErrorCircle,
+      title: 'Connected to Ceramic Network',
+      explorerLink: true,
+    },
+    failed: {
+      icon: BiErrorCircle,
+      title: 'Failed to connect please try again',
+      explorerLink: true,
     },
   };
 
-	const setValue = (key, value) => {
-    setStepperStorage(prevState => ({ ...prevState, [key]: value }))
-	}
+  const setValue = (key, value) => {
+    setStepperStorage(prevState => ({ ...prevState, [key]: value }));
+  };
 
   const handleClick = async () => {
     // try / except with progress indicator
@@ -50,8 +48,8 @@ const ButtonAction = props => {
     await btnCallback(setValue, setLoading, setFormState);
   };
 
-	useEffect(async () => {
-    if (btnNextCallback(stepperStorage) && formState === "success") {
+  useEffect(async () => {
+    if (btnNextCallback(stepperStorage) && formState === 'success') {
       if (next?.type === 'awaitCustom') {
         await handleCustomAwait(
           next?.awaitDef,
@@ -61,32 +59,30 @@ const ButtonAction = props => {
           stepperStorage,
         );
       } else {
+        await goToNext(next);
+      }
+    }
+  }, [stepperStorage, formState]);
 
-      await goToNext(next);
-			}
-    
-		}
-	}, [stepperStorage, formState])
-
-	console.log("Form state")
-	console.log(formState)
+  console.log('Form state');
+  console.log(formState);
   return (
-		<>
-    <Flex flexDirection='row' mb={3}>
-      <Flex flexDirection='column'>
-      <h4>{btnLabel}</h4>
-      <Button
-        type='button'
-        loadingText={btnLoadingText}
-        isLoading={loading}
-				onClick={() => handleClick()}
-      >
-        {btnText}
-      </Button>
+    <>
+      <Flex flexDirection='row' mb={3}>
+        <Flex flexDirection='column'>
+          <h4>{btnLabel}</h4>
+          <Button
+            type='button'
+            loadingText={btnLoadingText}
+            isLoading={loading}
+            onClick={() => handleClick()}
+          >
+            {btnText}
+          </Button>
+        </Flex>
       </Flex>
-    </Flex>
-    <ProgressIndicator currentState={formState} states={indicatorStates} />
-		</>
+      <ProgressIndicator currentState={formState} states={indicatorStates} />
+    </>
   );
 };
 

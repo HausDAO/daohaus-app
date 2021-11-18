@@ -135,7 +135,7 @@ const StepperForm = props => {
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}
-				defaultValues={stepperStorage}
+        defaultValues={stepperStorage}
         ctaText={
           currentStep?.finish
             ? 'Submit'
@@ -215,12 +215,14 @@ const StepperForm = props => {
     );
   }
   if (currentStep?.type === 'buttonAction') {
-    return (<ButtonAction
-      {...currentStep}
-      goToNext={goToNext}
-      setStepperStorage={setStepperStorage}
-			stepperStorage={stepperStorage}
-    />)
+    return (
+      <ButtonAction
+        {...currentStep}
+        goToNext={goToNext}
+        setStepperStorage={setStepperStorage}
+        stepperStorage={stepperStorage}
+      />
+    );
   }
   return null;
 };
