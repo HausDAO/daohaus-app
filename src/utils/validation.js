@@ -15,7 +15,7 @@ export const TYPE_ERR_MSGS = {
   urlNoHTTP: 'Must be a URL. Http not needed.',
   greaterThanZero: 'Must be greater than zero.',
   boolean: 'Must be a Booolean value',
-  addressList: 'Must be a proper address list with token values',
+  disperseList: 'Must be a proper address list with token values',
 };
 
 export const validate = {
@@ -45,7 +45,7 @@ export const validate = {
   bytes32(val) {
     return val;
   },
-  addressList(val) {
+  disperseList(val) {
     return val
       ?.split(/\r?\n/)
       .reduce(

@@ -167,6 +167,11 @@ export const CONTRACTS = {
     abiName: 'ESCROW_MINION',
     contractAddress: '.contextData.chainConfig.escrow_minion',
   },
+  DISPERSE_APP: {
+    location: 'local',
+    abiName: 'DISPERSE_APP',
+    conractAddress: '.contextData.chainConfig.disperse_app',
+  },
 };
 
 export const ACTIONS = {
@@ -264,6 +269,14 @@ export const DETAILS = {
     minionType: MINION_TYPES.SAFE,
     orderIpfsHash: '.values.ipfsOrderHash',
     eip712HashValue: '.values.eip712HashValue',
+  },
+  DISPERSE_TOKEN: {
+    title: '.values.title || Disperse Proposal',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: 'formData.type',
+    minionType: MINION_TYPES.SAFE,
+    token: '.values.tokenAddress',
   },
 };
 
@@ -1044,5 +1057,76 @@ export const TX = {
     display: 'Withdraw Balance from Escrow',
     errMsg: 'Error Withdrawing Balance from Escrow',
     successMsg: 'Balance Withdrawn from Escrow!',
+  },
+  DISPERSE_TOKEN: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Dispersing Funds to Recipients',
+    errMsg: 'Error Dispersing Funds to Recipients',
+    successMsg: 'Funds Dispersed to Recipients!',
+    gatherArgs: [
+      {
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.values.tokenAddress',
+              '.contextData.chainConfig.disperse_app',
+            ],
+          },
+        ],
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+        data: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.ERC_20,
+                fnName: 'approve',
+                gatherArgs: [
+                  '.contextData.chainConfig.disperse_app',
+                  '.values.disperseTotal',
+                ],
+              },
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.DISPERSE_APP,
+                fnName: 'disperseTokenSimple',
+                gatherArgs: [
+                  '.values.tokenAddress',
+                  '.values.userList',
+                  '.values.amountList',
+                ],
+              },
+            ],
+          },
+        ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0'],
+          },
+        ],
+      },
+      '.values.tokenAddress', // _withdrawToken
+      0, // _withdrawAmount
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.DISPERSE_TOKEN,
+      },
+      true, // _memberOnlyEnabled
+    ],
   },
 };

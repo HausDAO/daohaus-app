@@ -423,10 +423,19 @@ export const FIELD = {
   DISPERSE_CSV: {
     type: 'disperseListInput',
     label: 'Address List (Any Format)',
-    name: 'addressList',
-    htmlFor: 'addressList',
+    name: 'disperseList',
+    htmlFor: 'disperseList',
     placeholder: '0x1234...5678 1.23 \n0x8765...4321,3.21\n0x5678...1234=3.21',
-    expectType: 'addressList',
+    expectType: 'disperseList',
+  },
+  DISPERSE_TOKEN: {
+    type: 'gatedInput',
+    only: CONTRACT_MODELS.ERC20,
+    label: 'ERC-20 Address',
+    name: 'tokenAddress',
+    htmlFor: 'tokenAddress',
+    placeholder: '0x',
+    expectType: 'address',
   },
 };
 

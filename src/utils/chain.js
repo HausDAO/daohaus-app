@@ -45,6 +45,7 @@ export const supportedChains = {
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
@@ -99,6 +100,7 @@ export const supportedChains = {
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
     escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   '0x2a': {
     name: 'Ethereum Kovan',
