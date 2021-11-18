@@ -50,6 +50,8 @@ const ProfileMenu = ({ member, refreshProfile }) => {
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
 
   const handleEditProfile = useCallback(() => {
+		let client = null
+		let did = null
     stepperModal({
       DISPLAY: {
         type: 'buttonAction',
@@ -64,7 +66,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
         btnCallback: async (setValue, setLoading, setFormState) => {
           setLoading(true);
           try {
-            const [client, did] = await authenticateDid(
+            [client, did] = await authenticateDid(
               window.ethereum.selectedAddress,
             );
             setValue('ceramicClient', client);
@@ -96,23 +98,29 @@ const ProfileMenu = ({ member, refreshProfile }) => {
           formSuccessMessage: 'Connected',
           checklist: ['isConnected', 'isMember'],
           onSubmit: async ({ values }) => {
-            const profile = {
-              name: values?.name || '',
-              emoji: values?.emoji || '',
-              description: values?.description || '',
-              homeLocation: values?.homeLocation || '',
-              residenceCountry: values?.residenceCountry || '',
-              url: values?.url || '',
-            };
+            const profileArray = Object.entries({
+              name: values?.name || null,
+              emoji: values?.emoji || null,
+              description: values?.description || null,
+              homeLocation: values?.homeLocation || null,
+              residenceCountry: values?.residenceCountry.toUpperCase() || null,
+              url: values?.url || null,
+						}).filter(([key, value]) => value !== null);
+						const profile = Object.fromEntries(profileArray)
+						
+						console.log("Values")
+						console.log(values)
             await setBasicProfile(
-              values.ceramicClient,
-              values.ceramicDid,
+              client,
+              did,
               profile,
             );
             cacheProfile(profile, member.memberAddress);
             refreshProfile(profile);
-            refreshMemberProfile();
+            await refreshMemberProfile();
             successToast({ title: 'Updated Profile!' });
+						client = null
+						did = null
             closeModal();
           },
         },
@@ -123,7 +131,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
       },
     });
     history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
-  }, [member.memberAddress]);
+  }, [member.memberAddress, refreshMemberProfile]);
 
   useEffect(() => {
     const edit = new URLSearchParams(location.search).get('edit');
@@ -205,8 +213,8 @@ const ProfileMenu = ({ member, refreshProfile }) => {
           <MenuItem>Copy Address</MenuItem>
         </CopyToClipboard>
 
-        <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
-
+				{ address === member.memberAddress && <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
+				}
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <>
             {isMember && hasSharesOrLoot && (

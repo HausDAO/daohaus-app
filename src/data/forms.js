@@ -146,7 +146,6 @@ export const PROPOSAL_FORMS = {
     title: 'Update Basic Profile',
     description:
       'Editing this profile will update your profile everywhere Ceramic is used',
-    required: ['residenceCountry'], // Use name key from proposal type object
     tx: null,
     ctaText: 'Connect',
     blurText: 'Connect to update your profile',

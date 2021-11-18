@@ -127,8 +127,6 @@ const StepperForm = props => {
     fn: () => closeModal(),
   };
 
-	console.log("stepperStorage")
-	console.log(stepperStorage)
   if (currentStep?.type === 'form') {
     return (
       <FormBuilder

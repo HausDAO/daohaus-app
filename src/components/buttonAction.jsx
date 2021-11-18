@@ -51,11 +51,7 @@ const ButtonAction = props => {
   };
 
 	useEffect(async () => {
-		console.log("Internal values")
-		console.log(stepperStorage)
     if (btnNextCallback(stepperStorage) && formState === "success") {
-			console.log("Next")
-			console.log(next)
       if (next?.type === 'awaitCustom') {
         await handleCustomAwait(
           next?.awaitDef,
