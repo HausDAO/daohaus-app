@@ -24,6 +24,7 @@ import {
   handleListSort,
   searchProposals,
 } from '../utils/proposalUtils';
+import ProposalCardV2 from './proposalCard2';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
@@ -150,6 +151,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
         />
         <CsvDownloadButton entityList={listProposals} typename='Proposals' />
       </Flex>
+      <ProposalCardV2 />
       {isLoaded &&
         paginatedProposals?.map(proposal => {
           return (
