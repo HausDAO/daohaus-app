@@ -49,10 +49,12 @@ const Proposal = ({
         if (res.proposals[0]) {
           setCurrentProposal(
             proposalResolver(res.proposals[0], {
-              proposalType: true,
-              description: true,
+              status: true,
               title: true,
-              activityFeed: true,
+              description: true,
+              link: true,
+              hash: true,
+              proposalType: true,
             }),
           );
         }
@@ -64,6 +66,8 @@ const Proposal = ({
       setUpProposal();
     }
   }, [activities]);
+
+  console.log('currentProposal', currentProposal);
 
   const handleRefreshDao = () => {
     const skipVaults = true;

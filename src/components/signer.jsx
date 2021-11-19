@@ -12,6 +12,7 @@ import TextBox from './TextBox';
 import { FORM } from '../data/forms';
 import { addBoost } from '../utils/metadata';
 import { chainByID } from '../utils/chain';
+import { useTX } from '../contexts/TXContext';
 
 const indicatorStates = {
   signing: {
@@ -30,12 +31,22 @@ const indicatorStates = {
 };
 
 const Signer = props => {
-  const { playlist, boostData, goToNext, finish, stepperStorage } = props;
+  const {
+    playlist,
+    boostData,
+    goToNext,
+    finish,
+    stepperStorage,
+    daoRefetch,
+  } = props;
   const { daochain } = useParams();
   const { successToast, errorToast } = useOverlay();
   const { daoProposals, daoMetaData, refetchMetaData } = useMetaData();
+  const { refreshDao } = useTX();
   const { injectedProvider, address } = useInjectedProvider();
   const [state, setState] = useState(null);
+
+  console.log('daoRefetch', daoRefetch, props);
 
   const handleAddBoost = async () => {
     setState('signing');
@@ -60,6 +71,10 @@ const Signer = props => {
           title: 'Updated DAO Metadata',
         });
         refetchMetaData();
+        if (daoRefetch) {
+          const skipVaults = true;
+          refreshDao(skipVaults);
+        }
       },
     });
   };
