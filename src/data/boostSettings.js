@@ -24,7 +24,7 @@ const SETTING_STEPS = {
       isUserStep: true,
       start: true,
     },
-    STEP2: { ...COMMON_STEPS.SIGNER, stepLabel: 'Sign' },
+    STEP2: { ...COMMON_STEPS.SIGNER, stepLabel: 'Sign', daoRefetch: true },
   },
 };
 

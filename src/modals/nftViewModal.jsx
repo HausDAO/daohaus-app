@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
+  Center,
   Flex,
   Box,
   Modal,
@@ -14,11 +15,16 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import AddressAvatar from '../components/addressAvatar';
 
+import NFTImage from '../assets/img/nft-placeholder.png';
+
 const NftViewModal = () => {
   const { nftViewModal, setNftViewModal } = useOverlay();
   const { theme } = useCustomTheme();
 
   const closeModal = () => setNftViewModal({});
+
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   return (
     <Modal
@@ -45,14 +51,27 @@ const NftViewModal = () => {
               justifyContent='center'
               flexDir={['column', 'column', 'row']}
             >
-              <Image
-                p={5}
-                maxHeight={['100%', '50vh']}
-                maxWidth={['100%', '50vh']}
-                fit='contain'
-                objectFit='contain'
-                src={nftViewModal?.image}
-              />
+              <Flex direction='column'>
+                <Image
+                  p={5}
+                  maxHeight={['100%', '50vh']}
+                  maxWidth={['100%', '50vh']}
+                  fit='contain'
+                  objectFit='contain'
+                  src={
+                    imageLoaded && !imageError && nftViewModal?.image
+                      ? nftViewModal.image
+                      : NFTImage
+                  }
+                  onLoad={() => setImageLoaded(true)}
+                  onError={() => setImageError(true)}
+                />
+                {imageError && (
+                  <Center>
+                    <Box marginTop='-120px'>Could not load image</Box>
+                  </Center>
+                )}
+              </Flex>
               <Flex
                 w='100%'
                 d='column'
@@ -133,47 +152,6 @@ const NftViewModal = () => {
                         View on {nftViewModal.name}
                       </Box>
                     )}
-
-                    {/* <Box
-                      mt={5}
-                      size='xl'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      Sell
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='xl'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      Send
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='s'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      View on Rarible
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='s'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      Share Link
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='s'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      buy
-                    </Box> */}
                   </Box>
                 </Flex>
               </Flex>

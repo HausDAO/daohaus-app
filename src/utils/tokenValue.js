@@ -125,6 +125,7 @@ export const getContractBalance = (readableBalance, decimals) => {
   const exponent = ethers.BigNumber.from(10).pow(
     floatPoint ? decimals - floatPoint : decimals,
   );
+
   return ethers.utils
     .parseUnits(readableBalance, floatPoint || 0)
     .mul(exponent)

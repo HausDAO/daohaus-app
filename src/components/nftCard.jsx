@@ -68,17 +68,19 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
           },
         }}
       >
-        {/* <Image src={hydratedNft?.image} margin='auto' /> */}
-        <Image
-          src={
-            imageLoaded && !imageError && hydratedNft?.image
-              ? hydratedNft.image
-              : NFTImage
-          }
-          onLoad={() => setImageLoaded(true)}
-          onError={() => setImageError(true)}
-          margin='auto'
-        />
+        <Flex direction='column'>
+          <Image
+            src={
+              imageLoaded && !imageError && hydratedNft?.image
+                ? hydratedNft.image
+                : NFTImage
+            }
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+            margin='auto'
+          />
+          {imageError && <Box marginTop='-80px'>Could not load image</Box>}
+        </Flex>
       </AspectRatio>
       <Flex
         direction='row'

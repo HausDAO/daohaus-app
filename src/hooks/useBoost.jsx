@@ -18,11 +18,13 @@ const useBoost = () => {
     },
     // custom boost related functions
     spamFilterNotice(tx) {
-      if (!tx) return null;
+      if (!tx || tx.type === 'formCondition') return null;
+
+      console.log('tx', tx);
       const proposalTypeNeedsTribute =
         tx.name !== TX.WHITELIST_TOKEN_PROPOSAL.name &&
         tx.name !== TX.GUILDKICK_PROPOSAL.name &&
-        tx.contract.abiName === CONTRACTS.CURRENT_MOLOCH.abiName;
+        tx?.contract.abiName === CONTRACTS.CURRENT_MOLOCH.abiName;
       if (proposalTypeNeedsTribute && daoMetaData.boosts?.SPAM_FILTER?.active) {
         const depositAmount = `${getReadableBalance({
           balance: daoMetaData.boosts.SPAM_FILTER.metadata.paymentRequested,

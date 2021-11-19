@@ -328,7 +328,7 @@ export const STEPS = {
       stepLabel: 'Select Filter Parameter',
       isUserStep: true,
     },
-    STEP2: COMMON_STEPS.SIGNER,
+    STEP2: { ...COMMON_STEPS.SIGNER, daoRefetch: true },
   },
 };
 
