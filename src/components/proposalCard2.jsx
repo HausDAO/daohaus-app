@@ -26,10 +26,13 @@ import ContentBuilder from './contentBuilder/contentBuilder';
 
 const SAMPLE = {
   id: 'SAMPLE',
+
   content: [
-    { type: 'label', text: 'This is a label' },
+    { type: 'cardlabel', text: 'funding proposal' },
+    { type: 'label', text: 'This is a Label' },
     { type: 'heading', text: 'This is a Heading' },
     { type: 'pars', text: 'This is a paragraph' },
+    // { type: 'smallPars', text: 'This is smallText' },
   ],
 };
 // const formatStatus = status => {

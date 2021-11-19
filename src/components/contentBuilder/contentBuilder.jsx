@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heading, Label, Paragraph } from './typography';
+import { CardLabel, Heading, Label, Paragraph } from './typography';
 
 const ContentBuilder = ({ content = [] }) =>
   content.map((item, index) => (
@@ -11,6 +11,7 @@ const ContentFactory = props => {
   if (type === 'pars') return <Paragraph {...props} />;
   if (type === 'heading') return <Heading {...props} />;
   if (type === 'label') return <Label {...props} />;
+  if (type === 'cardlabel') return <CardLabel {...props} />;
 };
 
 export default ContentBuilder;
