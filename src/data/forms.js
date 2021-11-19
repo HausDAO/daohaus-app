@@ -451,17 +451,24 @@ export const PROPOSAL_FORMS = {
     description: 'Make a proposal to disperse tokens to a list of addresses',
     type: PROPOSAL_TYPES.DISPERSE,
     minionType: MINION_TYPES.SAFE,
-    tx: TX.DISPERSE_TOKEN,
-    required: [
-      'selectedMinion',
-      'tokenAddress',
-      'userList',
-      'amountList',
-      'disperseTotal',
-    ],
+    formConditions: ['eth', 'token'],
+    tx: {
+      type: 'formCondition',
+      eth: TX.DISPERSE_ETH,
+      token: TX.DISPERSE_TOKEN,
+    },
+    required: ['selectedMinion', 'userList', 'amountList', 'disperseTotal'],
     fields: [
       [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
-      [FIELD.DISPERSE_TOKEN, FIELD.DISPERSE_CSV],
+      [
+        FIELD.DISPERSE_TYPE_SWTICH,
+        {
+          type: 'formCondition',
+          eth: null,
+          token: FIELD.DISPERSE_TOKEN,
+        },
+        FIELD.DISPERSE_CSV,
+      ],
     ],
   },
   NEW_SAFE_MINION: {

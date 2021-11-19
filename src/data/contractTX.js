@@ -276,7 +276,7 @@ export const DETAILS = {
     link: '.values.link',
     proposalType: 'formData.type',
     minionType: MINION_TYPES.SAFE,
-    token: '.values.tokenAddress',
+    token: '.values.tokenAddress || 0x0',
   },
 };
 
@@ -1063,9 +1063,9 @@ export const TX = {
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
-    display: 'Dispersing Funds to Recipients',
-    errMsg: 'Error Dispersing Funds to Recipients',
-    successMsg: 'Funds Dispersed to Recipients!',
+    display: 'Dispersing Tokens to Recipients',
+    errMsg: 'Error Dispersing Tokens to Recipients',
+    successMsg: 'Tokens Dispersed to Recipients!',
     gatherArgs: [
       {
         // _transactions,
@@ -1121,6 +1121,61 @@ export const TX = {
         ],
       },
       '.values.tokenAddress', // _withdrawToken
+      0, // _withdrawAmount
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.DISPERSE_TOKEN,
+      },
+      true, // _memberOnlyEnabled
+    ],
+  },
+  DISPERSE_ETH: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Dispersing ETH to Recipients',
+    errMsg: 'Error Dispersing ETH to Recipients',
+    successMsg: 'ETH Dispersed to Recipients!',
+    gatherArgs: [
+      {
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['.contextData.chainConfig.disperse_app'],
+          },
+        ],
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['.values.disperseTotal'],
+          },
+        ],
+        data: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.DISPERSE_APP,
+                fnName: 'disperseEther',
+                gatherArgs: ['.values.userList', '.values.amountList'],
+              },
+            ],
+          },
+        ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0'],
+          },
+        ],
+      },
+      '.contextData.daoOverview.depositToken.tokenAddress', // _withdrawToken
       0, // _withdrawAmount
       {
         type: 'detailsToJSON',

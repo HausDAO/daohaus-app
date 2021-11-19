@@ -422,11 +422,30 @@ export const FIELD = {
   },
   DISPERSE_CSV: {
     type: 'disperseListInput',
+    listenTo: 'formCondition',
     label: 'Address List (Any Format)',
     name: 'disperseList',
     htmlFor: 'disperseList',
+    disperseType: {
+      type: 'formCondition',
+      eth: 'eth',
+      token: 'token',
+    },
     placeholder: '0x1234...5678 1.23 \n0x8765...4321,3.21\n0x5678...1234=3.21',
     expectType: 'disperseList',
+  },
+  DISPERSE_TYPE_SWTICH: {
+    type: 'toggleForm',
+    listenTo: 'formCondition',
+    checked: 'eth',
+    unchecked: 'token',
+    label: {
+      type: 'formCondition',
+      token: 'Token',
+      eth: 'Eth',
+    },
+    title: 'Funding Type',
+    expectType: 'any',
   },
   DISPERSE_TOKEN: {
     type: 'gatedInput',
