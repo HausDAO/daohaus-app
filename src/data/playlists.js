@@ -42,6 +42,11 @@ export const BOOST_PLAYLISTS = {
     id: 'Superfluid minion',
     forms: ['SUPERFLUID_STREAM'],
   },
+  DISPERSE: {
+    name: 'Disperse',
+    id: 'disperse',
+    forms: ['MINION_DISPERSE'],
+  },
 };
 
 export const defaultProposals = {

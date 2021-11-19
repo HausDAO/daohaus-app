@@ -444,8 +444,7 @@ export const PROPOSAL_FORMS = {
     tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
-  MINION_DISPERSE_TOKEN: {
-    dev: true,
+  MINION_DISPERSE: {
     id: 'MINION_DISPERSE_TOKEN',
     title: 'Disperse Tokens',
     description: 'Make a proposal to disperse tokens to a list of addresses',
