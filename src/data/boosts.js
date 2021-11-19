@@ -518,7 +518,7 @@ export const BOOSTS = {
     minionData: MINIONS[MINION_TYPES.SAFE],
     boostContent: CONTENT.DISPERSE,
     categories: ['payments'],
-    networks: { '0x4': true, '0x1': true },
+    networks: 'all',
     cost: 'free',
     settings: 'none',
   },
