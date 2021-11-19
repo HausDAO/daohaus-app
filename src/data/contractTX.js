@@ -276,7 +276,14 @@ export const DETAILS = {
     link: '.values.link',
     proposalType: 'formData.type',
     minionType: MINION_TYPES.SAFE,
-    token: '.values.tokenAddress || 0x0',
+    token: '.values.tokenAddress',
+  },
+  DISPERSE_ETH: {
+    title: '.values.title || Disperse Proposal',
+    description: '.values.description',
+    link: '.values.link',
+    proposalType: 'formData.type',
+    minionType: MINION_TYPES.SAFE,
   },
 };
 
@@ -1063,9 +1070,9 @@ export const TX = {
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
-    display: 'Dispersing Tokens to Recipients',
-    errMsg: 'Error Dispersing Tokens to Recipients',
-    successMsg: 'Tokens Dispersed to Recipients!',
+    display: 'Submitting Token Disperse Proposal',
+    errMsg: 'Error Token Disperse Proposal',
+    successMsg: 'Token Disperse Proposal Submitted!',
     gatherArgs: [
       {
         // _transactions,
@@ -1134,9 +1141,9 @@ export const TX = {
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
-    display: 'Dispersing ETH to Recipients',
-    errMsg: 'Error Dispersing ETH to Recipients',
-    successMsg: 'ETH Dispersed to Recipients!',
+    display: 'Submitting ETH Disperse Proposal',
+    errMsg: 'Error ETH Disperse Proposal',
+    successMsg: 'ETH Disperse Proposal Submitted!',
     gatherArgs: [
       {
         // _transactions,
@@ -1179,7 +1186,7 @@ export const TX = {
       0, // _withdrawAmount
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.DISPERSE_TOKEN,
+        gatherFields: DETAILS.DISPERSE_ETH,
       },
       true, // _memberOnlyEnabled
     ],
