@@ -48,6 +48,15 @@ export const ParaSm = props => {
   );
 };
 
+export const ParaLg = props => {
+  const { text, children } = props;
+  return (
+    <Text fontSize='1.2rem' lineHeight='168.4%;' {...props}>
+      {text || children}
+    </Text>
+  );
+};
+
 export const CardLabel = props => (
   <Label fontSize='xs' opacity='0.8' letterSpacing='0.25rem' {...props} />
 );

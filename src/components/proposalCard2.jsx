@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import humanFormat from 'human-format';
 import {
   Flex,
   Box,
@@ -9,6 +10,7 @@ import {
   Icon,
   Divider,
   Progress,
+  Center,
 } from '@chakra-ui/react';
 import {
   RiArrowLeftLine,
@@ -31,28 +33,51 @@ import {
 import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCustomProposalTerm } from '../utils/metadata';
-import ContentBuilder from './contentBuilder/contentBuilder';
-import { ParaMd, ParaSm } from './contentBuilder/typography';
+import { CardLabel, ParaLg, ParaMd, ParaSm } from './typography';
+import { getReadableBalance } from '../utils/tokenValue';
 
-const SAMPLE = {
-  id: 'SAMPLE',
-
-  content: [
-    { type: 'cardlabel', text: 'funding proposal', mb: '1' },
-    // { type: 'label', text: 'This is a Label' },
-    // { type: 'heading', text: 'This is a Heading' },
-    { type: 'par', text: 'Takahashi wants in', fontWeight: '700' },
-    {
-      type: 'cardIncoming',
-      text: 'Requesting <b>100 Shares, 4000 Loot </b>',
-    },
-    // { type: 'smallPars', text: 'This is smallText' },
-  ],
+const readableNumber = ({ amount, unit }) => {
+  if (amount > 0 && amount < 1) {
+    return `${Number(amount.toFixed(4))} ${unit}`;
+  }
+  return `${humanFormat(amount, {
+    unit: ` ${unit}`,
+    decimals: 1,
+    separator: '',
+  })}`;
 };
-// const formatStatus = status => {
-//   return status.split(/(?=[A-Z])/).join(' ');
-// };
+
+const readableTokenBalance = tokenData => {
+  const { balance, decimals, symbol } = tokenData || {};
+  if (!balance || !decimals || !symbol) return '!! MISSING DATA !!';
+  const readableBalance = getReadableBalance(tokenData);
+  return readableNumber({ amount: readableBalance, unit: symbol });
+};
+
+const checkOffering = () => {};
+
+const checkRequesting = proposal => {
+  const {
+    paymentRequested,
+    paymentTokenDecimals,
+    paymentTokenSymbol,
+  } = proposal;
+  const payReadable = paymentRequested
+    ? readableTokenBalance({
+        decimals: paymentTokenDecimals,
+        balance: paymentRequested,
+        symbol: paymentTokenSymbol,
+      })
+    : null;
+  // const shareReadble = getShareReadable(proposal?.paymentRequested);
+  // const lootReadable = getLootRequestReadable(proposal?.lootRequested);
+  // const lootRequested =
+  // const sharesRequested =
+};
+const checkSpecial = () => {};
+
 const ProposalCardV2 = ({ proposal, customTerms }) => {
+  console.log(`proposal`, proposal);
   // const { daochain, daoid } = useParams();
   // const { address } = useInjectedProvider();
   // const [status, setStatus] = useState(null);
@@ -65,31 +90,12 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
   // }, [proposal]);
 
   return (
-    <ContentBox p='0'>
+    <ContentBox p='0' mb={4}>
       <Flex>
-        <Flex
-          width='60%'
-          justifyContent='space-between'
-          borderRight='1px solid rgba(255,255,255,0.3)'
-        >
-          <Box px='1.2rem' py='0.6rem'>
-            <ContentBuilder {...SAMPLE} />
-          </Box>
-          <Box px='1.2rem' py='0.6rem'>
-            <Button
-              variant='ghost'
-              p='0'
-              size='sm'
-              fontSize='.85rem'
-              fontWeight='600'
-              color='secondary.400'
-              transform='translateY(-.4rem)'
-            >
-              More Details
-            </Button>
-          </Box>
-        </Flex>
-        <Divider color='white' orientation='vertical' h='100%' />
+        <PropCardBrief proposal={proposal} />
+        <Center height='100%'>
+          <Divider orientation='vertical' />
+        </Center>
         <Flex w='40%'>
           <Box px='1.2rem' py='0.6rem' w='100%'>
             <Flex alignItems='center' mb={3}>
@@ -131,6 +137,38 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
         </Flex>
       </Flex>
     </ContentBox>
+  );
+};
+
+const PropCardBrief = ({ proposal }) => {
+  const requesting = checkRequesting(proposal);
+  const offering = checkOffering(proposal);
+  const special = (requesting && offering) || checkSpecial(proposal);
+
+  return (
+    <Flex
+      width='60%'
+      justifyContent='space-between'
+      borderRight='1px solid rgba(255,255,255,0.3)'
+    >
+      <Box px='1.2rem' py='0.6rem'>
+        <CardLabel>{proposal.proposalType}</CardLabel>
+        <ParaMd fontWeight='700'>{proposal.title}</ParaMd>
+      </Box>
+      <Box px='1.2rem' py='0.6rem'>
+        <Button
+          variant='ghost'
+          p='0'
+          size='sm'
+          fontSize='.85rem'
+          fontWeight='400'
+          color='secondary.400'
+          transform='translateY(-.4rem)'
+        >
+          More Details
+        </Button>
+      </Box>
+    </Flex>
   );
 };
 

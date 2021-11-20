@@ -17,7 +17,6 @@ import {
   sortOptions,
   allFilter,
 } from '../utils/proposalContent';
-import ProposalCard from './proposalCard';
 import TextBox from './TextBox';
 import {
   determineUnreadProposalList,
@@ -158,18 +157,15 @@ const ProposalsList = ({ proposals, customTerms }) => {
       </Flex>
 
       {isLoaded && isActive('SPAM_FILTER') && <SpamFilterListNotification />}
-      <ProposalCardV2 />
 
       {isLoaded &&
-        paginatedProposals?.map(proposal => {
-          return (
-            <ProposalCard
-              key={proposal.id}
-              proposal={proposal}
-              customTerms={customTerms}
-            />
-          );
-        })}
+        paginatedProposals?.map(proposal => (
+          <ProposalCardV2
+            key={proposal.id}
+            proposal={proposal}
+            customTerms={customTerms}
+          />
+        ))}
 
       {isLoaded ? (
         <Paginator

@@ -1,5 +1,11 @@
 import React from 'react';
-import { CardIncoming, CardLabel, Heading, Label, ParaMd } from './typography';
+import {
+  CardIncoming,
+  CardLabel,
+  Heading,
+  Label,
+  ParaMd,
+} from '../components/typography';
 
 const EMPH_TYEPS = { bold: '<b>', italic: '<i>' };
 
