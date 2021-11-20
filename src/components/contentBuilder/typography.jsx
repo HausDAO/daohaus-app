@@ -17,16 +17,31 @@ export const Label = props => {
   );
 };
 
-export const Heading = ({ text, children }) => (
-  <TextBox size='md' variant='label'>
-    {text || children}
-  </TextBox>
-);
-export const Paragraph = ({ text, children }) => (
-  <TextBox variant='body' size='sm'>
-    {text || children}
-  </TextBox>
-);
+export const Heading = props => {
+  const { text, children } = props;
+  return (
+    <Text fontSize='2rem' variant='label' lineHeight='168.4%;'>
+      {text || children}
+    </Text>
+  );
+};
+
+export const ParaMd = props => {
+  const { text, children } = props;
+  return (
+    <Text fontSize='1rem' lineHeight='168.4%;' {...props}>
+      {text || children}
+    </Text>
+  );
+};
+export const ParaSm = props => {
+  const { text, children } = props;
+  return (
+    <Text fontSize='.8rem' lineHeight='168.4%;' {...props}>
+      {text || children}
+    </Text>
+  );
+};
 
 export const CardLabel = props => (
   <Label fontSize='xs' opacity='0.8' letterSpacing='0.25rem' {...props} />

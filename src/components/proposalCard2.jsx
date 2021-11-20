@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Flex, Box, Button, Skeleton, Badge, Icon } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Button,
+  Skeleton,
+  Badge,
+  Icon,
+  Divider,
+  Progress,
+} from '@chakra-ui/react';
 import {
   RiArrowLeftLine,
   RiArrowRightLine,
@@ -23,15 +32,16 @@ import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCustomProposalTerm } from '../utils/metadata';
 import ContentBuilder from './contentBuilder/contentBuilder';
+import { ParaMd, ParaSm } from './contentBuilder/typography';
 
 const SAMPLE = {
   id: 'SAMPLE',
 
   content: [
-    { type: 'cardlabel', text: 'funding proposal' },
-    { type: 'label', text: 'This is a Label' },
-    { type: 'heading', text: 'This is a Heading' },
-    { type: 'pars', text: 'This is a paragraph' },
+    { type: 'cardlabel', text: 'funding proposal', mb: '1' },
+    // { type: 'label', text: 'This is a Label' },
+    // { type: 'heading', text: 'This is a Heading' },
+    { type: 'par', text: 'Takahashi wants in', fontWeight: '700' },
     // { type: 'smallPars', text: 'This is smallText' },
   ],
 };
@@ -51,8 +61,71 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
   // }, [proposal]);
 
   return (
-    <ContentBox key='0' mt={3} p='0'>
-      <ContentBuilder {...SAMPLE} />
+    <ContentBox p='0'>
+      <Flex>
+        <Flex
+          width='60%'
+          justifyContent='space-between'
+          borderRight='1px solid rgba(255,255,255,0.3)'
+        >
+          <Box px='1.2rem' py='0.6rem'>
+            <ContentBuilder {...SAMPLE} />
+          </Box>
+          <Box px='1.2rem' py='0.6rem'>
+            <Button
+              variant='ghost'
+              p='0'
+              size='sm'
+              fontSize='.85rem'
+              fontWeight='600'
+              color='secondary.400'
+              transform='translateY(-.4rem)'
+            >
+              More Details
+            </Button>
+          </Box>
+        </Flex>
+        <Divider color='white' orientation='vertical' h='100%' />
+        <Flex w='40%'>
+          <Box px='1.2rem' py='0.6rem' w='100%'>
+            <Flex alignItems='center' mb={3}>
+              <Box
+                borderRadius='50%'
+                background='green'
+                h='.6rem'
+                w='.6rem'
+                mr='2'
+              />
+              <ParaSm fontWeight='700' mr='1'>
+                Passed
+              </ParaSm>
+              <ParaSm>and needs execution </ParaSm>
+            </Flex>
+            <Progress value={80} mb='3' colorScheme='secondary.500' />
+            <Flex justifyContent='space-between'>
+              <Button
+                size='sm'
+                minW='64px'
+                backgroundColor='white'
+                color='black'
+              >
+                No
+              </Button>
+              <Button
+                size='sm'
+                minW='64px'
+                color='secondary.500'
+                variant='outline'
+              >
+                Abstain
+              </Button>
+              <Button size='sm' minW='64px'>
+                Yes
+              </Button>
+            </Flex>
+          </Box>
+        </Flex>
+      </Flex>
     </ContentBox>
   );
 };
