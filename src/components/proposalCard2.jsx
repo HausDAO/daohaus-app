@@ -42,6 +42,10 @@ const SAMPLE = {
     // { type: 'label', text: 'This is a Label' },
     // { type: 'heading', text: 'This is a Heading' },
     { type: 'par', text: 'Takahashi wants in', fontWeight: '700' },
+    {
+      type: 'cardIncoming',
+      text: 'Requesting <b>100 Shares, 4000 Loot </b>',
+    },
     // { type: 'smallPars', text: 'This is smallText' },
   ],
 };
