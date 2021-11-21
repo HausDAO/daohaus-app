@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import humanFormat from 'human-format';
 import {
@@ -36,21 +36,22 @@ import { getCustomProposalTerm } from '../utils/metadata';
 import { CardLabel, ParaLg, ParaMd, ParaSm } from './typography';
 import { getReadableBalance } from '../utils/tokenValue';
 
-const readableNumber = ({ amount, unit }) => {
+const readableNumber = ({ amount, unit, decimals = 1, separator = '' }) => {
+  if (!amount || !unit) return null;
   if (amount > 0 && amount < 1) {
     return `${Number(amount.toFixed(4))} ${unit}`;
   }
   return `${humanFormat(amount, {
     unit: ` ${unit}`,
-    decimals: 1,
-    separator: '',
+    decimals,
+    separator,
   })}`;
 };
-
 const readableTokenBalance = tokenData => {
   const { balance, decimals, symbol } = tokenData || {};
-  if (!balance || !decimals || !symbol) return '!! MISSING DATA !!';
+  if (!balance || !decimals || !symbol) return null;
   const readableBalance = getReadableBalance(tokenData);
+  if (!readableBalance) return null;
   return readableNumber({ amount: readableBalance, unit: symbol });
 };
 
@@ -61,23 +62,35 @@ const checkRequesting = proposal => {
     paymentRequested,
     paymentTokenDecimals,
     paymentTokenSymbol,
+    sharesRequested,
+    lootRequested,
   } = proposal;
-  const payReadable = paymentRequested
+
+  const paymentReadable = Number(paymentRequested)
     ? readableTokenBalance({
         decimals: paymentTokenDecimals,
         balance: paymentRequested,
         symbol: paymentTokenSymbol,
       })
-    : null;
-  // const shareReadble = getShareReadable(proposal?.paymentRequested);
-  // const lootReadable = getLootRequestReadable(proposal?.lootRequested);
-  // const lootRequested =
-  // const sharesRequested =
+    : '';
+
+  const sharesReadable = Number(sharesRequested)
+    ? readableNumber({ unit: 'Shares', amount: Number(sharesRequested) })
+    : '';
+  const lootReadable = Number(lootRequested)
+    ? readableNumber({ unit: 'Loot', amount: Number(lootRequested) })
+    : '';
+
+  const itemsRequested = [sharesReadable, lootReadable, paymentReadable]
+    .filter(Boolean)
+    .join(', ');
+  if (!itemsRequested?.length) return;
+
+  console.log(`itemsRequested`, itemsRequested);
 };
 const checkSpecial = () => {};
 
 const ProposalCardV2 = ({ proposal, customTerms }) => {
-  console.log(`proposal`, proposal);
   // const { daochain, daoid } = useParams();
   // const { address } = useInjectedProvider();
   // const [status, setStatus] = useState(null);
@@ -88,7 +101,7 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
   //     setStatus(statusStr);
   //   }
   // }, [proposal]);
-
+  console.log(`proposal`, proposal);
   return (
     <ContentBox p='0' mb={4}>
       <Flex>
