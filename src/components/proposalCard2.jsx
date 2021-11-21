@@ -5,7 +5,7 @@ import { Flex, Box, Button, Divider, Progress, Center } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
-import { CardLabel, ParaMd, ParaSm } from './typography';
+import { Bold, CardLabel, ParaMd, ParaSm } from './typography';
 import { getReadableBalance } from '../utils/tokenValue';
 
 const readableNumber = ({ amount, unit, decimals = 1, separator = '' }) => {
@@ -181,10 +181,37 @@ const PropCardOffer = ({ proposal }) => {
     }
   }, [proposal]);
   return (
+    <PropCardTransfer
+      outgoing
+      action='Offering'
+      itemText={requestText}
+      specialLocation='Minion'
+    />
+  );
+};
+
+const PropCardTransfer = ({
+  incoming,
+  outgoing,
+  itemText,
+  action,
+  specialLocation,
+}) => {
+  return (
     <Flex alignItems='center'>
-      <RiArrowRightLine size='1.2rem' />
-      <ParaMd mx='1'>Offering</ParaMd>
-      <ParaMd fontWeight='700'>{requestText}</ParaMd>
+      {incoming && <RiArrowRightLine size='1.2rem' />}
+      {outgoing && <RiArrowRightLine size='1.2rem' />}
+      {specialLocation ? (
+        <ParaMd>
+          {action}
+          <Bold> {itemText} </Bold> to <Bold> {specialLocation}</Bold>
+        </ParaMd>
+      ) : (
+        <ParaMd>
+          {action}
+          <Bold>{itemText}</Bold>
+        </ParaMd>
+      )}
     </Flex>
   );
 };
