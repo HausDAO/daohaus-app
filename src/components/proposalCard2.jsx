@@ -9,6 +9,7 @@ import {
   Progress,
   Center,
   Icon,
+  Skeleton,
 } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 
@@ -142,7 +143,10 @@ const DetailsLink = ({ proposalId }) => {
   );
 };
 
-const PropCardBrief = ({ proposal = {} }) => {
+const PropCardBrief = ({
+  proposal = {},
+  customTransferUI = 'minionTransfer',
+}) => {
   const isOffering = Number(proposal.tributeOffered) > 0;
   const isRequesting =
     Number(proposal.lootRequested) > 0 ||
@@ -163,6 +167,12 @@ const PropCardBrief = ({ proposal = {} }) => {
         </ParaMd>
         {isRequesting && <PropCardRequest proposal={proposal} />}
         {isOffering && <PropCardOffer proposal={proposal} />}
+        {customTransferUI && (
+          <CustomTransfer
+            proposal={proposal}
+            customTransferUI={customTransferUI}
+          />
+        )}
       </Box>
       <DetailsLink proposalId={proposal.proposalId} />
     </Flex>
@@ -187,6 +197,26 @@ const PropCardOffer = ({ proposal }) => {
     }
   }, [proposal]);
   return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
+};
+
+const MinionTransfer = ({ proposal, isLoaded }) => {
+  return <AsyncCardTransfer isLoaded={isLoaded} proposal={proposal} />;
+};
+
+const CustomTransfer = ({ proposal, customTransferUI }) => {
+  if (customTransferUI === 'minionTransfer') {
+    return <MinionTransfer proposal={proposal} />;
+  }
+  return null;
+};
+
+const AsyncCardTransfer = props => {
+  const { isLoaded } = props;
+  return (
+    <Skeleton isLoaded={isLoaded} height='1.5rem'>
+      <PropCardTransfer /> ;
+    </Skeleton>
+  );
 };
 
 const PropCardTransfer = ({
