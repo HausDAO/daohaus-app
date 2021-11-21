@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import humanFormat from 'human-format';
 import {
@@ -55,9 +55,7 @@ const readableTokenBalance = tokenData => {
   return readableNumber({ amount: readableBalance, unit: symbol });
 };
 
-const checkOffering = () => {};
-
-const checkRequesting = proposal => {
+const generateRequestText = proposal => {
   const {
     paymentRequested,
     paymentTokenDecimals,
@@ -65,7 +63,6 @@ const checkRequesting = proposal => {
     sharesRequested,
     lootRequested,
   } = proposal;
-
   const paymentReadable = Number(paymentRequested)
     ? readableTokenBalance({
         decimals: paymentTokenDecimals,
@@ -81,32 +78,33 @@ const checkRequesting = proposal => {
     ? readableNumber({ unit: 'Loot', amount: Number(lootRequested) })
     : '';
 
-  const itemsRequested = [sharesReadable, lootReadable, paymentReadable]
+  return [sharesReadable, lootReadable, paymentReadable]
     .filter(Boolean)
     .join(', ');
-  if (!itemsRequested?.length) return;
-
-  console.log(`itemsRequested`, itemsRequested);
 };
+
+const generateOfferText = proposal => {
+  const { tributeOffered, tributeTokenDecimals, tributeTokenSymbol } = proposal;
+  const tributeReadable = Number(tributeOffered)
+    ? readableTokenBalance({
+        decimals: tributeTokenDecimals,
+        balance: tributeOffered,
+        symbol: tributeTokenSymbol,
+      })
+    : '';
+  //  'NFT offered' logic here
+  const text = [tributeReadable].filter(Boolean).join(', ');
+  return text;
+};
+
 const checkSpecial = () => {};
 
 const ProposalCardV2 = ({ proposal, customTerms }) => {
-  // const { daochain, daoid } = useParams();
-  // const { address } = useInjectedProvider();
-  // const [status, setStatus] = useState(null);
-
-  // useEffect(() => {
-  //   if (proposal) {
-  //     const statusStr = determineProposalStatus(proposal);
-  //     setStatus(statusStr);
-  //   }
-  // }, [proposal]);
-  console.log(`proposal`, proposal);
   return (
-    <ContentBox p='0' mb={4}>
+    <ContentBox p='0' mb={4} minHeight='8.875rem'>
       <Flex>
         <PropCardBrief proposal={proposal} />
-        <Center height='100%'>
+        <Center height='100%' minHeight='8.875rem'>
           <Divider orientation='vertical' />
         </Center>
         <Flex w='40%'>
@@ -154,10 +152,7 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
 };
 
 const PropCardBrief = ({ proposal }) => {
-  const requesting = checkRequesting(proposal);
-  const offering = checkOffering(proposal);
-  const special = (requesting && offering) || checkSpecial(proposal);
-
+  const isOffering = Number(proposal.tributeOffered) > 0;
   return (
     <Flex
       width='60%'
@@ -165,8 +160,12 @@ const PropCardBrief = ({ proposal }) => {
       borderRight='1px solid rgba(255,255,255,0.3)'
     >
       <Box px='1.2rem' py='0.6rem'>
-        <CardLabel>{proposal.proposalType}</CardLabel>
-        <ParaMd fontWeight='700'>{proposal.title}</ParaMd>
+        <CardLabel mb={1}>{proposal.proposalType}</CardLabel>
+        <ParaMd fontWeight='700' mb={1}>
+          {proposal.title}
+        </ParaMd>
+        <PropCardRequest proposal={proposal} />
+        {isOffering && <PropCardOffer proposal={proposal} />}
       </Box>
       <Box px='1.2rem' py='0.6rem'>
         <Button
@@ -185,87 +184,36 @@ const PropCardBrief = ({ proposal }) => {
   );
 };
 
+const PropCardRequest = ({ proposal }) => {
+  const requestText = useMemo(() => {
+    if (proposal) {
+      return generateRequestText(proposal);
+    }
+  }, [proposal]);
+  return (
+    <Flex alignItems='center'>
+      <RiArrowLeftLine size='1.2rem' />
+      <ParaMd mr='1' ml='1'>
+        Requesting
+      </ParaMd>
+      <ParaMd fontWeight='700'>{requestText}</ParaMd>
+    </Flex>
+  );
+};
+
+const PropCardOffer = ({ proposal }) => {
+  const requestText = useMemo(() => {
+    if (proposal) {
+      return generateOfferText(proposal);
+    }
+  }, [proposal]);
+  return (
+    <Flex alignItems='center'>
+      <RiArrowRightLine size='1.2rem' />
+      <ParaMd mx='1'>Offering</ParaMd>
+      <ParaMd fontWeight='700'>{requestText}</ParaMd>
+    </Flex>
+  );
+};
+
 export default ProposalCardV2;
-
-const things = (
-  <Flex w='100%' wrap='wrap'>
-    <Flex direction='column' w={['100%', null, null, '60%']} p={3}>
-      <Flex justify='space-between'>
-        <Box
-          fontSize='xs'
-          textTransform='uppercase'
-          fontFamily='heading'
-          letterSpacing='0.1em'
-        >
-          Proposal Type
-        </Box>
-        <Link to='/proposals'>
-          <Box fontSize='xs' color='secondary.500'>
-            <strong>More Details</strong>
-          </Box>
-        </Link>
-      </Flex>
-      <Box fontWeight={700} fontSize='sm' fontFamily='heading' mt={3}>
-        This proposal title is intentionally long in order to test the limits of
-        the layout.
-      </Box>
-      <Box mt={3}>
-        <Flex align='center'>
-          <RiArrowRightLine style={{ marginRight: '5px' }} /> Offering 1.5 WETH
-        </Flex>
-        <Flex align='center'>
-          <RiArrowLeftLine style={{ marginRight: '5px' }} /> Requesting 100
-          shares, 4900 Loot
-        </Flex>
-      </Box>
-    </Flex>
-
-    <Flex
-      direction='column'
-      w={['100%', null, null, '40%']}
-      align='start'
-      justify='space-between'
-      borderLeft={['none', null, null, '1px solid rgba(255,255,255,0.2)']}
-      borderTop={['1px solid rgba(255,255,255,0.2)', null, null, 'none']}
-      p={3}
-    >
-      <Flex align='center' justify='space-between' w='100%'>
-        <Box fontSize='xs'>
-          <Badge mb='1'>Voting</Badge>
-          <strong>
-            <i>Voting</i>
-          </strong>{' '}
-          <i>ends in 5 hours</i>
-        </Box>
-        <Box fontSize='xl' color='secondary.500'>
-          <RiDashboard3Line />
-        </Box>
-      </Flex>
-      <Flex align='center' w='100%'>
-        <Box
-          style={{
-            width: '100%',
-            height: '8px',
-            backgroundColor: 'rgba(255,255,255,0.25',
-          }}
-        />
-      </Flex>
-      <Flex w='100%' justify='space-between'>
-        <Button variant='primary' size='sm'>
-          No
-        </Button>
-        <Button variant='ghost' size='sm'>
-          Abstain
-        </Button>
-        <Button variant='primary' size='sm'>
-          Yes
-        </Button>
-      </Flex>
-      <Flex align='center'>
-        <Box fontSize='xs'>
-          <i>Submit your vote</i>
-        </Box>
-      </Flex>
-    </Flex>
-  </Flex>
-);
