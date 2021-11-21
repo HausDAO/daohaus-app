@@ -42,7 +42,7 @@ export const ParaMd = props => {
 export const ParaSm = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='.8rem' lineHeight='168.4%;' {...props}>
+    <Text fontSize='.9rem' lineHeight='168.4%;' {...props}>
       {text || children}
     </Text>
   );

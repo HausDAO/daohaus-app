@@ -1,39 +1,11 @@
 import React, { useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 import humanFormat from 'human-format';
-import {
-  Flex,
-  Box,
-  Button,
-  Skeleton,
-  Badge,
-  Icon,
-  Divider,
-  Progress,
-  Center,
-} from '@chakra-ui/react';
-import {
-  RiArrowLeftLine,
-  RiArrowRightLine,
-  RiDashboard2Line,
-  RiDashboard3Line,
-} from 'react-icons/ri';
-import styled from '@emotion/styled';
+import { Flex, Box, Button, Divider, Progress, Center } from '@chakra-ui/react';
+import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 
-import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
-import { format } from 'date-fns';
-
-import { numberWithCommas } from '../utils/general';
-import {
-  determineProposalStatus,
-  getProposalCardDetailStatus,
-  memberVote,
-  PROPOSAL_TYPES,
-} from '../utils/proposalUtils';
 import ContentBox from './ContentBox';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { getCustomProposalTerm } from '../utils/metadata';
-import { CardLabel, ParaLg, ParaMd, ParaSm } from './typography';
+import { CardLabel, ParaMd, ParaSm } from './typography';
 import { getReadableBalance } from '../utils/tokenValue';
 
 const readableNumber = ({ amount, unit, decimals = 1, separator = '' }) => {
@@ -126,7 +98,7 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
             <Flex justifyContent='space-between'>
               <Button
                 size='sm'
-                minW='64px'
+                minW='4rem'
                 backgroundColor='white'
                 color='black'
               >
@@ -134,13 +106,13 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
               </Button>
               <Button
                 size='sm'
-                minW='64px'
+                minW='4rem'
                 color='secondary.500'
                 variant='outline'
               >
                 Abstain
               </Button>
-              <Button size='sm' minW='64px'>
+              <Button size='sm' minW='4rem'>
                 Yes
               </Button>
             </Flex>
@@ -151,13 +123,26 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
   );
 };
 
+const DetailsLink = ({ proposalId }) => {
+  const { daochain, daoid } = useParams();
+  return (
+    <Box position='absolute' top='0.5rem' right='1rem'>
+      <Link to={`/dao/${daochain}/${daoid}/proposals/${proposalId}`}>
+        <ParaSm>More Details</ParaSm>
+      </Link>
+    </Box>
+  );
+};
+
 const PropCardBrief = ({ proposal }) => {
   const isOffering = Number(proposal.tributeOffered) > 0;
+
   return (
     <Flex
       width='60%'
       justifyContent='space-between'
       borderRight='1px solid rgba(255,255,255,0.3)'
+      position='relative'
     >
       <Box px='1.2rem' py='0.6rem'>
         <CardLabel mb={1}>{proposal.proposalType}</CardLabel>
@@ -167,19 +152,7 @@ const PropCardBrief = ({ proposal }) => {
         <PropCardRequest proposal={proposal} />
         {isOffering && <PropCardOffer proposal={proposal} />}
       </Box>
-      <Box px='1.2rem' py='0.6rem'>
-        <Button
-          variant='ghost'
-          p='0'
-          size='sm'
-          fontSize='.85rem'
-          fontWeight='400'
-          color='secondary.400'
-          transform='translateY(-.4rem)'
-        >
-          More Details
-        </Button>
-      </Box>
+      <DetailsLink proposalId={proposal.proposalId} />
     </Flex>
   );
 };
