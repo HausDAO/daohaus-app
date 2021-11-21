@@ -36,7 +36,7 @@ const Modal = () => {
       />
       <ModalContent
         rounded='lg'
-        bg='black'
+        bg='#0b0b0b'
         maxWidth={width}
         maxH='100vh'
         overflowY='auto'

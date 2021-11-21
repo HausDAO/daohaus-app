@@ -158,14 +158,16 @@ const ProposalsList = ({ proposals, customTerms }) => {
 
       {isLoaded && isActive('SPAM_FILTER') && <SpamFilterListNotification />}
 
-      {isLoaded &&
-        paginatedProposals?.map(proposal => (
-          <ProposalCardV2
-            key={proposal.id}
-            proposal={proposal}
-            customTerms={customTerms}
-          />
-        ))}
+      <Box mt={4}>
+        {isLoaded &&
+          paginatedProposals?.map(proposal => (
+            <ProposalCardV2
+              key={proposal.id}
+              proposal={proposal}
+              customTerms={customTerms}
+            />
+          ))}
+      </Box>
 
       {isLoaded ? (
         <Paginator

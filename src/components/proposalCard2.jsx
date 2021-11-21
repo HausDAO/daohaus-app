@@ -1,7 +1,15 @@
 import React, { useMemo } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import humanFormat from 'human-format';
-import { Flex, Box, Button, Divider, Progress, Center } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Button,
+  Divider,
+  Progress,
+  Center,
+  Icon,
+} from '@chakra-ui/react';
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
@@ -77,7 +85,7 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
       <Flex>
         <PropCardBrief proposal={proposal} />
         <Center height='100%' minHeight='8.875rem'>
-          <Divider orientation='vertical' />
+          <Divider orientation='vertical' colorScheme='blackAplha.900' />
         </Center>
         <Flex w='40%'>
           <Box px='1.2rem' py='0.6rem' w='100%'>
@@ -134,14 +142,18 @@ const DetailsLink = ({ proposalId }) => {
   );
 };
 
-const PropCardBrief = ({ proposal }) => {
+const PropCardBrief = ({ proposal = {} }) => {
   const isOffering = Number(proposal.tributeOffered) > 0;
+  const isRequesting =
+    Number(proposal.lootRequested) > 0 ||
+    Number(proposal.sharesRequested) > 0 ||
+    Number(proposal.paymentRequested) > 0;
 
   return (
     <Flex
       width='60%'
       justifyContent='space-between'
-      borderRight='1px solid rgba(255,255,255,0.3)'
+      borderRight='1px solid rgba(255,255,255,0.1)'
       position='relative'
     >
       <Box px='1.2rem' py='0.6rem'>
@@ -149,7 +161,7 @@ const PropCardBrief = ({ proposal }) => {
         <ParaMd fontWeight='700' mb={1}>
           {proposal.title}
         </ParaMd>
-        <PropCardRequest proposal={proposal} />
+        {isRequesting && <PropCardRequest proposal={proposal} />}
         {isOffering && <PropCardOffer proposal={proposal} />}
       </Box>
       <DetailsLink proposalId={proposal.proposalId} />
@@ -164,13 +176,7 @@ const PropCardRequest = ({ proposal }) => {
     }
   }, [proposal]);
   return (
-    <Flex alignItems='center'>
-      <RiArrowLeftLine size='1.2rem' />
-      <ParaMd mr='1' ml='1'>
-        Requesting
-      </ParaMd>
-      <ParaMd fontWeight='700'>{requestText}</ParaMd>
-    </Flex>
+    <PropCardTransfer incoming action='Requesting' itemText={requestText} />
   );
 };
 
@@ -180,14 +186,7 @@ const PropCardOffer = ({ proposal }) => {
       return generateOfferText(proposal);
     }
   }, [proposal]);
-  return (
-    <PropCardTransfer
-      outgoing
-      action='Offering'
-      itemText={requestText}
-      specialLocation='Minion'
-    />
-  );
+  return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
 };
 
 const PropCardTransfer = ({
@@ -198,18 +197,26 @@ const PropCardTransfer = ({
   specialLocation,
 }) => {
   return (
-    <Flex alignItems='center'>
-      {incoming && <RiArrowRightLine size='1.2rem' />}
-      {outgoing && <RiArrowRightLine size='1.2rem' />}
+    <Flex alignItems='center' mb='2'>
+      {incoming && (
+        <Box transform='translateY(1px)'>
+          <RiArrowRightLine size='1.1rem' />
+        </Box>
+      )}
+      {outgoing && (
+        <Box transform='translateY(1px)'>
+          <RiArrowLeftLine size='1.1rem' />
+        </Box>
+      )}
       {specialLocation ? (
-        <ParaMd>
+        <ParaMd ml='1'>
           {action}
           <Bold> {itemText} </Bold> to <Bold> {specialLocation}</Bold>
         </ParaMd>
       ) : (
-        <ParaMd>
+        <ParaMd ml='1'>
           {action}
-          <Bold>{itemText}</Bold>
+          <Bold> {itemText} </Bold>
         </ParaMd>
       )}
     </Flex>

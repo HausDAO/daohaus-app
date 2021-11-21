@@ -65,7 +65,7 @@ const ProposalSelector = () => {
       <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
-        bg='blackAlpha.600'
+        bg='#0b0b0b'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
         maxWidth='700px'
