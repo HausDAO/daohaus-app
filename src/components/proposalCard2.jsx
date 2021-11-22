@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import humanFormat from 'human-format';
 import {
@@ -16,6 +16,10 @@ import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 import ContentBox from './ContentBox';
 import { Bold, CardLabel, ParaMd, ParaSm } from './typography';
 import { getReadableBalance } from '../utils/tokenValue';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { createContract } from '../utils/contract';
+import { getMinionAbi } from '../utils/abi';
+import { getMinionAction } from '../utils/minionUtils';
 
 const readableNumber = ({ amount, unit, decimals = 1, separator = '' }) => {
   if (!amount || !unit) return null;
@@ -200,6 +204,25 @@ const PropCardOffer = ({ proposal }) => {
 };
 
 const MinionTransfer = ({ proposal, isLoaded }) => {
+  const [paymentInfo, setPaymentInfo] = useState(null);
+  const { daochain } = useParams();
+  useEffect(() => {
+    const shoudRender = true;
+    const callMinionAction = async () => {
+      const minionAction = await getMinionAction({
+        proposal,
+        chainID: daochain,
+      });
+      console.log(`minionAction`, minionAction);
+    };
+    if (proposal?.minion?.minionType) {
+      callMinionAction();
+    }
+  }, [proposal]);
+
+  if (proposal.proposalType === PROPOSAL_TYPES.PAYROLL) {
+    console.log(`proposal`, proposal);
+  }
   return <AsyncCardTransfer isLoaded={isLoaded} proposal={proposal} />;
 };
 
