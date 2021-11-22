@@ -13,19 +13,19 @@ import {
 } from '@chakra-ui/react';
 
 import { useTX } from '../contexts/TXContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { TX } from '../data/contractTX';
 import { chainByName } from '../utils/chain';
 
 const MinionInternalBalanceActionMenu = ({
   targetDao,
   tokenWhitelisted,
-  daoConnectedAndSameChain,
   token,
 }) => {
+  const { canInteract } = useCanInteract({});
   const { submitTransaction, refreshDao } = useTX();
-  const { isMember } = useDaoMember();
   const { minion } = useParams();
+
   const [loading, setLoading] = useState();
 
   const handleWithdraw = async options => {
@@ -51,7 +51,7 @@ const MinionInternalBalanceActionMenu = ({
     setLoading(false);
   };
   return (
-    <Menu isDisabled>
+    <Menu>
       <MenuButton
         as={Button}
         variant='outline'
@@ -73,7 +73,7 @@ const MinionInternalBalanceActionMenu = ({
       </MenuButton>
       <MenuList>
         <MenuItem
-          isDisabled={!daoConnectedAndSameChain || !isMember}
+          isDisabled={!canInteract}
           onClick={() => handleWithdraw({ transfer: false })}
         >
           <Tooltip
@@ -86,9 +86,7 @@ const MinionInternalBalanceActionMenu = ({
           </Tooltip>{' '}
         </MenuItem>
         <MenuItem
-          isDisabled={
-            !tokenWhitelisted || !daoConnectedAndSameChain || !isMember
-          }
+          isDisabled={!tokenWhitelisted || !canInteract}
           onClick={() => handleWithdraw({ transfer: true })}
         >
           <Tooltip
