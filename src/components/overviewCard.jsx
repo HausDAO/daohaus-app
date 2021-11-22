@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Button, Avatar, Spinner } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { utils } from 'ethers';
 
@@ -61,7 +61,7 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             </TextBox>
             {/* <Skeleton isLoaded={members}> */}
             <TextBox size='lg' variant='value'>
-              {activeMembers?.length ? activeMembers.length : 0}
+              {activeMembers ? activeMembers.length : <Spinner size='sm' />}
             </TextBox>
             {/* </Skeleton> */}
           </Box>
