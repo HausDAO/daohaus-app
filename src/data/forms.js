@@ -450,7 +450,7 @@ export const PROPOSAL_FORMS = {
     description: 'Make a proposal to disperse tokens to a list of addresses',
     type: PROPOSAL_TYPES.DISPERSE,
     minionType: MINION_TYPES.SAFE,
-    formConditions: ['eth', 'token'],
+    formConditions: ['token', 'eth'],
     tx: {
       type: 'formCondition',
       eth: TX.DISPERSE_ETH,
