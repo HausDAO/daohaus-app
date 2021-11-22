@@ -65,7 +65,7 @@ const Proposal = ({
     if (activities && propid.match(/^\d+$/)) {
       setUpProposal();
     }
-  }, [activities]);
+  }, [activities, propid]);
 
   console.log('currentProposal', currentProposal);
 
