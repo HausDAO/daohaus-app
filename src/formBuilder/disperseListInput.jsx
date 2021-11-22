@@ -68,7 +68,12 @@ const DisperseListInput = props => {
     }
   }, [disperseList, tokenAddress, fundingType]);
 
-  return <GenericTextArea {...props} />;
+  return (
+    <GenericTextArea
+      info='Accepts a distribution list where each line should have an address followed by a single amount. Addresses and amounts can be seperated by any form of delimeter.'
+      {...props}
+    />
+  );
 };
 
 export default DisperseListInput;

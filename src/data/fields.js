@@ -423,7 +423,7 @@ export const FIELD = {
   DISPERSE_CSV: {
     type: 'disperseListInput',
     listenTo: 'formCondition',
-    label: 'Address List (Any Format)',
+    label: 'Address List',
     name: 'disperseList',
     htmlFor: 'disperseList',
     disperseType: {
