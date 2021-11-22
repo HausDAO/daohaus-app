@@ -164,7 +164,6 @@ const DaoRouter = () => {
         <Route exact path={`${path}/settings`}>
           <Settings
             overview={daoOverview}
-            daoMember={daoMember}
             daoMetaData={daoMetaData}
             customTerms={customTerms}
           />

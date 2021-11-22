@@ -8,7 +8,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import { fetchTransmutation, getWrapNZap } from '../utils/theGraph';
 
-const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
+const Settings = ({ overview, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
   const [wrapNZap, setWrapNZap] = useState(null);
   const [transmutationContract, setTransmutationContract] = useState(null);
@@ -48,7 +48,7 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>
           </Flex>
-          <DaoMetaOverview daoMetaData={daoMetaData} daoMember={daoMember} />
+          <DaoMetaOverview daoMetaData={daoMetaData} />
         </Box>
       </Flex>
     </MainViewLayout>
