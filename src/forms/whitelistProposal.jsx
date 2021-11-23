@@ -18,20 +18,20 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { chainByID } from '../utils/chain';
 import DetailsFields from './detailFields';
 import TextBox from '../components/TextBox';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { createForumTopic } from '../utils/discourse';
-import {
-  createHash,
-  detailsToJSON,
-  daoConnectedAndSameChain,
-} from '../utils/general';
+import { createHash, detailsToJSON } from '../utils/general';
 
 const WhitelistProposalForm = () => {
-  const [loading, setLoading] = useState(false);
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
+
   const { daochain, daoid } = useParams();
   const {
     address,
@@ -39,17 +39,18 @@ const WhitelistProposalForm = () => {
     requestWallet,
     injectedChain,
   } = useInjectedProvider();
-  const [currentError, setCurrentError] = useState(null);
+  const { cachePoll, resolvePoll } = useUser();
+  const { daoMetaData } = useMetaData();
+  const { daoOverview } = useDao();
   const {
     errorToast,
     successToast,
     setProposalModal,
     setTxInfoModal,
   } = useOverlay();
-  const { daoOverview } = useDao();
   const { refreshDao } = useTX();
-  const { cachePoll, resolvePoll } = useUser();
-  const { daoMetaData } = useMetaData();
+  const [currentError, setCurrentError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { handleSubmit, errors, register } = useForm();
 
@@ -161,11 +162,7 @@ const WhitelistProposalForm = () => {
           </Box>
         )}
         <Box>
-          {daoConnectedAndSameChain(
-            address,
-            daochain,
-            injectedChain?.chainId,
-          ) ? (
+          {canInteract ? (
             <Button
               type='submit'
               loadingText='Submitting'
