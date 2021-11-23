@@ -97,7 +97,6 @@ const DaoRouter = () => {
             currentDaoTokens={currentDaoTokens}
             overview={daoOverview}
             customTerms={customTerms}
-            daoMember={daoMember}
             daoVaults={daoVaults}
           />
         </Route>
