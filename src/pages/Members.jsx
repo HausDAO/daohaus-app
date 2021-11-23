@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
-import { Flex, Box, Stack, Button } from '@chakra-ui/react';
+import { Flex, Box, Stack, Button, Spinner } from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -137,15 +137,19 @@ const Members = React.memo(
           align='center'
           w={['100%', null, null, '58%']}
         >
-          <Box
-            mr={5}
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize={['sm', null, null, 'md']}
-            mb={[3, null, null, 0]}
-          >
-            {listMembers?.length || 0} MEMBERS
-          </Box>
+          {!listMembers ? (
+            <Spinner />
+          ) : (
+            <Box
+              mr={5}
+              textTransform='uppercase'
+              fontFamily='heading'
+              fontSize={['sm', null, null, 'md']}
+              mb={[3, null, null, 0]}
+            >
+              {listMembers?.length || 0} MEMBERS
+            </Box>
+          )}
           <Box>
             <ListSort
               sort={sort}
