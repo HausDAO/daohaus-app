@@ -12,7 +12,7 @@ const GenericTextarea = ({
   localForm,
   info,
   h = 10,
-  error,
+  errors,
   disabled,
   w,
   layout,
@@ -30,9 +30,10 @@ const GenericTextarea = ({
       info={info}
       helperText={helperText}
       btn={btn}
-      error={error}
+      errors={errors}
       w={w}
       layout={layout}
+      name={name}
     >
       <Textarea
         key={name}

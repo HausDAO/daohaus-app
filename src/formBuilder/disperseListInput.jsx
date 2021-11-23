@@ -34,12 +34,16 @@ const DisperseListInput = props => {
         const address = item.match(/0x[a-fA-F0-9]{40}/)?.[0];
         const rawAmount = item
           .replace(address, '')
-          ?.match(/([0-9]+).*([0-9])/)?.[0];
+          ?.match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0];
         if (rawAmount) {
-          const paddedAmount = Number(addZeros(rawAmount, zeroPadding));
-          userList.push(address);
-          amountList.push(paddedAmount.toString());
-          disperseTotal += paddedAmount;
+          try {
+            const paddedAmount = Number(addZeros(rawAmount, zeroPadding));
+            userList.push(address);
+            amountList.push(paddedAmount.toString());
+            disperseTotal += paddedAmount;
+          } catch (err) {
+            console.error(err);
+          }
         }
       });
 
