@@ -11,11 +11,10 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import useCanInteract from '../hooks/useCanInteract';
 import BalanceList from '../components/balanceList';
 import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';
 
@@ -27,8 +26,8 @@ const Treasury = ({
   delegate,
   daoVaults,
 }) => {
+  const { canInteract } = useCanInteract({});
   const { daoid, daochain } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
   const toast = useToast();
   const [needsSync, setNeedsSync] = useState(false);
 
@@ -52,16 +51,15 @@ const Treasury = ({
       <CopyToClipboard text={daoid} mr={2} onCopy={handleCopy}>
         <Button>Copy Address</Button>
       </CopyToClipboard>
-      {daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
-        daoMember && (
-          <Button
-            as={Link}
-            to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
-            rightIcon={<RiAddFill />}
-          >
-            Whitelist Asset
-          </Button>
-        )}
+      {canInteract && (
+        <Button
+          as={Link}
+          to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
+          rightIcon={<RiAddFill />}
+        >
+          Whitelist Asset
+        </Button>
+      )}
     </Flex>
   );
 
