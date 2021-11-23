@@ -20,6 +20,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import useCanInteract from '../hooks/useCanInteract';
 import AddressInput from './addressInput';
 import DetailsFields from './detailFields';
 import PaymentInput from './paymentInput';
@@ -28,15 +29,13 @@ import TextBox from '../components/TextBox';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
-import {
-  daoConnectedAndSameChain,
-  detailsToJSON,
-  truncateAddr,
-} from '../utils/general';
+import { detailsToJSON, truncateAddr } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 const SuperfluidMinionProposalForm = () => {
-  const [loading, setLoading] = useState(false);
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { daoOverview } = useDao();
   const { daochain } = useParams();
   const {
@@ -54,6 +53,7 @@ const SuperfluidMinionProposalForm = () => {
   } = useOverlay();
   const { refreshDao } = useTX();
   const [currentError, setCurrentError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [minions, setMinions] = useState([]);
   const now = (new Date().getTime() / 1000).toFixed();
 
@@ -267,11 +267,7 @@ const SuperfluidMinionProposalForm = () => {
           </Box>
         )}
         <Box>
-          {daoConnectedAndSameChain(
-            address,
-            daochain,
-            injectedChain?.chainId,
-          ) ? (
+          {canInteract ? (
             <Button
               type='submit'
               loadingText='Submitting'
