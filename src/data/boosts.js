@@ -225,13 +225,13 @@ export const CONTENT = {
   },
   DISPERSE: {
     title: 'Disperse Boost',
-    description: 'Disperse tokens or ether to a list of recipients.',
+    description: 'Disperse tokens to a list of recipients.',
     publisher: PUBLISHERS.BOOST_FOUNDRY,
     version: '1.0',
     pars: [
       'This Boost allows you to send funds to a list of addresses in a single transaction.',
       'Addresses and amounts can be input as a CSV or other similar format.',
-      'Funds can be in the form of tokens or ether and are pulled from a Safe Minion.',
+      'Funds can be in the form of tokens or ether (network token) and are pulled from a Safe Minion.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
