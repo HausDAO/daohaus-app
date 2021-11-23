@@ -274,7 +274,7 @@ export const DETAILS = {
     title: '.values.title || Disperse Proposal',
     description: '.values.description',
     link: '.values.link',
-    proposalType: 'formData.type',
+    proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
     token: '.values.tokenAddress',
   },
@@ -282,7 +282,7 @@ export const DETAILS = {
     title: '.values.title || Disperse Proposal',
     description: '.values.description',
     link: '.values.link',
-    proposalType: 'formData.type',
+    proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
   },
 };
