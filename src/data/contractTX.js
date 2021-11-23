@@ -1127,7 +1127,7 @@ export const TX = {
           },
         ],
       },
-      '.values.tokenAddress', // _withdrawToken
+      '.contextData.daoOverview.depositToken.tokenAddress', // _withdrawToken
       0, // _withdrawAmount
       {
         type: 'detailsToJSON',

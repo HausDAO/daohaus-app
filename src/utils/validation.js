@@ -15,7 +15,8 @@ export const TYPE_ERR_MSGS = {
   urlNoHTTP: 'Must be a URL. Http not needed.',
   greaterThanZero: 'Must be greater than zero.',
   boolean: 'Must be a Booolean value',
-  disperseList: 'Must be a proper address list with token values',
+  disperseList:
+    'Must be a proper list with addresses and token values on each line',
 };
 
 export const validate = {
@@ -53,7 +54,9 @@ export const validate = {
           acc &&
           item.match(/0x[a-fA-F0-9]{40}/)?.[0] &&
           Number(
-            item.match(/(?<=(0x[a-fA-F0-9]{40}).)([0-9]+).*([0-9]*)/)?.[0],
+            item
+              ?.replace(/0x[a-fA-F0-9]{40}/, '')
+              .match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0],
           ),
         true,
       );
