@@ -1,14 +1,14 @@
 import { FORM } from './forms';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { NFT_ACTIONS } from '../utils/nftData';
 
 export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: {
-    // here for legacy support
-    '0x64': false,
-    '0x89': false,
-    '0x4': false,
-    '0x1': false,
-    '0x2a': false,
+    '0x64': true,
+    '0x89': true,
+    '0x4': true,
+    '0x1': true,
+    '0x2a': true,
   },
   [MINION_TYPES.NIFTY]: {
     '0x64': true,
@@ -104,6 +104,7 @@ export const MINIONS = {
     networks: MINION_NETWORKS[MINION_TYPES.VANILLA],
     summonForm: FORM.NEW_VANILLA_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_NIFTY],
   },
   [MINION_TYPES.NIFTY]: {
     minionType: MINION_TYPES.NIFTY,
@@ -111,6 +112,7 @@ export const MINIONS = {
     networks: MINION_NETWORKS[MINION_TYPES.NIFTY],
     summonForm: FORM.NEW_NIFTY_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_NIFTY],
   },
   [MINION_TYPES.SUPERFLUID]: {
     minionType: MINION_TYPES.SUPERFLUID,
@@ -125,5 +127,6 @@ export const MINIONS = {
     networks: MINION_NETWORKS[MINION_TYPES.SAFE],
     summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_RARIBLE],
   },
 };
