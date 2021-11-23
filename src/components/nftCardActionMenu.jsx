@@ -13,17 +13,18 @@ import {
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
-import { daoConnectedAndSameChain } from '../utils/general';
+import useCanInteract from '../hooks/useCanInteract';
 import { getMinionActionFormLego, getNftType } from '../utils/vaults';
 import { getNftCardActions } from '../utils/nftData';
 
 const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain', 'isMember'],
+  });
   const { daoOverview } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
-  const { address, injectedChain } = useInjectedProvider();
   const { formModal } = useAppModal();
   const [actionsEnabled, enableActions] = useState(false);
 
@@ -88,16 +89,7 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
               <MenuItem
                 key={action.menuLabel}
                 onClick={() => handleActionClick(action)}
-                isDisabled={
-                  !(
-                    actionsEnabled &&
-                    daoConnectedAndSameChain(
-                      address,
-                      daochain,
-                      injectedChain?.chainId,
-                    )
-                  )
-                }
+                isDisabled={!(actionsEnabled && canInteract)}
               >
                 <Tooltip
                   hasArrow
