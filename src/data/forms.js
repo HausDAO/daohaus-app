@@ -215,6 +215,8 @@ export const PROPOSAL_FORMS = {
           htmlFor: 'residenceCountry',
           expectType: 'countryCode',
           info: 'An ISO 3166-1 alpha-2 compliant country code',
+          hrefLink:
+            'https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements',
         },
       ],
     ],
