@@ -2,17 +2,16 @@ import React, { useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { Flex, Button, InputGroup, Input } from '@chakra-ui/react';
 
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
+import useCanInteract from '../hooks/useCanInteract';
+
 import BoostItemButton from './boostItemButton';
 import List from './list';
 import ListItem from './listItem';
 import ListItemButton from './listItemButton';
 import NoListItem from './NoListItem';
 import TextBox from './TextBox';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { STEPS } from '../data/boosts';
 
 const handleSearch = (list, listID, searchStr) => {
@@ -33,18 +32,13 @@ const InstalledList = ({
   openDetails,
   goToSettings,
 }) => {
+  const { canInteract } = useCanInteract({});
   const { daoid, daochain } = useParams();
   const history = useHistory();
   const { stepperModal } = useAppModal();
   const { hydrateString } = useTX();
-  const { address, injectedChain } = useInjectedProvider();
-  const { daoMember } = useDaoMember();
 
   const [searchStr, setSearchStr] = useState(null);
-
-  const canInteract =
-    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
-    +daoMember?.shares > 0;
 
   const currentList = useMemo(() => {
     if (listID && lists) {

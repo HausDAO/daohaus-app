@@ -10,20 +10,19 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
+import useCanInteract from '../hooks/useCanInteract';
 import AddressInput from './addressInput';
 import DetailsFields from './detailFields';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { chainByID } from '../utils/chain';
 import { createForumTopic } from '../utils/discourse';
-import {
-  createHash,
-  detailsToJSON,
-  daoConnectedAndSameChain,
-} from '../utils/general';
+import { createHash, detailsToJSON } from '../utils/general';
 
 const GuildKickProposalForm = () => {
-  const [loading, setLoading] = useState(false);
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { daochain, daoid } = useParams();
   const {
     address,
@@ -31,7 +30,7 @@ const GuildKickProposalForm = () => {
     requestWallet,
     injectedChain,
   } = useInjectedProvider();
-  const [currentError, setCurrentError] = useState(null);
+
   const {
     errorToast,
     successToast,
@@ -43,6 +42,9 @@ const GuildKickProposalForm = () => {
   const { cachePoll, resolvePoll } = useUser();
   const { daoMetaData } = useMetaData();
   const location = useLocation();
+
+  const [loading, setLoading] = useState(false);
+  const [currentError, setCurrentError] = useState(null);
 
   const { handleSubmit, errors, register, setValue, watch } = useForm();
 
@@ -161,11 +163,7 @@ const GuildKickProposalForm = () => {
           </Box>
         )}
         <Box>
-          {daoConnectedAndSameChain(
-            address,
-            daochain,
-            injectedChain?.chainId,
-          ) ? (
+          {canInteract ? (
             <Button
               type='submit'
               loadingText='Submitting'
