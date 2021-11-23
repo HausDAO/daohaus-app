@@ -1,4 +1,4 @@
-import { FIELD } from './fields';
+import { FIELD, INFO_TEXT } from './fields';
 import { BOOST_FORMS } from './forms';
 import { COMMON_STEPS, CONTENT } from './boosts';
 
@@ -10,7 +10,12 @@ const SETTING_STEPS = {
         ...BOOST_FORMS.SPAM_FILTER,
         fields: [
           [
-            ...BOOST_FORMS.SPAM_FILTER.fields[0],
+            {
+              ...FIELD.PAYMENT_REQUEST,
+              label: 'Amount in Deposit Token',
+              info: INFO_TEXT.SPAM_FILTER_AMOUNT,
+              hideMax: true,
+            },
             {
               ...FIELD.BASIC_SWITCH,
               label: 'Spam filter active?',

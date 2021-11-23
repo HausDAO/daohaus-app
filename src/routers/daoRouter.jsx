@@ -43,6 +43,7 @@ import Treasury from '../pages/Treasury';
 import Vaults from '../pages/Vaults';
 import ProposalsSpam from '../pages/ProposalsSpam';
 import SpamFilterSettings from '../pages/SpamFilterSettings';
+import MembersSpam from '../pages/MembersSpam';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -127,9 +128,10 @@ const DaoRouter = () => {
           <MinionGallery daoVaults={daoVaults} customTerms={customTerms} />
         </Route>
         <Route exact path={`${path}/members`}>
-          <Members
+          {/* <Members */}
+          <MembersSpam
             members={daoMembers}
-            activities={daoActivities}
+            // activities={daoActivities}
             overview={daoOverview}
             daoMember={daoMember}
             daoMembers={daoMembers}

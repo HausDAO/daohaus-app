@@ -5,14 +5,26 @@ import { format } from 'date-fns';
 import AddressAvatar from './addressAvatar';
 import ProfileMenu from './profileMenu';
 import TextBox from './TextBox';
+import useBoost from '../hooks/useBoost';
+import StaticAvatar from './staticAvatar';
 
 const MemberInfoGuts = ({ member, showMenu, hideCopy }) => {
+  const { isActive } = useBoost();
   return (
     <>
       {member && (
         <>
           <Flex justify='space-between'>
-            <AddressAvatar addr={member.memberAddress} hideCopy={hideCopy} />
+            {isActive('SPAM_FILTER') ? (
+              <StaticAvatar
+                address={member.memberAddress}
+                avatarImg={null}
+                name={null}
+                hideCopy
+              />
+            ) : (
+              <AddressAvatar addr={member.memberAddress} hideCopy={hideCopy} />
+            )}
             {showMenu ? <ProfileMenu member={member} /> : null}
           </Flex>
           <Flex w='100%' justify='space-between' mt={6}>

@@ -24,6 +24,7 @@ import {
   membersFilterOptions,
   membersSortOptions,
 } from '../utils/memberContent';
+import useBoost from '../hooks/useBoost';
 
 const Members = React.memo(
   ({
@@ -38,6 +39,7 @@ const Members = React.memo(
     const { daoid, daochain } = useParams();
     const { address, injectedChain } = useInjectedProvider();
     const { setProposalSelector } = useOverlay();
+    const { isActive } = useBoost();
 
     const [selectedMember, setSelectedMember] = useState(null);
     const [scrolled, setScrolled] = useState(false);
@@ -240,10 +242,7 @@ const Members = React.memo(
                         color='inherit'
                         size='xs'
                       >
-                        {`View 
-                      ${!daoMember ||
-                        (daoMember.memberAddress === address && 'My')}
-                      Profile`}
+                        View Profile
                       </TextBox>
                     </Flex>
                     <MembersChart
@@ -254,21 +253,26 @@ const Members = React.memo(
                   </>
                 )}
               </Box>
-
-              {selectedMember?.memberAddress ? (
-                <ActivitiesFeed
-                  key={selectedMember?.memberAddress}
-                  limit={2}
-                  activities={activities}
-                  hydrateFn={getMemberActivites(selectedMember.memberAddress)}
-                />
-              ) : daoMember ? (
-                <ActivitiesFeed
-                  limit={2}
-                  activities={activities}
-                  hydrateFn={getMembersActivites}
-                />
-              ) : null}
+              {!isActive('SPAM_FILTER') && (
+                <>
+                  {selectedMember?.memberAddress ? (
+                    <ActivitiesFeed
+                      key={selectedMember?.memberAddress}
+                      limit={2}
+                      activities={activities}
+                      hydrateFn={getMemberActivites(
+                        selectedMember.memberAddress,
+                      )}
+                    />
+                  ) : daoMember ? (
+                    <ActivitiesFeed
+                      limit={2}
+                      activities={activities}
+                      hydrateFn={getMembersActivites}
+                    />
+                  ) : null}
+                </>
+              )}
             </Stack>
           </Box>
         </Flex>

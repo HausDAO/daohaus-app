@@ -3,9 +3,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import StaticAvatar from './staticAvatar';
 import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
+// import useBoost from '../hooks/useBoost';
 
 const AddressAvatar = React.memo(({ addr, hideCopy }) => {
   const [profile, setProfile] = useState(null);
+  // const { isActive } = useBoost();
 
   const shouldFetchENS = useRef(false);
 
@@ -26,6 +28,7 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
         console.log("Member doesn't have a profile");
       }
     };
+    // if (addr && !isActive('SPAM_FILTER')) {
     if (addr) {
       getProfile();
     }
