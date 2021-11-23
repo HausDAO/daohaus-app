@@ -28,6 +28,7 @@ import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
+import DISPERSE_APP from '../contracts/disperseApp.json';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -51,6 +52,7 @@ export const LOCAL_ABI = Object.freeze({
   WRAP_N_ZAP,
   DAO_CONDITIONAL_HELPER,
   ESCROW_MINION,
+  DISPERSE_APP,
 });
 
 const getBlockExplorerApiKey = chainID => {

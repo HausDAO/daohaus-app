@@ -45,6 +45,7 @@ export const supportedChains = {
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
@@ -99,6 +100,7 @@ export const supportedChains = {
     },
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
     escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -138,6 +140,7 @@ export const supportedChains = {
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   '0x64': {
     name: 'xDAI Chain',
@@ -191,6 +194,7 @@ export const supportedChains = {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   '0x89': {
     name: 'Matic',
@@ -242,6 +246,7 @@ export const supportedChains = {
       minion_factory_addr: '0x4CCaDF3f5734436B28869c27A11B6D0F4776bc8E',
       version: 'v1',
     },
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   '0xa4b1': {
     name: 'Arbitrum',
@@ -291,6 +296,7 @@ export const supportedChains = {
       minion_factory_addr: '0xA92CbC525EabFa5baE4e0ff7bDa8E011B43B9aCC',
       version: 'v1',
     },
+    disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
   },
   '0xa4ec': {
     name: 'Celo',
@@ -338,6 +344,7 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
   // '0x4a': {
   //   name: 'IDChain',
