@@ -464,7 +464,7 @@ export const PROPOSAL_FORMS = {
         {
           type: 'formCondition',
           eth: null,
-          token: FIELD.DISPERSE_TOKEN,
+          token: FIELD.MINION_TOKEN_SELECT,
         },
         FIELD.DISPERSE_CSV,
       ],
