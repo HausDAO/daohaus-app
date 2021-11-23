@@ -10,7 +10,6 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
   const { isActive } = useBoost();
 
   const handleSelect = () => {
-    console.log('selecting');
     selectMember(member);
   };
 
