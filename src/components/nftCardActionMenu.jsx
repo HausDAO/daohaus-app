@@ -20,7 +20,7 @@ import { getNftCardActions } from '../utils/nftData';
 
 const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
   const { canInteract } = useCanInteract({
-    checklist: ['isConnected', 'isSameChain', 'isMember'],
+    checklist: ['isConnected', 'isSameChain'],
   });
   const { daoOverview } = useDao();
   const { daochain } = useParams();
