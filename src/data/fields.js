@@ -447,13 +447,12 @@ export const FIELD = {
     title: 'Funding Type',
     expectType: 'any',
   },
-  DISPERSE_TOKEN: {
-    type: 'gatedInput',
-    only: CONTRACT_MODELS.ERC20,
-    label: 'ERC-20 Address',
+  MINION_TOKEN_SELECT: {
+    type: 'minionTokenSelect',
+    label: 'Select a Token',
     name: 'tokenAddress',
     htmlFor: 'tokenAddress',
-    placeholder: '0x',
+    placeholder: 'Choose a Token',
     expectType: 'address',
   },
 };

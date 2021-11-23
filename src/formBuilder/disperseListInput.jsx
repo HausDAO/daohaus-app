@@ -31,12 +31,13 @@ const DisperseListInput = props => {
       let disperseTotal = 0;
 
       rawList.forEach(item => {
-        const rawAmount = item.match(
-          /(?<=(0x[a-fA-F0-9]{40}).)([0-9]+).*([0-9]*)/,
-        )?.[0];
+        const address = item.match(/0x[a-fA-F0-9]{40}/)?.[0];
+        const rawAmount = item
+          .replace(address, '')
+          ?.match(/([0-9]+).*([0-9])/)?.[0];
         if (rawAmount) {
           const paddedAmount = Number(addZeros(rawAmount, zeroPadding));
-          userList.push(item.match(/0x[a-fA-F0-9]{40}/)?.[0]);
+          userList.push(address);
           amountList.push(paddedAmount.toString());
           disperseTotal += paddedAmount;
         }
