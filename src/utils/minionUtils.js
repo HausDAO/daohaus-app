@@ -20,4 +20,4 @@ export const getMinionAction = async ({
   }
 };
 
-export const decodeAction = () => {};
+export const decodeAction = actionData => {};

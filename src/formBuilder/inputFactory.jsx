@@ -38,6 +38,8 @@ import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
 import BoolSelect from './boolSelect';
 import GenericSwitch from './genericSwitch';
+import DisperseListInput from './disperseListInput';
+import MinionTokenSelect from './minionTokenSelect';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -165,6 +167,12 @@ export const InputFactory = props => {
   }
   if (type === 'boolSelect') {
     return <BoolSelect {...props} />;
+  }
+  if (type === 'disperseListInput') {
+    return <DisperseListInput {...props} />;
+  }
+  if (type === 'minionTokenSelect') {
+    return <MinionTokenSelect {...props} />;
   }
   return null;
 };

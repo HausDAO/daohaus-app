@@ -437,6 +437,32 @@ export const PROPOSAL_FORMS = {
     tx: TX.MINION_SELL_NIFTY,
     fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
+  MINION_DISPERSE: {
+    id: 'MINION_DISPERSE',
+    title: 'Disperse Tokens',
+    description: 'Make a proposal to disperse tokens to a list of addresses',
+    type: PROPOSAL_TYPES.DISPERSE,
+    minionType: MINION_TYPES.SAFE,
+    formConditions: ['token', 'eth'],
+    tx: {
+      type: 'formCondition',
+      eth: TX.DISPERSE_ETH,
+      token: TX.DISPERSE_TOKEN,
+    },
+    required: ['selectedMinion', 'userList', 'amountList', 'disperseTotal'],
+    fields: [
+      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [
+        FIELD.DISPERSE_TYPE_SWTICH,
+        {
+          type: 'formCondition',
+          eth: null,
+          token: FIELD.MINION_TOKEN_SELECT,
+        },
+        FIELD.DISPERSE_CSV,
+      ],
+    ],
+  },
   NEW_SAFE_MINION: {
     formConditions: ['easy', 'advanced'],
     tx: {
