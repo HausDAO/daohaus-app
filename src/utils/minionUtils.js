@@ -1,12 +1,17 @@
 import { getMinionAbi } from './abi';
 import { createContract } from './contract';
 
-export const getMinionAction = async ({ proposal, chainID }) => {
+export const getMinionAction = async ({
+  minionAddress,
+  proposalId,
+  chainID,
+  abi,
+  decodeHex,
+}) => {
   try {
-    const { minion, minionAddress, proposalId } = proposal;
     const minionContract = createContract({
       address: minionAddress,
-      abi: getMinionAbi(minion.minionType),
+      abi,
       chainID,
     });
     const result = await minionContract.methods.actions(proposalId).call();

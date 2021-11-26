@@ -314,6 +314,7 @@ export const PROPOSAL_FORMS = {
   PAYROLL_NIFTY: {
     id: 'PAYROLL_NIFTY',
     title: 'Payroll Proposal',
+    logValues: true,
     description: 'Pay Members with a minion',
     type: PROPOSAL_TYPES.PAYROLL,
     required: ['title', 'selectedMinion', 'minionPayment', 'applicant'],

@@ -531,6 +531,7 @@ export const TX = {
     contract: CONTRACTS.SELECTED_MINION_NIFTY,
     name: 'proposeAction',
     poll: 'subgraph',
+
     onTxHash: ACTIONS.PROPOSAL,
     display: 'Sending Token',
     errMsg: 'Error Submitting Proposal',

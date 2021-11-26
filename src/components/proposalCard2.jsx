@@ -19,7 +19,7 @@ import { getReadableBalance } from '../utils/tokenValue';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { createContract } from '../utils/contract';
 import { getMinionAbi } from '../utils/abi';
-import { getMinionAction } from '../utils/minionUtils';
+import useMinionAction from '../hooks/useMinionAction';
 
 const readableNumber = ({ amount, unit, decimals = 1, separator = '' }) => {
   if (!amount || !unit) return null;
@@ -147,10 +147,7 @@ const DetailsLink = ({ proposalId }) => {
   );
 };
 
-const PropCardBrief = ({
-  proposal = {},
-  customTransferUI = 'minionTransfer',
-}) => {
+const PropCardBrief = ({ proposal = {}, customTransferUI }) => {
   const isOffering = Number(proposal.tributeOffered) > 0;
   const isRequesting =
     Number(proposal.lootRequested) > 0 ||
@@ -205,20 +202,9 @@ const PropCardOffer = ({ proposal }) => {
 
 const MinionTransfer = ({ proposal, isLoaded }) => {
   const [paymentInfo, setPaymentInfo] = useState(null);
-  const { daochain } = useParams();
-  useEffect(() => {
-    const shoudRender = true;
-    const callMinionAction = async () => {
-      const minionAction = await getMinionAction({
-        proposal,
-        chainID: daochain,
-      });
-      console.log(`minionAction`, minionAction);
-    };
-    if (proposal?.minion?.minionType) {
-      callMinionAction();
-    }
-  }, [proposal]);
+  const minionActionData = useMinionAction({
+    minionAddress: proposal?.minionAddress,
+  });
 
   if (proposal.proposalType === PROPOSAL_TYPES.PAYROLL) {
     console.log(`proposal`, proposal);
