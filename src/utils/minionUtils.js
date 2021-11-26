@@ -6,7 +6,6 @@ export const getMinionAction = async ({
   proposalId,
   chainID,
   abi,
-  decodeHex,
 }) => {
   try {
     const minionContract = createContract({
@@ -20,3 +19,5 @@ export const getMinionAction = async ({
     console.error(error);
   }
 };
+
+export const decodeAction = () => {};

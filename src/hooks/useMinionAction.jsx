@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMinionAbi } from '../utils/abi';
 
-import { getMinionAction } from '../utils/minionUtils';
+import { getMinionAction, decodeAction } from '../utils/minionUtils';
 
 const useMinionAction = ({ minionAddress, minionType, proposalId }) => {
   const [minionAction, setAction] = useState(null);
@@ -16,9 +16,15 @@ const useMinionAction = ({ minionAddress, minionType, proposalId }) => {
         minionAddress,
         abi: getMinionAbi(minionType),
         proposalId,
+        chainID: daochain,
       });
-      if (action && shouldUpdate) {
-        setAction({ ...action, status: 'success' });
+      if (action?.data && shouldUpdate) {
+        console.log(`action`, action);
+        setAction({
+          ...action,
+          status: 'success',
+          decoded: decodeAction(action.data),
+        });
       }
       if (!action) {
         setAction({

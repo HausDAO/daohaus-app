@@ -202,22 +202,26 @@ const PropCardOffer = ({ proposal }) => {
   return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
 };
 
-const MinionTransfer = ({ proposal, isLoaded }) => {
-  const [paymentInfo, setPaymentInfo] = useState(null);
-  const minionActionData = useMinionAction({
+const MinionTransfer = ({ proposal }) => {
+  const minionAction = useMinionAction({
     minionAddress: proposal?.minionAddress,
+    minionType: proposal?.minion?.minionType,
+    proposalId: proposal?.proposalId,
   });
-
-  if (proposal.proposalType === PROPOSAL_TYPES.PAYROLL) {
-    console.log(`proposal`, proposal);
-  }
-  return <AsyncCardTransfer isLoaded={isLoaded} proposal={proposal} />;
+  const isLoaded =
+    minionAction?.status === 'error' || minionAction?.status === 'success';
+  const sample = 'This is a test message';
+  return (
+    <AsyncCardTransfer
+      isLoaded={isLoaded}
+      proposal={proposal}
+      itemText={sample}
+    />
+  );
 };
 
 const CustomTransfer = ({ proposal, customTransferUI }) => {
-  console.log(`customTransferUI`, customTransferUI);
   if (customTransferUI === 'minionTransfer') {
-    console.log('fired');
     return <MinionTransfer proposal={proposal} />;
   }
   return null;
@@ -227,7 +231,7 @@ const AsyncCardTransfer = props => {
   const { isLoaded } = props;
   return (
     <Skeleton isLoaded={isLoaded} height='1.5rem'>
-      <PropCardTransfer /> ;
+      <PropCardTransfer {...props} />
     </Skeleton>
   );
 };
