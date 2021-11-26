@@ -20,6 +20,7 @@ import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { createContract } from '../utils/contract';
 import { getMinionAbi } from '../utils/abi';
 import useMinionAction from '../hooks/useMinionAction';
+import { CUSTOM_DISPLAY } from '../data/proposalData';
 
 const readableNumber = ({ amount, unit, decimals = 1, separator = '' }) => {
   if (!amount || !unit) return null;
@@ -147,12 +148,13 @@ const DetailsLink = ({ proposalId }) => {
   );
 };
 
-const PropCardBrief = ({ proposal = {}, customTransferUI }) => {
+const PropCardBrief = ({ proposal = {} }) => {
   const isOffering = Number(proposal.tributeOffered) > 0;
   const isRequesting =
     Number(proposal.lootRequested) > 0 ||
     Number(proposal.sharesRequested) > 0 ||
     Number(proposal.paymentRequested) > 0;
+  const { customTransferUI } = CUSTOM_DISPLAY[proposal.proposalType] || {};
 
   return (
     <Flex
@@ -213,7 +215,9 @@ const MinionTransfer = ({ proposal, isLoaded }) => {
 };
 
 const CustomTransfer = ({ proposal, customTransferUI }) => {
+  console.log(`customTransferUI`, customTransferUI);
   if (customTransferUI === 'minionTransfer') {
+    console.log('fired');
     return <MinionTransfer proposal={proposal} />;
   }
   return null;
