@@ -29,7 +29,6 @@ import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
 import { MINION_TYPES } from './proposalUtils';
-import { CONTRACTS } from '../data/contractTX';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 
 export const LOCAL_ABI = Object.freeze({

@@ -1,89 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams, Link, useHistory } from 'react-router-dom';
-import humanFormat from 'human-format';
-import {
-  Flex,
-  Box,
-  Button,
-  Divider,
-  Progress,
-  Center,
-  Icon,
-  Skeleton,
-} from '@chakra-ui/react';
+import React, { useMemo } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Flex, Box, Divider, Center, Skeleton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 
-import ContentBox from './ContentBox';
-import { Bold, CardLabel, ParaMd, ParaSm } from './typography';
-import { getReadableBalance } from '../utils/tokenValue';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
-import { createContract } from '../utils/contract';
-import { getMinionAbi } from '../utils/abi';
+import ContentBox from '../components/ContentBox';
+import { Bold, CardLabel, ParaMd, ParaSm } from '../components/typography';
+import PropActions from './propActions';
 import useMinionAction from '../hooks/useMinionAction';
 import { CUSTOM_DISPLAY } from '../data/proposalData';
-
-const readableNumber = ({ amount, unit, decimals = 1, separator = '' }) => {
-  if (!amount || !unit) return null;
-  if (amount > 0 && amount < 1) {
-    return `${Number(amount.toFixed(4))} ${unit}`;
-  }
-  return `${humanFormat(amount, {
-    unit: ` ${unit}`,
-    decimals,
-    separator,
-  })}`;
-};
-const readableTokenBalance = tokenData => {
-  const { balance, decimals, symbol } = tokenData || {};
-  if (!balance || !decimals || !symbol) return null;
-  const readableBalance = getReadableBalance(tokenData);
-  if (!readableBalance) return null;
-  return readableNumber({ amount: readableBalance, unit: symbol });
-};
-
-const generateRequestText = proposal => {
-  const {
-    paymentRequested,
-    paymentTokenDecimals,
-    paymentTokenSymbol,
-    sharesRequested,
-    lootRequested,
-  } = proposal;
-  const paymentReadable = Number(paymentRequested)
-    ? readableTokenBalance({
-        decimals: paymentTokenDecimals,
-        balance: paymentRequested,
-        symbol: paymentTokenSymbol,
-      })
-    : '';
-
-  const sharesReadable = Number(sharesRequested)
-    ? readableNumber({ unit: 'Shares', amount: Number(sharesRequested) })
-    : '';
-  const lootReadable = Number(lootRequested)
-    ? readableNumber({ unit: 'Loot', amount: Number(lootRequested) })
-    : '';
-
-  return [sharesReadable, lootReadable, paymentReadable]
-    .filter(Boolean)
-    .join(', ');
-};
-
-const generateOfferText = proposal => {
-  const { tributeOffered, tributeTokenDecimals, tributeTokenSymbol } = proposal;
-  const tributeReadable = Number(tributeOffered)
-    ? readableTokenBalance({
-        decimals: tributeTokenDecimals,
-        balance: tributeOffered,
-        symbol: tributeTokenSymbol,
-      })
-    : '';
-  //  'NFT offered' logic here
-  const text = [tributeReadable].filter(Boolean).join(', ');
-  return text;
-};
-
-const checkSpecial = () => {};
+import { generateOfferText, generateRequestText } from '../utils/proposalCard';
 
 const ProposalCardV2 = ({ proposal, customTerms }) => {
   return (
@@ -94,43 +19,7 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
           <Divider orientation='vertical' colorScheme='blackAplha.900' />
         </Center>
         <Flex w='40%'>
-          <Box px='1.2rem' py='0.6rem' w='100%'>
-            <Flex alignItems='center' mb={3}>
-              <Box
-                borderRadius='50%'
-                background='green'
-                h='.6rem'
-                w='.6rem'
-                mr='2'
-              />
-              <ParaSm fontWeight='700' mr='1'>
-                Passed
-              </ParaSm>
-              <ParaSm>and needs execution </ParaSm>
-            </Flex>
-            <Progress value={80} mb='3' colorScheme='secondary.500' />
-            <Flex justifyContent='space-between'>
-              <Button
-                size='sm'
-                minW='4rem'
-                backgroundColor='white'
-                color='black'
-              >
-                No
-              </Button>
-              <Button
-                size='sm'
-                minW='4rem'
-                color='secondary.500'
-                variant='outline'
-              >
-                Abstain
-              </Button>
-              <Button size='sm' minW='4rem'>
-                Yes
-              </Button>
-            </Flex>
-          </Box>
+          <PropActions proposal={proposal} />
         </Flex>
       </Flex>
     </ContentBox>
@@ -164,8 +53,8 @@ const PropCardBrief = ({ proposal = {} }) => {
       position='relative'
     >
       <Box px='1.2rem' py='0.6rem'>
-        <CardLabel mb={1}>{proposal.proposalType}</CardLabel>
-        <ParaMd fontWeight='700' mb={1}>
+        <CardLabel mb={2}>{proposal.proposalType}</CardLabel>
+        <ParaMd fontWeight='700' mb={3}>
           {proposal.title}
         </ParaMd>
         {isRequesting && <PropCardRequest proposal={proposal} />}

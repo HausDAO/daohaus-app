@@ -24,7 +24,7 @@ import {
   handleListSort,
   searchProposals,
 } from '../utils/proposalUtils';
-import ProposalCardV2 from './proposalCard2';
+import ProposalCardV2 from '../proposalBuilder/proposalCard2';
 import SpamFilterListNotification from './spamFilterListNotification';
 
 const ProposalsList = ({ proposals, customTerms }) => {

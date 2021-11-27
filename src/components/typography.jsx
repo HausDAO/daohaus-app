@@ -39,7 +39,7 @@ export const Heading = props => {
 export const ParaMd = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='1rem' lineHeight='168.4%;' {...props}>
+    <Text fontSize='1rem' lineHeight='1.1rem' {...props}>
       {text || children}
     </Text>
   );
@@ -47,7 +47,7 @@ export const ParaMd = props => {
 export const ParaSm = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='.9rem' lineHeight='168.4%;' {...props}>
+    <Text fontSize='.9rem' lineHeight='1.1rem' {...props}>
       {text || children}
     </Text>
   );
@@ -56,7 +56,7 @@ export const ParaSm = props => {
 export const ParaLg = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='1.1rem' lineHeight='168.4%;' {...props}>
+    <Text fontSize='1.1rem' lineHeight='1.1rem' {...props}>
       {text || children}
     </Text>
   );
