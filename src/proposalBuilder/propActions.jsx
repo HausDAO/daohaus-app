@@ -13,16 +13,15 @@ const Actions = {
   // ReadyForProcessing: 'ReadyForProcessing',
 };
 
-const getCurrentStage = ({ proposal }) => {
-  const CurrentComponent = () =>
-    Actions?.[proposal?.proposalStatus] || <Unsponsored {...proposal} />;
-  return <CurrentComponent {...proposal} />;
+const getCurrentStage = props => {
+  console.log(`props?.proposal`, props?.proposal);
+  const CurrentComponent = () => Actions?.[props?.proposal?.status];
+  return <CurrentComponent {...props} />;
 };
 
-const PropActions = ({ proposal }) => {
-  console.log(`proposal`, proposal);
-  if (!proposal) return;
-  return getCurrentStage(proposal);
+const PropActions = props => {
+  if (!props?.proposal) return;
+  return getCurrentStage(props);
 };
 
 export default PropActions;

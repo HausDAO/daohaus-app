@@ -9,8 +9,10 @@ import PropActions from './propActions';
 import useMinionAction from '../hooks/useMinionAction';
 import { CUSTOM_DISPLAY } from '../data/proposalData';
 import { generateOfferText, generateRequestText } from '../utils/proposalCard';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import useCanInteract from '../hooks/useCanInteract';
 
-const ProposalCardV2 = ({ proposal, customTerms }) => {
+const ProposalCardV2 = ({ proposal, interaction }) => {
   return (
     <ContentBox p='0' mb={4} minHeight='8.875rem'>
       <Flex>
@@ -19,7 +21,7 @@ const ProposalCardV2 = ({ proposal, customTerms }) => {
           <Divider orientation='vertical' colorScheme='blackAplha.900' />
         </Center>
         <Flex w='40%'>
-          <PropActions proposal={proposal} />
+          <PropActions proposal={proposal} interaction={interaction} />
         </Flex>
       </Flex>
     </ContentBox>

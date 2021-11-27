@@ -26,11 +26,13 @@ import {
 } from '../utils/proposalUtils';
 import ProposalCardV2 from '../proposalBuilder/proposalCard2';
 import SpamFilterListNotification from './spamFilterListNotification';
+import useCanInteract from '../hooks/useCanInteract';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
   const { isActive } = useBoost();
+  const interaction = useCanInteract();
 
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
@@ -165,6 +167,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
               key={proposal.id}
               proposal={proposal}
               customTerms={customTerms}
+              interaction={interaction}
             />
           ))}
       </Box>
