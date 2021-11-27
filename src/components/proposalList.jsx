@@ -27,14 +27,13 @@ import {
 import ProposalCardV2 from '../proposalBuilder/proposalCard2';
 import SpamFilterListNotification from './spamFilterListNotification';
 import useCanInteract from '../hooks/useCanInteract';
+import { isFirstItem, isLastItem } from '../utils/general';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
   const { isActive } = useBoost();
-  const interaction = useCanInteract({
-    checklist: ['canSponsorAndVote'],
-  });
+  const interaction = useCanInteract();
 
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
@@ -164,10 +163,15 @@ const ProposalsList = ({ proposals, customTerms }) => {
 
       <Box mt={4}>
         {isLoaded &&
-          paginatedProposals?.map(proposal => (
+          paginatedProposals?.map((proposal, index) => (
             <ProposalCardV2
               key={proposal.id}
               proposal={proposal}
+              // proposal={
+              //   isFirstItem(paginatedProposals, index)
+              //     ? { ...proposal, status: 'InQueue' }
+              //     : proposal
+              // }
               customTerms={customTerms}
               interaction={interaction}
             />

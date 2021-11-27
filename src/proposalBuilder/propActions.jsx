@@ -1,6 +1,18 @@
 import React from 'react';
-import { VotingPeriod } from './actionPrimitives';
+import { InQueue, VotingPeriod } from './actionPrimitives';
 import { Unsponsored } from './Unsponsored';
+
+// export const ProposalStatus = {
+//   Unknown: 'Unknown',
+//   InQueue: 'InQueue',
+//   VotingPeriod: 'VotingPeriod',
+//   GracePeriod: 'GracePeriod',
+//   Cancelled: 'Cancelled',
+//   Passed: 'Passed',
+//   Failed: 'Failed',
+//   ReadyForProcessing: 'ReadyForProcessing',
+//   Unsponsored: 'Unsponsored',
+// };
 
 const PropActions = props => {
   if (!props?.proposal?.status) return;
@@ -12,6 +24,9 @@ const PropActions = props => {
   }
   if (status === 'VotingPeriod') {
     return <VotingPeriod {...props} />;
+  }
+  if (status === 'InQueue') {
+    return <InQueue {...props} />;
   }
   return null;
 };
