@@ -1,27 +1,19 @@
 import React from 'react';
-import { Unsponsored, VotingPeriod } from './proposalActionStates';
-
-const Actions = {
-  // Unknown: <,
-  // InQueue: 'InQueue',
-  VotingPeriod: <VotingPeriod />,
-  Unsponsored: <Unsponsored />,
-  // GracePeriod: 'GracePeriod',
-  // Cancelled: 'Cancelled',
-  // Passed: 'Passed',
-  // Failed: 'Failed',
-  // ReadyForProcessing: 'ReadyForProcessing',
-};
-
-const getCurrentStage = props => {
-  console.log(`props?.proposal`, props?.proposal);
-  const CurrentComponent = () => Actions?.[props?.proposal?.status];
-  return <CurrentComponent {...props} />;
-};
+import { VotingPeriod } from './actionPrimitives';
+import { Unsponsored } from './Unsponsored';
 
 const PropActions = props => {
-  if (!props?.proposal) return;
-  return getCurrentStage(props);
+  if (!props?.proposal?.status) return;
+  const {
+    proposal: { status },
+  } = props;
+  if (status === 'Unsponsored') {
+    return <Unsponsored {...props} />;
+  }
+  if (status === 'VotingPeriod') {
+    return <VotingPeriod {...props} />;
+  }
+  return null;
 };
 
 export default PropActions;

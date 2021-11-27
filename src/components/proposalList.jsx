@@ -32,7 +32,9 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
   const { isActive } = useBoost();
-  const interaction = useCanInteract();
+  const interaction = useCanInteract({
+    checklist: ['canSponsorAndVote'],
+  });
 
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
