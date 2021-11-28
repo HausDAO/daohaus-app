@@ -152,6 +152,12 @@ export const PROPOSAL_FORMS = {
     fields: [
       [
         {
+          type: 'imageInput',
+          label: 'avatar',
+          name: 'image',
+          htmlFor: 'avatar',
+        },
+        {
           ...FIELD.TITLE,
           label: 'Name',
           name: 'name',
@@ -206,7 +212,6 @@ export const PROPOSAL_FORMS = {
             message: 'Location must be less than 420 characters',
           },
         },
-
         {
           ...FIELD.TITLE,
           label: '2-Letter Country Code',

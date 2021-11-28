@@ -77,12 +77,15 @@ const ProfileMenu = ({ member, refreshProfile }) => {
             setValue('ceramicClient', client);
             setValue('ceramicDid', did);
             const profile = await getBasicProfile(did.id);
+            console.log('Profile');
+            console.log(profile);
             setValue('name', profile?.name || '');
             setValue('emoji', profile?.emoji || '');
             setValue('description', profile?.description || '');
             setValue('homeLocation', profile?.homeLocation || '');
             setValue('residenceCountry', profile?.residenceCountry || '');
             setValue('url', profile?.url || '');
+            setValue('image', profile?.image || '');
             setFormState('success');
           } catch (err) {
             console.error(err);
@@ -110,6 +113,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
               homeLocation: values?.homeLocation || null,
               residenceCountry: values?.residenceCountry.toUpperCase() || null,
               url: values?.url || null,
+              image: values?.image || null,
             }).filter(value => value[1] !== null);
             const profile = Object.fromEntries(profileArray);
 

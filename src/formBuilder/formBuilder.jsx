@@ -237,6 +237,7 @@ const FormBuilder = props => {
           setFormState={setFormState}
           setValue={setValue}
           values={values}
+          defaultValues={defaultValues}
         />
       );
     });
