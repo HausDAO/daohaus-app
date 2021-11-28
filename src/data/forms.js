@@ -151,12 +151,7 @@ export const PROPOSAL_FORMS = {
     blurText: 'Connect to update your profile',
     fields: [
       [
-        {
-          type: 'imageInput',
-          label: 'avatar',
-          name: 'image',
-          htmlFor: 'avatar',
-        },
+        FIELD.AVATAR,
         {
           ...FIELD.TITLE,
           label: 'Name',

@@ -77,8 +77,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
             setValue('ceramicClient', client);
             setValue('ceramicDid', did);
             const profile = await getBasicProfile(did.id);
-            console.log('Profile');
-            console.log(profile);
             setValue('name', profile?.name || '');
             setValue('emoji', profile?.emoji || '');
             setValue('description', profile?.description || '');
