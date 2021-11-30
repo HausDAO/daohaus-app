@@ -268,13 +268,13 @@ const Members = React.memo(
                         selectedMember.memberAddress,
                       )}
                     />
-                  ) : daoMember ? (
+                  ) : (
                     <ActivitiesFeed
                       limit={2}
                       activities={activities}
                       hydrateFn={getMembersActivites}
                     />
-                  ) : null}
+                  )}
                 </>
               )}
             </Stack>

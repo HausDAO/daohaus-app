@@ -22,7 +22,7 @@ export const PROPOSAL_TYPES = {
   MEMBER: 'Member Proposal',
   SIGNAL: 'Signal Proposal',
   WHITELIST: 'Whitelist Token Proposal',
-  GUILDKICK: 'Guild Kick Proposal',
+  GUILDKICK: 'Guildkick Proposal',
   TRADE: 'Trade Proposal',
   MINION_UBER_STAKE: 'UberHAUS Staking Proposal',
   MINION_UBER_RQ: 'UberHAUS RageQuit Proposal',
@@ -543,6 +543,7 @@ export const handleListFilter = (proposals, filter, daoMember) => {
           ?.unread,
     );
   }
+
   return updatedProposals.filter(
     proposal => proposal[filter.type] === filter.value,
   );
