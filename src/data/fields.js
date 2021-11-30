@@ -214,6 +214,19 @@ export const FIELD = {
     label: 'Vaild Rarible Order Data',
     expectType: 'any',
   },
+  DATE_RANGE_SWITCH: {
+    type: 'toggleForm',
+    listenTo: 'formCondition',
+    checked: 'fixed',
+    unchecked: 'unset',
+    label: {
+      type: 'formCondition',
+      fixed: 'Fixed Length',
+      unset: 'Unset',
+    },
+    title: 'Auction Duration',
+    expectType: 'any',
+  },
   NFT_INPUT: {
     type: 'input',
     htmlFor: 'nftAddress',
@@ -243,7 +256,7 @@ export const FIELD = {
     type: 'dateRange',
     htmlFor: 'dateRange',
     name: 'dateRange',
-    label: 'Set Auction Duration',
+    label: 'Set Date Range',
     expectType: 'any',
   },
   DELEGATE_ADDRESS: {
