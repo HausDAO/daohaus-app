@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { RiAddFill } from 'react-icons/ri';
 import { useParams, Link } from 'react-router-dom';
 import {
   Button,
@@ -11,7 +10,6 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import useCanInteract from '../hooks/useCanInteract';
 import BalanceList from '../components/balanceList';
 import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
@@ -26,7 +24,6 @@ const Treasury = ({
   delegate,
   daoVaults,
 }) => {
-  const { canInteract } = useCanInteract({});
   const { daoid, daochain } = useParams();
   const toast = useToast();
   const [needsSync, setNeedsSync] = useState(false);
@@ -51,15 +48,6 @@ const Treasury = ({
       <CopyToClipboard text={daoid} mr={2} onCopy={handleCopy}>
         <Button>Copy Address</Button>
       </CopyToClipboard>
-      {canInteract && (
-        <Button
-          as={Link}
-          to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
-          rightIcon={<RiAddFill />}
-        >
-          Whitelist Asset
-        </Button>
-      )}
     </Flex>
   );
 
