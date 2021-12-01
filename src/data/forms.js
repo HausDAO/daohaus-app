@@ -151,6 +151,7 @@ export const PROPOSAL_FORMS = {
     blurText: 'Connect to update your profile',
     fields: [
       [
+        FIELD.AVATAR,
         {
           ...FIELD.TITLE,
           label: 'Name',
@@ -206,7 +207,6 @@ export const PROPOSAL_FORMS = {
             message: 'Location must be less than 420 characters',
           },
         },
-
         {
           ...FIELD.TITLE,
           label: '2-Letter Country Code',

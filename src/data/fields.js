@@ -419,6 +419,12 @@ export const FIELD = {
     label: 'Yes or No?',
     expectType: 'any',
   },
+  AVATAR: {
+    type: 'imageInput',
+    label: 'avatar',
+    name: 'image',
+    htmlFor: 'avatar',
+  },
 };
 
 export const FORM_DISPLAY = {

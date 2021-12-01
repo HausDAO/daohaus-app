@@ -56,9 +56,15 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
   }, [profile, addr]);
 
   const avatarImage = useMemo(() => {
+    if (profile?.image?.original?.src) {
+      return `https://ipfs.infura.io/ipfs/${
+        profile?.image.original.src.match('(?<=ipfs://).+')[0]
+      }`;
+    }
     if (profile?.image?.length) {
       return `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`;
     }
+
     return null;
   }, [profile, addr]);
 
