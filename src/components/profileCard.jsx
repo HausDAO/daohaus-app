@@ -31,6 +31,20 @@ const ProfileCard = ({
 }) => {
   const { userid } = useParams();
   const handleAvatar = (member, profile) => {
+    if (profile?.image?.original?.src) {
+      return (
+        <Avatar
+          key={`profile${member}`}
+          name={profile?.name}
+          width='100px'
+          height='100px'
+          src={`https://ipfs.infura.io/ipfs/${
+            profile?.image.original.src.match('(?<=ipfs://).+')[0]
+          }`}
+        />
+      );
+    }
+
     if (profile?.image?.length) {
       const url = profile?.image[0].contentUrl;
       return (

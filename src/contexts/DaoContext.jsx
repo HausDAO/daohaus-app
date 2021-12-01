@@ -131,11 +131,6 @@ export const DaoProvider = ({ children }) => {
     bigGraphQuery(bigQueryOptions);
   };
 
-  const refreshMinionVault = async minionAddress => {
-    const { network } = supportedChains[daochain];
-    await putRefreshApiVault({ network, minionAddress });
-  };
-
   const refreshAllDaoVaults = async () => {
     const { network } = supportedChains[daochain];
     await putRefreshApiVault({ network, molochAddress: daoid });
@@ -179,7 +174,6 @@ export const DaoProvider = ({ children }) => {
         setIsUberHaus,
         isCorrectNetwork,
         refetch,
-        refreshMinionVault,
         refreshAllDaoVaults,
         hasPerformedBatchQuery, // Ref, not state
       }}
@@ -209,7 +203,6 @@ export const useDao = () => {
     isUberHaus,
     isCorrectNetwork,
     refetch,
-    refreshMinionVault,
     refreshAllDaoVaults,
     hasPerformedBatchQuery, // Ref, not state
   } = useContext(DaoContext);
@@ -223,7 +216,6 @@ export const useDao = () => {
     daoVaults,
     isCorrectNetwork,
     refetch,
-    refreshMinionVault,
     refreshAllDaoVaults,
     hasPerformedBatchQuery,
   };

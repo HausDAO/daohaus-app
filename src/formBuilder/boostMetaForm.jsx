@@ -18,14 +18,17 @@ const BoostMetaForm = props => {
 
   const handleGoToNext = () => {
     const formValues = getValues();
+
     if (metaFields) {
       const metaUpdate = metaFields.reduce((update, fieldName) => {
         update[fieldName] = formValues[fieldName];
         return update;
       }, {});
-      //  Does values still not persist through different steps?
       setStepperStorage(prevState => ({ ...prevState, ...metaUpdate }));
+    } else {
+      setStepperStorage(prevState => ({ ...prevState }));
     }
+
     goToNext(next);
   };
 

@@ -83,6 +83,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
             setValue('homeLocation', profile?.homeLocation || '');
             setValue('residenceCountry', profile?.residenceCountry || '');
             setValue('url', profile?.url || '');
+            setValue('image', profile?.image || '');
             setFormState('success');
           } catch (err) {
             console.error(err);
@@ -110,11 +111,10 @@ const ProfileMenu = ({ member, refreshProfile }) => {
               homeLocation: values?.homeLocation || null,
               residenceCountry: values?.residenceCountry.toUpperCase() || null,
               url: values?.url || null,
+              image: values?.image || null,
             }).filter(value => value[1] !== null);
             const profile = Object.fromEntries(profileArray);
 
-            console.log('Values');
-            console.log(values);
             await setBasicProfile(client, did, profile);
             cacheProfile(profile, member.memberAddress);
             refreshProfile(profile);
@@ -164,7 +164,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
         args: [member.memberAddress],
       });
     } catch (err) {
-      console.log('error: ', err);
       userRejectedToast();
     }
   };

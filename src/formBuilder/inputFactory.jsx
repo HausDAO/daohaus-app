@@ -38,6 +38,8 @@ import TributeInput from './tributeInput';
 import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
 import BoolSelect from './boolSelect';
+import GenericSwitch from './genericSwitch';
+import ImageInput from './imageInput';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -66,6 +68,9 @@ export const InputFactory = props => {
   }
   if (type === 'inputSelect') {
     return <InputSelect {...props} />;
+  }
+  if (type === 'switch') {
+    return <GenericSwitch {...props} />;
   }
   if (type === 'linkInput') {
     return <LinkInput {...props} />;
@@ -165,6 +170,9 @@ export const InputFactory = props => {
   }
   if (type === 'genericButton') {
     return <GenericButton {...props} />;
+  }
+  if (type === 'imageInput') {
+    return <ImageInput {...props} />;
   }
   return null;
 };

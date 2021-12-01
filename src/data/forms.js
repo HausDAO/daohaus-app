@@ -118,7 +118,7 @@ export const PROPOSAL_FORMS = {
     fields: [
       [FIELD.TITLE, FIELD.SHARES_REQUEST, FIELD.LINK, FIELD.DESCRIPTION],
     ],
-    additionalOptions: [FIELD.PAYMENT_REQUEST],
+    additionalOptions: [FIELD.PAYMENT_REQUEST, FIELD.TRIBUTE],
   },
   MEMBER: {
     id: 'MEMBER',
@@ -151,6 +151,7 @@ export const PROPOSAL_FORMS = {
     blurText: 'Connect to update your profile',
     fields: [
       [
+        FIELD.AVATAR,
         {
           ...FIELD.TITLE,
           label: 'Name',
@@ -206,7 +207,6 @@ export const PROPOSAL_FORMS = {
             message: 'Location must be less than 420 characters',
           },
         },
-
         {
           ...FIELD.TITLE,
           label: '2-Letter Country Code',
@@ -215,6 +215,8 @@ export const PROPOSAL_FORMS = {
           htmlFor: 'residenceCountry',
           expectType: 'countryCode',
           info: 'An ISO 3166-1 alpha-2 compliant country code',
+          hrefLink:
+            'https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements',
         },
       ],
     ],
@@ -277,6 +279,7 @@ export const PROPOSAL_FORMS = {
       FIELD.APPLICANT,
       FIELD.LOOT_REQUEST,
       FIELD.SHARES_REQUEST,
+      FIELD.TRIBUTE,
     ],
     customValidations: ['nonDaoApplicant'],
   },
@@ -308,7 +311,7 @@ export const PROPOSAL_FORMS = {
     type: PROPOSAL_TYPES.SIGNAL,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['title'], // Use name key from proposal type object
-    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
+    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK, FIELD.TRIBUTE]],
   },
   MINION: {
     id: 'MINION',
@@ -462,7 +465,6 @@ export const PROPOSAL_FORMS = {
       ],
     ],
   },
-
   MINION_BUYOUT_TOKEN: {
     id: 'MINION_BUYOUT_TOKEN',
     title: 'Buyout Proposal',
@@ -782,6 +784,27 @@ export const BOOST_FORMS = {
     title: 'Deploy Wrap n Zap',
     fields: [[]],
     tx: TX.CREATE_WRAP_N_ZAP,
+  },
+  SPAM_FILTER: {
+    id: 'SPAM_FILTER',
+    title: 'Minimum Tribute',
+    required: ['paymentRequested'],
+    fields: [
+      [
+        {
+          ...FIELD.PAYMENT_REQUEST,
+          label: 'Amount in Deposit Token',
+          info: INFO_TEXT.SPAM_FILTER_AMOUNT,
+          depositTokenOnly: true,
+          hideMax: true,
+        },
+        {
+          ...FIELD.BASIC_SWITCH,
+          name: 'membersOnly',
+          label: 'Hide new proposal button from non members?',
+        },
+      ],
+    ],
   },
 };
 

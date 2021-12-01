@@ -59,6 +59,7 @@ export const TXProvider = ({ children }) => {
     memberWalletRef,
     isMember,
     daoMember,
+    delegate,
   } = useDaoMember();
 
   const { daoid, daochain, minion } = useParams();
@@ -76,6 +77,7 @@ export const TXProvider = ({ children }) => {
     currentDaoTokens,
     isMember,
     daoMember,
+    delegate,
     userHubDaos,
     outstandingTXs,
     daoVaults,
@@ -114,8 +116,9 @@ export const TXProvider = ({ children }) => {
     // This should get up all the up to date data from the Graph and spread across the
     // entire component tree. It should also recache the new data automatically
     if (!skipVaults) {
-      console.log('vault fetch');
+      console.log('refresh');
       await refreshAllDaoVaults();
+      console.log('refresh done');
     }
     refetch();
   };

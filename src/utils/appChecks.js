@@ -1,3 +1,5 @@
+import { isDelegating } from './general';
+
 const appCheckFns = Object.freeze({
   isConnected({ address }) {
     return address
@@ -11,6 +13,23 @@ const appCheckFns = Object.freeze({
   },
   isMember({ isMember }) {
     return isMember ? true : 'For shareholding members only';
+  },
+  canSponsorAndVote({ daoMember, delegate }) {
+    if (Number(daoMember?.shares) > 0 && !isDelegating(daoMember)) {
+      return true;
+    }
+    if (delegate) {
+      return true;
+    }
+    return 'For shareholding members only';
+  },
+  spamFilterMemberOnlyOff({ daoMetaData, isMember }) {
+    const hasSpamFilterMemberOnly =
+      daoMetaData?.boosts?.SPAM_FILTER?.active &&
+      daoMetaData?.boosts?.SPAM_FILTER?.metadata?.membersOnly &&
+      isMember;
+
+    return !hasSpamFilterMemberOnly ? true : 'For shareholding members only';
   },
 });
 

@@ -1,6 +1,5 @@
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { authenticateDid } from '../utils/3box';
 
 export const INFO_TEXT = {
   SHARES_REQUEST:
@@ -19,6 +18,8 @@ export const INFO_TEXT = {
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
   MINION_VALUE: 'Value in wei of network token for payable functions.',
+  SPAM_FILTER_AMOUNT:
+    'Proposals with tribute offered less than this amount in the deposit token will be filterd out of your proposal list.',
   MINION_QUORUM:
     'Warning: 51% or more is recommended to ensure the community majority approve decisions.',
   NIFTY_REPAYMENT_REQUEST:
@@ -203,7 +204,7 @@ export const FIELD = {
     htmlFor: 'nftAddress',
     name: 'nftAddress',
     label: 'Select an NFT',
-    expectType: 'address',
+    expectType: 'any',
   },
   RARIBLE_NFT_DATA: {
     type: 'raribleNftData',
@@ -411,6 +412,19 @@ export const FIELD = {
     title: 'Minion Setup',
     expectType: 'any',
   },
+  BASIC_SWITCH: {
+    type: 'switch',
+    checked: 'true',
+    unchecked: 'false',
+    label: 'Yes or No?',
+    expectType: 'any',
+  },
+  AVATAR: {
+    type: 'imageInput',
+    label: 'avatar',
+    name: 'image',
+    htmlFor: 'avatar',
+  },
 };
 
 export const FORM_DISPLAY = {
@@ -421,33 +435,5 @@ export const FORM_DISPLAY = {
     label: 'Loot Requested',
     fallback: '0',
     expectType: 'number',
-  },
-};
-
-export const FORM_ACTION = {
-  // This will require the form to
-  // have a matching indicator state
-  CERAMIC_CONNECT: {
-    type: 'genericButton',
-    btnText: 'Connect',
-    btnLabel: 'Connect to Ceramic',
-    btnLoadingText: 'Connecting',
-    btnHideCallback: values => {
-      return values?.ceramicDid;
-    },
-    btnCallback: async (setValue, setLoading, setFormState) => {
-      setLoading(true);
-      try {
-        const [client, did] = await authenticateDid(
-          window.ethereum.selectedAddress,
-        );
-        setValue('ceramicClient', client);
-        setValue('ceramicDid', did);
-      } catch (err) {
-        console.error(err);
-      }
-      setFormState('connected');
-      setLoading(false);
-    },
   },
 };

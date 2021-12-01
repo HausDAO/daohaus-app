@@ -11,7 +11,7 @@ import { spreadOptions } from '../utils/formBuilder';
 
 const PaymentInput = props => {
   const { daoOverview } = useDao();
-  const { localForm, registerOptions = {} } = props;
+  const { localForm, registerOptions = {}, depositTokenOnly, hideMax } = props;
   const { getValues, setValue, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
@@ -36,7 +36,9 @@ const PaymentInput = props => {
       );
       const nonDepTokens = daoOverview.tokenBalances.filter(
         token =>
-          token.guildBank && token.token.tokenAddress !== depTokenAddress,
+          !depositTokenOnly &&
+          token.guildBank &&
+          token.token.tokenAddress !== depTokenAddress,
       );
 
       setDaoTokens(
@@ -72,11 +74,13 @@ const PaymentInput = props => {
     registerOptions,
     setValueAs: value => getContractBalance(value, token?.decimals),
     validate: {
-      hasBalance: value =>
+      hasBalance: value => {
+        depositTokenOnly ||
         Number(getContractBalance(value, token?.decimals)) <=
-        Number(token?.balance)
+          Number(token?.balance)
           ? true
-          : 'Not enough balance in Wallet',
+          : 'Not enough balance in Wallet';
+      },
     },
   });
 
@@ -86,8 +90,7 @@ const PaymentInput = props => {
       registerOptions={options}
       selectName='paymentToken'
       options={daoTokens}
-      // helperText={unlocked || 'Unlock to tokens to submit proposal'}
-      btn={<ModButton text={maxBtnDisplay} fn={setMax} />}
+      btn={!hideMax && <ModButton text={maxBtnDisplay} fn={setMax} />}
     />
   );
 };

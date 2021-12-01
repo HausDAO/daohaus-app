@@ -207,6 +207,22 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  SPAM_FILTER: {
+    title: 'Proposal Anti-Spam',
+    description:
+      'Filter & reduce proposal spam by requiring minimum tributes and hiding spam proposals.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.0',
+    pars: [
+      'This Boost gives you a suite of anti-spam features to filter and reduce spam proposals.',
+      'First, you can set a tribute minimum for proposals, filtering out proposals that do not meet the minimum amount.',
+      'To go even further, you can prevent non-members from submitting proposals temporarily by hiding the ‘Add Proposal’ button.',
+      'At any time, you can always reconfigure the minimum tribute, filter settings and visibility of the ‘Add Proposal’ button.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   // SNAPSHOT: {
   //   title: 'Snapshot Proposals',
   //   description:
@@ -220,7 +236,7 @@ export const CONTENT = {
   // },
 };
 
-const COMMON_STEPS = {
+export const COMMON_STEPS = {
   DISPLAY: {
     type: 'boostDetails',
     title: { type: 'boostName' },
@@ -231,7 +247,7 @@ const COMMON_STEPS = {
   SIGNER: {
     type: 'signer',
     title: 'Member Signature',
-    stepLabel: 'Add Proposals & Sign',
+    stepLabel: 'Add Boost & Sign',
     finish: true,
     isUserStep: true,
   },
@@ -302,6 +318,17 @@ export const STEPS = {
       stepLabel: 'Summon',
       next: { type: 'awaitTx', then: 'FINISH', ctaText: 'Summon' },
     },
+  },
+  ADD_SPAM_FILTER: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'boostMetaForm',
+      form: BOOST_FORMS.SPAM_FILTER,
+      next: 'STEP2',
+      stepLabel: 'Select Filter Parameter',
+      isUserStep: true,
+    },
+    STEP2: { ...COMMON_STEPS.SIGNER, daoRefetch: true },
   },
 };
 
@@ -458,6 +485,16 @@ export const BOOSTS = {
     networks: 'all',
     cost: 'free',
     settings: 'none',
+  },
+  SPAM_FILTER: {
+    id: 'SPAM_FILTER',
+    steps: STEPS.ADD_SPAM_FILTER,
+    boostContent: CONTENT.SPAM_FILTER,
+    categories: ['devTools'],
+    networks: 'all',
+    cost: 'free',
+    metaFields: ['paymentRequested', 'paymentToken', 'membersOnly'],
+    settings: { type: 'internalLink', appendToDaoPath: 'settings/spam' },
   },
   // SNAPSHOT: {
   //   id: 'SNAPSHOT',
