@@ -135,7 +135,6 @@ const Proposal = ({
             </Link>
             <ProposalDetails
               proposal={currentProposal}
-              daoMember={daoMember}
               overview={overview}
               hideMinionExecuteButton={hideMinionExecuteButton}
               minionAction={minionAction}

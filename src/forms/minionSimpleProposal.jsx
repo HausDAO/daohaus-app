@@ -26,22 +26,20 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
+import useCanInteract from '../hooks/useCanInteract';
 import PaymentInput from './paymentInput';
 import TextBox from '../components/TextBox';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
 import { createForumTopic } from '../utils/discourse';
-import {
-  detailsToJSON,
-  daoConnectedAndSameChain,
-  IsJsonString,
-} from '../utils/general';
+import { detailsToJSON, IsJsonString } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionProposalForm = () => {
-  const [loading, setLoading] = useState(false);
-  const [abiLoading, setAbiLoading] = useState(false);
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { daoOverview } = useDao();
   const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
@@ -59,12 +57,14 @@ const MinionProposalForm = () => {
     setTxInfoModal,
   } = useOverlay();
   const { refreshDao } = useTX();
-  const [currentError, setCurrentError] = useState(null);
   const [abiFunctions, setAbiFunctions] = useState(null);
-  const [selectedFunction, setSelectedFunction] = useState(null);
+  const [abiLoading, setAbiLoading] = useState(false);
   const [abiParams, setAbiParams] = useState(null);
+  const [currentError, setCurrentError] = useState(null);
   const [hexSwitch, setHexSwitch] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [minions, setMinions] = useState([]);
+  const [selectedFunction, setSelectedFunction] = useState(null);
   const [selectedMinion, setSelectedMinion] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
@@ -525,11 +525,7 @@ const MinionProposalForm = () => {
           </Box>
         )}
         <Box>
-          {daoConnectedAndSameChain(
-            address,
-            daochain,
-            injectedChain?.chainId,
-          ) ? (
+          {canInteract ? (
             <Button
               type='submit'
               loadingText='Submitting'

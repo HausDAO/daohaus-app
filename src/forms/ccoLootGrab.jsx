@@ -9,15 +9,12 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
+import useCanInteract from '../hooks/useCanInteract';
 import CcoTributeInput from './ccoTributeInput';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { chainByID } from '../utils/chain';
-import {
-  createHash,
-  daoConnectedAndSameChain,
-  detailsToJSON,
-} from '../utils/general';
+import { createHash, detailsToJSON } from '../utils/general';
 import { valToDecimalString } from '../utils/tokenValue';
 
 const CcoLootGrabForm = ({
@@ -26,6 +23,9 @@ const CcoLootGrabForm = ({
   contributionClosed,
   openContribution,
 }) => {
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const {
     injectedProvider,
     address,
@@ -170,11 +170,7 @@ const CcoLootGrabForm = ({
               </Flex>
             </FormControl>
 
-            {daoConnectedAndSameChain(
-              address,
-              daochain,
-              injectedChain?.chainId,
-            ) && (
+            {canInteract && (
               <Button
                 type='submit'
                 loadingText='Submitting'
@@ -189,11 +185,7 @@ const CcoLootGrabForm = ({
               </Button>
             )}
 
-            {!daoConnectedAndSameChain(
-              address,
-              daochain,
-              injectedChain?.chainId,
-            ) && (
+            {!canInteract && (
               <Button
                 onClick={requestWallet}
                 isDisabled={networkMismatch}
