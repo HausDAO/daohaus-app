@@ -4,11 +4,15 @@ import { useParams } from 'react-router-dom';
 import { Box, Button, Flex, Icon, Tooltip } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { capitalize, daoConnectedAndSameChain } from '../utils/general';
+import useCanInteract from '../hooks/useCanInteract';
+import { capitalize } from '../utils/general';
 import { chainByID, EIP3085, MM_ADDCHAIN_DATA } from '../utils/chain';
 
 const WrongNetworkToolTip = () => {
-  const { address, injectedChain, injectedProvider } = useInjectedProvider();
+  const { address, injectedProvider } = useInjectedProvider();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { daochain } = useParams();
   const daoChainName = chainByID(daochain)?.name;
 
@@ -31,10 +35,7 @@ const WrongNetworkToolTip = () => {
     return null;
   }
 
-  if (
-    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) ||
-    !injectedProvider?.currentProvider?.isMetaMask
-  ) {
+  if (canInteract || !injectedProvider?.currentProvider?.isMetaMask) {
     return <NetworkTextBox name={daoChainName} />;
   }
 

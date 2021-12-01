@@ -10,16 +10,16 @@ import {
 } from 'react-icons/ri';
 import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import useCanInteract from '../hooks/useCanInteract';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
 import { fixSocialLink } from '../utils/navLinks';
-import { daoConnectedAndSameChain } from '../utils/general';
 
-const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
+const DaoMetaOverview = ({ daoMetaData }) => {
+  const { canInteract } = useCanInteract({});
+
   const { daochain, daoid } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
 
   return (
     <Flex as={ContentBox} mt={2} direction='column' w='100%'>
@@ -52,51 +52,46 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
               </Flex>
             </>
           )}
-          {daoConnectedAndSameChain(
-            address,
-            daochain,
-            injectedChain?.chainId,
-          ) &&
-            +daoMember?.shares > 0 && (
-              <>
-                <Link
-                  as={RouterLink}
-                  color='secondary.500'
-                  fontFamily='heading'
-                  fontSize='xs'
-                  textTransform='uppercase'
-                  letterSpacing='0.15em'
-                  to={`/dao/${daochain}/${daoid}/settings/meta`}
-                  mt={5}
-                  mb={3}
-                >
-                  Edit Metadata
-                </Link>
-                <Link
-                  as={RouterLink}
-                  color='secondary.500'
-                  fontFamily='heading'
-                  fontSize='xs'
-                  textTransform='uppercase'
-                  letterSpacing='0.15em'
-                  to={`/dao/${daochain}/${daoid}/settings/theme`}
-                  mb={3}
-                >
-                  Edit Custom Theme
-                </Link>
-                <Link
-                  as={RouterLink}
-                  color='secondary.500'
-                  fontFamily='heading'
-                  fontSize='xs'
-                  textTransform='uppercase'
-                  letterSpacing='0.15em'
-                  to={`/dao/${daochain}/${daoid}/settings/audit`}
-                >
-                  View Metadata Edit Log
-                </Link>
-              </>
-            )}
+          {canInteract && (
+            <>
+              <Link
+                as={RouterLink}
+                color='secondary.500'
+                fontFamily='heading'
+                fontSize='xs'
+                textTransform='uppercase'
+                letterSpacing='0.15em'
+                to={`/dao/${daochain}/${daoid}/settings/meta`}
+                mt={5}
+                mb={3}
+              >
+                Edit Metadata
+              </Link>
+              <Link
+                as={RouterLink}
+                color='secondary.500'
+                fontFamily='heading'
+                fontSize='xs'
+                textTransform='uppercase'
+                letterSpacing='0.15em'
+                to={`/dao/${daochain}/${daoid}/settings/theme`}
+                mb={3}
+              >
+                Edit Custom Theme
+              </Link>
+              <Link
+                as={RouterLink}
+                color='secondary.500'
+                fontFamily='heading'
+                fontSize='xs'
+                textTransform='uppercase'
+                letterSpacing='0.15em'
+                to={`/dao/${daochain}/${daoid}/settings/audit`}
+              >
+                View Metadata Edit Log
+              </Link>
+            </>
+          )}
           {daoMetaData.name && (
             <Flex mt={3}>
               {daoMetaData.links?.website && (
