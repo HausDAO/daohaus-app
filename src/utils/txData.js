@@ -13,7 +13,6 @@ export const DISPLAY_NAMES = {
   ragekick: 'Rage Kick',
   sponsorProposal: 'Sponsor Proposal',
   submitProposal: 'Submit Proposal',
-  submitProposalCco: 'CCO Contribution',
   submitGuildKickProposal: 'Submit GuildKick Proposal',
   submitWhitelistProposal: 'Submit Whitelist Proposal',
   withdrawBalance: 'Withdraw Balance',

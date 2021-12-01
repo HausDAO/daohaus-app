@@ -13,9 +13,6 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useToken } from '../contexts/TokenContext';
 
 import Allies from '../pages/Allies';
-import CcoAdmin from '../pages/CcoAdmin';
-import CcoContribution from '../pages/CcoContribution';
-import CcoHelper from '../pages/CcoHelper';
 import Clone from '../pages/Clone';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import Layout from '../components/layout';
@@ -245,26 +242,6 @@ const DaoRouter = () => {
             customTerms={customTerms}
             daoMetaData={daoMetaData}
             daoOverview={daoOverview}
-          />
-        </Route>
-        <Route exact path={`${path}/cco`}>
-          <CcoContribution
-            daoMetaData={daoMetaData}
-            currentDaoTokens={currentDaoTokens}
-            daoProposals={daoProposals}
-          />
-        </Route>
-        <Route exact path={`${path}/cco/watcher`}>
-          <CcoHelper
-            daoMetaData={daoMetaData}
-            currentDaoTokens={currentDaoTokens}
-            daoProposals={daoProposals}
-          />
-        </Route>
-        <Route exact path={`${path}/cco/admin/`}>
-          <CcoAdmin
-            daoMetaData={daoMetaData}
-            isCorrectNetwork={isCorrectNetwork}
           />
         </Route>
         <Route exact path={`${path}/boost/mintgate`}>

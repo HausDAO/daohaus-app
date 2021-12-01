@@ -256,39 +256,6 @@ export const createPoll = ({
         });
       }
     };
-  } else if (action === 'submitProposalCco') {
-    return ({ daoID, chainID, hash, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollProposals,
-        testFn: submitProposalTest,
-        shouldEqual: hash,
-        args: { daoID, chainID },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Contribution submitted',
-          unresolvedMsg: 'Contribution pending',
-          successMsg: 'Contribution submission complete',
-          errorMsg: 'Error submitting contribution',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            daoID,
-            chainID,
-            hash,
-          },
-        });
-      }
-    };
   } else if (action === 'unlockToken' || action === 'approveUberHaus') {
     return ({
       daoID,
