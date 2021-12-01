@@ -5,10 +5,6 @@ import makeBlockie from 'ethereum-blockies-base64';
 
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr } from '../utils/general';
-// import { graphQuery } from '../utils/apollo';
-// import { UBERHAUS_DELEGATE } from '../graphQL/uberhaus-queries';
-// import { getGraphEndpoint } from '../utils/chain';
-// import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const HubProfileCard = ({ address }) => {
   const location = useLocation();
@@ -31,26 +27,6 @@ const HubProfileCard = ({ address }) => {
 
     getProfile();
   }, [address]);
-
-  // useEffect(() => {
-  //   const getUberDelegate = async () => {
-  //     if (address && location.pathname === '/') {
-  //       const res = await graphQuery({
-  //         endpoint: getGraphEndpoint(UBERHAUS_DATA.NETWORK, 'subgraph_url'),
-  //         query: UBERHAUS_DELEGATE,
-  //         variables: {
-  //           molochAddress: UBERHAUS_DATA.ADDRESS,
-  //           delegateAddress: address,
-  //         },
-  //       });
-
-  //       console.log(res);
-  //       // return res.members[0];
-  //     }
-  //   };
-
-  //   getUberDelegate();
-  // }, [address]);
 
   return (
     <>

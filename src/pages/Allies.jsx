@@ -5,7 +5,6 @@ import { Box, Button, Flex } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
-// import Following from '../components/followingDaos';
 import DaoToDaoManager from '../components/daoToDaoManager';
 import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
 import DaoToDaoProposalTypeModal from '../modals/daoToDaoProposalTypeModal';
@@ -165,7 +164,6 @@ const Allies = ({
           daoProposals={proposals}
           refetchAllies={refetchAllies}
         />
-        {/* <Following /> */}
       </Box>
     </MainViewLayout>
   );
