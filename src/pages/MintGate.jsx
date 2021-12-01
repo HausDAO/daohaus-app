@@ -3,20 +3,22 @@ import { RiAddFill } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 import { Flex, Button, Link, Spinner, Box } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import useCanInteract from '../hooks/useCanInteract';
 import BoostNotActive from '../components/boostNotActive';
 import MainViewLayout from '../components/mainViewLayout';
 import MintGateCard from '../components/mintGateCard';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { getMintGates } from '../utils/requests';
 
 const MintGate = ({ daoMetaData }) => {
-  const [gates, setGates] = useState([]);
-  const { address, injectedChain } = useInjectedProvider();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
+
   const { daochain, daoid } = useParams();
+  const [gates, setGates] = useState([]);
   const [loading, setLoading] = useState(true);
   const { errorToast } = useOverlay();
 
@@ -41,11 +43,7 @@ const MintGate = ({ daoMetaData }) => {
     }
   }, [daoid, daoMetaData]);
 
-  const newGateButton = daoConnectedAndSameChain(
-    address,
-    injectedChain?.chainId,
-    daochain,
-  ) && (
+  const newGateButton = canInteract && (
     <Button
       as={Link}
       href={`https://www.mintgate.app/create_link?url&token1=${daoid}&amount1=1&type1=2&network1=${

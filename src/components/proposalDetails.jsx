@@ -42,7 +42,6 @@ const urlify = text => {
 
 const ProposalDetails = ({
   proposal,
-  daoMember,
   hideMinionExecuteButton,
   minionAction,
 }) => {
@@ -159,7 +158,7 @@ const ProposalDetails = ({
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link && <MediaBox link={proposal.link} />}
           </Box>
-          <DiscourseProposalTopic proposal={proposal} daoMember={daoMember} />
+          <DiscourseProposalTopic proposal={proposal} />
         </Box>
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
