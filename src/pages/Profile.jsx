@@ -3,7 +3,7 @@ import { Flex, Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import BankList from '../components/BankList';
+import BankList from '../components/bankList';
 import ActivitiesFeed from '../components/activitiesFeed';
 import ProfileCard from '../components/profileCard';
 import MainViewLayout from '../components/mainViewLayout';

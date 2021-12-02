@@ -13,9 +13,6 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useToken } from '../contexts/TokenContext';
 
 import Allies from '../pages/Allies';
-import CcoAdmin from '../pages/CcoAdmin';
-import CcoContribution from '../pages/CcoContribution';
-import CcoHelper from '../pages/CcoHelper';
 import Clone from '../pages/Clone';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import Layout from '../components/layout';
@@ -26,7 +23,6 @@ import MetaAudit from '../pages/MetaAudit';
 import MinionGallery from '../pages/MinionGallery';
 import MinionVault from '../pages/MinionVault';
 import MintGate from '../pages/MintGate';
-import NewProposal from '../pages/NewProposal';
 import Notifications from '../pages/Notifications';
 import Overview from '../pages/Overview';
 import PartyFavor from '../pages/PartyFavor';
@@ -142,9 +138,6 @@ const DaoRouter = () => {
         <Route exact path={`${path}/staking`}>
           <Redirect to='/' />
         </Route>
-        <Route exact path={`${path}/settings/clone`}>
-          <Clone daoMembers={daoMembers} daoOverview={daoOverview} />
-        </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications
             daoMetaData={daoMetaData}
@@ -237,33 +230,6 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/uberhaus/clone`}>
           <Clone daoMembers={daoMembers} daoOverview={daoOverview} isUberHaus />
-        </Route>
-        <Route exact path={`${path}/uberhaus/proposals/new`}>
-          <NewProposal
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
-            daoOverview={daoOverview}
-          />
-        </Route>
-        <Route exact path={`${path}/cco`}>
-          <CcoContribution
-            daoMetaData={daoMetaData}
-            currentDaoTokens={currentDaoTokens}
-            daoProposals={daoProposals}
-          />
-        </Route>
-        <Route exact path={`${path}/cco/watcher`}>
-          <CcoHelper
-            daoMetaData={daoMetaData}
-            currentDaoTokens={currentDaoTokens}
-            daoProposals={daoProposals}
-          />
-        </Route>
-        <Route exact path={`${path}/cco/admin/`}>
-          <CcoAdmin
-            daoMetaData={daoMetaData}
-            isCorrectNetwork={isCorrectNetwork}
-          />
         </Route>
         <Route exact path={`${path}/boost/mintgate`}>
           <MintGate daoMetaData={daoMetaData} />
