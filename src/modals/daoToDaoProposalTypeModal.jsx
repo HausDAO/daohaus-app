@@ -15,7 +15,7 @@ import { rgba } from 'polished';
 
 import TextBox from '../components/TextBox';
 
-import { daoToDaoProposalTypes } from '../content/proposal-types';
+import { daoToDaoProposalTypes } from '../utils/proposalContent';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useOverlay } from '../contexts/OverlayContext';
 // import { useModals } from '../../contexts/PokemolContext';

@@ -67,8 +67,6 @@ const Proposal = ({
     }
   }, [activities, propid]);
 
-  console.log('currentProposal', currentProposal);
-
   const handleRefreshDao = () => {
     const skipVaults = true;
     refreshDao(skipVaults);
