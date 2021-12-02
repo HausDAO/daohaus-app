@@ -1,4 +1,4 @@
-import { POPUP_CONTENT } from '../content/pending-tx-modal';
+import { POPUP_CONTENT } from '../data/txModalContent';
 
 export const DISPLAY_NAMES = {
   submitVote: 'Submit Vote',
