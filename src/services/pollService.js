@@ -1,50 +1,30 @@
 import {
   pollDelegateRewards,
   pollGuildFunds,
-  pollMinionExecute,
   pollMinionCancel,
   pollMinionProposal,
   pollMinionSummon,
   pollMolochSummon,
-  pollProposals,
-  pollRageQuit,
   pollTokenAllowances,
   pollTokenApproval,
   pollUberHausDelegateSet,
-  syncTokenPoll,
-  updateDelegateFetch,
   withdrawTokenFetch,
-  pollRageKick,
-  pollWrapNZapSummon,
-  pollTransmutationSummon,
-  pollProposal,
   pollTXHash,
   pollBoostTXHash,
   pollMinionExecuteAction,
   pollWrapNZap,
 } from '../polls/polls';
 import {
-  cancelProposalTest,
   checkDelRewardsTest,
-  collectTokenTest,
   guildFundTest,
   minionExecuteTest,
   minonProposalTest,
   minonSummonTest,
   molochSummonTest,
-  processProposalTest,
-  rageQuitTest,
-  sponsorProposalTest,
-  submitProposalTest,
-  submitVoteTest,
   tokenAllowanceTest,
   tokenApprovedTest,
   uberHausDelegateSetTest,
-  updateDelegateTest,
   withdrawTokenTest,
-  rageKickTest,
-  wrapNZapSummonTest,
-  transmutationSummonTest,
   testTXHash,
   testWrapNZap,
 } from '../polls/tests';
@@ -219,44 +199,7 @@ export const createPoll = ({
         });
       }
     };
-  } else if (
-    action === 'submitProposal' ||
-    action === 'submitWhitelistProposal' ||
-    action === 'submitGuildKickProposal'
-  ) {
-    return ({ daoID, chainID, hash, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollProposals,
-        testFn: submitProposalTest,
-        shouldEqual: hash,
-        args: { daoID, chainID },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Submitted proposal',
-          unresolvedMsg: 'Submitting proposal',
-          successMsg: `Proposal Submitted to ${daoID} on ${chainID}`,
-          errorMsg: `Error Submitting proposal ${daoID} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            daoID,
-            chainID,
-            hash,
-          },
-        });
-      }
-    };
-  } else if (action === 'unlockToken' || action === 'approveUberHaus') {
+  } else if (action === 'unlockToken') {
     return ({
       daoID,
       chainID,
@@ -354,144 +297,6 @@ export const createPoll = ({
         });
       }
     };
-  } else if (action === 'sponsorProposal') {
-    return ({ daoID, chainID, proposalId, actions, fetchAll }) => txHash => {
-      startPoll({
-        pollFetch: pollProposal,
-        testFn: sponsorProposalTest,
-        shouldEqual: proposalId,
-        args: { daoID, chainID, proposalId, fetchAll },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Sponsored proposal',
-          unresolvedMsg: 'Sponsoring proposal',
-          successMsg: `Proposal #${proposalId} Sponsored for ${daoID} on ${chainID}`,
-          errorMsg: `Error Sponsoring proposal #${proposalId} for ${daoID} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            daoID,
-            chainID,
-            proposalId,
-          },
-        });
-      }
-    };
-  } else if (action === 'submitVote') {
-    return ({ daoID, chainID, proposalId, userAddress, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollProposals,
-        testFn: submitVoteTest,
-        shouldEqual: [proposalId, userAddress],
-        args: {
-          daoID,
-          chainID,
-          proposalId,
-          userAddress,
-        },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: `Voted on proposal #${proposalId}`,
-          unresolvedMsg: `Voted on proposal #${proposalId}`,
-          successMsg: `Voted on proposal #${proposalId} for ${daoID} on ${chainID}`,
-          errorMsg: `Error voting on proposal #${proposalId} for ${daoID} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            daoID,
-            chainID,
-            proposalId,
-            userAddress,
-          },
-        });
-      }
-    };
-  } else if (action === 'processProposal') {
-    return ({ daoID, chainID, proposalIndex, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollProposals,
-        testFn: processProposalTest,
-        shouldEqual: proposalIndex,
-        args: { daoID, chainID, proposalIndex },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Processed proposal',
-          unresolvedMsg: 'Processing proposal',
-          successMsg: `Proposal #${proposalIndex} Processed for ${daoID} on ${chainID}`,
-          errorMsg: `Error Processing proposal #${proposalIndex} for ${daoID} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            daoID,
-            chainID,
-            proposalIndex,
-          },
-        });
-      }
-    };
-  } else if (action === 'cancelProposal') {
-    return ({ daoID, chainID, proposalId, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollProposals,
-        testFn: cancelProposalTest,
-        shouldEqual: proposalId,
-        args: { daoID, chainID, proposalId },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Cancelled proposal',
-          unresolvedMsg: 'Cancelling proposal',
-          successMsg: `Proposal #${proposalId} Cancelled for ${daoID} on ${chainID}`,
-          errorMsg: `Error Cancelling proposal #${proposalId} for ${daoID} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            daoID,
-            chainID,
-            proposalId,
-          },
-        });
-      }
-    };
   } else if (action === 'summonMoloch') {
     return ({ chainID, summoner, createdAt, actions }) => txHash => {
       startPoll({
@@ -521,148 +326,6 @@ export const createPoll = ({
         });
       }
     };
-  } else if (action === 'collectTokens') {
-    return ({ token, actions, chainID, daoID }) => txHash => {
-      if (!token?.contractBalances?.token) {
-        throw new Error(
-          'token object does not contain .contractBalances.token',
-        );
-      }
-      if (!token?.moloch?.version) {
-        throw new Error('token object does not contain .moloch.version');
-      }
-      startPoll({
-        pollFetch: syncTokenPoll,
-        testFn: collectTokenTest,
-        shouldEqual: token.tokenBalance,
-        args: {
-          chainID,
-          daoID,
-          daoVersion: token?.moloch?.version,
-          tokenAddress: token?.tokenAddress,
-        },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Token Value Synced',
-          unresolvedMsg: 'Syncing Token Value',
-          successMsg: 'Token value has been synced',
-          errorMsg: 'Error syncing token value',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            chainID,
-            daoID,
-            token,
-          },
-        });
-      }
-    };
-  } else if (action === 'minionCrossWithdraw') {
-    return ({
-      tokenAddress,
-      memberAddress,
-      actions,
-      chainID,
-      daoID,
-      uber,
-      expectedBalance,
-    }) => txHash => {
-      console.log('Create Poll');
-      startPoll({
-        pollFetch: withdrawTokenFetch,
-        testFn: withdrawTokenTest,
-        shouldEqual: expectedBalance || 0,
-        args: {
-          tokenAddress,
-          memberAddress,
-          chainID,
-          daoID,
-          uber,
-          expectedBalance,
-        },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Withdrew Tokens',
-          unresolvedMsg: 'Withdrawing tokens',
-          successMsg: 'Successfully withdrew tokens!',
-          errorMsg: 'There was an error withdrawing tokens',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            chainID,
-            daoID,
-            memberAddress,
-            tokenAddress,
-            shouldEqual: uber ? expectedBalance : 0,
-          },
-        });
-      }
-    };
-  } else if (action === 'minionProposeAction') {
-    return ({
-      minionAddress,
-      selectedMinion,
-      createdAt,
-      chainID,
-      actions,
-    }) => txHash => {
-      startPoll({
-        pollFetch: pollMinionProposal,
-        testFn: minonProposalTest,
-        shouldEqual: createdAt,
-        args: {
-          minionAddress: minionAddress || selectedMinion,
-          chainID,
-          createdAt,
-        },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Minion proposal submitted',
-          unresolvedMsg: 'Submitting minion proposal',
-          successMsg: `Minion proposal submitted for ${minionAddress ||
-            selectedMinion} on ${chainID}`,
-          errorMsg: `Error submitting minion proposal for ${minionAddress ||
-            selectedMinion} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            minionAddress: minionAddress || selectedMinion,
-            createdAt,
-            chainID,
-          },
-        });
-      }
-    };
   } else if (action === 'uberHausProposeAction') {
     return ({ minionAddress, createdAt, chainID, actions }) => txHash => {
       startPoll({
@@ -682,35 +345,6 @@ export const createPoll = ({
           resolvedMsg: 'UberHAUS proposal submitted',
           unresolvedMsg: 'Submitting UberHAUS proposal',
           successMsg: `UberHAUS proposal submitted for ${minionAddress} on ${chainID}`,
-          errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { minionAddress, createdAt, chainID },
-        });
-      }
-    };
-  } else if (action === 'superfluidProposeAction') {
-    return ({ minionAddress, createdAt, chainID, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollMinionProposal,
-        testFn: minonProposalTest,
-        shouldEqual: createdAt,
-        args: { minionAddress, chainID, createdAt },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Superfluid proposal submitted',
-          unresolvedMsg: 'Submitting Superfluid proposal',
-          successMsg: `Superfluid proposal submitted for ${minionAddress} on ${chainID}`,
           errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
           pollData: {
             action,
@@ -765,48 +399,6 @@ export const createPoll = ({
         });
       }
     };
-    // legacy execute
-  } else if (action === 'minionExecuteAction') {
-    console.log('set poll');
-    return ({
-      chainID,
-      minionAddress,
-      proposalId,
-      proposalType,
-      actions,
-    }) => txHash => {
-      startPoll({
-        pollFetch: pollMinionExecute,
-        testFn: minionExecuteTest,
-        shouldEqual: true,
-        args: {
-          chainID,
-          minionAddress,
-          proposalId,
-          proposalType,
-        },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Minion proposal executed',
-          unresolvedMsg: 'Executing minion proposal',
-          successMsg: `Executed minion proposal on ${chainID}`,
-          errorMsg: `Error executing minion proposal on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, minionAddress, proposalId },
-        });
-      }
-    };
   } else if (action === 'minionCancelAction') {
     return ({
       chainID,
@@ -844,35 +436,6 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, minionAddress, proposalId },
-        });
-      }
-    };
-  } else if (action === 'transmutationProposal') {
-    return ({ daoID, chainID, hash, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollProposals,
-        testFn: submitProposalTest,
-        shouldEqual: hash,
-        args: { daoID, chainID, hash },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Transmutation proposal submitted',
-          unresolvedMsg: 'Submitting transmutation proposal',
-          successMsg: `A new transmutation proposal has been submitted on ${chainID}`,
-          errorMsg: `Error submitting transmutation proposal on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { daoID, chainID, hash },
         });
       }
     };
@@ -999,104 +562,6 @@ export const createPoll = ({
         });
       }
     };
-  } else if (action === 'ragequit') {
-    return ({ chainID, molochAddress, createdAt, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollRageQuit,
-        testFn: rageQuitTest,
-        shouldEqual: { molochAddress, createdAt },
-        args: { chainID, molochAddress, createdAt },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Rage Quit Completed',
-          unresolvedMsg: 'Rage Quitting',
-          successMsg: 'You Rage Quit',
-          errorMsg: 'Error Rage Quitting',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, molochAddress, createdAt },
-        });
-      }
-    };
-  } else if (action === 'ragequitClaim') {
-    return ({ chainID, molochAddress, createdAt, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollRageQuit,
-        testFn: rageQuitTest,
-        shouldEqual: { molochAddress, createdAt },
-        args: { chainID, molochAddress, createdAt },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Claim Completed',
-          unresolvedMsg: 'Claiming',
-          successMsg: 'Claim Completed. You got your $HAUS',
-          errorMsg: 'Error Claiming',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, molochAddress, createdAt },
-        });
-      }
-    };
-  } else if (action === 'updateDelegateKey') {
-    return ({
-      chainID,
-      daoID,
-      memberAddress,
-      delegateAddress,
-      actions,
-    }) => txHash => {
-      startPoll({
-        pollFetch: updateDelegateFetch,
-        testFn: updateDelegateTest,
-        shouldEqual: delegateAddress,
-        args: { chainID, daoID, memberAddress },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Delegate has been updated',
-          unresolvedMsg: 'Updating delegate',
-          successMsg: `Updated delegate address to ${delegateAddress}`,
-          errorMsg: 'Poll error on updateDelegate',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            chainID,
-            daoID,
-            memberAddress,
-            delegateAddress,
-          },
-        });
-      }
-    };
   } else if (action === 'uberHausNominateDelegate') {
     return ({
       chainID,
@@ -1179,14 +644,6 @@ export const createPoll = ({
       delegateAddress,
       actions,
     }) => txHash => {
-      console.log('In Start Poll');
-      console.log('chainID', chainID);
-      console.log('uberMinionAddress', uberMinionAddress);
-      console.log('delegateAddres', delegateAddress);
-      console.log('actions', actions);
-      console.log('action', action);
-      console.log('txHash', txHash);
-
       startPoll({
         pollFetch: pollDelegateRewards,
         testFn: checkDelRewardsTest,
@@ -1210,93 +667,6 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, uberMinionAddress, delegateAddress },
-        });
-      }
-    };
-  } else if (action === 'ragekick') {
-    return ({ chainID, daoID, memberAddress, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollRageKick,
-        testFn: rageKickTest,
-        shouldEqual: { daoID, memberAddress },
-        args: { chainID, daoID, memberAddress },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Rage Kick Completed',
-          unresolvedMsg: 'Rage Kicking',
-          successMsg: 'You Rage Kicked',
-          errorMsg: 'Error Rage Kicking',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, daoID, memberAddress },
-        });
-      }
-    };
-  } else if (action === 'wrapNZapSummon') {
-    return ({ chainID, daoID, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollWrapNZapSummon,
-        testFn: wrapNZapSummonTest,
-        shouldEqual: { daoID },
-        args: { chainID, daoID },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Successfully summoned Wrap-n-Zap',
-          unresolvedMsg: 'Summoning Wrap-N-Zap',
-          successMsg: 'Summoned Wrap-N-Zap',
-          errorMsg: 'Error summoning Wrap-N-Zap',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, daoID },
-        });
-      }
-    };
-  } else if (action === 'summonTransmutation') {
-    return ({ chainID, daoID, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollTransmutationSummon,
-        testFn: transmutationSummonTest,
-        shouldEqual: { daoID },
-        args: { chainID, daoID },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Successfully summoned Transmutation',
-          unresolvedMsg: 'Summoning Transmutation',
-          successMsg: 'Summoned Transmutation',
-          errorMsg: 'Error summoning Transmutation',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, daoID },
         });
       }
     };

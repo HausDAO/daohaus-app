@@ -29,7 +29,7 @@ const ApproveUberHausToken = ({
     setLoading(true);
 
     try {
-      const poll = createPoll({ action: 'approveUberHaus', cachePoll })({
+      const poll = createPoll({ action: 'unlockToken', cachePoll })({
         chainID: daochain,
         minionAddress,
         uberHausAddress: UBERHAUS_DATA.ADDRESS,
