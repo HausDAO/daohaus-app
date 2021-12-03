@@ -24,6 +24,7 @@ import {
 } from '../utils/charts';
 import { fetchBankValues } from '../utils/theGraph';
 import { numberWithCommas } from '../utils/general';
+import CsvDownloadButton from './csvDownloadButton';
 
 const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   const { daochain, daoid } = useParams();
@@ -69,6 +70,9 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
         daoBalances,
         dates,
       );
+
+      console.log('daoBalances', daoBalances);
+      console.log('groupedBalances', groupedBalances);
 
       setPreppedData(groupedBalances);
     }
@@ -143,6 +147,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
                 </TextBox>
               </Box>
             )}
+            <CsvDownloadButton entityList={chartData} typename='SharesLoot' />
           </Flex>
           <RadioGroup
             defaultValue={chartDimension}
