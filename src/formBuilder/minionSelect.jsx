@@ -14,8 +14,6 @@ const MinionSelect = props => {
     return daoOverview.minions
       .filter(minion => {
         const customFilter = props.filters?.[minion.minionType];
-
-        console.log('customFilter', props.filters);
         return (
           minion.minionType === props.minionType &&
           (!customFilter ||
@@ -31,8 +29,6 @@ const MinionSelect = props => {
         name: minion.details,
       }));
   }, [daoOverview, daoVaults]);
-
-  console.log('minions', daoOverview.minions, minions, props.minionType);
 
   useEffect(() => {
     register('selectedSafeAddress');

@@ -80,7 +80,6 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = (abiString, serialTag = false) => {
-    console.log('abiString, serialTag', abiString, serialTag);
     if (!abiString || typeof abiString !== 'string') return;
 
     if (abiString === 'clear' || abiString === 'hex') {
