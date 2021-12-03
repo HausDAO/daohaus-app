@@ -25,16 +25,16 @@ const FILTERS = {
     { name: 'All', value: 'all' },
     { name: 'Unsponsored', value: 'Unsponsored' },
     { name: 'InQueue', value: 'InQueue' },
-    { name: 'Voting Period', value: 'Voting Period' },
-    { name: 'Grace Period', value: 'Grace Period' },
-    { name: 'Ready For Processing', value: 'Ready For Processing' },
+    { name: 'Voting Period', value: 'VotingPeriod' },
+    { name: 'Grace Period', value: 'GracePeriod' },
+    { name: 'Ready For Processing', value: 'ReadyForProcessing' },
     { name: 'Passed', value: 'Passed' },
     { name: 'Failed', value: 'Failed' },
     { name: 'Cancelled', value: 'Cancelled' },
   ],
 };
 
-const ProposalWatcher = ({ daoProposals }) => {
+const ProposalAudit = ({ daoProposals }) => {
   const { daoid, daochain } = useParams();
   const { refreshDao } = useTX();
   const [proposals, setProposals] = useState({});
@@ -76,6 +76,7 @@ const ProposalWatcher = ({ daoProposals }) => {
           },
         );
       setProposals(sorted);
+      setListProposals(sorted);
     }
   }, [daoProposals]);
 
@@ -148,7 +149,7 @@ const ProposalWatcher = ({ daoProposals }) => {
   };
 
   return (
-    <MainViewLayout header='Proposal List' isDao>
+    <MainViewLayout header='Proposal Audit' isDao>
       <Flex
         wrap='wrap'
         position='relative'
@@ -199,8 +200,8 @@ const ProposalWatcher = ({ daoProposals }) => {
         <ContentBox w='100%'>
           {Object.keys(listProposals).map(section => {
             return (
-              <Box key={section}>
-                <Box mt={5} p={4} fontSize='xl' fontFamily='heading'>
+              <Box key={section} mb={7}>
+                <Box mb={3} fontSize='xl' fontFamily='heading' fontWeight='700'>
                   {`${section} (${listProposals[section].length})`}
                 </Box>
 
@@ -234,4 +235,4 @@ const ProposalWatcher = ({ daoProposals }) => {
   );
 };
 
-export default ProposalWatcher;
+export default ProposalAudit;

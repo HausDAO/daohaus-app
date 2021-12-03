@@ -30,7 +30,7 @@ import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
 import Proposals from '../pages/Proposals';
 import ProposalTypes from '../pages/ProposalTypes';
-import ProposalWatcher from '../pages/ProposalWatcher';
+import ProposalAudit from '../pages/ProposalAudit';
 import Settings from '../pages/Settings';
 import Snapshot from '../pages/Snapshot';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
@@ -203,7 +203,10 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/proposals/hardcore`}>
-          <ProposalWatcher daoProposals={daoProposals} />
+          <ProposalAudit daoProposals={daoProposals} />
+        </Route>
+        <Route exact path={`${path}/proposals/audit`}>
+          <ProposalAudit daoProposals={daoProposals} />
         </Route>
         <Route exact path={`${path}/proposals/spam`}>
           <ProposalsSpam daoMetaData={daoMetaData} />
