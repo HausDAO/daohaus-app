@@ -110,10 +110,13 @@ const collapseToCallData = values =>
 
 const argBuilderCallback = Object.freeze({
   proposeActionVanilla({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      values?.abiArgs || [],
-    );
+    const hexData =
+      values.abiInput.slice(0, 2) === '0x'
+        ? values.abiInput
+        : safeEncodeHexFunction(
+            JSON.parse(values.abiInput),
+            values?.abiArgs || [],
+          );
     const details = detailsToJSON({
       ...values,
       minionType: formData.minionType,
@@ -121,10 +124,13 @@ const argBuilderCallback = Object.freeze({
     return [values.targetContract, values.minionValue || '0', hexData, details];
   },
   proposeActionNifty({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      values?.abiArgs || [],
-    );
+    const hexData =
+      values.abiInput.slice(0, 2) === '0x'
+        ? values.abiInput
+        : safeEncodeHexFunction(
+            JSON.parse(values.abiInput),
+            values?.abiArgs || [],
+          );
 
     const details = detailsToJSON({
       ...values,
@@ -158,10 +164,13 @@ const argBuilderCallback = Object.freeze({
     ];
   },
   proposeActionSafe({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      values?.abiArgs || [],
-    );
+    const hexData =
+      values.abiInput.slice(0, 2) === '0x'
+        ? values.abiInput
+        : safeEncodeHexFunction(
+            JSON.parse(values.abiInput),
+            values?.abiArgs || [],
+          );
 
     const details = detailsToJSON({
       ...values,
