@@ -24,6 +24,7 @@ import {
 } from '../utils/charts';
 import { fetchBankValues } from '../utils/theGraph';
 import { numberWithCommas } from '../utils/general';
+import CsvDownloadButton from './csvDownloadButton';
 
 const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   const { daochain, daoid } = useParams();
@@ -143,6 +144,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
                 </TextBox>
               </Box>
             )}
+            <CsvDownloadButton entityList={preppedData} typename='SharesLoot' />
           </Flex>
           <RadioGroup
             defaultValue={chartDimension}
