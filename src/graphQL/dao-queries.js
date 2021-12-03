@@ -33,20 +33,27 @@ export const HOME_DAO = gql`
         symbol
         decimals
       }
-      tokenBalances(where: { guildBank: true }) {
+    }
+  }
+`;
+
+export const HOME_DAO_TOKENS = gql`
+  query tokenBalances($contractAddr: String!) {
+    tokenBalances(
+      where: { guildBank: true, moloch: $contractAddr }
+      first: 500
+    ) {
+      id
+      token {
+        tokenAddress
+        symbol
+        decimals
+      }
+      tokenBalance
+      guildBank
+      moloch {
         id
-        token {
-          tokenAddress
-          symbol
-          decimals
-        }
-        tokenBalance
-        guildBank
-        # contractBalances @client
-        moloch {
-          id
-          version
-        }
+        version
       }
     }
   }

@@ -71,9 +71,6 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
         dates,
       );
 
-      console.log('daoBalances', daoBalances);
-      console.log('groupedBalances', groupedBalances);
-
       setPreppedData(groupedBalances);
     }
   }, [daoBalances, overview]);

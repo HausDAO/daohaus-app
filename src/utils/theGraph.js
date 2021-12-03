@@ -3,6 +3,7 @@ import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import {
   DAO_ACTIVITIES,
   HOME_DAO,
+  HOME_DAO_TOKENS,
   SINGLE_PROPOSAL,
   SPAM_FILTER_ACTIVITIES,
   SPAM_FILTER_GK_WL,
@@ -246,8 +247,19 @@ const completeQueries = {
         },
       });
 
+      const daoTokenBalances = await graphQuery({
+        endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+        query: HOME_DAO_TOKENS,
+        variables: {
+          contractAddr: args.daoID,
+        },
+      });
+
       if (setter.setDaoOverview) {
-        setter.setDaoOverview(graphOverview.moloch);
+        setter.setDaoOverview({
+          ...graphOverview.moloch,
+          tokenBalances: daoTokenBalances.tokenBalances,
+        });
       }
 
       if (setter.setDaoVaults) {
