@@ -170,6 +170,13 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
             Vault Books
           </Button>
         )}
+        <Button
+          variant='outline'
+          as={Link}
+          to={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion}`}
+        >
+          View Superfluid Streams
+        </Button>
       </Flex>
       {!vault && <Loading message='Fetching treasury holdings...' />}
       {vault && (

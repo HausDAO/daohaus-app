@@ -98,7 +98,8 @@ export const customValidations = {
     return false;
   },
   superFluidStreamMinimum({ values }) {
-    const minDeposit = Web3.utils.toWei(values.paymentRequested);
+    const minDeposit = values.paymentRequested;
+    // TODO: fetch minimum stream value from SF governance contracts
     if (Number(minDeposit) < Number(values.weiRatePerSec) * 3600) {
       return {
         name: 'paymentRequested',

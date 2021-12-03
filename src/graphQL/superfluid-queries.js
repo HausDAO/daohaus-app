@@ -26,6 +26,7 @@ const baseFlowFields = `
     flowRate
     sum
     transaction {
+      id
       blockNumber
       timestamp
     }
@@ -36,6 +37,32 @@ const baseFlowFields = `
   token {
     id
     underlyingAddress
+  }
+`;
+
+const baseFlowFieldsV2 = `
+  id
+  createdAtTimestamp
+  updatedAtTimestamp
+  currentFlowRate
+  streamedUntilUpdatedAt
+  token {
+    id
+    isListed
+    isSuperToken
+    name
+    symbol
+    underlyingAddress
+  }
+  receiver {
+    id
+  }
+  flowUpdatedEvents {
+    flowRate
+    timestamp
+    totalAmountStreamedUntilTimestamp
+    transactionHash
+    type
   }
 `;
 
@@ -66,6 +93,20 @@ export const SF_STREAMS = gql`
   }
 `;
 
+export const SF_STREAMS_V2 = gql`
+  query outStreams($ownerAddress: String!) {
+    account(id: $ownerAddress) {
+      id
+      inflows {
+        ${baseFlowFieldsV2}
+      }
+      outflows {
+        ${baseFlowFieldsV2}
+      }
+    }
+  }
+`;
+
 export const SF_ACTIVE_STREAMS = gql`
   query activeStreams($ownerAddress: String!, $recipientAddress: String!) {
     account(id: $ownerAddress) {
@@ -78,6 +119,70 @@ export const SF_ACTIVE_STREAMS = gql`
           underlyingAddress
         }
       }
+    }
+  }
+`;
+
+export const SF_SUPERTOKEN_CREATED = gql`
+  query supertoken($underlyingTokenAddress: String!, $createdAt: String!) {
+    tokens(
+      where: {
+        underlyingToken: $underlyingTokenAddress
+        createdAtTimestamp_gt: $createdAt
+      }
+    ) {
+      id
+      underlyingToken {
+        id
+      }
+    }
+  }
+`;
+
+export const SF_SUPERTOKEN = gql`
+  query supertoken($tokenAddress: String!) {
+    superTokenOf: superTokenCreateds(
+      where: { underlyingAddress: $tokenAddress }
+      orderBy: id
+      orderDirection: asc
+    ) {
+      id
+      address
+      underlyingAddress
+      name
+      symbol
+    }
+    superToken: superTokenCreateds(
+      where: { address: $tokenAddress }
+      orderBy: id
+      orderDirection: asc
+    ) {
+      id
+      address
+      underlyingAddress
+      name
+      symbol
+    }
+  }
+`;
+
+export const SF_SUPERTOKEN_V2 = gql`
+  query supertoken($tokenAddress: String!) {
+    superTokenOf: tokens(where: { underlyingAddress: $tokenAddress }) {
+      address: id
+      isSuperToken
+      isListed
+      name
+      symbol
+      underlyingAddress
+    }
+    superToken: tokens(where: { id: $tokenAddress }) {
+      address: id
+      isSuperToken
+      isListed
+      name
+      symbol
+      underlyingAddress
     }
   }
 `;

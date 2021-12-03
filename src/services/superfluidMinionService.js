@@ -1,27 +1,20 @@
-import { constants } from 'ethers';
 import Web3 from 'web3';
 
 import SuperfluidMinionAbi from '../contracts/superfluidMinion.json';
-import SuperfluidResolverAbi from '../contracts/iSuperfluidResolver.json';
-
+import { TokenService } from './tokenService';
 import {
   MINION_STREAMS,
   SF_ACTIVE_STREAMS,
   SF_STREAMS,
+  SF_STREAMS_V2,
 } from '../graphQL/superfluid-queries';
-import { createContract } from '../utils/contract';
-import { chainByID, getGraphEndpoint } from '../utils/chain';
-import { graphFetchAll } from '../utils/theGraph';
 import { graphQuery } from '../utils/apollo';
-import { LOCAL_ABI } from '../utils/abi';
+import { chainByID, getGraphEndpoint } from '../utils/chain';
+import { MINION_TYPES } from '../utils/proposalUtils';
+import { isSupertoken } from '../utils/superfluid';
+import { graphFetchAll } from '../utils/theGraph';
 
-const getSuperTokenBalances = async (
-  chainID,
-  minion,
-  sfResolver,
-  sfVersion,
-  tokens,
-) => {
+const getSuperTokenBalances = async (chainID, minion, tokens) => {
   try {
     const tokenBalances = tokens.map(async token => {
       const tokenContract = createContract({
@@ -29,18 +22,19 @@ const getSuperTokenBalances = async (
         abi: LOCAL_ABI.ERC_20,
         chainID,
       });
-      const tokenSymbol = await tokenContract.methods.symbol().call();
-      const balance = await tokenContract.methods.balanceOf(minion).call();
-      const tokenDecimals = await tokenContract.methods.decimals().call();
-      const sToken = await sfResolver.methods
-        .get(`supertokens.${sfVersion}.${tokenSymbol}`)
-        .call();
+      const tokenSymbol = await tokenService('symbol')();
+      const superTokenInfo = await isSupertoken(
+        chainID,
+        token.superTokenAddress,
+      );
+
       return {
         [token.superTokenAddress]: {
           tokenBalance: balance,
           symbol: tokenSymbol,
-          decimals: tokenDecimals,
-          registeredToken: sToken !== constants.AddressZero,
+          decimals: await tokenService('decimals')(),
+          registeredToken:
+            superTokenInfo.superTokenAddress === token.superTokenAddress,
           underlyingTokenAddress:
             token.underlyingTokenAddress !== token.superTokenAddress &&
             token.underlyingTokenAddress,
@@ -55,7 +49,12 @@ const getSuperTokenBalances = async (
   }
 };
 
-export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
+export const SuperfluidMinionService = ({
+  chainID,
+  minion,
+  minionType,
+  web3,
+}) => {
   const chainConfig = chainByID(chainID);
   if (!web3) {
     const rpcUrl = chainConfig.rpc_url;
@@ -74,11 +73,80 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
               `Superfluid minion not available in ${chainID} network`,
             );
           }
-          const sfResolver = new web3.eth.Contract(
-            SuperfluidResolverAbi,
-            superfluidConfig?.resolver,
-          );
-          const sfVersion = superfluidConfig.version;
+
+          const now = new Date();
+          if (minionType === MINION_TYPES.SAFE) {
+            const sfAccount = await graphQuery({
+              endpoint: superfluidConfig.subgraph_url_v2,
+              query: SF_STREAMS_V2,
+              variables: {
+                ownerAddress: minion,
+              },
+            });
+            const sfInflows = sfAccount?.account?.inflows;
+            const sfOutflows = sfAccount?.account?.outflows;
+            const tokens = Array.from(
+              new Set([
+                ...(sfInflows?.map(s => s.token.id) || []),
+                ...(sfOutflows?.map(s => s.token.id) || []),
+              ]),
+            ).map(token => {
+              const s =
+                sfOutflows.find(s => s.token.id === token) ||
+                sfInflows.find(s => s.token.id === token);
+              return {
+                superTokenAddress: s.token.id,
+                underlyingTokenAddress: s.token.underlyingAddress,
+              };
+            });
+            const superTokens = await getSuperTokenBalances(
+              chainID,
+              minion,
+              tokens,
+            );
+
+            const flows = await Promise.all(
+              sfOutflows.map(async outStream => {
+                const decimals = superTokens[outStream.token.id]?.decimals;
+                console.log('SToken decimals', outStream.token.id, decimals);
+                const createdEvent = outStream.flowUpdatedEvents.find(
+                  e => e.type === 0,
+                );
+                const stoppedEvent = outStream.flowUpdatedEvents.find(
+                  e => e.type === 2,
+                );
+                // TODO: what if multiple stopped events?
+                const active = !stoppedEvent;
+                if (active) {
+                  // TODO: consider flowRate update (e.g. updatedAtTimestamp > createdAtTimestamp)
+                  const netFlow =
+                    (Number(outStream.currentFlowRate) *
+                      ((now - new Date(outStream.createdAtTimestamp * 1000)) /
+                        1000)) /
+                    10 ** decimals;
+                  return {
+                    ...outStream,
+                    active,
+                    netFlow,
+                    createdTxHash: createdEvent.transactionHash,
+                  };
+                }
+                return {
+                  ...outStream,
+                  active,
+                  netFlow:
+                    Number(outStream.streamedUntilUpdatedAt) / 10 ** decimals,
+                  createdTxHash: createdEvent.transactionHash,
+                };
+              }),
+            );
+
+            return {
+              flows,
+              superTokens,
+            };
+          }
+
           const streams = await graphFetchAll({
             endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
             query: MINION_STREAMS,
@@ -115,8 +183,6 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
           const superTokens = await getSuperTokenBalances(
             chainID,
             minion,
-            sfResolver,
-            sfVersion,
             tokens,
           );
 
@@ -126,7 +192,7 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
               superTokens,
             };
           }
-          const now = new Date();
+
           const flows = await Promise.all(
             streams.map(async stream => {
               if (stream.executed) {
@@ -145,7 +211,7 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
                 );
                 if (nextFUEvent) {
                   // Stream was stopped or liquidated
-                  const netFlow = +nextFUEvent.sum / 10 ** decimals;
+                  const netFlow = Number(nextFUEvent.sum) / 10 ** decimals;
                   return {
                     ...stream,
                     liquidated: stream.active,
@@ -153,10 +219,11 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
                   };
                 }
                 const netFlow = stream.active
-                  ? (+stream.rate *
+                  ? (Number(stream.rate) *
                       ((now - new Date(stream.executedAt * 1000)) / 1000)) /
                     10 ** decimals
-                  : (+stream.rate * (+stream.canceledAt - +stream.executedAt)) /
+                  : (Number(stream.rate) *
+                      (Number(stream.canceledAt) - Number(stream.executedAt))) /
                     10 ** decimals;
                 return {
                   ...stream,

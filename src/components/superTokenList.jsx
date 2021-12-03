@@ -6,6 +6,9 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
+import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
+import { FORM } from '../data/forms';
+import { useAppModal } from '../hooks/useModals';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import SuperTokenListItem from './SuperTokenListItem';
@@ -14,6 +17,7 @@ import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { createContract } from '../utils/contract';
 import { deriveValFromWei } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const SuperTokenList = ({
   superTokenBalances,
@@ -23,9 +27,10 @@ const SuperTokenList = ({
   minionBalances,
   loading,
   setLoading,
+  minionType,
 }) => {
   const { daochain, daoid, minion } = useParams();
-
+  const { formModal } = useAppModal();
   const { address, injectedProvider } = useInjectedProvider();
   const {
     errorToast,
@@ -33,7 +38,7 @@ const SuperTokenList = ({
     setProposalModal,
     setTxInfoModal,
   } = useOverlay();
-  const { refreshDao } = useTX();
+  const { refreshDao, submitTransaction } = useTX();
   const { cachePoll, resolvePoll } = useUser();
 
   const balanceArr = useMemo(() => {
@@ -100,6 +105,35 @@ const SuperTokenList = ({
       });
       console.log('error: ', err);
     }
+  };
+
+  const withdrawSupertokenProposal = async superTokenAddress => {
+    // TODO: opt-in to downgrade or just withdraw supertoken
+    const token = superTokenBalances[superTokenAddress];
+    setLoading({
+      active: true,
+      condition: superTokenAddress,
+    });
+    try {
+      await submitTransaction({
+        tx: VAULT_TRANSFER_TX.MINION_DOWNGRADE_RETURN_TOKEN_SAFE,
+        localValues: {
+          downgradeValue: token.tokenBalance,
+          minionTransfer: token.tokenBalance, // TODO: also sum underlyng token balance if any
+          minionAddress: minion,
+        },
+        values: {
+          superTokenAddress,
+          tokenAddress: token.underlyingTokenAddress,
+        },
+      });
+    } catch (err) {
+      console.log('error: ', err);
+    }
+    setLoading({
+      active: false,
+      condition: null,
+    });
   };
 
   const upgradeSupertoken = async (superToken, superTokenAddress) => {
@@ -190,6 +224,16 @@ const SuperTokenList = ({
     }
   };
 
+  const upgradeSupertokenProposal = async superToken => {
+    formModal({
+      ...FORM.SUPERFLUID_UPGRADE_TOKEN,
+      localValues: {
+        defaultPaymentToken: superToken.underlyingTokenAddress,
+        minionAddress: minion,
+      },
+    });
+  };
+
   return (
     <Box>
       <Flex pt={4}>
@@ -221,8 +265,16 @@ const SuperTokenList = ({
                     handleCopyToast={handleCopyToast}
                     tokenAddress={tokenAddress}
                     daoMember={daoMember}
-                    withdrawSupertoken={withdrawSupertoken}
-                    upgradeSupertoken={upgradeSupertoken}
+                    withdrawSupertoken={
+                      minionType === MINION_TYPES.SAFE
+                        ? withdrawSupertokenProposal
+                        : withdrawSupertoken
+                    }
+                    upgradeSupertoken={
+                      minionType === MINION_TYPES.SAFE
+                        ? upgradeSupertokenProposal
+                        : upgradeSupertoken
+                    }
                     key={tokenAddress}
                   />
                 );

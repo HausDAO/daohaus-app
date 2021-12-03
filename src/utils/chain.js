@@ -105,13 +105,18 @@ export const supportedChains = {
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
+      cfa: '0xF4C5310E51F6079F601a5fb7120bC72a70b96e2A',
+      host: '0xeD5B5b32110c3Ded02a07c8b8e97513FAfb883B6',
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
       resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
       subgraph_url:
         'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-rinkeby',
+      subgraph_url_v2:
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-rinkeby',
       superapp_addr: {
         v1: '0x7d8151FAB5D6742F1c574fff472B6794062C2D0C',
       },
+      supertoken_factory: '0xd465e36e607d493cd4CC1e83bea275712BECd5E0',
       version: 'v1',
     },
     rarible: {

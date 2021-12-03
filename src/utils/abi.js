@@ -32,6 +32,11 @@ import POSTER from '../contracts/poster.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import SWAPR_STAKING from '../contracts/swapr_staking.json';
 import { MINION_TYPES } from './proposalUtils';
+import DISPERSE_APP from '../contracts/disperseApp.json';
+import SF_CFA from '../contracts/superfluidCFA.json';
+import SF_HOST from '../contracts/superfluid.json';
+import SF_SUPERTOKEN from '../contracts/superfluidSupertoken.json';
+import SF_SUPERTOKEN_FACTORY from '../contracts/superfluidTokenFactory.json';
 import AMB_MODULE from '../contracts/ambModule.json';
 import AMB from '../contracts/iAmb.json';
 import { validate } from './validation';
@@ -60,6 +65,10 @@ export const LOCAL_ABI = Object.freeze({
   DAO_CONDITIONAL_HELPER,
   ESCROW_MINION,
   DISPERSE_APP,
+  SF_CFA,
+  SF_HOST,
+  SF_SUPERTOKEN,
+  SF_SUPERTOKEN_FACTORY,
   SWAPR_STAKING,
   POSTER,
   AMB_MODULE,

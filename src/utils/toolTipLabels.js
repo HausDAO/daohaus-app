@@ -70,4 +70,7 @@ export const SF_LABEL = {
     body:
       'To fund the Superfluid Minion you need to make a funding proposal from the DAO to the minion. Do not send tokens directly.',
   },
+  CANCEL_STREAM: {
+    body: 'This action will send a DAO proposal to cancel the stream',
+  },
 };

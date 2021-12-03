@@ -11,6 +11,7 @@ import {
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { TX_HASH } from '../graphQL/general';
 import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
+import { SF_SUPERTOKEN_CREATED } from '../graphQL/superfluid-queries';
 import { createContract } from '../utils/contract';
 import { getContractABI, LOCAL_ABI } from '../utils/abi';
 import { getGraphEndpoint, supportedChains } from '../utils/chain';
@@ -140,6 +141,22 @@ export const pollMinionProposal = async ({
     query: MINION_PROPOSAL_POLL,
     variables: {
       minionAddress,
+      createdAt,
+    },
+  });
+};
+
+export const pollSupertokenCreated = async ({
+  chainID,
+  underlyingTokenAddress,
+  createdAt,
+}) => {
+  const sfConfig = supportedChains[chainID].superfluid;
+  return graphQuery({
+    endpoint: sfConfig.subgraph_url_v2,
+    query: SF_SUPERTOKEN_CREATED,
+    variables: {
+      underlyingTokenAddress,
       createdAt,
     },
   });

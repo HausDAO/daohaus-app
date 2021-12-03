@@ -171,6 +171,26 @@ export const CONTRACTS = {
     abiName: 'DISPERSE_APP',
     conractAddress: '.contextData.chainConfig.disperse_app',
   },
+  SUPERFLUID_CFA: {
+    location: 'local',
+    abiName: 'SF_CFA',
+    contractAddress: '.contextData.chainConfig.superfluid.cfa',
+  },
+  SUPERFLUID_HOST: {
+    location: 'local',
+    abiName: 'SF_HOST',
+    contractAddress: '.contextData.chainConfig.superfluid.host',
+  },
+  SUPERTOKEN: {
+    location: 'local',
+    abiName: 'SF_SUPERTOKEN',
+    contractAddress: '.values.superTokenAddress',
+  },
+  SUPERTOKEN_FACTORY: {
+    location: 'local',
+    abiName: 'SF_SUPERTOKEN_FACTORY',
+    contractAddress: '.contextData.chainConfig.superfluid.supertoken_factory',
+  },
   SWAPR_STAKING: {
     location: 'local',
     abiName: 'SWAPR_STAKING',

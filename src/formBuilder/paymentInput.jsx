@@ -11,7 +11,13 @@ import { spreadOptions } from '../utils/formBuilder';
 
 const PaymentInput = props => {
   const { daoOverview } = useDao();
-  const { localForm, registerOptions = {}, depositTokenOnly, hideMax } = props;
+  const {
+    localForm,
+    localValues,
+    registerOptions = {},
+    depositTokenOnly,
+    hideMax,
+  } = props;
   const { getValues, setValue, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
@@ -29,7 +35,9 @@ const PaymentInput = props => {
 
   useEffect(() => {
     if (daoOverview) {
-      const depTokenAddress = daoOverview.depositToken?.tokenAddress;
+      const depTokenAddress =
+        localValues?.defaultPaymentToken ||
+        daoOverview.depositToken?.tokenAddress;
       const depositToken = daoOverview.tokenBalances?.find(
         token =>
           token.guildBank && token.token.tokenAddress === depTokenAddress,

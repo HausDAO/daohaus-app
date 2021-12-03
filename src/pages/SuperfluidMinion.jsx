@@ -17,6 +17,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 
 import BankList from '../components/bankList';
 import ContentBox from '../components/ContentBox';
+import Loading from '../components/loading';
 import MainViewLayout from '../components/mainViewLayout';
 import SuperTokenList from '../components/superTokenList';
 import StreamList from '../components/StreamList';
@@ -25,6 +26,7 @@ import { ToolTipWrapper } from '../staticElements/wrappers';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { initTokenData } from '../utils/tokenValue';
 import { truncateAddr } from '../utils/general';
+import { MINION_TYPES } from '../utils/proposalUtils';
 import { SF_LABEL } from '../utils/toolTipLabels';
 
 const SuperfluidMinionDetails = ({
@@ -46,22 +48,17 @@ const SuperfluidMinionDetails = ({
   const [streamList, setStreamList] = useState();
 
   useEffect(() => {
-    if (!overview?.minions.length) {
-      return;
-    }
-    const minionDetails = overview?.minions.find(m => {
-      return m.minionAddress === minion;
-    });
-    setMinionData(minionDetails);
-  }, [overview, minion]);
-
-  useEffect(() => {
-    if (daoid && minion && activities) {
+    if (daoid && minion && activities && overview) {
       setLoadingStreams(true);
+      const minionDetails = overview?.minions?.find(m => {
+        return m.minionAddress === minion;
+      });
+      setMinionData(minionDetails);
       try {
         const fetchStreams = async () => {
           const cfaStreams = await SuperfluidMinionService({
-            minion,
+            minion: minionDetails.safeAddress || minionDetails.minionAddress,
+            minionType: minionDetails.minionType,
             chainID: daochain,
           })('fetchStreams')({ molochAddress: daoid });
           const streams = cfaStreams.flows.map(s => {
@@ -114,24 +111,39 @@ const SuperfluidMinionDetails = ({
 
   return (
     <MainViewLayout header='Minion' isDao>
-      <Box>
-        <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
-          <HStack spacing={3}>
-            <Icon
-              name='arrow-back'
-              color='primary.50'
-              as={RiArrowLeftLine}
-              h='20px'
-              w='20px'
-            />
-            <TextBox size='md' align='center'>
-              Settings
-            </TextBox>
-          </HStack>
-        </Link>
-        <ContentBox d='flex' flexDirection='column' position='relative' mt={2}>
-          {minionData ? (
-            <>
+      {!minionData && <Loading message='Fetching streaming data...' />}
+      {minionData && (
+        <>
+          <Link
+            as={RouterLink}
+            to={
+              minionData?.minionType === MINION_TYPES.SAFE
+                ? `/dao/${daochain}/${daoid}/vaults/minion/${minionData.minionAddress}`
+                : `/dao/${daochain}/${daoid}/settings`
+            }
+          >
+            <HStack spacing={3}>
+              <Icon
+                name='arrow-back'
+                color='primary.50'
+                as={RiArrowLeftLine}
+                h='20px'
+                w='20px'
+              />
+              <TextBox size='md' align='center'>
+                {minionData?.minionType === MINION_TYPES.SAFE
+                  ? 'Vault'
+                  : 'Settings'}
+              </TextBox>
+            </HStack>
+          </Link>
+          <ContentBox
+            d='flex'
+            flexDirection='column'
+            position='relative'
+            mt={2}
+          >
+            <Box>
               <Flex
                 p={4}
                 justify='space-between'
@@ -168,25 +180,27 @@ const SuperfluidMinionDetails = ({
                   </CopyToClipboard>
                 </Flex>
               </Flex>
-              <Box>
-                <Flex pt={4}>
-                  <TextBox size='md'>Token Balances</TextBox>
-                  <ToolTipWrapper
-                    placement='right'
-                    tooltip
-                    tooltipText={SF_LABEL.TOKEN_BALANCES}
-                  >
-                    <RiQuestionLine />
-                  </ToolTipWrapper>
-                </Flex>
-                {minionBalances && (
-                  <BankList
-                    tokens={minionBalances}
-                    hasBalance={false}
-                    profile
-                  />
-                )}
-              </Box>
+              {minionData.minionType !== MINION_TYPES.SAFE && (
+                <Box>
+                  <Flex pt={4}>
+                    <TextBox size='md'>Token Balances</TextBox>
+                    <ToolTipWrapper
+                      placement='right'
+                      tooltip
+                      tooltipText={SF_LABEL.TOKEN_BALANCES}
+                    >
+                      <RiQuestionLine />
+                    </ToolTipWrapper>
+                  </Flex>
+                  {minionBalances && (
+                    <BankList
+                      tokens={minionBalances}
+                      hasBalance={false}
+                      profile
+                    />
+                  )}
+                </Box>
+              )}
               <SuperTokenList
                 superTokenBalances={superTokenBalances}
                 loadingStreams={loadingStreams}
@@ -195,21 +209,19 @@ const SuperfluidMinionDetails = ({
                 setLoading={setLoading}
                 daoMember={daoMember}
                 minionBalances={minionBalances}
+                minionType={minionData.minionType}
               />
               <StreamList
+                minionType={minionData.minionType}
                 list={streamList}
                 daoMember={daoMember}
                 loadingStreams={loadingStreams}
                 balances={superTokenBalances}
               />
-            </>
-          ) : (
-            <Flex justify='center'>
-              <Box fontFamily='heading'>No minion found</Box>
-            </Flex>
-          )}
-        </ContentBox>
-      </Box>
+            </Box>
+          </ContentBox>
+        </>
+      )}
     </MainViewLayout>
   );
 };
