@@ -144,7 +144,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
                 </TextBox>
               </Box>
             )}
-            <CsvDownloadButton entityList={chartData} typename='SharesLoot' />
+            <CsvDownloadButton entityList={preppedData} typename='SharesLoot' />
           </Flex>
           <RadioGroup
             defaultValue={chartDimension}

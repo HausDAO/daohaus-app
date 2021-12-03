@@ -298,7 +298,7 @@ const completeQueries = {
           name: 'DAO Treasury',
           address: args.daoID,
           currentBalance: '',
-          erc20s: graphOverview.moloch.tokenBalances.map(token => {
+          erc20s: daoTokenBalances.tokenBalances.map(token => {
             const priceData = prices[token.token.tokenAddress];
             return {
               ...token,
