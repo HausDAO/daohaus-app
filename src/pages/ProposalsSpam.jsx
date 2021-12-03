@@ -46,12 +46,14 @@ const ProposalRow = ({ proposal, daochain, daoid }) => {
             proposal.paymentTokenDecimals,
           ) || 0} ${proposal.paymentTokenSymbol || ' '}`}
         </Td>
+
         <Td border='none'>
           {`${displayBalance(
             proposal.tributeOffered,
             proposal.tributeTokenDecimals,
           ) || 0} ${proposal.tributeTokenSymbol || ''}`}
         </Td>
+
         <Td border='none'>{`yes: ${proposal.yesShares} / no: ${proposal.noShares}`}</Td>
         <Td border='none'>{timeToNow(proposal.createdAt)}</Td>
         <Td border='none'>

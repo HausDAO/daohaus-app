@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   Box,
+  Flex,
   Table,
   Thead,
   Tr,
@@ -13,18 +14,43 @@ import {
 import { RiRefreshLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
-import MainViewLayout from '../components/mainViewLayout';
 import ContentBox from '../components/ContentBox';
+import ListSelect from '../components/listSelect';
+import MainViewLayout from '../components/mainViewLayout';
+import { displayBalance } from '../utils/tokenValue';
 import { timeToNow } from '../utils/general';
+
+const FILTERS = {
+  main: [
+    { name: 'All', value: 'all' },
+    { name: 'Unsponsored', value: 'Unsponsored' },
+    { name: 'InQueue', value: 'InQueue' },
+    { name: 'Voting Period', value: 'Voting Period' },
+    { name: 'Grace Period', value: 'Grace Period' },
+    { name: 'Ready For Processing', value: 'Ready For Processing' },
+    { name: 'Passed', value: 'Passed' },
+    { name: 'Failed', value: 'Failed' },
+    { name: 'Cancelled', value: 'Cancelled' },
+  ],
+};
 
 const ProposalWatcher = ({ daoProposals }) => {
   const { daoid, daochain } = useParams();
   const { refreshDao } = useTX();
   const [proposals, setProposals] = useState({});
+  const [filter, setFilter] = useState(FILTERS[0]);
+  const [listProposals, setListProposals] = useState({});
 
   const handleRefreshDao = () => {
     const skipVaults = true;
     refreshDao(skipVaults);
+  };
+
+  const handleFilter = e => {
+    setFilter(e);
+    setListProposals(
+      e.value === 'all' ? proposals : { [e.value]: proposals[e.value] },
+    );
   };
 
   useEffect(() => {
@@ -67,26 +93,35 @@ const ProposalWatcher = ({ daoProposals }) => {
     return (
       <Fragment key={proposal.proposalId}>
         <Tr>
-          <Td>{proposal.proposalId}</Td>
-          {/* <Td>{JSON.stringify(proposal.details)}</Td> */}
-          <Td>{proposal.sharesRequested}</Td>
-          <Td>{proposal.lootRequested}</Td>
-          <Td>
+          <Td border='none'>{proposal.proposalId}</Td>
+          <Td border='none'>{proposal.sharesRequested}</Td>
+          <Td border='none'>{proposal.lootRequested}</Td>
+
+          <Td border='none'>
             {`${proposal.paymentRequested /
               10 **
                 proposal.paymentTokenDecimals} ${proposal.paymentTokenSymbol ||
               ' '}`}
           </Td>
-          <Td>
+
+          {/* <Td border='none'>
             {`${proposal.tributeOffered /
               10 **
                 proposal.tributeTokenDecimals} ${proposal.tributeTokenSymbol ||
               ''}`}
+          </Td> */}
+
+          <Td border='none'>
+            {`${displayBalance(
+              proposal.tributeOffered,
+              proposal.tributeTokenDecimals,
+            ) || 0} ${proposal.tributeTokenSymbol || ''}`}
           </Td>
-          <Td>{`yes: ${proposal.yesShares} - no: ${proposal.noShares}`}</Td>
-          <Td>{renderStatus(proposal)}</Td>
-          <Td>{timeToNow(proposal.createdAt)}</Td>
-          <Td>
+
+          <Td border='none'>{`yes: ${proposal.yesShares} / no: ${proposal.noShares}`}</Td>
+          <Td border='none'>{renderStatus(proposal)}</Td>
+          <Td border='none'>{timeToNow(proposal.createdAt)}</Td>
+          <Td border='none'>
             <Link
               to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
             >
@@ -95,12 +130,18 @@ const ProposalWatcher = ({ daoProposals }) => {
           </Td>
         </Tr>
         <Tr key={`${proposal.proposalId}-2`}>
-          <Td colSpan='2'>{proposal.proposalType}</Td>
-          <Td colSpan='2'>{proposal.title}</Td>
-          <Td colSpan='5'>{proposal.description}</Td>
+          <Td border='none' colSpan='3'>
+            {proposal.proposalType}
+          </Td>
+          <Td border='none' colSpan='2'>
+            {proposal.title}
+          </Td>
+          <Td border='none' colSpan='3'>
+            {proposal.description}
+          </Td>
         </Tr>
         <Tr key={`${proposal.proposalId}-3`}>
-          <Td colSpan='9' backgroundColor='gray.900' />
+          <Td colSpan='8' />
         </Tr>
       </Fragment>
     );
@@ -108,7 +149,36 @@ const ProposalWatcher = ({ daoProposals }) => {
 
   return (
     <MainViewLayout header='Proposal List' isDao>
-      <Box w='100%'>
+      <Flex
+        wrap='wrap'
+        position='relative'
+        justifyContent='space-between'
+        fontFamily='heading'
+        textTransform='uppercase'
+      >
+        <Box>{`${daoProposals?.length || 'looking for'} proposals`}</Box>
+        {daoProposals?.length && (
+          <Flex justifyContent='space-between' align='center'>
+            <ListSelect
+              currentOption={filter?.name}
+              options={FILTERS}
+              handleSelect={handleFilter}
+              label='Filter By'
+              count={listProposals?.length}
+            />
+            <IconButton
+              icon={<RiRefreshLine size='1rem' />}
+              p={0}
+              size='sm'
+              variant='outline'
+              onClick={handleRefreshDao}
+              ml={10}
+            />
+          </Flex>
+        )}
+      </Flex>
+
+      {/* <Box w='100%'>
         <Box my={5} w='100%'>
           <ContentBox w='100%' fontSize='xl' fontFamily='heading' ml={3}>
             {`${daoProposals?.length || 'looking for'} proposals`}
@@ -123,43 +193,43 @@ const ProposalWatcher = ({ daoProposals }) => {
               />
             )}
           </ContentBox>
-        </Box>
+        </Box> */}
 
-        <Box w='100%' pr={[0, null, null, null, 6]} mb={6}>
-          <ContentBox w='100%'>
-            {Object.keys(proposals).map(section => {
-              return (
-                <Box key={section}>
-                  <Box mt={5} p={4} fontSize='xl' fontFamily='heading'>
-                    {`${section} (${proposals[section].length})`}
-                  </Box>
-
-                  <Table size='sm' variant='simple'>
-                    <Thead>
-                      <Tr>
-                        <Th>ID</Th>
-                        <Th>shares</Th>
-                        <Th>loot</Th>
-                        <Th>payment</Th>
-                        <Th>tribute</Th>
-                        <Th>votes</Th>
-                        <Th>status</Th>
-                        <Th>created</Th>
-                        <Th />
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {proposals[section].map(prop => {
-                        return renderRow(prop);
-                      })}
-                    </Tbody>
-                  </Table>
+      <Box w='100%' pr={[0, null, null, null, 6]} my={5}>
+        <ContentBox w='100%'>
+          {Object.keys(listProposals).map(section => {
+            return (
+              <Box key={section}>
+                <Box mt={5} p={4} fontSize='xl' fontFamily='heading'>
+                  {`${section} (${listProposals[section].length})`}
                 </Box>
-              );
-            })}
-          </ContentBox>
-        </Box>
+
+                <Table size='sm' variant='simple'>
+                  <Thead>
+                    <Tr>
+                      <Th>ID</Th>
+                      <Th>shares</Th>
+                      <Th>loot</Th>
+                      <Th>payment</Th>
+                      <Th>tribute</Th>
+                      <Th>votes</Th>
+                      <Th>status</Th>
+                      <Th>created</Th>
+                      <Th />
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {listProposals[section].map(prop => {
+                      return renderRow(prop);
+                    })}
+                  </Tbody>
+                </Table>
+              </Box>
+            );
+          })}
+        </ContentBox>
       </Box>
+      {/* </Box> */}
     </MainViewLayout>
   );
 };
