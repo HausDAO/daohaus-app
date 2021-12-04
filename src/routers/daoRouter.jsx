@@ -203,23 +203,13 @@ const DaoRouter = () => {
           />
         </Route>
 
-        {/* <Route exact path={`${path}/proposals/hardcore`}>
+        <Redirect
+          from={`${path}/proposals/hardcore`}
+          to={`${path}/proposals/audit`}
+        />
+        <Route exact path={`${path}/proposals/audit`}>
           <ProposalAudit daoProposals={daoProposals} />
-        </Route> */}
-
-        <Switch>
-          <Redirect
-            from={`${path}/proposals/hardcore`}
-            to={`${path}/proposals/audit`}
-          />
-          <Route exact path={`${path}/proposals/audit`}>
-            <ProposalAudit daoProposals={daoProposals} />
-          </Route>
-        </Switch>
-
-        {/* <Route exact path={`${path}/proposals/audit`}>
-          <ProposalAudit daoProposals={daoProposals} />
-        </Route> */}
+        </Route>
 
         <Route exact path={`${path}/proposals/spam`}>
           <ProposalsSpam daoMetaData={daoMetaData} />
