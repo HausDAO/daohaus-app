@@ -23,7 +23,6 @@ import MainViewLayout from '../components/mainViewLayout';
 import { boostPost } from '../utils/metadata';
 
 const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
-  console.log(daoMetaData);
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
   const { daoid } = useParams();
   const { successToast, errorToast } = useOverlay();

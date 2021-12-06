@@ -10,6 +10,7 @@ import {
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
+import { SNAPSHOT_SPACE_QUERY } from '../graphQL/snapshot-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
 import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
@@ -25,6 +26,8 @@ import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
 import { validateSafeMinion } from './vaults';
+
+const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -82,6 +85,31 @@ export const getWrapNZap = async (daochain, daoid) => {
     return records.wrapNZaps[0].id;
   }
   return null;
+};
+
+export const getSnapshotSpaces = async () => {
+  try {
+    return graphQuery({
+      endpoint: SNAPSHOT_ENDPOINT,
+      query: SNAPSHOT_SPACE_QUERY,
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getSnapshotProposals = async space => {
+  try {
+    return graphQuery({
+      endpoint: SNAPSHOT_ENDPOINT,
+      query: SNAPSHOT_SPACE_QUERY,
+      variables: {
+        space,
+      },
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
 };
 
 export const fetchTransmutation = async args => {

@@ -2,6 +2,7 @@ import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
+import { getSnapshotSpaces } from '../utils/theGraph';
 
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
@@ -698,6 +699,36 @@ export const BOOST_FORMS = {
     title: 'Deploy Wrap n Zap',
     fields: [[]],
     tx: TX.CREATE_WRAP_N_ZAP,
+  },
+  SNAPSHOT: {
+    id: 'SNAPSHOT',
+    title: 'Show Snapshot Proposals',
+    subtitle:
+      'View your community&apos;s snapshot proposals directly within DAOhaus for easy access.',
+    required: ['space'],
+    fields: [
+      {
+        ...FIELD.TITLE,
+        label: 'Snapshot Space',
+        name: 'space',
+      },
+    ],
+    onSubmit: async ({ values }) => {
+      const snapshotSpace = values?.space;
+      const spaces = await getSnapshotSpaces();
+      console.log('spaces');
+      console.log(spaces);
+      if (
+        Object.keys(spaces).filter(s => s.name === snapshotSpace)?.length < 1
+      ) {
+        // errorToast({
+        //  title: 'No space found!',
+        //  description:
+        //    'Please verify the space name with the official snapshot name.',
+        // });
+        throw Error('No space found!');
+      }
+    },
   },
   SPAM_FILTER: {
     id: 'SPAM_FILTER',

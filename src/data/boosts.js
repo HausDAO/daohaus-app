@@ -238,17 +238,17 @@ export const CONTENT = {
       { href: 'https://disperse.app', label: 'Disperse App' },
     ],
   },
-  // SNAPSHOT: {
-  //   title: 'Snapshot Proposals',
-  //   description:
-  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
-  //   publisher: PUBLISHERS.DAOHAUS,
-  //   version: '0.5',
-  //   pars: ['AWAITING CONTENT'],
-  //   externalLinks: [
-  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
-  //   ],
-  // },
+  SNAPSHOT: {
+    title: 'Snapshot Proposals',
+    description:
+      'Gasless voting for quicker, smaller decisions or just collecting signal.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.5',
+    pars: ['AWAITING CONTENT'],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
 };
 
 export const COMMON_STEPS = {
@@ -298,6 +298,18 @@ export const STEPS = {
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
+    },
+    STEP2: COMMON_STEPS.SIGNER,
+  },
+  ADD_SNAPSHOT: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'boostMetaForm',
+      // change to select
+      form: BOOST_FORMS.SNAPSHOT,
+      isUserStep: true,
+      stepLabel: 'Add Space',
+      next: 'STEP2',
     },
     STEP2: COMMON_STEPS.SIGNER,
   },
@@ -522,14 +534,17 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  // SNAPSHOT: {
-  //   id: 'SNAPSHOT',
-  //   boostContent: CONTENT.SNAPSHOT,
-  //   steps: STEPS.ADD_SNAPSHOT,
-  //   categories: ['governance'],
-  //   networks: 'all',
-  //   cost: 'free',
-  // },
+  SNAPSHOT: {
+    id: 'SNAPSHOT',
+    boostContent: CONTENT.SNAPSHOT,
+    steps: STEPS.ADD_SNAPSHOT,
+    categories: ['governance'],
+    networks: 'all',
+    cost: 'free',
+    metaFields: ['space'],
+    // This should update the space name
+    settings: { type: 'internalLink', appendToDaoPath: 'boost/snapshot' },
+  },
 };
 
 export const allBoosts = {
