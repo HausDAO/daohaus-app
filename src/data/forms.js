@@ -460,7 +460,7 @@ export const PROPOSAL_FORMS = {
     fields: [
       [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [
-        FIELD.DISPERSE_TYPE_SWTICH,
+        FIELD.DISPERSE_TYPE_SWITCH,
         {
           type: 'formCondition',
           eth: null,

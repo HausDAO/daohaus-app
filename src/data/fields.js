@@ -436,7 +436,7 @@ export const FIELD = {
   DISPERSE_CSV: {
     type: 'disperseListInput',
     listenTo: 'formCondition',
-    label: 'Address List',
+    label: 'Recipients and Amounts',
     name: 'disperseList',
     htmlFor: 'disperseList',
     disperseType: {
@@ -447,8 +447,8 @@ export const FIELD = {
     placeholder: '0x1234...5678 1.23 \n0x8765...4321,3.21\n0x5678...1234=3.21',
     expectType: 'disperseList',
   },
-  DISPERSE_TYPE_SWTICH: {
-    type: 'toggleForm',
+  DISPERSE_TYPE_SWITCH: {
+    type: 'toggleToken',
     listenTo: 'formCondition',
     checked: 'eth',
     unchecked: 'token',
