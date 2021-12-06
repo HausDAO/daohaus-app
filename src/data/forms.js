@@ -176,6 +176,8 @@ export const PROPOSAL_FORMS = {
             message: 'Bio must be less than 420 characters',
           },
         },
+      ],
+      [
         {
           ...FIELD.TITLE,
           label: 'Spirit Emoji',
@@ -185,8 +187,7 @@ export const PROPOSAL_FORMS = {
           expectType: 'string',
           maxLength: { value: 2, message: 'Not a valid emoji' },
         },
-      ],
-      [
+
         {
           ...FIELD.TITLE,
           label: 'Url',
@@ -206,17 +207,6 @@ export const PROPOSAL_FORMS = {
             value: 140,
             message: 'Location must be less than 420 characters',
           },
-        },
-        {
-          ...FIELD.TITLE,
-          label: '2-Letter Country Code',
-          name: 'residenceCountry',
-          placeholder: 'US',
-          htmlFor: 'residenceCountry',
-          expectType: 'countryCode',
-          info: 'An ISO 3166-1 alpha-2 compliant country code',
-          hrefLink:
-            'https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements',
         },
       ],
     ],
