@@ -14,6 +14,7 @@ import {
 import { useAppModal } from '../hooks/useModals';
 import { useMetaData } from '../contexts/MetaDataContext';
 import useBoost from '../hooks/useBoost';
+import { validate } from '../utils/validation';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -80,11 +81,7 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = (abiString, serialTag = false) => {
-    if (
-      !abiString ||
-      typeof abiString !== 'string' ||
-      abiString.slice(0, 2) === '0x'
-    )
+    if (!abiString || typeof abiString !== 'string' || validate.hex(abiString))
       return;
 
     if (abiString === 'clear' || abiString === 'hex') {
