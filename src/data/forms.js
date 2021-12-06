@@ -715,12 +715,8 @@ export const BOOST_FORMS = {
     ],
     onSubmit: async ({ values }) => {
       const snapshotSpace = values?.space;
-      const spaces = await getSnapshotSpaces();
-      console.log('spaces');
-      console.log(spaces);
-      if (
-        Object.keys(spaces).filter(s => s.name === snapshotSpace)?.length < 1
-      ) {
+      const spaces = await getSnapshotSpaces(snapshotSpace);
+      if (!spaces) {
         // errorToast({
         //  title: 'No space found!',
         //  description:

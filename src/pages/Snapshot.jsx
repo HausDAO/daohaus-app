@@ -65,7 +65,7 @@ const Snapshot = ({ isMember, daoMetaData, refetchMetaData }) => {
   const handleSave = async () => {
     // Has to be a valid id
     setLoading(true);
-    getSpace;
+    // getSpace;
     try {
       const messageHash = injectedProvider.utils.sha3(daoid);
       const signature = await injectedProvider.eth.personal.sign(
