@@ -8,7 +8,7 @@ import BoostNotActive from '../components/boostNotActive';
 import MainViewLayout from '../components/mainViewLayout';
 import SnapshotCard from '../components/snapshotCard';
 import TextBox from '../components/TextBox';
-import { getSnapshotProposals } from '../utils/requests';
+import { getSnapshotProposals } from '../utils/theGraph';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 
@@ -30,7 +30,9 @@ const Snapshot = ({ isMember, daoMetaData, refetchMetaData }) => {
           // daoMetaData?.boosts?.snapshot.metadata.space,
           daoMetaData?.boosts?.SNAPSHOT.metadata.space,
         );
-        setSnapshots(localSnapshots);
+        console.log('Local snapshots');
+        console.log(localSnapshots);
+        setSnapshots(localSnapshots.proposals);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -75,8 +77,8 @@ const Snapshot = ({ isMember, daoMetaData, refetchMetaData }) => {
 
       const updatedBoost = {
         contractAddress: daoid,
-        boostKey: 'SNAPSHOt',
-        metadata: localMetadata,
+        boostKey: 'SNAPSHOT',
+        metadata: { ...localMetadata, space: spaceName },
         network: injectedChain.network,
         signature,
       };
@@ -110,6 +112,7 @@ const Snapshot = ({ isMember, daoMetaData, refetchMetaData }) => {
     </Button>
   );
 
+  console.log(snapshots);
   return (
     <MainViewLayout
       header='Snapshots'
@@ -136,13 +139,13 @@ const Snapshot = ({ isMember, daoMetaData, refetchMetaData }) => {
           // daoMetaData && 'snapshot' in daoMetaData?.boosts ? (
           daoMetaData && 'SNAPSHOT' in daoMetaData?.boosts ? (
             Object.keys(snapshots).length > 0 ? (
-              Object.keys(snapshots)
+              Object.values(snapshots)
                 .slice(0, 10)
                 .map(snapshot => (
                   <SnapshotCard
-                    key={snapshots[snapshot].sig}
-                    snapshotId={snapshot}
-                    snapshot={snapshots[snapshot]}
+                    key={snapshot.id}
+                    snapshotId={snapshot.od}
+                    snapshot={snapshot}
                   />
                 ))
             ) : (

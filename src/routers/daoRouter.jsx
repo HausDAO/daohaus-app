@@ -271,7 +271,11 @@ const DaoRouter = () => {
           <MintGate daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/boost/snapshot`}>
-          <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
+          <Snapshot
+            isMember={isMember}
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
         </Route>
         <Route exact path={`${path}/party-favor`}>
           <PartyFavor isMember={isMember} />

@@ -10,7 +10,11 @@ import {
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
-import { SNAPSHOT_SPACE_QUERY } from '../graphQL/snapshot-queries';
+import {
+  SNAPSHOT_SPACE_QUERY,
+  SNAPSHOT_PROPOSALS_QUERY,
+  SNAPSHOT_VOTES_QUERY,
+} from '../graphQL/snapshot-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
 import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
@@ -98,13 +102,27 @@ export const getSnapshotSpaces = async () => {
   }
 };
 
-export const getSnapshotProposals = async space => {
+export const getSnapshotProposals = async id => {
   try {
     return graphQuery({
       endpoint: SNAPSHOT_ENDPOINT,
-      query: SNAPSHOT_SPACE_QUERY,
+      query: SNAPSHOT_PROPOSALS_QUERY,
       variables: {
-        space,
+        id,
+      },
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getSnapshotVotes = async id => {
+  try {
+    return graphQuery({
+      endpoint: SNAPSHOT_ENDPOINT,
+      query: SNAPSHOT_VOTES_QUERY,
+      variables: {
+        id,
       },
     });
   } catch (err) {
