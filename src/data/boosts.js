@@ -543,7 +543,10 @@ export const BOOSTS = {
     cost: 'free',
     metaFields: ['space'],
     // This should update the space name
-    settings: { type: 'internalLink', appendToDaoPath: 'boost/snapshot' },
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'boost/snapshot/settings',
+    },
   },
 };
 

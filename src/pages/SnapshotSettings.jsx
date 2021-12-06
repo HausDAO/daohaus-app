@@ -1,0 +1,139 @@
+import React, { useEffect, useState } from 'react';
+import { Flex, Button, Input, FormLabel, Icon } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
+import { RiInformationLine } from 'react-icons/ri';
+import TextBox from '../components/TextBox';
+import { ToolTipWrapper } from '../staticElements/wrappers';
+
+import { useOverlay } from '../contexts/OverlayContext';
+import MainViewLayout from '../components/mainViewLayout';
+import { getSnapshotProposals } from '../utils/theGraph';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { boostPost } from '../utils/metadata';
+
+const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
+  const [loading, setLoading] = useState(true);
+  const { errorToast, successToast } = useOverlay();
+  const { injectedProvider, injectedChain, address } = useInjectedProvider();
+  const { daoid } = useParams();
+  const [localMetadata, setLocalMetadata] = useState();
+  const [spaceName, setSpaceName] = useState('');
+
+  useEffect(() => {
+    console.log('Space');
+    console.log(daoMetaData?.boosts?.SNAPSHOT.metadata.space);
+    const getSnaphots = async () => {
+      try {
+        const localSnapshots = await getSnapshotProposals(
+          // daoMetaData?.boosts?.snapshot.metadata.space,
+          daoMetaData?.boosts?.SNAPSHOT.metadata.space,
+        );
+        console.log('Local snapshots');
+        console.log(localSnapshots);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        errorToast({
+          title: 'Fetching snapshot proposals failed.',
+        });
+      }
+    };
+    if (
+      daoMetaData &&
+      // 'snapshot' in daoMetaData?.boosts &&
+      // daoMetaData?.boosts?.snapshot.active
+      'SNAPSHOT' in daoMetaData?.boosts &&
+      daoMetaData?.boosts?.SNAPSHOT.active
+    ) {
+      getSnaphots();
+    }
+  }, [daoMetaData?.boosts]);
+
+  useEffect(() => {
+    if (daoMetaData?.boosts?.SNAPSHOT?.active) {
+      setLocalMetadata(daoMetaData.boosts.SNAPSHOT.metadata);
+      setSpaceName(daoMetaData.boosts.SNAPSHOT.metadata.space);
+    }
+  }, [daoMetaData]);
+
+  const onChange = e => {
+    setSpaceName(e.target.value);
+  };
+
+  const handleSave = async () => {
+    // Has to be a valid id
+    setLoading(true);
+    try {
+      const messageHash = injectedProvider.utils.sha3(daoid);
+      const signature = await injectedProvider.eth.personal.sign(
+        messageHash,
+        address,
+      );
+
+      const updatedBoost = {
+        contractAddress: daoid,
+        boostKey: 'SNAPSHOT',
+        metadata: { ...localMetadata, space: spaceName },
+        network: injectedChain.network,
+        signature,
+      };
+
+      const updateRes = await boostPost('dao/boost', updatedBoost);
+      console.log('updateRes', updateRes);
+      setLoading(false);
+      refetchMetaData();
+      successToast({
+        title: 'Snapshot Settings Updated',
+        description: 'You DAOd it!',
+      });
+    } catch (err) {
+      console.log('update error', err);
+      setLoading(false);
+      errorToast({
+        title: 'Something went wrong',
+        description: 'Are you an active member of this DAO?',
+      });
+    }
+  };
+
+  return (
+    <MainViewLayout header='Snapshots' isDao>
+      <Flex justify='flex-start' align='center'>
+        <TextBox as={FormLabel} size='xs' position='relative'>
+          Snapshot Space ID
+        </TextBox>
+        <ToolTipWrapper
+          tooltip
+          tooltipText={{
+            body:
+              'The space id is the .eth name found in the url or your space.',
+          }}
+          placement='right'
+          layoutProps={{
+            transform: 'translateY(-2px)',
+            display: 'inline-block',
+          }}
+        >
+          <Icon as={RiInformationLine} ml={2} />
+        </ToolTipWrapper>
+      </Flex>
+      <Flex justify='flex-start' align='center'>
+        <Input
+          maxW='15rem'
+          mr='1rem'
+          key={name}
+          id={name}
+          name={name}
+          onChange={onChange}
+          defaultValue={spaceName}
+        />
+        <Button mr='2.5%' isLoading={loading} onClick={() => handleSave()}>
+          Save Changes
+        </Button>
+      </Flex>
+    </MainViewLayout>
+  );
+};
+
+export default SnapshotSettings;

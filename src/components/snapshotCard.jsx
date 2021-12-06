@@ -6,7 +6,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { getSnapshotVotes } from '../utils/theGraph';
 
-const SnapshotCard = ({ snapshotId, snapshot }) => {
+const SnapshotCard = ({ snapshot }) => {
   const [votes, setVotes] = useState([]);
 
   useEffect(() => {

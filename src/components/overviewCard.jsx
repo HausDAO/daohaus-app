@@ -53,7 +53,6 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             {daoMetaData?.description ? daoMetaData.description : '--'}
           </Box>
         </Skeleton>
-
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
             <TextBox size='xs' title={getTitle(customTerms, 'Members')}>
@@ -103,12 +102,24 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             {`View ${getTerm(customTerms, 'bank')}`}
           </Button>
           <Button
+            mr={6}
             onClick={() => history.push(`/dao/${daochain}/${daoid}/proposals`)}
             value='proposals'
             title={getTitle(customTerms, 'Proposals')}
           >
             {`View ${getTerm(customTerms, 'proposals')}`}
           </Button>
+          {daoMetaData?.boosts?.SNAPSHOT?.active && (
+            <Button
+              onClick={() =>
+                history.push(`/dao/${daochain}/${daoid}/boost/snapshot`)
+              }
+              value='proposals'
+              title={getTitle(customTerms, 'Snapshots')}
+            >
+              {`View ${getTerm(customTerms, 'snapshots')}`}
+            </Button>
+          )}
         </Flex>
       </ContentBox>
     </Box>
