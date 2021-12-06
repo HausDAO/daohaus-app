@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Button, Spinner, Tooltip } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { TX } from '../data/contractTX';
-import { daoConnectedAndSameChain } from '../utils/general';
 
 const Withdraw = ({ token }) => {
-  const { address, injectedChain } = useInjectedProvider();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { submitTransaction } = useTX();
-  const { daochain } = useParams();
   const [loading, setLoading] = useState(false);
 
   const handleWithdraw = async () => {
@@ -28,11 +27,7 @@ const Withdraw = ({ token }) => {
         <Spinner />
       ) : (
         <>
-          {daoConnectedAndSameChain(
-            address,
-            daochain,
-            injectedChain?.chainId,
-          ) ? (
+          {canInteract ? (
             <Button size='sm' onClick={handleWithdraw}>
               Withdraw
             </Button>

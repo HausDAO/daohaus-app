@@ -213,6 +213,19 @@ export const FIELD = {
     label: 'Vaild Rarible Order Data',
     expectType: 'any',
   },
+  DATE_RANGE_SWITCH: {
+    type: 'toggleForm',
+    listenTo: 'formCondition',
+    checked: 'fixed',
+    unchecked: 'unset',
+    label: {
+      type: 'formCondition',
+      fixed: 'Fixed Length',
+      unset: 'Unset',
+    },
+    title: 'Auction Duration',
+    expectType: 'any',
+  },
   NFT_INPUT: {
     type: 'input',
     htmlFor: 'nftAddress',
@@ -242,7 +255,7 @@ export const FIELD = {
     type: 'dateRange',
     htmlFor: 'dateRange',
     name: 'dateRange',
-    label: 'Set Auction Duration',
+    label: 'Set Date Range',
     expectType: 'any',
   },
   DELEGATE_ADDRESS: {
@@ -424,6 +437,41 @@ export const FIELD = {
     label: 'avatar',
     name: 'image',
     htmlFor: 'avatar',
+  },
+  DISPERSE_CSV: {
+    type: 'disperseListInput',
+    listenTo: 'formCondition',
+    label: 'Address List',
+    name: 'disperseList',
+    htmlFor: 'disperseList',
+    disperseType: {
+      type: 'formCondition',
+      eth: 'eth',
+      token: 'token',
+    },
+    placeholder: '0x1234...5678 1.23 \n0x8765...4321,3.21\n0x5678...1234=3.21',
+    expectType: 'disperseList',
+  },
+  DISPERSE_TYPE_SWTICH: {
+    type: 'toggleForm',
+    listenTo: 'formCondition',
+    checked: 'eth',
+    unchecked: 'token',
+    label: {
+      type: 'formCondition',
+      token: 'Token',
+      eth: 'Eth',
+    },
+    title: 'Funding Type',
+    expectType: 'any',
+  },
+  MINION_TOKEN_SELECT: {
+    type: 'minionTokenSelect',
+    label: 'Select a Token',
+    name: 'tokenAddress',
+    htmlFor: 'tokenAddress',
+    placeholder: 'Choose a Token',
+    expectType: 'address',
   },
 };
 

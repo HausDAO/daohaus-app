@@ -141,7 +141,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
   };
 
   const renderChannel = channel => {
-    const isActive = localMetadata.some(
+    const isActive = localMetadata?.some(
       meta => meta.type === channel.name && meta.active,
     );
 

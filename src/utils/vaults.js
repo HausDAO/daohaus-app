@@ -180,6 +180,7 @@ export const validateSafeMinion = async (chainId, vault) => {
       chainByID(chainId).networkAlt || chainByID(chainId).network,
       vault,
     );
+
     return {
       isMinionModule: safeDetails.modules.includes(
         Web3Utils.toChecksumAddress(vault.address),

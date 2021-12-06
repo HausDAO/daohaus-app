@@ -67,8 +67,6 @@ const Proposal = ({
     }
   }, [activities, propid]);
 
-  console.log('currentProposal', currentProposal);
-
   const handleRefreshDao = () => {
     const skipVaults = true;
     refreshDao(skipVaults);
@@ -135,7 +133,6 @@ const Proposal = ({
             </Link>
             <ProposalDetails
               proposal={currentProposal}
-              daoMember={daoMember}
               overview={overview}
               hideMinionExecuteButton={hideMinionExecuteButton}
               minionAction={minionAction}

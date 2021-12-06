@@ -17,6 +17,8 @@ export const TYPE_ERR_MSGS = {
   countryCode: 'Must be a valid country code.',
   greaterThanZero: 'Must be greater than zero.',
   boolean: 'Must be a Booolean value',
+  disperseList:
+    'Must be a proper list with addresses and token values on each line',
 };
 
 export const validate = {
@@ -55,6 +57,21 @@ export const validate = {
   },
   bytes32(val) {
     return val;
+  },
+  disperseList(val) {
+    return val
+      ?.split(/\r?\n/)
+      .reduce(
+        (acc, item) =>
+          acc &&
+          item.match(/0x[a-fA-F0-9]{40}/)?.[0] &&
+          Number(
+            item
+              ?.replace(/0x[a-fA-F0-9]{40}/, '')
+              .match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0],
+          ),
+        true,
+      );
   },
 };
 
