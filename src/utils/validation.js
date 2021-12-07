@@ -17,8 +17,6 @@ export const TYPE_ERR_MSGS = {
   boolean: 'Must be a Booolean value',
   disperseList:
     'Must be a proper list with addresses and token values on each line',
-  snapshot:
-    "No space with a matching name. Please use the .eth name in your space's url",
 };
 
 export const validate = {

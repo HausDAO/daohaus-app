@@ -31,7 +31,6 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
   };
 
   const handleSave = useCallback(async () => {
-    // Has to be a valid id
     setLoading(true);
     try {
       const messageHash = injectedProvider.utils.sha3(daoid);
