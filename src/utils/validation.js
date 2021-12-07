@@ -64,6 +64,14 @@ export const validate = {
         true,
       );
   },
+  jsonString(val) {
+    try {
+      JSON.parse(val);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  },
 };
 
 export const customValidations = {

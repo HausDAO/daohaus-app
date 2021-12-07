@@ -91,7 +91,10 @@ const FormBuilder = props => {
         setFields(fields);
       }
     } else {
+      if (!validate.jsonString(abiString)) return;
+
       const abiInputs = JSON.parse(abiString)?.inputs;
+
       if (setParentFields) {
         setParentFields(txID, [
           fields[0],
