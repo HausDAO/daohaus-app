@@ -715,7 +715,7 @@ export const BOOST_FORMS = {
         name: 'space',
       },
     ],
-    indicatorState: {
+    indicatorStates: {
       loading: {
         spinner: true,
         title: 'Submitting...',
@@ -728,15 +728,15 @@ export const BOOST_FORMS = {
       },
       error: {
         icon: BiErrorCircle,
-        title: 'Error: no space found!',
+        title:
+          "Error: No space found! Please use the .eth name in your space's url",
         errorMessage: true,
       },
     },
-
     onSubmit: async ({ values }) => {
       const snapshotSpace = values?.space;
-      const spaces = await getSnapshotSpaces(snapshotSpace);
-      if (!spaces) {
+      const space = await getSnapshotSpaces(snapshotSpace);
+      if (!space.space?.id) {
         throw Error('No space found!');
       }
     },

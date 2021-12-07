@@ -541,7 +541,6 @@ export const BOOSTS = {
     networks: 'all',
     cost: 'free',
     metaFields: ['space'],
-    // This should update the space name
     settings: {
       type: 'internalLink',
       appendToDaoPath: 'boost/snapshot/settings',

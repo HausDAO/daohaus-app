@@ -170,6 +170,16 @@ const FormBuilder = props => {
     //  HANDLE GO TO NEXT
     if (next && typeof goToNext === 'function') {
       if (typeof next === 'string') {
+        if (
+          props.onSubmit &&
+          !props.tx &&
+          typeof props.onSubmit === 'function'
+        ) {
+          const res = await handleSubmitCallback();
+          if (!res) {
+            return;
+          }
+        }
         return goToNext(next);
       }
       if (next?.type === 'awaitTx') {
