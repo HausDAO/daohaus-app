@@ -1,3 +1,5 @@
+import { BiErrorCircle } from 'react-icons/bi';
+import { BsCheckCircle } from 'react-icons/bs';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
@@ -713,15 +715,28 @@ export const BOOST_FORMS = {
         name: 'space',
       },
     ],
+    indicatorState: {
+      loading: {
+        spinner: true,
+        title: 'Submitting...',
+        explorerLink: true,
+      },
+      success: {
+        icon: BsCheckCircle,
+        title: 'Form Submitted',
+        explorerLink: true,
+      },
+      error: {
+        icon: BiErrorCircle,
+        title: 'Error: no space found!',
+        errorMessage: true,
+      },
+    },
+
     onSubmit: async ({ values }) => {
       const snapshotSpace = values?.space;
       const spaces = await getSnapshotSpaces(snapshotSpace);
       if (!spaces) {
-        // errorToast({
-        //  title: 'No space found!',
-        //  description:
-        //    'Please verify the space name with the official snapshot name.',
-        // });
         throw Error('No space found!');
       }
     },

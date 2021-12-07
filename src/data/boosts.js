@@ -305,7 +305,6 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      // change to select
       form: BOOST_FORMS.SNAPSHOT,
       isUserStep: true,
       stepLabel: 'Add Space',

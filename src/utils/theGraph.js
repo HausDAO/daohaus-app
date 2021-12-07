@@ -91,11 +91,14 @@ export const getWrapNZap = async (daochain, daoid) => {
   return null;
 };
 
-export const getSnapshotSpaces = async () => {
+export const getSnapshotSpaces = async id => {
   try {
     return graphQuery({
       endpoint: SNAPSHOT_ENDPOINT,
       query: SNAPSHOT_SPACE_QUERY,
+      variables: {
+        id,
+      },
     });
   } catch (err) {
     throw new Error(err);

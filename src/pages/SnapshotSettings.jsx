@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Flex, Button, Input, FormLabel, Icon } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { RiInformationLine } from 'react-icons/ri';
@@ -7,48 +7,17 @@ import { ToolTipWrapper } from '../staticElements/wrappers';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import MainViewLayout from '../components/mainViewLayout';
-import { getSnapshotProposals } from '../utils/theGraph';
+import { getSnapshotSpaces } from '../utils/theGraph';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 
 const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { errorToast, successToast } = useOverlay();
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
   const { daoid } = useParams();
   const [localMetadata, setLocalMetadata] = useState();
   const [spaceName, setSpaceName] = useState('');
-
-  useEffect(() => {
-    console.log('Space');
-    console.log(daoMetaData?.boosts?.SNAPSHOT.metadata.space);
-    const getSnaphots = async () => {
-      try {
-        const localSnapshots = await getSnapshotProposals(
-          // daoMetaData?.boosts?.snapshot.metadata.space,
-          daoMetaData?.boosts?.SNAPSHOT.metadata.space,
-        );
-        console.log('Local snapshots');
-        console.log(localSnapshots);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-        errorToast({
-          title: 'Fetching snapshot proposals failed.',
-        });
-      }
-    };
-    if (
-      daoMetaData &&
-      // 'snapshot' in daoMetaData?.boosts &&
-      // daoMetaData?.boosts?.snapshot.active
-      'SNAPSHOT' in daoMetaData?.boosts &&
-      daoMetaData?.boosts?.SNAPSHOT.active
-    ) {
-      getSnaphots();
-    }
-  }, [daoMetaData?.boosts]);
 
   useEffect(() => {
     if (daoMetaData?.boosts?.SNAPSHOT?.active) {
@@ -61,7 +30,7 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
     setSpaceName(e.target.value);
   };
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     // Has to be a valid id
     setLoading(true);
     try {
@@ -70,6 +39,17 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
         messageHash,
         address,
       );
+      const space = await getSnapshotSpaces(spaceName);
+      console.log(spaceName);
+      console.log(space);
+      if (!space.space?.id) {
+        errorToast({
+          title: 'No space found!',
+          description: "Please use the .eth name found in your space's url!",
+        });
+        setLoading(false);
+        return;
+      }
 
       const updatedBoost = {
         contractAddress: daoid,
@@ -95,7 +75,7 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
         description: 'Are you an active member of this DAO?',
       });
     }
-  };
+  }, [spaceName]);
 
   return (
     <MainViewLayout header='Snapshots' isDao>

@@ -21,8 +21,6 @@ const SnapshotCard = ({ snapshot }) => {
     getVotes();
   }, []);
 
-  console.log('Snapshot');
-  console.log(snapshot);
   return (
     <ContentBox
       as={Link}
