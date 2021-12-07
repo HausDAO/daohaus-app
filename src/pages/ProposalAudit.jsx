@@ -105,13 +105,6 @@ const ProposalAudit = ({ daoProposals }) => {
               ' '}`}
           </Td>
 
-          {/* <Td border='none'>
-            {`${proposal.tributeOffered /
-              10 **
-                proposal.tributeTokenDecimals} ${proposal.tributeTokenSymbol ||
-              ''}`}
-          </Td> */}
-
           <Td border='none'>
             {`${displayBalance(
               proposal.tributeOffered,
@@ -179,23 +172,6 @@ const ProposalAudit = ({ daoProposals }) => {
         )}
       </Flex>
 
-      {/* <Box w='100%'>
-        <Box my={5} w='100%'>
-          <ContentBox w='100%' fontSize='xl' fontFamily='heading' ml={3}>
-            {`${daoProposals?.length || 'looking for'} proposals`}
-            {daoProposals?.length && (
-              <IconButton
-                icon={<RiRefreshLine size='1rem' />}
-                p={0}
-                size='sm'
-                variant='outline'
-                onClick={handleRefreshDao}
-                ml={10}
-              />
-            )}
-          </ContentBox>
-        </Box> */}
-
       <Box w='100%' pr={[0, null, null, null, 6]} my={5}>
         <ContentBox w='100%'>
           {Object.keys(listProposals).map(section => {
@@ -230,7 +206,6 @@ const ProposalAudit = ({ daoProposals }) => {
           })}
         </ContentBox>
       </Box>
-      {/* </Box> */}
     </MainViewLayout>
   );
 };
