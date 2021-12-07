@@ -49,7 +49,6 @@ const AbiInput = props => {
 
   useEffect(() => {
     if (abiInput) {
-      console.log(`abiInput`, abiInput);
       if (abiInput === abiRef.current) return;
       const tag = getTxFromName(name);
       buildABIOptions(abiInput, tag);

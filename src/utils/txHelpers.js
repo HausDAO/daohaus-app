@@ -5,6 +5,7 @@ import { detailsToJSON, filterObject, HASH } from './general';
 import { getContractBalance, valToDecimalString } from './tokenValue';
 import {
   encodeMultisendTx,
+  ensureHex,
   getABIsnippet,
   getContractABI,
   safeEncodeHexFunction,
@@ -110,10 +111,8 @@ const collapseToCallData = values =>
 
 const argBuilderCallback = Object.freeze({
   proposeActionVanilla({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      values?.abiArgs || [],
-    );
+    const hexData = ensureHex(values.abiInput, values.abiArgs);
+
     const details = detailsToJSON({
       ...values,
       minionType: formData.minionType,
@@ -121,10 +120,7 @@ const argBuilderCallback = Object.freeze({
     return [values.targetContract, values.minionValue || '0', hexData, details];
   },
   proposeActionNifty({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      values?.abiArgs || [],
-    );
+    const hexData = ensureHex(values.abiInput, values.abiArgs);
 
     const details = detailsToJSON({
       ...values,
@@ -158,10 +154,7 @@ const argBuilderCallback = Object.freeze({
     ];
   },
   proposeActionSafe({ values, formData }) {
-    const hexData = safeEncodeHexFunction(
-      JSON.parse(values.abiInput),
-      values?.abiArgs || [],
-    );
+    const hexData = ensureHex(values.abiInput, values.abiArgs);
 
     const details = detailsToJSON({
       ...values,

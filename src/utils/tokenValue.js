@@ -181,6 +181,31 @@ export const addZeros = (roundedVal, decimals) => {
     .toString();
 };
 
+// Used to avoid repeating decimals which can happen when using ethers.BigNumber
+// Converts to string and adds '0's then converts back to int
+export const safeAddZeros = (val, decimals) => {
+  const stringVal = `${val}`;
+  const inputDecimals =
+    stringVal.indexOf('.') === -1
+      ? 0
+      : stringVal.length - stringVal.indexOf('.') - 1;
+  let returnVal = stringVal.replace('.', '');
+
+  if (decimals > inputDecimals) {
+    for (let i = 0; i < decimals - inputDecimals; i += 1) {
+      returnVal += '0';
+    }
+  } else if (decimals < inputDecimals) {
+    const newDecimalIndex = returnVal.length - (inputDecimals - decimals);
+    returnVal = `${returnVal.slice(0, newDecimalIndex)}.${returnVal.slice(
+      newDecimalIndex,
+      returnVal.length,
+    )}`;
+  }
+
+  return Number(returnVal);
+};
+
 export const fetchBalance = ({ address, chainID, tokenAddress }) => {
   try {
     const tokenContract = createContract({

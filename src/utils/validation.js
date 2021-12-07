@@ -46,6 +46,9 @@ export const validate = {
   bytes32(val) {
     return val;
   },
+  hex(val) {
+    return Web3.utils.isHexStrict(val);
+  },
   disperseList(val) {
     return val
       ?.split(/\r?\n/)
