@@ -64,13 +64,13 @@ export const validate = {
         true,
       );
   },
-  jsonString(val) {
+  jsonStringObject(val) {
     try {
-      JSON.parse(val);
+      const obj = JSON.parse(val);
+      return typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
     } catch (e) {
       return false;
     }
-    return true;
   },
 };
 
