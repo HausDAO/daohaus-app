@@ -13,7 +13,7 @@ import { createContract } from '../utils/contract';
 import { getProposalHistories } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
-import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
+import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { fetchSingleProposal } from '../utils/theGraph';
 import { proposalResolver } from '../utils/resolvers';

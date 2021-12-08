@@ -166,11 +166,6 @@ const ProposalsList = ({ proposals, customTerms }) => {
             <ProposalCardV2
               key={proposal.id}
               proposal={proposal}
-              // proposal={
-              //   isFirstItem(paginatedProposals, index)
-              //     ? { ...proposal, status: 'InQueue' }
-              //     : proposal
-              // }
               customTerms={customTerms}
               interaction={interaction}
             />
@@ -179,7 +174,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
 
       {isLoaded ? (
         <Paginator
-          perPage={3}
+          perPage={5}
           setRecords={setPageProposals}
           allRecords={listProposals}
         />

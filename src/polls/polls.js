@@ -16,10 +16,8 @@ import { createContract } from '../utils/contract';
 import { getContractABI } from '../utils/abi';
 import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
-import {
-  MINION_ACTION_FUNCTION_NAMES,
-  PROPOSAL_TYPES,
-} from '../utils/proposalUtils';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({

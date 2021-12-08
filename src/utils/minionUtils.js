@@ -1,5 +1,12 @@
 import { createContract } from './contract';
 
+export const MINION_ACTION_FUNCTION_NAMES = {
+  VANILLA_MINION: 'actions',
+  SAFE_MINION: 'actions',
+  UBERHAUS_MINION: 'appointments',
+  SUPERFLUID_MINION: 'streams',
+};
+
 export const getMinionAction = async ({
   minionAddress,
   proposalId,

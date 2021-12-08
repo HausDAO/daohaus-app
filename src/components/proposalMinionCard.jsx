@@ -50,7 +50,6 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
               })
             : [minionAction],
       };
-
       setMinionDeets(formattedActions);
     }
   }, [minionAction, proposal]);
@@ -92,68 +91,70 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   });
 
   useEffect(() => {
+    const isEthTransfer = action => action.data.slice(2).length === 0;
+    const handleSafeActions = async action => {
+      const multisendAddress = `${
+        chainByID(daochain).safeMinion.safe_mutisend_addr
+      }`;
+      const decodedMultisend = decodeMultisendTx(multisendAddress, action.data);
+      action.decodedMultisend = decodedMultisend;
+      action.decodedData = {
+        name: 'multiSend',
+        actions: await Promise.all(
+          decodedMultisend.map(async action => {
+            if (isEthTransfer(action)) {
+              return buildEthTransferAction(action);
+            }
+            let json = await decodeFromEtherscan(action);
+            //  could not decode
+            if (json.status === '0') {
+              //  figure out why this happens
+              return {
+                to: action.to,
+                value: Web3Utils.toBN(action.value).toString(),
+              };
+            }
+            let parsed = JSON.parse(json.result);
+            const imp = parsed.find(p => p.name === 'implementation');
+            if (imp) {
+              action.proxyTo = await checkIfProxy(parsed, action.to);
+              json = action.proxyTo && (await decodeFromEtherscan(action));
+              if (!json || json.status === '0') {
+                return {
+                  to: action.to,
+                  value: Web3Utils.toBN(action.value).toString(),
+                };
+              }
+              parsed = JSON.parse(json.result);
+            }
+            abiDecoder.addABI(parsed);
+            return {
+              ...abiDecoder.decodeMethod(action.data),
+              to: action.to,
+              value: Web3Utils.toBN(action.value).toString(),
+            };
+          }),
+        ),
+      };
+    };
     const hydrateActions = async () => {
       const promRes = await Promise.all(
+        // only safe has more than 1 action
         minionDeets.actions.map(async action => {
           const hydratedAction = { ...action };
           try {
             if (proposal.minion.minionType === MINION_TYPES.SAFE) {
-              const multisendAddress = `${
-                chainByID(daochain).safeMinion.safe_mutisend_addr
-              }`;
-              const decodedMultisend = decodeMultisendTx(
-                multisendAddress,
-                action.data,
-              );
-              hydratedAction.decodedMultisend = decodedMultisend;
-              hydratedAction.decodedData = {
-                name: 'multiSend',
-                actions: await Promise.all(
-                  decodedMultisend.map(async action => {
-                    if (action.data.slice(2).length === 0) {
-                      return buildEthTransferAction(action);
-                    }
-                    let json = await decodeFromEtherscan(action);
-                    if (json.status === '0') {
-                      return {
-                        to: action.to,
-                        value: Web3Utils.toBN(action.value).toString(),
-                      };
-                    }
-                    let parsed = JSON.parse(json.result);
-                    const imp = parsed.find(p => p.name === 'implementation');
-                    if (imp) {
-                      hydratedAction.proxyTo = await checkIfProxy(
-                        parsed,
-                        action.to,
-                      );
-                      json =
-                        hydratedAction.proxyTo &&
-                        (await decodeFromEtherscan(hydratedAction));
-                      if (!json || json.status === '0') {
-                        return {
-                          to: action.to,
-                          value: Web3Utils.toBN(action.value).toString(),
-                        };
-                      }
-                      parsed = JSON.parse(json.result);
-                    }
-                    abiDecoder.addABI(parsed);
-                    return {
-                      ...abiDecoder.decodeMethod(action.data),
-                      to: action.to,
-                      value: Web3Utils.toBN(action.value).toString(),
-                    };
-                  }),
-                ),
-              };
-              return hydratedAction;
+              return handleSafeActions(hydratedAction);
             }
-            if (action.data.slice(2).length === 0) {
+            if (isEthTransfer(action)) {
               return buildEthTransferAction(action);
             }
             let json = await decodeFromEtherscan(action);
             if (json.status === '0') {
+              // what does status === 0 mean?
+              // in this part, we return whole hydrated action,
+              // in Gnosis part we return the fields to and value
+              // can they be the same thing?
               return hydratedAction;
             }
             let parsed = JSON.parse(json.result);
@@ -221,7 +222,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   );
 
   const displayDecodedData = data => {
-    if (data.decodedData) {
+    if (data?.decodedData) {
       return (
         <>
           <HStack spacing={3}>
