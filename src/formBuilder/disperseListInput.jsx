@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDao } from '../contexts/DaoContext';
 import { useFormConditions } from '../utils/formBuilder';
 import GenericTextArea from './genericTextArea';
-import { addZeros } from '../utils/tokenValue';
+import { safeAddZeros } from '../utils/tokenValue';
 
 const DisperseListInput = props => {
   const { daoOverview } = useDao();
@@ -37,7 +37,7 @@ const DisperseListInput = props => {
           ?.match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0];
         if (rawAmount) {
           try {
-            const paddedAmount = Number(addZeros(rawAmount, zeroPadding));
+            const paddedAmount = safeAddZeros(Number(rawAmount), zeroPadding);
             userList.push(address);
             amountList.push(paddedAmount.toString());
             disperseTotal += paddedAmount;

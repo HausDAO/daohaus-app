@@ -1,11 +1,9 @@
 import { ethers } from 'ethers';
 
-// Refactor utils to PURGE TokenService and MolochService
-
-import { TokenService } from '../services/tokenService';
-import { MolochService } from '../services/molochService';
 import { omit } from './general';
 import { validate } from './validation';
+import { createContract } from './contract';
+import { LOCAL_ABI } from './abi';
 
 const babe = '0x000000000000000000000000000000000000baBe';
 const tokenAPI =
@@ -69,20 +67,24 @@ export const addContractVals = (tokens, chainID) => {
   return Promise.all(
     tokens.map(async token => {
       try {
-        const tokenBalance = await TokenService({
+        const tokenContract = createContract({
+          address: token.tokenAddress,
+          abi: LOCAL_ABI.ERC_20,
           chainID,
-          tokenAddress: token.tokenAddress,
-          is32: false,
-        })('balanceOf')(token?.moloch?.id);
-        const babeBalance = await MolochService({
-          tokenAddress: token.tokenAddress,
-          chainID,
-          daoAddress: token?.moloch?.id,
-          version: +token?.moloch?.version,
-        })('getUserTokenBalance')({
-          userAddress: babe,
-          tokenAddress: token.tokenAddress,
         });
+        const tokenBalance = await tokenContract.methods
+          .balanceOf(token?.moloch?.id)
+          .call();
+
+        const molochContract = createContract({
+          address: token?.moloch?.id,
+          abi: LOCAL_ABI.MOLOCH_V2,
+          chainID,
+        });
+        const babeBalance = await molochContract.methods
+          .getUserTokenBalance(babe, token.tokenAddress)
+          .call();
+
         return {
           ...token,
           contractBalances: {
@@ -179,12 +181,40 @@ export const addZeros = (roundedVal, decimals) => {
     .toString();
 };
 
+// Used to avoid repeating decimals which can happen when using ethers.BigNumber
+// Converts to string and adds '0's then converts back to int
+export const safeAddZeros = (val, decimals) => {
+  const stringVal = `${val}`;
+  const inputDecimals =
+    stringVal.indexOf('.') === -1
+      ? 0
+      : stringVal.length - stringVal.indexOf('.') - 1;
+  let returnVal = stringVal.replace('.', '');
+
+  if (decimals > inputDecimals) {
+    for (let i = 0; i < decimals - inputDecimals; i += 1) {
+      returnVal += '0';
+    }
+  } else if (decimals < inputDecimals) {
+    const newDecimalIndex = returnVal.length - (inputDecimals - decimals);
+    returnVal = `${returnVal.slice(0, newDecimalIndex)}.${returnVal.slice(
+      newDecimalIndex,
+      returnVal.length,
+    )}`;
+  }
+
+  return Number(returnVal);
+};
+
 export const fetchBalance = ({ address, chainID, tokenAddress }) => {
   try {
-    const max = TokenService({
+    const tokenContract = createContract({
+      address: tokenAddress,
+      abi: LOCAL_ABI.ERC_20,
       chainID,
-      tokenAddress,
-    })('balanceOf')(address);
+    });
+    const max = tokenContract.methods.balanceOf(address).call();
+
     return max;
   } catch (error) {
     console.log(error);

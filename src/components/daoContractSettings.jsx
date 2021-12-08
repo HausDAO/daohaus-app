@@ -175,20 +175,6 @@ const DaoContractSettings = ({
                 : '--'}
             </TextBox>
           </Stack>
-          {/* <Text
-          fontFamily='mono'
-          variant='value'
-          fontSize='sm'
-          as={RouterLink}
-          to={`/dao/${daochain}/${daoid}/settings/clone`}
-          // target='_blank'
-          // rel='noreferrer noopener'
-        >
-          <Flex color='secondary.400' align='center'>
-            Summon a clone of this DAO
-            <Icon as={RiFireLine} color='secondary.400' ml={1} />
-          </Flex>
-        </Text> */}
         </Flex>
       </Stack>
     </ContentBox>

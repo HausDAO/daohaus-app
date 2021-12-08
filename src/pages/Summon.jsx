@@ -9,26 +9,17 @@ import MainViewLayout from '../components/mainViewLayout';
 import SummonEasy from '../forms/summonEasy';
 import SummonHard from '../forms/summonHard';
 import SummonPending from '../components/summonPending';
-// import TemporaryCloneSummon from '../components/temporaryCloneSummon';
 import { createPoll } from '../services/pollService';
 import { SummonService } from '../services/summonService';
 import { DAO_POLL } from '../graphQL/dao-queries';
 import { capitalize } from '../utils/general';
 import {
-  // cloneDaoPresets,
-  // cloneMembers,
-  // cloneTokens,
   daoConstants,
   daoPresets,
   parseSummonersAndShares,
 } from '../utils/summoning';
 import { getGraphEndpoint } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
-
-// const tokenMsg =
-//   '''Token addresses are different across chains.
-//    If you would like to clone the same tokens to a different network,
-//    you will need to manually add the equivalent token addresses here.''';
 
 const Summon = () => {
   const {
@@ -263,9 +254,6 @@ const Summon = () => {
             </Flex>
           </Box>
         )}
-        {/* {hardMode && !isSummoning && (
-          <TemporaryCloneSummon handleCloneDAO={handleCloneDAO} />
-        )} */}
       </MainViewLayout>
     </Layout>
   );

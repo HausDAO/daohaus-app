@@ -102,9 +102,6 @@ export const POPUP_CONTENT = {
     ],
     links: [],
   },
-  submitProposalCco: {
-    displayName: 'CCO Contribution',
-  },
   withdrawBalance: {
     displayName: 'Withdraw Balance',
     header: 'Next Steps',

@@ -33,6 +33,7 @@ import SuperfluidPaymentInput from './superfluidPaymentInput';
 import SuperfluidRate from './superfluidRate';
 import TargetContract from './targetContract';
 import ToggleForm from './toggleForm';
+import ToggleToken from './toggleToken';
 import TributeInput from './tributeInput';
 import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
@@ -161,6 +162,9 @@ export const InputFactory = props => {
   }
   if (type === 'toggleForm') {
     return <ToggleForm {...props} />;
+  }
+  if (type === 'toggleToken') {
+    return <ToggleToken {...props} />;
   }
   if (type === 'saltGenerator') {
     return <SaltGenerator {...props} />;

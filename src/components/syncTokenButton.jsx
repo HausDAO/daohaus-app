@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { RiQuestionLine } from 'react-icons/ri';
-import { useParams } from 'react-router';
 import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { TX } from '../data/contractTX';
-import { isDelegating, daoConnectedAndSameChain } from '../utils/general';
+import { isDelegating } from '../utils/general';
 
 const SyncTokenButton = ({ token }) => {
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { errorToast } = useOverlay();
   const { submitTransaction } = useTX();
   const { daoMember, delegate } = useDaoMember();
-  const { address, injectedChain } = useInjectedProvider();
-  const { daochain } = useParams();
   const [loading, setLoading] = useState(false);
 
   const canSync = !isDelegating(daoMember) || delegate;
@@ -50,8 +50,7 @@ const SyncTokenButton = ({ token }) => {
 
   return (
     <Flex>
-      {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
-      canSync ? (
+      {canInteract && canSync ? (
         <Tooltip
           hasArrow
           shouldWrapChildren
