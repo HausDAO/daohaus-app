@@ -15,7 +15,7 @@ import {
   StatusDisplayBox,
 } from './actionPrimitives';
 
-export const Unsponsored = ({ interaction, proposal }) => {
+const Unsponsored = ({ interaction, proposal }) => {
   const { daoOverview } = useDao();
   const { canInteract } = interaction || {};
 
@@ -64,3 +64,4 @@ export const Unsponsored = ({ interaction, proposal }) => {
     </PropActionBox>
   );
 };
+export default Unsponsored;

@@ -1,12 +1,6 @@
-import { Flex, Text } from '@chakra-ui/react';
-import styled from '@emotion/styled';
 import React from 'react';
-import {
-  RiArrowLeftLine,
-  RiArrowRightLine,
-  RiDashboard2Line,
-  RiDashboard3Line,
-} from 'react-icons/ri';
+import { Text } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 
 export const Bold = styled.span`
   font-weight: 700;

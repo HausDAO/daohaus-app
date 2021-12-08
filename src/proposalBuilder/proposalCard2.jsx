@@ -9,8 +9,6 @@ import PropActions from './propActions';
 import useMinionAction from '../hooks/useMinionAction';
 import { CUSTOM_DISPLAY } from '../data/proposalData';
 import { generateOfferText, generateRequestText } from '../utils/proposalCard';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import useCanInteract from '../hooks/useCanInteract';
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
   return (

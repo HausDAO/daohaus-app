@@ -1,4 +1,3 @@
-import { getMinionAbi } from './abi';
 import { createContract } from './contract';
 
 export const getMinionAction = async ({
@@ -20,4 +19,4 @@ export const getMinionAction = async ({
   }
 };
 
-export const decodeAction = actionData => {};
+export const decodeAction = () => {};

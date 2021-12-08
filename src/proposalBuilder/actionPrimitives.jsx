@@ -1,8 +1,5 @@
-import React, { useMemo } from 'react';
-import { Box, Button, Flex, Progress } from '@chakra-ui/react';
-import { formatDistanceToNow } from 'date-fns';
-import { ParaSm } from '../components/typography';
-import { validate } from '../utils/validation';
+import React from 'react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 
 export const StatusCircle = ({ color }) => (
   <Box borderRadius='50%' background={color} h='.6rem' w='.6rem' mr='2' />
@@ -82,28 +79,5 @@ export const VotingSection = ({
         isLoading={loadingAll}
       />
     </Flex>
-  );
-};
-
-export const InQueue = ({ proposal }) => {
-  const time = useMemo(() => {
-    if (validate.number(Number(proposal?.votingPeriodStarts))) {
-      return formatDistanceToNow(
-        new Date(Number(proposal?.votingPeriodStarts) * 1000),
-      );
-    }
-  }, [proposal]);
-  return (
-    <PropActionBox>
-      <StatusDisplayBox>
-        <StatusCircle color='green' />
-        <ParaSm fontWeight='700' mr='1'>
-          Voting
-        </ParaSm>
-        <ParaSm>starts in {time} </ParaSm>
-      </StatusDisplayBox>
-      <Progress value={80} mb='3' colorScheme='secondary.500' />
-      <VotingSection disableAll />
-    </PropActionBox>
   );
 };

@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { Box, Button, Flex, Progress } from '@chakra-ui/react';
+import { Progress } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import { ParaSm } from '../components/typography';
-import { decodeAction } from '../utils/minionUtils';
 import { validate } from '../utils/validation';
 import { useTX } from '../contexts/TXContext';
 import { TX } from '../data/contractTX';
@@ -13,7 +12,7 @@ import {
   VotingSection,
 } from './actionPrimitives';
 
-export const VotingPeriod = ({ interactions, proposal }) => {
+const VotingPeriod = ({ proposal }) => {
   const [isLoading, setLoading] = useState(false);
   const { submitTransaction } = useTX();
   const gracePeriodTime = useMemo(() => {
@@ -59,3 +58,4 @@ export const VotingPeriod = ({ interactions, proposal }) => {
     </PropActionBox>
   );
 };
+export default VotingPeriod;

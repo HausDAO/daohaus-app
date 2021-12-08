@@ -27,7 +27,6 @@ import {
 import ProposalCardV2 from '../proposalBuilder/proposalCard2';
 import SpamFilterListNotification from './spamFilterListNotification';
 import useCanInteract from '../hooks/useCanInteract';
-import { isFirstItem, isLastItem } from '../utils/general';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
@@ -163,7 +162,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
 
       <Box mt={4}>
         {isLoaded &&
-          paginatedProposals?.map((proposal, index) => (
+          paginatedProposals?.map(proposal => (
             <ProposalCardV2
               key={proposal.id}
               proposal={proposal}

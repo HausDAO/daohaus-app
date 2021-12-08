@@ -1,6 +1,7 @@
 import React from 'react';
-import { InQueue, VotingPeriod } from './actionPrimitives';
-import { Unsponsored } from './Unsponsored';
+import VotingPeriod from './votingPeriod';
+import InQueue from './inQueue';
+import Unsponsored from './Unsponsored';
 
 // export const ProposalStatus = {
 //   Unknown: 'Unknown',
