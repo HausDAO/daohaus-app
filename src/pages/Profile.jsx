@@ -47,7 +47,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
 
   useEffect(() => {
     const initMemberTokens = async tokensWithBalance => {
-      const newTokenData = await initTokenData(tokensWithBalance);
+      const newTokenData = await initTokenData(daochain, tokensWithBalance);
       setTokensReceivable(newTokenData);
     };
     if (memberEntity?.tokenBalances && daochain) {

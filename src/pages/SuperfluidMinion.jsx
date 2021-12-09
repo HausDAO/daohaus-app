@@ -92,7 +92,7 @@ const SuperfluidMinionDetails = ({
     const setUpBalances = async () => {
       const balances = members.find(member => member.memberAddress === minion);
       const newTokenData = balances
-        ? await initTokenData(balances.tokenBalances)
+        ? await initTokenData(daochain, balances.tokenBalances)
         : [];
       setMinionBalances(newTokenData);
     };
