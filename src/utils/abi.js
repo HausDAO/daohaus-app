@@ -78,7 +78,7 @@ const getABIurl = (contractAddress, chainID) => {
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
 };
 
-const isProxyABI = response => {
+export const isProxyABI = response => {
   if (response?.length) {
     return response.some(fn => fn.name === 'implementation');
   }
