@@ -5,7 +5,8 @@ import { Box, Flex } from '@chakra-ui/layout';
 import { useToken } from '../contexts/TokenContext';
 import TextIndicator from './textIndicator';
 import TokenIndicator from './tokenIndicator';
-import { TokenService } from '../services/tokenService';
+import { createContract } from '../utils/contract';
+import { LOCAL_ABI } from '../utils/abi';
 
 const TokenDisplay = ({ tokenAddress }) => {
   const { daochain } = useParams();
@@ -16,10 +17,15 @@ const TokenDisplay = ({ tokenAddress }) => {
 
   useEffect(() => {
     const fetchTokenData = async () => {
-      const tokenService = TokenService({ chainID: daochain, tokenAddress });
+      const tokenContract = createContract({
+        address: tokenAddress,
+        abi: LOCAL_ABI.ERC_20,
+        chainID: daochain,
+      });
+
       try {
-        const symbol = await tokenService('symbol')();
-        const decimals = await tokenService('decimals')();
+        const symbol = await tokenContract.methods.symbol().call();
+        const decimals = await tokenContract.methods.decimals().call();
         const data = { symbol, decimals };
         setTokenData(data);
       } catch (error) {

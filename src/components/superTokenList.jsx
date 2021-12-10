@@ -11,8 +11,9 @@ import TextBox from './TextBox';
 import SuperTokenListItem from './SuperTokenListItem';
 import { createPoll } from '../services/pollService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import { TokenService } from '../services/tokenService';
+import { createContract } from '../utils/contract';
 import { deriveValFromWei } from '../utils/general';
+import { LOCAL_ABI } from '../utils/abi';
 
 const SuperTokenList = ({
   superTokenBalances,
@@ -106,15 +107,18 @@ const SuperTokenList = ({
       const underlyingTokenInternalBalance = minionBalances.find(
         b => b.tokenAddress === superToken.underlyingTokenAddress,
       );
-      const underlyingTokenBalance = await TokenService({
-        web3: injectedProvider,
+
+      const tokenContract = createContract({
+        address: superToken.underlyingTokenAddress,
+        abi: LOCAL_ABI.ERC_20,
         chainID: daochain,
-        tokenAddress: superToken.underlyingTokenAddress,
-      })('balanceOf')(minion);
+      });
+      const tokenBalance = await tokenContract.methods.balanceOf(minion).call();
+
       if (
         (underlyingTokenInternalBalance &&
           +underlyingTokenInternalBalance.tokenBalance > 0) ||
-        deriveValFromWei(underlyingTokenBalance) > 0
+        deriveValFromWei(tokenBalance) > 0
       ) {
         setLoading({
           active: true,
