@@ -63,21 +63,11 @@ export const pollTokenAllowances = async ({
   tokenAddress,
   userAddress,
 }) => {
-  // const tokenContract = TokenService({
-  //   chainID,
-  //   tokenAddress,
-  // });
-
   const tokenContract = createContract({
     address: tokenAddress,
     abi: LOCAL_ABI.ERC_20,
     chainID,
   });
-
-  // const amountApproved = await tokenContract('allowance')({
-  //   accountAddr: userAddress,
-  //   contractAddr: daoID,
-  // });
 
   const amountApproved = await tokenContract.methods
     .allowance({
