@@ -14,7 +14,7 @@ const useMinionAction = proposal => {
 
   useEffect(() => {
     if (!minionAddress || !daochain || !minionType) return;
-    // let shouldUpdate = true;
+    let shouldUpdate = true;
     const fetchMinionAction = async () => {
       const action = await getMinionAction({
         minionAddress,
@@ -22,14 +22,10 @@ const useMinionAction = proposal => {
         proposalId,
         chainID: daochain,
       });
-      console.log(`action`, action);
-      console.log(`minionAction`, minionAction);
-      if (action?.data) {
-        console.log('setting');
+      if (action?.data && shouldUpdate) {
         setAction({
           ...action,
           status: 'success',
-          // decoded: decodeAction(action.data),
         });
       }
       if (!action) {
@@ -40,7 +36,7 @@ const useMinionAction = proposal => {
       }
     };
     fetchMinionAction();
-    // return () => (shouldUpdate = false);
+    return () => (shouldUpdate = false);
   }, [minionAddress, daochain, minionType]);
   return minionAction;
 };
