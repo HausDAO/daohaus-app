@@ -8,7 +8,12 @@ import { Bold, CardLabel, ParaMd, ParaSm } from '../components/typography';
 import PropActions from './propActions';
 import useMinionAction from '../hooks/useMinionAction';
 import { CUSTOM_DISPLAY } from '../data/proposalData';
-import { generateOfferText, generateRequestText } from '../utils/proposalCard';
+import {
+  generateOfferText,
+  generateRequestText,
+  readableTokenBalance,
+} from '../utils/proposalCard';
+import { useDao } from '../contexts/DaoContext';
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
   return (
@@ -91,20 +96,42 @@ const PropCardOffer = ({ proposal }) => {
   return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
 };
 
-const MinionTransfer = ({ proposal }) => {
-  const minionAction = useMinionAction({
-    minionAddress: proposal?.minionAddress,
-    minionType: proposal?.minion?.minionType,
-    proposalId: proposal?.proposalId,
-  });
+const MinionTransfer = ({ proposal = {} }) => {
+  const { minionAddress } = proposal;
+  const minionAction = useMinionAction(proposal);
+  const { daoVaults } = useDao();
+  console.log(`proposal`, proposal);
+
+  const itemText = useMemo(() => {
+    if (!daoVaults || minionAction?.status !== 'success' || !minionAddress)
+      return;
+    const tokenAddress = minionAction.to;
+
+    const vault = daoVaults?.find(minion => minion.address === minionAddress);
+    const tokenData = vault?.erc20s.find(
+      token =>
+        token.tokenAddress?.toLowerCase() === tokenAddress?.toLowerCase(),
+    );
+    const { balance, name, decimals } = tokenData || {};
+    if (balance && name && decimals && vault) {
+      return `Requesting ${readableTokenBalance({
+        balance,
+        symbol: name,
+        decimals,
+      })} from ${vault?.name || 'Minion'}`;
+    }
+
+    return 'Error Retriving token data';
+  }, [daoVaults && minionAction && !minionAddress]);
+
   const isLoaded =
     minionAction?.status === 'error' || minionAction?.status === 'success';
-  const sample = 'This is a test message';
   return (
     <AsyncCardTransfer
       isLoaded={isLoaded}
       proposal={proposal}
-      itemText={sample}
+      incoming
+      itemText={itemText}
     />
   );
 };

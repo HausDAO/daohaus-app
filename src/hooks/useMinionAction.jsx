@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { getMinionAction, decodeAction } from '../utils/minionUtils';
+import { getMinionAction } from '../utils/minionUtils';
 
 const useMinionAction = proposal => {
   const {
@@ -23,7 +23,6 @@ const useMinionAction = proposal => {
         chainID: daochain,
       });
       if (action?.data && shouldUpdate) {
-        console.log('setting, ', action);
         setAction({
           ...action,
           status: 'success',
