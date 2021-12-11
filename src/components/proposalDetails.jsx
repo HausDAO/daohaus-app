@@ -30,9 +30,6 @@ import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
 import { handleDecimals } from '../utils/general';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const UBER_LINK =
-  '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
-
 const urlify = text => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.replace(urlRegex, url => {
@@ -259,7 +256,6 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         label='uberhaus minion'
         tooltip
         tooltipText={TIP_LABELS.UBER_PROPOSAL}
-        link={UBER_LINK}
         shouldFetchProfile
         name={minionName}
       />
