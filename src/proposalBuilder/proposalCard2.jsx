@@ -14,6 +14,7 @@ import {
   readableTokenBalance,
 } from '../utils/proposalCard';
 import { useDao } from '../contexts/DaoContext';
+import MinionTransfer from './minionTransfer';
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
   return (
@@ -96,46 +97,6 @@ const PropCardOffer = ({ proposal }) => {
   return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
 };
 
-const MinionTransfer = ({ proposal = {} }) => {
-  const { minionAddress } = proposal;
-  const minionAction = useMinionAction(proposal);
-  const { daoVaults } = useDao();
-  console.log(`proposal`, proposal);
-
-  const itemText = useMemo(() => {
-    if (!daoVaults || minionAction?.status !== 'success' || !minionAddress)
-      return;
-    const tokenAddress = minionAction.to;
-
-    const vault = daoVaults?.find(minion => minion.address === minionAddress);
-    const tokenData = vault?.erc20s.find(
-      token =>
-        token.tokenAddress?.toLowerCase() === tokenAddress?.toLowerCase(),
-    );
-    const { balance, name, decimals } = tokenData || {};
-    if (balance && name && decimals && vault) {
-      return `Requesting ${readableTokenBalance({
-        balance,
-        symbol: name,
-        decimals,
-      })} from ${vault?.name || 'Minion'}`;
-    }
-
-    return 'Error Retriving token data';
-  }, [daoVaults && minionAction && !minionAddress]);
-
-  const isLoaded =
-    minionAction?.status === 'error' || minionAction?.status === 'success';
-  return (
-    <AsyncCardTransfer
-      isLoaded={isLoaded}
-      proposal={proposal}
-      incoming
-      itemText={itemText}
-    />
-  );
-};
-
 const CustomTransfer = ({ proposal, customTransferUI }) => {
   if (customTransferUI === 'minionTransfer') {
     return <MinionTransfer proposal={proposal} />;
@@ -143,7 +104,7 @@ const CustomTransfer = ({ proposal, customTransferUI }) => {
   return null;
 };
 
-const AsyncCardTransfer = props => {
+export const AsyncCardTransfer = props => {
   const { isLoaded } = props;
   return (
     <Skeleton isLoaded={isLoaded} height='1.5rem'>
