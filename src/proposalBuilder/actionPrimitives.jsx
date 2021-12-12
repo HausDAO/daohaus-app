@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
 export const StatusCircle = ({ color }) => (
@@ -52,32 +52,34 @@ export const StatusDisplayBox = ({ children }) => (
   </Flex>
 );
 
-export const VotingSection = ({
+export const IsVoting = ({
   voteYes,
   voteNo,
   abstain,
   disableAll,
   loadingAll,
-}) => {
-  return (
-    <Flex justifyContent='space-between'>
-      <VoteButton
-        no
-        onClick={voteNo}
-        isDisabled={disableAll}
-        isLoading={loadingAll}
-      />
-      <AbstainButton
-        onClick={abstain}
-        isDisabled={disableAll}
-        isLoading={loadingAll}
-      />
-      <VoteButton
-        yes
-        onClick={voteYes}
-        isDisabled={disableAll}
-        isLoading={loadingAll}
-      />
-    </Flex>
-  );
+}) => (
+  <Flex justifyContent='space-between'>
+    <VoteButton
+      no
+      onClick={voteNo}
+      isDisabled={disableAll}
+      isLoading={loadingAll}
+    />
+    <AbstainButton
+      onClick={abstain}
+      isDisabled={disableAll}
+      isLoading={loadingAll}
+    />
+    <VoteButton
+      yes
+      onClick={voteYes}
+      isDisabled={disableAll}
+      isLoading={loadingAll}
+    />
+  </Flex>
+);
+
+export const VotingSection = props => {
+  return <IsVoting {...props} />;
 };

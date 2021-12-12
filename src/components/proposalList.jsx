@@ -121,7 +121,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
     setSort(null);
   };
 
-  const isLoaded = proposals?.length;
+  const isLoaded = proposals;
   return (
     <>
       <Flex wrap='wrap' position='relative' justifyContent='space-between'>

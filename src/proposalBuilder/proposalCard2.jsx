@@ -6,17 +6,18 @@ import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 import ContentBox from '../components/ContentBox';
 import { Bold, CardLabel, ParaMd, ParaSm } from '../components/typography';
 import PropActions from './propActions';
-import useMinionAction from '../hooks/useMinionAction';
 import { CUSTOM_DISPLAY } from '../data/proposalData';
-import {
-  generateOfferText,
-  generateRequestText,
-  readableTokenBalance,
-} from '../utils/proposalCard';
-import { useDao } from '../contexts/DaoContext';
+import { generateOfferText, generateRequestText } from '../utils/proposalCard';
 import MinionTransfer from './minionTransfer';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { memberVote } from '../utils/proposalUtils';
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
+  const { address } = useInjectedProvider();
+
+  const hasVoted = useMemo(() => {
+    return memberVote(proposal, address);
+  }, [proposal.proposalId, address]);
   return (
     <ContentBox p='0' mb={4} minHeight='8.875rem'>
       <Flex>
@@ -25,7 +26,11 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
           <Divider orientation='vertical' colorScheme='blackAplha.900' />
         </Center>
         <Flex w='40%'>
-          <PropActions proposal={proposal} interaction={interaction} />
+          <PropActions
+            proposal={proposal}
+            interaction={interaction}
+            hasVoted={hasVoted}
+          />
         </Flex>
       </Flex>
     </ContentBox>

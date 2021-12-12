@@ -55,7 +55,12 @@ const VotingPeriod = ({ proposal }) => {
         <ParaSm>ends {getTime()}</ParaSm>
       </StatusDisplayBox>
       <Progress value={80} mb='3' colorScheme='secondary.500' />
-      <VotingSection voteYes={voteYes} voteNo={voteNo} loadingAll={isLoading} />
+      <VotingSection
+        voteYes={voteYes}
+        voteNo={voteNo}
+        loadingAll={isLoading}
+        proposal={proposal}
+      />
     </PropActionBox>
   );
 };
