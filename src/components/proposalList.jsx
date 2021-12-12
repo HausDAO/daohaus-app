@@ -24,7 +24,6 @@ import {
   handleListSort,
   isProposalActive,
   searchProposals,
-  updateStatus,
 } from '../utils/proposalUtils';
 import ProposalCardV2 from '../proposalBuilder/proposalCard2';
 import SpamFilterListNotification from './spamFilterListNotification';
@@ -55,16 +54,10 @@ const ProposalsList = ({ proposals, customTerms }) => {
     };
     const sameUser = prevMember.current === address;
     if (!proposals || sameUser) return;
-
-    //  Later on, create functionality to only call the assigment below if daoMember is true or false
-    //  This would require setting that functionality in the context
     const activeProposals = proposals.filter(proposal =>
       isProposalActive(proposal),
     );
-    console.log(
-      `activeProposals`,
-      activeProposals.map(p => p.status),
-    );
+
     const filters = getFilters(activeProposals);
     setFilterOptions(filters);
 
@@ -74,7 +67,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
       initializeFilters(
         filters?.main?.[0],
         activeProposals?.length
-          ? { name: 'Newest', value: 'submissionDateDesc' }
+          ? { name: 'Oldest', value: 'submissionDateDesc' }
           : { name: 'Newest', value: 'submissionDateAsc' },
       );
     }

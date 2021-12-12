@@ -306,16 +306,11 @@ export const determineUnreadActivityFeed = proposal => {
   };
 };
 
-export const updateStatus = proposal => ({
-  ...proposal,
-  status: determineProposalStatus(proposal),
-});
-
 export const isTwoWeeksOrOlder = proposal =>
   Number(proposal.createdAt) > (new Date() / 1000 || 0) - 1.21e6;
 
 export const isProposalActive = proposal => {
-  const { status } = proposal;
+  const status = determineProposalStatus(proposal);
   if (status === 'Unsponsored' && !isTwoWeeksOrOlder(proposal)) {
     return true;
   }
@@ -553,7 +548,10 @@ export const handleListFilter = (proposals, filter, daoMember) => {
   if (filter.value === 'All') {
     return updatedProposals;
   }
-  if (filter.value === 'Action Needed' || filter.value === 'Active') {
+  if (filter.value === 'Active') {
+    return updatedProposals.filter(proposal => isProposalActive(proposal));
+  }
+  if (filter.value === 'Action Needed') {
     return updatedProposals.filter(
       proposal =>
         determineUnreadProposalList(proposal, true, daoMember?.memberAddress)

@@ -15,7 +15,7 @@ import {
 const VotingPeriod = ({ proposal }) => {
   const [isLoading, setLoading] = useState(false);
   const { submitTransaction } = useTX();
-  const gracePeriodTime = useMemo(() => {
+  const getTime = () => {
     if (validate.number(Number(proposal?.votingPeriodStarts))) {
       return formatDistanceToNow(
         new Date(Number(proposal?.votingPeriodEnds) * 1000),
@@ -24,7 +24,8 @@ const VotingPeriod = ({ proposal }) => {
         },
       );
     }
-  }, [proposal]);
+    return '--';
+  };
 
   const voteYes = async () => {
     setLoading(true);
@@ -51,7 +52,7 @@ const VotingPeriod = ({ proposal }) => {
         <ParaSm fontWeight='700' mr='1'>
           Voting
         </ParaSm>
-        <ParaSm>ends in {gracePeriodTime}</ParaSm>
+        <ParaSm>ends {getTime()}</ParaSm>
       </StatusDisplayBox>
       <Progress value={80} mb='3' colorScheme='secondary.500' />
       <VotingSection voteYes={voteYes} voteNo={voteNo} loadingAll={isLoading} />
