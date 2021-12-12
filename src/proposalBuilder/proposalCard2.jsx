@@ -19,16 +19,28 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const getVoteData = (proposal, address, daoMember) => {
   const hasVoted = memberVote(proposal, address);
+  const votedYes = hasVoted === 1;
+  const votedNo = hasVoted === 0;
+  const userYes = votedYes && Number(daoMember?.shares);
+  const userNo = votedNo && Number(daoMember?.shares);
+  const totalYes = Number(proposal?.yesShares);
+  const totalNo = Number(proposal?.noShares);
+  const totalVotes = Number(proposal?.yesShares) + Number(proposal?.noShares);
   return {
     hasVoted,
-    votedYes: hasVoted === 1,
-    votedNo: hasVoted === 0,
-    yesVoteAmount:
-      hasVoted === 1 &&
-      `(${readableNumber({ amount: Number(daoMember?.shares) })})`,
-    noVotedAmount:
-      hasVoted === 0 &&
-      `(${readableNumber({ amount: Number(daoMember?.shares) })})`,
+    votedYes,
+    votedNo,
+    userYes,
+    userNo,
+    userYesReadable:
+      daoMember && userYes && `(${readableNumber({ amount: userYes })})`,
+    userNoReadable:
+      daoMember && userNo && `(${readableNumber({ amount: userNo })})`,
+    totalYes,
+    totalNo,
+    totalYesReadable: `(${readableNumber({ amount: totalYes })})`,
+    totalNoReadable: `(${readableNumber({ amount: totalNo })})`,
+    totalVotes,
   };
 };
 
@@ -36,7 +48,10 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
   const { address } = useInjectedProvider();
   const { daoMember } = useDaoMember();
 
-  const voteData = daoMember && getVoteData(proposal, address, daoMember);
+  const voteData = useMemo(() => {
+    return getVoteData(proposal, address, daoMember);
+  }, [daoMember, address, proposal?.status]);
+
   return (
     <ContentBox p='0' mb={4} minHeight='8.875rem'>
       <Flex>

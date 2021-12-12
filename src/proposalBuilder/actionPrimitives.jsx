@@ -113,23 +113,28 @@ export const VotingActive = ({ voteYes, voteNo, disableAll, loadingAll }) => (
 
 export const VotingInactive = props => {
   const { voteData } = props;
-  const { votedNo, votedYes, noVoteAmount, yesVoteAmount } = voteData;
+  const { votedNo, votedYes, totalYesReadable, totalNoReadable } = voteData;
 
   return (
     <>
-      <Progress value={10} mb='2' colorScheme='chakraProgressBarHack' />
+      <Progress
+        value={10}
+        mb='3'
+        size='sm'
+        colorScheme='chakraProgressBarHack'
+      />
       <Flex justifyContent='space-between'>
         <InactiveButton
           leftIcon={votedNo && <AiOutlineClose />}
           shade={votedNo ? 'highlight' : undefined} // chakra wants this
         >
-          No {noVoteAmount}
+          No {totalNoReadable}
         </InactiveButton>
         <InactiveButton
           leftIcon={votedYes && <AiOutlineCheck />}
           shade={votedYes ? 'highlight' : undefined} // chakra wants this
         >
-          Yes {yesVoteAmount}
+          Yes {totalYesReadable}
         </InactiveButton>
       </Flex>
     </>
