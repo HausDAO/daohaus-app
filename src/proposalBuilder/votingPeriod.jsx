@@ -12,7 +12,7 @@ import {
   VotingSection,
 } from './actionPrimitives';
 
-const VotingPeriod = ({ proposal, hasVoted }) => {
+const VotingPeriod = ({ proposal, voteData }) => {
   const [isLoading, setLoading] = useState(false);
   const { submitTransaction } = useTX();
   const getTime = () => {
@@ -59,7 +59,7 @@ const VotingPeriod = ({ proposal, hasVoted }) => {
         voteNo={voteNo}
         loadingAll={isLoading}
         proposal={proposal}
-        hasVoted={hasVoted}
+        voteData={voteData}
       />
     </PropActionBox>
   );

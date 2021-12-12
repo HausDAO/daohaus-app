@@ -15,6 +15,7 @@ export const ProposalStatus = {
   Failed: 'Failed',
   ReadyForProcessing: 'ReadyForProcessing',
   Unsponsored: 'Unsponsored',
+  NeedsExecution: 'NeedsExecution',
 };
 
 export const BASE_ACTIVE_STATES = omit(
@@ -113,6 +114,27 @@ export function determineProposalStatus(proposal) {
   }
   return ProposalStatus.Unknown;
 }
+
+export const checkCheatedExecutionCache = (proposalId, daoid) => {
+  const executeStorage = JSON.parse(
+    sessionStorage.getItem(`needsExecution-${daoid}`),
+  );
+  if (!Array.isArray(executeStorage)) return;
+  return executeStorage?.find(id => proposalId === id);
+};
+
+const checkForExecution = (proposal, daoid) =>
+  proposal &&
+  daoid &&
+  (proposal.status === ProposalStatus.Failed ||
+    proposal.status === ProposalStatus.Passed)
+    ? {
+        ...proposal,
+        status: checkCheatedExecutionCache(proposal, daoid)
+          ? ProposalStatus.NeedsExecution
+          : proposal.status,
+      }
+    : proposal;
 
 const tryGetDetails = details => {
   try {
@@ -540,10 +562,10 @@ export const memberVote = (proposal, userAddress = '0') => {
   return vote ? vote.uintVote : null;
 };
 
-export const handleListFilter = (proposals, filter, daoMember) => {
+export const handleListFilter = (proposals, filter, daoMember, daoid) => {
   const updatedProposals = proposals.map(proposal => ({
     ...proposal,
-    status: determineProposalStatus(proposal),
+    status: checkForExecution(determineProposalStatus(proposal), daoid),
   }));
   if (filter.value === 'All') {
     return updatedProposals;

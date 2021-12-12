@@ -26,6 +26,7 @@ const getVoteData = (proposal, address, daoMember) => {
   const totalYes = Number(proposal?.yesShares);
   const totalNo = Number(proposal?.noShares);
   const totalVotes = Number(proposal?.yesShares) + Number(proposal?.noShares);
+  const isPassing = totalYes > totalNo;
   return {
     hasVoted,
     votedYes,
@@ -41,6 +42,7 @@ const getVoteData = (proposal, address, daoMember) => {
     totalYesReadable: `(${readableNumber({ amount: totalYes })})`,
     totalNoReadable: `(${readableNumber({ amount: totalNo })})`,
     totalVotes,
+    isPassing,
   };
 };
 
@@ -59,7 +61,7 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
         <Center height='100%' minHeight='8.875rem'>
           <Divider orientation='vertical' colorScheme='blackAplha.900' />
         </Center>
-        <Flex w='40%'>
+        <Flex w='45%'>
           <PropActions
             proposal={proposal}
             interaction={interaction}

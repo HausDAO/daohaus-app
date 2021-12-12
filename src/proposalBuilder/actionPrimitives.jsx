@@ -93,7 +93,6 @@ export const StatusDisplayBox = ({ children }) => (
 
 export const VotingBar = ({ voteData }) => {
   const { totalVotes, totalYes } = voteData;
-
   const barPercentage = ((totalYes / totalVotes) * 100).toFixed();
   return (
     <Progress
@@ -107,7 +106,7 @@ export const VotingBar = ({ voteData }) => {
 
 export const VotingActive = ({ voteYes, voteNo, disableAll, loadingAll }) => (
   <>
-    <Progress value={80} mb='2' colorScheme='secondary.500' />
+    <VotingBar />
     <Flex justifyContent='space-between'>
       <VoteButton
         votes='no'

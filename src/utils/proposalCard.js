@@ -73,3 +73,23 @@ export const generateOfferText = proposal => {
   const text = [tributeReadable].filter(Boolean).join(', ');
   return text;
 };
+
+export const cheatNeedsExecution = (proposalId, daoid) => {
+  const executeStorage =
+    JSON.parse(sessionStorage.getItem(`needsExecution-${daoid}`)) || [];
+  const newStorage = JSON.stringify([...executeStorage, proposalId]);
+  sessionStorage.setItem(`needsExecution-${daoid}`, newStorage);
+};
+
+export const removeExecutionCheat = (proposalId, daoid) => {
+  const executeStorage = JSON.parse(
+    sessionStorage.getItem(`needsExecution-${daoid}`),
+  );
+  if (!Array.isArray(executeStorage)) return;
+  const newStorage = JSON.stringify(
+    executeStorage.filter(id => id !== proposalId),
+  );
+  sessionStorage.setItem(`needsExecution-${daoid}`, newStorage);
+};
+
+cheatNeedsExecution('0', '0xf28df12a012d55717790ded8c2b246280ab4abab');
