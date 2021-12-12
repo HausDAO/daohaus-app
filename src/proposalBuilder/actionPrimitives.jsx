@@ -91,6 +91,20 @@ export const StatusDisplayBox = ({ children }) => (
   </Flex>
 );
 
+export const VotingBar = ({ voteData }) => {
+  const { totalVotes, totalYes } = voteData;
+
+  const barPercentage = ((totalYes / totalVotes) * 100).toFixed();
+  return (
+    <Progress
+      value={barPercentage}
+      mb='3'
+      size='sm'
+      colorScheme='chakraProgressBarHack'
+    />
+  );
+};
+
 export const VotingActive = ({ voteYes, voteNo, disableAll, loadingAll }) => (
   <>
     <Progress value={80} mb='2' colorScheme='secondary.500' />
@@ -117,12 +131,7 @@ export const VotingInactive = props => {
 
   return (
     <>
-      <Progress
-        value={10}
-        mb='3'
-        size='sm'
-        colorScheme='chakraProgressBarHack'
-      />
+      <VotingBar voteData={voteData} />
       <Flex justifyContent='space-between'>
         <InactiveButton
           leftIcon={votedNo && <AiOutlineClose />}
