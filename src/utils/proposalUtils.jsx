@@ -17,10 +17,11 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
 };
 
-export const ACTIVE_STATES = omit(
-  ['Cancelled', 'Passed', 'Failed'],
+export const BASE_ACTIVE_STATES = omit(
+  ['Passed', 'Failed', 'Cancelled'],
   ProposalStatus,
 );
+
 export const PROPOSAL_TYPES = {
   CORE: 'Core',
   MEMBER: 'Member Proposal',
@@ -303,6 +304,25 @@ export const determineUnreadActivityFeed = proposal => {
       (needsMemberVote || needsProcessing || !proposal.sponsored),
     message,
   };
+};
+
+export const updateStatus = proposal => ({
+  ...proposal,
+  status: determineProposalStatus(proposal),
+});
+
+export const isTwoWeeksOrOlder = proposal =>
+  Number(proposal.createdAt) > (new Date() / 1000 || 0) - 1.21e6;
+
+export const isProposalActive = proposal => {
+  const { status } = proposal;
+  if (status === 'Unsponsored' && !isTwoWeeksOrOlder(proposal)) {
+    return true;
+  }
+  if (BASE_ACTIVE_STATES[status]) {
+    return true;
+  }
+  return false;
 };
 
 export const determineUnreadProposalList = (

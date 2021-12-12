@@ -94,22 +94,16 @@ export const defaultFilterOptions = {
   ],
 };
 
-export const getFilters = (daoMember, unread) => {
-  // if (+daoMember?.shares && unread?.length) {
-  //   return {
-  //     ...defaultFilterOptions,
-  //     main: [actionNeededFilter, allFilter],
-  //   };
-  // }
-  // if (!+daoMember?.shares && unread?.length) {
-  //   return {
-  //     ...defaultFilterOptions,
-  //     main: [activeFilter, allFilter],
-  //   };
-  // }
-
-  return defaultFilterOptions;
-};
+export const getFilters = activeProposals =>
+  activeProposals?.length
+    ? {
+        ...defaultFilterOptions,
+        main: [activeFilter, allFilter, actionNeededFilter],
+      }
+    : {
+        ...defaultFilterOptions,
+        main: [allFilter, activeFilter, actionNeededFilter],
+      };
 
 export const sortOptions = {
   main: [

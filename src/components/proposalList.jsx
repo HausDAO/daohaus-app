@@ -16,14 +16,15 @@ import {
   getFilters,
   sortOptions,
   allFilter,
-  activeFilter,
 } from '../utils/proposalContent';
 import TextBox from './TextBox';
 import {
   determineUnreadProposalList,
   handleListFilter,
   handleListSort,
+  isProposalActive,
   searchProposals,
+  updateStatus,
 } from '../utils/proposalUtils';
 import ProposalCardV2 from '../proposalBuilder/proposalCard2';
 import SpamFilterListNotification from './spamFilterListNotification';
@@ -48,28 +49,34 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const searchMode = useRef(false);
 
   useEffect(() => {
-    const initializeFilters = () => {
-      setFilter(activeFilter);
-      setSort({ name: 'Newest', value: 'submissionDateDesc' });
+    const initializeFilters = (initFilter, initSort) => {
+      setFilter(initFilter);
+      setSort(initSort);
     };
     const sameUser = prevMember.current === address;
     if (!proposals || sameUser) return;
 
     //  Later on, create functionality to only call the assigment below if daoMember is true or false
     //  This would require setting that functionality in the context
-    const unread = proposals.filter(
-      proposal =>
-        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
-          ?.unread,
+    const activeProposals = proposals.filter(proposal =>
+      isProposalActive(proposal),
     );
-
-    const newOptions = getFilters(daoMember, unread);
-    setFilterOptions(newOptions);
+    console.log(
+      `activeProposals`,
+      activeProposals.map(p => p.status),
+    );
+    const filters = getFilters(activeProposals);
+    setFilterOptions(filters);
 
     const hasSavedChanges =
       prevMember.current === 'No Address' && filter && sort;
     if (!hasSavedChanges) {
-      initializeFilters();
+      initializeFilters(
+        filters?.main?.[0],
+        activeProposals?.length
+          ? { name: 'Newest', value: 'submissionDateDesc' }
+          : { name: 'Newest', value: 'submissionDateAsc' },
+      );
     }
     prevMember.current = address;
   }, [daoMember, proposals, filter, sort]);
