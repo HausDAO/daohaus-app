@@ -17,7 +17,7 @@ export const allFilter = {
 };
 
 export const defaultFilterOptions = {
-  main: [allFilter],
+  main: [activeFilter, allFilter],
   'Proposal Type': [
     {
       name: 'Funding Proposals',
@@ -95,18 +95,19 @@ export const defaultFilterOptions = {
 };
 
 export const getFilters = (daoMember, unread) => {
-  if (+daoMember?.shares && unread?.length) {
-    return {
-      ...defaultFilterOptions,
-      main: [actionNeededFilter, allFilter],
-    };
-  }
-  if (!+daoMember?.shares && unread?.length) {
-    return {
-      ...defaultFilterOptions,
-      main: [activeFilter, allFilter],
-    };
-  }
+  // if (+daoMember?.shares && unread?.length) {
+  //   return {
+  //     ...defaultFilterOptions,
+  //     main: [actionNeededFilter, allFilter],
+  //   };
+  // }
+  // if (!+daoMember?.shares && unread?.length) {
+  //   return {
+  //     ...defaultFilterOptions,
+  //     main: [activeFilter, allFilter],
+  //   };
+  // }
+
   return defaultFilterOptions;
 };
 

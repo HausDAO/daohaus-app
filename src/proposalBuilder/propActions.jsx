@@ -29,6 +29,20 @@ const PropActions = props => {
   if (status === 'InQueue') {
     return <InQueue {...props} />;
   }
+  if (status === 'GracePeriod') {
+    return 'Grace Period';
+  }
+  if (status === 'ReadyForProcessing') {
+    return 'Ready For Processing';
+  }
+  // If passed and is Minion
+  if (status === 'Passed') {
+    return 'Passed';
+  }
+  if (status === 'Failed') {
+    return 'Failed';
+  }
+
   return null;
 };
 

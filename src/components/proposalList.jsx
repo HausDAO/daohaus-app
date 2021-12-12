@@ -16,6 +16,7 @@ import {
   getFilters,
   sortOptions,
   allFilter,
+  activeFilter,
 } from '../utils/proposalContent';
 import TextBox from './TextBox';
 import {
@@ -32,12 +33,11 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
   const { isActive } = useBoost();
-  const interaction = useCanInteract();
+  const interaction = useCanInteract(['isConnected', 'isSameChain']);
 
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
 
-  const [isLoaded, setIsLoaded] = useState(false);
   const { daoid } = useParams();
 
   const [filterOptions, setFilterOptions] = useState(defaultFilterOptions);
@@ -48,12 +48,10 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const searchMode = useRef(false);
 
   useEffect(() => {
-    if (proposals) {
-      setIsLoaded(true);
-    }
-  }, [proposals]);
-
-  useEffect(() => {
+    const initializeFilters = () => {
+      setFilter(activeFilter);
+      setSort({ name: 'Newest', value: 'submissionDateDesc' });
+    };
     const sameUser = prevMember.current === address;
     if (!proposals || sameUser) return;
 
@@ -71,12 +69,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
     const hasSavedChanges =
       prevMember.current === 'No Address' && filter && sort;
     if (!hasSavedChanges) {
-      setFilter(newOptions?.main?.[0] || allFilter);
-      setSort(
-        unread?.length
-          ? { name: 'Oldest', value: 'submissionDateAsc' }
-          : { name: 'Newest', value: 'submissionDateDesc' },
-      );
+      initializeFilters();
     }
     prevMember.current = address;
   }, [daoMember, proposals, filter, sort]);
@@ -127,6 +120,8 @@ const ProposalsList = ({ proposals, customTerms }) => {
     setFilter(null);
     setSort(null);
   };
+
+  const isLoaded = proposals?.length;
   return (
     <>
       <Flex wrap='wrap' position='relative' justifyContent='space-between'>
