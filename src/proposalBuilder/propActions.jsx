@@ -2,6 +2,7 @@ import React from 'react';
 import VotingPeriod from './votingPeriod';
 import InQueue from './inQueue';
 import Unsponsored from './Unsponsored';
+import { ReadyForProcessing } from './readyForProcessing';
 
 // export const ProposalStatus = {
 //   Unknown: 'Unknown',
@@ -33,7 +34,7 @@ const PropActions = props => {
     return 'Grace Period';
   }
   if (status === 'ReadyForProcessing') {
-    return 'Ready For Processing';
+    return <ReadyForProcessing {...props} />;
   }
   // If passed and is Minion
   if (status === 'Passed') {

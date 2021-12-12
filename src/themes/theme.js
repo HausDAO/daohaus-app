@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/react';
+import { extendTheme, theme } from '@chakra-ui/react';
 import { lighten, darken } from 'polished';
 // theme
 import { defaultTheme } from './defaultTheme';
@@ -83,6 +83,10 @@ export const createTheme = daoTheme => {
         700: themeOverrides.modeAlpha500,
         800: themeOverrides.modeAlpha500,
         900: themeOverrides.modeAlpha500,
+      },
+      chakraProgressBarHack: {
+        200: themeOverrides.secondary500,
+        500: themeOverrides.secondary500,
       },
     },
     images: {

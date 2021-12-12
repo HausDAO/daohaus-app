@@ -12,7 +12,7 @@ import {
   VotingSection,
 } from './actionPrimitives';
 
-const VotingPeriod = ({ proposal }) => {
+const VotingPeriod = ({ proposal, hasVoted }) => {
   const [isLoading, setLoading] = useState(false);
   const { submitTransaction } = useTX();
   const getTime = () => {
@@ -52,14 +52,14 @@ const VotingPeriod = ({ proposal }) => {
         <ParaSm fontWeight='700' mr='1'>
           Voting
         </ParaSm>
-        <ParaSm>ends {getTime()}</ParaSm>
+        <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
       </StatusDisplayBox>
-      <Progress value={80} mb='3' colorScheme='secondary.500' />
       <VotingSection
         voteYes={voteYes}
         voteNo={voteNo}
         loadingAll={isLoading}
         proposal={proposal}
+        hasVoted={hasVoted}
       />
     </PropActionBox>
   );

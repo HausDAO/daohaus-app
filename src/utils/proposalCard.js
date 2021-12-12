@@ -7,16 +7,23 @@ export const readableNumber = ({
   decimals = 1,
   separator = '',
 }) => {
-  if (amount == null || unit == null) return null;
+  if (amount == null) return null;
   if (amount > 0 && amount < 1) {
     return `${Number(amount.toFixed(4))} ${unit}`;
   }
+  if (unit) {
+    return `${humanFormat(amount, {
+      unit: ` ${unit}`,
+      decimals,
+      separator,
+    })}`;
+  }
   return `${humanFormat(amount, {
-    unit: ` ${unit}`,
     decimals,
     separator,
   })}`;
 };
+
 export const readableTokenBalance = tokenData => {
   const { balance, decimals, symbol } = tokenData || {};
   if (!balance || !decimals || !symbol) return null;

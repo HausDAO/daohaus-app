@@ -7,17 +7,36 @@ import ContentBox from '../components/ContentBox';
 import { Bold, CardLabel, ParaMd, ParaSm } from '../components/typography';
 import PropActions from './propActions';
 import { CUSTOM_DISPLAY } from '../data/proposalData';
-import { generateOfferText, generateRequestText } from '../utils/proposalCard';
+import {
+  generateOfferText,
+  generateRequestText,
+  readableNumber,
+} from '../utils/proposalCard';
 import MinionTransfer from './minionTransfer';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { memberVote } from '../utils/proposalUtils';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+
+const getVoteData = (proposal, address, daoMember) => {
+  const hasVoted = memberVote(proposal, address);
+  return {
+    hasVoted,
+    votedYes: hasVoted === 1,
+    votedNo: hasVoted === 0,
+    yesVoteAmount:
+      hasVoted === 1 &&
+      `(${readableNumber({ amount: Number(daoMember?.shares) })})`,
+    noVotedAmount:
+      hasVoted === 0 &&
+      `(${readableNumber({ amount: Number(daoMember?.shares) })})`,
+  };
+};
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
   const { address } = useInjectedProvider();
+  const { daoMember } = useDaoMember();
 
-  const hasVoted = useMemo(() => {
-    return memberVote(proposal, address);
-  }, [proposal.proposalId, address]);
+  const voteData = daoMember && getVoteData(proposal, address, daoMember);
   return (
     <ContentBox p='0' mb={4} minHeight='8.875rem'>
       <Flex>
@@ -29,7 +48,7 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
           <PropActions
             proposal={proposal}
             interaction={interaction}
-            hasVoted={hasVoted}
+            voteData={voteData}
           />
         </Flex>
       </Flex>
