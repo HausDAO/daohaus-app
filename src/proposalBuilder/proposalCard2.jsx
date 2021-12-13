@@ -3,19 +3,20 @@ import { useParams, Link } from 'react-router-dom';
 import { Flex, Box, Divider, Center, Skeleton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
 
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from '../components/ContentBox';
 import { Bold, CardLabel, ParaMd, ParaSm } from '../components/typography';
 import PropActions from './propActions';
+import MinionTransfer from './minionTransfer';
+
 import { CUSTOM_DISPLAY } from '../data/proposalData';
 import {
   generateOfferText,
   generateRequestText,
   readableNumber,
 } from '../utils/proposalCard';
-import MinionTransfer from './minionTransfer';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { memberVote } from '../utils/proposalUtils';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const getVoteData = (proposal, address, daoMember) => {
   const hasVoted = memberVote(proposal, address);

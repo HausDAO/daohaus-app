@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
@@ -16,21 +16,12 @@ import {
 } from './actionPrimitives';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const Unsponsored = ({ interaction, proposal, canInteract, isMember }) => {
+const Unsponsored = ({ proposal, canInteract, isMember }) => {
   const { daoOverview } = useDao();
   const { address } = useInjectedProvider();
 
   const [isLoading, setLoading] = useState(false);
   const { submitTransaction } = useTX();
-
-  const sponsorProposal = async () => {
-    setLoading(true);
-    await submitTransaction({
-      args: [proposal.proposalId],
-      tx: TX.SPONSOR_PROPOSAL,
-    });
-    setLoading(false);
-  };
 
   const deposit = useMemo(() => {
     const { depositToken, proposalDeposit } = daoOverview || {};
@@ -43,7 +34,22 @@ const Unsponsored = ({ interaction, proposal, canInteract, isMember }) => {
     });
   }, [daoOverview]);
 
-  const cancelProposal = () => {};
+  const sponsorProposal = async () => {
+    setLoading(true);
+    await submitTransaction({
+      args: [proposal.proposalId],
+      tx: TX.SPONSOR_PROPOSAL,
+    });
+    setLoading(false);
+  };
+  const cancelProposal = async () => {
+    setLoading(true);
+    await submitTransaction({
+      args: [proposal.proposalId],
+      tx: TX.CANCEL_PROPOSAL,
+    });
+    setLoading(false);
+  };
 
   return (
     <PropActionBox>
@@ -74,6 +80,7 @@ const Unsponsored = ({ interaction, proposal, canInteract, isMember }) => {
             variant='outline'
             disabled={!canInteract}
             onClick={cancelProposal}
+            isLoading={isLoading}
           >
             Cancel
           </Button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, Flex, Progress } from '@chakra-ui/react';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
+
 import { ParaSm } from '../components/typography';
 
 export const StatusCircle = ({ color }) => (

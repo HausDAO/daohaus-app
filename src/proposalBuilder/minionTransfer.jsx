@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 
+import { useDao } from '../contexts/DaoContext';
 import useMinionAction from '../hooks/useMinionAction';
 import { readableTokenBalance } from '../utils/proposalCard';
-import { useDao } from '../contexts/DaoContext';
 import { AsyncCardTransfer } from './proposalCard2';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR PAYROLL PROPOSALS

@@ -19,7 +19,6 @@ import {
 } from '../utils/proposalContent';
 import TextBox from './TextBox';
 import {
-  determineUnreadProposalList,
   handleListFilter,
   handleListSort,
   isProposalActive,

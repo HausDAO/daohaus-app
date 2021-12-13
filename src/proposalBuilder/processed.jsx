@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React from 'react';
 import { Button, Flex } from '@chakra-ui/react';
 import { AiOutlineCheck } from 'react-icons/ai';
+
 import { ParaSm } from '../components/typography';
 import {
   InactiveButton,
@@ -11,18 +11,9 @@ import {
   UserVoteData,
   VotingInactive,
 } from './actionPrimitives';
-import { useDao } from '../contexts/DaoContext';
-import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
-import {
-  cheatExecutionStatus,
-  removeExecutionCheat,
-} from '../utils/proposalCard';
 
 const Processed = props => {
   const { voteData } = props;
-  console.log(voteData);
-  const { daoid, daochain } = useParams();
 
   return (
     <PropActionBox>

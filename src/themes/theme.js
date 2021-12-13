@@ -1,4 +1,4 @@
-import { extendTheme, theme } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
 import { lighten, darken } from 'polished';
 // theme
 import { defaultTheme } from './defaultTheme';

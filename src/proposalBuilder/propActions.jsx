@@ -1,12 +1,14 @@
 import React from 'react';
+
 import VotingPeriod from './votingPeriod';
 import InQueue from './inQueue';
 import Unsponsored from './Unsponsored';
 import ReadyForProcessing from './readyForProcessing';
 import GracePeriod from './gracePeriod';
-import { ProposalStatus } from '../utils/proposalUtils';
 import Processed from './processed';
+import Cancelled from './Cancelled';
 
+import { ProposalStatus } from '../utils/proposalUtils';
 // export const ProposalStatus = {
 //   Unknown: 'Unknown',
 //   InQueue: 'InQueue',
@@ -28,7 +30,7 @@ const PropActions = props => {
     return <Unsponsored {...props} />;
   }
   if (status === ProposalStatus.Cancelled) {
-    return 'Cancelled';
+    return <Cancelled {...props} />;
   }
   if (status === ProposalStatus.VotingPeriod) {
     return <VotingPeriod {...props} />;

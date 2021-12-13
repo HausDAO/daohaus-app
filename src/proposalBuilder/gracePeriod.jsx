@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
+
 import { ParaSm } from '../components/typography';
-import { validate } from '../utils/validation';
 import {
   PropActionBox,
   StatusCircle,
@@ -9,6 +9,7 @@ import {
   UserVoteData,
   VotingInactive,
 } from './actionPrimitives';
+import { validate } from '../utils/validation';
 
 const GracePeriod = ({ proposal, voteData }) => {
   const getTime = () => {
