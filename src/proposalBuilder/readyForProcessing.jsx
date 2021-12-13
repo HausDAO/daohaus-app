@@ -17,7 +17,7 @@ import {
   removeExecutionCheat,
 } from '../utils/proposalCard';
 
-export const ReadyForProcessing = props => {
+const ReadyForProcessing = props => {
   const { proposal, voteData } = props;
   const { isPassing } = voteData;
   const { daoProposals } = useDao();
@@ -78,28 +78,31 @@ export const ReadyForProcessing = props => {
       <VotingInactive {...props} justifyContent='space-between' />
       <Flex mt='2' alignItems='center'>
         <UserVoteData voteData={voteData} />
-        {isNextProposal ? (
-          <Button
-            size='sm'
-            mr='2'
-            onClick={processProposal}
-            isLoading={loading}
-          >
-            Process
-          </Button>
-        ) : (
-          <Button
-            size='sm'
-            mr='2'
-            variant='outline'
-            as={Link}
-            to={`/dao/${daochain}/${daoid}/proposals/${nextProposal?.proposalId}`}
-          >
-            Next ({nextProposal?.proposalId})
-          </Button>
-        )}
+        <Flex ml='auto'>
+          {isNextProposal ? (
+            <Button
+              size='sm'
+              mr='2'
+              onClick={processProposal}
+              isLoading={loading}
+            >
+              Process
+            </Button>
+          ) : (
+            <Button
+              size='sm'
+              mr='2'
+              variant='outline'
+              as={Link}
+              to={`/dao/${daochain}/${daoid}/proposals/${nextProposal?.proposalId}`}
+            >
+              Next ({nextProposal?.proposalId})
+            </Button>
+          )}
+        </Flex>
         <Button size='sm'>Early Execute</Button>
       </Flex>
     </PropActionBox>
   );
 };
+export default ReadyForProcessing;

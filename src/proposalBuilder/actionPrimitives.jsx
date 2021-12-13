@@ -95,12 +95,16 @@ export const StatusDisplayBox = ({ children }) => (
 export const UserVoteData = ({ voteData = {} }) => {
   const { userNo, userNoReadable, userYes, userYesReadable } = voteData;
   return (
-    <Flex alignItems='center' minHeight='2rem' mr='auto'>
-      <ParaSm fontStyle='italic'>
-        you voted {userNo > 0 && `No ${userNoReadable}`}
-        {userYes > 0 && `Yes ${userYesReadable}`}
-      </ParaSm>
-    </Flex>
+    <>
+      {(userNo || userYes) && (
+        <Flex alignItems='center' minHeight='2rem'>
+          <ParaSm fontStyle='italic'>
+            you voted {userNo > 0 && `No ${userNoReadable}`}
+            {userYes > 0 && `Yes ${userYesReadable}`}
+          </ParaSm>
+        </Flex>
+      )}
+    </>
   );
 };
 

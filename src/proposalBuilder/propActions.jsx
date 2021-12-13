@@ -2,7 +2,10 @@ import React from 'react';
 import VotingPeriod from './votingPeriod';
 import InQueue from './inQueue';
 import Unsponsored from './Unsponsored';
-import { ReadyForProcessing } from './readyForProcessing';
+import ReadyForProcessing from './readyForProcessing';
+import GracePeriod from './gracePeriod';
+import { ProposalStatus } from '../utils/proposalUtils';
+import Processed from './processed';
 
 // export const ProposalStatus = {
 //   Unknown: 'Unknown',
@@ -21,24 +24,31 @@ const PropActions = props => {
   const {
     proposal: { status },
   } = props;
-  if (status === 'Unsponsored') {
+  if (status === ProposalStatus.Unsponsored) {
     return <Unsponsored {...props} />;
   }
-  if (status === 'VotingPeriod') {
+  if (status === ProposalStatus.Cancelled) {
+    return 'Cancelled';
+  }
+  if (status === ProposalStatus.VotingPeriod) {
     return <VotingPeriod {...props} />;
   }
-  if (status === 'InQueue') {
+  if (status === ProposalStatus.InQueue) {
     return <InQueue {...props} />;
   }
-  if (status === 'GracePeriod') {
-    return 'Grace Period';
+  if (status === ProposalStatus.GracePeriod) {
+    return <GracePeriod {...props} />;
   }
-  if (status === 'ReadyForProcessing') {
+  if (status === ProposalStatus.ReadyForProcessing) {
     return <ReadyForProcessing {...props} />;
   }
-  // If passed and is Minion
-  if (status === 'Passed') {
-    return 'Passed';
+
+  if (
+    status === ProposalStatus.Passed ||
+    status === ProposalStatus.Failed ||
+    status === ProposalStatus.NeedsExecution
+  ) {
+    return <Processed {...props} />;
   }
   if (status === 'Failed') {
     return 'Failed';

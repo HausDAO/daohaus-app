@@ -1,0 +1,40 @@
+import React, { useState } from 'react';
+import { formatDistanceToNow } from 'date-fns';
+import { ParaSm } from '../components/typography';
+import { validate } from '../utils/validation';
+import {
+  PropActionBox,
+  StatusCircle,
+  StatusDisplayBox,
+  UserVoteData,
+  VotingInactive,
+} from './actionPrimitives';
+
+const GracePeriod = ({ proposal, voteData }) => {
+  const getTime = () => {
+    if (validate.number(Number(proposal?.votingPeriodStarts))) {
+      return formatDistanceToNow(
+        new Date(Number(proposal?.votingPeriodEnds) * 1000),
+        {
+          addSuffix: true,
+        },
+      );
+    }
+    return '--';
+  };
+
+  return (
+    <PropActionBox>
+      <StatusDisplayBox>
+        <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
+        <ParaSm fontWeight='700' mr='1'>
+          Voting
+        </ParaSm>
+        <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
+      </StatusDisplayBox>
+      <VotingInactive voteData={voteData} />
+      {voteData.hasVoted && <UserVoteData voteData={voteData} />}
+    </PropActionBox>
+  );
+};
+export default GracePeriod;

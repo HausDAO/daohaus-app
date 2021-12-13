@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Progress } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Flex } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import { ParaSm } from '../components/typography';
 import { validate } from '../utils/validation';
@@ -12,12 +12,10 @@ import {
   UserVoteData,
   VotingActive,
   VotingInactive,
-  VotingSection,
 } from './actionPrimitives';
 
 const VotingPeriod = ({ proposal, voteData }) => {
   const [isLoading, setLoading] = useState(false);
-  console.log(`voteData`, voteData);
   const { submitTransaction } = useTX();
   const getTime = () => {
     if (validate.number(Number(proposal?.votingPeriodStarts))) {
@@ -52,7 +50,7 @@ const VotingPeriod = ({ proposal, voteData }) => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
-        <StatusCircle color='green' />
+        <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
           Voting
         </ParaSm>
@@ -64,13 +62,18 @@ const VotingPeriod = ({ proposal, voteData }) => {
           <UserVoteData voteData={voteData} />
         </>
       ) : (
-        <VotingActive
-          voteYes={voteYes}
-          voteNo={voteNo}
-          loadingAll={isLoading}
-          proposal={proposal}
-          voteData={voteData}
-        />
+        <>
+          <VotingActive
+            voteYes={voteYes}
+            voteNo={voteNo}
+            loadingAll={isLoading}
+            proposal={proposal}
+            voteData={voteData}
+          />
+          <Flex alignItems='center' minHeight='2rem' mt={2}>
+            <ParaSm fontStyle='italic'> Vote if you&apos;re a member</ParaSm>
+          </Flex>
+        </>
       )}
     </PropActionBox>
   );
