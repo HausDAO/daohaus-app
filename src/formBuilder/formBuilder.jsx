@@ -36,6 +36,7 @@ const FormBuilder = props => {
     txID,
     logValues,
     tx,
+    nextFormHook,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
@@ -170,13 +171,14 @@ const FormBuilder = props => {
     //  HANDLE GO TO NEXT
     if (next && typeof goToNext === 'function') {
       if (typeof next === 'string') {
-        if (
-          props.onSubmit &&
-          !props.tx &&
-          typeof props.onSubmit === 'function'
-        ) {
-          const res = await handleSubmitCallback();
-          if (!res) {
+        if (nextFormHook) {
+          try {
+            setFormState('loading');
+            await nextFormHook({ values });
+            setFormState('success');
+          } catch (error) {
+            console.error(error);
+            setFormState('error');
             return;
           }
         }

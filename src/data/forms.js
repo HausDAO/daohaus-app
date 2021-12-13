@@ -727,12 +727,13 @@ export const BOOST_FORMS = {
         errorMessage: true,
       },
     },
-    onSubmit: async ({ values }) => {
+    nextFormHook: async ({ values }) => {
       const snapshotSpace = values?.space;
       const space = await getSnapshotSpaces(snapshotSpace);
       if (!space.space?.id) {
         throw Error('No space found!');
       }
+      return true;
     },
   },
   SPAM_FILTER: {
