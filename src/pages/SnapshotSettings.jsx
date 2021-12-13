@@ -39,8 +39,6 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
         address,
       );
       const space = await getSnapshotSpaces(spaceName);
-      console.log(spaceName);
-      console.log(space);
       if (!space.space?.id) {
         errorToast({
           title: 'No space found!',
@@ -58,8 +56,7 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
         signature,
       };
 
-      const updateRes = await boostPost('dao/boost', updatedBoost);
-      console.log('updateRes', updateRes);
+      await boostPost('dao/boost', updatedBoost);
       setLoading(false);
       refetchMetaData();
       successToast({
@@ -67,7 +64,6 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
         description: 'You DAOd it!',
       });
     } catch (err) {
-      console.log('update error', err);
       setLoading(false);
       errorToast({
         title: 'Something went wrong',
