@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Button } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
@@ -14,10 +14,11 @@ import {
   StatusCircle,
   StatusDisplayBox,
 } from './actionPrimitives';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const Unsponsored = ({ interaction, proposal }) => {
+const Unsponsored = ({ interaction, proposal, canInteract, isMember }) => {
   const { daoOverview } = useDao();
-  const { canInteract } = interaction || {};
+  const { address } = useInjectedProvider();
 
   const [isLoading, setLoading] = useState(false);
   const { submitTransaction } = useTX();
@@ -42,6 +43,8 @@ const Unsponsored = ({ interaction, proposal }) => {
     });
   }, [daoOverview]);
 
+  const cancelProposal = () => {};
+
   return (
     <PropActionBox>
       <StatusDisplayBox>
@@ -51,16 +54,31 @@ const Unsponsored = ({ interaction, proposal }) => {
         </ParaSm>
       </StatusDisplayBox>
       <ParaSm mb={3}>{propStatusText.Unsponsored}</ParaSm>
-      <Button
-        size='sm'
-        minW='4rem'
-        fontWeight='700'
-        disabled={!canInteract}
-        onClick={sponsorProposal}
-        isLoading={isLoading}
-      >
-        Sponsor {deposit && `(${deposit})`}
-      </Button>
+      <Flex>
+        <Button
+          size='sm'
+          minW='4rem'
+          fontWeight='700'
+          mr='auto'
+          disabled={!canInteract || !isMember}
+          onClick={sponsorProposal}
+          isLoading={isLoading}
+        >
+          Sponsor {deposit && `(${deposit})`}
+        </Button>
+        {address?.toLowerCase() === proposal?.proposer?.toLowerCase() && (
+          <Button
+            size='sm'
+            fontWeight='700'
+            minW='4rem'
+            variant='outline'
+            disabled={!canInteract}
+            onClick={cancelProposal}
+          >
+            Cancel
+          </Button>
+        )}
+      </Flex>
     </PropActionBox>
   );
 };

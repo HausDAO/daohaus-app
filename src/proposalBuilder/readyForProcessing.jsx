@@ -18,7 +18,7 @@ import {
 } from '../utils/proposalCard';
 
 const ReadyForProcessing = props => {
-  const { proposal, voteData } = props;
+  const { proposal, voteData, canInteract } = props;
   const { isPassing } = voteData;
   const { daoProposals } = useDao();
   const { daoid, daochain } = useParams();
@@ -69,9 +69,9 @@ const ReadyForProcessing = props => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
-        <StatusCircle color='green' />
+        <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
-          Passed
+          {voteData?.isPassing ? 'Passed' : 'Failed'}
         </ParaSm>
         <ParaSm fontStyle='italic'>and needs processing</ParaSm>
       </StatusDisplayBox>
@@ -85,6 +85,7 @@ const ReadyForProcessing = props => {
               mr='2'
               onClick={processProposal}
               isLoading={loading}
+              isDisabled={!canInteract}
             >
               Process
             </Button>

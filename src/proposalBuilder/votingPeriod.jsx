@@ -14,7 +14,7 @@ import {
   VotingInactive,
 } from './actionPrimitives';
 
-const VotingPeriod = ({ proposal, voteData }) => {
+const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
   const [isLoading, setLoading] = useState(false);
   const { submitTransaction } = useTX();
   const getTime = () => {
@@ -67,6 +67,7 @@ const VotingPeriod = ({ proposal, voteData }) => {
             voteYes={voteYes}
             voteNo={voteNo}
             loadingAll={isLoading}
+            disableAll={!canInteract || !isMember}
             proposal={proposal}
             voteData={voteData}
           />

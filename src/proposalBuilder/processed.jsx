@@ -21,7 +21,7 @@ import {
 
 const Processed = props => {
   const { voteData } = props;
-
+  console.log(voteData);
   const { daoid, daochain } = useParams();
 
   return (

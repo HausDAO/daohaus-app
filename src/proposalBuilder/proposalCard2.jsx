@@ -48,7 +48,8 @@ const getVoteData = (proposal, address, daoMember) => {
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
   const { address } = useInjectedProvider();
-  const { daoMember } = useDaoMember();
+  const { daoMember, isMember } = useDaoMember();
+  const { canInteract } = interaction || {};
 
   const voteData = useMemo(() => {
     return getVoteData(proposal, address, daoMember);
@@ -64,8 +65,9 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
         <Flex w='45%'>
           <PropActions
             proposal={proposal}
-            interaction={interaction}
+            canInteract={canInteract}
             voteData={voteData}
+            isMember={isMember}
           />
         </Flex>
       </Flex>

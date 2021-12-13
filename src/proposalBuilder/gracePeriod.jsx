@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { ParaSm } from '../components/typography';
 import { validate } from '../utils/validation';
@@ -28,7 +28,7 @@ const GracePeriod = ({ proposal, voteData }) => {
       <StatusDisplayBox>
         <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
-          Voting
+          Grace
         </ParaSm>
         <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
       </StatusDisplayBox>
