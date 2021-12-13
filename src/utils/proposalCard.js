@@ -74,7 +74,7 @@ export const generateOfferText = proposal => {
   return text;
 };
 
-export const cheatNeedsExecution = (proposalId, daoid) => {
+export const cheatExecutionStatus = (proposalId, daoid) => {
   const executeStorage =
     JSON.parse(sessionStorage.getItem(`needsExecution-${daoid}`)) || [];
   const newStorage = JSON.stringify([...executeStorage, proposalId]);
@@ -92,4 +92,4 @@ export const removeExecutionCheat = (proposalId, daoid) => {
   sessionStorage.setItem(`needsExecution-${daoid}`, newStorage);
 };
 
-cheatNeedsExecution('0', '0xf28df12a012d55717790ded8c2b246280ab4abab');
+cheatExecutionStatus('0', '0xf28df12a012d55717790ded8c2b246280ab4abab');

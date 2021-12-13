@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, Flex, Progress } from '@chakra-ui/react';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
+import { ParaSm } from '../components/typography';
 
 export const StatusCircle = ({ color }) => (
   <Box borderRadius='50%' background={color} h='.6rem' w='.6rem' mr='2' />
@@ -91,12 +92,26 @@ export const StatusDisplayBox = ({ children }) => (
   </Flex>
 );
 
-export const VotingBar = ({ voteData }) => {
+export const UserVoteData = ({ voteData = {} }) => {
+  const { userNo, userNoReadable, userYes, userYesReadable } = voteData;
+  return (
+    <Flex alignItems='center' minHeight='2rem' mr='auto'>
+      <ParaSm fontStyle='italic'>
+        you voted {userNo > 0 && `No ${userNoReadable}`}
+        {userYes > 0 && `Yes ${userYesReadable}`}
+      </ParaSm>
+    </Flex>
+  );
+};
+
+export const VotingBar = ({ voteData = {} }) => {
   const { totalVotes, totalYes } = voteData;
-  const barPercentage = ((totalYes / totalVotes) * 100).toFixed();
+  const barPercentage =
+    totalVotes && totalYes && ((totalYes / totalVotes) * 100).toFixed();
+
   return (
     <Progress
-      value={barPercentage}
+      value={barPercentage || 0}
       mb='3'
       size='sm'
       colorScheme='chakraProgressBarHack'
@@ -104,9 +119,15 @@ export const VotingBar = ({ voteData }) => {
   );
 };
 
-export const VotingActive = ({ voteYes, voteNo, disableAll, loadingAll }) => (
+export const VotingActive = ({
+  voteYes,
+  voteNo,
+  disableAll,
+  loadingAll,
+  voteData,
+}) => (
   <>
-    <VotingBar />
+    <VotingBar voteData={voteData} />
     <Flex justifyContent='space-between'>
       <VoteButton
         votes='no'
@@ -147,11 +168,4 @@ export const VotingInactive = props => {
       </Flex>
     </>
   );
-};
-
-export const VotingSection = props => {
-  if (props.hasVoted) {
-    return <VotingInactive {...props} />;
-  }
-  return <VotingActive {...props} />;
 };

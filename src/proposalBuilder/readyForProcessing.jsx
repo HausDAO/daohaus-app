@@ -6,17 +6,20 @@ import {
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
+  UserVoteData,
   VotingInactive,
 } from './actionPrimitives';
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 import { TX } from '../data/contractTX';
+import {
+  cheatExecutionStatus,
+  removeExecutionCheat,
+} from '../utils/proposalCard';
 
 export const ReadyForProcessing = props => {
-  const {
-    proposal,
-    voteData: { userNo, userYes, userNoReadable, userYesReadable, isPassing },
-  } = props;
+  const { proposal, voteData } = props;
+  const { isPassing } = voteData;
   const { daoProposals } = useDao();
   const { daoid, daochain } = useParams();
   const { submitTransaction } = useTX();
@@ -32,9 +35,8 @@ export const ReadyForProcessing = props => {
   }, [daoProposals]);
 
   const processProposal = async () => {
-    console.log(`isPassing`, isPassing);
     setLoading(true);
-    // const shouldCheatCache = () => {};
+    const shouldCheatCache = () => isPassing && proposal?.isMinion;
     const getTx = proposal => {
       if (proposal.whitelist) {
         return TX.PROCESS_WL_PROPOSAL;
@@ -47,18 +49,18 @@ export const ReadyForProcessing = props => {
     await submitTransaction({
       args: [proposal.proposalIndex],
       tx: getTx(proposal),
-      // lifeCycleFns: {
-      //   beforeTx() {
-      //     // if proposal has a minion
-      //     // if proposal is passing
-      //     //  add id to cheat proposal cache
-      //   },
-      //   onCatch() {
-      //     // if proposal has a minion
-      //     // if proposal is passing
-      //     //  add id to cheat proposal cache
-      //   },
-      // },
+      lifeCycleFns: {
+        beforeTx() {
+          if (shouldCheatCache()) {
+            cheatExecutionStatus(proposal.proposalId, daoid);
+          }
+        },
+        onCatch() {
+          if (shouldCheatCache()) {
+            removeExecutionCheat(proposal.proposalId, daoid);
+          }
+        },
+      },
     });
     setLoading(false);
   };
@@ -75,10 +77,7 @@ export const ReadyForProcessing = props => {
       </StatusDisplayBox>
       <VotingInactive {...props} justifyContent='space-between' />
       <Flex mt='2' alignItems='center'>
-        <ParaSm fontStyle='italic' mr='auto'>
-          you voted {userNo > 0 && `No ${userNoReadable}`}
-          {userYes > 0 && `Yes ${userYesReadable}`}
-        </ParaSm>
+        <UserVoteData voteData={voteData} />
         {isNextProposal ? (
           <Button
             size='sm'
@@ -96,7 +95,7 @@ export const ReadyForProcessing = props => {
             as={Link}
             to={`/dao/${daochain}/${daoid}/proposals/${nextProposal?.proposalId}`}
           >
-            Next ({nextProposal.proposalId})
+            Next ({nextProposal?.proposalId})
           </Button>
         )}
         <Button size='sm'>Early Execute</Button>

@@ -9,11 +9,15 @@ import {
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
+  UserVoteData,
+  VotingActive,
+  VotingInactive,
   VotingSection,
 } from './actionPrimitives';
 
 const VotingPeriod = ({ proposal, voteData }) => {
   const [isLoading, setLoading] = useState(false);
+  console.log(`voteData`, voteData);
   const { submitTransaction } = useTX();
   const getTime = () => {
     if (validate.number(Number(proposal?.votingPeriodStarts))) {
@@ -54,13 +58,20 @@ const VotingPeriod = ({ proposal, voteData }) => {
         </ParaSm>
         <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
       </StatusDisplayBox>
-      <VotingSection
-        voteYes={voteYes}
-        voteNo={voteNo}
-        loadingAll={isLoading}
-        proposal={proposal}
-        voteData={voteData}
-      />
+      {voteData.hasVoted ? (
+        <>
+          <VotingInactive voteData={voteData} />
+          <UserVoteData voteData={voteData} />
+        </>
+      ) : (
+        <VotingActive
+          voteYes={voteYes}
+          voteNo={voteNo}
+          loadingAll={isLoading}
+          proposal={proposal}
+          voteData={voteData}
+        />
+      )}
     </PropActionBox>
   );
 };

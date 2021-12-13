@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
-import { Progress } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import {
   PropActionBox,
   StatusDisplayBox,
   StatusCircle,
-  VotingSection,
+  VotingInactive,
 } from './actionPrimitives';
 import { ParaSm } from '../components/typography';
 import { validate } from '../utils/validation';
 
-const InQueue = ({ proposal }) => {
+const InQueue = props => {
+  const { proposal, voteData } = props;
   const time = useMemo(() => {
     if (validate.number(Number(proposal?.votingPeriodStarts))) {
       return formatDistanceToNow(
@@ -27,8 +27,7 @@ const InQueue = ({ proposal }) => {
         </ParaSm>
         <ParaSm>starts in {time} </ParaSm>
       </StatusDisplayBox>
-      <Progress value={80} mb='3' colorScheme='secondary.500' />
-      <VotingSection disableAll />
+      <VotingInactive voteData={voteData} />
     </PropActionBox>
   );
 };
