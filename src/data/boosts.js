@@ -241,10 +241,12 @@ export const CONTENT = {
   SNAPSHOT: {
     title: 'Snapshot Proposals',
     description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
+      'Conduct gasless voting or signalling for smaller DAO decisions via Snapshot',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.5',
-    pars: ['AWAITING CONTENT'],
+    pars: [
+      'Snapshot is a popular gasless signal voting solution, used by projects such as Yearn, Balancer, Sushi. The Boost allows you to obtain signals via Snapshot from members for time-sensitive proposals. If you already have a Snapshot space set up, link the Snapshot space, and start running signal proposals',
+    ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],

@@ -86,7 +86,7 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
           }}
           placement='right'
           layoutProps={{
-            transform: 'translateY(-2px)',
+            transform: 'translateY(-4px)',
             display: 'inline-block',
           }}
         >

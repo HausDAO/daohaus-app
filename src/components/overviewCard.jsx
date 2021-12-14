@@ -5,6 +5,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { utils } from 'ethers';
 
 import { useMetaData } from '../contexts/MetaDataContext';
+import useBoost from '../hooks/useBoost';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
@@ -18,6 +19,7 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
   const totalShares = utils.commify(daoOverview?.totalShares || 0);
   const totalLoot = utils.commify(daoOverview?.totalLoot || 0);
   const history = useHistory();
+  const { isActive } = useBoost();
 
   useEffect(() => {
     if (members?.length) {
@@ -109,7 +111,7 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
           >
             {`View ${getTerm(customTerms, 'proposals')}`}
           </Button>
-          {daoMetaData?.boosts?.SNAPSHOT?.active && (
+          {isActive('SNAPSHOT') && (
             <Button
               onClick={() =>
                 history.push(`/dao/${daochain}/${daoid}/boost/snapshot`)
