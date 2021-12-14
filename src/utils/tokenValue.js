@@ -4,6 +4,7 @@ import { omit } from './general';
 import { validate } from './validation';
 import { createContract } from './contract';
 import { LOCAL_ABI } from './abi';
+import { chainByID } from './chain';
 
 const babe = '0x000000000000000000000000000000000000baBe';
 const tokenAPI =
@@ -22,22 +23,30 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
 
-export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
+export const initTokenData = async (
+  daochain,
+  graphTokenData,
+  tokenPriceSetter,
+) => {
   const tokenData = await fetchTokenData();
   if (tokenData && tokenPriceSetter) {
     tokenPriceSetter(tokenData);
   }
 
+  const network = chainByID(daochain).networkAlt || chainByID(daochain).network;
+
   return graphTokenData
     .map(tokenObj => {
       const { token, tokenBalance } = tokenObj;
+      const tokenMeta =
+        tokenData[token.tokenAddress]?.network === network &&
+        tokenData[token.tokenAddress];
 
-      const usdVal = tokenData[token.tokenAddress]?.price || 0;
+      const usdVal = tokenMeta?.price || 0;
       // TODO: overriding due to dupe grt found in cache job
-      const symbol = tokenData[token.tokenAddress]?.symbol || token.symbol;
-      // const symbol = tokenData[token.tokenAddress]?.symbol || null;
-      const logoUri = tokenData[token.tokenAddress]?.logoURI || null;
-      const tokenName = tokenData[token.tokenAddress]?.name || null;
+      const symbol = tokenMeta?.symbol || token.symbol;
+      const logoUri = tokenMeta?.logoURI || null;
+      const tokenName = tokenMeta?.name || null;
       const tokenDataObj = {
         ...omit('token', tokenObj),
         ...token,
