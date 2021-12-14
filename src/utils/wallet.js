@@ -21,12 +21,7 @@ export const initMemberWallet = async ({
   );
 
   const allowance = utils.fromWei(
-    await tokenContract.methods
-      .allowance({
-        accountAddr: memberAddress,
-        contractAddr: daoAddress,
-      })
-      .call(),
+    await tokenContract.methods.allowance(memberAddress, daoAddress).call(),
   );
 
   return {

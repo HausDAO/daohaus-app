@@ -91,10 +91,7 @@ const TributeInput = props => {
       });
 
       const allowanceRes = await tokenContract.methods
-        .allowance({
-          accountAddr: address,
-          contractAddr: daoid,
-        })
+        .allowance(address, daoid)
         .call();
 
       const decimalRes = await tokenContract.methods.decimal().call();

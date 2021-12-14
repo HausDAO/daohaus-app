@@ -70,10 +70,7 @@ export const pollTokenAllowances = async ({
   });
 
   const amountApproved = await tokenContract.methods
-    .allowance({
-      accountAddr: userAddress,
-      contractAddr: daoID,
-    })
+    .allowance(userAddress, daoID)
     .call();
 
   return amountApproved;
