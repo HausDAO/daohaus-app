@@ -1,4 +1,5 @@
 import humanFormat from 'human-format';
+import { memberVote } from './proposalUtils';
 import { getReadableBalance } from './tokenValue';
 
 export const readableNumber = ({
@@ -92,4 +93,31 @@ export const removeExecutionCheat = (proposalId, daoid) => {
   sessionStorage.setItem(`needsExecution-${daoid}`, newStorage);
 };
 
-cheatExecutionStatus('0', '0xf28df12a012d55717790ded8c2b246280ab4abab');
+export const getVoteData = (proposal, address, daoMember) => {
+  const hasVoted = memberVote(proposal, address);
+  const votedYes = hasVoted === 1;
+  const votedNo = hasVoted === 0;
+  const userYes = votedYes && Number(daoMember?.shares);
+  const userNo = votedNo && Number(daoMember?.shares);
+  const totalYes = Number(proposal?.yesShares);
+  const totalNo = Number(proposal?.noShares);
+  const totalVotes = Number(proposal?.yesShares) + Number(proposal?.noShares);
+  const isPassing = totalYes > totalNo;
+  return {
+    hasVoted,
+    votedYes,
+    votedNo,
+    userYes,
+    userNo,
+    userYesReadable:
+      daoMember && userYes && `(${readableNumber({ amount: userYes })})`,
+    userNoReadable:
+      daoMember && userNo && `(${readableNumber({ amount: userNo })})`,
+    totalYes,
+    totalNo,
+    totalYesReadable: `(${readableNumber({ amount: totalYes })})`,
+    totalNoReadable: `(${readableNumber({ amount: totalNo })})`,
+    totalVotes,
+    isPassing,
+  };
+};

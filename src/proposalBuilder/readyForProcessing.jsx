@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Button, Flex } from '@chakra-ui/react';
 import { ParaSm } from '../components/typography';
 import {
+  EarlyExecuteButton,
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
@@ -101,7 +102,7 @@ const ReadyForProcessing = props => {
             </Button>
           )}
         </Flex>
-        <Button size='sm'>Early Execute</Button>
+        <EarlyExecuteButton />
       </Flex>
     </PropActionBox>
   );

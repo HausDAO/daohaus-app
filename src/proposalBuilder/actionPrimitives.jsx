@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Button, Flex, Progress } from '@chakra-ui/react';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 
+import { BiTachometer } from 'react-icons/bi';
 import { ParaSm } from '../components/typography';
 
 export const StatusCircle = ({ color }) => (
@@ -173,4 +174,11 @@ export const VotingInactive = props => {
       </Flex>
     </>
   );
+};
+
+export const EarlyExecuteButton = () => {
+  return <Button size='sm'>Early Execute</Button>;
+};
+export const EarlyExecuteGauge = () => {
+  return <BiTachometer />;
 };

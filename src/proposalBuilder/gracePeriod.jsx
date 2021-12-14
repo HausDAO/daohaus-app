@@ -29,7 +29,7 @@ const GracePeriod = ({ proposal, voteData }) => {
       <StatusDisplayBox>
         <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
-          Grace
+          Grace Periods
         </ParaSm>
         <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
       </StatusDisplayBox>

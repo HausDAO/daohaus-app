@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { useDao } from '../contexts/DaoContext';
 import useMinionAction from '../hooks/useMinionAction';
 import { readableTokenBalance } from '../utils/proposalCard';
-import { AsyncCardTransfer } from './proposalCard2';
+import { AsyncCardTransfer } from './propBriefPrimitives';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR PAYROLL PROPOSALS
 
@@ -14,8 +14,11 @@ const MinionTransfer = ({ proposal = {} }) => {
 
   const itemText = useMemo(() => {
     if (!daoVaults || !minionAction || !minionAddress) return;
+    if (minionAction.status === 'error') return 'Error Retrieving token data';
     const tokenAddress = minionAction.to;
-    const balance = minionAction.decoded.params[1].value;
+    const balance =
+      minionAction.decoded?.params[1]?.value ||
+      minionAction.decoded.actions[1]?.value;
     const vault = daoVaults?.find(minion => minion.address === minionAddress);
     const tokenData = vault?.erc20s.find(
       token =>

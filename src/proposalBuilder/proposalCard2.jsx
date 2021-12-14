@@ -14,38 +14,16 @@ import { CUSTOM_DISPLAY } from '../data/proposalData';
 import {
   generateOfferText,
   generateRequestText,
+  getVoteData,
   readableNumber,
 } from '../utils/proposalCard';
 import { memberVote } from '../utils/proposalUtils';
-
-const getVoteData = (proposal, address, daoMember) => {
-  const hasVoted = memberVote(proposal, address);
-  const votedYes = hasVoted === 1;
-  const votedNo = hasVoted === 0;
-  const userYes = votedYes && Number(daoMember?.shares);
-  const userNo = votedNo && Number(daoMember?.shares);
-  const totalYes = Number(proposal?.yesShares);
-  const totalNo = Number(proposal?.noShares);
-  const totalVotes = Number(proposal?.yesShares) + Number(proposal?.noShares);
-  const isPassing = totalYes > totalNo;
-  return {
-    hasVoted,
-    votedYes,
-    votedNo,
-    userYes,
-    userNo,
-    userYesReadable:
-      daoMember && userYes && `(${readableNumber({ amount: userYes })})`,
-    userNoReadable:
-      daoMember && userNo && `(${readableNumber({ amount: userNo })})`,
-    totalYes,
-    totalNo,
-    totalYesReadable: `(${readableNumber({ amount: totalYes })})`,
-    totalNoReadable: `(${readableNumber({ amount: totalNo })})`,
-    totalVotes,
-    isPassing,
-  };
-};
+import { earlyExecuteMinionType } from '../utils/minionUtils';
+import {
+  CustomTransfer,
+  PropCardOffer,
+  PropCardRequest,
+} from './propBriefPrimitives';
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
   const { address } = useInjectedProvider();
@@ -117,76 +95,6 @@ const PropCardBrief = ({ proposal = {} }) => {
         )}
       </Box>
       <DetailsLink proposalId={proposal.proposalId} />
-    </Flex>
-  );
-};
-
-const PropCardRequest = ({ proposal }) => {
-  const requestText = useMemo(() => {
-    if (proposal) {
-      return generateRequestText(proposal);
-    }
-  }, [proposal]);
-  return (
-    <PropCardTransfer incoming action='Requesting' itemText={requestText} />
-  );
-};
-
-const PropCardOffer = ({ proposal }) => {
-  const requestText = useMemo(() => {
-    if (proposal) {
-      return generateOfferText(proposal);
-    }
-  }, [proposal]);
-  return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
-};
-
-const CustomTransfer = ({ proposal, customTransferUI }) => {
-  if (customTransferUI === 'minionTransfer') {
-    return <MinionTransfer proposal={proposal} />;
-  }
-  return null;
-};
-
-export const AsyncCardTransfer = props => {
-  const { isLoaded } = props;
-  return (
-    <Skeleton isLoaded={isLoaded} height='1.5rem'>
-      <PropCardTransfer {...props} />
-    </Skeleton>
-  );
-};
-
-const PropCardTransfer = ({
-  incoming,
-  outgoing,
-  itemText,
-  action,
-  specialLocation,
-}) => {
-  return (
-    <Flex alignItems='center' mb='2'>
-      {incoming && (
-        <Box transform='translateY(1px)'>
-          <RiArrowRightLine size='1.1rem' />
-        </Box>
-      )}
-      {outgoing && (
-        <Box transform='translateY(1px)'>
-          <RiArrowLeftLine size='1.1rem' />
-        </Box>
-      )}
-      {specialLocation ? (
-        <ParaMd ml='1'>
-          {action}
-          <Bold> {itemText} </Bold> to <Bold> {specialLocation}</Bold>
-        </ParaMd>
-      ) : (
-        <ParaMd ml='1'>
-          {action}
-          <Bold> {itemText} </Bold>
-        </ParaMd>
-      )}
     </Flex>
   );
 };

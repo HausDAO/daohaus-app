@@ -99,3 +99,7 @@ export const getMinionAction = async params => {
     console.error(error);
   }
 };
+
+export const earlyExecuteMinionType = proposal =>
+  proposal?.minion?.minionType === MINION_TYPES.NIFTY ||
+  proposal?.minion?.minionType === MINION_TYPES.SAFE;
