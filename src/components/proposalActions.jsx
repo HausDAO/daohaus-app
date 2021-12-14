@@ -29,23 +29,13 @@ import EscrowActions from './escrowActions';
 
 import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
-import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
+import { memberVote } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 import { earlyExecuteMinionType } from '../utils/minionUtils';
 
 const MotionBox = motion(Box);
-
-const getAllowance = (daoMember, delegate) => {
-  if (daoMember?.hasWallet && daoMember?.allowance) {
-    return +daoMember.allowance;
-  }
-  if (delegate?.hasWallet && delegate?.allowance) {
-    return +delegate.allowance;
-  }
-  return null;
-};
 
 const ProposalVote = ({
   daoMember,
@@ -228,7 +218,7 @@ const ProposalVote = ({
                   {`${overview?.proposalDeposit /
                     10 ** overview?.depositToken.decimals}
                   ${overview?.depositToken?.symbol}`}
-                  {!enoughDeposit && daoMember ? (
+                  {/* {!enoughDeposit && daoMember ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
@@ -243,17 +233,17 @@ const ProposalVote = ({
                         mt='-4px'
                       />
                     </Tooltip>
-                  ) : null}
+                  ) : null} */}
                 </TextBox>
               </Flex>
             </Flex>
             <Flex justify='space-around'>
               {canInteract ? (
                 <>
-                  {getAllowance(daoMember, delegate) *
-                    10 ** overview?.depositToken?.decimals >=
-                    +overview?.proposalDeposit ||
-                  +overview?.proposalDeposit === 0 ? (
+                  {Number(daoMember?.depositTokenData?.allowance) ||
+                  Number(delegate?.depositTokenData?.allowance) >=
+                    Number(overview?.proposalDeposit) ||
+                  Number(overview?.proposalDeposit === 0) ? (
                     <Button
                       onClick={() => sponsorProposal(proposal?.proposalId)}
                       isDisabled={!enoughDeposit}

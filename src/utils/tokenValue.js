@@ -220,3 +220,14 @@ export const fetchBalance = ({ address, chainID, tokenAddress }) => {
     console.log(error);
   }
 };
+
+//  for use with daoMemberContext {daoMember, delegate}
+export const getAllowance = (daoMember, delegate) => {
+  if (daoMember?.hasWallet && daoMember?.allowance) {
+    return +daoMember.allowance;
+  }
+  if (delegate?.hasWallet && delegate?.allowance) {
+    return +delegate.allowance;
+  }
+  return null;
+};

@@ -18,26 +18,43 @@ import {
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import SkeletonActionCard from './skeletonActionCard';
+import { getAllowance } from '../utils/tokenValue';
 
 const Unsponsored = props => {
   const { proposal } = props;
   const { daoOverview } = useDao();
-  const { daoMember } = useDaoMember();
+  const { daoMember, delegate } = useDaoMember();
   const { address } = useInjectedProvider();
 
   const [isLoadingTx, setLoadingTx] = useState(false);
   const { submitTransaction } = useTX();
 
-  const deposit = useMemo(() => {
+  const depositData = useMemo(() => {
     const { depositToken, proposalDeposit } = daoOverview || {};
-    if (!depositToken?.decimals || !depositToken.symbol || !proposalDeposit)
+    if (
+      !daoMember ||
+      !depositToken?.decimals ||
+      !depositToken.symbol ||
+      !proposalDeposit
+    )
       return;
     const { decimals, symbol } = depositToken;
-    return readableTokenBalance({
-      balance: proposalDeposit,
+    const { allowance, balance } = daoMember;
+    const canSpend =
+      allowance >= Number(proposalDeposit) || Number(proposalDeposit) > 0;
+
+    return {
+      deposit: readableTokenBalance({
+        balance: proposalDeposit,
+        decimals,
+        symbol,
+      }),
+      allowance,
+      balance,
       decimals,
       symbol,
-    });
+      canSpend,
+    };
   }, [daoOverview, daoMember]);
 
   const sponsorProposal = async () => {
@@ -60,18 +77,19 @@ const Unsponsored = props => {
   if (!daoMember || !daoOverview) {
     return <SkeletonActionCard />;
   }
-  if (!deposit?.canSpend) {
+  if (depositData?.canSpend) {
     return (
       <SponsorCard
         isLoadingTx={isLoadingTx}
         cancelProposal={cancelProposal}
         sponsorProposal={sponsorProposal}
         address={address}
+        depositData={depositData}
         {...props}
       />
     );
   }
-  if (deposit?.canSpend) {
+  if (!depositData?.canSpend) {
     return <UnlockTokenCard />;
   }
 };
@@ -83,7 +101,7 @@ const SponsorCard = ({
   isLoadingTx,
   cancelProposal,
   sponsorProposal,
-  deposit,
+  depositData,
   proposal,
   voteData,
   canInteract,
@@ -110,7 +128,7 @@ const SponsorCard = ({
           onClick={sponsorProposal}
           isLoading={isLoadingTx}
         >
-          Sponsor {deposit && `(${deposit})`}
+          Sponsor {depositData.deposit && `(${depositData.deposit})`}
         </Button>
         {address?.toLowerCase() === proposal?.proposer?.toLowerCase() && (
           <Button

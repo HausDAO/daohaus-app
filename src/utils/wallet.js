@@ -1,4 +1,3 @@
-import { utils } from 'web3';
 import { TokenService } from '../services/tokenService';
 
 export const initMemberWallet = async ({
@@ -7,24 +6,27 @@ export const initMemberWallet = async ({
   chainID,
   depositToken,
 }) => {
-  // TODO handle tokens with different decimals
-
+  const { decimals, symbol } = depositToken;
   const depositTokenContract = TokenService({
     chainID,
     tokenAddress: depositToken.tokenAddress,
   });
-  const tokenBalance = utils.fromWei(
-    await depositTokenContract('balanceOf')(memberAddress),
-  );
-  const allowance = utils.fromWei(
-    await depositTokenContract('allowance')({
-      accountAddr: memberAddress,
-      contractAddr: daoAddress,
-    }),
-  );
+
+  const balance = await depositTokenContract('balanceOf')(memberAddress);
+
+  const allowance = await depositTokenContract('allowance')({
+    accountAddr: memberAddress,
+    contractAddr: daoAddress,
+  });
+
+  const depositTokenData = {
+    decimals,
+    balance,
+    allowance,
+    symbol,
+  };
 
   return {
-    depositTokenBalance: tokenBalance,
-    allowance,
+    depositTokenData,
   };
 };
