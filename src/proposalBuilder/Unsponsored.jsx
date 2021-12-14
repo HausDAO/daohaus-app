@@ -17,17 +17,15 @@ import {
 } from './actionPrimitives';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import SkeletonCard from './SkeletonCard';
+import SkeletonActionCard from './skeletonActionCard';
 
 const Unsponsored = props => {
   const { proposal } = props;
-  console.log(`props`, props);
   const { daoOverview } = useDao();
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
 
   const [isLoadingTx, setLoadingTx] = useState(false);
-  const [memberBalanceData, setMemberBalanceData] = useState();
   const { submitTransaction } = useTX();
 
   const deposit = useMemo(() => {
@@ -59,8 +57,8 @@ const Unsponsored = props => {
     setLoadingTx(false);
   };
 
-  if (daoMember || !daoOverview) {
-    return <SkeletonCard />;
+  if (!daoMember || !daoOverview) {
+    return <SkeletonActionCard />;
   }
   if (!deposit?.canSpend) {
     return (
