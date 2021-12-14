@@ -16,42 +16,82 @@ import {
   StatusDisplayBox,
 } from './actionPrimitives';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import SkeletonCard from './SkeletonCard';
 
-const Unsponsored = ({ proposal, canInteract, isMember, voteData }) => {
+const Unsponsored = props => {
+  const { proposal } = props;
+  console.log(`props`, props);
   const { daoOverview } = useDao();
+  const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
 
-  const [isLoading, setLoading] = useState(false);
+  const [isLoadingTx, setLoadingTx] = useState(false);
+  const [memberBalanceData, setMemberBalanceData] = useState();
   const { submitTransaction } = useTX();
 
   const deposit = useMemo(() => {
     const { depositToken, proposalDeposit } = daoOverview || {};
     if (!depositToken?.decimals || !depositToken.symbol || !proposalDeposit)
       return;
+    const { decimals, symbol } = depositToken;
     return readableTokenBalance({
       balance: proposalDeposit,
-      decimals: depositToken?.decimals,
-      symbol: depositToken?.symbol,
+      decimals,
+      symbol,
     });
-  }, [daoOverview]);
+  }, [daoOverview, daoMember]);
 
   const sponsorProposal = async () => {
-    setLoading(true);
+    setLoadingTx(true);
     await submitTransaction({
       args: [proposal.proposalId],
       tx: TX.SPONSOR_PROPOSAL,
     });
-    setLoading(false);
+    setLoadingTx(false);
   };
   const cancelProposal = async () => {
-    setLoading(true);
+    setLoadingTx(true);
     await submitTransaction({
       args: [proposal.proposalId],
       tx: TX.CANCEL_PROPOSAL,
     });
-    setLoading(false);
+    setLoadingTx(false);
   };
 
+  if (daoMember || !daoOverview) {
+    return <SkeletonCard />;
+  }
+  if (!deposit?.canSpend) {
+    return (
+      <SponsorCard
+        isLoadingTx={isLoadingTx}
+        cancelProposal={cancelProposal}
+        sponsorProposal={sponsorProposal}
+        address={address}
+        {...props}
+      />
+    );
+  }
+  if (deposit?.canSpend) {
+    return <UnlockTokenCard />;
+  }
+};
+export default Unsponsored;
+
+const UnlockTokenCard = () => null;
+
+const SponsorCard = ({
+  isLoadingTx,
+  cancelProposal,
+  sponsorProposal,
+  deposit,
+  proposal,
+  voteData,
+  canInteract,
+  isMember,
+  address,
+}) => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
@@ -70,7 +110,7 @@ const Unsponsored = ({ proposal, canInteract, isMember, voteData }) => {
           mr='auto'
           disabled={!canInteract || !isMember}
           onClick={sponsorProposal}
-          isLoading={isLoading}
+          isLoading={isLoadingTx}
         >
           Sponsor {deposit && `(${deposit})`}
         </Button>
@@ -82,7 +122,7 @@ const Unsponsored = ({ proposal, canInteract, isMember, voteData }) => {
             variant='outline'
             disabled={!canInteract}
             onClick={cancelProposal}
-            isLoading={isLoading}
+            isLoading={isLoadingTx}
           >
             Cancel
           </Button>
@@ -91,4 +131,3 @@ const Unsponsored = ({ proposal, canInteract, isMember, voteData }) => {
     </PropActionBox>
   );
 };
-export default Unsponsored;

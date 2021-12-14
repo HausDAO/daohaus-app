@@ -1,24 +1,15 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Flex, Box, Divider, Center, Skeleton } from '@chakra-ui/react';
-import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
+import { Flex, Box, Divider, Center } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from '../components/ContentBox';
-import { Bold, CardLabel, ParaMd, ParaSm } from '../components/typography';
+import { CardLabel, ParaMd, ParaSm } from '../components/typography';
 import PropActions from './propActions';
-import MinionTransfer from './minionTransfer';
 
 import { CUSTOM_DISPLAY } from '../data/proposalData';
-import {
-  generateOfferText,
-  generateRequestText,
-  getVoteData,
-  readableNumber,
-} from '../utils/proposalCard';
-import { memberVote } from '../utils/proposalUtils';
-import { earlyExecuteMinionType } from '../utils/minionUtils';
+import { getVoteData } from '../utils/proposalCard';
 import {
   CustomTransfer,
   PropCardOffer,
