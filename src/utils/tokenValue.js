@@ -191,7 +191,8 @@ export const addZeros = (roundedVal, decimals) => {
 };
 
 // Used to avoid repeating decimals which can happen when using ethers.BigNumber
-// Converts to string and adds '0's then converts back to int
+// Converts to string and adds '0's
+// (Returns string)
 export const safeAddZeros = (val, decimals) => {
   const stringVal = `${val}`;
   const inputDecimals =
@@ -212,7 +213,25 @@ export const safeAddZeros = (val, decimals) => {
     )}`;
   }
 
-  return Number(returnVal);
+  return returnVal;
+};
+
+export const fixScientificNotation = val => {
+  const stringVal = `${val}`;
+  const [baseVal, numZeros] = stringVal.split('e+');
+  console.log({ baseVal, numZeros });
+  let returnVal = baseVal;
+
+  if (!baseVal || !numZeros) {
+    console.log('RETURNING');
+    return stringVal;
+  }
+
+  for (let i = 0; i < Number(numZeros); i += 1) {
+    returnVal += '0';
+  }
+
+  return returnVal;
 };
 
 export const fetchBalance = ({ address, chainID, tokenAddress }) => {
