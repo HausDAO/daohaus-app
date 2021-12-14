@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Flex, Progress, useTheme } from '@chakra-ui/react';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 
@@ -178,6 +178,12 @@ export const VotingInactive = props => {
 };
 
 export const EarlyExecuteButton = () => {
+  const [buttonState, setButtonState] = useState('loading');
+
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return <Button size='sm'>Early Execute</Button>;
 };
 export const EarlyExecuteGauge = ({ proposal, voteData }) => {
