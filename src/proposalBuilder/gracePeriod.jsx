@@ -3,6 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 
 import { ParaSm } from '../components/typography';
 import {
+  EarlyExecuteGauge,
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
@@ -27,6 +28,7 @@ const GracePeriod = ({ proposal, voteData }) => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
+        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
           Grace Periods

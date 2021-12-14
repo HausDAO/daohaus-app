@@ -4,6 +4,7 @@ import { Button, Flex } from '@chakra-ui/react';
 import { ParaSm } from '../components/typography';
 import {
   EarlyExecuteButton,
+  EarlyExecuteGauge,
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
@@ -70,6 +71,7 @@ const ReadyForProcessing = props => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
+        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
           {voteData?.isPassing ? 'Passed' : 'Failed'}

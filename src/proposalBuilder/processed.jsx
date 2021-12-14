@@ -4,6 +4,7 @@ import { AiOutlineCheck } from 'react-icons/ai';
 
 import { ParaSm } from '../components/typography';
 import {
+  EarlyExecuteGauge,
   InactiveButton,
   PropActionBox,
   StatusCircle,
@@ -13,11 +14,12 @@ import {
 } from './actionPrimitives';
 
 const Processed = props => {
-  const { voteData } = props;
+  const { voteData, proposal } = props;
 
   return (
     <PropActionBox>
       <StatusDisplayBox>
+        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
           {voteData?.isPassing ? 'Passed' : 'Failed'}

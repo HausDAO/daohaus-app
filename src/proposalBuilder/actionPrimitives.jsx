@@ -1,9 +1,10 @@
 import React from 'react';
-import { Box, Button, Flex, Progress } from '@chakra-ui/react';
+import { Box, Button, Flex, Progress, useTheme } from '@chakra-ui/react';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 
 import { BiTachometer } from 'react-icons/bi';
 import { ParaSm } from '../components/typography';
+import { validate } from '../utils/validation';
 
 export const StatusCircle = ({ color }) => (
   <Box borderRadius='50%' background={color} h='.6rem' w='.6rem' mr='2' />
@@ -89,7 +90,7 @@ export const PropActionBox = ({ children }) => (
 );
 
 export const StatusDisplayBox = ({ children }) => (
-  <Flex alignItems='center' mb={3}>
+  <Flex alignItems='center' mb={3} position='relative'>
     {children}
   </Flex>
 );
@@ -179,6 +180,20 @@ export const VotingInactive = props => {
 export const EarlyExecuteButton = () => {
   return <Button size='sm'>Early Execute</Button>;
 };
-export const EarlyExecuteGauge = () => {
-  return <BiTachometer />;
+export const EarlyExecuteGauge = ({ proposal, voteData }) => {
+  const { totalVotes, totalYes } = voteData;
+  const theme = useTheme();
+  const percYesVotes =
+    totalVotes && totalYes && ((totalYes / totalVotes) * 100).toFixed();
+  if (validate.number(proposal?.minion?.minQuorum)) {
+    return (
+      <Flex position='absolute' right='0' alignItems='center'>
+        <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />
+        <ParaSm ml={1}>
+          {percYesVotes}/{proposal.minion.minQuorum}%
+        </ParaSm>
+      </Flex>
+    );
+  }
+  return null;
 };
