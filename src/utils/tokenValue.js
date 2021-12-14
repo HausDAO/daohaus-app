@@ -220,18 +220,12 @@ export const fixScientificNotation = val => {
   const stringVal = `${val}`;
   const [baseVal, numZeros] = stringVal.split('e+');
   console.log({ baseVal, numZeros });
-  let returnVal = baseVal;
 
   if (!baseVal || !numZeros) {
-    console.log('RETURNING');
     return stringVal;
   }
 
-  for (let i = 0; i < Number(numZeros); i += 1) {
-    returnVal += '0';
-  }
-
-  return returnVal;
+  return safeAddZeros(baseVal, numZeros);
 };
 
 export const fetchBalance = ({ address, chainID, tokenAddress }) => {
