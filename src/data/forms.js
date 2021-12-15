@@ -727,14 +727,6 @@ export const BOOST_FORMS = {
       },
     },
     stepValidation: 'validateSnapshot',
-    // nextFormHook: async ({ values }) => {
-    //   const snapshotSpace = values?.space;
-    //   const space = await getSnapshotSpaces(snapshotSpace);
-    //   if (!space.space?.id) {
-    //     throw Error('No space found!');
-    //   }
-    //   return true;
-    // },
   },
   SPAM_FILTER: {
     id: 'SPAM_FILTER',

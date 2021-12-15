@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
+import { useMetaData } from '../contexts/MetaDataContext';
+import useBoost from '../hooks/useBoost';
+import { useAppModal } from '../hooks/useModals';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -9,12 +12,9 @@ import FormFooter from './formFooter';
 import {
   checkConditionalTx,
   createRegisterOptions,
-  handleStepValidation,
   inputDataFromABI,
 } from '../utils/formBuilder';
-import { useAppModal } from '../hooks/useModals';
-import { useMetaData } from '../contexts/MetaDataContext';
-import useBoost from '../hooks/useBoost';
+import { handleStepValidation } from '../utils/validation';
 
 const dev = process.env.REACT_APP_DEV;
 

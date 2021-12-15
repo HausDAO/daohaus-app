@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { getSnapshotSpaces } from './theGraph';
 
 // Error Model {
 //   message: String (required)
@@ -192,4 +193,15 @@ export const collectTypeValidations = valString => {
     );
   }
   return val => (valFn(val) || val === '' ? true : valMsg);
+};
+
+export const handleStepValidation = {
+  validateSnapshot: async ({ values }) => {
+    const snapshotSpace = values?.space;
+    const space = await getSnapshotSpaces(snapshotSpace);
+    if (!space.space?.id) {
+      throw Error('No space found!');
+    }
+    return true;
+  },
 };

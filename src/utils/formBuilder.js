@@ -3,7 +3,6 @@ import { filterObject, isObjectEmpty, pipe } from './general';
 import { logFormError } from './errorLog';
 import { collectTypeValidations, validate } from './validation';
 import { handleSearch } from './txHelpers';
-import { getSnapshotSpaces } from './theGraph';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
@@ -315,15 +314,4 @@ const checkNestedError = (errors, name) =>
 export const handleCheckError = (errors, name) => {
   if (!name || !errors) return;
   return isNestedValue(name) ? checkNestedError(errors, name) : errors[name];
-};
-
-export const handleStepValidation = {
-  validateSnapshot: async ({ values }) => {
-    const snapshotSpace = values?.space;
-    const space = await getSnapshotSpaces(snapshotSpace);
-    if (!space.space?.id) {
-      throw Error('No space found!');
-    }
-    return true;
-  },
 };

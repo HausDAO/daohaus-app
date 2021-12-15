@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Flex, Button, Input, FormLabel, Icon } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { RiInformationLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
@@ -15,7 +15,7 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
   const [loading, setLoading] = useState(false);
   const { errorToast, successToast } = useOverlay();
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
-  const { daoid } = useParams();
+  const { daoid, daochain } = useParams();
   const [localMetadata, setLocalMetadata] = useState();
   const [spaceName, setSpaceName] = useState('');
 
@@ -72,8 +72,15 @@ const SnapshotSettings = ({ daoMetaData, refetchMetaData }) => {
     }
   }, [spaceName]);
 
+  const snapshotButton = (
+    <Button as={Link} to={`/dao/${daochain}/${daoid}/boost/snapshot`}>
+      View Snapshot Proposals
+    </Button>
+  );
+
   return (
-    <MainViewLayout header='Snapshots' isDao>
+    <MainViewLayout header='Snapshots' isDao headerEl={snapshotButton}>
+      <TextBox mb={5}>Editing Settings</TextBox>
       <Flex justify='flex-start' align='center'>
         <TextBox as={FormLabel} size='xs' position='relative'>
           Snapshot Space ID
