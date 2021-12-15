@@ -2,6 +2,7 @@ import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
+import { UBERHAUS_FORMS } from './uberhausForms';
 
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
@@ -728,4 +729,4 @@ export const BOOST_FORMS = {
   },
 };
 
-export const FORM = { ...PROPOSAL_FORMS, ...MULTI_FORMS };
+export const FORM = { ...PROPOSAL_FORMS, ...MULTI_FORMS, ...UBERHAUS_FORMS };
