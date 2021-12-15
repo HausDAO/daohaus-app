@@ -4,7 +4,6 @@ import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 
 import { BiTachometer } from 'react-icons/bi';
 import { ParaSm } from '../components/typography';
-import { validate } from '../utils/validation';
 
 export const StatusCircle = ({ color }) => (
   <Box borderRadius='50%' background={color} h='.6rem' w='.6rem' mr='2' />
