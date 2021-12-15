@@ -179,7 +179,7 @@ export const InputFactory = props => {
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
   }
-  if (type === 'uberhausDelegate') {
+  if (type === 'uberHausDelegate') {
     return <UberhausDelegateInput {...props} />;
   }
   return null;

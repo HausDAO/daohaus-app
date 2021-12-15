@@ -477,7 +477,7 @@ const DaoToDaoManager = ({
                       refetchAllies={refetchAllies}
                     />
 
-                    <UberhausProposals />
+                    <UberhausProposals uberHausMinion={uberHausMinion} />
 
                     {uberHausMinion.openChildProposals.length ? (
                       <Flex

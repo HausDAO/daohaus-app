@@ -8,8 +8,8 @@ export const UBERHAUS_FORMS = {
     title: 'Choose Champion',
     description: 'Manage your delegate to UBERhaus',
     type: PROPOSAL_TYPES.MINION_UBER_DEL,
-    tx: TX.SUBMIT_PROPOSAL,
-    required: ['title'],
+    tx: TX.UBERHAUS_DELEGATE,
+    required: ['title', 'uberHausDelegate'],
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [FIELD.UBERHAUS_DELEGATE],

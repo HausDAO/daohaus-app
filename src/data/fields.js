@@ -469,11 +469,10 @@ export const FIELD = {
     expectType: 'address',
   },
   UBERHAUS_DELEGATE: {
-    type: 'uberhausDelegate',
-    htmlFor: 'uberhausDelegate',
-    name: 'uberhausDelegate',
-    // placeholder: '0x',
-    label: 'Delegate',
+    type: 'uberHausDelegate',
+    htmlFor: 'uberHausDelegate',
+    name: 'uberHausDelegate',
+    label: 'New Delegate',
     expectType: 'address',
   },
 };

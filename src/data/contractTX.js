@@ -107,7 +107,7 @@ export const CONTRACTS = {
     abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
   },
-  UBERHAUS_MINION: {
+  LOCAL_UBERHAUS_MINION: {
     location: 'local',
     abiName: 'UBERHAUS_MINION',
     contractAddress: '.localValues.minionAddress',
@@ -284,6 +284,14 @@ export const DETAILS = {
     link: '.values.link',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
+  },
+  UBERHAUS_DELEGATE: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'delegate',
   },
 };
 
@@ -674,7 +682,7 @@ export const TX = {
     successMsg: 'Minion Proposal Executed!',
   },
   UBERHAUS_MINION_EXECUTE_APPOINTMENT: {
-    contract: CONTRACTS.UBERHAUS_MINION,
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
     name: 'executeAppointment',
     specialPoll: 'executeAction',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -1190,5 +1198,24 @@ export const TX = {
       },
       true, // _memberOnlyEnabled
     ],
+  },
+  UBERHAUS_DELEGATE: {
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
+    name: 'nominateDelegate',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Proposal submitted!',
+    gatherArgs: [
+      '.localValues.uberHausDaoAddress',
+      '.values.uberHausDelegate',
+      '.localValues.delegateExpiration',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.UBERHAUS_DELEGATE,
+      },
+    ],
+    createDiscourse: true,
   },
 };
