@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Button, Flex, Progress, useTheme } from '@chakra-ui/react';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 
@@ -178,11 +178,12 @@ export const VotingInactive = props => {
 };
 
 export const EarlyExecuteButton = () => {
-  const [buttonState, setButtonState] = useState('loading');
+  //  Awaiting early execute designs
+  // const [buttonState, setButtonState] = useState('loading');
 
-  useEffect(() => {
-    return () => {};
-  }, []);
+  // useEffect(() => {
+  //   return () => {};
+  // }, []);
 
   return <Button size='sm'>Early Execute</Button>;
 };
@@ -191,7 +192,7 @@ export const EarlyExecuteGauge = ({ proposal, voteData }) => {
   const theme = useTheme();
   const percYesVotes =
     totalVotes && totalYes && ((totalYes / totalVotes) * 100).toFixed();
-  if (validate.number(proposal?.minion?.minQuorum)) {
+  if (proposal?.minion?.minQuorum) {
     return (
       <Flex position='absolute' right='0' alignItems='center'>
         <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />

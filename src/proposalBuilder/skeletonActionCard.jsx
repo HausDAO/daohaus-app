@@ -1,4 +1,4 @@
-import { Button, Flex, Skeleton } from '@chakra-ui/react';
+import { Flex, Skeleton } from '@chakra-ui/react';
 import React from 'react';
 import { ParaSm } from '../components/typography';
 import { PropActionBox, StatusDisplayBox } from './actionPrimitives';

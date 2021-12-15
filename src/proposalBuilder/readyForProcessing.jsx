@@ -100,11 +100,11 @@ const ReadyForProcessing = props => {
               as={Link}
               to={`/dao/${daochain}/${daoid}/proposals/${nextProposal?.proposalId}`}
             >
-              Next ({nextProposal?.proposalId})
+              Process Next ({nextProposal?.proposalId})
             </Button>
           )}
         </Flex>
-        <EarlyExecuteButton />
+        {proposal?.proposal?.minQuorum && <EarlyExecuteButton />}
       </Flex>
     </PropActionBox>
   );
