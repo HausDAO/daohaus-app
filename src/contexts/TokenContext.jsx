@@ -28,6 +28,7 @@ export const TokenProvider = ({ children }) => {
   useEffect(() => {
     const initDaoTokens = async () => {
       const newDaoData = await initTokenData(
+        daochain,
         daoOverview.tokenBalances,
         setTokenPrices,
       );
@@ -56,7 +57,7 @@ export const TokenProvider = ({ children }) => {
   }, [currentDaoTokens, daochain]);
 
   const refetchTokens = async () => {
-    const newDaoData = await initTokenData(daoOverview.tokenBalances);
+    const newDaoData = await initTokenData(daochain, daoOverview.tokenBalances);
     setCurrentDaoTokens(newDaoData);
     shouldFetchContract.current = true;
   };
