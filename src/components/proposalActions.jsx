@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
-import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
+import { RiQuestionLine } from 'react-icons/ri';
 import {
   Box,
   Button,

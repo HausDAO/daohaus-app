@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Button, Flex } from '@chakra-ui/react';
+import { MaxUint256 } from '@ethersproject/constants';
 
+import { useParams } from 'react-router-dom';
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 
@@ -18,12 +20,12 @@ import {
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import SkeletonActionCard from './skeletonActionCard';
-import { getAllowance } from '../utils/tokenValue';
 
 const Unsponsored = props => {
   const { proposal } = props;
+  const { daoid } = useParams();
   const { daoOverview } = useDao();
-  const { daoMember, delegate } = useDaoMember();
+  const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
 
   const [isLoadingTx, setLoadingTx] = useState(false);
@@ -32,28 +34,35 @@ const Unsponsored = props => {
   const depositData = useMemo(() => {
     const { depositToken, proposalDeposit } = daoOverview || {};
     if (
-      !daoMember ||
+      !daoMember.depositTokenData ||
       !depositToken?.decimals ||
       !depositToken.symbol ||
       !proposalDeposit
     )
       return;
-    const { decimals, symbol } = depositToken;
-    const { allowance, balance } = daoMember;
+    const { decimals, symbol, tokenAddress } = depositToken;
+    const { allowance, balance } = daoMember.depositTokenData || {};
     const canSpend =
-      allowance >= Number(proposalDeposit) || Number(proposalDeposit) > 0;
+      Number(allowance) >= Number(proposalDeposit) ||
+      Number(proposalDeposit) === 0;
 
+    console.log(Number(allowance) >= Number(proposalDeposit));
+    console.log(`canSpend`, canSpend);
+    const hasBalance =
+      Number(balance) >= Number(proposalDeposit) || Number(proposalDeposit) > 0;
     return {
       deposit: readableTokenBalance({
         balance: proposalDeposit,
         decimals,
         symbol,
       }),
-      allowance,
-      balance,
+      userAllowance: Number(allowance),
+      userBalance: Number(balance),
       decimals,
+      address: tokenAddress,
       symbol,
       canSpend,
+      hasBalance,
     };
   }, [daoOverview, daoMember]);
 
@@ -73,7 +82,17 @@ const Unsponsored = props => {
     });
     setLoadingTx(false);
   };
-
+  const approveToken = async () => {
+    setLoadingTx(true);
+    const unlockAmount = MaxUint256.toString();
+    await submitTransaction({
+      args: [daoid, unlockAmount],
+      tx: TX.UNLOCK_TOKEN,
+      values: { tokenAddress: '0x', unlockAmount },
+    });
+    setLoadingTx(false);
+  };
+  console.log(`depositData`, depositData);
   if (!daoMember || !daoOverview) {
     return <SkeletonActionCard />;
   }
@@ -89,13 +108,55 @@ const Unsponsored = props => {
       />
     );
   }
-  if (!depositData?.canSpend) {
-    return <UnlockTokenCard />;
-  }
+  return (
+    <UnlockTokenCard
+      depositData={depositData}
+      isLoadingTx={isLoadingTx}
+      approveToken={approveToken}
+      {...props}
+    />
+  );
 };
 export default Unsponsored;
 
-const UnlockTokenCard = () => null;
+const UnlockTokenCard = ({
+  proposal,
+  voteData,
+  canInteract,
+  approveToken,
+  depositData,
+  isLoadingTx,
+}) => {
+  return (
+    <PropActionBox>
+      <StatusDisplayBox>
+        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
+        <StatusCircle color='green' />
+        <ParaSm fontWeight='700' mr='1'>
+          Unsponsored
+        </ParaSm>
+      </StatusDisplayBox>
+      <ParaSm mb={3}>
+        {depositData?.hasBalance
+          ? propStatusText.approve(depositData?.symbol)
+          : propStatusText.noFunds(depositData?.symbol)}
+      </ParaSm>
+      <Flex>
+        <Button
+          size='sm'
+          fontWeight='700'
+          minW='4rem'
+          variant='outline'
+          disabled={!canInteract || !depositData?.hasBalance}
+          onClick={approveToken}
+          isLoading={isLoadingTx}
+        >
+          Approve {depositData.symbol}
+        </Button>
+      </Flex>
+    </PropActionBox>
+  );
+};
 
 const SponsorCard = ({
   isLoadingTx,
