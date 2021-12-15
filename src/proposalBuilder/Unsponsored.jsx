@@ -33,9 +33,7 @@ const Unsponsored = props => {
 
   const depositData = useMemo(() => {
     const { depositToken, proposalDeposit } = daoOverview || {};
-    console.log(`depositToken`, depositToken);
-    console.log(`daoMember`, daoMember);
-    console.log(`proposalDeposit`, proposalDeposit);
+
     if (
       !daoMember.depositTokenData ||
       !depositToken?.decimals ||
@@ -43,7 +41,6 @@ const Unsponsored = props => {
       !proposalDeposit
     )
       return;
-    console.log('DID FIRE');
     const { decimals, symbol, tokenAddress } = depositToken;
     const { allowance, balance } = daoMember.depositTokenData || {};
     const canSpend =
@@ -110,8 +107,6 @@ const Unsponsored = props => {
       />
     );
   }
-  console.log(`depositData?.canSpend`, depositData?.canSpend);
-  console.log(`isMember`, isMember);
   return (
     <UnlockTokenCard
       depositData={depositData}
