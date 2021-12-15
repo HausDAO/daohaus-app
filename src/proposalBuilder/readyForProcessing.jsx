@@ -95,7 +95,6 @@ const ReadyForProcessing = props => {
           ) : (
             <Button
               size='sm'
-              mr='2'
               variant='outline'
               as={Link}
               to={`/dao/${daochain}/${daoid}/proposals/${nextProposal?.proposalId}`}
@@ -104,7 +103,7 @@ const ReadyForProcessing = props => {
             </Button>
           )}
         </Flex>
-        {proposal?.proposal?.minQuorum && <EarlyExecuteButton />}
+        {proposal?.proposal?.minQuorum && <EarlyExecuteButton ml='2' />}
       </Flex>
     </PropActionBox>
   );
