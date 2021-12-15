@@ -22,7 +22,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import SkeletonActionCard from './skeletonActionCard';
 
 const Unsponsored = props => {
-  const { proposal } = props;
+  const { proposal, isMember } = props;
   const { daoid } = useParams();
   const { daoOverview } = useDao();
   const { daoMember } = useDaoMember();
@@ -33,6 +33,9 @@ const Unsponsored = props => {
 
   const depositData = useMemo(() => {
     const { depositToken, proposalDeposit } = daoOverview || {};
+    console.log(`depositToken`, depositToken);
+    console.log(`daoMember`, daoMember);
+    console.log(`proposalDeposit`, proposalDeposit);
     if (
       !daoMember.depositTokenData ||
       !depositToken?.decimals ||
@@ -40,14 +43,13 @@ const Unsponsored = props => {
       !proposalDeposit
     )
       return;
+    console.log('DID FIRE');
     const { decimals, symbol, tokenAddress } = depositToken;
     const { allowance, balance } = daoMember.depositTokenData || {};
     const canSpend =
       Number(allowance) >= Number(proposalDeposit) ||
       Number(proposalDeposit) === 0;
 
-    console.log(Number(allowance) >= Number(proposalDeposit));
-    console.log(`canSpend`, canSpend);
     const hasBalance =
       Number(balance) >= Number(proposalDeposit) || Number(proposalDeposit) > 0;
     return {
@@ -64,7 +66,7 @@ const Unsponsored = props => {
       canSpend,
       hasBalance,
     };
-  }, [daoOverview, daoMember]);
+  }, [daoOverview, daoMember, isMember, address]);
 
   const sponsorProposal = async () => {
     setLoadingTx(true);
@@ -88,15 +90,15 @@ const Unsponsored = props => {
     await submitTransaction({
       args: [daoid, unlockAmount],
       tx: TX.UNLOCK_TOKEN,
-      values: { tokenAddress: '0x', unlockAmount },
+      values: { tokenAddress: depositData.address, unlockAmount },
     });
     setLoadingTx(false);
   };
-  console.log(`depositData`, depositData);
-  if (!daoMember || !daoOverview) {
+
+  if (isMember === null || !daoOverview) {
     return <SkeletonActionCard />;
   }
-  if (depositData?.canSpend) {
+  if ((isMember === true && depositData?.canSpend) || isMember === false) {
     return (
       <SponsorCard
         isLoadingTx={isLoadingTx}
@@ -108,6 +110,8 @@ const Unsponsored = props => {
       />
     );
   }
+  console.log(`depositData?.canSpend`, depositData?.canSpend);
+  console.log(`isMember`, isMember);
   return (
     <UnlockTokenCard
       depositData={depositData}
@@ -133,7 +137,7 @@ const UnlockTokenCard = ({
         <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
         <StatusCircle color='green' />
         <ParaSm fontWeight='700' mr='1'>
-          Unsponsored
+          Approve Deposit Token
         </ParaSm>
       </StatusDisplayBox>
       <ParaSm mb={3}>
@@ -151,7 +155,7 @@ const UnlockTokenCard = ({
           onClick={approveToken}
           isLoading={isLoadingTx}
         >
-          Approve {depositData.symbol}
+          Approve {depositData?.symbol}
         </Button>
       </Flex>
     </PropActionBox>
@@ -189,7 +193,7 @@ const SponsorCard = ({
           onClick={sponsorProposal}
           isLoading={isLoadingTx}
         >
-          Sponsor {depositData.deposit && `(${depositData.deposit})`}
+          Sponsor {depositData?.deposit && `(${depositData.deposit})`}
         </Button>
         {address?.toLowerCase() === proposal?.proposer?.toLowerCase() && (
           <Button

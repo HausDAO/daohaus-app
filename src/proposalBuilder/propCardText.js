@@ -5,8 +5,8 @@ export const propStatusText = {
     'This proposal has been struck down, and now it lay beneath the earth, putrifying as the insects feast.',
   approve: symbol =>
     symbol
-      ? `You need to approve ${symbol} in order to sponsor it`
-      : `You need to approve ${symbol} in order to sponsor this proposal`,
+      ? `You need to approve ${symbol} in order to sponsor this proposal`
+      : `You need to approve deposit token in order to sponsor this proposal`,
   noFunds: symbol =>
     symbol
       ? `You don't have enough ${symbol} to sponsor this proposal`
