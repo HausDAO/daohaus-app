@@ -468,6 +468,14 @@ export const FIELD = {
     placeholder: 'Choose a Token',
     expectType: 'address',
   },
+  UBERHAUS_DELEGATE: {
+    type: 'uberhausDelegate',
+    htmlFor: 'uberhausDelegate',
+    name: 'uberhausDelegate',
+    // placeholder: '0x',
+    label: 'Delegate',
+    expectType: 'address',
+  },
 };
 
 export const FORM_DISPLAY = {
