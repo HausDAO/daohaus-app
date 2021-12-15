@@ -3,7 +3,6 @@ import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
-import { getSnapshotSpaces } from '../utils/theGraph';
 
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
@@ -727,14 +726,15 @@ export const BOOST_FORMS = {
         errorMessage: true,
       },
     },
-    nextFormHook: async ({ values }) => {
-      const snapshotSpace = values?.space;
-      const space = await getSnapshotSpaces(snapshotSpace);
-      if (!space.space?.id) {
-        throw Error('No space found!');
-      }
-      return true;
-    },
+    stepValidation: 'validateSnapshot',
+    // nextFormHook: async ({ values }) => {
+    //   const snapshotSpace = values?.space;
+    //   const space = await getSnapshotSpaces(snapshotSpace);
+    //   if (!space.space?.id) {
+    //     throw Error('No space found!');
+    //   }
+    //   return true;
+    // },
   },
   SPAM_FILTER: {
     id: 'SPAM_FILTER',

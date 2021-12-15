@@ -9,6 +9,7 @@ import FormFooter from './formFooter';
 import {
   checkConditionalTx,
   createRegisterOptions,
+  handleStepValidation,
   inputDataFromABI,
 } from '../utils/formBuilder';
 import { useAppModal } from '../hooks/useModals';
@@ -36,7 +37,7 @@ const FormBuilder = props => {
     txID,
     logValues,
     tx,
-    nextFormHook,
+    stepValidation,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
@@ -171,10 +172,10 @@ const FormBuilder = props => {
     //  HANDLE GO TO NEXT
     if (next && typeof goToNext === 'function') {
       if (typeof next === 'string') {
-        if (nextFormHook) {
+        if (stepValidation) {
           try {
             setFormState('loading');
-            await nextFormHook({ values });
+            await handleStepValidation[stepValidation]({ values });
             setFormState('success');
           } catch (error) {
             console.error(error);
