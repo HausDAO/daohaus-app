@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Flex, Box, Divider, Center } from '@chakra-ui/react';
+import { Flex, Box, Center, Button } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -27,18 +27,35 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
 
   return (
     <ContentBox p='0' mb={4} minHeight='8.875rem'>
-      <Flex>
+      <Flex flexDir={['column', 'column', 'row']}>
         <PropCardBrief proposal={proposal} />
-        <Center height='100%' minHeight='8.875rem'>
-          <Divider orientation='vertical' colorScheme='blackAplha.900' />
-        </Center>
-        <Flex w='45%'>
+        <Center minHeight={['0', '0', '8.875rem']} />
+        <Flex
+          w={['100%', '100%', '45%']}
+          mb={['4', '4', '0', '0']}
+          mt={['4', '4', '0']}
+        >
           <PropActions
             proposal={proposal}
             canInteract={canInteract}
             voteData={voteData}
             isMember={isMember}
           />
+        </Flex>
+        <Flex
+          justifyContent='center'
+          w='100%'
+          display={['flex', 'flex', 'none']}
+          mb='6'
+        >
+          <Button
+            variant='outline'
+            size='lg'
+            width='10rem'
+            mt={['4', '4', '0']}
+          >
+            More Details
+          </Button>
         </Flex>
       </Flex>
     </ContentBox>
@@ -48,7 +65,12 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
 const DetailsLink = ({ proposalId }) => {
   const { daochain, daoid } = useParams();
   return (
-    <Box position='absolute' top='0.5rem' right='1rem'>
+    <Box
+      position='absolute'
+      top='0.5rem'
+      right='1rem'
+      display={['none', 'none', 'block']}
+    >
       <Link to={`/dao/${daochain}/${daoid}/proposals/${proposalId}`}>
         <ParaSm>More Details</ParaSm>
       </Link>
@@ -66,14 +88,25 @@ const PropCardBrief = ({ proposal = {} }) => {
 
   return (
     <Flex
-      width='60%'
+      width={['100%', '100%', '60%']}
+      minHeight={['10rem', '10rem', '0']}
       justifyContent='space-between'
-      borderRight='1px solid rgba(255,255,255,0.1)'
+      borderRight={['none', 'none', '1px solid rgba(255,255,255,0.1)']}
+      borderBottom={[
+        '1px solid rgba(255,255,255,0.1)',
+        '1px solid rgba(255,255,255,0.1)',
+        'none',
+        'none',
+      ]}
       position='relative'
     >
       <Box px='1.2rem' py='0.6rem'>
-        <CardLabel mb={2}>{proposal.proposalType}</CardLabel>
-        <ParaMd fontWeight='700' mb={3}>
+        <CardLabel mb={['4', '4', '2']}>{proposal.proposalType}</CardLabel>
+        <ParaMd
+          fontWeight='700'
+          mb={['5', '5', '3']}
+          fontSize={['1.4rem', '1.4rem', '1rem']}
+        >
           {proposal.title}
         </ParaMd>
         {isRequesting && <PropCardRequest proposal={proposal} />}
