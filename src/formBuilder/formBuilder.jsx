@@ -14,7 +14,7 @@ import {
   createRegisterOptions,
   inputDataFromABI,
 } from '../utils/formBuilder';
-import { handleStepValidation } from '../utils/validation';
+import { validate, handleStepValidation } from '../utils/validation';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -82,7 +82,8 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = (abiString, serialTag = false) => {
-    if (!abiString || typeof abiString !== 'string') return;
+    if (!abiString || typeof abiString !== 'string' || validate.hex(abiString))
+      return;
 
     if (abiString === 'clear' || abiString === 'hex') {
       if (setParentFields) {
@@ -91,6 +92,8 @@ const FormBuilder = props => {
         setFields(fields);
       }
     } else {
+      if (!validate.jsonStringObject(abiString)) return;
+
       const abiInputs = JSON.parse(abiString)?.inputs;
       if (setParentFields) {
         setParentFields(txID, [

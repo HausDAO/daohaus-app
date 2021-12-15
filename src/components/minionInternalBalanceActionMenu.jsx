@@ -13,19 +13,18 @@ import {
 } from '@chakra-ui/react';
 
 import { useTX } from '../contexts/TXContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { TX } from '../data/contractTX';
 import { chainByName } from '../utils/chain';
 
 const MinionInternalBalanceActionMenu = ({
   targetDao,
   tokenWhitelisted,
-  daoConnectedAndSameChain,
   token,
 }) => {
-  const { submitTransaction, refreshDao } = useTX();
-  const { isMember } = useDaoMember();
+  const { canInteract } = useCanInteract({});
   const { minion } = useParams();
+  const { submitTransaction, refreshDao } = useTX();
   const [loading, setLoading] = useState();
 
   const handleWithdraw = async options => {
@@ -73,7 +72,7 @@ const MinionInternalBalanceActionMenu = ({
       </MenuButton>
       <MenuList>
         <MenuItem
-          isDisabled={!daoConnectedAndSameChain || !isMember}
+          isDisabled={!canInteract}
           onClick={() => handleWithdraw({ transfer: false })}
         >
           <Tooltip
@@ -86,9 +85,7 @@ const MinionInternalBalanceActionMenu = ({
           </Tooltip>{' '}
         </MenuItem>
         <MenuItem
-          isDisabled={
-            !tokenWhitelisted || !daoConnectedAndSameChain || !isMember
-          }
+          isDisabled={!tokenWhitelisted || !canInteract}
           onClick={() => handleWithdraw({ transfer: true })}
         >
           <Tooltip

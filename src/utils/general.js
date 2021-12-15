@@ -96,9 +96,6 @@ export const detailsToJSON = values => {
     details.ratePerSec = values.ratePerSec;
     details.minDeposit = values.minDeposit;
   }
-  if (values.cco) {
-    details.cco = values.cco;
-  }
   if (values.isTransmutation) {
     details.isTransmutation = true;
   }

@@ -67,30 +67,6 @@ const baseListFields = `
   }
   `;
 
-export const PROPOSALS_LIST = gql`
-  query proposals($contractAddr: String!, $skip: Int) {
-    proposals(
-      where: { molochAddress: $contractAddr }
-      orderBy: proposalId
-      orderDirection: desc
-      first: 1000
-      skip: $skip
-    ) {
-      ${baseListFields}
-    }
-  }
-`;
-
-export const PROPOSAL_BY_ID = gql`
-query proposals($contractAddr: String!, $skip: Int, $id: String ) {
-    proposals(
-      where: { molochAddress: $contractAddr, proposalId: $id }
-    ) {
-      ${baseListFields}
-    }
-  }
-`;
-
 export const PROPOSALS_LIST_IS_MEMBER = gql`
   query proposalsMember($contractAddr: String!, $skip: Int, $memberAddress: String!) {
     proposals(

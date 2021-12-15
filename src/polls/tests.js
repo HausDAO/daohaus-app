@@ -1,5 +1,4 @@
 import { BigNumber } from 'ethers';
-import { hashMaker, memberVote } from '../utils/proposalUtils';
 
 export const testTXHash = (data, shouldEqual, pollId) => {
   if (data) {
@@ -17,19 +16,6 @@ export const testWrapNZap = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error('Did not receive results from the Wrap N Zap transaction.');
-};
-
-export const submitProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const recentProposalHashes = data.proposals.map(proposal =>
-      hashMaker(proposal),
-    );
-    return recentProposalHashes.includes(shouldEqual);
-  }
-  clearInterval(pollId);
-  throw new Error(
-    `Poll test did not recieve the expected results from the graph: ${data}`,
-  );
 };
 
 export const tokenAllowanceTest = (data, shouldEqual) => {
@@ -64,64 +50,6 @@ export const minonProposalTest = (data, shouldEqual, pollId) => {
   throw new Error(`Bad query, clearing poll: ${data}`);
 };
 
-export const rageQuitTest = (data, shouldEqual, pollId) => {
-  if (data.moloch) {
-    return data.moloch.rageQuits.length > 0;
-  }
-  clearInterval(pollId);
-  throw new Error(`Bad query, clearing poll: ${data}`);
-};
-
-export const sponsorProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals.length === 1) {
-    return data.proposals[0].sponsored;
-  }
-  clearInterval(pollId);
-  throw new Error(
-    `Poll test did not recieve the expected results from the graph: ${data}`,
-  );
-};
-
-export const submitVoteTest = (data, shouldEqual, pollId) => {
-  const [proposalId, userAddress] = shouldEqual;
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      proposal => proposal.proposalId === proposalId,
-    );
-    return memberVote(proposal, userAddress) !== null;
-  }
-  clearInterval(pollId);
-  throw new Error(
-    `Poll test did not recieve the expected results from the graph: ${data}`,
-  );
-};
-
-export const processProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      proposal => proposal.proposalIndex === shouldEqual,
-    );
-    return proposal?.processed;
-  }
-  clearInterval(pollId);
-  throw new Error(
-    `Poll test did not recieve the expected results from the graph: ${data}`,
-  );
-};
-
-export const cancelProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      proposal => proposal.proposalId === shouldEqual,
-    );
-    return proposal?.cancelled;
-  }
-  clearInterval(pollId);
-  throw new Error(
-    `Poll test did not recieve the expected results from the graph: ${data}`,
-  );
-};
-
 export const minionExecuteTest = (data, shouldEqual, pollId) => {
   if (data !== null || data !== undefined) {
     return data === shouldEqual;
@@ -131,16 +59,6 @@ export const minionExecuteTest = (data, shouldEqual, pollId) => {
     `Poll test did recieve the expected results from contract: ${data}`,
   );
   return null;
-};
-
-export const collectTokenTest = (graphBalance, oldBalance, pollId) => {
-  if (graphBalance) {
-    return graphBalance !== oldBalance;
-  }
-  clearInterval(pollId);
-  throw new Error(
-    'Poll for collect tokens did not recieve new value from the graph',
-  );
 };
 
 export const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
@@ -158,16 +76,6 @@ export const guildFundTest = (data, shouldEqual, pollId) => {
   if (data) {
     // eslint-disable-next-line
     return data == shouldEqual;
-  }
-  clearInterval(pollId);
-  throw new Error(
-    `Poll test did not recieve the expected results from the graph: ${data}`,
-  );
-};
-
-export const updateDelegateTest = (data, shouldEqual, pollId) => {
-  if (data) {
-    return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
   }
   clearInterval(pollId);
   throw new Error(
@@ -193,10 +101,6 @@ export const checkDelRewardsTest = (data, shouldEqual, pollId) => {
   throw new Error(
     `Poll test did not recieve the expected results from the graph: ${data}`,
   );
-};
-
-export const rageKickTest = data => {
-  return data.members[0].loot === '0';
 };
 
 export const wrapNZapSummonTest = data => {

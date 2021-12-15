@@ -1,10 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router';
-
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ListItemButton from './listItemButton';
-import { daoConnectedAndSameChain } from '../utils/general';
 
 const BoostItemButton = ({
   boost,
@@ -12,13 +7,6 @@ const BoostItemButton = ({
   installBoost,
   goToSettings,
 }) => {
-  const { daochain } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
-  const { daoMember } = useDaoMember();
-
-  const canInteract =
-    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
-    +daoMember?.shares > 0;
   const cost = boost?.cost?.toUpperCase();
 
   if (!boost.isAvailable)
@@ -28,7 +16,6 @@ const BoostItemButton = ({
         helperText={`Unavailable on network - ${cost}`}
         value={boost}
         mainText='Details'
-        disabled={!canInteract}
       />
     );
   if (!boost.isInstalled)
@@ -38,7 +25,6 @@ const BoostItemButton = ({
         helperText={cost}
         value={boost}
         mainText='Install'
-        disabled={!canInteract}
       />
     );
   if (boost.isInstalled && boost.settings === 'none')
@@ -48,7 +34,6 @@ const BoostItemButton = ({
         helperText='installed'
         value={boost}
         mainText='Details'
-        disabled={!canInteract}
       />
     );
   if (boost.isInstalled)
@@ -58,7 +43,6 @@ const BoostItemButton = ({
         helperText='installed'
         value={boost}
         mainText='Settings'
-        disabled={!canInteract}
       />
     );
   return null;

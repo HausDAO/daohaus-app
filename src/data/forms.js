@@ -461,7 +461,7 @@ export const PROPOSAL_FORMS = {
     fields: [
       [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [
-        FIELD.DISPERSE_TYPE_SWTICH,
+        FIELD.DISPERSE_TYPE_SWITCH,
         {
           type: 'formCondition',
           eth: null,
@@ -548,6 +548,7 @@ export const PROPOSAL_FORMS = {
   },
   SELL_NFT_RARIBLE: {
     id: 'SELL_NFT_RARIBLE',
+    formConditions: ['unset', 'fixed'],
     title: 'Sell NFT on Rarible',
     description: 'Post an NFT for sale on Rarible',
     type: PROPOSAL_TYPES.SELL_NFT_RARIBLE,
@@ -557,7 +558,12 @@ export const PROPOSAL_FORMS = {
     fields: [
       [FIELD.NFT_SELECT],
       [
-        FIELD.DATE_RANGE,
+        FIELD.DATE_RANGE_SWITCH,
+        {
+          type: 'formCondition',
+          fixed: FIELD.DATE_RANGE,
+          unset: null,
+        },
         {
           ...FIELD.SET_PRICE,
           orderType: 'sell',

@@ -22,7 +22,6 @@ import ContentBox from './ContentBox';
 import DaoToDaoUberAlly from './daoToDaoUberAllyLink';
 import DaoToDaoProposalCard from './daoToDaoProposalCard';
 import DaoToDaoMemberInfo from './daoToDaoMemberInfo';
-import { TokenService } from '../services/tokenService';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { chainByName } from '../utils/chain';
 import {
@@ -30,6 +29,8 @@ import {
   pendingUberHausStakingProposalChildDao,
 } from '../utils/proposalUtils';
 import { truncateAddr } from '../utils/general';
+import { createContract } from '../utils/contract';
+import { LOCAL_ABI } from '../utils/abi';
 
 import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 
@@ -117,11 +118,14 @@ const DaoToDaoManager = ({
             UBERHAUS_DATA.STAKING_TOKEN.toLowerCase()
           );
         });
-        const tokenBalance = await TokenService({
+        const tokenContract = createContract({
+          address: UBERHAUS_DATA.STAKING_TOKEN,
+          abi: LOCAL_ABI.ERC_20,
           chainID: daochain,
-          tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
-          is32: false,
-        })('balanceOf')(uberHausMinionData.minionAddress);
+        });
+        const tokenBalance = await tokenContract.methods
+          .balanceOf(uberHausMinionData.minionAddress)
+          .call();
 
         setUberHausMinion({
           ...uberHausMinionData,

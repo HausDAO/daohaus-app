@@ -30,9 +30,6 @@ import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
 import { handleDecimals } from '../utils/general';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const UBER_LINK =
-  '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
-
 const urlify = text => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.replace(urlRegex, url => {
@@ -42,7 +39,6 @@ const urlify = text => {
 
 const ProposalDetails = ({
   proposal,
-  daoMember,
   hideMinionExecuteButton,
   minionAction,
 }) => {
@@ -159,7 +155,7 @@ const ProposalDetails = ({
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link && <MediaBox link={proposal.link} />}
           </Box>
-          <DiscourseProposalTopic proposal={proposal} daoMember={daoMember} />
+          <DiscourseProposalTopic proposal={proposal} />
         </Box>
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
@@ -260,7 +256,6 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         label='uberhaus minion'
         tooltip
         tooltipText={TIP_LABELS.UBER_PROPOSAL}
-        link={UBER_LINK}
         shouldFetchProfile
         name={minionName}
       />

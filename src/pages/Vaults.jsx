@@ -9,25 +9,18 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import useCanInteract from '../hooks/useCanInteract';
 import BankChart from '../components/bankChart';
 import ListFilter from '../components/listFilter';
 import MainViewLayout from '../components/mainViewLayout';
 import VaultCard from '../components/vaultCard';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { vaultFilterOptions } from '../utils/vaults';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';
 
-const Vaults = ({
-  overview,
-  customTerms,
-  currentDaoTokens,
-  daoMember,
-  daoVaults,
-}) => {
+const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
+  const { canInteract } = useCanInteract({});
   const { daoid, daochain } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
   const [filter, setFilter] = useState('all');
   const [listVaults, setListVaults] = useState(null);
   const [chartBalances, setChartBalances] = useState([]);
@@ -60,20 +53,15 @@ const Vaults = ({
     }
   }, [daoVaults, filter]);
 
-  const ctaButton = daoConnectedAndSameChain(
-    address,
-    injectedChain?.chainId,
-    daochain,
-  ) &&
-    daoMember && (
-      <Button
-        as={Link}
-        to={`/dao/${daochain}/${daoid}/settings/boosts`}
-        rightIcon={<RiAddFill />}
-      >
-        Add Vault
-      </Button>
-    );
+  const ctaButton = canInteract && (
+    <Button
+      as={Link}
+      to={`/dao/${daochain}/${daoid}/settings/boosts`}
+      rightIcon={<RiAddFill />}
+    >
+      Add Vault
+    </Button>
+  );
 
   return (
     <MainViewLayout

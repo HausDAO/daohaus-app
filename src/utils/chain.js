@@ -302,6 +302,7 @@ export const supportedChains = {
     name: 'Celo',
     short_name: 'celo',
     nativeCurrency: 'CELO',
+    network: 'celo',
     network_id: 42220,
     chain_id: '0xa4ec',
     hub_sort_order: 5,
@@ -320,8 +321,8 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-celo-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-celo-subgraph',
-    minion_factory_addr: '',
-    moloch_factory_addr: '0x9100a2489b2998b1331fd33714187d895c919075', // moloch v2.1.sol
+    minion_factory_addr: '0xaD791Ef059A25b6C82e56977C6489974333C5A0C',
+    moloch_factory_addr: '0x8c47bD2ABae16323054a19aA562efC87A6c26d29', // moloch v2.1.sol
     dai_contract: '0x765de816845861e75a25fca122bb6898b8b1282a', // This is cUSD for Celo
     wrapper_contract: '0x471ece3750da237f93b8e339c536989b8978a438',
     wrap_n_zap_factory_addr: '0x07269699bc441fc97d12d5478cb09522ef32f76a',

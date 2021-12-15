@@ -13,9 +13,6 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useToken } from '../contexts/TokenContext';
 
 import Allies from '../pages/Allies';
-import CcoAdmin from '../pages/CcoAdmin';
-import CcoContribution from '../pages/CcoContribution';
-import CcoHelper from '../pages/CcoHelper';
 import Clone from '../pages/Clone';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import Layout from '../components/layout';
@@ -26,7 +23,6 @@ import MetaAudit from '../pages/MetaAudit';
 import MinionGallery from '../pages/MinionGallery';
 import MinionVault from '../pages/MinionVault';
 import MintGate from '../pages/MintGate';
-import NewProposal from '../pages/NewProposal';
 import Notifications from '../pages/Notifications';
 import Overview from '../pages/Overview';
 import PartyFavor from '../pages/PartyFavor';
@@ -34,7 +30,7 @@ import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
 import Proposals from '../pages/Proposals';
 import ProposalTypes from '../pages/ProposalTypes';
-import ProposalWatcher from '../pages/ProposalWatcher';
+import ProposalAudit from '../pages/ProposalAudit';
 import Settings from '../pages/Settings';
 import Snapshot from '../pages/Snapshot';
 import SnapshotSettings from '../pages/SnapshotSettings';
@@ -98,7 +94,6 @@ const DaoRouter = () => {
             currentDaoTokens={currentDaoTokens}
             overview={daoOverview}
             customTerms={customTerms}
-            daoMember={daoMember}
             daoVaults={daoVaults}
           />
         </Route>
@@ -144,9 +139,6 @@ const DaoRouter = () => {
         <Route exact path={`${path}/staking`}>
           <Redirect to='/' />
         </Route>
-        <Route exact path={`${path}/settings/clone`}>
-          <Clone daoMembers={daoMembers} daoOverview={daoOverview} />
-        </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications
             daoMetaData={daoMetaData}
@@ -165,7 +157,6 @@ const DaoRouter = () => {
         <Route exact path={`${path}/settings`}>
           <Settings
             overview={daoOverview}
-            daoMember={daoMember}
             daoMetaData={daoMetaData}
             customTerms={customTerms}
           />
@@ -212,9 +203,15 @@ const DaoRouter = () => {
             daoMembers={daoMembers}
           />
         </Route>
-        <Route exact path={`${path}/proposals/hardcore`}>
-          <ProposalWatcher daoProposals={daoProposals} />
+
+        <Redirect
+          from={`${path}/proposals/hardcore`}
+          to={`${path}/proposals/audit`}
+        />
+        <Route exact path={`${path}/proposals/audit`}>
+          <ProposalAudit daoProposals={daoProposals} />
         </Route>
+
         <Route exact path={`${path}/proposals/spam`}>
           <ProposalsSpam daoMetaData={daoMetaData} />
         </Route>
@@ -240,33 +237,6 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/uberhaus/clone`}>
           <Clone daoMembers={daoMembers} daoOverview={daoOverview} isUberHaus />
-        </Route>
-        <Route exact path={`${path}/uberhaus/proposals/new`}>
-          <NewProposal
-            customTerms={customTerms}
-            daoMetaData={daoMetaData}
-            daoOverview={daoOverview}
-          />
-        </Route>
-        <Route exact path={`${path}/cco`}>
-          <CcoContribution
-            daoMetaData={daoMetaData}
-            currentDaoTokens={currentDaoTokens}
-            daoProposals={daoProposals}
-          />
-        </Route>
-        <Route exact path={`${path}/cco/watcher`}>
-          <CcoHelper
-            daoMetaData={daoMetaData}
-            currentDaoTokens={currentDaoTokens}
-            daoProposals={daoProposals}
-          />
-        </Route>
-        <Route exact path={`${path}/cco/admin/`}>
-          <CcoAdmin
-            daoMetaData={daoMetaData}
-            isCorrectNetwork={isCorrectNetwork}
-          />
         </Route>
         <Route exact path={`${path}/boost/mintgate`}>
           <MintGate daoMetaData={daoMetaData} />

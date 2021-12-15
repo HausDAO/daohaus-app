@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
-import BankList from '../components/BankList';
+import BankList from '../components/bankList';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import SuperTokenList from '../components/superTokenList';
@@ -92,7 +92,7 @@ const SuperfluidMinionDetails = ({
     const setUpBalances = async () => {
       const balances = members.find(member => member.memberAddress === minion);
       const newTokenData = balances
-        ? await initTokenData(balances.tokenBalances)
+        ? await initTokenData(daochain, balances.tokenBalances)
         : [];
       setMinionBalances(newTokenData);
     };

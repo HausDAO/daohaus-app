@@ -16,16 +16,19 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { useAppModal } from '../hooks/useModals';
 import { CORE_FORMS, FORM } from '../data/forms';
 import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
-  const { address, injectedChain, injectedProvider } = useInjectedProvider();
+  const { address, injectedProvider } = useInjectedProvider();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { formModal } = useAppModal();
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
@@ -126,7 +129,7 @@ const ProfileMenu = ({ member }) => {
           <MenuItem>View 3box Profile</MenuItem>
         </Link>
 
-        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
+        {canInteract ? (
           <>
             {isMember && hasSharesOrLoot && (
               <MenuItem onClick={handleRageQuitClick}>RageQuit</MenuItem>

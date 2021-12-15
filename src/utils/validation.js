@@ -47,6 +47,9 @@ export const validate = {
   bytes32(val) {
     return val;
   },
+  hex(val) {
+    return Web3.utils.isHexStrict(val);
+  },
   disperseList(val) {
     return val
       ?.split(/\r?\n/)
@@ -61,6 +64,14 @@ export const validate = {
           ),
         true,
       );
+  },
+  jsonStringObject(val) {
+    try {
+      const obj = JSON.parse(val);
+      return typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
+    } catch (e) {
+      return false;
+    }
   },
 };
 

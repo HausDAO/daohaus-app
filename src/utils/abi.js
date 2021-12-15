@@ -29,6 +29,7 @@ import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
+import { validate } from './validation';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -156,6 +157,12 @@ export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
         'Could not encode transaction data with the values entered into this form',
     };
   }
+};
+
+export const ensureHex = (abiInput, abiArgs) => {
+  return validate.hex(abiInput)
+    ? abiInput
+    : safeEncodeHexFunction(JSON.parse(abiInput), abiArgs || []);
 };
 
 export const encodeMultisendTx = (
