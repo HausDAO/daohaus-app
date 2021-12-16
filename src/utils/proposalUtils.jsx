@@ -22,7 +22,7 @@ export const PROPOSAL_TYPES = {
   MEMBER: 'Member Proposal',
   SIGNAL: 'Signal Proposal',
   WHITELIST: 'Whitelist Token Proposal',
-  GUILDKICK: 'Guild Kick Proposal',
+  GUILDKICK: 'Guildkick Proposal',
   TRADE: 'Trade Proposal',
   MINION_UBER_STAKE: 'UberHAUS Staking Proposal',
   MINION_UBER_RQ: 'UberHAUS RageQuit Proposal',
@@ -48,6 +48,7 @@ export const PROPOSAL_TYPES = {
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
   BUY_NFT_RARIBLE: 'Buy NFT',
   SELL_NFT_RARIBLE: 'Sell NFT',
+  DISPERSE: 'Disperse Proposal',
 };
 
 export const MINION_TYPES = {
@@ -542,6 +543,7 @@ export const handleListFilter = (proposals, filter, daoMember) => {
           ?.unread,
     );
   }
+
   return updatedProposals.filter(
     proposal => proposal[filter.type] === filter.value,
   );

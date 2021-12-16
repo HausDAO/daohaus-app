@@ -223,6 +223,21 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  DISPERSE: {
+    title: 'Disperse Boost',
+    description: 'Disperse tokens to a list of recipients.',
+    publisher: PUBLISHERS.BOOST_FOUNDRY,
+    version: '1.0',
+    pars: [
+      'This Boost allows you to send funds to a list of addresses in a single transaction.',
+      'Addresses and amounts can be input as a CSV or other similar format.',
+      'Funds can be in the form of tokens or ether (network token) and are pulled from a Safe Minion.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+      { href: 'https://disperse.app', label: 'Disperse App' },
+    ],
+  },
   // SNAPSHOT: {
   //   title: 'Snapshot Proposals',
   //   description:
@@ -495,6 +510,17 @@ export const BOOSTS = {
     cost: 'free',
     metaFields: ['paymentRequested', 'paymentToken', 'membersOnly'],
     settings: { type: 'internalLink', appendToDaoPath: 'settings/spam' },
+  },
+  DISPERSE: {
+    id: 'DISPERSE',
+    steps: STEPS.MINION_BOOST,
+    playlist: BOOST_PLAYLISTS.DISPERSE,
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    boostContent: CONTENT.DISPERSE,
+    categories: ['payments'],
+    networks: 'all',
+    cost: 'free',
+    settings: 'none',
   },
   // SNAPSHOT: {
   //   id: 'SNAPSHOT',

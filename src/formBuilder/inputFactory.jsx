@@ -9,7 +9,6 @@ import DiscourseMeta from './discourseMeta';
 import GatedInput from './gatedInput';
 import GenericFormDisplay from './genericFormDisplay';
 import GenericInput from './genericInput';
-import GenericButton from './genericButton';
 import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
 import LinkInput from './linkInput';
@@ -40,6 +39,8 @@ import { createRegisterOptions } from '../utils/formBuilder';
 import BoolSelect from './boolSelect';
 import GenericSwitch from './genericSwitch';
 import ImageInput from './imageInput';
+import DisperseListInput from './disperseListInput';
+import MinionTokenSelect from './minionTokenSelect';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -168,11 +169,14 @@ export const InputFactory = props => {
   if (type === 'boolSelect') {
     return <BoolSelect {...props} />;
   }
-  if (type === 'genericButton') {
-    return <GenericButton {...props} />;
-  }
   if (type === 'imageInput') {
     return <ImageInput {...props} />;
+	}
+  if (type === 'disperseListInput') {
+    return <DisperseListInput {...props} />;
+  }
+  if (type === 'minionTokenSelect') {
+    return <MinionTokenSelect {...props} />;
   }
   return null;
 };

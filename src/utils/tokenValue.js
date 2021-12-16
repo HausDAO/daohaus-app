@@ -1,11 +1,9 @@
 import { ethers } from 'ethers';
 
-// Refactor utils to PURGE TokenService and MolochService
-
-import { TokenService } from '../services/tokenService';
-import { MolochService } from '../services/molochService';
 import { omit } from './general';
 import { validate } from './validation';
+import { createContract } from './contract';
+import { LOCAL_ABI } from './abi';
 
 const babe = '0x000000000000000000000000000000000000baBe';
 const tokenAPI =
@@ -69,20 +67,24 @@ export const addContractVals = (tokens, chainID) => {
   return Promise.all(
     tokens.map(async token => {
       try {
-        const tokenBalance = await TokenService({
+        const tokenContract = createContract({
+          address: token.tokenAddress,
+          abi: LOCAL_ABI.ERC_20,
           chainID,
-          tokenAddress: token.tokenAddress,
-          is32: false,
-        })('balanceOf')(token?.moloch?.id);
-        const babeBalance = await MolochService({
-          tokenAddress: token.tokenAddress,
-          chainID,
-          daoAddress: token?.moloch?.id,
-          version: +token?.moloch?.version,
-        })('getUserTokenBalance')({
-          userAddress: babe,
-          tokenAddress: token.tokenAddress,
         });
+        const tokenBalance = await tokenContract.methods
+          .balanceOf(token?.moloch?.id)
+          .call();
+
+        const molochContract = createContract({
+          address: token?.moloch?.id,
+          abi: LOCAL_ABI.MOLOCH_V2,
+          chainID,
+        });
+        const babeBalance = await molochContract.methods
+          .getUserTokenBalance(babe, token.tokenAddress)
+          .call();
+
         return {
           ...token,
           contractBalances: {
@@ -181,10 +183,13 @@ export const addZeros = (roundedVal, decimals) => {
 
 export const fetchBalance = ({ address, chainID, tokenAddress }) => {
   try {
-    const max = TokenService({
+    const tokenContract = createContract({
+      address: tokenAddress,
+      abi: LOCAL_ABI.ERC_20,
       chainID,
-      tokenAddress,
-    })('balanceOf')(address);
+    });
+    const max = tokenContract.methods.balanceOf(address).call();
+
     return max;
   } catch (error) {
     console.log(error);

@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import { Button, Tooltip } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
-import { daoConnectedAndSameChain } from '../utils/general';
+import useCanInteract from '../hooks/useCanInteract';
 import { getMinionActionFormLego } from '../utils/vaults';
 
 const LABELS = {
@@ -13,20 +11,17 @@ const LABELS = {
 };
 
 const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
-  const { address, injectedChain } = useInjectedProvider();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { formModal } = useAppModal();
-  const { daochain } = useParams();
 
   const enableTransfer =
     isMember &&
     (!vault.safeAddress || (vault.safeAddress && vault.isMinionModule));
-  const sameChain = daoConnectedAndSameChain(
-    address,
-    daochain,
-    injectedChain?.chainId,
-  );
+
   const tooltip =
-    ((!sameChain || !isMember) && LABELS.NO_MEMBER) ||
+    ((!canInteract || !isMember) && LABELS.NO_MEMBER) ||
     (!enableTransfer && LABELS.MINION_NOT_READY);
 
   const transferFormLego = useMemo(() => {
@@ -48,7 +43,7 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
 
   return (
     <>
-      {sameChain && enableTransfer ? (
+      {canInteract && enableTransfer ? (
         <Button size='md' variant='outline' ml={6} onClick={openSendModal}>
           Transfer
         </Button>

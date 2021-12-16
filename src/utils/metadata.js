@@ -8,7 +8,6 @@ import {
 } from '../data/playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';
-const ccoApiUrl = 'https://cco.daohaus.club';
 
 export const fetchMetaData = async endpoint => {
   const url = `${metadataApiUrl}/dao/${endpoint}`;
@@ -214,23 +213,6 @@ export const boostPost = async (endpoint, data) => {
   }
 };
 
-export const ccoPost = async (endpoint, data) => {
-  const url = `${ccoApiUrl}/${endpoint}`;
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Haus-Key': process.env.REACT_APP_HAUS_KEY,
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 export const ipfsPrePost = async (endpoint, data) => {
   const url = `${metadataApiUrl}/${endpoint}`;
   try {
@@ -323,17 +305,6 @@ export const getForumTopics = async categoryId => {
   try {
     const response = await fetch(url);
 
-    return response.json();
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-export const getEligibility = async (ccoId, address) => {
-  try {
-    const response = await fetch(
-      `${ccoApiUrl}/cco/eligibility/${ccoId}/${address}`,
-    );
     return response.json();
   } catch (err) {
     console.error(err);

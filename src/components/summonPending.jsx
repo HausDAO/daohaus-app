@@ -18,7 +18,7 @@ import {
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { POPUP_CONTENT } from '../content/pending-tx-modal';
+import { POPUP_CONTENT } from '../data/txModalContent';
 import { supportedChains } from '../utils/chain';
 
 const SummonPending = ({ txHash, success, chainId, isUberHaus = false }) => {

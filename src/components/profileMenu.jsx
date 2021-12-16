@@ -16,11 +16,11 @@ import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { useAppModal } from '../hooks/useModals';
 import { CORE_FORMS, FORM } from '../data/forms';
 import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
 import {
   getBasicProfile,
@@ -31,8 +31,11 @@ import {
 
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
-  const { address, injectedChain, injectedProvider } = useInjectedProvider();
+  const { address, injectedProvider } = useInjectedProvider();
   const { stepperModal, formModal, closeModal } = useAppModal();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
   const { successToast, errorToast } = useOverlay();
@@ -81,7 +84,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
             setValue('emoji', profile?.emoji || '');
             setValue('description', profile?.description || '');
             setValue('homeLocation', profile?.homeLocation || '');
-            setValue('residenceCountry', profile?.residenceCountry || '');
             setValue('url', profile?.url || '');
             setValue('image', profile?.image || '');
             setFormState('success');
@@ -109,7 +111,6 @@ const ProfileMenu = ({ member, refreshProfile }) => {
               emoji: values?.emoji || null,
               description: values?.description || null,
               homeLocation: values?.homeLocation || null,
-              residenceCountry: values?.residenceCountry.toUpperCase() || null,
               url: values?.url || null,
               image: values?.image || null,
             }).filter(value => value[1] !== null);
@@ -216,7 +217,7 @@ const ProfileMenu = ({ member, refreshProfile }) => {
         {address === member.memberAddress && (
           <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
         )}
-        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
+        {canInteract ? (
           <>
             {isMember && hasSharesOrLoot && (
               <MenuItem onClick={handleRageQuitClick}>RageQuit</MenuItem>

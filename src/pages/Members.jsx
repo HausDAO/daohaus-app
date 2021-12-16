@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
-import { Flex, Box, Stack, Button } from '@chakra-ui/react';
+import { Flex, Box, Stack, Button, Spinner } from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import useCanInteract from '../hooks/useCanInteract';
 import ActivitiesFeed from '../components/activitiesFeed';
 import ContentBox from '../components/ContentBox';
 import CsvDownloadButton from '../components/csvDownloadButton';
@@ -17,13 +18,13 @@ import MembersChart from '../components/membersChart';
 import MemberInfoWrapper from '../components/memberInfoWrapper';
 import TextBox from '../components/TextBox';
 import UberHausMemberCard from '../components/uberHausMemberCard';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import {
   membersFilterOptions,
   membersSortOptions,
 } from '../utils/memberContent';
+import useBoost from '../hooks/useBoost';
 
 const Members = React.memo(
   ({
@@ -35,15 +36,19 @@ const Members = React.memo(
     customTerms,
     daoMetaData,
   }) => {
+    const { address } = useInjectedProvider();
+    const { canInteract } = useCanInteract({
+      checklist: ['isConnected', 'isSameChain'],
+    });
     const { daoid, daochain } = useParams();
-    const { address, injectedChain } = useInjectedProvider();
     const { setProposalSelector } = useOverlay();
+    const { isActive } = useBoost();
 
-    const [selectedMember, setSelectedMember] = useState(null);
-    const [scrolled, setScrolled] = useState(false);
-    const [listMembers, setListMembers] = useState(null);
-    const [sort, setSort] = useState('shares');
     const [filter, setFilter] = useState('active');
+    const [listMembers, setListMembers] = useState(null);
+    const [scrolled, setScrolled] = useState(false);
+    const [selectedMember, setSelectedMember] = useState(null);
+    const [sort, setSort] = useState('shares');
 
     useEffect(() => {
       const handleScroll = () => {
@@ -108,11 +113,7 @@ const Members = React.memo(
       setProposalSelector(true);
     };
 
-    const ctaButton = daoConnectedAndSameChain(
-      address,
-      injectedChain?.chainId,
-      daochain,
-    ) && (
+    const ctaButton = canInteract && (
       <Button
         rightIcon={<RiAddFill />}
         title={getTitle(customTerms, 'Proposal')}
@@ -135,15 +136,19 @@ const Members = React.memo(
           align='center'
           w={['100%', null, null, '58%']}
         >
-          <Box
-            mr={5}
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize={['sm', null, null, 'md']}
-            mb={[3, null, null, 0]}
-          >
-            {listMembers?.length || 0} MEMBERS
-          </Box>
+          {!listMembers ? (
+            <Spinner />
+          ) : (
+            <Box
+              mr={5}
+              textTransform='uppercase'
+              fontFamily='heading'
+              fontSize={['sm', null, null, 'md']}
+              mb={[3, null, null, 0]}
+            >
+              {listMembers?.length || 0} MEMBERS
+            </Box>
+          )}
           <Box>
             <ListSort
               sort={sort}
@@ -240,10 +245,7 @@ const Members = React.memo(
                         color='inherit'
                         size='xs'
                       >
-                        {`View 
-                      ${!daoMember ||
-                        (daoMember.memberAddress === address && 'My')}
-                      Profile`}
+                        View Profile
                       </TextBox>
                     </Flex>
                     <MembersChart
@@ -254,21 +256,26 @@ const Members = React.memo(
                   </>
                 )}
               </Box>
-
-              {selectedMember?.memberAddress ? (
-                <ActivitiesFeed
-                  key={selectedMember?.memberAddress}
-                  limit={2}
-                  activities={activities}
-                  hydrateFn={getMemberActivites(selectedMember.memberAddress)}
-                />
-              ) : daoMember ? (
-                <ActivitiesFeed
-                  limit={2}
-                  activities={activities}
-                  hydrateFn={getMembersActivites}
-                />
-              ) : null}
+              {!isActive('SPAM_FILTER') && (
+                <>
+                  {selectedMember?.memberAddress ? (
+                    <ActivitiesFeed
+                      key={selectedMember?.memberAddress}
+                      limit={2}
+                      activities={activities}
+                      hydrateFn={getMemberActivites(
+                        selectedMember.memberAddress,
+                      )}
+                    />
+                  ) : (
+                    <ActivitiesFeed
+                      limit={2}
+                      activities={activities}
+                      hydrateFn={getMembersActivites}
+                    />
+                  )}
+                </>
+              )}
             </Stack>
           </Box>
         </Flex>
