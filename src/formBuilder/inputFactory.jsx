@@ -41,6 +41,9 @@ import BoolSelect from './boolSelect';
 import GenericSwitch from './genericSwitch';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
+import ForeignChainSelect from './foreignChainSelect';
+import SwitchNetwork from './switchNetwork';
+import PrecomputedInput from './precomputedInput';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -177,6 +180,15 @@ export const InputFactory = props => {
   }
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
+  }
+  if (type === 'foreignChainSelect') {
+    return <ForeignChainSelect {...props} />;
+  }
+  if (type === 'switchNetwork') {
+    return <SwitchNetwork {...props} />;
+  }
+  if (type === 'precomputedInput') {
+    return <PrecomputedInput {...props} />;
   }
   return null;
 };

@@ -61,6 +61,21 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  SAFE_CROSSCHAIN_DEV_SUITE: {
+    title: 'Minion Cross-Chain DEV Suite (Safe Minion)',
+    // TODO: update content
+    description:
+      'Enable interactions with another avatar on a foreign chain from your Safe Minion/Gnosis Safe vault via DAO proposals.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.00',
+    pars: [
+      // TODO: update content
+      'Cross-chain Minion',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
   NIFTY_INK: {
     title: 'Nifty Ink',
     description: 'Buy and Sell Nifty Ink NFTs as a DAO.',
@@ -282,6 +297,29 @@ export const STEPS = {
     },
     STEP2: COMMON_STEPS.SIGNER,
   },
+  CROSS_CHAIN_MINION_BOOST: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'form',
+      form: BOOST_FORMS.CROSSCHAIN_MINION,
+      next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Summon Minion' },
+      // next: 'STEP2',
+      stepLabel: 'Deploy Minion',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'zodiacActionForm',
+      form: BOOST_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+      ctaText: 'Deploy & Add Module',
+      // TODO: how to adapt it to Tx model
+      // next: { type: 'awaitTx', then: 'STEP3' },
+      next: 'STEP3',
+      stepLabel: 'Deploy Brigde Module for Avatar on Foreign Chain',
+      isUserStep: true,
+      checklist: ['isConnected'],
+    },
+    STEP3: COMMON_STEPS.SIGNER,
+  },
   ADD_DISCORD: {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
@@ -393,6 +431,23 @@ export const BOOSTS = {
     networks: MINIONS[MINION_TYPES.SAFE].networks,
     cost: 'free',
     settings: 'none',
+  },
+  CROSS_CHAIN_MINION: {
+    id: 'CROSS_CHAIN_MINION',
+    boostContent: CONTENT.SAFE_CROSSCHAIN_DEV_SUITE,
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    categories: ['devTools'],
+    steps: STEPS.CROSS_CHAIN_MINION_BOOST,
+    // TODO: correct playlist?
+    playlist: BOOST_PLAYLISTS.SAFE_DEV_SUITE,
+    // TODO:
+    networks: {
+      '0x4': true,
+      '0x64': true,
+    },
+    cost: 'free',
+    settings: 'none',
+    metaFields: ['ambModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
   },
   RARIBLE: {
     id: 'RARIBLE',

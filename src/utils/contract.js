@@ -1,6 +1,7 @@
 // SAVE FOR LATER
 import { ethers } from 'ethers';
 import SafeMasterCopy from '@gnosis.pm/safe-contracts/build/artifacts/contracts/GnosisSafe.sol/GnosisSafe.json';
+import { deployAndSetUpModule } from '@gnosis.pm/zodiac';
 import Web3 from 'web3';
 
 // import Erc20Abi from '../contracts/erc20a.json';
@@ -201,4 +202,43 @@ export const getNftType = async (
   );
   if (erc1155Uri) return 'ERC1155';
   throw new Error('Not an NFT');
+};
+
+export const deployZodiacBridgeModule = async (
+  owner,
+  avatar,
+  target,
+  amb,
+  controller,
+  bridgeChainId,
+  chainId,
+  injectedProvider,
+) => {
+  try {
+    const provider = new ethers.providers.Web3Provider(
+      injectedProvider.currentProvider,
+    );
+    const { transaction, expectedModuleAddress } = deployAndSetUpModule(
+      'bridge',
+      {
+        types: [
+          'address',
+          'address',
+          'address',
+          'address',
+          'address',
+          'bytes32',
+        ],
+        values: [owner, avatar, target, amb, controller, bridgeChainId],
+      },
+      provider,
+      Number(chainId),
+      Date.now().toString(),
+    );
+    const tx = await provider.getSigner().sendTransaction(transaction);
+    await tx.wait();
+    return expectedModuleAddress;
+  } catch (error) {
+    console.error(error);
+  }
 };

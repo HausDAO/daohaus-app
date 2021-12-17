@@ -28,6 +28,8 @@ export const INFO_TEXT = {
     'Allows the DAO to execute proposals once a set percentage of passed votes has been reached. We recommend 50% or higher. This cannot be changed once deployed.',
   RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
   SAFE_ADDRESS: 'Address of an already deployed Gnosis Safe.',
+  FOREIGN_SAFE_ADDRESS:
+    'Address of an already deployed Gnosis Safe on the Foreign Chain.',
   TRIBUTE_MINION:
     'This is the minion that will receive the NFT after the proposal passes.',
   NFT_ADDRESS: 'This should be the contract address for the NFT.',
@@ -295,6 +297,17 @@ export const FIELD = {
     placeholder: 'Sally',
     expectType: 'any',
   },
+  PRECOMPUTED_MINION_NAME: {
+    type: 'precomputedInput',
+    label: 'Minion Name',
+    name: 'minionName',
+    helperText: 'All minions get a name',
+    htmlFor: 'minionName',
+    placeholder: 'Sally',
+    expectType: 'any',
+    fields: ['formfield', 'formfield'],
+    strPattern: '0xbeb/<0>/<1>/<2>',
+  },
   MINION_QUORUM: {
     type: 'checkGate',
     title: 'Allow Minimum Quorum',
@@ -467,6 +480,23 @@ export const FIELD = {
     htmlFor: 'tokenAddress',
     placeholder: 'Choose a Token',
     expectType: 'address',
+  },
+  FOREIGN_CHAIN_SELECT: {
+    type: 'foreignChainSelect',
+    label: 'Select a Foreign Chain',
+    name: 'foreignChainId',
+    htmlFor: 'foreignChainId',
+    placeholder: 'Choose a Foreign Chain',
+    expectType: 'any',
+  },
+  SWITCH_NETWORK: {
+    type: 'switchNetwork',
+    label: 'Switch Network',
+    name: 'swithNetwork',
+    htmlFor: 'swithNetwork',
+    placeholder: 'Change Network',
+    warningMessage: '',
+    expectType: 'any',
   },
 };
 

@@ -7,23 +7,25 @@ import { validate } from '../utils/validation';
 import { checkContractType } from '../utils/tokenExplorerApi';
 
 const GatedInput = props => {
-  const { localForm, only, name } = props;
+  const { localForm, only, name, foreignChain } = props;
   const { daochain } = useParams();
   const [isCorrect, setIsCorrect] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const { watch } = localForm;
   const contractAddress = watch(name);
+  const customChainId = foreignChain && watch('foreignChainId');
 
   useEffect(() => {
     let shouldUpdate = true;
 
     const checkIsCorrect = async () => {
+      const chainId = customChainId || daochain;
       //  TODO add ability to disable form
       setLoading(true);
       const isCorrectContractType = await checkContractType(
         contractAddress,
-        daochain,
+        chainId,
         only.model,
       );
       if (!shouldUpdate) return;

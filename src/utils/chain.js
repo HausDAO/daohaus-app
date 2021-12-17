@@ -46,6 +46,20 @@ export const supportedChains = {
     },
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    zodiac_amb_module: {
+      amb_bridge_address: {
+        '0x64': '0x4C36d2919e407f0Cc2Ee3c993ccF8ac26d9CE64e',
+      },
+      foreign_networks: [
+        {
+          name: 'xDAI',
+          value: '0x64',
+        },
+      ],
+      gas_limit: {
+        '0x64': '2000000',
+      },
+    },
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
@@ -101,6 +115,20 @@ export const supportedChains = {
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
     escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    zodiac_amb_module: {
+      amb_bridge_address: {
+        '0x64': '0xD4075FB57fCf038bFc702c915Ef9592534bED5c1',
+      },
+      foreign_networks: [
+        {
+          name: 'xDAI',
+          value: '0x64',
+        },
+      ],
+      gas_limit: {
+        '0x64': '3000000',
+      },
+    },
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -195,6 +223,26 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    zodiac_amb_module: {
+      amb_bridge_address: {
+        '0x1': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
+        '0x4': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',
+      },
+      foreign_networks: [
+        {
+          name: 'Ethereum',
+          value: '0x1',
+        },
+        {
+          name: 'Rinkeby',
+          value: '0x4',
+        },
+      ],
+      gas_limit: {
+        '0x1': '2000000',
+        '0x4': '3000000',
+      },
+    },
   },
   '0x89': {
     name: 'Matic',
@@ -473,3 +521,18 @@ export const EIP3085 = {
 };
 
 export const NIFTYINK_ADDRESS = '0xcf964c89f509a8c0ac36391c5460df94b91daba5';
+
+export const switchNetwork = async daochain => {
+  if (daochain && window.ethereum) {
+    try {
+      await window.ethereum?.request({
+        id: '1',
+        jsonrpc: '2.0',
+        method: 'wallet_addEthereumChain',
+        params: [MM_ADDCHAIN_DATA[daochain]],
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+};

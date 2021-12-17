@@ -25,6 +25,7 @@ import {
   GET_POAP,
   GET_TRANSMUTATION,
   GET_WRAP_N_ZAPS,
+  GET_MINION_BY_NAME,
 } from '../graphQL/boost-queries';
 import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
@@ -170,6 +171,17 @@ export const fetchPoapAddresses = async args => {
     query: GET_POAP,
     variables: {
       eventId: args.eventId,
+    },
+  });
+};
+
+export const fetchMinionByName = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: GET_MINION_BY_NAME,
+    variables: {
+      minionName: args.minionName,
+      molochAddress: args.molochAddress,
     },
   });
 };

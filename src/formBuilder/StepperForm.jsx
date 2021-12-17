@@ -7,6 +7,7 @@ import BoostDetails from '../components/boostDetails';
 import BoostMetaForm from './boostMetaForm';
 import DiscordNotificationsLaunch from './discordLaunchForm';
 import FormBuilder from './formBuilder';
+import ZodiacActionForm from './zodiacActionForm';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
 
@@ -204,6 +205,19 @@ const StepperForm = props => {
         goToNext={goToNext}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}
+      />
+    );
+  }
+  if (currentStep?.type === 'zodiacActionForm') {
+    return (
+      <ZodiacActionForm
+        currentStep={currentStep}
+        goToNext={goToNext}
+        metaFields={metaFields}
+        next={currentStep.next}
+        parentForm={parentForm}
+        secondaryBtn={secondaryBtn}
+        setStepperStorage={setStepperStorage}
       />
     );
   }

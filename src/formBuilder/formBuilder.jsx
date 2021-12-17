@@ -34,6 +34,7 @@ const FormBuilder = props => {
     formConditions,
     setParentFields,
     indicatorStates,
+    formStateOverride, // TODO: ask Jord for feedback
     txID,
     logValues,
     tx,
@@ -245,7 +246,7 @@ const FormBuilder = props => {
           </Flex>
         </FormControl>
         <ProgressIndicator
-          currentState={formState}
+          currentState={formStateOverride || formState}
           states={indicatorStatesOverride || indicatorStates}
         />
         {footer && (

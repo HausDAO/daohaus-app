@@ -755,6 +755,79 @@ export const BOOST_FORMS = {
       ],
     ],
   },
+  CROSSCHAIN_MINION: {
+    id: 'CROSSCHAIN_MINION',
+    title: 'Deploy a Cross-chain Minion Safe',
+    tx: TX.SUMMON_MINION_AND_SAFE,
+    required: [
+      '_minionName',
+      'foreignChainId',
+      'foreignSafeAddress',
+      'minQuorum',
+      'saltNonce',
+    ],
+    fields: [
+      [
+        {
+          ...FIELD.MINION_NAME,
+          name: '_minionName',
+          htmlFor: '_minionName',
+        },
+        {
+          ...FIELD.PRECOMPUTED_MINION_NAME,
+          fields: ['_minionName', 'foreignChainId', 'foreignSafeAddress'],
+          strPattern: '0xab270234/<0>/<1>/<2>', // bytes4(keccak256(abi.encodePacked('AMBMinionSafe'))) === 0xab270234
+          hidden: true,
+        },
+        FIELD.MINION_QUORUM,
+        FIELD.SALT_NONCE,
+        FIELD.FOREIGN_CHAIN_SELECT,
+        {
+          ...FIELD.ONLY_SAFE,
+          info: INFO_TEXT.FOREIGN_SAFE_ADDRESS,
+          label: 'Existing Gnosis Safe Address',
+          name: 'foreignSafeAddress',
+          htmlFor: 'foreignSafeAddress',
+          foreignChain: true,
+        },
+      ],
+    ],
+  },
+  ZODIAC_CROSSCHAIN_MODULE: {
+    id: 'ZODIAC_CROSSCHAIN_MODULE',
+    title: 'Add Zodiac Bridge on Gnosis Safe on a Foreign Chain',
+    required: ['foreignChainId', 'foreignSafeAddress'],
+    fields: [
+      [
+        {
+          ...FIELD.FOREIGN_CHAIN_SELECT,
+          disabled: true,
+          label: 'Foreign Chain',
+        },
+        {
+          ...FIELD.ONLY_SAFE,
+          disabled: true,
+          info: INFO_TEXT.FOREIGN_SAFE_ADDRESS,
+          label: 'Gnosis Safe Address',
+          name: 'foreignSafeAddress',
+          htmlFor: 'foreignSafeAddress',
+          foreignChain: true,
+        },
+        {
+          ...FIELD.SWITCH_NETWORK,
+          warningMessage:
+            'IMPORTANT: You Must be a Gnosis Saf Signer on the Foreign Chain',
+        },
+        {
+          ...FIELD.PROPOSAL_NAME,
+          name: 'zodiacAction',
+          htmlFor: 'zodiacAction',
+          defaultValue: 'ambModule',
+          hidden: true,
+        },
+      ],
+    ],
+  },
 };
 
 export const FORM = { ...PROPOSAL_FORMS, ...MULTI_FORMS };
