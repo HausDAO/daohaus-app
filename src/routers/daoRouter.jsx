@@ -33,6 +33,7 @@ import ProposalTypes from '../pages/ProposalTypes';
 import ProposalAudit from '../pages/ProposalAudit';
 import Settings from '../pages/Settings';
 import Snapshot from '../pages/Snapshot';
+import SnapshotSettings from '../pages/SnapshotSettings';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
 import ThemeBuilder from '../pages/ThemeBuilder';
 import Treasury from '../pages/Treasury';
@@ -240,8 +241,18 @@ const DaoRouter = () => {
         <Route exact path={`${path}/boost/mintgate`}>
           <MintGate daoMetaData={daoMetaData} />
         </Route>
+        <Route exact path={`${path}/boost/snapshot/settings`}>
+          <SnapshotSettings
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
+        </Route>
         <Route exact path={`${path}/boost/snapshot`}>
-          <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
+          <Snapshot
+            isMember={isMember}
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
         </Route>
         <Route exact path={`${path}/party-favor`}>
           <PartyFavor isMember={isMember} />

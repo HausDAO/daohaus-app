@@ -27,10 +27,11 @@ import TextBox from '../components/TextBox';
 import DaoToDaoStakingTributeInput from './daoToDaoStakingTributeInput';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
-import { TokenService } from '../services/tokenService';
 import molochAbi from '../contracts/molochV2.json';
+import { createContract } from '../utils/contract';
 import { createForumTopic } from '../utils/discourse';
 import { createHash, detailsToJSON } from '../utils/general';
+import { LOCAL_ABI } from '../utils/abi';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { valToDecimalString } from '../utils/tokenValue';
 
@@ -74,11 +75,15 @@ const StakeProposalForm = () => {
           minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
       );
 
-      const tokenBalance = await TokenService({
+      const tokenContract = createContract({
+        address: UBERHAUS_DATA.STAKING_TOKEN,
+        abi: LOCAL_ABI.ERC_20,
         chainID: UBERHAUS_DATA.NETWORK,
-        tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
-        is32: false,
-      })('balanceOf')(uberHausMinionData.minionAddress);
+      });
+
+      const tokenBalance = await tokenContract.methods
+        .balanceOf(uberHausMinionData.minionAddress)
+        .call();
 
       setStakingToken({
         label: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
