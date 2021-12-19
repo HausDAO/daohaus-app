@@ -30,9 +30,13 @@ const ReadyForProcessing = props => {
 
   const nextProposal = useMemo(() => {
     if (daoProposals?.length) {
-      return daoProposals
+      const prop2proc = daoProposals
         .filter(p => p.status === 'ReadyForProcessing')
-        .sort((a, b) => a.gracePeriodsEnds - b.gracePeriodsEnds)?.[0];
+        .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
+      if (prop2proc?.length > 0) {
+        console.log(`prop2proc[0]?.proposalId`, prop2proc[0]?.proposalId);
+        return prop2proc[0];
+      }
     }
   }, [daoProposals]);
 

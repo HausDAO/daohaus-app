@@ -126,8 +126,8 @@ const ProposalVote = ({
       const proposalsToProcess = daoProposals
         .filter(p => p.status === 'ReadyForProcessing')
         .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
-
       if (proposalsToProcess.length > 0) {
+        console.log(`proposalsToProcess`, proposalsToProcess[0]);
         setNextProposal(proposalsToProcess[0]);
       }
     }

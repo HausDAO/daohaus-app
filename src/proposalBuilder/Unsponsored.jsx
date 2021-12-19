@@ -70,16 +70,24 @@ const Unsponsored = props => {
     await submitTransaction({
       args: [proposal.proposalId],
       tx: TX.SPONSOR_PROPOSAL,
+      lifeCycleFns: {
+        onPollSuccess() {
+          setLoadingTx(false);
+        },
+      },
     });
-    setLoadingTx(false);
   };
   const cancelProposal = async () => {
     setLoadingTx(true);
     await submitTransaction({
       args: [proposal.proposalId],
       tx: TX.CANCEL_PROPOSAL,
+      lifeCycleFns: {
+        onPollSuccess() {
+          setLoadingTx(false);
+        },
+      },
     });
-    setLoadingTx(false);
   };
   const approveToken = async () => {
     setLoadingTx(true);
@@ -88,8 +96,12 @@ const Unsponsored = props => {
       args: [daoid, unlockAmount],
       tx: TX.UNLOCK_TOKEN,
       values: { tokenAddress: depositData.address, unlockAmount },
+      lifeCycleFns: {
+        onPollSuccess() {
+          setLoadingTx(false);
+        },
+      },
     });
-    setLoadingTx(false);
   };
 
   if (isMember === null || !daoOverview) {
