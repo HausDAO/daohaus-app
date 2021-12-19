@@ -120,7 +120,7 @@ export const TXProvider = ({ children }) => {
       await refreshAllDaoVaults();
       console.log('refresh done');
     }
-    refetch();
+    await refetch();
   };
 
   const buildTXPoll = data => {
