@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Flex, Box, Center, Button } from '@chakra-ui/react';
 
@@ -21,9 +21,7 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
   const { daoMember, isMember } = useDaoMember();
   const { canInteract } = interaction || {};
 
-  const voteData = useMemo(() => {
-    return getVoteData(proposal, address, daoMember);
-  }, [daoMember, address, proposal?.status]);
+  const voteData = getVoteData(proposal, address, daoMember);
 
   return (
     <ContentBox p='0' mb={4} minHeight='8.875rem'>

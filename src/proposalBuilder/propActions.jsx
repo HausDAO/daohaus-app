@@ -52,10 +52,6 @@ const PropActions = props => {
   ) {
     return <Processed {...props} />;
   }
-  if (status === 'Failed') {
-    return 'Failed';
-  }
-
   return null;
 };
 
