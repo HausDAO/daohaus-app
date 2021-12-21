@@ -17,6 +17,11 @@ export const BOOST_PLAYLISTS = {
     id: 'safeMinionClassics',
     forms: ['MINION_SAFE_SIMPLE', 'MINION_BUYOUT_TOKEN', 'SAFE_TX_BUILDER'],
   },
+  CROSSCHAIN_SAFE_DEV_SUITE: {
+    name: 'Cross Chain Safe Minion Classics',
+    id: 'crossChainSafeMinionClassics',
+    forms: ['CROSSCHAIN_SAFE_TX_BUILDER'],
+  },
   RARIBLE: {
     name: 'Rarible',
     id: 'rarible',

@@ -439,7 +439,7 @@ export const BOOSTS = {
     categories: ['devTools'],
     steps: STEPS.CROSS_CHAIN_MINION_BOOST,
     // TODO: correct playlist?
-    playlist: BOOST_PLAYLISTS.SAFE_DEV_SUITE,
+    playlist: BOOST_PLAYLISTS.CROSSCHAIN_SAFE_DEV_SUITE,
     // TODO:
     networks: {
       '0x4': true,
