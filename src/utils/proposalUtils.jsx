@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
-import { IsJsonString, omit, timeToNow } from './general';
+import { IsJsonString, timeToNow } from './general';
 
 import TextBox from '../components/TextBox';
 
@@ -18,10 +18,15 @@ export const ProposalStatus = {
   NeedsExecution: 'NeedsExecution',
 };
 
-export const BASE_ACTIVE_STATES = omit(
-  ['Passed', 'Failed', 'Cancelled'],
-  ProposalStatus,
-);
+export const BASE_ACTIVE_STATES = {
+  Unknown: 'Unknown',
+  InQueue: 'InQueue',
+  VotingPeriod: 'VotingPeriod',
+  GracePeriod: 'GracePeriod',
+  ReadyForProcessing: 'ReadyForProcessing',
+  Unsponsored: 'Unsponsored',
+  NeedsExecution: 'NeedsExecution',
+};
 
 export const PROPOSAL_TYPES = {
   CORE: 'Core',

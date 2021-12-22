@@ -27,11 +27,12 @@ import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
 import EscrowActions from './escrowActions';
 
-import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
 import { memberVote } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
+import { createContract } from '../utils/contract';
+import { LOCAL_ABI } from '../utils/abi';
 import { supportedChains } from '../utils/chain';
 import { earlyExecuteMinionType } from '../utils/minionUtils';
 
@@ -97,14 +98,19 @@ const ProposalVote = ({
   useEffect(() => {
     let shouldUpdate = true;
     const getDepositTokenBalance = async () => {
-      const depositTokenBalance = await TokenService({
-        tokenAddress: overview?.depositToken.tokenAddress,
+      const tokenContract = createContract({
+        address: overview?.depositToken.tokenAddress,
+        abi: LOCAL_ABI.ERC_20,
         chainID: daochain,
-      })('balanceOf')(address);
+      });
+      const tokenBalance = await tokenContract.methods
+        .balanceOf(address)
+        .call();
+
       if (shouldUpdate) {
         setEnoughDeposit(
           +overview?.proposalDeposit === 0 ||
-            +depositTokenBalance / 10 ** overview?.depositToken.decimals >=
+            +tokenBalance / 10 ** overview?.depositToken.decimals >=
               +overview?.proposalDeposit /
                 10 ** overview?.depositToken.decimals,
         );

@@ -1,4 +1,6 @@
-import { TokenService } from '../services/tokenService';
+import { utils } from 'web3';
+import { createContract } from './contract';
+import { LOCAL_ABI } from './abi';
 
 export const initMemberWallet = async ({
   memberAddress,
@@ -7,17 +9,18 @@ export const initMemberWallet = async ({
   depositToken,
 }) => {
   const { decimals, symbol } = depositToken;
-  const depositTokenContract = TokenService({
+
+  const tokenContract = createContract({
+    address: depositToken.tokenAddress,
+    abi: LOCAL_ABI.ERC_20,
     chainID,
-    tokenAddress: depositToken.tokenAddress,
   });
 
-  const balance = await depositTokenContract('balanceOf')(memberAddress);
+  const balance = await tokenContract.methods.balanceOf(memberAddress).call();
 
-  const allowance = await depositTokenContract('allowance')({
-    accountAddr: memberAddress,
-    contractAddr: daoAddress,
-  });
+  const allowance = await tokenContract.methods
+    .allowance(memberAddress, daoAddress)
+    .call();
 
   const depositTokenData = {
     decimals,

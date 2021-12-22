@@ -8,7 +8,7 @@ import ContentBox from '../components/ContentBox';
 import { CardLabel, ParaMd, ParaSm } from '../components/typography';
 import PropActions from './propActions';
 
-import { CUSTOM_DISPLAY } from '../data/proposalData';
+import { CUSTOM_CARD_DATA } from '../data/proposalData';
 import { getVoteData } from '../utils/proposalCard';
 import {
   CustomTransfer,
@@ -82,7 +82,7 @@ const PropCardBrief = ({ proposal = {} }) => {
     Number(proposal.lootRequested) > 0 ||
     Number(proposal.sharesRequested) > 0 ||
     Number(proposal.paymentRequested) > 0;
-  const { customTransferUI } = CUSTOM_DISPLAY[proposal.proposalType] || {};
+  const { customTransferUI } = CUSTOM_CARD_DATA[proposal.proposalType] || {};
 
   return (
     <Flex
