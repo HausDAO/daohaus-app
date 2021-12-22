@@ -1,7 +1,6 @@
 import Web3 from 'web3';
 
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import { TokenService } from '../services/tokenService';
 import { NFTService } from '../services/nftService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import {
@@ -13,7 +12,7 @@ import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { TX_HASH } from '../graphQL/general';
 import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { createContract } from '../utils/contract';
-import { getContractABI } from '../utils/abi';
+import { getContractABI, LOCAL_ABI } from '../utils/abi';
 import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
 import {
@@ -64,15 +63,16 @@ export const pollTokenAllowances = async ({
   tokenAddress,
   userAddress,
 }) => {
-  const tokenContract = TokenService({
+  const tokenContract = createContract({
+    address: tokenAddress,
+    abi: LOCAL_ABI.ERC_20,
     chainID,
-    tokenAddress,
   });
 
-  const amountApproved = await tokenContract('allowance')({
-    accountAddr: userAddress,
-    contractAddr: daoID,
-  });
+  const amountApproved = await tokenContract.methods
+    .allowance(userAddress, daoID)
+    .call();
+
   return amountApproved;
 };
 
@@ -280,10 +280,16 @@ export const pollGuildFunds = async ({
   tokenAddress,
 }) => {
   try {
-    const newTokenBalance = TokenService({
+    const tokenContract = createContract({
+      address: tokenAddress,
+      abi: LOCAL_ABI.ERC_20,
       chainID,
-      tokenAddress,
-    })('balanceOf')(uberMinionAddress);
+    });
+
+    const newTokenBalance = await tokenContract.methods
+      .balanceOf(uberMinionAddress)
+      .call();
+
     return newTokenBalance;
   } catch (error) {
     return error;

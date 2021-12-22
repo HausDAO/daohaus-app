@@ -1,5 +1,6 @@
 import { utils } from 'web3';
-import { TokenService } from '../services/tokenService';
+import { createContract } from './contract';
+import { LOCAL_ABI } from './abi';
 
 export const initMemberWallet = async ({
   memberAddress,
@@ -9,18 +10,18 @@ export const initMemberWallet = async ({
 }) => {
   // TODO handle tokens with different decimals
 
-  const depositTokenContract = TokenService({
+  const tokenContract = createContract({
+    address: depositToken.tokenAddress,
+    abi: LOCAL_ABI.ERC_20,
     chainID,
-    tokenAddress: depositToken.tokenAddress,
   });
+
   const tokenBalance = utils.fromWei(
-    await depositTokenContract('balanceOf')(memberAddress),
+    await tokenContract.methods.balanceOf(memberAddress).call(),
   );
+
   const allowance = utils.fromWei(
-    await depositTokenContract('allowance')({
-      accountAddr: memberAddress,
-      contractAddr: daoAddress,
-    }),
+    await tokenContract.methods.allowance(memberAddress, daoAddress).call(),
   );
 
   return {
