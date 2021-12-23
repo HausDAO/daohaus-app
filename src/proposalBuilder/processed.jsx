@@ -16,7 +16,38 @@ import MinionExexcuteFactory from './minionExexcuteFactory';
 
 const Processed = props => {
   const { voteData, proposal, minionAction } = props;
+  console.log(`minionAction`, minionAction);
+  console.log(`proposal`, proposal);
 
+  if (!proposal.isMinion) {
+    return (
+      <PropActionBox>
+        <StatusDisplayBox>
+          <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
+          <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
+          <ParaSm fontWeight='700' mr='1'>
+            {voteData?.isPassing ? 'Passed' : 'Failed'}
+          </ParaSm>
+          <ParaSm fontStyle='italic'>and processed</ParaSm>
+        </StatusDisplayBox>
+        <VotingInactive
+          {...props}
+          justifyContent='space-between'
+          voteData={voteData}
+        />
+        <Flex mt='2' alignItems='center'>
+          <UserVoteData voteData={voteData} />
+          <Flex ml='auto'>
+            <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
+              Processed
+            </InactiveButton>
+            {minionAction && <MinionExexcuteFactory {...props} />}
+            {/* <Button size='sm'>Early Execute</Button> */}
+          </Flex>
+        </Flex>
+      </PropActionBox>
+    );
+  }
   return (
     <PropActionBox>
       <StatusDisplayBox>
@@ -35,11 +66,7 @@ const Processed = props => {
       <Flex mt='2' alignItems='center'>
         <UserVoteData voteData={voteData} />
         <Flex ml='auto'>
-          <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
-            Processed
-          </InactiveButton>
           {minionAction && <MinionExexcuteFactory {...props} />}
-          {/* <Button size='sm'>Early Execute</Button> */}
         </Flex>
       </Flex>
     </PropActionBox>

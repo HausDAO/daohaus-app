@@ -8,7 +8,6 @@ const ExecuteAction = ({ proposal, executeTX, minionAction }) => {
   const { submitTransaction } = useTX();
   const [loading, setLoading] = useState(false);
 
-  console.log(`minionAction`, minionAction);
   const execute = async () => {
     setLoading(true);
     await submitTransaction({
@@ -22,9 +21,12 @@ const ExecuteAction = ({ proposal, executeTX, minionAction }) => {
     setLoading(false);
   };
   if (minionAction.executed) {
-    <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
-      Executed
-    </InactiveButton>;
+    console.log('has been executited');
+    return (
+      <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
+        Executed
+      </InactiveButton>
+    );
   }
   return (
     <Button onClick={execute} size='sm' isLoading={loading}>
