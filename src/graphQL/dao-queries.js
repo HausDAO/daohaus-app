@@ -27,6 +27,9 @@ export const HOME_DAO = gql`
         uberHausAddress
         uberHausDelegate
         uberHausDelegateRewardFactor
+        crossChainMinion
+        foreignChainId
+        foreignSafeAddress
       }
       depositToken {
         tokenAddress

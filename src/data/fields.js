@@ -174,7 +174,20 @@ export const FIELD = {
     expectType: 'address',
     filters: {
       [MINION_TYPES.SAFE]: minionVault => {
-        return minionVault.isMinionModule;
+        return minionVault.isMinionModule && !minionVault.crossChainMinion;
+      },
+    },
+  },
+  CROSSCHAIN_MINION_SELECT: {
+    type: 'minionSelect',
+    label: 'Select a minion',
+    name: 'selectedMinion',
+    htmlFor: 'selectedMinion',
+    placeholder: 'Choose a cross-chain minion',
+    expectType: 'address',
+    filters: {
+      [MINION_TYPES.SAFE]: minionVault => {
+        return minionVault.isMinionModule && minionVault.crossChainMinion;
       },
     },
   },
