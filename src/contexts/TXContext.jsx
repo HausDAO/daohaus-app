@@ -1,5 +1,6 @@
-import React, { useContext, createContext } from 'react';
+import React, { useContext, createContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
@@ -63,6 +64,7 @@ export const TXProvider = ({ children }) => {
   } = useDaoMember();
 
   const { daoid, daochain, minion } = useParams();
+  const [txClock, setTxClock] = useState(uuid());
   const chainConfig = supportedChains[daochain];
 
   const contextData = {
@@ -121,6 +123,7 @@ export const TXProvider = ({ children }) => {
       console.log('refresh done');
     }
     await refetch();
+    setTxClock(uuid());
   };
 
   const buildTXPoll = data => {
@@ -295,6 +298,7 @@ export const TXProvider = ({ children }) => {
         submitCallback,
         hydrateString,
         checkState,
+        txClock,
       }}
     >
       {children}
@@ -311,6 +315,7 @@ export const useTX = () => {
     submitCallback,
     hydrateString,
     checkState,
+    txClock,
   } = useContext(TXContext) || {};
   return {
     refreshDao,
@@ -320,5 +325,6 @@ export const useTX = () => {
     submitCallback,
     hydrateString,
     checkState,
+    txClock,
   };
 };
