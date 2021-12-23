@@ -60,9 +60,13 @@ export const PropCardOffer = ({ proposal }) => {
   return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
 };
 
-export const CustomTransfer = ({ proposal, customTransferUI }) => {
+export const CustomTransfer = ({
+  proposal,
+  customTransferUI,
+  minionAction,
+}) => {
   if (customTransferUI === 'minionTransfer') {
-    return <MinionTransfer proposal={proposal} />;
+    return <MinionTransfer proposal={proposal} minionAction={minionAction} />;
   }
   return null;
 };

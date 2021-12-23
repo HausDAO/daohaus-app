@@ -12,9 +12,10 @@ import {
   UserVoteData,
   VotingInactive,
 } from './actionPrimitives';
+import MinionExexcuteFactory from './minionExexcuteFactory';
 
 const Processed = props => {
-  const { voteData, proposal } = props;
+  const { voteData, proposal, minionAction } = props;
 
   return (
     <PropActionBox>
@@ -37,7 +38,8 @@ const Processed = props => {
           <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
             Processed
           </InactiveButton>
-          <Button size='sm'>Early Execute</Button>
+          {minionAction && <MinionExexcuteFactory {...props} />}
+          {/* <Button size='sm'>Early Execute</Button> */}
         </Flex>
       </Flex>
     </PropActionBox>

@@ -7,9 +7,9 @@ import { AsyncCardTransfer } from './propBriefPrimitives';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR PAYROLL PROPOSALS
 
-const MinionTransfer = ({ proposal = {} }) => {
+const MinionTransfer = ({ proposal = {}, minionAction }) => {
   const { minionAddress } = proposal;
-  const minionAction = useMinionAction(proposal);
+  console.log(`minionAction`, minionAction);
   const { daoVaults } = useDao();
 
   const itemText = useMemo(() => {
@@ -24,8 +24,12 @@ const MinionTransfer = ({ proposal = {} }) => {
       token =>
         token.tokenAddress?.toLowerCase() === tokenAddress?.toLowerCase(),
     );
+    console.log(`daoVaults`, daoVaults);
     const { name, decimals } = tokenData || {};
-
+    console.log(`balance`, balance);
+    console.log(`name`, name);
+    console.log(`decimals`, decimals);
+    console.log(`vault`, vault);
     if (balance && name && decimals && vault) {
       return `Requesting ${readableTokenBalance({
         balance,

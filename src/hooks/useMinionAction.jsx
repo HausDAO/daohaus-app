@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { getMinionAction } from '../utils/minionUtils';
+import { getExecuteAction, getMinionAction } from '../utils/minionUtils';
 
 const useMinionAction = proposal => {
-  const {
-    minionAddress,
-    minion: { minionType },
-    proposalId,
-  } = proposal || { minion: {} };
+  const { minionAddress, minion, proposalId } = proposal || {};
+  const { minionType } = minion || {};
   const [minionAction, setAction] = useState(null);
+  const [executeTX, setExecuteTX] = useState(null);
   const { daochain } = useParams();
 
   useEffect(() => {
@@ -27,6 +25,13 @@ const useMinionAction = proposal => {
           ...action,
           status: 'success',
         });
+        setExecuteTX(
+          getExecuteAction({
+            minionAction: action,
+            minion: { ...minion, minionAddress },
+            proposalType: proposal.proposalType,
+          }),
+        );
       }
       if (!action) {
         setAction({
@@ -38,7 +43,7 @@ const useMinionAction = proposal => {
     fetchMinionAction();
     return () => (shouldUpdate = false);
   }, [minionAddress, daochain, minionType]);
-  return minionAction;
+  return { minionAction, executeTX };
 };
 
 export default useMinionAction;

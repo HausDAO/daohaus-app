@@ -15,10 +15,13 @@ import {
   PropCardOffer,
   PropCardRequest,
 } from './propBriefPrimitives';
+import useMinionAction from '../hooks/useMinionAction';
 
 const ProposalCardV2 = ({ proposal, interaction }) => {
   const { address } = useInjectedProvider();
   const { daoMember, isMember } = useDaoMember();
+  const { minionAction, executeTX } = useMinionAction(proposal);
+
   const { canInteract } = interaction || {};
 
   const voteData = getVoteData(proposal, address, daoMember);
@@ -26,7 +29,7 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
   return (
     <ContentBox p='0' mb={4} minHeight='8.875rem'>
       <Flex flexDir={['column', 'column', 'row']}>
-        <PropCardBrief proposal={proposal} />
+        <PropCardBrief proposal={proposal} minionAction={minionAction} />
         <Center minHeight={['0', '0', '8.875rem']} />
         <Flex
           w={['100%', '100%', '45%']}
@@ -38,6 +41,8 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
             canInteract={canInteract}
             voteData={voteData}
             isMember={isMember}
+            minionAction={minionAction}
+            executeTX={executeTX}
           />
         </Flex>
         <Flex
@@ -76,7 +81,7 @@ const DetailsLink = ({ proposalId }) => {
   );
 };
 
-const PropCardBrief = ({ proposal = {} }) => {
+const PropCardBrief = ({ proposal = {}, minionAction }) => {
   const isOffering = Number(proposal.tributeOffered) > 0;
   const isRequesting =
     Number(proposal.lootRequested) > 0 ||
@@ -113,6 +118,7 @@ const PropCardBrief = ({ proposal = {} }) => {
           <CustomTransfer
             proposal={proposal}
             customTransferUI={customTransferUI}
+            minionAction={minionAction}
           />
         )}
       </Box>

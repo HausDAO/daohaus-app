@@ -4,6 +4,7 @@ import { createContract } from './contract';
 import { fetchABI, getMinionAbi } from './abi';
 import { MINION_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
+import { TX } from '../data/contractTX';
 
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
@@ -103,3 +104,14 @@ export const getMinionAction = async params => {
 export const earlyExecuteMinionType = proposal =>
   proposal?.minion?.minionType === MINION_TYPES.NIFTY ||
   proposal?.minion?.minionType === MINION_TYPES.SAFE;
+
+export const getExecuteAction = ({ minion }) => {
+  const { minionType } = minion;
+
+  if (
+    minionType === MINION_TYPES.VANILLA ||
+    minionType === MINION_TYPES.NIFTY
+  ) {
+    return TX.MINION_SIMPLE_EXECUTE;
+  }
+};

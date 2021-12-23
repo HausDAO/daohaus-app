@@ -5,12 +5,12 @@ import ExecuteRarible from './ExecuteRarible';
 import UberDelegateAction from './uberDelegateAction';
 import UberStakingAction from './uberStakingAction';
 
-const minionExexcuteFactory = ({ proposal }) => {
+const MinionExexcuteFactory = props => {
+  const { proposal } = props;
   const { proposalType } = proposal;
-  const executeType = CUSTOM_CARD_DATA[proposalType];
-
+  const executeType = CUSTOM_CARD_DATA[proposalType].execute;
   if (executeType === 'executeAction') {
-    return <ExecuteAction {...proposal} />;
+    return <ExecuteAction {...props} />;
   }
   if (executeType === 'UH_delegate') {
     return <UberDelegateAction {...proposal} />;
@@ -23,4 +23,4 @@ const minionExexcuteFactory = ({ proposal }) => {
   }
 };
 
-export default minionExexcuteFactory;
+export default MinionExexcuteFactory;
