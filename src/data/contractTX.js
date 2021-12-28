@@ -11,6 +11,7 @@
 // this was causing a site crash - used for iniitialization
 // import { HASH } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const HASH = {
   EMPTY_FIELD: 'e3bb180f-dda4-46e0-8ba5-7b24e7b00855',
@@ -23,6 +24,11 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'MOLOCH_V2',
     contractAddress: '.contextData.daoid',
+  },
+  UBERHAUS_MOLOCH: {
+    location: 'local',
+    abiName: 'MOLOCH_V2',
+    contractAddress: UBERHAUS_DATA.ADDRESS,
   },
   MINION_ACTION: {
     location: 'fetch',
@@ -1248,7 +1254,7 @@ export const TX = {
       '0',
       {
         type: 'encodeHex',
-        contract: CONTRACTS.CURRENT_MOLOCH,
+        contract: CONTRACTS.UBERHAUS_MOLOCH,
         fnName: 'submitProposal',
         gatherArgs: [
           '.localValues.minionAddress',
