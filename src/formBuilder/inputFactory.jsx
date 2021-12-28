@@ -42,6 +42,7 @@ import GenericSwitch from './genericSwitch';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
 import UberhausDelegateInput from './uberhausDelegateInput';
+import UberHausTributeInput from './uberHausTributeInput';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -179,8 +180,11 @@ export const InputFactory = props => {
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
   }
-  if (type === 'uberhausDelegate') {
+  if (type === 'uberHausDelegate') {
     return <UberhausDelegateInput {...props} />;
+  }
+  if (type === 'uberHausTributeInput') {
+    return <UberHausTributeInput {...props} />;
   }
   return null;
 };

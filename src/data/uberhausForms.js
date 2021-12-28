@@ -8,11 +8,23 @@ export const UBERHAUS_FORMS = {
     title: 'Choose Champion',
     description: 'Manage your delegate to UBERhaus',
     type: PROPOSAL_TYPES.MINION_UBER_DEL,
-    tx: TX.SUBMIT_PROPOSAL,
-    required: ['title'],
+    tx: TX.UBERHAUS_DELEGATE,
+    required: ['title', 'uberHausDelegate'],
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [FIELD.UBERHAUS_DELEGATE],
+    ],
+  },
+  UBERHAUS_STAKE: {
+    id: 'UBERHAUS_STAKE',
+    title: 'Stake in UBERhaus',
+    description: "Submit your DAO's membership proposal here.",
+    type: PROPOSAL_TYPES.MINION_UBER_STAKE,
+    tx: TX.UBERHAUS_STAKING,
+    required: ['title', 'sharesRequested', 'tributeOffered'],
+    fields: [
+      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.SHARES_REQUEST, FIELD.UBERHAUS_TRIBUTE],
     ],
   },
 };

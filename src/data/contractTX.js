@@ -11,6 +11,7 @@
 // this was causing a site crash - used for iniitialization
 // import { HASH } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const HASH = {
   EMPTY_FIELD: 'e3bb180f-dda4-46e0-8ba5-7b24e7b00855',
@@ -23,6 +24,11 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'MOLOCH_V2',
     contractAddress: '.contextData.daoid',
+  },
+  UBERHAUS_MOLOCH: {
+    location: 'local',
+    abiName: 'MOLOCH_V2',
+    contractAddress: UBERHAUS_DATA.ADDRESS,
   },
   MINION_ACTION: {
     location: 'fetch',
@@ -114,7 +120,7 @@ export const CONTRACTS = {
     abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
   },
-  UBERHAUS_MINION: {
+  LOCAL_UBERHAUS_MINION: {
     location: 'local',
     abiName: 'UBERHAUS_MINION',
     contractAddress: '.localValues.minionAddress',
@@ -291,6 +297,22 @@ export const DETAILS = {
     link: '.values.link',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
+  },
+  UBERHAUS_DELEGATE: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'delegate',
+  },
+  UBERHAUS_STAKING: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'staking',
   },
 };
 
@@ -681,7 +703,7 @@ export const TX = {
     successMsg: 'Minion Proposal Executed!',
   },
   UBERHAUS_MINION_EXECUTE_APPOINTMENT: {
-    contract: CONTRACTS.UBERHAUS_MINION,
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
     name: 'executeAppointment',
     specialPoll: 'executeAction',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -1197,5 +1219,62 @@ export const TX = {
       },
       true, // _memberOnlyEnabled
     ],
+  },
+  UBERHAUS_DELEGATE: {
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
+    name: 'nominateDelegate',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Proposal submitted!',
+    gatherArgs: [
+      '.localValues.uberHausDaoAddress',
+      '.values.uberHausDelegate',
+      '.localValues.delegateExpiration',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.UBERHAUS_DELEGATE,
+      },
+    ],
+    createDiscourse: true,
+  },
+  UBERHAUS_STAKING: {
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
+    name: 'proposeAction',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Proposal submitted!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.localValues.uberHausDaoAddress',
+      '.values.tributeToken',
+      '0',
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.UBERHAUS_MOLOCH,
+        fnName: 'submitProposal',
+        gatherArgs: [
+          '.localValues.minionAddress',
+          '.values.sharesRequested || 0',
+          '0',
+          '.values.tributeOffered',
+          '.values.tributeToken',
+          '0',
+          '.contextData.daoOverview.depositToken.tokenAddress',
+          {
+            type: 'detailsToJSON',
+            gatherFields: DETAILS.UBERHAUS_STAKING,
+          },
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.UBERHAUS_STAKING,
+      },
+    ],
+    createDiscourse: true,
   },
 };

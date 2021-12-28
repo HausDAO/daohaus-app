@@ -34,6 +34,8 @@ export const INFO_TEXT = {
   NFT_TOKEN_ID:
     'This should be the Token ID for your NFT and then select the correct NFT standard.',
   BUYOUT_MINION: 'This proposal must be executed by a minion.',
+  UBERHAUS_TRIBUTE:
+    'DAOs must stake HAUS to join UberHAUS. Your UberHAUS minion will need to have HAUS before this proposal can be executed.',
 };
 
 export const FIELD = {
@@ -469,12 +471,20 @@ export const FIELD = {
     expectType: 'address',
   },
   UBERHAUS_DELEGATE: {
-    type: 'uberhausDelegate',
-    htmlFor: 'uberhausDelegate',
-    name: 'uberhausDelegate',
-    // placeholder: '0x',
-    label: 'Delegate',
+    type: 'uberHausDelegate',
+    htmlFor: 'uberHausDelegate',
+    name: 'uberHausDelegate',
+    label: 'New Delegate',
     expectType: 'address',
+  },
+  UBERHAUS_TRIBUTE: {
+    type: 'uberHausTributeInput',
+    htmlFor: 'tribute',
+    name: 'tributeOffered',
+    placeholder: '0',
+    label: 'Tribute Offered',
+    info: INFO_TEXT.UBERHAUS_TRIBUTE,
+    expectType: 'number',
   },
 };
 

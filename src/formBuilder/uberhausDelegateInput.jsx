@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { Flex } from '@chakra-ui/layout';
 import { useDao } from '../contexts/DaoContext';
 import GenericSelect from './genericSelect';
 import { getActiveMembers } from '../utils/dao';
@@ -9,30 +10,22 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { createContract } from '../utils/contract';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { LOCAL_ABI } from '../utils/abi';
+import TextBox from '../components/TextBox';
+import AddressAvatar from '../components/addressAvatar';
 
 const UberhausDelegateInput = props => {
-  const { daoMembers, daoOverview } = useDao();
+  const { localValues } = props;
+  const { daoMembers } = useDao();
 
   const [uberMembers] = useSessionStorage('U-members', null);
   const [userAddresses, setAddresses] = useState([]);
   const [currentDelegate, setCurrentDelegate] = useState();
 
-  const uberHausMinion = useMemo(() => {
-    if (daoOverview) {
-      return daoOverview?.minions?.find(
-        minion =>
-          minion.minionType === 'UberHaus minion' &&
-          minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
-      );
-    }
-    return null;
-  }, [daoOverview]);
-
   useEffect(() => {
     const getDelegate = async () => {
       try {
         const minionContract = await createContract({
-          address: uberHausMinion.minionAddress,
+          address: localValues.minionAddress,
           abi: LOCAL_ABI.UBERHAUS_MINION,
           chainID: UBERHAUS_DATA.NETWORK,
         });
@@ -43,10 +36,10 @@ const UberhausDelegateInput = props => {
         console.error(error?.message);
       }
     };
-    if (uberHausMinion) {
+    if (localValues?.minionAddress) {
       getDelegate();
     }
-  }, [uberHausMinion]);
+  }, [localValues]);
 
   useEffect(() => {
     let shouldSet = true;
@@ -94,6 +87,12 @@ const UberhausDelegateInput = props => {
 
   return (
     <>
+      <TextBox size='xs' htmlFor='name' mb={3}>
+        Current Delegate
+      </TextBox>
+      <Flex w='100%' align='center' justify='space-between' pb={3} mb={2}>
+        <AddressAvatar addr={currentDelegate} />
+      </Flex>
       <GenericSelect
         {...props}
         placeholder='Select an Address'
