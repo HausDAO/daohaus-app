@@ -11,18 +11,38 @@ const UberhausProposals = ({ uberHausMinion }) => {
   const { formModal } = useAppModal();
   const handleClick = propType => {
     console.log('uberHausMinion', uberHausMinion, propType);
-    formModal({
-      ...FORM.CHANGE_UBERHAUS_DELEGATE,
-      localValues: {
-        uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
-        minionAddress: uberHausMinion.minionAddress,
-        delegateExpiration: JANUARY_2024.toString(),
-      },
-    });
+
+    switch (propType) {
+      case 'delegate': {
+        formModal({
+          ...FORM.CHANGE_UBERHAUS_DELEGATE,
+          localValues: {
+            uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
+            minionAddress: uberHausMinion.minionAddress,
+            delegateExpiration: JANUARY_2024.toString(),
+          },
+        });
+        break;
+      }
+      case 'stake': {
+        formModal({
+          ...FORM.UBERHAUS_STAKE,
+          localValues: {
+            uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
+            minionAddress: uberHausMinion.minionAddress,
+          },
+        });
+        break;
+      }
+      default: {
+        return null;
+      }
+    }
   };
   return (
     <Flex flexDir='row' w='100%'>
-      <Button onClick={() => handleClick('delegate')}>Delegate proposal</Button>
+      <Button onClick={() => handleClick('delegate')}>Delegate</Button>
+      <Button onClick={() => handleClick('stake')}>Stake</Button>
     </Flex>
   );
 };

@@ -300,6 +300,14 @@ export const DETAILS = {
     uberHaus: 'true',
     uberType: 'delegate',
   },
+  UBERHAUS_STAKING: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'staking',
+  },
 };
 
 export const TX = {
@@ -1221,6 +1229,44 @@ export const TX = {
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.UBERHAUS_DELEGATE,
+      },
+    ],
+    createDiscourse: true,
+  },
+  UBERHAUS_STAKING: {
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
+    name: 'proposeAction',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Proposal submitted!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.localValues.uberHausDaoAddress',
+      '.values.tributeToken',
+      '0',
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.CURRENT_MOLOCH,
+        fnName: 'submitProposal',
+        gatherArgs: [
+          '.localValues.minionAddress',
+          '.values.sharesRequested || 0',
+          '0',
+          '.values.tributeOffered',
+          '.values.tributeToken',
+          '0',
+          '.contextData.daoOverview.depositToken.tokenAddress',
+          {
+            type: 'detailsToJSON',
+            gatherFields: DETAILS.UBERHAUS_STAKING,
+          },
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.UBERHAUS_STAKING,
       },
     ],
     createDiscourse: true,
