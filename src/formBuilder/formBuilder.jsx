@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
+import { useMetaData } from '../contexts/MetaDataContext';
+import useBoost from '../hooks/useBoost';
+import { useAppModal } from '../hooks/useModals';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -11,10 +14,7 @@ import {
   createRegisterOptions,
   inputDataFromABI,
 } from '../utils/formBuilder';
-import { useAppModal } from '../hooks/useModals';
-import { useMetaData } from '../contexts/MetaDataContext';
-import useBoost from '../hooks/useBoost';
-import { validate } from '../utils/validation';
+import { validate, handleStepValidation } from '../utils/validation';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -37,6 +37,7 @@ const FormBuilder = props => {
     txID,
     logValues,
     tx,
+    stepValidation,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
@@ -174,6 +175,17 @@ const FormBuilder = props => {
     //  HANDLE GO TO NEXT
     if (next && typeof goToNext === 'function') {
       if (typeof next === 'string') {
+        if (stepValidation) {
+          try {
+            setFormState('loading');
+            await handleStepValidation[stepValidation]({ values });
+            setFormState('success');
+          } catch (error) {
+            console.error(error);
+            setFormState('error');
+            return;
+          }
+        }
         return goToNext(next);
       }
       if (next?.type === 'awaitTx') {

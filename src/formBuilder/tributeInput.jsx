@@ -8,12 +8,13 @@ import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
-import { TokenService } from '../services/tokenService';
 import { TX } from '../data/contractTX';
+import { createContract } from '../utils/contract';
 import { handleDecimals } from '../utils/general';
-import { validate } from '../utils/validation';
 import { getContractBalance } from '../utils/tokenValue';
+import { LOCAL_ABI } from '../utils/abi';
 import { spreadOptions } from '../utils/formBuilder';
+import { validate } from '../utils/validation';
 
 const TributeInput = props => {
   const { submitTransaction } = useTX();
@@ -24,7 +25,6 @@ const TributeInput = props => {
   const { setValue, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
-  // const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(null);
   const [decimals, setDecimals] = useState(null);
   const [allowance, setAllowance] = useState(null);
@@ -83,16 +83,20 @@ const TributeInput = props => {
 
     const getInitial = async () => {
       setLoading(true);
-      const tokenService = TokenService({
+
+      const tokenContract = createContract({
+        address: tributeToken,
+        abi: LOCAL_ABI.ERC_20,
         chainID: daochain,
-        tokenAddress: tributeToken,
       });
-      const allowanceRes = await tokenService('allowance')({
-        accountAddr: address,
-        contractAddr: daoid,
-      });
-      const decimalRes = await tokenService('decimals')();
-      const balanceRes = await tokenService('balanceOf')(address);
+
+      const allowanceRes = await tokenContract.methods
+        .allowance(address, daoid)
+        .call();
+
+      const decimalRes = await tokenContract.methods.decimals().call();
+      const balanceRes = await tokenContract.methods.balanceOf(address).call();
+
       if (shouldUpdate) {
         setBalance(balanceRes);
         setAllowance(allowanceRes);

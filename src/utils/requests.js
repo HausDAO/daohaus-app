@@ -7,7 +7,6 @@ const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
 const apiPricedataUrl =
   'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
 const mintGateUrl = 'https://link.mintgate.app/api';
-const snapshotUrl = 'https://hub.snapshot.page/api';
 
 export const get = async endpoint => {
   const url = `${metadataApiUrl}/${endpoint}`;
@@ -214,36 +213,6 @@ export const getMintGates = async tokenAddress => {
   const mintGatesUrl = `${mintGateUrl}/links?tid=${tokenAddress}`;
   try {
     const response = await fetch(mintGatesUrl);
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getSnapshotProposals = async space => {
-  const snapshotProposalUrl = `${snapshotUrl}/${space}/proposals`;
-  try {
-    const response = await fetch(snapshotProposalUrl);
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getSnapshotVotes = async (space, snapshotId) => {
-  const snapshotVoteUrl = `${snapshotUrl}/${space}/proposal/${snapshotId}`;
-  try {
-    const response = await fetch(snapshotVoteUrl);
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getSnapshotSpaces = async () => {
-  const snapshotSpacesUrl = `${snapshotUrl}/spaces`;
-  try {
-    const response = await fetch(snapshotSpacesUrl);
     return response.json();
   } catch (err) {
     throw new Error(err);
