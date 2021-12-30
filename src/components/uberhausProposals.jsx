@@ -7,7 +7,7 @@ import { FORM } from '../data/forms';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { JANUARY_2024 } from '../utils/general';
 
-const UberhausProposals = ({ uberHausMinion, uberMembers }) => {
+const UberHausProposals = ({ uberHausMinion, uberMembers }) => {
   const { formModal } = useAppModal();
   const handleClick = propType => {
     console.log('uberHausMinion', uberHausMinion, propType);
@@ -60,4 +60,4 @@ const UberhausProposals = ({ uberHausMinion, uberMembers }) => {
   );
 };
 
-export default UberhausProposals;
+export default UberHausProposals;
