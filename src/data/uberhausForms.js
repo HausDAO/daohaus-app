@@ -47,4 +47,22 @@ export const UBERHAUS_FORMS = {
       ],
     ],
   },
+  UBERHAUS_WITHDRAW: {
+    id: 'UBERHAUS_WITHDRAW',
+    title: 'Withdraw',
+    description: 'Withdraw tokens into the minion',
+    type: PROPOSAL_TYPES.MINION_UBER_DEFAULT,
+    tx: TX.UBERHAUS_RAGEQUIT,
+    required: ['withdraw'],
+    fields: [[FIELD.UBERHAUS_WITHDRAW_INPUT]],
+  },
+  UBERHAUS_PULL: {
+    id: 'UBERHAUS_PULL',
+    title: 'Pull',
+    description: 'Transfer funds from minion to your DAO',
+    type: PROPOSAL_TYPES.MINION_UBER_DEFAULT,
+    tx: TX.UBERHAUS_RAGEQUIT,
+    required: ['pull'],
+    fields: [[FIELD.UBERHAUS_PULL_INPUT]],
+  },
 };

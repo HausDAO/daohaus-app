@@ -46,6 +46,26 @@ const UberHausProposals = ({ uberHausMinion, uberMembers }) => {
         });
         break;
       }
+      case 'withdraw': {
+        formModal({
+          ...FORM.UBERHAUS_WITHDRAW,
+          localValues: {
+            uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
+            minionAddress: uberHausMinion.minionAddress,
+          },
+        });
+        break;
+      }
+      case 'pull': {
+        formModal({
+          ...FORM.UBERHAUS_PULL,
+          localValues: {
+            uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
+            minionAddress: uberHausMinion.minionAddress,
+          },
+        });
+        break;
+      }
       default: {
         return null;
       }
@@ -56,6 +76,8 @@ const UberHausProposals = ({ uberHausMinion, uberMembers }) => {
       <Button onClick={() => handleClick('delegate')}>Delegate</Button>
       <Button onClick={() => handleClick('stake')}>Stake</Button>
       <Button onClick={() => handleClick('ragequit')}>RageQuit</Button>
+      <Button onClick={() => handleClick('withdraw')}>Withdraw</Button>
+      <Button onClick={() => handleClick('pull')}>Pull</Button>
     </Flex>
   );
 };

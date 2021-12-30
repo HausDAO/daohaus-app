@@ -495,6 +495,24 @@ export const FIELD = {
     info: INFO_TEXT.RAGE_QUIT_INPUT,
     expectType: 'integer',
   },
+  UBERHAUS_WITHDRAW_INPUT: {
+    type: 'uberHausWithdrawInput',
+    label: 'Withdraw',
+    name: 'withdraw',
+    htmlFor: 'withdraw',
+    placeholder: '0',
+    // info: INFO_TEXT.RAGE_QUIT_INPUT,
+    expectType: 'integer',
+  },
+  UBERHAUS_PULL_INPUT: {
+    type: 'uberHausPullInput',
+    label: 'Pull',
+    name: 'pull',
+    htmlFor: 'pull',
+    placeholder: '0',
+    // info: INFO_TEXT.RAGE_QUIT_INPUT,
+    expectType: 'integer',
+  },
 };
 
 export const FORM_DISPLAY = {
