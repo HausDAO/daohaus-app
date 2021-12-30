@@ -34,7 +34,7 @@ export const UBERHAUS_FORMS = {
     description: 'Submit a proposal to RageQuit from UberHaus.',
     type: PROPOSAL_TYPES.MINION_UBER_RQ,
     tx: TX.UBERHAUS_RAGEQUIT,
-    required: [],
+    required: ['shares', 'loot'],
     fields: [
       [FIELD.UBERHAUS_RAGE_QUIT_INPUT],
       [
