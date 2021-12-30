@@ -27,4 +27,24 @@ export const UBERHAUS_FORMS = {
       [FIELD.SHARES_REQUEST, FIELD.UBERHAUS_TRIBUTE],
     ],
   },
+  UBERHAUS_RAGEQUIT: {
+    // customValidations: ['canRagequit', 'rageQuitMinimum', 'rageQuitMax'],
+    id: 'UBERHAUS_RAGEQUIT',
+    title: 'RageQuit',
+    description: 'Submit a proposal to RageQuit from UberHaus.',
+    type: PROPOSAL_TYPES.MINION_UBER_RQ,
+    tx: TX.UBERHAUS_RAGEQUIT,
+    required: [],
+    fields: [
+      [FIELD.UBERHAUS_RAGE_QUIT_INPUT],
+      [
+        {
+          ...FIELD.UBERHAUS_RAGE_QUIT_INPUT,
+          label: 'Loot to Rage',
+          htmlFor: 'loot',
+          name: 'loot',
+        },
+      ],
+    ],
+  },
 };

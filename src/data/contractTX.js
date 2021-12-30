@@ -314,6 +314,14 @@ export const DETAILS = {
     uberHaus: 'true',
     uberType: 'staking',
   },
+  UBERHAUS_RAGEQUIT: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'staking',
+  },
 };
 
 export const TX = {

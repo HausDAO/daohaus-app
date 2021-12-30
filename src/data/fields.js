@@ -471,7 +471,7 @@ export const FIELD = {
     expectType: 'address',
   },
   UBERHAUS_DELEGATE: {
-    type: 'uberHausDelegate',
+    type: 'uberHausDelegateInput',
     htmlFor: 'uberHausDelegate',
     name: 'uberHausDelegate',
     label: 'New Delegate',
@@ -485,6 +485,15 @@ export const FIELD = {
     label: 'Tribute Offered',
     info: INFO_TEXT.UBERHAUS_TRIBUTE,
     expectType: 'number',
+  },
+  UBERHAUS_RAGE_QUIT_INPUT: {
+    type: 'uberHausRageQuitInput',
+    label: 'Shares To Rage',
+    name: 'shares',
+    htmlFor: 'shares',
+    placeholder: '0',
+    info: INFO_TEXT.RAGE_QUIT_INPUT,
+    expectType: 'integer',
   },
 };
 

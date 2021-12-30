@@ -7,10 +7,11 @@ import { FORM } from '../data/forms';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { JANUARY_2024 } from '../utils/general';
 
-const UberhausProposals = ({ uberHausMinion }) => {
+const UberhausProposals = ({ uberHausMinion, uberMembers }) => {
   const { formModal } = useAppModal();
   const handleClick = propType => {
     console.log('uberHausMinion', uberHausMinion, propType);
+    console.log('uberMembers', uberMembers, propType);
 
     switch (propType) {
       case 'delegate': {
@@ -34,6 +35,17 @@ const UberhausProposals = ({ uberHausMinion }) => {
         });
         break;
       }
+      case 'ragequit': {
+        formModal({
+          ...FORM.UBERHAUS_RAGEQUIT,
+          localValues: {
+            uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
+            minionAddress: uberHausMinion.minionAddress,
+            uberMembers,
+          },
+        });
+        break;
+      }
       default: {
         return null;
       }
@@ -43,6 +55,7 @@ const UberhausProposals = ({ uberHausMinion }) => {
     <Flex flexDir='row' w='100%'>
       <Button onClick={() => handleClick('delegate')}>Delegate</Button>
       <Button onClick={() => handleClick('stake')}>Stake</Button>
+      <Button onClick={() => handleClick('ragequit')}>RageQuit</Button>
     </Flex>
   );
 };
