@@ -1,38 +1,34 @@
 import React, { useEffect, useState } from 'react';
 
-import { useDaoMember } from '../contexts/DaoMemberContext';
-
 import GenericInput from './genericInput';
-import InputSelect from './inputSelect';
 import ModButton from './modButton';
 
 const UberHausRageQuitInput = props => {
   console.log('RQ Props', props);
-  // const { daoMember } = useDaoMember();
-  const { localForm, localValues } = props;
-  const { setValue } = localForm;
 
-  const [minionLoot, setMinionLoot] = useState(0);
+  const { localForm, localValues, name } = props;
+  const { setValue } = localForm;
   const [minionShares, setMinionShares] = useState(0);
+  const [minionLoot, setMinionLoot] = useState(0);
 
   const btnDisplay = () => {
-    if (minionShares) return `Max: ${minionShares}`;
-    return '0';
+    if (name === 'shares') {
+      if (minionShares) return `Max: ${minionShares}`;
+      return '0';
+    }
+    if (name === 'loot') {
+      if (minionLoot) return `Max: ${minionLoot}`;
+      return '0';
+    }
   };
 
-  // const btnDisplay = () => {
-  //   const btnText = {};
-
-  //   minionShares
-  //     ? (btnText.shares = `Max: ${minionShares}`)
-  //     : (btnText.shares = '0');
-  //   minionLoot ? (btnText.loot = `Max: ${minionLoot}`) : (btnText.loot = '0');
-  //   console.log('btnText', btnText);
-  //   return btnText;
-  // };
-
   const setMax = () => {
-    setValue('shares', minionShares);
+    if (name === 'shares') {
+      setValue('shares', minionShares);
+    }
+    if (name === 'loot') {
+      setValue('loot', minionLoot);
+    }
   };
 
   useEffect(() => {
@@ -59,10 +55,6 @@ const UberHausRageQuitInput = props => {
       {...props}
       btn={<ModButton text={btnDisplay()} fn={setMax} />}
     />
-    // <InputSelect
-    //   {...props}
-    //   btn={<ModButton text={btnDisplay()} fn={setMax} />}
-    // />
   );
 };
 

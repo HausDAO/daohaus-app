@@ -320,7 +320,7 @@ export const DETAILS = {
     link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
     uberHaus: 'true',
-    uberType: 'staking',
+    uberType: 'ragequit',
   },
 };
 
@@ -1281,6 +1281,40 @@ export const TX = {
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.UBERHAUS_STAKING,
+      },
+    ],
+    createDiscourse: true,
+  },
+  UBERHAUS_RAGEQUIT: {
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
+    name: 'proposeAction',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Proposal submitted!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.localValues.uberHausDaoAddress',
+      '.values.tributeToken',
+      '0',
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.UBERHAUS_MOLOCH,
+        fnName: 'ragequit',
+        gatherArgs: [
+          '.values.shares || 0',
+          '.values.loot || 0',
+
+          {
+            type: 'detailsToJSON',
+            gatherFields: DETAILS.UBERHAUS_RAGEQUIT,
+          },
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.UBERHAUS_RAGEQUIT,
       },
     ],
     createDiscourse: true,
