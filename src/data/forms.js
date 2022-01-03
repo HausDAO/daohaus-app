@@ -156,7 +156,7 @@ export const PROPOSAL_FORMS = {
           ...FIELD.TITLE,
           label: 'Name',
           name: 'name',
-          placeholder: 'A name for your porfile',
+          placeholder: 'A name for your profile',
           htmlFor: 'name',
           expectType: 'string',
           maxLength: {
