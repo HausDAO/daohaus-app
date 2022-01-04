@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { Checkbox } from '@chakra-ui/react';
 
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
@@ -13,9 +14,11 @@ const UberHausPullInput = props => {
   const { localForm, registerOptions, localValues } = props;
   const { setValue } = localForm;
 
-  const [daoTokens, setDaoTokens] = useState([]);
   const [balance, setBalance] = useState(null);
+  const [currentDelegate, setCurrentDelegate] = useState();
+  const [daoTokens, setDaoTokens] = useState([]);
   const [decimals, setDecimals] = useState(null);
+  const [pullDelegateRewards, setDelegateRewards] = useState(false);
 
   const displayBalance = useMemo(() => {
     if (balance && decimals) {
@@ -25,10 +28,32 @@ const UberHausPullInput = props => {
     return 'Error';
   }, [balance, decimals]);
 
-  const btnDisplay = () => {
-    if (displayBalance) return `Max: ${displayBalance}`;
-    return '0';
-  };
+  const isDelegate = useMemo(() => {
+    if (localValues.uberDelegate && localValues.address) {
+      return localValues.address === localValues.uberDelegate?.toLowerCase?.();
+    }
+    return false;
+  }, [localValues.address, localValues.uberDelegate]);
+
+  useEffect(() => {
+    const getDelegate = async () => {
+      try {
+        const minionContract = await createContract({
+          address: localValues.minionAddress,
+          abi: LOCAL_ABI.UBERHAUS_MINION,
+          chainID: UBERHAUS_DATA.NETWORK,
+        });
+        const delegate = await minionContract.methods.currentDelegate().call();
+
+        setCurrentDelegate(delegate);
+      } catch (error) {
+        console.error(error?.message);
+      }
+    };
+    if (localValues?.minionAddress) {
+      getDelegate();
+    }
+  }, [localValues]);
 
   useEffect(() => {
     const setupTokenData = async () => {
@@ -59,8 +84,17 @@ const UberHausPullInput = props => {
     }
   }, [localValues]);
 
+  const btnDisplay = () => {
+    if (displayBalance) return `Max: ${displayBalance}`;
+    return '0';
+  };
+
+  const handleCheck = () => {
+    setDelegateRewards(prevState => !prevState);
+  };
+
   const setMax = () => {
-    setValue('tributeOffered', balance / 10 ** decimals);
+    setValue('withdraw', balance / 10 ** decimals);
   };
 
   const options = spreadOptions({
@@ -75,13 +109,24 @@ const UberHausPullInput = props => {
   });
 
   return (
-    <InputSelect
-      {...props}
-      selectName='tributeToken'
-      options={daoTokens}
-      registerOptions={options}
-      btn={<ModButton text={btnDisplay()} fn={setMax} />}
-    />
+    <>
+      <InputSelect
+        {...props}
+        selectName='tributeToken'
+        options={daoTokens}
+        registerOptions={options}
+        btn={<ModButton text={btnDisplay()} fn={setMax} />}
+        disabled={!isDelegate}
+      />
+      <Checkbox
+        onChange={handleCheck}
+        isChecked={pullDelegateRewards}
+        color={pullDelegateRewards ? 'whiteAlpha.700' : 'whiteAlpha.500'}
+        isDisabled={currentDelegate?.impeached || currentDelegate?.rewarded}
+      >
+        Pull delegate rewards
+      </Checkbox>
+    </>
   );
 };
 
