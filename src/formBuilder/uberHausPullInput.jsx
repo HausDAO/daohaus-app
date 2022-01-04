@@ -28,13 +28,6 @@ const UberHausPullInput = props => {
     return 'Error';
   }, [balance, decimals]);
 
-  const isDelegate = useMemo(() => {
-    if (localValues.uberDelegate && localValues.address) {
-      return localValues.address === localValues.uberDelegate?.toLowerCase?.();
-    }
-    return false;
-  }, [localValues.address, localValues.uberDelegate]);
-
   useEffect(() => {
     const getDelegate = async () => {
       try {
@@ -94,7 +87,7 @@ const UberHausPullInput = props => {
   };
 
   const setMax = () => {
-    setValue('withdraw', balance / 10 ** decimals);
+    setValue('pull', balance / 10 ** decimals);
   };
 
   const options = spreadOptions({
@@ -116,7 +109,6 @@ const UberHausPullInput = props => {
         options={daoTokens}
         registerOptions={options}
         btn={<ModButton text={btnDisplay()} fn={setMax} />}
-        disabled={!isDelegate}
       />
       <Checkbox
         onChange={handleCheck}
