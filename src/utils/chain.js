@@ -298,6 +298,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
+    dao_conditional_helper_addr: '0xF5fb9ce16dbf5B0a7b632Ed5D3F0278E0043B7AE',
   },
   '0xa4ec': {
     name: 'Celo',
