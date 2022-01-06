@@ -94,7 +94,7 @@ const TributeInput = props => {
         .allowance(address, daoid)
         .call();
 
-      const decimalRes = await tokenContract.methods.decimal().call();
+      const decimalRes = await tokenContract.methods.decimals().call();
       const balanceRes = await tokenContract.methods.balanceOf(address).call();
 
       if (shouldUpdate) {
