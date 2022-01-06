@@ -140,11 +140,11 @@ export const getApiGnosis = async (networkName, endpoint) => {
   }
 };
 
-export const fetchSafeDetails = async (networkName, vault) => {
+export const fetchSafeDetails = async (networkName, safeAddress) => {
   try {
     return await getApiGnosis(
       networkName,
-      `safes/${Web3Utils.toChecksumAddress(vault.safeAddress)}`,
+      `safes/${Web3Utils.toChecksumAddress(safeAddress)}`,
     );
   } catch (error) {
     console.error(error);

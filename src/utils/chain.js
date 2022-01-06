@@ -64,6 +64,7 @@ export const supportedChains = {
   '0x4': {
     name: 'Ethereum Rinkeby',
     short_name: 'rinkeby',
+    shortNamePrefix: 'rin',
     nativeCurrency: 'ETH',
     network: 'rinkeby',
     network_id: 4,
@@ -133,6 +134,7 @@ export const supportedChains = {
   '0x2a': {
     name: 'Ethereum Kovan',
     short_name: 'kovan',
+    shortNamePrefix: 'kov',
     nativeCurrency: 'ETH',
     network: 'kovan',
     network_id: 42,

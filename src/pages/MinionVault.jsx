@@ -22,6 +22,7 @@ import NftCard from '../components/nftCard';
 import TextBox from '../components/TextBox';
 import SafeMinionDetails from '../components/safeMinionDetails';
 import { chainByID } from '../utils/chain';
+import { isAmbModule } from '../utils/contract';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { formatNativeData } from '../utils/vaults';
@@ -39,6 +40,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const [nativeBalance, setNativeBalance] = useState(null);
   const [internalBalances, setInternalBalances] = useState(null);
   const [safeDetails, setSafeDetails] = useState(null);
+  const [foreignSafeDetails, setForeignSafeDetails] = useState(null);
 
   const { daoMetaData } = useMetaData();
 
@@ -82,17 +84,40 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
         console.log('no vault found');
         return;
       }
+      const targetChainId = vaultMatch.foreignChainId || daochain;
       if (vaultMatch.safeAddress) {
         try {
           const safe = await fetchSafeDetails(
             chainByID(daochain).networkAlt || chainByID(daochain).network,
-            vaultMatch,
+            vaultMatch.safeAddress,
           );
           if (safe) {
             vaultMatch.isMinionModule = safe.modules.includes(
               Web3Utils.toChecksumAddress(vaultMatch.address),
             );
             setSafeDetails(safe);
+          }
+          if (vaultMatch.foreignSafeAddress) {
+            const foreignSafe = await fetchSafeDetails(
+              chainByID(vaultMatch.foreignChainId).networkAlt ||
+                chainByID(vaultMatch.foreignChainId).network,
+              vaultMatch.foreignSafeAddress,
+            );
+            if (foreignSafe) {
+              // Validate if the foreign safe has the AMB module enabled
+              foreignSafe.ambModuleEnabled = (
+                await Promise.all(
+                  foreignSafe.modules.map(async m => {
+                    return isAmbModule(
+                      m,
+                      vaultMatch.safeAddress,
+                      vaultMatch.foreignChainId,
+                    );
+                  }),
+                )
+              ).some(m => m);
+              setForeignSafeDetails(foreignSafe);
+            }
           }
         } catch (error) {
           console.error(error);
@@ -106,11 +131,11 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       });
 
       const nativeBalance = await fetchNativeBalance(
-        vaultMatch.safeAddress || minion,
-        daochain,
+        vaultMatch.foreignSafeAddress || vaultMatch.safeAddress || minion,
+        targetChainId,
       );
       if (+nativeBalance > 0) {
-        setNativeBalance(formatNativeData(daochain, nativeBalance));
+        setNativeBalance(formatNativeData(targetChainId, nativeBalance));
       }
 
       const internalBalanceRes = await fetchMinionInternalBalances({
@@ -184,12 +209,14 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               <SafeMinionDetails
                 vault={vault}
                 safeDetails={safeDetails}
+                foreignSafeDetails={foreignSafeDetails}
                 handleCopy={handleCopy}
               />
             )}
             <CrossDaoInternalBalanceList
               tokens={internalBalances}
               currentDaoTokens={currentDaoTokens}
+              isMinion
             />
             <BalanceList vault={vault} balances={erc20Balances} />
             {nativeBalance && (

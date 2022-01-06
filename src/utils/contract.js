@@ -242,3 +242,20 @@ export const deployZodiacBridgeModule = async (
     console.error(error);
   }
 };
+
+export const isAmbModule = async (address, controller, targetChainId) => {
+  const abi = getLocalABI(CONTRACTS.AMB_MODULE);
+  const contract = createContract({ address, abi, chainID: targetChainId });
+  try {
+    const props = await Promise.all([
+      Web3.utils.toChecksumAddress(
+        await contract.methods.controller().call(),
+      ) === Web3.utils.toChecksumAddress(controller),
+      Number(await contract.methods.chainId().call()) === Number(targetChainId),
+    ]);
+    return props.every(v => v);
+  } catch (error) {
+    console.error('Not an AMB module', address, error);
+    return false;
+  }
+};
