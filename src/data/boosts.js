@@ -434,7 +434,7 @@ export const BOOSTS = {
       '0x1': false,
       '0x64': true,
       '0x89': false,
-      '0xa4b1': false,
+      '0xa4b1': true,
     },
     cost: 'free',
     settings: 'none',
