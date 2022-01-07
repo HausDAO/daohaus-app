@@ -160,7 +160,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
 
                 <FormControl id='longDescription' mb={4}>
                   <TextBox size='xs' mb={2}>
-                    Description
+                    Long Description
                   </TextBox>
                   <Textarea
                     ref={register({ required: true })}
