@@ -158,6 +158,18 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                   />
                 </FormControl>
 
+                <FormControl id='longDescription' mb={4}>
+                  <TextBox size='xs' mb={2}>
+                    Description
+                  </TextBox>
+                  <Textarea
+                    ref={register({ required: true })}
+                    defaultValue={metadata.longDescription}
+                    placeholder='More content (not currently displayed in the app, maybe soon)'
+                    name='longDescription'
+                  />
+                </FormControl>
+
                 <FormControl id='purpose' mb={4}>
                   <TextBox size='xs' mb={2}>
                     Purpose
