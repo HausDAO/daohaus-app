@@ -1,8 +1,8 @@
 import React from 'react';
+import { TX } from '../data/contractTX';
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
 import ExecuteAction from './ExecuteAction';
 import ExecuteRarible from './ExecuteRarible';
-import UberDelegateAction from './uberDelegateAction';
 import UberStakingAction from './uberStakingAction';
 
 const MinionExexcuteFactory = props => {
@@ -13,13 +13,18 @@ const MinionExexcuteFactory = props => {
     return <ExecuteAction {...props} />;
   }
   if (executeType === 'UH_delegate') {
-    return <UberDelegateAction {...proposal} />;
+    return (
+      <ExecuteAction
+        {...props}
+        executeTX={TX.UBERHAUS_MINION_EXECUTE_APPOINTMENT}
+      />
+    );
   }
   if (executeType === 'UH_staking') {
-    return <UberStakingAction {...proposal} />;
+    return <UberStakingAction {...props} />;
   }
   if (executeType === 'rarible') {
-    return <ExecuteRarible {...proposal} />;
+    return <ExecuteRarible {...props} />;
   }
 };
 

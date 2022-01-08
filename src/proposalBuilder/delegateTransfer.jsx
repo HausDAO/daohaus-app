@@ -1,13 +1,10 @@
-import { Box, Flex } from '@chakra-ui/react';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Box, Flex } from '@chakra-ui/react';
+
 import AddressAvatar from '../components/addressAvatar';
-
-import { useDao } from '../contexts/DaoContext';
-
 import { AsyncCardTransfer } from './propBriefPrimitives';
 
-//  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR PAYROLL PROPOSALS
+//  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR  UBERHAUS DELEGATE PROPOSALS
 
 const DelegateTransfer = ({ proposal = {}, minionAction }) => {
   const nomineeUI = (
@@ -19,10 +16,10 @@ const DelegateTransfer = ({ proposal = {}, minionAction }) => {
   const proposerUI = (
     <Flex alignItems='center'>
       <AddressAvatar addr={minionAction?.proposer} hideCopy sizeForPropCard />
-      <Box ml='1'>nominates</Box>
+      <Box ml='1'>is nominating</Box>
     </Flex>
   );
-  console.log(`minionAction`, minionAction);
+
   return (
     <>
       <Box mb='2'>
@@ -30,14 +27,14 @@ const DelegateTransfer = ({ proposal = {}, minionAction }) => {
           isLoaded={minionAction?.proposer}
           proposal={proposal}
           outgoing
-          itemText={proposerUI}
+          action={proposerUI}
         />
       </Box>
       <AsyncCardTransfer
         isLoaded={minionAction?.nominee}
         proposal={proposal}
         incoming
-        itemText={nomineeUI}
+        action={nomineeUI}
       />
     </>
   );

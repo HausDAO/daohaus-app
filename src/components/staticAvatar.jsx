@@ -4,7 +4,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 
 import CopyButton from './copyButton';
 import { truncateAddr } from '../utils/general';
-import { ParaMd } from './typography';
+import { Bold, ParaMd } from './typography';
 
 const StaticAvatar = ({
   address,
@@ -32,7 +32,9 @@ const StaticAvatar = ({
             width='18px'
           />
           <Flex>
-            <ParaMd ml='2'>{name || truncateAddr(address)}</ParaMd>
+            <ParaMd ml='2'>
+              <Bold>{name || truncateAddr(address)}</Bold>
+            </ParaMd>
             {emoji && (
               <Box as='span' mx={1}>
                 {emoji}
