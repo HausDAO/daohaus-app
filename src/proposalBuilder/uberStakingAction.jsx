@@ -8,7 +8,8 @@ import { UBERHAUS_DATA } from '../utils/uberhaus';
 import ExecuteAction from './ExecuteAction';
 
 const UberStakingAction = props => {
-  const { proposal } = props;
+  const { proposal, minionAction } = props;
+
   const { daochain } = useParams();
   const [hasEnough, setHasEnough] = useState('loading');
   const [hausBalance, setHausBalance] = useState(null);
@@ -26,7 +27,7 @@ const UberStakingAction = props => {
         .balanceOf(proposal.minionAddress)
         .call();
       const enough = Number(amountApproved) > Number(minionBalance);
-      console.log(`enough`, enough);
+
       setHasEnough(Number(amountApproved) > Number(minionBalance));
       setHausBalance(minionBalance);
     };
@@ -49,7 +50,13 @@ const UberStakingAction = props => {
       </Button>
     );
   }
-  return <ExecuteAction {...props} executeTX={TX.MINION_SIMPLE_EXECUTE} />;
+  return (
+    <ExecuteAction
+      {...props}
+      executeTX={TX.MINION_SIMPLE_EXECUTE}
+      executed={false}
+    />
+  );
 };
 
 export default UberStakingAction;

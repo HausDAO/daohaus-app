@@ -2,7 +2,7 @@ import Web3, { utils as Web3Utils } from 'web3';
 import abiDecoder from 'abi-decoder';
 import { createContract } from './contract';
 import { fetchABI, getMinionAbi } from './abi';
-import { MINION_TYPES } from './proposalUtils';
+import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
 import { TX } from '../data/contractTX';
 
@@ -26,6 +26,12 @@ export const SHOULD_DECODE = {
 
 export const SHOULD_MULTI_DECODE = {
   [MINION_TYPES.SAFE]: true,
+};
+
+const getUHAction = proposalType => {
+  return proposalType === PROPOSAL_TYPES.MINION_UBER_DEL
+    ? 'appointments'
+    : 'actions';
 };
 
 export const getProxiedAddress = async (abi, to, daochain) => {
@@ -84,9 +90,19 @@ export const handleDecode = async (action, params) => {
 };
 
 export const getMinionAction = async params => {
-  const { minionAddress, proposalId, chainID, minionType } = params;
+  const {
+    minionAddress,
+    proposalId,
+    chainID,
+    minionType,
+    proposalType,
+  } = params;
   const abi = getMinionAbi(minionType);
-  const actionName = MINION_ACTION_FUNCTION_NAMES[minionType];
+  const actionName =
+    minionType === MINION_TYPES.UBERHAUS_MINION
+      ? getUHAction(proposalType)
+      : MINION_ACTION_FUNCTION_NAMES[minionType];
+  console.log(`actionName`, actionName);
   try {
     const minionContract = createContract({
       address: minionAddress,
@@ -94,6 +110,7 @@ export const getMinionAction = async params => {
       chainID,
     });
     const action = await minionContract.methods[actionName](proposalId).call();
+
     if (SHOULD_DECODE[minionType]) {
       const decoded = await decodeAction(action, params);
       return { ...action, decoded };

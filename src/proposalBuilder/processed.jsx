@@ -16,8 +16,6 @@ import MinionExexcuteFactory from './minionExexcuteFactory';
 
 const Processed = props => {
   const { voteData, proposal, minionAction } = props;
-  console.log(`minionAction`, minionAction);
-  console.log(`proposal`, proposal);
 
   if (!proposal.isMinion) {
     return (

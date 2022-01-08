@@ -4,7 +4,7 @@ import { AiOutlineCheck } from 'react-icons/ai';
 import { useTX } from '../contexts/TXContext';
 import { InactiveButton } from './actionPrimitives';
 
-const ExecuteAction = ({ proposal, executeTX, minionAction }) => {
+const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
   const { submitTransaction } = useTX();
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +20,7 @@ const ExecuteAction = ({ proposal, executeTX, minionAction }) => {
     });
     setLoading(false);
   };
-  if (minionAction.executed) {
+  if (minionAction.executed || executed) {
     return (
       <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
         Executed

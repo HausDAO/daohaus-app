@@ -13,31 +13,38 @@ export const PropCardTransfer = ({
   incoming,
   outgoing,
   itemText,
+  customUI,
   action,
   specialLocation,
 }) => {
   return (
     <Flex alignItems='center' mb='4'>
       {incoming && (
-        <Box transform='translateY(1px)'>
+        <Box transform='translateY(1px)' mr='1'>
           <RiArrowRightLine size='1.1rem' />
         </Box>
       )}
       {outgoing && (
-        <Box transform='translateY(1px)'>
+        <Box transform='translateY(1px)' mr='1'>
           <RiArrowLeftLine size='1.1rem' />
         </Box>
       )}
-      {specialLocation ? (
-        <ParaMd ml='1'>
-          {action}
-          <Bold> {itemText} </Bold> to <Bold> {specialLocation}</Bold>
-        </ParaMd>
-      ) : (
-        <ParaMd ml='1'>
-          {action}
-          <Bold> {itemText} </Bold>
-        </ParaMd>
+
+      {customUI}
+      {itemText && (
+        <>
+          {specialLocation ? (
+            <ParaMd>
+              {action}
+              <Bold> {itemText} </Bold> to <Bold> {specialLocation}</Bold>
+            </ParaMd>
+          ) : (
+            <ParaMd>
+              {action}
+              <Bold> {itemText} </Bold>
+            </ParaMd>
+          )}
+        </>
       )}
     </Flex>
   );
