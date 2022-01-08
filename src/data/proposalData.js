@@ -13,6 +13,7 @@ export const CUSTOM_CARD_DATA = {
     execute: 'UH_delegate',
   },
   [PROPOSAL_TYPES.MINION_UBER_STAKE]: {
+    // customTransferUI: 'uberStake',
     execute: 'UH_staking',
   },
 };

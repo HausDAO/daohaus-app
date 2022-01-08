@@ -7,6 +7,7 @@ import MinionTransfer from './minionTransfer';
 
 import { generateOfferText, generateRequestText } from '../utils/proposalCard';
 import DelegateTransfer from './delegateTransfer';
+import StakeTransfer from './UHstakingTransfer';
 
 export const PropCardTransfer = ({
   incoming,
@@ -68,6 +69,9 @@ export const CustomTransfer = props => {
   }
   if (customTransferUI === 'uberDelegate') {
     return <DelegateTransfer {...props} />;
+  }
+  if (customTransferUI === 'uberStake') {
+    return <StakeTransfer {...props} />;
   }
   return null;
 };

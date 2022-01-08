@@ -14,9 +14,9 @@ import { validate } from '../utils/validation';
 
 const GracePeriod = ({ proposal, voteData }) => {
   const getTime = () => {
-    if (validate.number(Number(proposal?.votingPeriodStarts))) {
+    if (validate.number(Number(proposal?.gracePeriodEnds))) {
       return formatDistanceToNow(
-        new Date(Number(proposal?.votingPeriodEnds) * 1000),
+        new Date(Number(proposal?.gracePeriodEnds) * 1000),
         {
           addSuffix: true,
         },
@@ -31,7 +31,7 @@ const GracePeriod = ({ proposal, voteData }) => {
         <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
-          Grace Periods
+          Grace Period
         </ParaSm>
         <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
       </StatusDisplayBox>
