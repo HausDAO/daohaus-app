@@ -19,6 +19,15 @@ export const MINION_ACTION_FUNCTION_NAMES = {
   [MINION_TYPES.SUPERFLUID]: 'streams',
 };
 
+export const SHOULD_DECODE = {
+  [MINION_TYPES.NIFTY]: true,
+  [MINION_TYPES.VANILLA]: true,
+};
+
+export const SHOULD_MULTI_DECODE = {
+  [MINION_TYPES.SAFE]: true,
+};
+
 export const getProxiedAddress = async (abi, to, daochain) => {
   try {
     const rpcUrl = chainByID(daochain).rpc_url;
@@ -75,13 +84,7 @@ export const handleDecode = async (action, params) => {
 };
 
 export const getMinionAction = async params => {
-  const {
-    minionAddress,
-    proposalId,
-    chainID,
-    minionType,
-    shouldDecode = true,
-  } = params;
+  const { minionAddress, proposalId, chainID, minionType } = params;
   const abi = getMinionAbi(minionType);
   const actionName = MINION_ACTION_FUNCTION_NAMES[minionType];
   try {
@@ -91,9 +94,13 @@ export const getMinionAction = async params => {
       chainID,
     });
     const action = await minionContract.methods[actionName](proposalId).call();
-    if (shouldDecode) {
+    if (SHOULD_DECODE[minionType]) {
       const decoded = await decodeAction(action, params);
       return { ...action, decoded };
+    }
+    if (SHOULD_MULTI_DECODE[minionType]) {
+      //  Do multi-stuff
+      return action;
     }
     return action;
   } catch (error) {

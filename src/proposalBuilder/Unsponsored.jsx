@@ -70,12 +70,8 @@ const Unsponsored = props => {
     await submitTransaction({
       args: [proposal.proposalId],
       tx: TX.SPONSOR_PROPOSAL,
-      lifeCycleFns: {
-        onPollSuccess() {
-          setLoadingTx(false);
-        },
-      },
     });
+    setLoadingTx(false);
   };
   const cancelProposal = async () => {
     setLoadingTx(true);

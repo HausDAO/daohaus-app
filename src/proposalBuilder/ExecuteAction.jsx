@@ -21,7 +21,6 @@ const ExecuteAction = ({ proposal, executeTX, minionAction }) => {
     setLoading(false);
   };
   if (minionAction.executed) {
-    console.log('has been executited');
     return (
       <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
         Executed

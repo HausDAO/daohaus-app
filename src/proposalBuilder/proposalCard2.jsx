@@ -20,7 +20,9 @@ import useMinionAction from '../hooks/useMinionAction';
 const ProposalCardV2 = ({ proposal, interaction }) => {
   const { address } = useInjectedProvider();
   const { daoMember, isMember } = useDaoMember();
-  const { minionAction, executeTX } = useMinionAction(proposal);
+  const { minionAction, executeTX } = proposal?.minion
+    ? useMinionAction(proposal)
+    : {};
 
   const { canInteract } = interaction || {};
 

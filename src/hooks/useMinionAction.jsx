@@ -23,7 +23,7 @@ const useMinionAction = proposal => {
         proposalId,
         chainID: daochain,
       });
-      if (action?.data && shouldUpdate) {
+      if (action && shouldUpdate) {
         setAction({
           ...action,
           status: 'success',

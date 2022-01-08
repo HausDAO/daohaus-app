@@ -9,6 +9,7 @@ export const CUSTOM_CARD_DATA = {
     execute: 'executeRarible',
   },
   [PROPOSAL_TYPES.MINION_UBER_DEL]: {
+    customTransferUI: 'uberDelegate',
     execute: 'UH_delegate',
   },
   [PROPOSAL_TYPES.MINION_UBER_STAKE]: {

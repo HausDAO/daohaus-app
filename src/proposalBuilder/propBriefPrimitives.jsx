@@ -6,6 +6,7 @@ import { Bold, ParaMd } from '../components/typography';
 import MinionTransfer from './minionTransfer';
 
 import { generateOfferText, generateRequestText } from '../utils/proposalCard';
+import DelegateTransfer from './delegateTransfer';
 
 export const PropCardTransfer = ({
   incoming,
@@ -60,13 +61,13 @@ export const PropCardOffer = ({ proposal }) => {
   return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
 };
 
-export const CustomTransfer = ({
-  proposal,
-  customTransferUI,
-  minionAction,
-}) => {
+export const CustomTransfer = props => {
+  const { customTransferUI } = props;
   if (customTransferUI === 'minionTransfer') {
-    return <MinionTransfer proposal={proposal} minionAction={minionAction} />;
+    return <MinionTransfer {...props} />;
+  }
+  if (customTransferUI === 'uberDelegate') {
+    return <DelegateTransfer {...props} />;
   }
   return null;
 };
