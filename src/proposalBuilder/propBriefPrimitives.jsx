@@ -16,7 +16,7 @@ export const PropCardTransfer = ({
   specialLocation,
 }) => {
   return (
-    <Flex alignItems='center' mb='2'>
+    <Flex alignItems='center' mb='4'>
       {incoming && (
         <Box transform='translateY(1px)'>
           <RiArrowRightLine size='1.1rem' />
