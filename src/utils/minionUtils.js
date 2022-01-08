@@ -98,8 +98,10 @@ export const getMinionAction = async params => {
     proposalType,
   } = params;
   const abi = getMinionAbi(minionType);
+  console.log(`proposalType`, proposalType);
+  console.log(`minionType`, minionType);
   const actionName =
-    minionType === MINION_TYPES.UBERHAUS_MINION
+    minionType === MINION_TYPES.UBER
       ? getUHAction(proposalType)
       : MINION_ACTION_FUNCTION_NAMES[minionType];
   console.log(`actionName`, actionName);

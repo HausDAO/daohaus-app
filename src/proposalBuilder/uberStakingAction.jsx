@@ -9,7 +9,7 @@ import ExecuteAction from './ExecuteAction';
 
 const UberStakingAction = props => {
   const { proposal, minionAction } = props;
-
+  console.log(`minionAction`, minionAction);
   const { daochain } = useParams();
   const [hasEnough, setHasEnough] = useState('loading');
   const [hausBalance, setHausBalance] = useState(null);
