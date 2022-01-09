@@ -211,7 +211,6 @@ export const determineProposalType = proposal => {
 
 export const titleMaker = proposal => {
   if (!proposal.details) {
-    console.log(proposal.details);
     proposal.details = '';
   }
   const details = proposal.details.split('~');
