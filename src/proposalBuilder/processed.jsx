@@ -39,7 +39,6 @@ const Processed = props => {
             <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
               Processed
             </InactiveButton>
-            {minionAction && <MinionExexcuteFactory {...props} />}
             {/* <Button size='sm'>Early Execute</Button> */}
           </Flex>
         </Flex>
@@ -64,7 +63,9 @@ const Processed = props => {
       <Flex mt='2' alignItems='center'>
         <UserVoteData voteData={voteData} />
         <Flex ml='auto'>
-          {minionAction && <MinionExexcuteFactory {...props} />}
+          {minionAction && voteData?.isPassing && (
+            <MinionExexcuteFactory {...props} />
+          )}
         </Flex>
       </Flex>
     </PropActionBox>
