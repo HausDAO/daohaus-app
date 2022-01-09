@@ -9,10 +9,9 @@ import ExecuteAction from './ExecuteAction';
 
 const UberStakingAction = props => {
   const { proposal, minionAction } = props;
-  console.log(`minionAction`, minionAction);
   const { daochain } = useParams();
   const [hasEnough, setHasEnough] = useState('loading');
-  const [hausBalance, setHausBalance] = useState(null);
+  // const [hausBalance, setHausBalance] = useState(null);
   useEffect(() => {
     const checkHausBal = async () => {
       const hausContract = createContract({
@@ -26,22 +25,16 @@ const UberStakingAction = props => {
       const minionBalance = await hausContract.methods
         .balanceOf(proposal.minionAddress)
         .call();
-      const enough = Number(amountApproved) > Number(minionBalance);
 
       setHasEnough(Number(amountApproved) > Number(minionBalance));
-      setHausBalance(minionBalance);
+      // setHausBalance(minionBalance);
     };
     if (proposal) {
       checkHausBal();
     }
   }, [proposal.minionAddress]);
 
-  if (hasEnough === 'loading')
-    return (
-      <Button size='sm' minW='4rem'>
-        Checking Allowance
-      </Button>
-    );
+  if (hasEnough === 'loading') return null;
 
   if (!hasEnough) {
     return (
@@ -53,7 +46,7 @@ const UberStakingAction = props => {
   return (
     <ExecuteAction
       {...props}
-      executeTX={TX.MINION_SIMPLE_EXECUTE}
+      executeTX={TX.UBER_EXECUTE_ACTION}
       executed={false}
     />
   );

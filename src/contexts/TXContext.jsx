@@ -128,7 +128,7 @@ export const TXProvider = ({ children }) => {
 
   const buildTXPoll = data => {
     const { tx, values, formData, now, lifeCycleFns, localValues } = data;
-
+    console.log(`localValues`, localValues);
     return createPoll({
       action: tx.poll || tx.specialPoll || tx.name,
       cachePoll,
@@ -212,6 +212,7 @@ export const TXProvider = ({ children }) => {
       const poll = buildTXPoll({
         ...consolidatedData,
       });
+      console.log(`poll`, poll);
       const tx = await Transaction({
         args,
         ...consolidatedData,

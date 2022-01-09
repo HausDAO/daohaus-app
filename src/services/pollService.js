@@ -166,7 +166,14 @@ export const createPoll = ({
     // NEW TX specialPoll
   } else if (action === 'executeAction') {
     console.log('set poll');
-    return ({ chainID, minionAddress, proposalId, actions, tx }) => txHash => {
+    return ({
+      chainID,
+      minionAddress,
+      proposalId,
+      actions,
+      tx,
+      proposalType,
+    }) => txHash => {
       startPoll({
         pollFetch: pollMinionExecuteAction,
         testFn: minionExecuteTest,
@@ -176,6 +183,7 @@ export const createPoll = ({
           minionAddress,
           proposalId,
           tx,
+          proposalType,
         },
         actions,
         txHash,
@@ -195,7 +203,7 @@ export const createPoll = ({
             interval,
             tries,
           },
-          pollArgs: { chainID, minionAddress, proposalId },
+          pollArgs: { chainID, minionAddress, proposalId, proposalType },
         });
       }
     };

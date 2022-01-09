@@ -6,6 +6,9 @@ import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
 import { TX } from '../data/contractTX';
 
+// If a minion has separate action names (ex. UBER),
+// then use Proposal types as a reference to the action name
+// If you do use proposal types, DO NOT use minion types or it won't work.
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
   [MINION_TYPES.VANILLA]: 'actions',
@@ -13,8 +16,8 @@ export const MINION_ACTION_FUNCTION_NAMES = {
   [MINION_TYPES.NIFTY]: 'actions',
   SAFE_MINION: 'actions',
   [MINION_TYPES.SAFE]: 'actions',
-  UBERHAUS_MINION: 'appointments',
-  [MINION_TYPES.UBER]: 'appointments',
+  [PROPOSAL_TYPES.MINION_UBER_STAKE]: 'actions',
+  [PROPOSAL_TYPES.MINION_UBER_DEL]: 'appointments',
   SUPERFLUID_MINION: 'streams',
   [MINION_TYPES.SUPERFLUID]: 'streams',
 };
@@ -22,6 +25,7 @@ export const MINION_ACTION_FUNCTION_NAMES = {
 export const SHOULD_DECODE = {
   [MINION_TYPES.NIFTY]: true,
   [MINION_TYPES.VANILLA]: true,
+  [PROPOSAL_TYPES.MINION_UBER_STAKE]: true,
 };
 
 export const SHOULD_MULTI_DECODE = {
@@ -98,13 +102,11 @@ export const getMinionAction = async params => {
     proposalType,
   } = params;
   const abi = getMinionAbi(minionType);
-  console.log(`proposalType`, proposalType);
-  console.log(`minionType`, minionType);
+
   const actionName =
-    minionType === MINION_TYPES.UBER
-      ? getUHAction(proposalType)
-      : MINION_ACTION_FUNCTION_NAMES[minionType];
-  console.log(`actionName`, actionName);
+    MINION_ACTION_FUNCTION_NAMES[minionType] ||
+    MINION_ACTION_FUNCTION_NAMES[proposalType];
+
   try {
     const minionContract = createContract({
       address: minionAddress,
@@ -112,8 +114,7 @@ export const getMinionAction = async params => {
       chainID,
     });
     const action = await minionContract.methods[actionName](proposalId).call();
-
-    if (SHOULD_DECODE[minionType]) {
+    if (SHOULD_DECODE[minionType] || SHOULD_DECODE[proposalType]) {
       const decoded = await decodeAction(action, params);
       return { ...action, decoded };
     }

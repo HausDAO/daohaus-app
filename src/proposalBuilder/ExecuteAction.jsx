@@ -10,12 +10,15 @@ const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
 
   const execute = async () => {
     setLoading(true);
+    const { minionAddress, proposalId, proposalType } = proposal;
+    console.log(`proposalType`, proposalType);
     await submitTransaction({
       tx: executeTX,
       args: [proposal.proposalId],
       localValues: {
-        minionAddress: proposal.minionAddress,
-        proposalId: proposal.proposalId,
+        minionAddress,
+        proposalId,
+        proposalType,
       },
     });
     setLoading(false);

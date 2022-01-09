@@ -17,6 +17,7 @@ import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
+import { TX } from '../data/contractTX';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({
@@ -139,6 +140,7 @@ export const pollMinionExecuteAction = async ({
   minionAddress,
   proposalId,
   tx,
+  proposalType,
 }) => {
   try {
     const web3Contract = createContract({
@@ -146,16 +148,35 @@ export const pollMinionExecuteAction = async ({
       abi: await getContractABI({ tx }),
       chainID,
     });
-
-    const actionValue = await web3Contract.methods[
-      MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
-    ](proposalId).call();
+    const actionName =
+      MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName] ||
+      MINION_ACTION_FUNCTION_NAMES[proposalType];
+    const actionValue = await web3Contract.methods[actionName](
+      Number(proposalId),
+    ).call();
     return actionValue.executed;
   } catch (error) {
     console.error(error);
     throw new Error('Error caught in Poll block of TX');
   }
 };
+
+// const test = async () => {
+//   try {
+//     const what = await pollMinionExecuteAction({
+//       chainID: '0x2a',
+//       minionAddress: '0x311fb3e9c99b647bf3f51a4d456581ec81e45eb3',
+//       proposalId: '27',
+//       tx: TX.UBER_EXECUTE_ACTION,
+//       proposalType: 'UberHAUS Staking Proposal',
+//     });
+//     return what;
+//   } catch (error) {
+//     console.log(`error`, error);
+//   }
+// };
+
+// console.log(test());
 
 // export const pollMinionExecute = async ({
 //   chainID,

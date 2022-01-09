@@ -664,6 +664,15 @@ export const TX = {
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
   },
+  UBER_EXECUTE_ACTION: {
+    contract: CONTRACTS.UBERHAUS_MINION,
+    name: 'executeAction',
+    specialPoll: 'executeAction',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Executing Minion Proposal',
+    errMsg: 'Error Executing Minion Proposal',
+    successMsg: 'Minion Proposal Executed!',
+  },
   MINION_SAFE_EXECUTE: {
     contract: CONTRACTS.MINION_SAFE_EXECUTE,
     name: 'executeAction',
