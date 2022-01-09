@@ -36,7 +36,7 @@ const Processed = props => {
         <Flex mt='2' alignItems='center'>
           <UserVoteData voteData={voteData} />
           <Flex ml='auto'>
-            <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
+            <InactiveButton size='sm' leftIcon={<AiOutlineCheck />}>
               Processed
             </InactiveButton>
             {/* <Button size='sm'>Early Execute</Button> */}

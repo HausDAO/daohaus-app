@@ -11,7 +11,6 @@ const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
   const execute = async () => {
     setLoading(true);
     const { minionAddress, proposalId, proposalType } = proposal;
-    console.log(`proposalType`, proposalType);
     await submitTransaction({
       tx: executeTX,
       args: [proposal.proposalId],
@@ -25,7 +24,7 @@ const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
   };
   if (minionAction.executed || executed) {
     return (
-      <InactiveButton size='sm' mr='2' leftIcon={<AiOutlineCheck />}>
+      <InactiveButton size='sm' leftIcon={<AiOutlineCheck />}>
         Executed
       </InactiveButton>
     );

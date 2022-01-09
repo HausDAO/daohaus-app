@@ -1,42 +1,69 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import AddressAvatar from '../components/addressAvatar';
-import { AsyncCardTransfer } from './propBriefPrimitives';
+import { AsyncCardTransfer, PropCardTransfer } from './propBriefPrimitives';
+import { readableNumber, readableTokenBalance } from '../utils/proposalCard';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { ParaMd } from '../components/typography';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR  UBERHAUS DELEGATE PROPOSALS
 
 const StakeTransfer = ({ proposal = {}, minionAction }) => {
-  console.log(`proposal`, proposal);
-  console.log(`minionAction`, minionAction);
-  // const nomineeUI = (
-  //   <Flex alignItems='center'>
-  //     <AddressAvatar addr={minionAction?.nominee} hideCopy sizeForPropCard />
-  //     <Box ml='1'>as delegate</Box>
-  //   </Flex>
-  // );
-  // const proposerUI = (
-  //   <Flex alignItems='center'>
-  //     <AddressAvatar addr={minionAction?.proposer} hideCopy sizeForPropCard />
-  //     <Box ml='1'>is nominating</Box>
-  //   </Flex>
-  // );
+  const incorrectToken = useMemo(() => {
+    if (!minionAction?.decoded?.params?.length) return;
+    const token = minionAction.decoded.params.find(
+      method => method?.name === 'tributeToken',
+    )?.value;
+    if (token !== UBERHAUS_DATA.STAKING_TOKEN.toLowerCase()) return true;
+  }, [proposal, minionAction]);
+
+  const stakeAmt = useMemo(() => {
+    if (!minionAction?.decoded?.params?.length) return;
+    const amt = minionAction.decoded.params.find(
+      method => method?.name === 'tributeOffered',
+    )?.value;
+    if (amt != null)
+      return readableTokenBalance({
+        balance: amt,
+        symbol: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
+        decimals: UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
+      });
+  }, [proposal, minionAction]);
+  const sharesAmt = useMemo(() => {
+    if (!minionAction?.decoded?.params?.length) return;
+    const amt = minionAction.decoded.params.find(
+      method => method?.name === 'sharesRequested',
+    )?.value;
+    return readableNumber({ amount: Number(amt) });
+  }, [proposal]);
+
+  if (incorrectToken) {
+    return (
+      <PropCardTransfer customUI={<ParaMd>Incorrect Staking Token</ParaMd>} />
+    );
+  }
 
   return (
     <>
       <Box mb='2'>
         <AsyncCardTransfer
-          isLoaded={minionAction?.proposer}
+          isLoaded={minionAction?.decoded}
           proposal={proposal}
           outgoing
-          // action={proposerUI}
+          action='Stake'
+          itemText={stakeAmt}
+          specialLocation='UberHAUS'
         />
       </Box>
       <AsyncCardTransfer
-        isLoaded={minionAction?.nominee}
+        isLoaded={minionAction?.decoded}
         proposal={proposal}
         incoming
-        // action={nomineeUI}
+        action='Requesting'
+        itemText={`${sharesAmt} ${
+          Number(sharesAmt) === 1 ? 'Share' : 'Shares'
+        }`}
       />
     </>
   );

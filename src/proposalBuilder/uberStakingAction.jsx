@@ -8,7 +8,7 @@ import { UBERHAUS_DATA } from '../utils/uberhaus';
 import ExecuteAction from './ExecuteAction';
 
 const UberStakingAction = props => {
-  const { proposal, minionAction } = props;
+  const { proposal } = props;
   const { daochain } = useParams();
   const [hasEnough, setHasEnough] = useState('loading');
   // const [hausBalance, setHausBalance] = useState(null);
