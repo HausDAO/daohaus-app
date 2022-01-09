@@ -210,6 +210,10 @@ export const determineProposalType = proposal => {
 };
 
 export const titleMaker = proposal => {
+  if (!proposal.details) {
+    console.log(proposal.details);
+    proposal.details = '';
+  }
   const details = proposal.details.split('~');
   if (details[0] === 'id') {
     return details[3];
