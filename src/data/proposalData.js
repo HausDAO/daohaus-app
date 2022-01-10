@@ -19,4 +19,7 @@ export const CUSTOM_CARD_DATA = {
   [PROPOSAL_TYPES.WHITELIST]: {
     customTransferUI: 'whitelistToken',
   },
+  [PROPOSAL_TYPES.GUILDKICK]: {
+    customTransferUI: 'guildKick',
+  },
 };

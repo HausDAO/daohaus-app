@@ -43,12 +43,15 @@ const Unsponsored = props => {
       return;
     const { decimals, symbol, tokenAddress } = depositToken;
     const { allowance, balance } = daoMember.depositTokenData || {};
+    console.log(`balance`, balance);
     const canSpend =
       Number(allowance) >= Number(proposalDeposit) ||
       Number(proposalDeposit) === 0;
 
     const hasBalance =
-      Number(balance) >= Number(proposalDeposit) || Number(proposalDeposit) > 0;
+      Number(balance) >= Number(proposalDeposit) ||
+      Number(proposalDeposit) === 0;
+
     return {
       deposit: readableTokenBalance({
         balance: proposalDeposit,
@@ -177,14 +180,18 @@ const SponsorCard = ({
           Unsponsored
         </ParaSm>
       </StatusDisplayBox>
-      <ParaSm mb={3}>{propStatusText.Unsponsored}</ParaSm>
+      <ParaSm mb={3}>
+        {depositData?.hasBalance
+          ? propStatusText.approve(depositData?.symbol)
+          : propStatusText.noFunds(depositData?.symbol)}
+      </ParaSm>
       <Flex>
         <Button
           size='sm'
           minW='4rem'
           fontWeight='700'
           mr='auto'
-          disabled={!canInteract || !isMember}
+          disabled={!canInteract || !isMember || !depositData.hasBalance}
           onClick={sponsorProposal}
           isLoading={isLoadingTx}
         >
@@ -196,7 +203,6 @@ const SponsorCard = ({
             fontWeight='700'
             minW='4rem'
             variant='outline'
-            disabled={!canInteract}
             onClick={cancelProposal}
             isLoading={isLoadingTx}
           >

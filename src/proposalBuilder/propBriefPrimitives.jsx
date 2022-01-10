@@ -9,6 +9,7 @@ import { generateOfferText, generateRequestText } from '../utils/proposalCard';
 import DelegateTransfer from './delegateTransfer';
 import StakeTransfer from './UHstakingTransfer';
 import WhitelistTokenTransfer from './whitelistTokenTransfer';
+import GuildKickTransfer from './guildKickTransfer';
 
 export const PropCardTransfer = ({
   incoming,
@@ -83,6 +84,9 @@ export const CustomTransfer = props => {
   }
   if (customTransferUI === 'whitelistToken') {
     return <WhitelistTokenTransfer {...props} />;
+  }
+  if (customTransferUI === 'guildKick') {
+    return <GuildKickTransfer {...props} />;
   }
   return null;
 };
