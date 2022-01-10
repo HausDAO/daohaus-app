@@ -16,4 +16,7 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'uberStake',
     execute: 'UH_staking',
   },
+  [PROPOSAL_TYPES.WHITELIST]: {
+    customTransferUI: 'whitelistToken',
+  },
 };

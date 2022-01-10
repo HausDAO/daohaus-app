@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
-import AddressAvatar from '../components/addressAvatar';
 import { AsyncCardTransfer, PropCardTransfer } from './propBriefPrimitives';
 import { readableNumber, readableTokenBalance } from '../utils/proposalCard';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { ParaMd } from '../components/typography';
 
-//  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR  UBERHAUS DELEGATE PROPOSALS
+//  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR  UBERHAUS STAKE PROPOSALS
 
 const StakeTransfer = ({ proposal = {}, minionAction }) => {
   const incorrectToken = useMemo(() => {
@@ -17,7 +16,6 @@ const StakeTransfer = ({ proposal = {}, minionAction }) => {
     )?.value;
     if (token !== UBERHAUS_DATA.STAKING_TOKEN.toLowerCase()) return true;
   }, [proposal, minionAction]);
-
   const stakeAmt = useMemo(() => {
     if (!minionAction?.decoded?.params?.length) return;
     const amt = minionAction.decoded.params.find(
@@ -36,7 +34,7 @@ const StakeTransfer = ({ proposal = {}, minionAction }) => {
       method => method?.name === 'sharesRequested',
     )?.value;
     return readableNumber({ amount: Number(amt) });
-  }, [proposal]);
+  }, [proposal, minionAction]);
 
   if (incorrectToken) {
     return (
