@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FaCopy } from 'react-icons/fa';
 import { TiWarningOutline } from 'react-icons/ti';
 import Icon from '@chakra-ui/icon';
-import { Box, Flex } from '@chakra-ui/layout';
+import { Box, Flex, Text } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/react';
 import { utils as Web3Utils } from 'web3';
 import ModuleManager from '@gnosis.pm/safe-contracts/build/artifacts/contracts/base/ModuleManager.sol/ModuleManager.json';
 
+import GnosisSafeCard from './gnosisSafeCard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 import { safeEncodeHexFunction } from '../utils/abi';
-import { createGnosisSafeTxProposal } from '../utils/contract';
+import { chainByID } from '../utils/chain';
+import {
+  createGnosisSafeTxProposal,
+  deployZodiacBridgeModule,
+} from '../utils/contract';
 
 const SF_TOOLTIP = {
   ADD_MODULE: {
@@ -30,28 +33,55 @@ const SF_TOOLTIP = {
     body:
       'You MUST be a Gnosis Safe signer in order to submit a Tx proposal to add the minion as a module',
   },
+  ADD_AMB_MODULE: {
+    title: 'ACTION REQUIRED',
+    pars: [
+      'To control a Gnosis Safe on a foreign network, it needs to have a brigde module enabled',
+      'Please check for pending Txs on your Gnosis Safe or click to deploy a new module and submit a Tx proposal.',
+    ],
+  },
+  REMOVE_SIGNERS: {
+    title: 'OPTIONAL',
+    pars: [
+      'Submit a Minion proposal to remove current signers on the foreign Gnosis Safe',
+    ],
+  },
+  WRONG_CHAIN_N_OWNER: {
+    title: 'ACTION REQUIRED',
+    body:
+      'You MUST be connected to the Target Network and be a Gnosis Safe signer in order to submit a Tx proposal',
+  },
 };
 
-const SafeMinionDetails = ({ vault, safeDetails, handleCopy }) => {
+const SafeMinionDetails = ({
+  vault,
+  safeDetails,
+  foreignSafeDetails,
+  handleCopy,
+}) => {
   const { daochain } = useParams();
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(null);
   const [isSafeOwner, safeOwner] = useState(false);
-  const { address, injectedProvider } = useInjectedProvider();
+  const [isForeignSafeOwner, foreignSafeOwner] = useState(false);
+  const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
 
-  const submitMinionModuleTxProposal = async () => {
-    setLoading(true);
+  const submitEnableModuleTxProposal = async (
+    chainID,
+    safeAddress,
+    newModuleAddress,
+  ) => {
     const selectedFunction = ModuleManager.abi.find(
       entry => entry.name === 'enableModule',
     );
     const hexData = safeEncodeHexFunction(selectedFunction, [
-      Web3Utils.toChecksumAddress(vault.address),
+      Web3Utils.toChecksumAddress(newModuleAddress),
     ]);
     if (!hexData.encodingError) {
-      const checksumSafeAddr = Web3Utils.toChecksumAddress(vault.safeAddress);
+      const checksumSafeAddr = Web3Utils.toChecksumAddress(safeAddress);
       try {
         await createGnosisSafeTxProposal({
-          chainID: daochain,
+          chainID,
           web3: injectedProvider,
           safeAddress: checksumSafeAddr,
           fromDelegate: Web3Utils.toChecksumAddress(address),
@@ -70,8 +100,70 @@ const SafeMinionDetails = ({ vault, safeDetails, handleCopy }) => {
           description: error.message,
         });
       }
-      setLoading(false);
     }
+  };
+
+  const submitMinionModuleTxProposal = async () => {
+    setLoading('enableMinionModule');
+    await submitEnableModuleTxProposal(
+      daochain,
+      vault.safeAddress,
+      vault.address,
+    );
+    setLoading(null);
+  };
+
+  const submitAmbModuleTxProposal = async () => {
+    setLoading('enableAmbModule');
+    try {
+      // Deploy a Zodiac Bridge module
+      const ambConfig = chainByID(daochain).zodiac_amb_module;
+      const ambAddress = ambConfig.amb_bridge_address[vault.foreignChainId];
+      // TODO: ask Jord for advice on how to adapt this to the Pending Tx model
+      const ambModuleAddress = await deployZodiacBridgeModule(
+        vault.safeAddress, // owner
+        vault.foreignSafeAddress, // avatar
+        vault.foreignSafeAddress, // target
+        ambAddress, // amb
+        vault.safeAddress, // controller
+        `0x${vault.foreignChainId.slice(2).padStart(64, '0')}`, // bridgeChainId
+        daochain, // chainId
+        injectedProvider,
+      );
+      if (!ambModuleAddress) {
+        errorToast({
+          title: 'AMB Module Deployment',
+          description: 'Failed to deploy the AMB Module.',
+        });
+      } else {
+        // Send Tx Proposla to foreign safe
+        await submitEnableModuleTxProposal(
+          vault.foreignChainId,
+          vault.foreignSafeAddress,
+          ambModuleAddress,
+        );
+      }
+    } catch (error) {
+      errorToast({
+        title: 'Failed to submit Tx Proposal',
+        description: error.message,
+      });
+    }
+    setLoading(null);
+  };
+
+  const removeSignersTxProposal = async () => {
+    setLoading('removeSigners');
+    try {
+      // TODO: create minion proposal to remove signers on the foreign safe
+      console.log('Minion proposal: Remove signers');
+    } catch (error) {
+      errorToast({
+        title: 'Failed to submit Tx Proposal',
+        description: error.message,
+      });
+    }
+    setLoading(null);
   };
 
   useEffect(() => {
@@ -83,61 +175,140 @@ const SafeMinionDetails = ({ vault, safeDetails, handleCopy }) => {
     }
   }, [address, safeDetails]);
 
+  useEffect(() => {
+    if (
+      address &&
+      foreignSafeDetails?.owners?.includes(Web3Utils.toChecksumAddress(address))
+    ) {
+      foreignSafeOwner(true);
+    }
+  }, [address, foreignSafeDetails]);
+
   return (
     <ContentBox mt={6}>
       <TextBox size='xs' mb={6}>
-        Safe Minion
+        {`${foreignSafeDetails ? 'Cross-chain ' : ''}Safe Minion`}
       </TextBox>
       <Box fontFamily='mono' mb={5}>
-        Gnosis Safe
-        <CopyToClipboard text={vault.safeAddress} onCopy={handleCopy}>
-          <Box color='secondary.300'>
-            {vault.safeAddress}
-            <Icon
-              as={FaCopy}
-              color='secondary.300'
-              ml={2}
-              _hover={{ cursor: 'pointer' }}
-            />
-          </Box>
-        </CopyToClipboard>
-      </Box>
-      <Box fontFamily='mono'>
-        Minion Address (Do Not Send Funds)
-        <CopyToClipboard text={vault.address} onCopy={handleCopy}>
-          <Box color='secondary.300'>
-            {vault.address}
-            <Icon
-              as={FaCopy}
-              color='secondary.300'
-              ml={2}
-              _hover={{ cursor: 'pointer' }}
-            />
-          </Box>
-        </CopyToClipboard>
-      </Box>
-      {injectedProvider && !vault.isMinionModule && (
-        <Flex mt={6}>
-          <ToolTipWrapper
-            placement='right'
-            tooltip
-            tooltipText={
-              isSafeOwner ? SF_TOOLTIP.ADD_MODULE : SF_TOOLTIP.NO_OWNER
+        <Flex
+          flexWrap='wrap'
+          justifyContent='space-around'
+          justifyItems='flex-start'
+        >
+          <GnosisSafeCard
+            actionDetails={
+              injectedProvider &&
+              !vault.isMinionModule && (
+                <>
+                  <Text mt={4}>
+                    Actions Required
+                    <Icon as={TiWarningOutline} color='secondary.300' ml={2} />
+                  </Text>
+                  <Flex mt={4}>
+                    <ToolTipWrapper
+                      placement='right'
+                      tooltip
+                      tooltipText={
+                        isSafeOwner
+                          ? SF_TOOLTIP.ADD_MODULE
+                          : SF_TOOLTIP.NO_OWNER
+                      }
+                    >
+                      <Button
+                        isLoading={isLoading === 'enableMinionModule'}
+                        isDisabled={!isSafeOwner}
+                        mr={6}
+                        onClick={submitMinionModuleTxProposal}
+                        variant='outline'
+                        size='sm'
+                      >
+                        Add Minion as Module
+                      </Button>
+                    </ToolTipWrapper>
+                  </Flex>
+                </>
+              )
             }
-          >
-            <Button
-              isLoading={isLoading}
-              isDisabled={!isSafeOwner}
-              mr={6}
-              onClick={submitMinionModuleTxProposal}
-              rightIcon={<TiWarningOutline />}
-              variant='outline'
-            >
-              Add Minion as Module
-            </Button>
-          </ToolTipWrapper>
+            handleCopy={handleCopy}
+            safeDetails={safeDetails}
+            vaultAddress={vault.address}
+          />
+          {foreignSafeDetails && (
+            <GnosisSafeCard
+              actionDetails={
+                (!foreignSafeDetails.ambModuleEnabled ||
+                  foreignSafeDetails.owners.length > 0) && (
+                  <>
+                    <Text mt={4}>Actions</Text>
+                    {!foreignSafeDetails.ambModuleEnabled && (
+                      <Flex mt={4}>
+                        <ToolTipWrapper
+                          placement='right'
+                          tooltip
+                          tooltipText={
+                            isForeignSafeOwner &&
+                            vault.foreignChainId === injectedChain.chainId
+                              ? SF_TOOLTIP.ADD_AMB_MODULE
+                              : SF_TOOLTIP.WRONG_CHAIN_N_OWNER
+                          }
+                        >
+                          <Button
+                            isLoading={isLoading === 'enableAmbModule'}
+                            isDisabled={
+                              !isForeignSafeOwner ||
+                              vault.foreignChainId !== injectedChain.chainId
+                            }
+                            mr={6}
+                            onClick={submitAmbModuleTxProposal}
+                            variant='outline'
+                            rightIcon={<TiWarningOutline />}
+                            size='sm'
+                          >
+                            Add Bridge Module
+                          </Button>
+                        </ToolTipWrapper>
+                      </Flex>
+                    )}
+                    {foreignSafeDetails.ambModuleEnabled &&
+                      foreignSafeDetails.owners.length > 0 && (
+                        <Flex mt={4}>
+                          <ToolTipWrapper
+                            placement='right'
+                            tooltip
+                            tooltipText={
+                              isForeignSafeOwner &&
+                              vault.foreignChainId === injectedChain.chainId
+                                ? SF_TOOLTIP.REMOVE_SIGNERS
+                                : SF_TOOLTIP.WRONG_CHAIN_N_OWNER
+                            }
+                          >
+                            <Button
+                              isLoading={isLoading === 'removeSigners'}
+                              isDisabled={
+                                !isForeignSafeOwner ||
+                                vault.foreignChainId !== injectedChain.chainId
+                              }
+                              mr={6}
+                              onClick={removeSignersTxProposal}
+                              variant='outline'
+                              size='sm'
+                            >
+                              Remove Signers
+                            </Button>
+                          </ToolTipWrapper>
+                        </Flex>
+                      )}
+                  </>
+                )
+              }
+              handleCopy={handleCopy}
+              safeDetails={foreignSafeDetails}
+              targetChain={vault.foreignChainId}
+              title='Foreign Gnosis Safe'
+            />
+          )}
         </Flex>
-      )}
+      </Box>
     </ContentBox>
   );
 };

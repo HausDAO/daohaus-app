@@ -158,8 +158,10 @@ export const getVaultListData = (minion, daochain, daoid) => {
     case MINION_TYPES.SAFE:
       return {
         badgeColor: 'pink',
-        badgeTextColor: '#632b16',
-        badgeName: 'GNOSIS SAFE',
+        badgeTextColor: minion.crossChainMinion ? '#632fef' : '#632b16',
+        badgeName: minion.crossChainMinion
+          ? 'CROSS-CHAIN MINION'
+          : 'GNOSIS SAFE',
         badgeVariant: 'outline',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
@@ -178,7 +180,7 @@ export const validateSafeMinion = async (chainId, vault) => {
   try {
     const safeDetails = await fetchSafeDetails(
       chainByID(chainId).networkAlt || chainByID(chainId).network,
-      vault,
+      vault.safeAddress,
     );
 
     return {

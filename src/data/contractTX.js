@@ -179,6 +179,11 @@ export const CONTRACTS = {
     abiName: 'DISPERSE_APP',
     conractAddress: '.contextData.chainConfig.disperse_app',
   },
+  AMB_MODULE: {
+    location: 'local',
+    abiName: 'AMB_MODULE',
+    conractAddress: '.localValues.ambModuleAddress',
+  },
 };
 
 export const ACTIONS = {
