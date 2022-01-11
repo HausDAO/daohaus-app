@@ -66,8 +66,8 @@ const ProposalsList = ({ proposals, customTerms }) => {
       initializeFilters(
         filters?.main?.[0],
         activeProposals?.length
-          ? { name: 'Oldest', value: 'submissionDateDesc' }
-          : { name: 'Newest', value: 'submissionDateAsc' },
+          ? { name: 'Oldest', value: 'submissionDateAsc' }
+          : { name: 'Newest', value: 'submissionDateDesc' },
       );
     }
     prevMember.current = address;

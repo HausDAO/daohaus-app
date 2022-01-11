@@ -111,6 +111,7 @@ const PropCardBrief = ({ proposal = {}, minionAction }) => {
           fontWeight='700'
           mb={['5', '5', '3']}
           fontSize={['1.4rem', '1.4rem', '1rem']}
+          lineHeight={['1.8rem', '1.8rem', '1rem']}
         >
           {proposal.title}
         </ParaMd>

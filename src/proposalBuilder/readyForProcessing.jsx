@@ -33,15 +33,14 @@ const ReadyForProcessing = props => {
     if (daoProposals?.length) {
       const proposal2process = daoProposals
         .map(p => ({ ...p, status: determineProposalStatus(p) }))
-        .filter(p => p.status === 'ReadyForProcessing');
-
+        .filter(p => p.status === 'ReadyForProcessing')
+        .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
       if (proposal2process?.length > 0) {
         return proposal2process[0];
       }
     }
   }, [daoProposals, proposal]);
 
-  console.log(`nextProposal`, nextProposal);
   const processProposal = async () => {
     setLoading(true);
     const shouldCheatCache = () => isPassing && proposal?.isMinion;
@@ -73,7 +72,8 @@ const ReadyForProcessing = props => {
     setLoading(false);
   };
 
-  const isNextProposal = nextProposal?.proposalId === proposal.proposalId;
+  const isNextProposal =
+    nextProposal?.proposalId === proposal.proposalId || !nextProposal;
   return (
     <PropActionBox>
       <StatusDisplayBox>

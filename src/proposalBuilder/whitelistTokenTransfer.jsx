@@ -9,7 +9,6 @@ import { Bold, ParaMd } from '../components/typography';
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR WHITELIST TOKEN PROPOSALS
 
 const WhitelistTokenTransfer = ({ proposal = {} }) => {
-  console.log(`proposal`, proposal);
   const { daochain } = useParams();
   const { tributeToken } = proposal;
 
