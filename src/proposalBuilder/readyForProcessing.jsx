@@ -18,6 +18,7 @@ import {
   cheatExecutionStatus,
   removeExecutionCheat,
 } from '../utils/proposalCard';
+import { determineProposalStatus } from '../utils/proposalUtils';
 
 const ReadyForProcessing = props => {
   const { proposal, voteData, canInteract } = props;
@@ -30,16 +31,17 @@ const ReadyForProcessing = props => {
 
   const nextProposal = useMemo(() => {
     if (daoProposals?.length) {
-      const prop2proc = daoProposals
-        .filter(p => p.status === 'ReadyForProcessing')
-        .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
-      if (prop2proc?.length > 0) {
-        console.log(`prop2proc[0]?.proposalId`, prop2proc[0]?.proposalId);
-        return prop2proc[0];
+      const proposal2process = daoProposals
+        .map(p => ({ ...p, status: determineProposalStatus(p) }))
+        .filter(p => p.status === 'ReadyForProcessing');
+
+      if (proposal2process?.length > 0) {
+        return proposal2process[0];
       }
     }
-  }, [daoProposals]);
+  }, [daoProposals, proposal]);
 
+  console.log(`nextProposal`, nextProposal);
   const processProposal = async () => {
     setLoading(true);
     const shouldCheatCache = () => isPassing && proposal?.isMinion;

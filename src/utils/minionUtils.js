@@ -18,6 +18,7 @@ export const MINION_ACTION_FUNCTION_NAMES = {
   [MINION_TYPES.SAFE]: 'actions',
   [PROPOSAL_TYPES.MINION_UBER_STAKE]: 'actions',
   [PROPOSAL_TYPES.MINION_UBER_DEL]: 'appointments',
+  [PROPOSAL_TYPES.MINION_UBER_RQ]: 'actions',
   SUPERFLUID_MINION: 'streams',
   [MINION_TYPES.SUPERFLUID]: 'streams',
 };

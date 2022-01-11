@@ -29,7 +29,7 @@ const MinionExexcuteFactory = props => {
   if (executeType === 'rarible') {
     return <ExecuteRarible {...props} />;
   }
-  return null;
+  return <ExecuteAction {...props} />;
 };
 
 export default MinionExexcuteFactory;
