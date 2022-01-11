@@ -314,6 +314,13 @@ export const DETAILS = {
     uberHaus: 'true',
     uberType: 'staking',
   },
+  UBERHAUS_RAGEQUIT: {
+    title: `UberHaus RageQuit`,
+    description: `This is a proposal to ragequit from UberHaus`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'ragequit',
+  },
 };
 
 export const TX = {
@@ -1273,6 +1280,32 @@ export const TX = {
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.UBERHAUS_STAKING,
+      },
+    ],
+    createDiscourse: true,
+  },
+  UBERHAUS_RAGEQUIT: {
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
+    name: 'proposeAction',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Proposal submitted!',
+    gatherArgs: [
+      '.contextData.daoid',
+      '.localValues.uberHausDaoAddress',
+      '.contextData.daoOverview.depositToken.tokenAddress',
+      '0',
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.UBERHAUS_MOLOCH,
+        fnName: 'ragequit',
+        gatherArgs: ['.values.shares || 0', '.values.loot || 0'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.UBERHAUS_RAGEQUIT,
       },
     ],
     createDiscourse: true,

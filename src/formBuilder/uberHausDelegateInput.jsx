@@ -13,7 +13,7 @@ import { LOCAL_ABI } from '../utils/abi';
 import TextBox from '../components/TextBox';
 import AddressAvatar from '../components/addressAvatar';
 
-const UberhausDelegateInput = props => {
+const UberHausDelegateInput = props => {
   const { localValues } = props;
   const { daoMembers } = useDao();
 
@@ -102,4 +102,4 @@ const UberhausDelegateInput = props => {
   );
 };
 
-export default UberhausDelegateInput;
+export default UberHausDelegateInput;
