@@ -36,8 +36,8 @@ export const UBERHAUS_FORMS = {
     tx: TX.UBERHAUS_RAGEQUIT,
     required: ['shares', 'loot'],
     fields: [
-      [FIELD.UBERHAUS_RAGE_QUIT_INPUT],
       [
+        FIELD.UBERHAUS_RAGE_QUIT_INPUT,
         {
           ...FIELD.UBERHAUS_RAGE_QUIT_INPUT,
           label: 'Loot to Rage',
