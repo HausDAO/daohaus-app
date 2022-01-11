@@ -8,7 +8,10 @@ import UberStakingAction from './uberStakingAction';
 const MinionExexcuteFactory = props => {
   const { proposal } = props;
   const { proposalType } = proposal;
-  const executeType = CUSTOM_CARD_DATA[proposalType].execute;
+  const executeType = CUSTOM_CARD_DATA[proposalType]?.execute;
+  if (!executeType) {
+    console.log(props);
+  }
   if (executeType === 'executeAction') {
     return <ExecuteAction {...props} />;
   }
@@ -26,6 +29,7 @@ const MinionExexcuteFactory = props => {
   if (executeType === 'rarible') {
     return <ExecuteRarible {...props} />;
   }
+  return null;
 };
 
 export default MinionExexcuteFactory;

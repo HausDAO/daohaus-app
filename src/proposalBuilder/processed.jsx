@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Flex } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { AiOutlineCheck } from 'react-icons/ai';
 
 import { ParaSm } from '../components/typography';
@@ -39,7 +39,6 @@ const Processed = props => {
             <InactiveButton size='sm' leftIcon={<AiOutlineCheck />}>
               Processed
             </InactiveButton>
-            {/* <Button size='sm'>Early Execute</Button> */}
           </Flex>
         </Flex>
       </PropActionBox>
