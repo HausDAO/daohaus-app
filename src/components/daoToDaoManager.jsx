@@ -33,6 +33,7 @@ import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
 
 import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
+import UberHausProposals from './uberHausProposals';
 
 const DaoToDaoManager = ({
   daoOverview,
@@ -474,6 +475,11 @@ const DaoToDaoManager = ({
                       }
                       isMember={isMember}
                       refetchAllies={refetchAllies}
+                    />
+
+                    <UberHausProposals
+                      uberHausMinion={uberHausMinion}
+                      uberMembers={uberMembers}
                     />
 
                     {uberHausMinion.openChildProposals.length ? (
