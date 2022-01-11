@@ -1343,40 +1343,13 @@ export const TX = {
   },
   UBERHAUS_PULL: {
     contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
-    name: 'proposeAction',
+    name: 'pullGuildFunds',
     onTxHash: ACTIONS.PROPOSAL,
     poll: 'subgraph',
     display: 'Submit Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Proposal submitted!',
-    gatherArgs: [
-      '.contextData.daoid',
-      '.localValues.uberHausDaoAddress',
-      '.values.tributeToken',
-      '0',
-      {
-        type: 'encodeHex',
-        contract: CONTRACTS.UBERHAUS_MOLOCH,
-        fnName: 'pull',
-        gatherArgs: [
-          '.localValues.minionAddress',
-          '.values.sharesRequested || 0',
-          '0',
-          '.values.tributeOffered',
-          '.values.tributeToken',
-          '0',
-          '.contextData.daoOverview.depositToken.tokenAddress',
-          {
-            type: 'detailsToJSON',
-            gatherFields: DETAILS.UBERHAUS_PULL,
-          },
-        ],
-      },
-      {
-        type: 'detailsToJSON',
-        gatherFields: DETAILS.UBERHAUS_PULL,
-      },
-    ],
+    gatherArgs: ['.values.tributeToken', '.values.pull' || '0'],
     createDiscourse: true,
   },
 };

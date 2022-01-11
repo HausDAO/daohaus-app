@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Checkbox } from '@chakra-ui/react';
+// import { Checkbox } from '@chakra-ui/react';
 
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
@@ -17,8 +17,6 @@ const UberHausPullInput = props => {
   const [balance, setBalance] = useState(null);
   const [daoTokens, setDaoTokens] = useState([]);
   const [decimals, setDecimals] = useState(null);
-  const [loadToken, setLoadToken] = useState(false);
-  const [pullDelegateRewards, setDelegateRewards] = useState(false);
 
   const displayBalance = useMemo(() => {
     if (balance && decimals) {
@@ -33,8 +31,6 @@ const UberHausPullInput = props => {
 
     const getTokenBalance = async () => {
       try {
-        setLoadToken(true);
-
         const tokenContract = createContract({
           address: localValues.pullToken,
           abi: LOCAL_ABI.ERC_20,
@@ -55,7 +51,6 @@ const UberHausPullInput = props => {
             balance,
           },
         ]);
-        setLoadToken(false);
       } catch (error) {
         console.error(error);
       }
@@ -69,10 +64,6 @@ const UberHausPullInput = props => {
     return '0';
   };
 
-  const handleCheck = () => {
-    setDelegateRewards(prevState => !prevState);
-  };
-
   const setMax = () => {
     setValue('pull', balance / 10 ** decimals);
   };
@@ -80,12 +71,6 @@ const UberHausPullInput = props => {
   const options = spreadOptions({
     registerOptions,
     setValueAs: val => getContractBalance(val, decimals),
-    validate: {
-      hasBalance: val =>
-        getContractBalance(val, decimals) > Number(balance)
-          ? `Amount entered exceeds wallet balance.`
-          : true,
-    },
   });
 
   return (
