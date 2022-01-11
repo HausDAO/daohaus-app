@@ -15,9 +15,9 @@ const UberHausPullInput = props => {
   const { setValue } = localForm;
 
   const [balance, setBalance] = useState(null);
-  const [currentDelegate, setCurrentDelegate] = useState();
   const [daoTokens, setDaoTokens] = useState([]);
   const [decimals, setDecimals] = useState(null);
+  const [loadToken, setLoadToken] = useState(false);
   const [pullDelegateRewards, setDelegateRewards] = useState(false);
 
   const displayBalance = useMemo(() => {
@@ -29,53 +29,40 @@ const UberHausPullInput = props => {
   }, [balance, decimals]);
 
   useEffect(() => {
-    const getDelegate = async () => {
+    if (!localValues.minionAddress || !localValues.pullToken) return;
+
+    const getTokenBalance = async () => {
       try {
-        const minionContract = await createContract({
-          address: localValues.minionAddress,
-          abi: LOCAL_ABI.UBERHAUS_MINION,
+        setLoadToken(true);
+
+        const tokenContract = createContract({
+          address: localValues.pullToken,
+          abi: LOCAL_ABI.ERC_20,
           chainID: UBERHAUS_DATA.NETWORK,
         });
-        const delegate = await minionContract.methods.currentDelegate().call();
 
-        setCurrentDelegate(delegate);
+        const balance = await tokenContract.methods
+          .balanceOf(localValues.minionAddress)
+          .call();
+
+        setBalance(balance);
+        setDecimals(UBERHAUS_DATA.STAKING_TOKEN_DECIMALS);
+        setDaoTokens([
+          {
+            value: UBERHAUS_DATA.STAKING_TOKEN,
+            name: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
+            decimals: UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
+            balance,
+          },
+        ]);
+        setLoadToken(false);
       } catch (error) {
-        console.error(error?.message);
+        console.error(error);
       }
     };
-    if (localValues?.minionAddress) {
-      getDelegate();
-    }
-  }, [localValues]);
 
-  useEffect(() => {
-    const setupTokenData = async () => {
-      const tokenContract = createContract({
-        address: UBERHAUS_DATA.STAKING_TOKEN,
-        abi: LOCAL_ABI.ERC_20,
-        chainID: UBERHAUS_DATA.NETWORK,
-      });
-
-      const tokenBalance = await tokenContract.methods
-        .balanceOf(localValues.minionAddress)
-        .call();
-
-      setBalance(tokenBalance);
-      setDecimals(UBERHAUS_DATA.STAKING_TOKEN_DECIMALS);
-
-      setDaoTokens([
-        {
-          value: UBERHAUS_DATA.STAKING_TOKEN,
-          name: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
-          decimals: UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
-          balance: tokenBalance,
-        },
-      ]);
-    };
-    if (localValues) {
-      setupTokenData();
-    }
-  }, [localValues]);
+    getTokenBalance();
+  }, [localValues.uberHausMinion]);
 
   const btnDisplay = () => {
     if (displayBalance) return `Max: ${displayBalance}`;
@@ -110,14 +97,14 @@ const UberHausPullInput = props => {
         registerOptions={options}
         btn={<ModButton text={btnDisplay()} fn={setMax} />}
       />
-      <Checkbox
+      {/* <Checkbox
         onChange={handleCheck}
         isChecked={pullDelegateRewards}
         color={pullDelegateRewards ? 'whiteAlpha.700' : 'whiteAlpha.500'}
         isDisabled={currentDelegate?.impeached || currentDelegate?.rewarded}
       >
         Pull delegate rewards
-      </Checkbox>
+      </Checkbox> */}
     </>
   );
 };

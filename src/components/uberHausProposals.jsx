@@ -65,6 +65,7 @@ const UberHausProposals = ({ uberHausMinion, uberMembers }) => {
             uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
             minionAddress: uberHausMinion.minionAddress,
             uberMembers,
+            pullToken: UBERHAUS_DATA.STAKING_TOKEN,
           },
         });
         break;

@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { getContractBalance } from '../utils/tokenValue';
+import { spreadOptions } from '../utils/formBuilder';
 
 const UberHausWithdrawInput = props => {
   const [balance, setBalance] = useState(null);
   const [daoTokens, setDaoTokens] = useState([]);
   const [decimals, setDecimals] = useState(null);
-  const { localForm, localValues } = props;
+  const { localForm, localValues, registerOptions } = props;
   const { setValue } = localForm;
 
   const btnDisplay = () => {
@@ -55,11 +57,17 @@ const UberHausWithdrawInput = props => {
     setValue('withdraw', balance / 10 ** decimals);
   };
 
+  const options = spreadOptions({
+    registerOptions,
+    setValueAs: val => getContractBalance(val, decimals),
+  });
+
   return (
     <InputSelect
       {...props}
       selectName='tributeToken'
       options={daoTokens}
+      registerOptions={options}
       btn={<ModButton text={btnDisplay()} fn={setMax} />}
     />
   );

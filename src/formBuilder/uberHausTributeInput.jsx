@@ -68,12 +68,6 @@ const UberHausTributeInput = props => {
   const options = spreadOptions({
     registerOptions,
     setValueAs: val => getContractBalance(val, decimals),
-    validate: {
-      hasBalance: val =>
-        getContractBalance(val, decimals) > Number(balance)
-          ? `Amount entered exceeds wallet balance.`
-          : true,
-    },
   });
 
   return (
