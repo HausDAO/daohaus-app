@@ -41,6 +41,11 @@ import BoolSelect from './boolSelect';
 import GenericSwitch from './genericSwitch';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
+import UberHausDelegateInput from './uberHausDelegateInput';
+import UberHausTributeInput from './uberHausTributeInput';
+import UberHausRageQuitInput from './uberHausRageQuitInput';
+import UberHausWithdrawInput from './uberHausWithdrawInput';
+import UberHausPullInput from './uberHausPullInput';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -177,6 +182,21 @@ export const InputFactory = props => {
   }
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
+  }
+  if (type === 'uberHausDelegateInput') {
+    return <UberHausDelegateInput {...props} />;
+  }
+  if (type === 'uberHausTributeInput') {
+    return <UberHausTributeInput {...props} />;
+  }
+  if (type === 'uberHausRageQuitInput') {
+    return <UberHausRageQuitInput {...props} />;
+  }
+  if (type === 'uberHausWithdrawInput') {
+    return <UberHausWithdrawInput {...props} />;
+  }
+  if (type === 'uberHausPullInput') {
+    return <UberHausPullInput {...props} />;
   }
   return null;
 };
