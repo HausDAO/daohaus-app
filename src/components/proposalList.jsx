@@ -17,25 +17,26 @@ import {
   sortOptions,
   allFilter,
 } from '../utils/proposalContent';
-import ProposalCard from './proposalCard';
 import TextBox from './TextBox';
 import {
-  determineUnreadProposalList,
   handleListFilter,
   handleListSort,
+  isProposalActive,
   searchProposals,
 } from '../utils/proposalUtils';
+import ProposalCardV2 from '../proposalBuilder/proposalCard2';
 import SpamFilterListNotification from './spamFilterListNotification';
+import useCanInteract from '../hooks/useCanInteract';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const { address } = useInjectedProvider();
   const { isActive } = useBoost();
+  const interaction = useCanInteract(['isConnected', 'isSameChain']);
 
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
 
-  const [isLoaded, setIsLoaded] = useState(false);
   const { daoid } = useParams();
 
   const [filterOptions, setFilterOptions] = useState(defaultFilterOptions);
@@ -46,32 +47,25 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const searchMode = useRef(false);
 
   useEffect(() => {
-    if (proposals) {
-      setIsLoaded(true);
-    }
-  }, [proposals]);
-
-  useEffect(() => {
+    const initializeFilters = (initFilter, initSort) => {
+      setFilter(initFilter);
+      setSort(initSort);
+    };
     const sameUser = prevMember.current === address;
     if (!proposals || sameUser) return;
-
-    //  Later on, create functionality to only call the assigment below if daoMember is true or false
-    //  This would require setting that functionality in the context
-    const unread = proposals.filter(
-      proposal =>
-        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
-          ?.unread,
+    const activeProposals = proposals.filter(proposal =>
+      isProposalActive(proposal),
     );
 
-    const newOptions = getFilters(daoMember, unread);
-    setFilterOptions(newOptions);
+    const filters = getFilters(activeProposals);
+    setFilterOptions(filters);
 
     const hasSavedChanges =
       prevMember.current === 'No Address' && filter && sort;
     if (!hasSavedChanges) {
-      setFilter(newOptions?.main?.[0] || allFilter);
-      setSort(
-        unread?.length
+      initializeFilters(
+        filters?.main?.[0],
+        activeProposals?.length
           ? { name: 'Oldest', value: 'submissionDateAsc' }
           : { name: 'Newest', value: 'submissionDateDesc' },
       );
@@ -125,6 +119,8 @@ const ProposalsList = ({ proposals, customTerms }) => {
     setFilter(null);
     setSort(null);
   };
+
+  const isLoaded = proposals;
   return (
     <>
       <Flex wrap='wrap' position='relative' justifyContent='space-between'>
@@ -158,20 +154,21 @@ const ProposalsList = ({ proposals, customTerms }) => {
 
       {isLoaded && isActive('SPAM_FILTER') && <SpamFilterListNotification />}
 
-      {isLoaded &&
-        paginatedProposals?.map(proposal => {
-          return (
-            <ProposalCard
+      <Box mt={4}>
+        {isLoaded &&
+          paginatedProposals?.map(proposal => (
+            <ProposalCardV2
               key={proposal.id}
               proposal={proposal}
               customTerms={customTerms}
+              interaction={interaction}
             />
-          );
-        })}
+          ))}
+      </Box>
 
       {isLoaded ? (
         <Paginator
-          perPage={3}
+          perPage={5}
           setRecords={setPageProposals}
           allRecords={listProposals}
         />

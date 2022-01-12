@@ -4,7 +4,7 @@ import StaticAvatar from './staticAvatar';
 import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
 
-const AddressAvatar = React.memo(({ addr, hideCopy }) => {
+const AddressAvatar = React.memo(({ addr, hideCopy, sizeForPropCard }) => {
   const [profile, setProfile] = useState(null);
 
   const shouldFetchENS = useRef(false);
@@ -61,6 +61,7 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
       avatarImg={avatarImage}
       name={profile?.name}
       hideCopy={hideCopy}
+      sizeForPropCard={sizeForPropCard}
     />
   );
 });

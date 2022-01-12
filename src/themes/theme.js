@@ -84,6 +84,10 @@ export const createTheme = daoTheme => {
         800: themeOverrides.modeAlpha500,
         900: themeOverrides.modeAlpha500,
       },
+      chakraProgressBarHack: {
+        200: themeOverrides.secondary500,
+        500: themeOverrides.secondary500,
+      },
     },
     images: {
       avatarImg: themeOverrides.avatarImg,

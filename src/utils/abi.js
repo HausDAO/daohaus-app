@@ -28,6 +28,7 @@ import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
+import { MINION_TYPES } from './proposalUtils';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import { validate } from './validation';
 
@@ -77,7 +78,7 @@ const getABIurl = (contractAddress, chainID) => {
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
 };
 
-const isProxyABI = response => {
+export const isProxyABI = response => {
   if (response?.length) {
     return response.some(fn => fn.name === 'implementation');
   }
@@ -285,4 +286,18 @@ export const getContractABI = async data => {
     `abi.js => getABI():
     Did not recieve a correct ABI location. Check tx data in contractTx.js`,
   );
+};
+
+export const getMinionAbi = minionType => {
+  const abis = {
+    [MINION_TYPES.NIFTY]: NIFTY_MINION,
+    [MINION_TYPES.VANILLA]: VANILLA_MINION,
+    [MINION_TYPES.SAFE]: SAFE_MINION,
+    [MINION_TYPES.SUPERFLUID]: SUPERFLUID_MINION,
+    [MINION_TYPES.UBER]: UBERHAUS_MINION,
+  };
+  if (Object.keys(abis).includes(minionType)) {
+    return abis[minionType];
+  }
+  return null;
 };

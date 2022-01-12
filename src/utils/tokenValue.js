@@ -198,9 +198,63 @@ export const fetchBalance = ({ address, chainID, tokenAddress }) => {
       chainID,
     });
     const max = tokenContract.methods.balanceOf(address).call();
-
     return max;
   } catch (error) {
     console.log(error);
+  }
+};
+
+//  for use with daoMemberContext {daoMember, delegate}
+export const getAllowance = (daoMember, delegate) => {
+  if (daoMember?.hasWallet && daoMember?.allowance) {
+    return +daoMember.allowance;
+  }
+  if (delegate?.hasWallet && delegate?.allowance) {
+    return +delegate.allowance;
+  }
+  return null;
+};
+
+export const fetchSpecificTokenData = async (
+  tokenAddress,
+  searchParams,
+  chainID,
+) => {
+  let data = {};
+  const tokenContract = createContract({
+    address: tokenAddress,
+    abi: LOCAL_ABI.ERC_20,
+    chainID,
+  });
+  if (!tokenContract || !validate.address(tokenAddress) || !searchParams)
+    return;
+  try {
+    if (searchParams.balance) {
+      const balance = await tokenContract.methods
+        .balanceOf(searchParams.balance)
+        .call();
+      data = { ...data, balance };
+    }
+    if (searchParams.allowance) {
+      const allowance = await tokenContract.methods
+        .allowance(searchParams.allowance)
+        .call();
+      data = { ...data, allowance };
+    }
+    if (searchParams.decimals) {
+      const decimals = await tokenContract.methods.decimals().call();
+      data = { ...data, decimals };
+    }
+    if (searchParams.name) {
+      const name = await tokenContract.methods.name().call();
+      data = { ...data, name };
+    }
+    if (searchParams.symbol) {
+      const symbol = await tokenContract.methods.symbol().call();
+      data = { ...data, symbol };
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
   }
 };
