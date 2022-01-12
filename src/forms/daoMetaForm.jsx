@@ -163,7 +163,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                     Long Description
                   </TextBox>
                   <Textarea
-                    ref={register({ required: true })}
+                    ref={register}
                     defaultValue={metadata.longDescription}
                     placeholder='More content (not currently displayed in the app, maybe soon)'
                     name='longDescription'
