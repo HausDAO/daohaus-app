@@ -17,7 +17,6 @@ import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
-import { TX } from '../data/contractTX';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({

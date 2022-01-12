@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ExecuteRarible = () => {
   return 'Execute Rarible';
 };

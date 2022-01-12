@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useTX } from '../contexts/TXContext';
 
 import { getExecuteAction, getMinionAction } from '../utils/minionUtils';
-import { ProposalStatus } from '../utils/proposalUtils';
 
 const useMinionAction = proposal => {
   const { minionAddress, minion, proposalId, proposalType } = proposal || {};

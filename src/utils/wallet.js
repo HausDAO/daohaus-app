@@ -1,4 +1,3 @@
-import { utils } from 'web3';
 import { createContract } from './contract';
 import { LOCAL_ABI } from './abi';
 

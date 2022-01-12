@@ -34,11 +34,11 @@ export const SHOULD_MULTI_DECODE = {
   [MINION_TYPES.SAFE]: true,
 };
 
-const getUHAction = proposalType => {
-  return proposalType === PROPOSAL_TYPES.MINION_UBER_DEL
-    ? 'appointments'
-    : 'actions';
-};
+// const getUHAction = proposalType => {
+//   return proposalType === PROPOSAL_TYPES.MINION_UBER_DEL
+//     ? 'appointments'
+//     : 'actions';
+// };
 
 export const getProxiedAddress = async (abi, to, daochain) => {
   try {
