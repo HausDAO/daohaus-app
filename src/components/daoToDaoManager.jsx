@@ -480,6 +480,7 @@ const DaoToDaoManager = ({
                     <UberHausProposals
                       uberHausMinion={uberHausMinion}
                       uberMembers={uberMembers}
+                      uberDelegate={uberHausMinion?.uberHausDelegate}
                     />
 
                     {uberHausMinion.openChildProposals.length ? (

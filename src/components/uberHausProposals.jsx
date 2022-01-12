@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Menu, MenuList, MenuButton, MenuItem, Button } from '@chakra-ui/react';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
 import { FORM } from '../data/forms';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { JANUARY_2024 } from '../utils/general';
 
-const UberHausProposals = ({ uberHausMinion, uberMembers }) => {
+const UberHausProposals = ({ uberHausMinion, uberMembers, uberDelegate }) => {
+  const { address } = useInjectedProvider();
   const { formModal } = useAppModal();
+
+  const isDelegate = useMemo(() => {
+    if (uberDelegate && address) {
+      return address === uberDelegate?.toLowerCase?.();
+    }
+    return false;
+  }, [address, uberDelegate]);
 
   const handleClick = propType => {
     switch (propType) {
@@ -78,20 +87,22 @@ const UberHausProposals = ({ uberHausMinion, uberMembers }) => {
         Manage
       </MenuButton>
       <MenuList>
-        <MenuItem>
+        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
           <Button onClick={() => handleClick('delegate')}>Delegate</Button>
         </MenuItem>
-        <MenuItem>
+        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
           <Button onClick={() => handleClick('stake')}>Stake</Button>
         </MenuItem>
-        <MenuItem>
+        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
           <Button onClick={() => handleClick('ragequit')}>RageQuit</Button>
         </MenuItem>
-        <MenuItem>
+        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
           <Button onClick={() => handleClick('withdraw')}>Withdraw</Button>
         </MenuItem>
-        <MenuItem>
-          <Button onClick={() => handleClick('pull')}>Pull</Button>
+        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
+          <Button disabled={!isDelegate} onClick={() => handleClick('pull')}>
+            Pull
+          </Button>
         </MenuItem>
       </MenuList>
     </Menu>
