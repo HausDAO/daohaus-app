@@ -16,6 +16,10 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'uberStake',
     execute: 'UH_staking',
   },
+  [PROPOSAL_TYPES.MINION_UBER_RQ]: {
+    customTransferUI: 'uberRQ',
+    execute: 'executeAction',
+  },
   [PROPOSAL_TYPES.WHITELIST]: {
     customTransferUI: 'whitelistToken',
   },

@@ -10,6 +10,7 @@ import DelegateTransfer from './delegateTransfer';
 import StakeTransfer from './UHstakingTransfer';
 import WhitelistTokenTransfer from './whitelistTokenTransfer';
 import GuildKickTransfer from './guildKickTransfer';
+import UberRQTransfer from './uberRQTransfer';
 
 export const PropCardTransfer = ({
   incoming,
@@ -87,6 +88,9 @@ export const CustomTransfer = props => {
   }
   if (customTransferUI === 'guildKick') {
     return <GuildKickTransfer {...props} />;
+  }
+  if (customTransferUI === 'uberRQ') {
+    return <UberRQTransfer {...props} />;
   }
   return null;
 };

@@ -27,6 +27,7 @@ export const SHOULD_DECODE = {
   [MINION_TYPES.NIFTY]: true,
   [MINION_TYPES.VANILLA]: true,
   [PROPOSAL_TYPES.MINION_UBER_STAKE]: true,
+  [PROPOSAL_TYPES.MINION_UBER_RQ]: true,
 };
 
 export const SHOULD_MULTI_DECODE = {

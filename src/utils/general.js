@@ -338,3 +338,21 @@ export const isLastItem = (list, index) => index === list?.length - 1;
 export const isFirstItem = (list, index) => index === 0;
 
 export const generateNonce = () => `0x${randomBytes(32).toString('hex')}`;
+
+export const NOUN = {
+  SHARES: {
+    singular: 'share',
+    plural: 'shares',
+  },
+  LOOT: {
+    singular: 'loot',
+    plural: 'loot',
+  },
+  PROPOSALS: {
+    singular: 'proposal',
+    plural: 'proposals',
+  },
+};
+
+export const handleNounCase = (amt, noun) =>
+  Number(amt) === 1 ? noun.singular : noun.plural;

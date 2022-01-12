@@ -1,4 +1,5 @@
 import humanFormat from 'human-format';
+import { handleNounCase, NOUN } from './general';
 import { memberVote } from './proposalUtils';
 import { getReadableBalance } from './tokenValue';
 
@@ -33,6 +34,33 @@ export const readableTokenBalance = tokenData => {
   return readableNumber({ amount: readableBalance, unit: symbol });
 };
 
+const getSharesReadable = sharesRequested =>
+  Number(sharesRequested)
+    ? readableNumber({
+        unit: handleNounCase(sharesRequested, NOUN.SHARES),
+        amount: Number(sharesRequested),
+      })
+    : '';
+const getLootReadable = lootRequested =>
+  Number(lootRequested)
+    ? readableNumber({
+        unit: handleNounCase(lootRequested, NOUN.LOOT),
+        amount: Number(lootRequested),
+      })
+    : '';
+const getPaymentReadable = ({
+  paymentRequested,
+  paymentTokenDecimals,
+  paymentTokenSymbol,
+}) =>
+  Number(paymentRequested)
+    ? readableTokenBalance({
+        decimals: paymentTokenDecimals,
+        balance: paymentRequested,
+        symbol: paymentTokenSymbol,
+      })
+    : '';
+
 export const generateRequestText = proposal => {
   const {
     paymentRequested,
@@ -41,22 +69,24 @@ export const generateRequestText = proposal => {
     sharesRequested,
     lootRequested,
   } = proposal;
-  const paymentReadable = Number(paymentRequested)
-    ? readableTokenBalance({
-        decimals: paymentTokenDecimals,
-        balance: paymentRequested,
-        symbol: paymentTokenSymbol,
-      })
-    : '';
 
-  const sharesReadable = Number(sharesRequested)
-    ? readableNumber({ unit: 'Shares', amount: Number(sharesRequested) })
-    : '';
-  const lootReadable = Number(lootRequested)
-    ? readableNumber({ unit: 'Loot', amount: Number(lootRequested) })
-    : '';
+  return [
+    getSharesReadable(sharesRequested),
+    getLootReadable(lootRequested),
+    getPaymentReadable({
+      paymentRequested,
+      paymentTokenDecimals,
+      paymentTokenSymbol,
+    }),
+  ]
+    .filter(Boolean)
+    .join(', ');
+};
 
-  return [sharesReadable, lootReadable, paymentReadable]
+export const generateRQText = proposal => {
+  const { sharesToBurn, lootToBurn } = proposal;
+
+  return [getSharesReadable(sharesToBurn), getLootReadable(lootToBurn)]
     .filter(Boolean)
     .join(', ');
 };
