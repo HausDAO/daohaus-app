@@ -4,8 +4,6 @@ import GenericInput from './genericInput';
 import ModButton from './modButton';
 
 const UberHausRageQuitInput = props => {
-  console.log('RQ Props', props);
-
   const { localForm, localValues, name } = props;
   const { setValue } = localForm;
   const [minionShares, setMinionShares] = useState(0);
@@ -38,14 +36,10 @@ const UberHausRageQuitInput = props => {
       member => member.memberAddress === localValues.minionAddress,
     );
 
-    console.log('uberMinionMember is: ', uberMinionMember);
-
     if (+uberMinionMember.shares) {
-      console.log(+uberMinionMember.shares);
       setMinionShares(+uberMinionMember.shares);
     }
     if (+uberMinionMember.loot) {
-      console.log(+uberMinionMember.loot);
       setMinionLoot(+uberMinionMember.loot);
     }
   }, [localValues.uberHausMinion, localValues.uberMembers]);
