@@ -1352,4 +1352,13 @@ export const TX = {
     gatherArgs: ['.values.tributeToken', '.values.pull' || '0'],
     createDiscourse: true,
   },
+  UBERHAUS_CLAIM_REWARDS: {
+    contract: CONTRACTS.LOCAL_UBERHAUS_MINION,
+    name: 'claimDelegateReward',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submit Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Proposal submitted!',
+  },
 };
