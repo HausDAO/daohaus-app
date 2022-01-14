@@ -184,6 +184,11 @@ export const CONTRACTS = {
     abiName: 'AMB_MODULE',
     conractAddress: '.localValues.ambModuleAddress',
   },
+  AMB: {
+    location: 'local',
+    abiName: 'AMB',
+    conractAddress: '.localValues.ambAddress',
+  },
 };
 
 export const ACTIONS = {

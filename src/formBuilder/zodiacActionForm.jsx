@@ -108,14 +108,12 @@ const ZodiacActionForm = props => {
       const ambAddress = ambConfig.amb_bridge_address[foreignChainId];
 
       // Deploy a Zodiac Bridge module
-      // TODO: ask Jord for advice on how to adapt this to the Pending Tx model
       const ambModuleAddress = await deployZodiacBridgeModule(
         vault.safeAddress, // owner
         foreignSafeAddress, // avatar
         foreignSafeAddress, // target
         ambAddress, // amb
         vault.safeAddress, // controller
-        `0x${foreignChainId.slice(2).padStart(64, '0')}`, // bridgeChainId
         daochain, // chainId
         injectedProvider,
       );

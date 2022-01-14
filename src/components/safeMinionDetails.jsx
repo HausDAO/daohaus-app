@@ -8,8 +8,12 @@ import { utils as Web3Utils } from 'web3';
 import ModuleManager from '@gnosis.pm/safe-contracts/build/artifacts/contracts/base/ModuleManager.sol/ModuleManager.json';
 
 import GnosisSafeCard from './gnosisSafeCard';
+import { useDao } from '../contexts/DaoContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { ACTIONS, TX } from '../data/contractTX';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
@@ -18,6 +22,8 @@ import { chainByID } from '../utils/chain';
 import {
   createGnosisSafeTxProposal,
   deployZodiacBridgeModule,
+  encodeAmbTxProposal,
+  encodeSwapSafeOwnersBy,
 } from '../utils/contract';
 
 const SF_TOOLTIP = {
@@ -46,6 +52,11 @@ const SF_TOOLTIP = {
       'Submit a Minion proposal to remove current signers on the foreign Gnosis Safe',
     ],
   },
+  MEMBER_ONLY: {
+    title: 'MEMBERS ONLY',
+    body:
+      'You MUST be connected to the Right Network and be a DAO Member in order to submit a Tx proposal',
+  },
   WRONG_CHAIN_N_OWNER: {
     title: 'ACTION REQUIRED',
     body:
@@ -63,8 +74,11 @@ const SafeMinionDetails = ({
   const [isLoading, setLoading] = useState(null);
   const [isSafeOwner, safeOwner] = useState(false);
   const [isForeignSafeOwner, foreignSafeOwner] = useState(false);
+  const { daoOverview } = useDao();
+  const { daoMember } = useDaoMember();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
+  const { submitTransaction } = useTX();
 
   const submitEnableModuleTxProposal = async (
     chainID,
@@ -119,14 +133,12 @@ const SafeMinionDetails = ({
       // Deploy a Zodiac Bridge module
       const ambConfig = chainByID(daochain).zodiac_amb_module;
       const ambAddress = ambConfig.amb_bridge_address[vault.foreignChainId];
-      // TODO: ask Jord for advice on how to adapt this to the Pending Tx model
       const ambModuleAddress = await deployZodiacBridgeModule(
         vault.safeAddress, // owner
         vault.foreignSafeAddress, // avatar
         vault.foreignSafeAddress, // target
         ambAddress, // amb
         vault.safeAddress, // controller
-        `0x${vault.foreignChainId.slice(2).padStart(64, '0')}`, // bridgeChainId
         daochain, // chainId
         injectedProvider,
       );
@@ -155,8 +167,30 @@ const SafeMinionDetails = ({
   const removeSignersTxProposal = async () => {
     setLoading('removeSigners');
     try {
-      // TODO: create minion proposal to remove signers on the foreign safe
-      console.log('Minion proposal: Remove signers');
+      const encodedTx = await encodeSwapSafeOwnersBy(
+        vault.foreignChainId,
+        vault.foreignSafeAddress,
+        foreignSafeDetails.ambModuleAddress,
+      );
+      const txProposal = await encodeAmbTxProposal(
+        foreignSafeDetails.ambModuleAddress,
+        daochain,
+        encodedTx,
+        vault.foreignChainId,
+      );
+      await submitTransaction({
+        tx: {
+          ...TX.GENERIC_SAFE_MULTICALL,
+          onTxHash: ACTIONS.BASIC,
+        },
+        values: {
+          title: 'Remove Gnosis Signers',
+          description: 'Remove current signers from a Foreign Gnosis Safe',
+          paymentToken: daoOverview.depositToken.tokenAddress,
+          selectedMinion: vault.address,
+          TX: [txProposal],
+        },
+      });
     } catch (error) {
       errorToast({
         title: 'Failed to submit Tx Proposal',
@@ -236,11 +270,11 @@ const SafeMinionDetails = ({
           {foreignSafeDetails && (
             <GnosisSafeCard
               actionDetails={
-                (!foreignSafeDetails.ambModuleEnabled ||
+                (!foreignSafeDetails.ambModuleAddress ||
                   foreignSafeDetails.owners.length > 0) && (
                   <>
                     <Text mt={4}>Actions</Text>
-                    {!foreignSafeDetails.ambModuleEnabled && (
+                    {!foreignSafeDetails.ambModuleAddress && (
                       <Flex mt={4}>
                         <ToolTipWrapper
                           placement='right'
@@ -269,24 +303,24 @@ const SafeMinionDetails = ({
                         </ToolTipWrapper>
                       </Flex>
                     )}
-                    {foreignSafeDetails.ambModuleEnabled &&
-                      foreignSafeDetails.owners.length > 0 && (
+                    {foreignSafeDetails.ambModuleAddress &&
+                      !foreignSafeDetails.owners.includes(
+                        foreignSafeDetails.ambModuleAddress,
+                      ) && (
                         <Flex mt={4}>
                           <ToolTipWrapper
                             placement='right'
                             tooltip
                             tooltipText={
-                              isForeignSafeOwner &&
-                              vault.foreignChainId === injectedChain.chainId
+                              daoMember && daochain === injectedChain.chainId
                                 ? SF_TOOLTIP.REMOVE_SIGNERS
-                                : SF_TOOLTIP.WRONG_CHAIN_N_OWNER
+                                : SF_TOOLTIP.MEMBER_ONLY
                             }
                           >
                             <Button
                               isLoading={isLoading === 'removeSigners'}
                               isDisabled={
-                                !isForeignSafeOwner ||
-                                vault.foreignChainId !== injectedChain.chainId
+                                !daoMember || daochain !== injectedChain.chainId
                               }
                               mr={6}
                               onClick={removeSignersTxProposal}

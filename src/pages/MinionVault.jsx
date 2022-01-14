@@ -104,18 +104,19 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               vaultMatch.foreignSafeAddress,
             );
             if (foreignSafe) {
-              // Validate if the foreign safe has the AMB module enabled
-              foreignSafe.ambModuleEnabled = (
-                await Promise.all(
-                  foreignSafe.modules.map(async m => {
-                    return isAmbModule(
-                      m,
-                      vaultMatch.safeAddress,
-                      vaultMatch.foreignChainId,
-                    );
-                  }),
-                )
-              ).some(m => m);
+              await foreignSafe.modules.every(async m => {
+                const validModule = await isAmbModule(
+                  m,
+                  vaultMatch.safeAddress,
+                  daochain,
+                  vaultMatch.foreignChainId,
+                );
+                if (validModule) {
+                  foreignSafe.ambModuleAddress = m;
+                  return false;
+                }
+                return true;
+              });
               setForeignSafeDetails(foreignSafe);
             }
           }

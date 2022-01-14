@@ -26,7 +26,6 @@ const getPrimaryButtonFn = props => {
   if (customPrimaryBtn?.fn) {
     return customPrimaryBtn.fn;
   }
-  // TODO: ask Jord for feedback
   if (props.formState === 'success' && props.next && props.next !== 'FINISH') {
     return () => goToNext(props.next);
   }

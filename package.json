@@ -19,6 +19,7 @@
     "ethereum-blockies-base64": "^1.0.2",
     "ethereumjs-util": "^7.1.0",
     "ethers": "^5.0.24",
+    "ethers-multisend": "^2.1.1",
     "framer-motion": "^3.2.0",
     "graphql": "^15.4.0",
     "polished": "^4.0.5",

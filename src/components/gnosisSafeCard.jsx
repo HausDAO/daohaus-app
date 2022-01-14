@@ -45,10 +45,10 @@ const GnosisSafeCard = ({
         {safeDetails.threshold}/{safeDetails.owners.length}
       </Text>
       {targetChain && (
-        <Text>
-          Network
+        <>
+          <Text>Network</Text>
           <Text fontWeight='bold'>{`${chainConfig.name}`}</Text>
-        </Text>
+        </>
       )}
       {vaultAddress && (
         <Box fontFamily='mono'>
