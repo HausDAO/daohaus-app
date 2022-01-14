@@ -8,8 +8,12 @@ import { utils as Web3Utils } from 'web3';
 import ModuleManager from '@gnosis.pm/safe-contracts/build/artifacts/contracts/base/ModuleManager.sol/ModuleManager.json';
 
 import GnosisSafeCard from './gnosisSafeCard';
+import { useDao } from '../contexts/DaoContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { ACTIONS, TX } from '../data/contractTX';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
@@ -18,6 +22,8 @@ import { chainByID } from '../utils/chain';
 import {
   createGnosisSafeTxProposal,
   deployZodiacBridgeModule,
+  encodeAmbTxProposal,
+  encodeSwapSafeOwnersBy,
 } from '../utils/contract';
 
 const SF_TOOLTIP = {
@@ -68,8 +74,11 @@ const SafeMinionDetails = ({
   const [isLoading, setLoading] = useState(null);
   const [isSafeOwner, safeOwner] = useState(false);
   const [isForeignSafeOwner, foreignSafeOwner] = useState(false);
+  const { daoOverview } = useDao();
+  const { daoMember } = useDaoMember();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
+  const { submitTransaction } = useTX();
 
   const submitEnableModuleTxProposal = async (
     chainID,
@@ -158,8 +167,30 @@ const SafeMinionDetails = ({
   const removeSignersTxProposal = async () => {
     setLoading('removeSigners');
     try {
-      // TODO: create minion proposal to remove signers on the foreign safe
-      console.log('Minion proposal: Remove signers');
+      const encodedTx = await encodeSwapSafeOwnersBy(
+        vault.foreignChainId,
+        vault.foreignSafeAddress,
+        foreignSafeDetails.ambModuleAddress,
+      );
+      const txProposal = await encodeAmbTxProposal(
+        foreignSafeDetails.ambModuleAddress,
+        daochain,
+        encodedTx,
+        vault.foreignChainId,
+      );
+      await submitTransaction({
+        tx: {
+          ...TX.GENERIC_SAFE_MULTICALL,
+          onTxHash: ACTIONS.BASIC,
+        },
+        values: {
+          title: 'Remove Gnosis Signers',
+          description: 'Remove current signers from a Foreign Gnosis Safe',
+          paymentToken: daoOverview.depositToken.tokenAddress,
+          selectedMinion: vault.address,
+          TX: [txProposal],
+        },
+      });
     } catch (error) {
       errorToast({
         title: 'Failed to submit Tx Proposal',

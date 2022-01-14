@@ -1,5 +1,6 @@
 // SAVE FOR LATER
 import { ethers } from 'ethers';
+import { encodeMulti, encodeSingle, TransactionType } from 'ethers-multisend';
 import SafeMasterCopy from '@gnosis.pm/safe-contracts/build/artifacts/contracts/GnosisSafe.sol/GnosisSafe.json';
 import { deployAndSetUpModule } from '@gnosis.pm/zodiac';
 import Web3 from 'web3';
@@ -262,5 +263,100 @@ export const isAmbModule = async (
   } catch (error) {
     console.error('Not an AMB module', address, error);
     return false;
+  }
+};
+
+export const fetchSafeOwners = async (chainID, safeAddress) => {
+  const safe = createContract({
+    address: safeAddress,
+    abi: SafeMasterCopy.abi,
+    chainID,
+  });
+  return safe.methods.getOwners().call();
+};
+
+export const encodeSwapSafeOwnersBy = async (
+  chainID,
+  safeAddress,
+  newOwnerAddress,
+) => {
+  const config = chainByID(chainID).safeMinion;
+  if (!config?.safe_mutisend_addr) {
+    throw new Error(
+      'No multiSend contract address found for target chain',
+      chainID,
+    );
+  }
+  try {
+    const currentOwners = await fetchSafeOwners(chainID, safeAddress);
+    const txs = [
+      encodeSingle({
+        id: 0,
+        type: TransactionType.callContract,
+        to: safeAddress,
+        value: '0',
+        abi: SafeMasterCopy.abi,
+        functionSignature: 'addOwnerWithThreshold(address,uint256)',
+        inputValues: {
+          owner: newOwnerAddress,
+          _threshold: '1',
+        },
+      }),
+      ...currentOwners.map((owner, i) =>
+        encodeSingle({
+          id: i + 1,
+          type: TransactionType.callContract,
+          to: safeAddress,
+          value: '0',
+          abi: SafeMasterCopy.abi,
+          functionSignature: 'removeOwner(address,address,uint256)',
+          inputValues: {
+            prevOwner: newOwnerAddress,
+            owner,
+            _threshold: '1',
+          },
+        }),
+      ),
+    ];
+    const encodedTx = encodeMulti(txs, config.safe_mutisend_addr);
+    return encodedTx;
+  } catch (error) {
+    console.error('An error occurred while trying to encode Txs', error);
+  }
+};
+
+export const encodeAmbTxProposal = async (
+  ambModuleAddress,
+  chainId,
+  encodedTx,
+  targetChainId,
+) => {
+  const config = chainByID(chainId).zodiac_amb_module;
+  if (!config.amb_bridge_address[targetChainId]) {
+    throw new Error('AMB not available for target chain', targetChainId);
+  }
+  try {
+    const ambModule = new ethers.Contract(
+      ambModuleAddress,
+      getLocalABI(CONTRACTS.AMB_MODULE),
+    );
+    const moduleTx = await ambModule.populateTransaction.executeTransaction(
+      encodedTx.to,
+      encodedTx.value,
+      encodedTx.data,
+      encodedTx.operation,
+    );
+    const ambAbi = getLocalABI(CONTRACTS.AMB);
+    const selectedFunction = ambAbi.find(
+      entry => entry.name === 'requireToPassMessage',
+    );
+
+    return {
+      targetContract: config.amb_bridge_address[targetChainId],
+      abiInput: JSON.stringify(selectedFunction),
+      abiArgs: [moduleTx.to, moduleTx.data, config.gas_limit[targetChainId]],
+    };
+  } catch (error) {
+    console.error('failed to encodeAmbTxMessage', error);
   }
 };

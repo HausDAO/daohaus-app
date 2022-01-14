@@ -30,6 +30,7 @@ import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import AMB_MODULE from '../contracts/ambModule.json';
+import AMB from '../contracts/iAmb.json';
 import { validate } from './validation';
 
 export const LOCAL_ABI = Object.freeze({
@@ -56,6 +57,7 @@ export const LOCAL_ABI = Object.freeze({
   ESCROW_MINION,
   DISPERSE_APP,
   AMB_MODULE,
+  AMB,
 });
 
 const getBlockExplorerApiKey = chainID => {
