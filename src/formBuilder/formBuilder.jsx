@@ -34,7 +34,7 @@ const FormBuilder = props => {
     formConditions,
     setParentFields,
     indicatorStates,
-    formStateOverride, // TODO: ask Jord for feedback
+    formStateOverride,
     txID,
     logValues,
     tx,

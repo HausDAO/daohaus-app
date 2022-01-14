@@ -855,7 +855,7 @@ export const BOOST_FORMS = {
         {
           ...FIELD.SWITCH_NETWORK,
           warningMessage:
-            'IMPORTANT: You Must be a Gnosis Saf Signer on the Foreign Chain',
+            'IMPORTANT: You Must be a Gnosis Safe Signer on the Foreign Chain',
         },
         {
           ...FIELD.PROPOSAL_NAME,

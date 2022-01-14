@@ -210,11 +210,11 @@ export const deployZodiacBridgeModule = async (
   target,
   amb,
   controller,
-  bridgeChainId,
   chainId,
   injectedProvider,
 ) => {
   try {
+    const bridgeChainId = `0x${chainId.slice(2).padStart(64, '0')}`;
     const provider = new ethers.providers.Web3Provider(
       injectedProvider.currentProvider,
     );
@@ -243,7 +243,12 @@ export const deployZodiacBridgeModule = async (
   }
 };
 
-export const isAmbModule = async (address, controller, targetChainId) => {
+export const isAmbModule = async (
+  address,
+  controller,
+  chainId,
+  targetChainId,
+) => {
   const abi = getLocalABI(CONTRACTS.AMB_MODULE);
   const contract = createContract({ address, abi, chainID: targetChainId });
   try {
@@ -251,7 +256,7 @@ export const isAmbModule = async (address, controller, targetChainId) => {
       Web3.utils.toChecksumAddress(
         await contract.methods.controller().call(),
       ) === Web3.utils.toChecksumAddress(controller),
-      Number(await contract.methods.chainId().call()) === Number(targetChainId),
+      Number(await contract.methods.chainId().call()) === Number(chainId),
     ]);
     return props.every(v => v);
   } catch (error) {
