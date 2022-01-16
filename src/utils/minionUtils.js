@@ -81,7 +81,7 @@ export const decodeAction = async (action, params) => {
   const { chainID } = params || {};
   const { to, data } = action || {};
   const targetContractABI = await fetchABI(to, chainID);
-  console.log(`targetContractABI`, targetContractABI);
+
   if (targetContractABI?.result === null) {
     return { ...targetContractABI, error: true };
   }

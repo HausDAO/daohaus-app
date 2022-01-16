@@ -1,6 +1,11 @@
 import React, { useMemo } from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/react';
-import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri';
+import {
+  RiAlertLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
+  RiErrorWarningLine,
+} from 'react-icons/ri';
 
 import { Bold, ParaMd } from '../components/typography';
 import MinionTransfer from './minionTransfer';
@@ -19,6 +24,7 @@ export const PropCardTransfer = ({
   customUI,
   action,
   specialLocation,
+  error,
 }) => {
   return (
     <Flex alignItems='center' mb='4'>
@@ -32,7 +38,11 @@ export const PropCardTransfer = ({
           <RiArrowLeftLine size='1.1rem' />
         </Box>
       )}
-
+      {error && (
+        <Box mr='1'>
+          <RiErrorWarningLine size='1.1rem' />
+        </Box>
+      )}
       {customUI}
       {itemText && (
         <>
