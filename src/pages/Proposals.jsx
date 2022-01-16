@@ -38,19 +38,19 @@ const Proposals = React.memo(({ proposals, activities, customTerms }) => {
     >
       <Flex wrap='wrap'>
         <Box
-          w={['100%', null, null, null, '70%']}
+          w={['100%', null, null, '100%', '80%']}
           pr={[0, null, null, null, 6]}
           pb={6}
         >
           <ProposalsList proposals={proposals} customTerms={customTerms} />
         </Box>
-        <Box w={['100%', null, null, null, '30%']}>
+        {/* <Box w={['100%', null, null, null, '30%']}>
           <ActivitiesFeed
             limit={5}
             activities={activities}
             hydrateFn={getProposalsActivites}
           />
-        </Box>
+        </Box> */}
       </Flex>
     </MainViewLayout>
   );
