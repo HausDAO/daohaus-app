@@ -81,6 +81,10 @@ export const decodeAction = async (action, params) => {
   const { chainID } = params || {};
   const { to, data } = action || {};
   const targetContractABI = await fetchABI(to, chainID);
+  console.log(`targetContractABI`, targetContractABI);
+  if (targetContractABI?.result === null) {
+    return { ...targetContractABI, error: true };
+  }
   abiDecoder.addABI(targetContractABI);
   return abiDecoder.decodeMethod(data);
 };
@@ -104,20 +108,24 @@ export const getMinionAction = async params => {
     proposalType,
   } = params;
   const abi = getMinionAbi(minionType);
-
+  console.log(`abi`, abi);
   const actionName =
     MINION_ACTION_FUNCTION_NAMES[minionType] ||
     MINION_ACTION_FUNCTION_NAMES[proposalType];
-
+  console.log(`actionName`, actionName);
   try {
     const minionContract = createContract({
       address: minionAddress,
       abi,
       chainID,
     });
+    console.log(`minionContract`, minionContract);
+
     const action = await minionContract.methods[actionName](proposalId).call();
+    console.log(`action`, action);
     if (SHOULD_DECODE[minionType] || SHOULD_DECODE[proposalType]) {
       const decoded = await decodeAction(action, params);
+      console.log(`decoded`, decoded);
       return { ...action, decoded };
     }
     if (SHOULD_MULTI_DECODE[minionType]) {
@@ -147,3 +155,15 @@ export const getExecuteAction = ({ minion }) => {
     return TX.UBER_EXECUTE_ACTION;
   }
 };
+
+const testMinionAction = async () => {
+  getMinionAction({
+    minionAddress: '0x3b1b181cb4fc4932a4917a12554aca5857b62623',
+    proposalId: '27',
+    chainID: '0x64',
+    minionType: MINION_TYPES.NIFTY,
+    proposalType: PROPOSAL_TYPES.PAYROLL,
+  });
+};
+
+console.log(testMinionAction());

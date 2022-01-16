@@ -22,9 +22,10 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
 
     const deriveMessage = async () => {
       const tokenAddress = minionAction.to;
+
       const balance =
         minionAction.decoded?.params[1]?.value ||
-        minionAction.decoded.actions[1]?.value;
+        minionAction.decoded?.actions[1]?.value;
       const vault = daoVaults?.find(minion => minion.address === minionAddress);
       const tokenData = await fetchSpecificTokenData(
         tokenAddress,
@@ -47,9 +48,14 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
         setItemText('Error Retrieving token data');
       }
     };
-    if (shouldUpdate) setItemText();
     if (!daoVaults || !minionAction || !minionAddress) return;
+    if (minionAction?.decoded?.error) {
+      setItemText(minionAction?.decoded?.message);
+      return;
+    }
+
     deriveMessage();
+
     return () => (shouldUpdate = false);
   }, [daoVaults && minionAction && !minionAddress]);
 
