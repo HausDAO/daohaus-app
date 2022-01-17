@@ -271,7 +271,9 @@ const SafeMinionDetails = ({
             <GnosisSafeCard
               actionDetails={
                 (!foreignSafeDetails.ambModuleAddress ||
-                  foreignSafeDetails.owners.length > 0) && (
+                  !foreignSafeDetails.owners.includes(
+                    foreignSafeDetails.ambModuleAddress,
+                  ) > 0) && (
                   <>
                     <Text mt={4}>Actions</Text>
                     {!foreignSafeDetails.ambModuleAddress && (

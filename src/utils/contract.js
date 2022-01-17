@@ -331,8 +331,8 @@ export const encodeAmbTxProposal = async (
   encodedTx,
   targetChainId,
 ) => {
-  const config = chainByID(chainId).zodiac_amb_module;
-  if (!config.amb_bridge_address[targetChainId]) {
+  const config = chainByID(targetChainId).zodiac_amb_module;
+  if (!config.amb_bridge_address[chainId]) {
     throw new Error('AMB not available for target chain', targetChainId);
   }
   try {
@@ -352,9 +352,9 @@ export const encodeAmbTxProposal = async (
     );
 
     return {
-      targetContract: config.amb_bridge_address[targetChainId],
+      targetContract: config.amb_bridge_address[chainId],
       abiInput: JSON.stringify(selectedFunction),
-      abiArgs: [moduleTx.to, moduleTx.data, config.gas_limit[targetChainId]],
+      abiArgs: [moduleTx.to, moduleTx.data, config.gas_limit[chainId]],
     };
   } catch (error) {
     console.error('failed to encodeAmbTxMessage', error);
