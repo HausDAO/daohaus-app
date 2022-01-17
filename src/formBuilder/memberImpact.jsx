@@ -17,16 +17,12 @@ const MemberImpact = props => {
   const { daochain, daoid } = useParams();
   const values = localForm.getValues();
   useEffect(async () => {
-    console.log(values);
-    console.log(daochain, daoid);
     if (values?.applicant && daochain && daoid) {
       const member = await fetchSingleMember({
         chainID: daochain,
         memberAddress: values?.applicant,
         molochAddress: daoid,
       });
-      console.log('Member');
-      console.log(member);
       setMember(member.member);
     } else {
       setMember(null);

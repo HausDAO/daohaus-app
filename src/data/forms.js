@@ -219,7 +219,6 @@ export const PROPOSAL_FORMS = {
         },
         {
           type: 'memberImpact',
-          name: 'sharesOwned',
         },
         FIELD.DESCRIPTION,
         FIELD.LINK,
