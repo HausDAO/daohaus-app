@@ -89,16 +89,47 @@ export const decodeAction = async (action, params) => {
   return abiDecoder.decodeMethod(data);
 };
 
-export const decodeMultiAction = async (actions, params) => {
+export const decodeMultiAction = async ([encodedMulti], params) => {
   const { chainID } = params;
   const multiSendAddress = chainByID(chainID).safeMinion.safe_mutisend_addr;
-  const batchData = actions?.map(action =>
-    decodeMultisendTx(multiSendAddress, action.data),
-  );
-  const decoded = await Promise.all(
-    batchData[0].map(action => decodeAction(action, params)),
-  );
-  return decoded;
+
+  //   SINGLE ARRAY VERSION
+
+  return {
+    ...encodedMulti,
+    actions: await Promise.all(
+      decodeMultisendTx(multiSendAddress, encodedMulti.data).map(
+        async action => ({
+          ...action,
+          data: await decodeAction(action, params),
+        }),
+      ),
+    ),
+  };
+
+  //  CODE REVIEW
+  //  Question for Sam
+  //  Why does the data structure come in as nested arrays?
+  //  Could there be more than one collection of transactions?
+  //  If not, I clean this up a lot.
+
+  //  NESTED ARRAY VERSION
+  // const multiCalls = actions.map(multiCall => ({
+  //   ...multiCall,
+  //   actions: decodeMultisendTx(multiSendAddress, multiCall.data),
+  // }));
+  // const decoded = await Promise.all(
+  //   multiCalls.map(async multiCall => {
+  //     const decodedTx = await Promise.all(
+  //       multiCall.actions.map(async action => ({
+  //         ...action,
+  //         data: await decodeAction(action, params),
+  //       })),
+  //     );
+  //     return { ...multiCall, actions: decodedTx };
+  //   }),
+  // );
+  // return decoded;
 };
 
 export const getMinionAction = async params => {

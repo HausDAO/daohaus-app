@@ -16,6 +16,7 @@ import StakeTransfer from './UHstakingTransfer';
 import WhitelistTokenTransfer from './whitelistTokenTransfer';
 import GuildKickTransfer from './guildKickTransfer';
 import UberRQTransfer from './uberRQTransfer';
+import MultiTxTransfer from './multiTxTransfer';
 
 export const PropCardTransfer = ({
   incoming,
@@ -101,6 +102,9 @@ export const CustomTransfer = props => {
   }
   if (customTransferUI === 'uberRQ') {
     return <UberRQTransfer {...props} />;
+  }
+  if (customTransferUI === 'multiTx') {
+    return <MultiTxTransfer {...props} />;
   }
   return null;
 };
