@@ -5,6 +5,7 @@ import {
   HOME_DAO,
   HOME_DAO_TOKENS,
   SINGLE_PROPOSAL,
+  SINGLE_MEMBER,
   SPAM_FILTER_ACTIVITIES,
   SPAM_FILTER_GK_WL,
   SPAM_FILTER_TRIBUTE,
@@ -193,6 +194,16 @@ export const fetchSingleProposal = async args => {
     variables: {
       molochAddress: args.molochAddress,
       proposalId: args.proposalId,
+    },
+  });
+};
+
+export const fetchSingleMember = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: SINGLE_MEMBER,
+    variables: {
+      id: `${args.molochAddress}-member-${args.memberAddress}`,
     },
   });
 };
