@@ -22,7 +22,7 @@ const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
     });
     setLoading(false);
   };
-  if (minionAction.executed || executed) {
+  if (proposal.executed) {
     return (
       <InactiveButton size='sm' leftIcon={<AiOutlineCheck />}>
         Executed

@@ -62,9 +62,7 @@ const Processed = props => {
       <Flex mt='2' alignItems='center'>
         <UserVoteData voteData={voteData} />
         <Flex ml='auto'>
-          {minionAction && voteData?.isPassing && (
-            <MinionExexcuteFactory {...props} />
-          )}
+          <MinionExexcuteFactory {...props} />
         </Flex>
       </Flex>
     </PropActionBox>

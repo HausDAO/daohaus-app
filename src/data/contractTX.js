@@ -658,6 +658,7 @@ export const TX = {
   MINION_SIMPLE_EXECUTE: {
     contract: CONTRACTS.MINION_SIMPLE_EXECUTE,
     name: 'executeAction',
+    poll: 'subgraph',
     specialPoll: 'executeAction',
     onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Executing Minion Proposal',
@@ -667,7 +668,7 @@ export const TX = {
   UBER_EXECUTE_ACTION: {
     contract: CONTRACTS.UBERHAUS_MINION,
     name: 'executeAction',
-    specialPoll: 'executeAction',
+    poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Executing Minion Proposal',
     errMsg: 'Error Executing Minion Proposal',
@@ -676,7 +677,7 @@ export const TX = {
   APPROVE_UHMINION_HAUS: {
     contract: CONTRACTS.UBERHAUS_MINION,
     name: 'approveUberHaus',
-    specialPoll: 'unlockToken',
+    poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Approving HAUS',
     errMsg: 'Error Approving HAUS',

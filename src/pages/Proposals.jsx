@@ -3,10 +3,8 @@ import { RiAddFill } from 'react-icons/ri';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
-import ActivitiesFeed from '../components/activitiesFeed';
 import MainViewLayout from '../components/mainViewLayout';
 import ProposalsList from '../components/proposalList';
-import { getProposalsActivites } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import useCanInteract from '../hooks/useCanInteract';
 

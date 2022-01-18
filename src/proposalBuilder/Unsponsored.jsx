@@ -84,6 +84,24 @@ const Unsponsored = props => {
     });
     setLoadingTx(false);
   };
+  const cancelMinion = async () => {
+    setLoadingTx(true);
+    if (proposal.escrow) {
+      await submitTransaction({
+        tx: TX.ESCROW_MINION_CANCEL,
+        args: [proposal.proposalId, proposal.molochAddress],
+      });
+    } else {
+      await submitTransaction({
+        tx: TX.MINION_CANCEL,
+        args: [proposal.proposalId],
+        localValues: {
+          minionAddress: proposal.minionAddress,
+        },
+      });
+    }
+    setLoadingTx(false);
+  };
   const approveToken = async () => {
     setLoadingTx(true);
     const unlockAmount = MaxUint256.toString();
@@ -103,6 +121,7 @@ const Unsponsored = props => {
       <SponsorCard
         isLoadingTx={isLoadingTx}
         cancelProposal={cancelProposal}
+        cancelMinion={cancelMinion}
         sponsorProposal={sponsorProposal}
         address={address}
         depositData={depositData}
@@ -163,6 +182,7 @@ const UnlockTokenCard = ({
 const SponsorCard = ({
   isLoadingTx,
   cancelProposal,
+  cancelMinion,
   sponsorProposal,
   depositData,
   proposal,
@@ -197,6 +217,19 @@ const SponsorCard = ({
         >
           Sponsor {depositData?.deposit && `(${depositData.deposit})`}
         </Button>
+        {proposal?.minionAddress &&
+          proposal.proposer === proposal.minionAddress && (
+            <Button
+              size='sm'
+              fontWeight='700'
+              minW='4rem'
+              variant='outline'
+              onClick={cancelMinion}
+              isLoading={isLoadingTx}
+            >
+              Cancel Minion
+            </Button>
+          )}
         {address?.toLowerCase() === proposal?.proposer?.toLowerCase() && (
           <Button
             size='sm'
