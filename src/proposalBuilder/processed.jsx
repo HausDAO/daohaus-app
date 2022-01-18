@@ -52,7 +52,9 @@ const Processed = props => {
         <ParaSm fontWeight='700' mr='1'>
           {voteData?.isPassing ? 'Passed' : 'Failed'}
         </ParaSm>
-        <ParaSm fontStyle='italic'>and processed</ParaSm>
+        <ParaSm fontStyle='italic'>
+          and {proposal?.executed ? 'minion executed' : 'needs execution'}
+        </ParaSm>
       </StatusDisplayBox>
       <VotingInactive
         {...props}
