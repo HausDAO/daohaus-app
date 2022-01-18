@@ -1,7 +1,7 @@
 import Web3, { utils as Web3Utils } from 'web3';
 import abiDecoder from 'abi-decoder';
 import { createContract } from './contract';
-import { fetchABI, getMinionAbi } from './abi';
+import { decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
 import { TX } from '../data/contractTX';
@@ -89,14 +89,16 @@ export const decodeAction = async (action, params) => {
   return abiDecoder.decodeMethod(data);
 };
 
-export const decodeMultiAction = () => {};
-
-export const handleDecode = async (action, params) => {
-  if (params.minionType === MINION_TYPES.SAFE) {
-    return decodeMultiAction(action, params);
-  }
-
-  return decodeAction(action, params);
+export const decodeMultiAction = async (actions, params) => {
+  const { chainID } = params;
+  const multiSendAddress = chainByID(chainID).safeMinion.safe_mutisend_addr;
+  const batchData = actions?.map(action =>
+    decodeMultisendTx(multiSendAddress, action.data),
+  );
+  const decoded = await Promise.all(
+    batchData[0].map(action => decodeAction(action, params)),
+  );
+  return decoded;
 };
 
 export const getMinionAction = async params => {
@@ -106,31 +108,26 @@ export const getMinionAction = async params => {
     chainID,
     minionType,
     proposalType,
+    actions,
   } = params;
   const abi = getMinionAbi(minionType);
-  console.log(`abi`, abi);
   const actionName =
     MINION_ACTION_FUNCTION_NAMES[minionType] ||
     MINION_ACTION_FUNCTION_NAMES[proposalType];
-  console.log(`actionName`, actionName);
   try {
     const minionContract = createContract({
       address: minionAddress,
       abi,
       chainID,
     });
-    console.log(`minionContract`, minionContract);
-
     const action = await minionContract.methods[actionName](proposalId).call();
-    console.log(`action`, action);
     if (SHOULD_DECODE[minionType] || SHOULD_DECODE[proposalType]) {
       const decoded = await decodeAction(action, params);
-      console.log(`decoded`, decoded);
       return { ...action, decoded };
     }
     if (SHOULD_MULTI_DECODE[minionType]) {
-      //  Do multi-stuff
-      return action;
+      const decoded = await decodeMultiAction(actions, params);
+      return { ...action, decoded };
     }
     return action;
   } catch (error) {
@@ -155,15 +152,3 @@ export const getExecuteAction = ({ minion }) => {
     return TX.UBER_EXECUTE_ACTION;
   }
 };
-
-const testMinionAction = async () => {
-  getMinionAction({
-    minionAddress: '0x3b1b181cb4fc4932a4917a12554aca5857b62623',
-    proposalId: '27',
-    chainID: '0x64',
-    minionType: MINION_TYPES.NIFTY,
-    proposalType: PROPOSAL_TYPES.PAYROLL,
-  });
-};
-
-console.log(testMinionAction());

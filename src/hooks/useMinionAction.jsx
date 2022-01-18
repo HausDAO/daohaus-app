@@ -5,7 +5,8 @@ import { useTX } from '../contexts/TXContext';
 import { getExecuteAction, getMinionAction } from '../utils/minionUtils';
 
 const useMinionAction = proposal => {
-  const { minionAddress, minion, proposalId, proposalType } = proposal || {};
+  const { minionAddress, minion, proposalId, proposalType, actions } =
+    proposal || {};
   const { minionType } = minion || {};
   const { daochain } = useParams();
 
@@ -24,9 +25,9 @@ const useMinionAction = proposal => {
         minionType,
         proposalId,
         proposalType,
+        actions,
         chainID: daochain,
       });
-      console.log(`action`, action);
       if (action && shouldUpdate) {
         setAction({
           ...action,

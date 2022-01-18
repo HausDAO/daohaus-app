@@ -43,7 +43,6 @@ const Unsponsored = props => {
       return;
     const { decimals, symbol, tokenAddress } = depositToken;
     const { allowance, balance } = daoMember.depositTokenData || {};
-    console.log(`balance`, balance);
     const canSpend =
       Number(allowance) >= Number(proposalDeposit) ||
       Number(proposalDeposit) === 0;
