@@ -179,6 +179,9 @@ export const getExecuteAction = ({ minion }) => {
   ) {
     return TX.MINION_SIMPLE_EXECUTE;
   }
+  if (minionType === MINION_TYPES.SAFE) {
+    return TX.MINION_SAFE_EXECUTE;
+  }
   if (minionType === MINION_TYPES.UBER) {
     return TX.UBER_EXECUTE_ACTION;
   }

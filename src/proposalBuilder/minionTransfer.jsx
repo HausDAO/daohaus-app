@@ -6,7 +6,7 @@ import { useDao } from '../contexts/DaoContext';
 import { readableTokenBalance } from '../utils/proposalCard';
 import { fetchSpecificTokenData } from '../utils/tokenValue';
 
-import { AsyncCardTransfer } from './propBriefPrimitives';
+import { AsyncCardTransfer, PropCardError } from './propBriefPrimitives';
 
 //  THIS IS A CUSTOM COMPONENT THAT WORKS FOR PAYROLL PROPOSALS
 const deriveMessage = async ({
@@ -74,7 +74,9 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
     });
     return () => (shouldUpdate = false);
   }, [daoVaults && minionAction && !minionAddress]);
-
+  if (minionAction?.status === 'error') {
+    return <PropCardError message={minionAction.message} />;
+  }
   return (
     <AsyncCardTransfer
       isLoaded={itemText}

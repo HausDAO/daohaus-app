@@ -1,34 +1,29 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionPanel,
-  Box,
-  Button,
-  Divider,
-  Flex,
-  Icon,
-} from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
-import { Link, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
+
 import TextBox from '../components/TextBox';
 import { ParaMd } from '../components/typography';
 import { useAppModal } from '../hooks/useModals';
 
-import { AsyncCardTransfer } from './propBriefPrimitives';
+import {
+  AsyncCardTransfer,
+  PropCardError,
+  PropCardTransfer,
+} from './propBriefPrimitives';
 
 const CONTRACT_ZERO =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
 
-const MultiTxTransfer = ({ minionAction, proposal }) => {
-  const { proposalId } = proposal;
-  const { daochain, daoid } = useParams();
-
+const MultiTxTransfer = ({ minionAction }) => {
   const { genericModal } = useAppModal();
 
+  if (minionAction?.status === 'error') {
+    return <PropCardError message={minionAction.message} />;
+  }
+
   const displayDetails = () => {
-    console.log(minionAction);
     genericModal({
       title: 'Action Details',
       subtitle: `Gnosis Safe Minion Multisend TX`,

@@ -82,7 +82,16 @@ export const PropCardOffer = ({ proposal }) => {
   }, [proposal]);
   return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
 };
-
+export const PropCardError = ({ message }) => {
+  return (
+    <PropCardTransfer
+      error
+      customUI={
+        <ParaMd>{message || 'Error: could not load proposal data'}</ParaMd>
+      }
+    />
+  );
+};
 export const CustomTransfer = props => {
   const { customTransferUI } = props;
   if (customTransferUI === 'minionTransfer') {

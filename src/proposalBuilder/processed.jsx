@@ -15,7 +15,9 @@ import {
 import MinionExexcuteFactory from './minionExexcuteFactory';
 
 const Processed = props => {
-  const { voteData, proposal, minionAction } = props;
+  const { voteData, proposal, executeTX } = props;
+  console.log('proposal', proposal);
+  console.log('executeTX', executeTX);
 
   if (!proposal.isMinion) {
     return (
@@ -26,7 +28,9 @@ const Processed = props => {
           <ParaSm fontWeight='700' mr='1'>
             {voteData?.isPassing ? 'Passed' : 'Failed'}
           </ParaSm>
-          <ParaSm fontStyle='italic'>and processed</ParaSm>
+          {voteData.isPassing && (
+            <ParaSm fontStyle='italic'>and processed</ParaSm>
+          )}
         </StatusDisplayBox>
         <VotingInactive
           {...props}
@@ -49,12 +53,16 @@ const Processed = props => {
       <StatusDisplayBox>
         <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
+
         <ParaSm fontWeight='700' mr='1'>
           {voteData?.isPassing ? 'Passed' : 'Failed'}
         </ParaSm>
-        <ParaSm fontStyle='italic'>
-          and {proposal?.executed ? 'minion executed' : 'needs execution'}
-        </ParaSm>
+
+        {voteData.isPassing && (
+          <ParaSm fontStyle='italic'>
+            and {proposal?.executed ? 'minion executed' : 'needs execution'}
+          </ParaSm>
+        )}
       </StatusDisplayBox>
       <VotingInactive
         {...props}
@@ -64,7 +72,7 @@ const Processed = props => {
       <Flex mt='2' alignItems='center'>
         <UserVoteData voteData={voteData} />
         <Flex ml='auto'>
-          <MinionExexcuteFactory {...props} />
+          {voteData.isPassing && <MinionExexcuteFactory {...props} />}
         </Flex>
       </Flex>
     </PropActionBox>
