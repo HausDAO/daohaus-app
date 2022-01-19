@@ -252,6 +252,19 @@ export const SINGLE_PROPOSAL = gql`
   }
 `;
 
+export const SINGLE_MEMBER = gql`
+  query member($id: String!) {
+    member(id: $id) {
+      id
+      createdAt
+      molochAddress
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
 export const DAO_POLL = gql`
   query moloches($summoner: String!, $createdAt: String!) {
     moloches(where: { summoner: $summoner, createdAt_gt: $createdAt }) {

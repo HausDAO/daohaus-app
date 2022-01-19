@@ -13,6 +13,7 @@ import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
 import LinkInput from './linkInput';
 import LootGrabDisplay from './lootGrabDisplay';
+import MemberImpact from './memberImpact';
 import MinionPayment from './minionPayment';
 import MinionSelect from './minionSelect';
 import MinionTypeSelect from './minionTypeSelect';
@@ -180,6 +181,9 @@ export const InputFactory = props => {
   }
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
+  }
+  if (type === 'memberImpact') {
+    return <MemberImpact {...props} />;
   }
   if (type === 'foreignChainSelect') {
     return <ForeignChainSelect {...props} />;

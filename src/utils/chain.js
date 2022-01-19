@@ -48,7 +48,7 @@ export const supportedChains = {
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     zodiac_amb_module: {
       amb_bridge_address: {
-        '0x64': '0x4C36d2919e407f0Cc2Ee3c993ccF8ac26d9CE64e',
+        '0x64': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
       },
       foreign_networks: [
         {
@@ -118,7 +118,7 @@ export const supportedChains = {
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     zodiac_amb_module: {
       amb_bridge_address: {
-        '0x64': '0xD4075FB57fCf038bFc702c915Ef9592534bED5c1',
+        '0x64': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',
       },
       foreign_networks: [
         {
@@ -228,8 +228,8 @@ export const supportedChains = {
     dao_conditional_helper_addr: '0x55c8F8a71aD01FC707Bbb1A04d2c0Ef246973392',
     zodiac_amb_module: {
       amb_bridge_address: {
-        '0x1': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
-        '0x4': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',
+        '0x1': '0x4C36d2919e407f0Cc2Ee3c993ccF8ac26d9CE64e',
+        '0x4': '0xD4075FB57fCf038bFc702c915Ef9592534bED5c1',
       },
       foreign_networks: [
         {
