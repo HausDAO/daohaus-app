@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Flex, FormControl } from '@chakra-ui/react';
 
+import { useMetaData } from '../contexts/MetaDataContext';
+import useBoost from '../hooks/useBoost';
+import { useAppModal } from '../hooks/useModals';
 import { useTX } from '../contexts/TXContext';
 import { InputFactory } from './inputFactory';
 import ProgressIndicator from '../components/progressIndicator';
@@ -13,9 +16,7 @@ import {
 } from '../utils/formBuilder';
 import { handleCustomAwait } from '../utils/customAwait';
 
-import { useAppModal } from '../hooks/useModals';
-import { useMetaData } from '../contexts/MetaDataContext';
-import useBoost from '../hooks/useBoost';
+import { validate, handleStepValidation } from '../utils/validation';
 
 const dev = process.env.REACT_APP_DEV;
 
@@ -40,6 +41,7 @@ const FormBuilder = props => {
     defaultValues,
     disableCallback,
     tx,
+    stepValidation,
     checklist = ['isConnected', 'isSameChain'],
   } = props;
   const { submitTransaction, handleCustomValidation, submitCallback } = useTX();
@@ -85,7 +87,8 @@ const FormBuilder = props => {
   };
 
   const buildABIOptions = (abiString, serialTag = false) => {
-    if (!abiString || typeof abiString !== 'string') return;
+    if (!abiString || typeof abiString !== 'string' || validate.hex(abiString))
+      return;
 
     if (abiString === 'clear' || abiString === 'hex') {
       if (setParentFields) {
@@ -94,6 +97,8 @@ const FormBuilder = props => {
         setFields(fields);
       }
     } else {
+      if (!validate.jsonStringObject(abiString)) return;
+
       const abiInputs = JSON.parse(abiString)?.inputs;
       if (setParentFields) {
         setParentFields(txID, [
@@ -175,6 +180,17 @@ const FormBuilder = props => {
     //  HANDLE GO TO NEXT
     if (next && typeof goToNext === 'function') {
       if (typeof next === 'string') {
+        if (stepValidation) {
+          try {
+            setFormState('loading');
+            await handleStepValidation[stepValidation]({ values });
+            setFormState('success');
+          } catch (error) {
+            console.error(error);
+            setFormState('error');
+            return;
+          }
+        }
         return goToNext(next);
       }
       if (next?.type === 'awaitTx') {

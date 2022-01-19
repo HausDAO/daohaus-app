@@ -13,6 +13,7 @@ import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
 import LinkInput from './linkInput';
 import LootGrabDisplay from './lootGrabDisplay';
+import MemberImpact from './memberImpact';
 import MinionPayment from './minionPayment';
 import MinionSelect from './minionSelect';
 import MinionTypeSelect from './minionTypeSelect';
@@ -33,6 +34,7 @@ import SuperfluidPaymentInput from './superfluidPaymentInput';
 import SuperfluidRate from './superfluidRate';
 import TargetContract from './targetContract';
 import ToggleForm from './toggleForm';
+import ToggleToken from './toggleToken';
 import TributeInput from './tributeInput';
 import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
@@ -163,6 +165,9 @@ export const InputFactory = props => {
   if (type === 'toggleForm') {
     return <ToggleForm {...props} />;
   }
+  if (type === 'toggleToken') {
+    return <ToggleToken {...props} />;
+  }
   if (type === 'saltGenerator') {
     return <SaltGenerator {...props} />;
   }
@@ -177,6 +182,9 @@ export const InputFactory = props => {
   }
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
+  }
+  if (type === 'memberImpact') {
+    return <MemberImpact {...props} />;
   }
   return null;
 };

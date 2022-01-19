@@ -238,17 +238,19 @@ export const CONTENT = {
       { href: 'https://disperse.app', label: 'Disperse App' },
     ],
   },
-  // SNAPSHOT: {
-  //   title: 'Snapshot Proposals',
-  //   description:
-  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
-  //   publisher: PUBLISHERS.DAOHAUS,
-  //   version: '0.5',
-  //   pars: ['AWAITING CONTENT'],
-  //   externalLinks: [
-  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
-  //   ],
-  // },
+  SNAPSHOT: {
+    title: 'Snapshot Proposals',
+    description:
+      'Conduct gasless voting or signalling for smaller DAO decisions via Snapshot',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.5',
+    pars: [
+      'Snapshot is a popular gasless signal voting solution, used by projects such as Yearn, Balancer, Sushi. The Boost allows you to obtain signals via Snapshot from members for time-sensitive proposals. If you already have a Snapshot space set up, link the Snapshot space, and start running signal proposals',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
 };
 
 export const COMMON_STEPS = {
@@ -298,6 +300,17 @@ export const STEPS = {
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
+    },
+    STEP2: COMMON_STEPS.SIGNER,
+  },
+  ADD_SNAPSHOT: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'boostMetaForm',
+      form: BOOST_FORMS.SNAPSHOT,
+      isUserStep: true,
+      stepLabel: 'Add Space',
+      next: 'STEP2',
     },
     STEP2: COMMON_STEPS.SIGNER,
   },
@@ -418,9 +431,9 @@ export const BOOSTS = {
     playlist: BOOST_PLAYLISTS.BANK_BUYOUT,
     networks: {
       '0x4': true,
-      '0x1': true,
+      '0x1': false,
       '0x64': true,
-      '0x89': true,
+      '0x89': false,
       '0xa4b1': true,
     },
     cost: 'free',
@@ -522,14 +535,19 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  // SNAPSHOT: {
-  //   id: 'SNAPSHOT',
-  //   boostContent: CONTENT.SNAPSHOT,
-  //   steps: STEPS.ADD_SNAPSHOT,
-  //   categories: ['governance'],
-  //   networks: 'all',
-  //   cost: 'free',
-  // },
+  SNAPSHOT: {
+    id: 'SNAPSHOT',
+    boostContent: CONTENT.SNAPSHOT,
+    steps: STEPS.ADD_SNAPSHOT,
+    categories: ['governance'],
+    networks: 'all',
+    cost: 'free',
+    metaFields: ['space'],
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'boost/snapshot/settings',
+    },
+  },
 };
 
 export const allBoosts = {

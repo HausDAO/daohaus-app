@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   Box,
+  Flex,
   Table,
   Thead,
   Tr,
@@ -9,87 +10,36 @@ import {
   Tbody,
   Td,
   IconButton,
-  Flex,
 } from '@chakra-ui/react';
 import { RiRefreshLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
-import useBoost from '../hooks/useBoost';
-import MainViewLayout from '../components/mainViewLayout';
 import ContentBox from '../components/ContentBox';
 import ListSelect from '../components/listSelect';
-import { timeToNow } from '../utils/general';
-import { fetchAllActivity } from '../utils/theGraph';
-import { SPAM_FILTER_UNSPONSORED } from '../graphQL/dao-queries';
-import { proposalResolver } from '../utils/resolvers';
+import MainViewLayout from '../components/mainViewLayout';
 import { displayBalance } from '../utils/tokenValue';
+import { timeToNow } from '../utils/general';
 
 const FILTERS = {
   main: [
     { name: 'All', value: 'all' },
     { name: 'Unsponsored', value: 'Unsponsored' },
+    { name: 'InQueue', value: 'InQueue' },
+    { name: 'Voting Period', value: 'VotingPeriod' },
+    { name: 'Grace Period', value: 'GracePeriod' },
+    { name: 'Ready For Processing', value: 'ReadyForProcessing' },
+    { name: 'Passed', value: 'Passed' },
+    { name: 'Failed', value: 'Failed' },
     { name: 'Cancelled', value: 'Cancelled' },
   ],
 };
 
-const ProposalRow = ({ proposal, daochain, daoid }) => {
-  return (
-    <Fragment key={proposal.proposalId}>
-      <Tr>
-        <Td border='none'>{proposal.proposalId}</Td>
-        <Td border='none'>{proposal.sharesRequested}</Td>
-        <Td border='none'>{proposal.lootRequested}</Td>
-
-        <Td border='none'>
-          {`${displayBalance(
-            proposal.paymentRequested,
-            proposal.paymentTokenDecimals,
-          ) || 0} ${proposal.paymentTokenSymbol || ' '}`}
-        </Td>
-
-        <Td border='none'>
-          {`${displayBalance(
-            proposal.tributeOffered,
-            proposal.tributeTokenDecimals,
-          ) || 0} ${proposal.tributeTokenSymbol || ''}`}
-        </Td>
-
-        <Td border='none'>{`yes: ${proposal.yesShares} / no: ${proposal.noShares}`}</Td>
-        <Td border='none'>{timeToNow(proposal.createdAt)}</Td>
-        <Td border='none'>
-          <Link
-            to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
-          >
-            View
-          </Link>
-        </Td>
-      </Tr>
-      <Tr key={`${proposal.proposalId}-2`}>
-        <Td border='none' colSpan='3'>
-          {proposal.proposalType}
-        </Td>
-        <Td border='none' colSpan='2'>
-          {proposal.title}
-        </Td>
-        <Td border='none' colSpan='3'>
-          {proposal.description}
-        </Td>
-      </Tr>
-      <Tr key={`${proposal.proposalId}-3`}>
-        <Td colSpan='8' />
-      </Tr>
-    </Fragment>
-  );
-};
-
-const ProposalsSpam = ({ daoMetaData }) => {
+const ProposalAudit = ({ daoProposals }) => {
   const { daoid, daochain } = useParams();
   const { refreshDao } = useTX();
-  const { isActive } = useBoost();
-  const [daoProposals, setDaoProposals] = useState(null);
   const [proposals, setProposals] = useState({});
-  const [listProposals, setListProposals] = useState({});
   const [filter, setFilter] = useState(FILTERS[0]);
+  const [listProposals, setListProposals] = useState({});
 
   const handleRefreshDao = () => {
     const skipVaults = true;
@@ -104,35 +54,6 @@ const ProposalsSpam = ({ daoMetaData }) => {
   };
 
   useEffect(() => {
-    const fetchProposals = async () => {
-      const res = await fetchAllActivity(
-        { daoID: daoid, chainID: daochain },
-        [],
-        '0',
-        1,
-        SPAM_FILTER_UNSPONSORED,
-      );
-
-      setDaoProposals(
-        res.proposals.map(proposal =>
-          proposalResolver(proposal, {
-            status: true,
-            title: true,
-            description: true,
-            link: true,
-            hash: true,
-            proposalType: true,
-          }),
-        ),
-      );
-    };
-
-    if (isActive('SPAM_FILTER')) {
-      fetchProposals();
-    }
-  }, [daoMetaData]);
-
-  useEffect(() => {
     if (daoProposals) {
       const sorted = [...daoProposals]
         .sort((a, b) => {
@@ -145,17 +66,83 @@ const ProposalsSpam = ({ daoMetaData }) => {
           },
           {
             Unsponsored: [],
+            InQueue: [],
+            VotingPeriod: [],
+            GracePeriod: [],
+            ReadyForProcessing: [],
+            Passed: [],
+            Failed: [],
             Cancelled: [],
           },
         );
-
       setProposals(sorted);
       setListProposals(sorted);
     }
   }, [daoProposals]);
 
+  const renderStatus = proposal => {
+    if (proposal.status === 'VotingPeriod') {
+      return `${proposal.status} ends ${timeToNow(proposal.votingPeriodEnds)}`;
+    }
+    if (proposal.status === 'GracePeriod') {
+      return `${proposal.status} ends ${timeToNow(proposal.gracePeriodEnds)}`;
+    }
+    return proposal.status;
+  };
+
+  const renderRow = proposal => {
+    return (
+      <Fragment key={proposal.proposalId}>
+        <Tr>
+          <Td border='none'>{proposal.proposalId}</Td>
+          <Td border='none'>{proposal.sharesRequested}</Td>
+          <Td border='none'>{proposal.lootRequested}</Td>
+
+          <Td border='none'>
+            {`${proposal.paymentRequested /
+              10 **
+                proposal.paymentTokenDecimals} ${proposal.paymentTokenSymbol ||
+              ' '}`}
+          </Td>
+
+          <Td border='none'>
+            {`${displayBalance(
+              proposal.tributeOffered,
+              proposal.tributeTokenDecimals,
+            ) || 0} ${proposal.tributeTokenSymbol || ''}`}
+          </Td>
+
+          <Td border='none'>{`yes: ${proposal.yesShares} / no: ${proposal.noShares}`}</Td>
+          <Td border='none'>{renderStatus(proposal)}</Td>
+          <Td border='none'>{timeToNow(proposal.createdAt)}</Td>
+          <Td border='none'>
+            <Link
+              to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
+            >
+              View
+            </Link>
+          </Td>
+        </Tr>
+        <Tr key={`${proposal.proposalId}-2`}>
+          <Td border='none' colSpan='3'>
+            {proposal.proposalType}
+          </Td>
+          <Td border='none' colSpan='2'>
+            {proposal.title}
+          </Td>
+          <Td border='none' colSpan='3'>
+            {proposal.description}
+          </Td>
+        </Tr>
+        <Tr key={`${proposal.proposalId}-3`}>
+          <Td colSpan='8' />
+        </Tr>
+      </Fragment>
+    );
+  };
+
   return (
-    <MainViewLayout header='Proposal Spam' isDao>
+    <MainViewLayout header='Proposal Audit' isDao>
       <Flex
         wrap='wrap'
         position='relative'
@@ -163,7 +150,7 @@ const ProposalsSpam = ({ daoMetaData }) => {
         fontFamily='heading'
         textTransform='uppercase'
       >
-        <Box>{`${daoProposals?.length || 'looking for'} spam proposals`}</Box>
+        <Box>{`${daoProposals?.length || 'looking for'} proposals`}</Box>
         {daoProposals?.length && (
           <Flex justifyContent='space-between' align='center'>
             <ListSelect
@@ -203,20 +190,14 @@ const ProposalsSpam = ({ daoMetaData }) => {
                       <Th>payment</Th>
                       <Th>tribute</Th>
                       <Th>votes</Th>
+                      <Th>status</Th>
                       <Th>created</Th>
                       <Th />
                     </Tr>
                   </Thead>
                   <Tbody>
                     {listProposals[section].map(prop => {
-                      return (
-                        <ProposalRow
-                          key={prop.id}
-                          proposal={prop}
-                          daochain={daochain}
-                          daoid={daoid}
-                        />
-                      );
+                      return renderRow(prop);
                     })}
                   </Tbody>
                 </Table>
@@ -229,4 +210,4 @@ const ProposalsSpam = ({ daoMetaData }) => {
   );
 };
 
-export default ProposalsSpam;
+export default ProposalAudit;

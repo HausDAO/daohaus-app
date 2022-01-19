@@ -1,3 +1,4 @@
+import { BiErrorCircle } from 'react-icons/bi';
 import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
@@ -289,6 +290,9 @@ export const PROPOSAL_FORMS = {
           label: 'Member to Kick',
           info: INFO_TEXT.ADDR_KICK,
         },
+        {
+          type: 'memberImpact',
+        },
         FIELD.DESCRIPTION,
         FIELD.LINK,
       ],
@@ -533,7 +537,7 @@ export const PROPOSAL_FORMS = {
     fields: [
       [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
       [
-        FIELD.DISPERSE_TYPE_SWTICH,
+        FIELD.DISPERSE_TYPE_SWITCH,
         {
           type: 'formCondition',
           eth: null,
@@ -806,6 +810,34 @@ export const BOOST_FORMS = {
     title: 'Deploy Wrap n Zap',
     fields: [[]],
     tx: TX.CREATE_WRAP_N_ZAP,
+  },
+  SNAPSHOT: {
+    id: 'SNAPSHOT',
+    title: 'Show Snapshot Proposals',
+    subtitle:
+      'View your community&apos;s snapshot proposals directly within DAOhaus for easy access.',
+    required: ['space'],
+    fields: [
+      {
+        ...FIELD.TITLE,
+        label: 'Snapshot Space',
+        name: 'space',
+      },
+    ],
+    indicatorStates: {
+      loading: {
+        spinner: true,
+        title: 'Submitting...',
+        explorerLink: true,
+      },
+      error: {
+        icon: BiErrorCircle,
+        title:
+          "Error: No space found! Please use the .eth name in your space's url",
+        errorMessage: true,
+      },
+    },
+    stepValidation: 'validateSnapshot',
   },
   SPAM_FILTER: {
     id: 'SPAM_FILTER',

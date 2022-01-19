@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { BigNumber, utils } from 'ethers';
 
 import { useDao } from '../contexts/DaoContext';
 import { useFormConditions } from '../utils/formBuilder';
 import GenericTextArea from './genericTextArea';
-import { addZeros } from '../utils/tokenValue';
 
 const DisperseListInput = props => {
   const { daoOverview } = useDao();
   const { localForm, formCondition, disperseType } = props;
   const { register, watch, setValue } = localForm;
+  const [displayTotal, setDisplayTotal] = useState();
 
   const [fundingType] = useFormConditions({
     values: [disperseType],
@@ -28,7 +29,7 @@ const DisperseListInput = props => {
       const rawList = input?.split(/\r?\n/);
       const userList = [];
       const amountList = [];
-      let disperseTotal = 0;
+      let disperseTotal = BigNumber.from(0);
 
       rawList.forEach(item => {
         const address = item.match(/0x[a-fA-F0-9]{40}/)?.[0];
@@ -37,10 +38,10 @@ const DisperseListInput = props => {
           ?.match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0];
         if (rawAmount) {
           try {
-            const paddedAmount = Number(addZeros(rawAmount, zeroPadding));
+            const paddedAmount = utils.parseUnits(rawAmount, zeroPadding);
             userList.push(address);
             amountList.push(paddedAmount.toString());
-            disperseTotal += paddedAmount;
+            disperseTotal = disperseTotal.add(paddedAmount);
           } catch (err) {
             console.error(err);
           }
@@ -55,6 +56,12 @@ const DisperseListInput = props => {
         setValue('userList', userList);
         setValue('amountList', amountList);
         setValue('disperseTotal', disperseTotal.toString());
+        setDisplayTotal(utils.formatUnits(disperseTotal, zeroPadding));
+      } else {
+        setValue('userList', null);
+        setValue('amountList', null);
+        setValue('disperseTotal', null);
+        setDisplayTotal(null);
       }
     };
 
@@ -77,6 +84,7 @@ const DisperseListInput = props => {
     <GenericTextArea
       info='Accepts a distribution list where each line should have an address followed by a single amount. Addresses and amounts can be seperated by any form of delimeter.'
       {...props}
+      helperText={displayTotal && `Total: ${displayTotal}`}
     />
   );
 };
