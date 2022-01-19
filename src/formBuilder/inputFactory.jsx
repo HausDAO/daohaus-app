@@ -171,7 +171,7 @@ export const InputFactory = props => {
   }
   if (type === 'imageInput') {
     return <ImageInput {...props} />;
-	}
+  }
   if (type === 'disperseListInput') {
     return <DisperseListInput {...props} />;
   }
