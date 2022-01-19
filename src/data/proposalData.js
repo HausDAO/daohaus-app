@@ -28,5 +28,6 @@ export const CUSTOM_CARD_DATA = {
   },
   [PROPOSAL_TYPES.MULTI_TX_SAFE]: {
     customTransferUI: 'multiTx',
+    execute: 'safeMinionAction',
   },
 };

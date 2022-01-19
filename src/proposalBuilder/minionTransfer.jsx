@@ -51,10 +51,8 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
   const { minionAddress } = proposal;
   const { daochain } = useParams();
   const { daoVaults } = useDao();
-
   const [itemText, setItemText] = useState(null);
   const [isError, setIsError] = useState(false);
-
   useEffect(() => {
     let shouldUpdate = true;
     if (!daoVaults || !minionAction || !minionAddress) return;

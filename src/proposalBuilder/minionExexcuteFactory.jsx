@@ -3,6 +3,7 @@ import { TX } from '../data/contractTX';
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
 import ExecuteAction from './ExecuteAction';
 import ExecuteRarible from './ExecuteRarible';
+import ExecuteSafeMinion from './executeSafeMinion';
 import UberStakingAction from './uberStakingAction';
 
 const MinionExexcuteFactory = props => {
@@ -29,6 +30,9 @@ const MinionExexcuteFactory = props => {
   }
   if (executeType === 'rarible') {
     return <ExecuteRarible {...props} />;
+  }
+  if (executeType === 'safeMinionAction') {
+    return <ExecuteSafeMinion {...props} />;
   }
   return <ExecuteAction {...props} />;
 };
