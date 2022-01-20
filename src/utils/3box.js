@@ -5,7 +5,6 @@ import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
 
 const ceramicNodeUrl = process.env.REACT_APP_CERAMIC_NODE_URL || 'testnet-clay';
 const ceramicNetwork = process.env.REACT_APP_CERAMIC_NETWORK || 'testnet-clay';
-console.log(ceramicNodeUrl);
 
 export const authenticateDid = async address => {
   // Always associate current chain with mainnet
