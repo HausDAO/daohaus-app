@@ -26,14 +26,12 @@ const DelegateTransfer = ({ proposal = {}, minionAction }) => {
         <AsyncCardTransfer
           isLoaded={minionAction?.proposer}
           proposal={proposal}
-          outgoing
           customUI={proposerUI}
         />
       </Box>
       <AsyncCardTransfer
         isLoaded={minionAction?.nominee}
         proposal={proposal}
-        incoming
         customUI={nomineeUI}
       />
     </>

@@ -46,7 +46,6 @@ const WhitelistTokenTransfer = ({ proposal = {} }) => {
     <AsyncCardTransfer
       isLoaded={tokenData}
       proposal={proposal}
-      incoming
       customUI={tokenUI}
     />
   );

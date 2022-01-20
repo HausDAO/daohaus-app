@@ -69,7 +69,7 @@ export const PropCardRequest = ({ proposal }) => {
     }
   }, [proposal]);
   return (
-    <PropCardTransfer incoming action='Requesting' itemText={requestText} />
+    <PropCardTransfer outgoing action='Requesting' itemText={requestText} />
   );
 };
 
@@ -79,7 +79,7 @@ export const PropCardOffer = ({ proposal }) => {
       return generateOfferText(proposal);
     }
   }, [proposal]);
-  return <PropCardTransfer outgoing action='Offering' itemText={requestText} />;
+  return <PropCardTransfer incoming action='Offering' itemText={requestText} />;
 };
 export const PropCardError = ({ message }) => {
   return (

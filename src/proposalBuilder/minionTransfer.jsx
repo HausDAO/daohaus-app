@@ -83,7 +83,7 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
     <AsyncCardTransfer
       isLoaded={customUI}
       proposal={proposal}
-      incoming={!isError && customUI}
+      outgoing={!isError && customUI}
       error={isError}
       customUI={customUI}
     />
