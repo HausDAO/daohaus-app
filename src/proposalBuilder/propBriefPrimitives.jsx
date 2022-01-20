@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import {
-  RiAlertLine,
   RiArrowLeftLine,
   RiArrowRightLine,
   RiErrorWarningLine,

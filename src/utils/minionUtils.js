@@ -74,7 +74,9 @@ export const buildEthTransferAction = action => ({
 
 export const isEthTransfer = action => action?.data?.slice(2)?.length === 0;
 
-export const decodeAction = async (action, params) => {
+export const maxRateLimit = async () => {};
+
+export const decodeAction = async (action, params, depth = 0) => {
   if (isEthTransfer(action)) {
     return buildEthTransferAction(action);
   }
@@ -85,6 +87,19 @@ export const decodeAction = async (action, params) => {
   if (targetContractABI?.result === null) {
     return { ...targetContractABI, error: true };
   }
+
+  if (depth === 3) {
+    return {
+      ...targetContractABI,
+      error: true,
+      message: 'Max rate limit reached',
+    };
+  }
+
+  if (targetContractABI?.result === 'Max rate limit reached') {
+    return decodeAction(action, params, depth + 1);
+  }
+
   abiDecoder.addABI(targetContractABI);
   return abiDecoder.decodeMethod(data);
 };
