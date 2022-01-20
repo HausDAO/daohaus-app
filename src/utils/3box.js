@@ -22,8 +22,6 @@ export const authenticateDid = async address => {
   let did = null;
   try {
     did = await client.authenticate(authProvider, true);
-    console.log('did');
-    console.log(did);
 
     const link = await Caip10Link.fromAccount(
       client.ceramic,
