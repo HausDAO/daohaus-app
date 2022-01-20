@@ -92,7 +92,7 @@ export const decodeAction = async (action, params, depth = 0) => {
     return {
       ...targetContractABI,
       error: true,
-      message: 'Max rate limit reached',
+      message: 'Etherscan Error: Max rate limit reached',
     };
   }
 

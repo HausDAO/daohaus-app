@@ -133,6 +133,8 @@ export const getVoteData = (proposal, address, daoMember) => {
   const totalNo = Number(proposal?.noShares);
   const totalVotes = Number(proposal?.yesShares) + Number(proposal?.noShares);
   const isPassing = totalYes > totalNo;
+  const isFailing = totalNo > totalYes;
+
   return {
     hasVoted,
     votedYes,
@@ -149,5 +151,6 @@ export const getVoteData = (proposal, address, daoMember) => {
     totalNoReadable: `(${readableNumber({ amount: totalNo })})`,
     totalVotes,
     isPassing,
+    isFailing,
   };
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Bold, ParaMd } from '../components/typography';
 
 import { useDao } from '../contexts/DaoContext';
 
@@ -11,7 +12,7 @@ import { AsyncCardTransfer, PropCardError } from './propBriefPrimitives';
 //  THIS IS A CUSTOM COMPONENT THAT WORKS FOR PAYROLL PROPOSALS
 const deriveMessage = async ({
   minionAction,
-  setItemText,
+  setCustomUI,
   setIsError,
   daochain,
   daoVaults,
@@ -34,15 +35,18 @@ const deriveMessage = async ({
   );
   const { name, decimals } = tokenData || {};
   if (balance && name && decimals && vault && shouldUpdate) {
-    setItemText(
-      `Requesting ${readableTokenBalance({
-        balance,
-        symbol: name,
-        decimals,
-      })} from ${vault?.name || 'Minion'}`,
+    setCustomUI(
+      <ParaMd>
+        Requesting
+        <Bold>
+          {' '}
+          {readableTokenBalance({ balance, symbol: name, decimals })}
+        </Bold>
+        from <Bold>{vault?.name || 'Minion'}</Bold>
+      </ParaMd>,
     );
   } else {
-    setItemText('Error Retrieving token data');
+    setCustomUI('Error Retrieving token data');
     setIsError(true);
   }
 };
@@ -51,19 +55,19 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
   const { minionAddress } = proposal;
   const { daochain } = useParams();
   const { daoVaults } = useDao();
-  const [itemText, setItemText] = useState(null);
+  const [customUI, setCustomUI] = useState(null);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
     let shouldUpdate = true;
     if (!daoVaults || !minionAction || !minionAddress) return;
     if (minionAction?.decoded?.error) {
-      setItemText(minionAction?.decoded?.message);
+      setCustomUI(minionAction?.decoded?.message);
       setIsError(true);
       return;
     }
     deriveMessage({
       minionAction,
-      setItemText,
+      setCustomUI,
       setIsError,
       daochain,
       daoVaults,
@@ -77,11 +81,11 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
   }
   return (
     <AsyncCardTransfer
-      isLoaded={itemText}
+      isLoaded={customUI}
       proposal={proposal}
-      incoming={!isError && itemText}
+      incoming={!isError && customUI}
       error={isError}
-      itemText={itemText}
+      customUI={customUI}
     />
   );
 };

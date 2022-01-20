@@ -101,7 +101,7 @@ export const UserVoteData = ({ voteData = {} }) => {
       {(userNo || userYes) && (
         <Flex alignItems='center' minHeight='2rem'>
           <ParaSm fontStyle='italic'>
-            you voted {userNo > 0 && `No ${userNoReadable}`}
+            You voted {userNo > 0 && `No ${userNoReadable}`}
             {userYes > 0 && `Yes ${userYesReadable}`}
           </ParaSm>
         </Flex>
@@ -153,21 +153,21 @@ export const VotingActive = ({
 
 export const VotingInactive = props => {
   const { voteData } = props;
-  const { votedNo, votedYes, totalYesReadable, totalNoReadable } = voteData;
+  const { totalYesReadable, totalNoReadable, isPassing, isFailing } = voteData;
 
   return (
     <>
       <VotingBar voteData={voteData} />
       <Flex justifyContent='space-between'>
         <InactiveButton
-          leftIcon={votedNo && <AiOutlineClose />}
-          shade={votedNo ? 'highlight' : undefined} // chakra wants this
+          leftIcon={isFailing && <AiOutlineClose />}
+          shade={isFailing ? 'highlight' : undefined} // chakra wants this
         >
           No {totalNoReadable}
         </InactiveButton>
         <InactiveButton
-          leftIcon={votedYes && <AiOutlineCheck />}
-          shade={votedYes ? 'highlight' : undefined} // chakra wants this
+          leftIcon={isPassing && <AiOutlineCheck />}
+          shade={isPassing ? 'highlight' : undefined} // chakra wants this
         >
           Yes {totalYesReadable}
         </InactiveButton>

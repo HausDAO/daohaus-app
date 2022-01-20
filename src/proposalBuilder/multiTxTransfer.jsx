@@ -7,11 +7,7 @@ import TextBox from '../components/TextBox';
 import { ParaMd } from '../components/typography';
 import { useAppModal } from '../hooks/useModals';
 
-import {
-  AsyncCardTransfer,
-  PropCardError,
-  PropCardTransfer,
-} from './propBriefPrimitives';
+import { AsyncCardTransfer, PropCardError } from './propBriefPrimitives';
 
 const CONTRACT_ZERO =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -50,11 +46,7 @@ const MultiTxTransfer = ({ minionAction }) => {
   );
 
   return (
-    <AsyncCardTransfer
-      outgoing
-      isLoaded={minionAction?.decoded}
-      customUI={customUI}
-    />
+    <AsyncCardTransfer isLoaded={minionAction?.decoded} customUI={customUI} />
   );
 };
 
