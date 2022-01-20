@@ -834,6 +834,7 @@ export const BOOST_FORMS = {
         },
       ],
     ],
+    customValidations: ['validMinionName'],
   },
   ZODIAC_CROSSCHAIN_MODULE: {
     id: 'ZODIAC_CROSSCHAIN_MODULE',
