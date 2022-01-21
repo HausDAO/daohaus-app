@@ -42,7 +42,7 @@
     "react-icons": "^4.1.0",
     "react-player": "^2.8.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.0.next.47",
+    "react-scripts": "5.0.0",
     "react-vis": "^1.11.7",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
@@ -94,7 +94,7 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-standard": "^4.0.1",
     "prettier": "^1.19.1"
