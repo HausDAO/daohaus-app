@@ -35,19 +35,20 @@ const StepperForm = props => {
   const parentForm = useForm({ shouldUnregister: false });
   const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
+  const [formSteps, setFormSteps] = useState(steps);
   const [currentStep, setCurrentStep] = useState(
-    Object.values(steps).find(step => step.start),
+    Object.values(formSteps).find(step => step.start),
   );
   const [stepperStorage, setStepperStorage] = useState();
 
   const userSteps = useMemo(() => {
-    if (steps) {
-      return Object.values(steps)
+    if (formSteps) {
+      return Object.values(formSteps)
         .filter(step => step.isUserStep)
         .map((step, index) => ({ ...step, position: index + 1 }));
     }
     return [];
-  }, [steps]);
+  }, [formSteps]);
 
   useEffect(() => {
     if (!currentStep || !userSteps || typeof updateModalUI !== 'function')
@@ -72,7 +73,7 @@ const StepperForm = props => {
 
   const goToNext = next => {
     const handleNextStep = nextString => {
-      const nextStep = steps[nextString];
+      const nextStep = formSteps[nextString];
       if (nextStep) {
         setCurrentStep(nextStep);
       } else {
@@ -121,6 +122,36 @@ const StepperForm = props => {
       next: nextObj.then,
       ctaText: getNewCtaText(nextObj),
     }));
+  };
+
+  const updateFormSteps = addSteps => {
+    const prevLastStep = Object.keys(formSteps).reverse()[0];
+    const overrideNext =
+      typeof formSteps[prevLastStep].next === 'string'
+        ? Object.keys(addSteps)[0]
+        : {
+            ...formSteps[prevLastStep].next,
+            then: Object.keys(addSteps)[0],
+          };
+    setCurrentStep(prevState => {
+      return {
+        ...prevState,
+        finish: false,
+        next: overrideNext,
+      };
+    });
+    setFormSteps(prevState => {
+      const updatedSteps = {
+        ...prevState,
+        ...addSteps,
+      };
+      updatedSteps[prevLastStep] = {
+        ...updatedSteps[prevLastStep],
+        finish: false,
+        next: overrideNext,
+      };
+      return updatedSteps;
+    });
   };
 
   const secondaryBtn = {
@@ -179,6 +210,7 @@ const StepperForm = props => {
         boostContent={boostContent}
         secondaryBtn={secondaryBtn}
         handleThen={handleThen}
+        updateFormSteps={updateFormSteps}
       />
     );
   }

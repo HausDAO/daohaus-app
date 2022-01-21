@@ -191,6 +191,18 @@ export const customValidations = {
     }
     return false;
   },
+  validMinionName({ values }) {
+    const invalidChars = /\//g;
+    const { minionName, _minionName } = values;
+    const name = _minionName ? '_minionName' : 'minionName';
+    const value = _minionName || minionName;
+    if (value.match(invalidChars)) {
+      return {
+        name,
+        message: 'Minion Name has invalid characters',
+      };
+    }
+  },
 };
 
 export const collectTypeValidations = valString => {

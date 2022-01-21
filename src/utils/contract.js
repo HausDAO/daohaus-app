@@ -205,6 +205,30 @@ export const getNftType = async (
   throw new Error('Not an NFT');
 };
 
+export const prepareZodiacModuleSetupTx = (
+  chainId,
+  injectedProvider,
+  moduleName,
+  setupParams, // { types: [string], values: [string] }
+  saltNonce,
+) => {
+  const provider = new ethers.providers.Web3Provider(
+    injectedProvider.currentProvider,
+  );
+  const { transaction, expectedModuleAddress } = deployAndSetUpModule(
+    moduleName,
+    setupParams,
+    provider,
+    Number(chainId),
+    saltNonce,
+  );
+
+  return {
+    transaction,
+    expectedModuleAddress,
+  };
+};
+
 export const deployZodiacBridgeModule = async (
   owner,
   avatar,
@@ -213,13 +237,13 @@ export const deployZodiacBridgeModule = async (
   controller,
   chainId,
   injectedProvider,
+  saltNonce = null,
 ) => {
   try {
     const bridgeChainId = `0x${chainId.slice(2).padStart(64, '0')}`;
-    const provider = new ethers.providers.Web3Provider(
-      injectedProvider.currentProvider,
-    );
-    const { transaction, expectedModuleAddress } = deployAndSetUpModule(
+    const { transaction, expectedModuleAddress } = prepareZodiacModuleSetupTx(
+      chainId,
+      injectedProvider,
       'bridge',
       {
         types: [
@@ -232,9 +256,10 @@ export const deployZodiacBridgeModule = async (
         ],
         values: [owner, avatar, target, amb, controller, bridgeChainId],
       },
-      provider,
-      Number(chainId),
-      Date.now().toString(),
+      saltNonce || Date.now().toString(),
+    );
+    const provider = new ethers.providers.Web3Provider(
+      injectedProvider.currentProvider,
     );
     const tx = await provider.getSigner().sendTransaction(transaction);
     await tx.wait();

@@ -253,14 +253,14 @@ const FormBuilder = props => {
           <FormFooter
             options={options}
             addOption={addOption}
-            formState={formState}
+            formState={formStateOverride || formState}
             ctaText={ctaText}
             closeModal={closeModal}
             next={next}
             goToNext={goToNext}
             errors={Object.values(formErrors)}
             customSecondaryBtn={secondaryBtn}
-            loading={formState === 'loading'}
+            loading={[formStateOverride, formState].includes('loading')}
             checklist={checklist}
           />
         )}

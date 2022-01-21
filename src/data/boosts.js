@@ -303,7 +303,6 @@ export const STEPS = {
       type: 'form',
       form: BOOST_FORMS.CROSSCHAIN_MINION,
       next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Summon Minion' },
-      // next: 'STEP2',
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },
