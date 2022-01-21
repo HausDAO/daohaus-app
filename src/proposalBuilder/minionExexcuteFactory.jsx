@@ -1,10 +1,11 @@
 import React from 'react';
-import { TX } from '../data/contractTX';
-import { CUSTOM_CARD_DATA } from '../data/proposalData';
-import ExecuteAction from './ExecuteAction';
-import ExecuteRarible from './ExecuteRarible';
+
+import ExecuteAction from './executeAction';
+import ExecuteRarible from './executeRarible';
 import ExecuteSafeMinion from './executeSafeMinion';
 import UberStakingAction from './uberStakingAction';
+import { TX } from '../data/contractTX';
+import { CUSTOM_CARD_DATA } from '../data/proposalData';
 
 const MinionExexcuteFactory = props => {
   const { proposal } = props;

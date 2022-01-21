@@ -24,7 +24,7 @@ import {
   isProposalActive,
   searchProposals,
 } from '../utils/proposalUtils';
-import ProposalCardV2 from '../proposalBuilder/proposalCard2';
+import ProposalCardV2 from '../proposalBuilder/proposalCard';
 import SpamFilterListNotification from './spamFilterListNotification';
 import useCanInteract from '../hooks/useCanInteract';
 

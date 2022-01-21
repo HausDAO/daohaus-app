@@ -2,11 +2,11 @@ import React from 'react';
 
 import VotingPeriod from './votingPeriod';
 import InQueue from './inQueue';
-import Unsponsored from './Unsponsored';
+import Unsponsored from './unsponsored';
 import ReadyForProcessing from './readyForProcessing';
 import GracePeriod from './gracePeriod';
 import Processed from './processed';
-import Cancelled from './Cancelled';
+import Cancelled from './cancelled';
 
 import { ProposalStatus } from '../utils/proposalUtils';
 // export const ProposalStatus = {

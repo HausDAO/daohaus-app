@@ -1,18 +1,18 @@
 import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Flex } from '@chakra-ui/react';
-import { ParaSm } from '../components/typography';
-import ExecuteQuorum from './ExecuteQuorum';
 
+import { useDao } from '../contexts/DaoContext';
+import { useTX } from '../contexts/TXContext';
 import {
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
   UserVoteData,
   VotingInactive,
-} from './actionPrimitives';
-import { useDao } from '../contexts/DaoContext';
-import { useTX } from '../contexts/TXContext';
+} from './proposalActionPrimitives';
+import ExecuteQuorum from './executeQuorum';
+import { ParaSm } from '../components/typography';
 import { TX } from '../data/contractTX';
 import {
   cheatExecutionStatus,

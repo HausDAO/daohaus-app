@@ -7,7 +7,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 
 import { ParaSm } from '../components/typography';
-import { propStatusText } from './propCardText';
+import { propStatusText } from '../data/proposalCardText';
 
 import { readableTokenBalance } from '../utils/proposalCard';
 import { TX } from '../data/contractTX';
@@ -15,8 +15,8 @@ import {
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
-} from './actionPrimitives';
-import ExecuteQuorum from './ExecuteQuorum';
+} from './proposalActionPrimitives';
+import ExecuteQuorum from './executeQuorum';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -51,10 +51,6 @@ const Unsponsored = props => {
     const hasBalance =
       Number(balance) >= Number(proposalDeposit) ||
       Number(proposalDeposit) === 0;
-
-    console.log('balance', balance);
-
-    console.log('hasBalance', hasBalance);
 
     return {
       deposit: readableTokenBalance({

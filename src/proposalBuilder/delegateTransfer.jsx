@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import AddressAvatar from '../components/addressAvatar';
-import { AsyncCardTransfer } from './propBriefPrimitives';
+import { AsyncCardTransfer } from './proposalBriefPrimitives';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR  UBERHAUS DELEGATE PROPOSALS
 

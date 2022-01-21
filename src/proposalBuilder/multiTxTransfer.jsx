@@ -3,11 +3,10 @@ import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
 import { v4 as uuid } from 'uuid';
 
+import { useAppModal } from '../hooks/useModals';
 import TextBox from '../components/TextBox';
 import { ParaMd } from '../components/typography';
-import { useAppModal } from '../hooks/useModals';
-
-import { AsyncCardTransfer, PropCardError } from './propBriefPrimitives';
+import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
 
 const CONTRACT_ZERO =
   '0x0000000000000000000000000000000000000000000000000000000000000000';

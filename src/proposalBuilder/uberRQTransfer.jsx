@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { AsyncCardTransfer } from './propBriefPrimitives';
+import { AsyncCardTransfer } from './proposalBriefPrimitives';
 import { Bold, ParaMd } from '../components/typography';
 import { generateRQText } from '../utils/proposalCard';
 

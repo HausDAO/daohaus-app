@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
-import { PropCardTransfer } from './propBriefPrimitives';
+import { PropCardTransfer } from './proposalBriefPrimitives';
 import { ParaMd } from '../components/typography';
 import AddressAvatar from '../components/addressAvatar';
 

@@ -3,14 +3,14 @@ import { Flex } from '@chakra-ui/react';
 import { AiOutlineClose } from 'react-icons/ai';
 
 import { ParaSm } from '../components/typography';
-import { propStatusText } from './propCardText';
+import { propStatusText } from '../data/proposalCardText';
 
 import {
   InactiveButton,
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
-} from './actionPrimitives';
+} from './proposalActionPrimitives';
 
 const Cancelled = () => {
   return (

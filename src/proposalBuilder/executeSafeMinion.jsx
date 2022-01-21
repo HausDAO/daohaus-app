@@ -1,6 +1,7 @@
 import React from 'react';
+
+import ExecuteAction from './executeAction';
 import { TX } from '../data/contractTX';
-import ExecuteAction from './ExecuteAction';
 
 const ExecuteSafeMinion = props => {
   const { proposal } = props;

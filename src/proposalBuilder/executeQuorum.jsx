@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Flex, Tooltip, useTheme } from '@chakra-ui/react';
+import { Button, Flex, useTheme } from '@chakra-ui/react';
 
 import { BiTachometer } from 'react-icons/bi';
 import { ParaSm } from '../components/typography';

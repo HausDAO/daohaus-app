@@ -6,7 +6,7 @@ import {
   StatusDisplayBox,
   StatusCircle,
   VotingInactive,
-} from './actionPrimitives';
+} from './proposalActionPrimitives';
 import { ParaSm } from '../components/typography';
 import { validate } from '../utils/validation';
 

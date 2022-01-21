@@ -10,9 +10,9 @@ import {
   StatusDisplayBox,
   UserVoteData,
   VotingInactive,
-} from './actionPrimitives';
+} from './proposalActionPrimitives';
 import MinionExexcuteFactory from './minionExexcuteFactory';
-import ExecuteQuorum from './ExecuteQuorum';
+import ExecuteQuorum from './executeQuorum';
 
 const Processed = props => {
   const { voteData, proposal } = props;

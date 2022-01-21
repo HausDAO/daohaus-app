@@ -1,8 +1,9 @@
-import { Button } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { Button } from '@chakra-ui/react';
 import { AiOutlineCheck } from 'react-icons/ai';
+
 import { useTX } from '../contexts/TXContext';
-import { InactiveButton } from './actionPrimitives';
+import { InactiveButton } from './proposalActionPrimitives';
 
 const ExecuteAction = ({ proposal, executeTX, argsOverride }) => {
   const { submitTransaction } = useTX();

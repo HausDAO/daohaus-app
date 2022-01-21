@@ -8,9 +8,9 @@ import {
   StatusDisplayBox,
   UserVoteData,
   VotingInactive,
-} from './actionPrimitives';
+} from './proposalActionPrimitives';
+import ExecuteQuorum from './executeQuorum';
 import { validate } from '../utils/validation';
-import ExecuteQuorum from './ExecuteQuorum';
 
 const GracePeriod = ({ proposal, voteData }) => {
   const getTime = () => {

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Bold, ParaMd } from '../components/typography';
 
 import { useDao } from '../contexts/DaoContext';
+import { Bold, ParaMd } from '../components/typography';
+import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
 
 import { readableTokenBalance } from '../utils/proposalCard';
 import { fetchSpecificTokenData } from '../utils/tokenValue';
-
-import { AsyncCardTransfer, PropCardError } from './propBriefPrimitives';
 
 //  THIS IS A CUSTOM COMPONENT THAT WORKS FOR PAYROLL PROPOSALS
 const deriveMessage = async ({

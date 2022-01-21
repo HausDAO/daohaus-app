@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
-import { ParaSm } from '../components/typography';
-import { validate } from '../utils/validation';
+
 import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
+import { ParaSm } from '../components/typography';
 import {
   PropActionBox,
   StatusCircle,
@@ -12,8 +11,11 @@ import {
   UserVoteData,
   VotingActive,
   VotingInactive,
-} from './actionPrimitives';
-import ExecuteQuorum from './ExecuteQuorum';
+} from './proposalActionPrimitives';
+import ExecuteQuorum from './executeQuorum';
+
+import { validate } from '../utils/validation';
+import { TX } from '../data/contractTX';
 
 const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
   const [isLoading, setLoading] = useState(false);
