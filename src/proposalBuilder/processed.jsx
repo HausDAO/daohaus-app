@@ -21,7 +21,6 @@ const Processed = props => {
     return (
       <PropActionBox>
         <StatusDisplayBox>
-          <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
           <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
           <ParaSm fontWeight='700' mr='1'>
             {voteData?.isPassing ? 'Passed' : 'Failed'}
@@ -51,7 +50,6 @@ const Processed = props => {
       <StatusDisplayBox>
         <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
-
         <ParaSm fontWeight='700' mr='1'>
           {voteData?.isPassing ? 'Passed' : 'Failed'}
         </ParaSm>

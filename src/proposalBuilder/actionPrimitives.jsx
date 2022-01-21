@@ -4,6 +4,9 @@ import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 
 import { BiTachometer } from 'react-icons/bi';
 import { ParaSm } from '../components/typography';
+import { earlyExecuteMinionType, getExecuteAction } from '../utils/minionUtils';
+import { MINION_TYPES } from '../utils/proposalUtils';
+import { useTX } from '../contexts/TXContext';
 
 export const StatusCircle = ({ color }) => (
   <Box borderRadius='50%' background={color} h='.6rem' w='.6rem' mr='2' />
@@ -186,20 +189,63 @@ export const EarlyExecuteButton = () => {
 
   return <Button size='sm'>Early Execute</Button>;
 };
+
 export const EarlyExecuteGauge = ({ proposal, voteData }) => {
   const { totalVotes, totalYes } = voteData;
+  const { submitTransaction } = useTX();
+
   const theme = useTheme();
   const percYesVotes =
     totalVotes && totalYes && ((totalYes / totalVotes) * 100).toFixed();
-  if (proposal?.minion?.minQuorum) {
+  const hasReachedQuorum = percYesVotes >= Number(proposal?.minion?.minQuorum);
+
+  const execute = async () => {
+    const { minionAddress, proposalId, proposalType, minion } = proposal;
+    await submitTransaction({
+      tx: getExecuteAction({ minion }),
+      args:
+        minion.minionType === MINION_TYPES.SAFE
+          ? [proposal.proposalId, proposal.actions[0].data]
+          : [proposal.proposalId],
+      localValues: {
+        minionAddress,
+        proposalId,
+        proposalType,
+      },
+    });
+  };
+
+  if (!proposal?.minion?.minQuorum || !earlyExecuteMinionType(proposal))
+    return null;
+  if (hasReachedQuorum && !proposal.executed) {
     return (
       <Flex position='absolute' right='0' alignItems='center'>
-        <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />
+        <Button variant='ghost' size='fit-content' onClick={execute}>
+          <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />
+          <ParaSm ml={1}>
+            {percYesVotes}/{proposal.minion.minQuorum}%
+          </ParaSm>
+        </Button>
+      </Flex>
+    );
+  }
+
+  if (!hasReachedQuorum) {
+    return (
+      <Flex
+        position='absolute'
+        right='0'
+        alignItems='center'
+        opacity='.6'
+        cursor='not-allowed'
+      >
+        <BiTachometer color='white' size='1.2rem' />
         <ParaSm ml={1}>
           {percYesVotes}/{proposal.minion.minQuorum}%
         </ParaSm>
       </Flex>
     );
   }
+
   return null;
 };

@@ -51,6 +51,10 @@ const Unsponsored = props => {
       Number(balance) >= Number(proposalDeposit) ||
       Number(proposalDeposit) === 0;
 
+    console.log('balance', balance);
+
+    console.log('hasBalance', hasBalance);
+
     return {
       deposit: readableTokenBalance({
         balance: proposalDeposit,

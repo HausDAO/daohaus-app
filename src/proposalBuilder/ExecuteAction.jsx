@@ -22,6 +22,7 @@ const ExecuteAction = ({ proposal, executeTX, argsOverride }) => {
     });
     setLoading(false);
   };
+
   if (proposal.executed) {
     return (
       <InactiveButton size='sm' leftIcon={<AiOutlineCheck />}>
@@ -29,6 +30,7 @@ const ExecuteAction = ({ proposal, executeTX, argsOverride }) => {
       </InactiveButton>
     );
   }
+
   return (
     <Button onClick={execute} size='sm' isLoading={loading}>
       Execute
