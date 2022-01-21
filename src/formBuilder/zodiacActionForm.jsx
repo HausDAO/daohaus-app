@@ -52,6 +52,7 @@ const ZodiacActionForm = props => {
       foreignSafeAddress,
       minionName,
       zodiacAction,
+      saltNonce,
     } = formValues;
 
     if (zodiacAction === 'ambModule') {
@@ -116,6 +117,7 @@ const ZodiacActionForm = props => {
         vault.safeAddress, // controller
         daochain, // chainId
         injectedProvider,
+        saltNonce,
       );
       // const ambModuleAddress = '0xc3de2702440DA3847220f6820A523b9D20bf756f';
 
@@ -149,8 +151,9 @@ const ZodiacActionForm = props => {
             operation: 0,
           });
           successToast({
-            title: 'EnableModule Tx Proposal Submitted.',
-            description: 'Check your Gnosis Safe Tx Queue for execution.',
+            title: 'Cross-chain Minion Summoned.',
+            description:
+              'Please check the Tx Queue on your Foreign Gnosis Safe for enabling a module.',
           });
           onSuccess();
         } catch (error) {

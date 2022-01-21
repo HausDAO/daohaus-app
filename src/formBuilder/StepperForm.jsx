@@ -36,13 +36,11 @@ const StepperForm = props => {
   const { closeModal } = useAppModal();
   const { errorToast } = useOverlay();
   const [formSteps, setFormSteps] = useState(steps);
-  // TODO: Ask Jord for feedback
   const [currentStep, setCurrentStep] = useState(
     Object.values(formSteps).find(step => step.start),
   );
   const [stepperStorage, setStepperStorage] = useState();
 
-  // TODO: Ask Jord for feedback
   const userSteps = useMemo(() => {
     if (formSteps) {
       return Object.values(formSteps)
@@ -75,7 +73,6 @@ const StepperForm = props => {
 
   const goToNext = next => {
     const handleNextStep = nextString => {
-      // TODO: Ask Jord for feedback
       const nextStep = formSteps[nextString];
       if (nextStep) {
         setCurrentStep(nextStep);
@@ -127,7 +124,6 @@ const StepperForm = props => {
     }));
   };
 
-  // TODO: Ask Jord for feedback
   const updateFormSteps = addSteps => {
     const prevLastStep = Object.keys(formSteps).reverse()[0];
     const overrideNext =

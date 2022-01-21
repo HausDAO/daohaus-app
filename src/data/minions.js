@@ -153,8 +153,7 @@ export const MINIONS = {
     content: MINION_CONTENT[MINION_TYPES.CROSSCHAIN_SAFE],
     networks: MINION_NETWORKS[MINION_TYPES.CROSSCHAIN_SAFE],
     summonForm: BOOST_FORMS.CROSSCHAIN_MINION,
-    // TODO: ask Jord for feedback
-    overrideSteps: {
+    addSummonSteps: {
       STEP3: {
         type: 'zodiacActionForm',
         form: BOOST_FORMS.ZODIAC_CROSSCHAIN_MODULE,

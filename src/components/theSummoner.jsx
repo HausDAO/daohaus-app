@@ -69,10 +69,9 @@ const TheSummoner = props => {
   const minionType = minionData?.minionType || parentForm.watch('minionType');
   const summonData = MINIONS[minionType];
 
-  // TODO: Ask Jord for feedback
   useEffect(() => {
-    if (summonData.overrideSteps) {
-      updateFormSteps(summonData.overrideSteps);
+    if (summonData.addSummonSteps) {
+      updateFormSteps(summonData.addSummonSteps);
     }
   }, [minionType]);
 
