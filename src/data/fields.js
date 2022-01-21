@@ -511,6 +511,12 @@ export const FIELD = {
     warningMessage: '',
     expectType: 'any',
   },
+  AMB_ENCODER: {
+    type: 'ambEncoder',
+    label: '',
+    name: 'ambEncoder',
+    htmlFor: 'ambEncoder',
+  },
 };
 
 export const FORM_DISPLAY = {

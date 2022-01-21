@@ -15,6 +15,7 @@ import { createContract } from './contract';
 import { validate } from './validation';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { CONTRACTS, TX } from '../data/contractTX';
+import { chainByID } from './chain';
 
 const getPath = pathString =>
   pathString
@@ -93,7 +94,7 @@ const getMultiSendFn = () => {
   });
 };
 
-const encodeMulti = encodedTXs => {
+export const encodeMulti = encodedTXs => {
   const web3 = new Web3();
   const multiSendFn = getMultiSendFn();
   return web3.eth.abi.encodeFunctionCall(multiSendFn, [
@@ -101,7 +102,7 @@ const encodeMulti = encodedTXs => {
   ]);
 };
 
-const collapseToCallData = values =>
+export const collapseToCallData = values =>
   values.TX.map(tx => ({
     to: tx.targetContract,
     data: safeEncodeHexFunction(JSON.parse(tx.abiInput), tx.abiArgs || []),
@@ -174,6 +175,44 @@ const argBuilderCallback = Object.freeze({
       values.paymentToken,
       values.paymentRequested || '0',
       details,
+      true, // _memberOnlyEnabled
+    ];
+  },
+  crossChainMultiActionSafe(data) {
+    const { contextData, values } = data;
+    const localChain = chainByID(contextData.daochain);
+    const foreignChain = chainByID(values.foreignChainId);
+
+    const encodedTX = safeEncodeHexFunction(
+      getABIsnippet({
+        contract: CONTRACTS.AMB,
+        fnName: 'requireToPassMessage',
+      }),
+      [
+        values.ambTx.to,
+        values.ambTx.data, // Multi-call for execution on foreign chain
+        localChain.zodiac_amb_module.gas_limit[values.foreignChainId],
+      ],
+    );
+
+    return [
+      encodeMultisendTx(
+        getABIsnippet({
+          contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+          fnName: 'multiSend',
+        }),
+        [
+          foreignChain.zodiac_amb_module.amb_bridge_address[
+            contextData.daochain
+          ],
+        ],
+        ['0'],
+        [encodedTX],
+        ['0'],
+      ),
+      contextData.daoOverview.depositToken.tokenAddress, // _withdrawToken
+      '0', // _withdrawAmount
+      detailsToJSON(values),
       true, // _memberOnlyEnabled
     ];
   },
