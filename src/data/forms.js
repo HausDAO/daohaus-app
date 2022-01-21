@@ -658,18 +658,10 @@ export const PROPOSAL_FORMS = {
     description: 'Create a multi-transaction proposal',
     type: PROPOSAL_TYPES.MINION_SAFE,
     minionType: MINION_TYPES.SAFE,
-    required: ['title'],
+    required: ['title', 'ambModuleAddress'],
     fields: [
       [FIELD.TITLE, FIELD.DESCRIPTION],
-      [
-        {
-          ...FIELD.PAYMENT_REQUEST,
-          label: 'Forward Funds',
-          info:
-            'This proposal type will use funds from the Minion first, if its balance is sufficient. If you wish to use funds from the treasury instead, then enter the appropriate amount. Note: Early execution for Treasury funds is not allowed.',
-        },
-        FIELD.CROSSCHAIN_MINION_SELECT,
-      ],
+      [FIELD.CROSSCHAIN_MINION_SELECT],
     ],
   },
   CREATE_TX: {
@@ -692,6 +684,10 @@ export const PROPOSAL_FORMS = {
   MULTICALL_CONFIRMATION: {
     id: 'MULTICALL_CONFIRMATION',
     fields: [[], []],
+  },
+  CROSSCHAIN_MULTICALL_CONFIRMATION: {
+    id: 'CROSSCHAIN_MULTICALL_CONFIRMATION',
+    fields: [[FIELD.AMB_ENCODER], []],
   },
 };
 
@@ -721,7 +717,7 @@ const MULTI_FORMS = {
     isTxBuilder: true,
     type: 'multiForm',
     minionType: MINION_TYPES.SAFE,
-    tx: TX.GENERIC_SAFE_MULTICALL,
+    tx: TX.CROSSCHAIN_SAFE_MULTICALL,
     title: 'Cross Chain Safe Minion TX Builder',
     description: 'Create a multi-transaction proposal',
     footer: 'end',
@@ -730,7 +726,7 @@ const MULTI_FORMS = {
     forms: [
       PROPOSAL_FORMS.START_CROSSCHAIN_SAFE_MULTI,
       PROPOSAL_FORMS.CREATE_TX,
-      PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
+      PROPOSAL_FORMS.CROSSCHAIN_MULTICALL_CONFIRMATION,
     ],
   },
 };

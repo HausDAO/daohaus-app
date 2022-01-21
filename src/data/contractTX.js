@@ -1208,4 +1208,13 @@ export const TX = {
       true, // _memberOnlyEnabled
     ],
   },
+  CROSSCHAIN_SAFE_MULTICALL: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    display: 'Submitting Safe Minion Proposal',
+    errMsg: 'Error Submitting Safe Proposal',
+    successMsg: 'Safe Minion Proposal Submitted!',
+    argsFromCallback: 'crossChainMultiActionSafe',
+  },
 };

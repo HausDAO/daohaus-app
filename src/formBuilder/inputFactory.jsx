@@ -45,6 +45,7 @@ import MinionTokenSelect from './minionTokenSelect';
 import ForeignChainSelect from './foreignChainSelect';
 import SwitchNetwork from './switchNetwork';
 import PrecomputedInput from './precomputedInput';
+import AmbEncoder from './ambEncoder';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -193,6 +194,9 @@ export const InputFactory = props => {
   }
   if (type === 'precomputedInput') {
     return <PrecomputedInput {...props} />;
+  }
+  if (type === 'ambEncoder') {
+    return <AmbEncoder {...props} />;
   }
   return null;
 };

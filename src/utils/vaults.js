@@ -3,6 +3,7 @@ import { chainByID, supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
 import { fetchSafeDetails } from './requests';
+import { isAmbModule } from './contract';
 import { FORM } from '../data/forms';
 import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
 import { getReadableBalance } from './tokenValue';
@@ -194,5 +195,22 @@ export const validateSafeMinion = async (chainId, vault) => {
     return {
       isMinionModule: false,
     };
+  }
+};
+
+export const getAmbModuleAddress = async ({
+  daochain,
+  foreignChainId,
+  safeAddress,
+  foreignSafeAddress,
+}) => {
+  const foreignSafe = await fetchSafeDetails(
+    chainByID(foreignChainId).networkAlt || chainByID(foreignChainId).network,
+    foreignSafeAddress,
+  );
+  if (foreignSafe) {
+    return foreignSafe.modules.find(async m => {
+      await isAmbModule(m, safeAddress, daochain, foreignChainId);
+    });
   }
 };
