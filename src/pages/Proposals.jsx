@@ -8,7 +8,7 @@ import ProposalsList from '../components/proposalList';
 import { getTerm, getTitle } from '../utils/metadata';
 import useCanInteract from '../hooks/useCanInteract';
 
-const Proposals = React.memo(({ proposals, activities, customTerms }) => {
+const Proposals = React.memo(({ proposals, customTerms }) => {
   const { setProposalSelector } = useOverlay();
   const { canInteract } = useCanInteract({
     checklist: ['isConnected', 'isSameChain', 'spamFilterMemberOnlyOff'],
@@ -42,13 +42,6 @@ const Proposals = React.memo(({ proposals, activities, customTerms }) => {
         >
           <ProposalsList proposals={proposals} customTerms={customTerms} />
         </Box>
-        {/* <Box w={['100%', null, null, null, '30%']}>
-          <ActivitiesFeed
-            limit={5}
-            activities={activities}
-            hydrateFn={getProposalsActivites}
-          />
-        </Box> */}
       </Flex>
     </MainViewLayout>
   );

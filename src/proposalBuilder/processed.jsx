@@ -4,7 +4,6 @@ import { AiOutlineCheck } from 'react-icons/ai';
 
 import { ParaSm } from '../components/typography';
 import {
-  EarlyExecuteGauge,
   InactiveButton,
   PropActionBox,
   StatusCircle,
@@ -13,6 +12,7 @@ import {
   VotingInactive,
 } from './actionPrimitives';
 import MinionExexcuteFactory from './minionExexcuteFactory';
+import ExecuteQuorum from './ExecuteQuorum';
 
 const Processed = props => {
   const { voteData, proposal } = props;
@@ -48,7 +48,7 @@ const Processed = props => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
-        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
+        <ExecuteQuorum proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
           {voteData?.isPassing ? 'Passed' : 'Failed'}

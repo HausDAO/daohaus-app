@@ -2,9 +2,9 @@ import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Flex } from '@chakra-ui/react';
 import { ParaSm } from '../components/typography';
+import ExecuteQuorum from './ExecuteQuorum';
+
 import {
-  EarlyExecuteButton,
-  EarlyExecuteGauge,
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
@@ -77,7 +77,7 @@ const ReadyForProcessing = props => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
-        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
+        <ExecuteQuorum proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
           {voteData?.isPassing ? 'Passed' : 'Failed'}
@@ -109,7 +109,6 @@ const ReadyForProcessing = props => {
             </Button>
           )}
         </Flex>
-        {proposal?.proposal?.minQuorum && <EarlyExecuteButton ml='2' />}
       </Flex>
     </PropActionBox>
   );

@@ -12,11 +12,12 @@ import { propStatusText } from './propCardText';
 import { readableTokenBalance } from '../utils/proposalCard';
 import { TX } from '../data/contractTX';
 import {
-  EarlyExecuteGauge,
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
 } from './actionPrimitives';
+import ExecuteQuorum from './ExecuteQuorum';
+
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import SkeletonActionCard from './skeletonActionCard';
@@ -154,7 +155,7 @@ const UnlockTokenCard = ({
   return (
     <PropActionBox>
       <StatusDisplayBox>
-        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
+        <ExecuteQuorum proposal={proposal} voteData={voteData} />
         <StatusCircle color='green' />
         <ParaSm fontWeight='700' mr='1'>
           Approve Deposit Token
@@ -197,7 +198,7 @@ const SponsorCard = ({
   return (
     <PropActionBox>
       <StatusDisplayBox>
-        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
+        <ExecuteQuorum proposal={proposal} voteData={voteData} />
         <StatusCircle color='green' />
         <ParaSm fontWeight='700' mr='1'>
           Unsponsored

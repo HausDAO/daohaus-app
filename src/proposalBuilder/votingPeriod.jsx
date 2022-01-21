@@ -6,7 +6,6 @@ import { validate } from '../utils/validation';
 import { useTX } from '../contexts/TXContext';
 import { TX } from '../data/contractTX';
 import {
-  EarlyExecuteGauge,
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
@@ -14,6 +13,7 @@ import {
   VotingActive,
   VotingInactive,
 } from './actionPrimitives';
+import ExecuteQuorum from './ExecuteQuorum';
 
 const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
   const [isLoading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
   return (
     <PropActionBox>
       <StatusDisplayBox>
-        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
+        <ExecuteQuorum proposal={proposal} voteData={voteData} />
         <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
         <ParaSm fontWeight='700' mr='1'>
           Voting

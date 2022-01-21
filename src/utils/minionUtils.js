@@ -88,7 +88,7 @@ export const decodeAction = async (action, params, depth = 0) => {
     return { ...targetContractABI, error: true };
   }
 
-  if (depth === 3) {
+  if (depth === 5) {
     return {
       ...targetContractABI,
       error: true,
