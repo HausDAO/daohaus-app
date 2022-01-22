@@ -37,39 +37,28 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
     return null;
   if (hasReachedQuorum && !proposal.executed) {
     return (
-      <Flex position='absolute' right='0' alignItems='center'>
-        <ToolTipWrapper
-          tooltip
-          placement='right'
-          tooltipText={{
-            title: 'Can execute',
-            pars: [
-              `This proposal requires ${proposal?.minion?.minQuorum}% of DAO shares to vote 'Yes' in order to execute the minion transaction early`,
-            ],
-          }}
-        >
-          <Button variant='ghost' size='fit-content' onClick={execute}>
-            <BiTachometer
-              color={theme?.colors?.secondary?.[500]}
-              size='1.2rem'
-            />
-            <ParaSm ml={1}>
-              {percYesVotes}/{proposal.minion.minQuorum}%
-            </ParaSm>
-          </Button>
-        </ToolTipWrapper>
-      </Flex>
+      // <ToolTipWrapper
+      //   tooltip
+      //   placement='right'
+      //   tooltipText={{
+      //     title: 'Can execute',
+      //     pars: [
+      //       `This proposal requires ${proposal?.minion?.minQuorum}% of DAO shares to vote 'Yes' in order to execute the minion transaction early`,
+      //     ],
+      //   }}
+      // >
+      <Button variant='ghost' size='fit-content' onClick={execute} p='0'>
+        <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />
+        <ParaSm ml={1}>
+          {percYesVotes}/{proposal.minion.minQuorum}%
+        </ParaSm>
+      </Button>
+      // </ToolTipWrapper>
     );
   }
 
   return (
-    <Flex
-      position='absolute'
-      top='0'
-      right='0'
-      opacity='.6'
-      cursor='not-allowed'
-    >
+    <Flex opacity='.6' cursor='not-allowed'>
       <ToolTipWrapper
         tooltip
         placement='right'

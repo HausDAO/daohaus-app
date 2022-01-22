@@ -15,6 +15,7 @@ import {
   PropActionBox,
   StatusCircle,
   StatusDisplayBox,
+  TopStatusBox,
 } from './proposalActionPrimitives';
 import ExecuteQuorum from './executeQuorum';
 
@@ -141,8 +142,6 @@ const Unsponsored = props => {
 export default Unsponsored;
 
 const UnlockTokenCard = ({
-  proposal,
-  voteData,
   canInteract,
   approveToken,
   depositData,
@@ -150,18 +149,15 @@ const UnlockTokenCard = ({
 }) => {
   return (
     <PropActionBox>
-      <StatusDisplayBox>
-        <ExecuteQuorum proposal={proposal} voteData={voteData} />
-        <StatusCircle color='green' />
-        <ParaSm fontWeight='700' mr='1'>
-          Approve Deposit Token
-        </ParaSm>
-      </StatusDisplayBox>
-      <ParaSm mb={4}>
-        {depositData?.hasBalance
-          ? propStatusText.approve(depositData?.symbol)
-          : propStatusText.noFunds(depositData?.symbol)}
-      </ParaSm>
+      <TopStatusBox
+        status='Unsponsored | Approve Deposit Token'
+        circleColor='green'
+        helperText={
+          depositData?.hasBalance
+            ? propStatusText.approve(depositData?.symbol)
+            : propStatusText.noFunds(depositData?.symbol)
+        }
+      />
       <Flex>
         <Button
           size='sm'
@@ -186,25 +182,21 @@ const SponsorCard = ({
   sponsorProposal,
   depositData,
   proposal,
-  voteData,
   canInteract,
   isMember,
   address,
 }) => {
   return (
     <PropActionBox>
-      <StatusDisplayBox>
-        <ExecuteQuorum proposal={proposal} voteData={voteData} />
-        <StatusCircle color='green' />
-        <ParaSm fontWeight='700' mr='1'>
-          Unsponsored
-        </ParaSm>
-      </StatusDisplayBox>
-      <ParaSm mb={4}>
-        {depositData?.hasBalance
-          ? propStatusText.approve(depositData?.symbol)
-          : propStatusText.noFunds(depositData?.symbol)}
-      </ParaSm>
+      <TopStatusBox
+        status='Unsponsored'
+        circleColor='green'
+        helperText={
+          depositData?.hasBalance
+            ? propStatusText.approve(depositData?.symbol)
+            : propStatusText.noFunds(depositData?.symbol)
+        }
+      />
       <Flex>
         <Button
           size='sm'

@@ -3,11 +3,10 @@ import { formatDistanceToNow } from 'date-fns';
 
 import {
   PropActionBox,
-  StatusDisplayBox,
-  StatusCircle,
   VotingInactive,
+  TopStatusBox,
+  MiddleActionBox,
 } from './proposalActionPrimitives';
-import { ParaSm } from '../components/typography';
 import { validate } from '../utils/validation';
 
 const InQueue = props => {
@@ -19,16 +18,17 @@ const InQueue = props => {
       );
     }
   }, [proposal]);
+
   return (
     <PropActionBox>
-      <StatusDisplayBox>
-        <StatusCircle color='green' />
-        <ParaSm fontWeight='700' mr='1'>
-          Voting
-        </ParaSm>
-        <ParaSm>starts in {time} </ParaSm>
-      </StatusDisplayBox>
-      <VotingInactive voteData={voteData} />
+      <TopStatusBox
+        status='Voting'
+        circleColor='green'
+        appendStatusText={`starts in ${time}`}
+      />
+      <MiddleActionBox>
+        <VotingInactive voteData={voteData} />
+      </MiddleActionBox>
     </PropActionBox>
   );
 };

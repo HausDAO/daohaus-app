@@ -3,6 +3,7 @@ import { Box, Button, Flex, Progress } from '@chakra-ui/react';
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';
 
 import { ParaSm } from '../components/typography';
+import ExecuteQuorum from './executeQuorum';
 
 export const StatusCircle = ({ color }) => (
   <Box borderRadius='50%' background={color} h='.6rem' w='.6rem' mr='2' />
@@ -88,10 +89,45 @@ export const PropActionBox = ({ children }) => (
 );
 
 export const StatusDisplayBox = ({ children }) => (
-  <Flex alignItems='center' mb={3} position='relative'>
+  <Flex alignItems='center' position='relative'>
     {children}
   </Flex>
 );
+
+export const TopStatusBox = ({
+  status,
+  proposal,
+  voteData,
+  helperText,
+  circleColor,
+  quorum,
+  appendStatusText,
+}) => {
+  return (
+    <Box mb='4'>
+      <Flex
+        alignItems='center'
+        justifyContent='space-between'
+        mb={3}
+        height='1.2rem'
+      >
+        <StatusDisplayBox>
+          <StatusCircle color={circleColor} />
+          <ParaSm fontWeight='700' mr='1'>
+            {status}
+          </ParaSm>
+          {appendStatusText && (
+            <ParaSm fontStyle='italic'>{appendStatusText}</ParaSm>
+          )}
+        </StatusDisplayBox>
+        {quorum && <ExecuteQuorum proposal={proposal} voteData={voteData} />}
+      </Flex>
+      {helperText && <ParaSm>{helperText}</ParaSm>}
+    </Box>
+  );
+};
+
+export const MiddleActionBox = ({ children }) => <Box mb={4}>{children}</Box>;
 
 export const UserVoteData = ({ voteData = {} }) => {
   const { userNo, userNoReadable, userYes, userYesReadable } = voteData;

@@ -4,8 +4,6 @@ import { PropCardTransfer } from './proposalBriefPrimitives';
 import { ParaMd } from '../components/typography';
 import AddressAvatar from '../components/addressAvatar';
 
-//  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR GUILDKICK PROPOSALS
-
 const GuildKickTransfer = ({ proposal = {} }) => (
   <PropCardTransfer
     customUI={

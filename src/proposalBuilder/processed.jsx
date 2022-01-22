@@ -2,17 +2,15 @@ import React from 'react';
 import { Flex } from '@chakra-ui/react';
 import { AiOutlineCheck } from 'react-icons/ai';
 
-import { ParaSm } from '../components/typography';
 import {
   InactiveButton,
+  MiddleActionBox,
   PropActionBox,
-  StatusCircle,
-  StatusDisplayBox,
+  TopStatusBox,
   UserVoteData,
   VotingInactive,
 } from './proposalActionPrimitives';
 import MinionExexcuteFactory from './minionExexcuteFactory';
-import ExecuteQuorum from './executeQuorum';
 
 const Processed = props => {
   const { voteData, proposal } = props;
@@ -20,21 +18,19 @@ const Processed = props => {
   if (!proposal.isMinion) {
     return (
       <PropActionBox>
-        <StatusDisplayBox>
-          <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
-          <ParaSm fontWeight='700' mr='1'>
-            {voteData?.isPassing ? 'Passed' : 'Failed'}
-          </ParaSm>
-          {voteData.isPassing && (
-            <ParaSm fontStyle='italic'>and processed</ParaSm>
-          )}
-        </StatusDisplayBox>
-        <VotingInactive
-          {...props}
-          justifyContent='space-between'
-          voteData={voteData}
+        <TopStatusBox
+          status={voteData?.isPassing ? 'Passed' : 'Failed'}
+          appendStatusText='and processed'
+          circleColor={voteData?.isPassing ? 'green' : 'red'}
         />
-        <Flex mt='2' alignItems='center'>
+        <MiddleActionBox>
+          <VotingInactive
+            {...props}
+            justifyContent='space-between'
+            voteData={voteData}
+          />
+        </MiddleActionBox>
+        <Flex alignItems='center'>
           <UserVoteData voteData={voteData} />
           <Flex ml='auto'>
             <InactiveButton size='sm' leftIcon={<AiOutlineCheck />}>
@@ -47,25 +43,24 @@ const Processed = props => {
   }
   return (
     <PropActionBox>
-      <StatusDisplayBox>
-        <ExecuteQuorum proposal={proposal} voteData={voteData} />
-        <StatusCircle color={voteData?.isPassing ? 'green' : 'red'} />
-        <ParaSm fontWeight='700' mr='1'>
-          {voteData?.isPassing ? 'Passed' : 'Failed'}
-        </ParaSm>
-
-        {voteData.isPassing && (
-          <ParaSm fontStyle='italic'>
-            and {proposal?.executed ? 'minion executed' : 'needs execution'}
-          </ParaSm>
-        )}
-      </StatusDisplayBox>
-      <VotingInactive
-        {...props}
-        justifyContent='space-between'
+      <TopStatusBox
+        status={voteData?.isPassing ? 'Passed' : 'Failed'}
+        appendStatusText={`and ${
+          proposal?.executed ? 'minion executed' : 'needs execution'
+        }`}
+        circleColor={voteData?.isPassing ? 'green' : 'red'}
+        quorum
         voteData={voteData}
+        proposal={proposal}
       />
-      <Flex mt='2' alignItems='center'>
+      <MiddleActionBox>
+        <VotingInactive
+          {...props}
+          justifyContent='space-between'
+          voteData={voteData}
+        />
+      </MiddleActionBox>
+      <Flex alignItems='center'>
         <UserVoteData voteData={voteData} />
         <Flex ml='auto'>
           {voteData.isPassing && <MinionExexcuteFactory {...props} />}

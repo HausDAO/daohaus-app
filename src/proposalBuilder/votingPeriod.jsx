@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 
 import { useTX } from '../contexts/TXContext';
 import { ParaSm } from '../components/typography';
 import {
+  MiddleActionBox,
   PropActionBox,
-  StatusCircle,
-  StatusDisplayBox,
+  TopStatusBox,
   UserVoteData,
   VotingActive,
   VotingInactive,
 } from './proposalActionPrimitives';
-import ExecuteQuorum from './executeQuorum';
 
 import { validate } from '../utils/validation';
 import { TX } from '../data/contractTX';
@@ -52,33 +50,34 @@ const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
 
   return (
     <PropActionBox>
-      <StatusDisplayBox>
-        <ExecuteQuorum proposal={proposal} voteData={voteData} />
-        <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
-        <ParaSm fontWeight='700' mr='1'>
-          Voting
-        </ParaSm>
-        <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
-      </StatusDisplayBox>
+      <TopStatusBox
+        status='Voting'
+        appendStatusText={`ends ${getTime()}`}
+        circleColor={voteData.isPassing ? 'green' : 'red'}
+        proposal={proposal}
+        voteData={voteData}
+        quorum
+      />
       {voteData.hasVoted ? (
-        <Box mb='3'>
-          <VotingInactive voteData={voteData} />
+        <>
+          <MiddleActionBox>
+            <VotingInactive voteData={voteData} />
+          </MiddleActionBox>
           <UserVoteData voteData={voteData} />
-        </Box>
+        </>
       ) : (
         <>
-          <VotingActive
-            voteYes={voteYes}
-            voteNo={voteNo}
-            loadingAll={isLoading}
-            disableAll={!canInteract || !isMember}
-            proposal={proposal}
-            voteData={voteData}
-          />
-
-          <Flex alignItems='center' minHeight='2rem' mt={2}>
-            <ParaSm fontStyle='italic'> Vote if you&apos;re a member</ParaSm>
-          </Flex>
+          <MiddleActionBox>
+            <VotingActive
+              voteYes={voteYes}
+              voteNo={voteNo}
+              loadingAll={isLoading}
+              disableAll={!canInteract || !isMember}
+              proposal={proposal}
+              voteData={voteData}
+            />
+          </MiddleActionBox>
+          <ParaSm fontStyle='italic'> Vote if you&apos;re a member</ParaSm>
         </>
       )}
     </PropActionBox>
