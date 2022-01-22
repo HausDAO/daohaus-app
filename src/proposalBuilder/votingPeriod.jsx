@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 
 import { useTX } from '../contexts/TXContext';
@@ -61,10 +61,10 @@ const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
         <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
       </StatusDisplayBox>
       {voteData.hasVoted ? (
-        <>
+        <Box mb='3'>
           <VotingInactive voteData={voteData} />
           <UserVoteData voteData={voteData} />
-        </>
+        </Box>
       ) : (
         <>
           <VotingActive
@@ -75,6 +75,7 @@ const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
             proposal={proposal}
             voteData={voteData}
           />
+
           <Flex alignItems='center' minHeight='2rem' mt={2}>
             <ParaSm fontStyle='italic'> Vote if you&apos;re a member</ParaSm>
           </Flex>

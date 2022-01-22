@@ -157,7 +157,7 @@ const UnlockTokenCard = ({
           Approve Deposit Token
         </ParaSm>
       </StatusDisplayBox>
-      <ParaSm mb={3}>
+      <ParaSm mb={4}>
         {depositData?.hasBalance
           ? propStatusText.approve(depositData?.symbol)
           : propStatusText.noFunds(depositData?.symbol)}
@@ -200,7 +200,7 @@ const SponsorCard = ({
           Unsponsored
         </ParaSm>
       </StatusDisplayBox>
-      <ParaSm mb={3}>
+      <ParaSm mb={4}>
         {depositData?.hasBalance
           ? propStatusText.approve(depositData?.symbol)
           : propStatusText.noFunds(depositData?.symbol)}
@@ -210,7 +210,7 @@ const SponsorCard = ({
           size='sm'
           minW='4rem'
           fontWeight='700'
-          mr='auto'
+          mr={['2', '2', 'auto']}
           disabled={!canInteract || !isMember || !depositData.hasBalance}
           onClick={sponsorProposal}
           isLoading={isLoadingTx}

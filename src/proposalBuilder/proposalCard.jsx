@@ -22,10 +22,10 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
   const voteData = getVoteData(proposal, address, daoMember);
 
   return (
-    <ContentBox p='0' mb={4} minHeight='8.875rem'>
+    <ContentBox p='1' mb={4} minHeight='10rem'>
       <Flex flexDir={['column', 'column', 'row']}>
         <ProposalCardBrief proposal={proposal} minionAction={minionAction} />
-        <Center minHeight={['0', '0', '8.875rem']} />
+        <Center minHeight={['0', '0', '10rem']} />
         <Flex
           w={['100%', '100%', '45%']}
           mb={['4', '4', '0', '0']}
@@ -39,21 +39,6 @@ const ProposalCardV2 = ({ proposal, interaction }) => {
             minionAction={minionAction}
             executeTX={executeTX}
           />
-        </Flex>
-        <Flex
-          justifyContent='center'
-          w='100%'
-          display={['flex', 'flex', 'none']}
-          mb='6'
-        >
-          <Button
-            variant='outline'
-            size='lg'
-            width='10rem'
-            mt={['4', '4', '0']}
-          >
-            More Details
-          </Button>
         </Flex>
       </Flex>
     </ContentBox>

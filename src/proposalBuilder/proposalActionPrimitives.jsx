@@ -117,7 +117,8 @@ export const VotingBar = ({ voteData = {} }) => {
   return (
     <Progress
       value={barPercentage || 0}
-      mb='3'
+      mb='4'
+      mt='4'
       size='sm'
       colorScheme='chakraProgressBarHack'
     />

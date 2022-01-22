@@ -32,11 +32,12 @@ const MultiTxTransfer = ({ minionAction }) => {
     <ParaMd>
       Multicall x{minionAction?.decoded?.actions?.length} (
       <Button
-        size='sm'
+        size='fit-content'
         variant='text'
-        p='0'
         color='secondary.400'
         onClick={displayDetails}
+        // transform='translateY(-1px)'
+        lineHeight='1.1rem'
       >
         <ParaMd>View Details</ParaMd>
       </Button>

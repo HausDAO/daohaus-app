@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Button } from '@chakra-ui/react';
 
 import { CardLabel, ParaMd, ParaSm } from '../components/typography';
 import CustomTransfer from './customTransferFactory';
@@ -31,12 +31,12 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
       position='relative'
     >
       <Box px='1.2rem' py='0.6rem'>
-        <CardLabel mb={['4', '4', '2']}>{proposal.proposalType}</CardLabel>
+        <CardLabel mb={['4', '4', '4']}>{proposal.proposalType}</CardLabel>
         <ParaMd
           fontWeight='700'
-          mb={['5', '5', '3']}
-          fontSize={['1.4rem', '1.4rem', '1rem']}
-          lineHeight={['1.8rem', '1.8rem', '1rem']}
+          mb={['5', '5', '5']}
+          fontSize={['1.2rem', '1.2rem', '1.2rem']}
+          lineHeight={['1.8rem', '1.8rem', '1.2rem']}
         >
           {proposal.title}
         </ParaMd>
@@ -49,6 +49,16 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
             minionAction={minionAction}
           />
         )}
+        <Flex display={['flex', 'flex', 'none']} mb='3'>
+          <Button
+            variant='outline'
+            size='sm'
+            width='10rem'
+            mt={['4', '4', '0']}
+          >
+            More Details
+          </Button>
+        </Flex>
       </Box>
       <DetailsLink proposalId={proposal.proposalId} />
     </Flex>
