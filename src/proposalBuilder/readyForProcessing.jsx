@@ -16,7 +16,7 @@ import { TX } from '../data/contractTX';
 import {
   cheatExecutionStatus,
   removeExecutionCheat,
-} from '../utils/proposalCard';
+} from '../utils/proposalCardUtils';
 import { determineProposalStatus } from '../utils/proposalUtils';
 
 const ReadyForProcessing = props => {

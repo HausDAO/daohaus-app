@@ -8,7 +8,10 @@ import {
 
 import { Bold, ParaMd } from '../components/typography';
 
-import { generateOfferText, generateRequestText } from '../utils/proposalCard';
+import {
+  generateOfferText,
+  generateRequestText,
+} from '../utils/proposalCardUtils';
 
 export const PropCardTransfer = ({
   incoming,

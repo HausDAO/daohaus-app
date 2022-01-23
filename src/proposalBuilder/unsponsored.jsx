@@ -6,18 +6,11 @@ import { useParams } from 'react-router-dom';
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 
-import { ParaSm } from '../components/typography';
 import { propStatusText } from '../data/proposalCardText';
 
-import { readableTokenBalance } from '../utils/proposalCard';
+import { readableTokenBalance } from '../utils/proposalCardUtils';
 import { TX } from '../data/contractTX';
-import {
-  PropActionBox,
-  StatusCircle,
-  StatusDisplayBox,
-  TopStatusBox,
-} from './proposalActionPrimitives';
-import ExecuteQuorum from './executeQuorum';
+import { PropActionBox, TopStatusBox } from './proposalActionPrimitives';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';

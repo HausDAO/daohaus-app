@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import { AsyncCardTransfer } from './proposalBriefPrimitives';
 import { Bold, ParaMd } from '../components/typography';
-import { generateRQText } from '../utils/proposalCard';
+import { generateRQText } from '../utils/proposalCardUtils';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR WHITELIST TOKEN PROPOSALS
 

@@ -5,7 +5,7 @@ import { useDao } from '../contexts/DaoContext';
 import { Bold, ParaMd } from '../components/typography';
 import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
 
-import { readableTokenBalance } from '../utils/proposalCard';
+import { readableTokenBalance } from '../utils/proposalCardUtils';
 import { fetchSpecificTokenData } from '../utils/tokenValue';
 
 //  THIS IS A CUSTOM COMPONENT THAT WORKS FOR PAYROLL PROPOSALS

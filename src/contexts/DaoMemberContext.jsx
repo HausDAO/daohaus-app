@@ -35,8 +35,6 @@ export const DaoMemberProvider = ({
 
     if (daoMembers) {
       if (currentMemberRef.current !== address) {
-        console.log('FIRED ACCOUNT CHECK');
-        console.log(`currentMemberRef.current`, currentMemberRef.current);
         const currentMember = checkForMember(daoMembers);
 
         if (currentMember) {

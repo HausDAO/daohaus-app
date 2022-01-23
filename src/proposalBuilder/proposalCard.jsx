@@ -1,12 +1,12 @@
 import React from 'react';
-import { Flex, Center, Button } from '@chakra-ui/react';
+import { Flex, Center } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from '../components/ContentBox';
 import PropActions from './proposalActionFactory';
 
-import { getVoteData } from '../utils/proposalCard';
+import { getVoteData } from '../utils/proposalCardUtils';
 import useMinionAction from '../hooks/useMinionAction';
 import ProposalCardBrief from './proposalBrief';
 

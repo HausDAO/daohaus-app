@@ -4,7 +4,10 @@ import { Box } from '@chakra-ui/react';
 import { AsyncCardTransfer, PropCardTransfer } from './proposalBriefPrimitives';
 import { ParaMd } from '../components/typography';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { readableNumber, readableTokenBalance } from '../utils/proposalCard';
+import {
+  readableNumber,
+  readableTokenBalance,
+} from '../utils/proposalCardUtils';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR  UBERHAUS STAKE PROPOSALS
 

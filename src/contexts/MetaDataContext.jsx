@@ -26,7 +26,7 @@ export const MetaDataProvider = ({ children }) => {
     proposalConfigReducer,
     null,
   );
-  console.log('daoMetaData', daoMetaData);
+
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
 

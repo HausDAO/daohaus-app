@@ -53,7 +53,7 @@ export const DaoProvider = ({ children }) => {
 
   const hasPerformedBatchQuery = useRef(false);
   const currentDao = useRef(null);
-  console.log('daoVaults', daoVaults);
+
   useEffect(() => {
     // This condition is brittle. If one request passes, but the rest fail
     // this stops the app from fetching. We'll need something better later on.
