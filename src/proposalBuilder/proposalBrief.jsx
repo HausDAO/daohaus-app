@@ -30,8 +30,16 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
       ]}
       position='relative'
     >
-      <Box px='1.2rem' py='0.6rem'>
-        <CardLabel mb={['4', '4', '4']}>{proposal.proposalType}</CardLabel>
+      <Box px='1.2rem' py='0.6rem' w='100%'>
+        <Flex
+          alignItems='center'
+          mb={['4', '4', '4']}
+          justifyContent='space-between'
+          w='100%'
+        >
+          <CardLabel>{proposal.proposalType}</CardLabel>
+          <DetailsLink proposalId={proposal.proposalId} />
+        </Flex>
         <ParaMd
           fontWeight='700'
           mb={['5', '5', '5']}
@@ -60,7 +68,6 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
           </Button>
         </Flex>
       </Box>
-      <DetailsLink proposalId={proposal.proposalId} />
     </Flex>
   );
 };
@@ -70,12 +77,7 @@ export default ProposalCardBrief;
 const DetailsLink = ({ proposalId }) => {
   const { daochain, daoid } = useParams();
   return (
-    <Box
-      position='absolute'
-      top='0.5rem'
-      right='1rem'
-      display={['none', 'none', 'block']}
-    >
+    <Box display={['none', 'none', 'block']}>
       <Link to={`/dao/${daochain}/${daoid}/proposals/${proposalId}`}>
         <ParaSm>More Details</ParaSm>
       </Link>
