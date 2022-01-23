@@ -11,8 +11,8 @@ import { chainByID } from '../utils/chain';
 import {
   createGnosisSafeTxProposal,
   deployZodiacBridgeModule,
-} from '../utils/contract';
-import { getApiGnosis } from '../utils/requests';
+  getSafe,
+} from '../utils/gnosis';
 import { fetchMinionByName } from '../utils/theGraph';
 
 const ZodiacActionForm = props => {
@@ -57,18 +57,17 @@ const ZodiacActionForm = props => {
 
     if (zodiacAction === 'ambModule') {
       register('ambModuleAddress');
-      const { network, networkAlt } = chainByID(foreignChainId);
-      const networkName = networkAlt || network;
       const checksumSafeAddr = Web3Utils.toChecksumAddress(foreignSafeAddress);
 
       // Validate if connected user is a signer of the foreign safe
-      const safeDetails = await getApiGnosis(
-        networkName,
-        `safes/${checksumSafeAddr}/`,
-      );
+      const safeSdk = await getSafe({
+        chainID: foreignChainId,
+        safeAddress: checksumSafeAddr,
+      });
       if (
-        safeDetails &&
-        !safeDetails.owners.includes(Web3Utils.toChecksumAddress(address))
+        !(await safeSdk.getOwners()).includes(
+          Web3Utils.toChecksumAddress(address),
+        )
       ) {
         errorToast({
           title: 'Not a Gnosis Safe Signer',

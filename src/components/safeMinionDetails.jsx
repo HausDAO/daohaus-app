@@ -24,7 +24,7 @@ import {
   deployZodiacBridgeModule,
   encodeAmbTxProposal,
   encodeSwapSafeOwnersBy,
-} from '../utils/contract';
+} from '../utils/gnosis';
 
 const SF_TOOLTIP = {
   ADD_MODULE: {
