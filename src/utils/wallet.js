@@ -24,6 +24,8 @@ export const initMemberWallet = async ({
     await tokenContract.methods.allowance(memberAddress, daoAddress).call(),
   );
 
+  console.log('allowance', allowance);
+
   return {
     depositTokenBalance: tokenBalance,
     allowance,
