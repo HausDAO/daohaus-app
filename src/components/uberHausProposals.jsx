@@ -1,5 +1,11 @@
 import React, { useMemo } from 'react';
-import { Menu, MenuList, MenuButton, MenuItem, Button } from '@chakra-ui/react';
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItemOption,
+  Button,
+} from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
@@ -96,31 +102,30 @@ const UberHausProposals = ({ uberHausMinion, uberMembers, uberDelegate }) => {
         Manage
       </MenuButton>
       <MenuList>
-        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
-          <Button onClick={() => handleClick('delegate')}>Delegate</Button>
-        </MenuItem>
-        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
-          <Button onClick={() => handleClick('stake')}>Stake</Button>
-        </MenuItem>
-        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
-          <Button onClick={() => handleClick('ragequit')}>RageQuit</Button>
-        </MenuItem>
-        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
-          <Button onClick={() => handleClick('withdraw')}>Withdraw</Button>
-        </MenuItem>
-        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
-          <Button disabled={!isDelegate} onClick={() => handleClick('pull')}>
-            Pull
-          </Button>
-        </MenuItem>
-        <MenuItem _hover={{ backgroundColor: 'transparent' }}>
-          <Button
-            disabled={!isDelegate}
-            onClick={() => handleClick('claimRewards')}
-          >
-            Claim Rewards
-          </Button>
-        </MenuItem>
+        <MenuItemOption onClick={() => handleClick('delegate')}>
+          Delegate
+        </MenuItemOption>
+        <MenuItemOption onClick={() => handleClick('stake')}>
+          Stake
+        </MenuItemOption>
+        <MenuItemOption onClick={() => handleClick('ragequit')}>
+          RageQuit
+        </MenuItemOption>
+        <MenuItemOption onClick={() => handleClick('withdraw')}>
+          Withdraw
+        </MenuItemOption>
+        <MenuItemOption
+          isDisabled={!isDelegate}
+          onClick={() => handleClick('pull')}
+        >
+          Pull
+        </MenuItemOption>
+        <MenuItemOption
+          isDisabled={!isDelegate}
+          onClick={() => handleClick('claimRewards')}
+        >
+          Claim Rewards
+        </MenuItemOption>
       </MenuList>
     </Menu>
   );
