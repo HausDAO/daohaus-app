@@ -7,8 +7,7 @@ import { LOCAL_ABI } from './abi';
 import { chainByID } from './chain';
 
 const babe = '0x000000000000000000000000000000000000baBe';
-const tokenAPI =
-  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const tokenAPI = 'https://data.daohaus.club/dao-tokens';
 
 export const fetchTokenData = async () => {
   try {
