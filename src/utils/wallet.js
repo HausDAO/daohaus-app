@@ -1,4 +1,4 @@
-import { utils } from 'web3';
+// import { utils } from 'web3';
 import { createContract } from './contract';
 import { LOCAL_ABI } from './abi';
 
@@ -16,18 +16,27 @@ export const initMemberWallet = async ({
     chainID,
   });
 
-  const tokenBalance = utils.fromWei(
-    await tokenContract.methods.balanceOf(memberAddress).call(),
-  );
+  // const tokenBalance = utils.fromWei(
+  //   await tokenContract.methods.balanceOf(memberAddress).call(),
+  // );
 
-  const allowance = utils.fromWei(
-    await tokenContract.methods.allowance(memberAddress, daoAddress).call(),
-  );
+  const tokenBalance = await tokenContract.methods
+    .balanceOf(memberAddress)
+    .call();
 
-  console.log('allowance', allowance);
+  // const allowance = utils.fromWei(
+  //   await tokenContract.methods.allowance(memberAddress, daoAddress).call(),
+  // );
+
+  const allowance = await tokenContract.methods
+    .allowance(memberAddress, daoAddress)
+    .call();
+
+  // console.log('allowance', allowance);
 
   return {
     depositTokenBalance: tokenBalance,
-    allowance,
+    // allowance,
+    allowance: allowance / 10 ** depositToken.decimals,
   };
 };

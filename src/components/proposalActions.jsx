@@ -143,8 +143,6 @@ const ProposalVote = ({
     };
   }, [overview, address, proposal, injectedChain]);
 
-  console.log('overview', daoMember);
-
   useEffect(() => {
     if (daoProposals) {
       const proposalsToProcess = daoProposals
