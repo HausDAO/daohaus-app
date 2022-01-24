@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
 import { useParams } from 'react-router-dom';
-import { AsyncCardTransfer } from './propBriefPrimitives';
+
+import { AsyncCardTransfer } from './proposalBriefPrimitives';
+import { Bold, ParaMd } from '../components/typography';
+
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
-import { Bold, ParaMd } from '../components/typography';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR WHITELIST TOKEN PROPOSALS
 
@@ -46,7 +47,6 @@ const WhitelistTokenTransfer = ({ proposal = {} }) => {
     <AsyncCardTransfer
       isLoaded={tokenData}
       proposal={proposal}
-      incoming
       customUI={tokenUI}
     />
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import AddressAvatar from '../components/addressAvatar';
-import { AsyncCardTransfer } from './propBriefPrimitives';
+import { AsyncCardTransfer } from './proposalBriefPrimitives';
 
 //  THIS IS A CUSTOM COMPONENT THAT ONLY WORKS FOR  UBERHAUS DELEGATE PROPOSALS
 
@@ -26,14 +26,12 @@ const DelegateTransfer = ({ proposal = {}, minionAction }) => {
         <AsyncCardTransfer
           isLoaded={minionAction?.proposer}
           proposal={proposal}
-          outgoing
           customUI={proposerUI}
         />
       </Box>
       <AsyncCardTransfer
         isLoaded={minionAction?.nominee}
         proposal={proposal}
-        incoming
         customUI={nomineeUI}
       />
     </>

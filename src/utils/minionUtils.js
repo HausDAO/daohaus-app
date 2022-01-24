@@ -1,7 +1,7 @@
 import Web3, { utils as Web3Utils } from 'web3';
 import abiDecoder from 'abi-decoder';
 import { createContract } from './contract';
-import { fetchABI, getMinionAbi } from './abi';
+import { decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
 import { TX } from '../data/contractTX';
@@ -74,25 +74,77 @@ export const buildEthTransferAction = action => ({
 
 export const isEthTransfer = action => action?.data?.slice(2)?.length === 0;
 
-export const decodeAction = async (action, params) => {
+export const maxRateLimit = async () => {};
+
+export const decodeAction = async (action, params, depth = 0) => {
   if (isEthTransfer(action)) {
     return buildEthTransferAction(action);
   }
   const { chainID } = params || {};
   const { to, data } = action || {};
   const targetContractABI = await fetchABI(to, chainID);
+
+  if (targetContractABI?.result === null) {
+    return { ...targetContractABI, error: true };
+  }
+
+  if (depth === 5) {
+    return {
+      ...targetContractABI,
+      error: true,
+      message: 'Etherscan Error: Max rate limit reached',
+    };
+  }
+
+  if (targetContractABI?.result === 'Max rate limit reached') {
+    return decodeAction(action, params, depth + 1);
+  }
+
   abiDecoder.addABI(targetContractABI);
   return abiDecoder.decodeMethod(data);
 };
 
-export const decodeMultiAction = () => {};
+export const decodeMultiAction = async ([encodedMulti], params) => {
+  const { chainID } = params;
+  const multiSendAddress = chainByID(chainID).safeMinion.safe_mutisend_addr;
 
-export const handleDecode = async (action, params) => {
-  if (params.minionType === MINION_TYPES.SAFE) {
-    return decodeMultiAction(action, params);
-  }
+  //   SINGLE ARRAY VERSION
 
-  return decodeAction(action, params);
+  return {
+    ...encodedMulti,
+    actions: await Promise.all(
+      decodeMultisendTx(multiSendAddress, encodedMulti.data).map(
+        async action => ({
+          ...action,
+          data: await decodeAction(action, params),
+        }),
+      ),
+    ),
+  };
+
+  //  CODE REVIEW
+  //  Question for Sam
+  //  Why does the data structure come in as nested arrays?
+  //  Could there be more than one collection of transactions?
+  //  If not, I clean this up a lot.
+
+  //  NESTED ARRAY VERSION
+  // const multiCalls = actions.map(multiCall => ({
+  //   ...multiCall,
+  //   actions: decodeMultisendTx(multiSendAddress, multiCall.data),
+  // }));
+  // const decoded = await Promise.all(
+  //   multiCalls.map(async multiCall => {
+  //     const decodedTx = await Promise.all(
+  //       multiCall.actions.map(async action => ({
+  //         ...action,
+  //         data: await decodeAction(action, params),
+  //       })),
+  //     );
+  //     return { ...multiCall, actions: decodedTx };
+  //   }),
+  // );
+  // return decoded;
 };
 
 export const getMinionAction = async params => {
@@ -102,13 +154,12 @@ export const getMinionAction = async params => {
     chainID,
     minionType,
     proposalType,
+    actions,
   } = params;
   const abi = getMinionAbi(minionType);
-
   const actionName =
     MINION_ACTION_FUNCTION_NAMES[minionType] ||
     MINION_ACTION_FUNCTION_NAMES[proposalType];
-
   try {
     const minionContract = createContract({
       address: minionAddress,
@@ -121,8 +172,8 @@ export const getMinionAction = async params => {
       return { ...action, decoded };
     }
     if (SHOULD_MULTI_DECODE[minionType]) {
-      //  Do multi-stuff
-      return action;
+      const decoded = await decodeMultiAction(actions, params);
+      return { ...action, decoded };
     }
     return action;
   } catch (error) {
@@ -142,6 +193,9 @@ export const getExecuteAction = ({ minion }) => {
     minionType === MINION_TYPES.NIFTY
   ) {
     return TX.MINION_SIMPLE_EXECUTE;
+  }
+  if (minionType === MINION_TYPES.SAFE) {
+    return TX.MINION_SAFE_EXECUTE;
   }
   if (minionType === MINION_TYPES.UBER) {
     return TX.UBER_EXECUTE_ACTION;

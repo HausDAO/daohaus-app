@@ -1,10 +1,11 @@
-import { Button } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { Button } from '@chakra-ui/react';
 import { AiOutlineCheck } from 'react-icons/ai';
-import { useTX } from '../contexts/TXContext';
-import { InactiveButton } from './actionPrimitives';
 
-const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
+import { useTX } from '../contexts/TXContext';
+import { InactiveButton } from './proposalActionPrimitives';
+
+const ExecuteAction = ({ proposal, executeTX, argsOverride }) => {
   const { submitTransaction } = useTX();
   const [loading, setLoading] = useState(false);
 
@@ -13,7 +14,7 @@ const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
     const { minionAddress, proposalId, proposalType } = proposal;
     await submitTransaction({
       tx: executeTX,
-      args: [proposal.proposalId],
+      args: argsOverride || [proposal.proposalId],
       localValues: {
         minionAddress,
         proposalId,
@@ -22,13 +23,15 @@ const ExecuteAction = ({ proposal, executeTX, minionAction, executed }) => {
     });
     setLoading(false);
   };
-  if (minionAction.executed || executed) {
+
+  if (proposal.executed) {
     return (
       <InactiveButton size='sm' leftIcon={<AiOutlineCheck />}>
         Executed
       </InactiveButton>
     );
   }
+
   return (
     <Button onClick={execute} size='sm' isLoading={loading}>
       Execute

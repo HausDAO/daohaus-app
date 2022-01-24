@@ -3,7 +3,7 @@ import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 export const CUSTOM_CARD_DATA = {
   [PROPOSAL_TYPES.PAYROLL]: {
     customTransferUI: 'minionTransfer',
-    execute: 'executeAction',
+    // execute: 'executeAction',
   },
   [PROPOSAL_TYPES.MINION_RARIBLE]: {
     execute: 'executeRarible',
@@ -25,5 +25,9 @@ export const CUSTOM_CARD_DATA = {
   },
   [PROPOSAL_TYPES.GUILDKICK]: {
     customTransferUI: 'guildKick',
+  },
+  [PROPOSAL_TYPES.MULTI_TX_SAFE]: {
+    customTransferUI: 'multiTx',
+    execute: 'safeMinionAction',
   },
 };

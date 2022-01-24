@@ -1,15 +1,13 @@
 import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
-import { ParaSm } from '../components/typography';
 import {
-  EarlyExecuteGauge,
+  MiddleActionBox,
   PropActionBox,
-  StatusCircle,
-  StatusDisplayBox,
+  TopStatusBox,
   UserVoteData,
   VotingInactive,
-} from './actionPrimitives';
+} from './proposalActionPrimitives';
 import { validate } from '../utils/validation';
 
 const GracePeriod = ({ proposal, voteData }) => {
@@ -27,15 +25,17 @@ const GracePeriod = ({ proposal, voteData }) => {
 
   return (
     <PropActionBox>
-      <StatusDisplayBox>
-        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
-        <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
-        <ParaSm fontWeight='700' mr='1'>
-          Grace Period
-        </ParaSm>
-        <ParaSm fontStyle='italic'>ends {getTime()}</ParaSm>
-      </StatusDisplayBox>
-      <VotingInactive voteData={voteData} />
+      <TopStatusBox
+        status='Grace Period'
+        appendStatusText={`ends ${getTime()}`}
+        circleColor={voteData.isPassing ? 'green' : 'red'}
+        proposal={proposal}
+        voteData={voteData}
+        quorum
+      />
+      <MiddleActionBox>
+        <VotingInactive voteData={voteData} />
+      </MiddleActionBox>
       {voteData.hasVoted && <UserVoteData voteData={voteData} />}
     </PropActionBox>
   );

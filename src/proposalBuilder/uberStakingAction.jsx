@@ -1,12 +1,14 @@
-import { Button } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { Button } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+
 import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
-import { LOCAL_ABI } from '../utils/abi';
+import ExecuteAction from './executeAction';
+
 import { createContract } from '../utils/contract';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import ExecuteAction from './ExecuteAction';
+import { LOCAL_ABI } from '../utils/abi';
+import { TX } from '../data/contractTX';
 
 const UberStakingAction = props => {
   const { proposal } = props;

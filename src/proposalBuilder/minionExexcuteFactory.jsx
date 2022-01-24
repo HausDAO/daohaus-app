@@ -1,12 +1,15 @@
 import React from 'react';
+
+import ExecuteAction from './executeAction';
+import ExecuteRarible from './executeRarible';
+import ExecuteSafeMinion from './executeSafeMinion';
+import UberStakingAction from './uberStakingAction';
 import { TX } from '../data/contractTX';
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
-import ExecuteAction from './ExecuteAction';
-import ExecuteRarible from './ExecuteRarible';
-import UberStakingAction from './uberStakingAction';
 
 const MinionExexcuteFactory = props => {
   const { proposal } = props;
+
   const { proposalType } = proposal;
   const executeType = CUSTOM_CARD_DATA[proposalType]?.execute;
   if (!executeType) {
@@ -28,6 +31,9 @@ const MinionExexcuteFactory = props => {
   }
   if (executeType === 'rarible') {
     return <ExecuteRarible {...props} />;
+  }
+  if (executeType === 'safeMinionAction') {
+    return <ExecuteSafeMinion {...props} />;
   }
   return <ExecuteAction {...props} />;
 };

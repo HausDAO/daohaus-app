@@ -85,7 +85,6 @@ const Proposal = ({
         const action = await web3Contract.methods[
           MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
         ](currentProposal.proposalId).call();
-
         setMinionAction(action);
 
         // hides execute minion button on funding and payroll proposals

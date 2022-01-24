@@ -1,8 +1,9 @@
-import { Flex, Skeleton } from '@chakra-ui/react';
 import React from 'react';
+import { Flex, Skeleton } from '@chakra-ui/react';
+
 import { ParaSm } from '../components/typography';
-import { PropActionBox, StatusDisplayBox } from './actionPrimitives';
-import { propStatusText } from './propCardText';
+import { PropActionBox, StatusDisplayBox } from './proposalActionPrimitives';
+import { propStatusText } from '../data/proposalCardText';
 
 const SkeletonActionCard = () => {
   return (

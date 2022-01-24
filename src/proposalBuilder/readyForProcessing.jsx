@@ -1,23 +1,22 @@
 import React, { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Flex } from '@chakra-ui/react';
-import { ParaSm } from '../components/typography';
-import {
-  EarlyExecuteButton,
-  EarlyExecuteGauge,
-  PropActionBox,
-  StatusCircle,
-  StatusDisplayBox,
-  UserVoteData,
-  VotingInactive,
-} from './actionPrimitives';
+
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
+import {
+  MiddleActionBox,
+  PropActionBox,
+  TopStatusBox,
+  UserVoteData,
+  VotingInactive,
+} from './proposalActionPrimitives';
+
 import { TX } from '../data/contractTX';
 import {
   cheatExecutionStatus,
   removeExecutionCheat,
-} from '../utils/proposalCard';
+} from '../utils/proposalCardUtils';
 import { determineProposalStatus } from '../utils/proposalUtils';
 
 const ReadyForProcessing = props => {
@@ -76,15 +75,17 @@ const ReadyForProcessing = props => {
     nextProposal?.proposalId === proposal.proposalId || !nextProposal;
   return (
     <PropActionBox>
-      <StatusDisplayBox>
-        <EarlyExecuteGauge proposal={proposal} voteData={voteData} />
-        <StatusCircle color={voteData.isPassing ? 'green' : 'red'} />
-        <ParaSm fontWeight='700' mr='1'>
-          {voteData?.isPassing ? 'Passed' : 'Failed'}
-        </ParaSm>
-        <ParaSm fontStyle='italic'>and needs processing</ParaSm>
-      </StatusDisplayBox>
-      <VotingInactive {...props} justifyContent='space-between' />
+      <TopStatusBox
+        status={voteData?.isPassing ? 'Passed' : 'Failed'}
+        circleColor={voteData.isPassing ? 'green' : 'red'}
+        appendStatusText='and needs processing'
+        quorum
+        proposal={proposal}
+        voteData={voteData}
+      />
+      <MiddleActionBox>
+        <VotingInactive {...props} justifyContent='space-between' />
+      </MiddleActionBox>
       <Flex mt='2' alignItems='center'>
         <UserVoteData voteData={voteData} />
         <Flex ml='auto'>
@@ -109,7 +110,6 @@ const ReadyForProcessing = props => {
             </Button>
           )}
         </Flex>
-        {proposal?.proposal?.minQuorum && <EarlyExecuteButton ml='2' />}
       </Flex>
     </PropActionBox>
   );
