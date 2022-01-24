@@ -218,6 +218,9 @@ export const PROPOSAL_FORMS = {
           label: 'Member to Kick',
           info: INFO_TEXT.ADDR_KICK,
         },
+        {
+          type: 'memberImpact',
+        },
         FIELD.DESCRIPTION,
         FIELD.LINK,
       ],
