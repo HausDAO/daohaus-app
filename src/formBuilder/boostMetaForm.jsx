@@ -11,6 +11,8 @@ const BoostMetaForm = props => {
     setStepperStorage,
     metaFields,
     secondaryBtn,
+    checklist,
+    handleThen,
   } = props;
   const { getValues } = parentForm;
 
@@ -38,6 +40,8 @@ const BoostMetaForm = props => {
       next={currentStep.next}
       ctaText={currentStep.ctaText || 'Next'}
       secondaryBtn={secondaryBtn}
+      checklist={checklist}
+      handleThen={handleThen}
     />
   );
 };

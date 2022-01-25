@@ -37,7 +37,6 @@ export const INFO_TEXT = {
     'This should be the Token ID for your NFT and then select the correct NFT standard.',
   BUYOUT_MINION: 'This proposal must be executed by a minion.',
 };
-
 export const FIELD = {
   TITLE: {
     type: 'input',
@@ -461,6 +460,12 @@ export const FIELD = {
     unchecked: 'false',
     label: 'Yes or No?',
     expectType: 'any',
+  },
+  AVATAR: {
+    type: 'imageInput',
+    label: 'avatar',
+    name: 'image',
+    htmlFor: 'avatar',
   },
   DISPERSE_CSV: {
     type: 'disperseListInput',

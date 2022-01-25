@@ -10,6 +10,7 @@ import FormBuilder from './formBuilder';
 import ZodiacActionForm from './zodiacActionForm';
 import Signer from '../components/signer';
 import TheSummoner from '../components/theSummoner';
+import ButtonAction from '../components/buttonAction';
 
 const getStepTitle = (currentStep, props) => {
   if (typeof currentStep?.title === 'string') return currentStep.title;
@@ -109,7 +110,6 @@ const StepperForm = props => {
       );
 
     const getNewCtaText = next => {
-      console.log(next);
       if (next?.then === 'FINISH') {
         return 'Finish';
       }
@@ -167,7 +167,12 @@ const StepperForm = props => {
         parentForm={parentForm}
         goToNext={goToNext}
         next={currentStep.next}
-        ctaText={currentStep?.next?.ctaText || 'Next >'}
+        defaultValues={stepperStorage}
+        ctaText={
+          currentStep?.finish
+            ? 'Submit'
+            : currentStep?.next?.ctaText || 'Next >'
+        }
         handleThen={handleThen}
       />
     );
@@ -182,6 +187,8 @@ const StepperForm = props => {
         next={currentStep.next}
         setStepperStorage={setStepperStorage}
         secondaryBtn={secondaryBtn}
+        checklist={currentStep.checklist}
+        handleThen={handleThen}
       />
     );
   }
@@ -250,6 +257,16 @@ const StepperForm = props => {
         parentForm={parentForm}
         secondaryBtn={secondaryBtn}
         setStepperStorage={setStepperStorage}
+      />
+    );
+  }
+  if (currentStep?.type === 'buttonAction') {
+    return (
+      <ButtonAction
+        {...currentStep}
+        goToNext={goToNext}
+        setStepperStorage={setStepperStorage}
+        stepperStorage={stepperStorage}
       />
     );
   }
