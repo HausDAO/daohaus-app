@@ -239,12 +239,14 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
             return (
               <Box key={`subaction_${idx}`}>
                 <HStack spacing={3}>
-                  <TextBox size='xs'>
+                  <TextBox size='xs' variant='mono'>
                     {`Action ${idx + 1}: ${action?.name || ''}`}
                   </TextBox>
                 </HStack>
                 {action?.to && (
-                  <TextBox size='xs'>{`To: ${action.to}`}</TextBox>
+                  <TextBox size='xs' variant='value'>
+                    {`To: ${action.to}`}
+                  </TextBox>
                 )}
                 {action?.value && (
                   <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
