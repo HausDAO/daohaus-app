@@ -31,7 +31,7 @@ export const MINION_NETWORKS = {
     '0xa4b1': true,
   },
   [MINION_TYPES.CROSSCHAIN_SAFE]: {
-    '0x1': true,
+    '0x1': false,
     '0x4': true,
     '0x64': true,
   },
@@ -166,6 +166,6 @@ export const MINIONS = {
       },
     },
     settings: SETTINGS_LINKS.VAULT_LINK,
-    nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_RARIBLE], // TODO: make sure all actions are available
+    nftActions: [NFT_ACTIONS.TRANSFER],
   },
 };

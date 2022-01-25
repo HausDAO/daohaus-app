@@ -81,6 +81,7 @@ const TheSummoner = props => {
         searchBy: 'type',
         daoOverview,
         searchParam: minionType,
+        crossChain: false,
       });
       if (minionsOfType?.length) {
         setExistingMinions(minionsOfType);

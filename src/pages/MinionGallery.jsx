@@ -24,13 +24,22 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   const [allCollections, setAllCollections] = useState([]);
   const [nfts, setNfts] = useState(null);
   const [nftData, setNftData] = useState(null); // Grab Vault NFTs
+  const [vaultMatch, setVaultMatch] = useState(null);
   useEffect(() => {
     if (daoVaults) {
       let nfts = [];
       if (minion) {
-        nfts = daoVaults?.find(vault => {
+        const vault = daoVaults?.find(vault => {
           return vault.address === minion;
-        })?.nfts;
+        });
+        nfts = vault?.nfts?.map(n => {
+          return {
+            ...n,
+            minionAddress: vault.address,
+            minionType: vault.minionType,
+          };
+        });
+        setVaultMatch(vault);
       } else {
         nfts = filterUniqueNfts(daoVaults);
       }
@@ -172,6 +181,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
                   minion={minion || nft.minionAddress}
                   minionType={nft.minionType}
                   width={['85vw', '85vw', 350, 350]}
+                  vault={vaultMatch}
                 />
               </WrapItem>
             ))}

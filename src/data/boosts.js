@@ -434,16 +434,11 @@ export const BOOSTS = {
   CROSS_CHAIN_MINION: {
     id: 'CROSS_CHAIN_MINION',
     boostContent: CONTENT.SAFE_CROSSCHAIN_DEV_SUITE,
-    minionData: MINIONS[MINION_TYPES.SAFE],
+    minionData: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE],
     categories: ['devTools'],
     steps: STEPS.CROSS_CHAIN_MINION_BOOST,
-    // TODO: correct playlist?
     playlist: BOOST_PLAYLISTS.CROSSCHAIN_SAFE_DEV_SUITE,
-    // TODO:
-    networks: {
-      '0x4': true,
-      '0x64': true,
-    },
+    networks: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE].networks,
     cost: 'free',
     settings: 'none',
     metaFields: ['ambModuleAddress', 'foreignChainId', 'foreignSafeAddress'],

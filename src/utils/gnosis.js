@@ -58,7 +58,7 @@ export const isModuleEnabled = async (chainID, safeAddress, moduleAddress) => {
 };
 
 export const fetchAmbModule = async (
-  ambController, // { chainid, address }
+  ambController, // { chainId, address }
   foreignChainId,
   foreignSafeAddress,
 ) => {

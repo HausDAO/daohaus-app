@@ -711,9 +711,7 @@ const MULTI_FORMS = {
     ],
   },
   CROSSCHAIN_SAFE_TX_BUILDER: {
-    dev: true,
     id: 'CROSSCHAIN_SAFE_TX_BUILDER',
-    logValues: true,
     isTxBuilder: true,
     type: 'multiForm',
     minionType: MINION_TYPES.SAFE,

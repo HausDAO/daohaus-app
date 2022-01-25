@@ -16,6 +16,7 @@ import { validate } from './validation';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { CONTRACTS, TX } from '../data/contractTX';
 import { chainByID } from './chain';
+import { encodeAmbTxProposal } from './gnosis';
 
 const getPath = pathString =>
   pathString
@@ -190,7 +191,7 @@ const argBuilderCallback = Object.freeze({
       }),
       [
         values.ambTx.to,
-        values.ambTx.data, // Multi-call for execution on foreign chain
+        values.ambTx.data, // multiSend Tx for execution on foreign chain
         localChain.zodiac_amb_module.gas_limit[values.foreignChainId],
       ],
     );
@@ -225,69 +226,101 @@ export const handleSearch = (data, arg, shouldThrow) => {
   return searchData(data, path, shouldThrow);
 };
 
-const gatherArgs = data => {
+const gatherArgs = async data => {
   const { tx } = data;
-  return tx.gatherArgs.map(arg => {
-    // checks if dev used two pipe operators to denote an OR condition.
-    // Splits the string into separate paths, then performs recursive search until
-    // a truthy result first.
-    if (typeof arg === 'string' && arg.includes('||')) {
-      const paths = getConditions(arg);
-      if (!paths.length)
-        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
-      return handleConditionalPaths(data, paths);
-    }
-    //  takes in search notation. Performs recursive search for application data
-    if (arg[0] === '.') {
-      return handleSearch(data, arg);
-    }
-    //  builds a details JSON string from values. Reindexes bases on a
-    //  given set of params defined in tx.detailsJSON
-    if (arg.type === 'detailsToJSON') {
-      return buildJSONdetails(data, arg.gatherFields);
-    }
-    if (arg.type === 'encodeHex') {
-      const args = gatherArgs({
-        ...data,
-        tx: { ...tx, gatherArgs: arg.gatherArgs },
-      });
-      return safeEncodeHexFunction(getABIsnippet(arg), args);
-    }
-    if (arg.type === 'encodeSafeActions') {
-      return encodeMultisendTx(
-        getABIsnippet(arg),
-        gatherArgs({
+  return Promise.all(
+    tx.gatherArgs.map(async arg => {
+      // checks if dev used two pipe operators to denote an OR condition.
+      // Splits the string into separate paths, then performs recursive search until
+      // a truthy result first.
+      if (typeof arg === 'string' && arg.includes('||')) {
+        const paths = getConditions(arg);
+        if (!paths.length)
+          throw new Error(
+            'txHelpers.js => gatherArgs(): Incorrect Path string',
+          );
+        return handleConditionalPaths(data, paths);
+      }
+      //  takes in search notation. Performs recursive search for application data
+      if (arg[0] === '.') {
+        return handleSearch(data, arg);
+      }
+      //  builds a details JSON string from values. Reindexes bases on a
+      //  given set of params defined in tx.detailsJSON
+      if (arg.type === 'detailsToJSON') {
+        return buildJSONdetails(data, arg.gatherFields);
+      }
+      if (arg.type === 'encodeHex') {
+        const args = await gatherArgs({
           ...data,
-          tx: { ...tx, gatherArgs: arg.to },
-        }).flatMap(a => a),
-        gatherArgs({
-          ...data,
-          tx: { ...tx, gatherArgs: arg.value },
-        }).flatMap(a => a),
-        gatherArgs({
-          ...data,
-          tx: { ...tx, gatherArgs: arg.data },
-        }).flatMap(a => a),
-        gatherArgs({
-          ...data,
-          tx: { ...tx, gatherArgs: arg.operation },
-        }).flatMap(a => a),
-      );
-    }
-    if (arg.type === 'nestedArgs') {
-      return arg.gatherArgs.flatMap(a => {
-        return gatherArgs({
-          ...data,
-          tx: { ...tx, gatherArgs: [a] },
+          tx: { ...tx, gatherArgs: arg.gatherArgs },
         });
-      });
-    }
-    //  for convenience, will search the values object for a field with the given string.
-    return arg;
-  });
+        return safeEncodeHexFunction(getABIsnippet(arg), args);
+      }
+      if (arg.type === 'encodeSafeActions') {
+        const encodedTx = encodeMultisendTx(
+          getABIsnippet(arg),
+          (
+            await gatherArgs({
+              ...data,
+              tx: { ...tx, gatherArgs: arg.to },
+            })
+          ).flatMap(a => a),
+          (
+            await gatherArgs({
+              ...data,
+              tx: { ...tx, gatherArgs: arg.value },
+            })
+          ).flatMap(a => a),
+          (
+            await gatherArgs({
+              ...data,
+              tx: { ...tx, gatherArgs: arg.data },
+            })
+          ).flatMap(a => a),
+          (
+            await gatherArgs({
+              ...data,
+              tx: { ...tx, gatherArgs: arg.operation },
+            })
+          ).flatMap(a => a),
+        );
+        if (arg.crossChain) {
+          // wrap encodedTx in a multiSend that sends a Tx through the AMB bridge
+          const { contextData, localValues } = data;
+          const txProposal = await encodeAmbTxProposal(
+            localValues.ambModuleAddress,
+            contextData.daochain,
+            {
+              to: chainByID(contextData.daochain).safeMinion.safe_mutisend_addr,
+              value: '0',
+              data: encodedTx,
+              operation: 1,
+            },
+            localValues.foreignChainId,
+          );
+          return encodeMulti(collapseToCallData({ TX: [txProposal] }));
+        }
+        return encodedTx;
+      }
+      if (arg.type === 'nestedArgs') {
+        const vals = await Promise.all(
+          arg.gatherArgs.map(async a => {
+            return gatherArgs({
+              ...data,
+              tx: { ...tx, gatherArgs: [a] },
+            });
+          }),
+        );
+        return [...vals].flatMap(v => v);
+      }
+      //  for convenience, will search the values object for a field with the given string.
+      return arg;
+    }),
+  );
 };
 
-export const getArgs = data => {
+export const getArgs = async data => {
   const { tx } = data;
   if (data.args) {
     //  Dev adds arguments manually in the component

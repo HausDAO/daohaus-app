@@ -176,6 +176,9 @@ export const FIELD = {
       [MINION_TYPES.SAFE]: minionVault => {
         return minionVault.isMinionModule && !minionVault.crossChainMinion;
       },
+      [MINION_TYPES.CROSSCHAIN_SAFE]: minionVault => {
+        return minionVault.crossChainMinion;
+      },
     },
   },
   CROSSCHAIN_MINION_SELECT: {

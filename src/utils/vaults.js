@@ -107,6 +107,26 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
       tx: VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
     };
   }
+  if (vaultMinionType === MINION_TYPES.CROSSCHAIN_SAFE) {
+    const tx = {
+      ...VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
+      gatherArgs: [
+        {
+          ...VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`]
+            .gatherArgs[0],
+          crossChain: true, // mark as cross-chain
+        },
+        ...VAULT_TRANSFER_TX[
+          `${tokenFormsString[tokenType]}_SAFE`
+        ].gatherArgs.slice(1),
+      ],
+    };
+    return {
+      ...formLego,
+      minionType: MINION_TYPES.SAFE,
+      tx,
+    };
+  }
 
   return formLego;
 };
