@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import {
   Menu,
   MenuList,
   Icon,
   MenuButton,
   MenuItem,
-  Link,
   useToast,
 } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
@@ -22,18 +22,27 @@ import { CORE_FORMS, FORM } from '../data/forms';
 import { TX } from '../data/contractTX';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
+import {
+  getBasicProfile,
+  setBasicProfile,
+  cacheProfile,
+  authenticateDid,
+} from '../utils/3box';
 
-const ProfileMenu = ({ member }) => {
+const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
   const { address, injectedProvider } = useInjectedProvider();
+  const { stepperModal, formModal, closeModal } = useAppModal();
   const { canInteract } = useCanInteract({
     checklist: ['isConnected', 'isSameChain'],
   });
-  const { formModal } = useAppModal();
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
-  const { errorToast } = useOverlay();
+  const { successToast, errorToast } = useOverlay();
   const { submitTransaction } = useTX();
+  const { refreshMemberProfile } = useUser(null);
+  const history = useHistory();
+  const location = useLocation();
 
   const [canRageQuit, setCanRageQuit] = useState(false);
 
@@ -47,6 +56,91 @@ const ProfileMenu = ({ member }) => {
   const handleRageQuitClick = () => formModal(CORE_FORMS.RAGE_QUIT);
 
   const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
+
+  const handleEditProfile = useCallback(() => {
+    let client = null;
+    let did = null;
+    stepperModal({
+      DISPLAY: {
+        type: 'buttonAction',
+        title: 'Edit Ceramic Profile',
+        checklist: ['isConnected', 'isMember'],
+        btnText: 'Connect',
+        btnLabel: 'Connect to Ceramic',
+        btnLoadingText: 'Connecting',
+        btnNextCallback: values => {
+          return values?.ceramicDid;
+        },
+        btnCallback: async (setValue, setLoading, setFormState) => {
+          setLoading(true);
+          try {
+            [client, did] = await authenticateDid(
+              window.ethereum.selectedAddress,
+            );
+            setValue('ceramicClient', client);
+            setValue('ceramicDid', did);
+            const profile = await getBasicProfile(did.id);
+            setValue('name', profile?.name || '');
+            setValue('emoji', profile?.emoji || '');
+            setValue('description', profile?.description || '');
+            setValue('homeLocation', profile?.homeLocation || '');
+            setValue('url', profile?.url || '');
+            setValue('image', profile?.image || '');
+            setFormState('success');
+          } catch (err) {
+            console.error(err);
+            setFormState('failed');
+          }
+          setLoading(false);
+        },
+        next: 'STEP2',
+        start: true,
+      },
+      STEP2: {
+        type: 'form',
+        title: 'Edit Ceramic Profile',
+        subtitle: 'Connected to Ceramic',
+        form: {
+          ...FORM.PROFILE,
+          ctaText: 'Submit',
+          formSuccessMessage: 'Connected',
+          checklist: ['isConnected', 'isMember'],
+          onSubmit: async ({ values }) => {
+            const profileArray = Object.entries({
+              name: values?.name || null,
+              emoji: values?.emoji || null,
+              description: values?.description || null,
+              homeLocation: values?.homeLocation || null,
+              url: values?.url || null,
+              image: values?.image || null,
+            }).filter(value => value[1] !== null);
+            const profile = Object.fromEntries(profileArray);
+
+            await setBasicProfile(client, did, profile);
+            cacheProfile(profile, member.memberAddress);
+            refreshProfile(profile);
+            await refreshMemberProfile();
+            successToast({ title: 'Updated Profile!' });
+            client = null;
+            did = null;
+            closeModal();
+          },
+        },
+        ctaText: 'Finish',
+        isUserStep: true,
+        finish: true,
+        stepLabel: 'Update profile',
+      },
+    });
+    history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
+  }, [member.memberAddress, refreshMemberProfile]);
+
+  useEffect(() => {
+    const edit = new URLSearchParams(location.search).get('edit');
+    if (edit) {
+      handleEditProfile();
+    }
+  }, [handleEditProfile, location.search]);
 
   const copiedToast = () => {
     toast({
@@ -71,7 +165,6 @@ const ProfileMenu = ({ member }) => {
         args: [member.memberAddress],
       });
     } catch (err) {
-      console.log('error: ', err);
       userRejectedToast();
     }
   };
@@ -121,14 +214,9 @@ const ProfileMenu = ({ member }) => {
           <MenuItem>Copy Address</MenuItem>
         </CopyToClipboard>
 
-        <Link
-          href={`https://3box.io/${member?.memberAddress}`}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <MenuItem>View 3box Profile</MenuItem>
-        </Link>
-
+        {address === member.memberAddress && (
+          <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
+        )}
         {canInteract ? (
           <>
             {isMember && hasSharesOrLoot && (

@@ -14,9 +14,9 @@ import { initTokenData } from '../utils/tokenValue';
 const Profile = ({ members, overview, daoTokens, activities }) => {
   const { userid, daochain } = useParams();
   const { address } = useInjectedProvider();
+  const [profile, setProfile] = useState(null);
 
   const [memberEntity, setMemberEntity] = useState(null);
-  const [profile, setProfile] = useState(null);
   const [tokensReceivable, setTokensReceivable] = useState([]);
 
   useEffect(() => {
@@ -34,16 +34,16 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     const getProfile = async () => {
       try {
         const profile = await handleGetProfile(userid);
-        if (profile.status === 'error') return;
+        if (!profile) return;
         setProfile(profile);
       } catch (error) {
         console.error(error);
       }
     };
-    if (userid && !profile) {
+    if (userid) {
       getProfile();
     }
-  }, [userid, profile]);
+  }, [userid]);
 
   useEffect(() => {
     const initMemberTokens = async tokensWithBalance => {
@@ -84,6 +84,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
             ens={profile?.ens}
             profile={profile}
             memberEntity={memberEntity}
+            refreshProfile={setProfile}
           />
           <BankList
             tokens={tokensReceivable}
