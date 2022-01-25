@@ -128,7 +128,6 @@ export const TXProvider = ({ children }) => {
 
   const buildTXPoll = data => {
     const { tx, values, formData, now, lifeCycleFns, localValues } = data;
-    console.log(`localValues`, localValues);
     return createPoll({
       action: tx.poll || tx.specialPoll || tx.name,
       cachePoll,

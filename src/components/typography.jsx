@@ -46,7 +46,6 @@ export const ParaSm = props => {
     </Text>
   );
 };
-
 export const ParaLg = props => {
   const { text, children } = props;
   return (

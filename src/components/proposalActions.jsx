@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
-import { RiQuestionLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import {
   Box,
   Button,
@@ -133,7 +133,6 @@ const ProposalVote = ({
         .filter(p => p.status === 'ReadyForProcessing')
         .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
       if (proposalsToProcess.length > 0) {
-        console.log(`proposalsToProcess`, proposalsToProcess[0]);
         setNextProposal(proposalsToProcess[0]);
       }
     }
@@ -224,7 +223,7 @@ const ProposalVote = ({
                   {`${overview?.proposalDeposit /
                     10 ** overview?.depositToken.decimals}
                   ${overview?.depositToken?.symbol}`}
-                  {/* {!enoughDeposit && daoMember ? (
+                  {!enoughDeposit && daoMember ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
@@ -239,7 +238,7 @@ const ProposalVote = ({
                         mt='-4px'
                       />
                     </Tooltip>
-                  ) : null} */}
+                  ) : null}
                 </TextBox>
               </Flex>
             </Flex>

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
+import { ethers } from 'ethers';
 import { v4 as uuid } from 'uuid';
 
 import { useAppModal } from '../hooks/useModals';
 import TextBox from '../components/TextBox';
 import { ParaMd } from '../components/typography';
 import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
-
-const CONTRACT_ZERO =
-  '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 const MultiTxTransfer = ({ minionAction }) => {
   const { genericModal } = useAppModal();
@@ -91,7 +89,7 @@ const SingleActionDisplay = ({ action, index }) => {
       {isOpen && (
         <>
           <ActionItem label='Target Contract' data={action.to} />
-          {action.value !== CONTRACT_ZERO && (
+          {action.value !== ethers.constants.AddressZero && (
             <ActionItem label='Target Contract' data={action.to} />
           )}
           <TextBox size='xs' variant='label' mb={3}>

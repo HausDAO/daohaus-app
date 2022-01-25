@@ -37,23 +37,12 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
     return null;
   if (hasReachedQuorum && !proposal.executed) {
     return (
-      // <ToolTipWrapper
-      //   tooltip
-      //   placement='right'
-      //   tooltipText={{
-      //     title: 'Can execute',
-      //     pars: [
-      //       `This proposal requires ${proposal?.minion?.minQuorum}% of DAO shares to vote 'Yes' in order to execute the minion transaction early`,
-      //     ],
-      //   }}
-      // >
       <Button variant='ghost' size='fit-content' onClick={execute} p='0'>
         <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />
         <ParaSm ml={1}>
           {percYesVotes}/{proposal.minion.minQuorum}%
         </ParaSm>
       </Button>
-      // </ToolTipWrapper>
     );
   }
 

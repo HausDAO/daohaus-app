@@ -20,6 +20,8 @@ import Textarea from './core/textarea';
 import ContentBoxComponent from './components/contentBox';
 import TextBoxComponent from './components/textBox';
 
+export const CARD_BG = '#0b0b0b';
+
 export const createTheme = daoTheme => {
   const daoThemeKeys = Object.keys(daoTheme);
 
