@@ -21,9 +21,30 @@ import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
 import { calcPower, calcValue } from '../utils/profile';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
+const ProfileCard = ({
+  overview,
+  daoTokens,
+  ens,
+  profile,
+  memberEntity,
+  refreshProfile,
+}) => {
   const { userid } = useParams();
   const handleAvatar = (member, profile) => {
+    if (profile?.image?.original?.src) {
+      return (
+        <Avatar
+          key={`profile${member}`}
+          name={profile?.name}
+          width='100px'
+          height='100px'
+          src={`https://ipfs.infura.io/ipfs/${
+            profile?.image.original.src.match('(?<=ipfs://).+')[0]
+          }`}
+        />
+      );
+    }
+
     if (profile?.image?.length) {
       const url = profile?.image[0].contentUrl;
       return (
@@ -133,7 +154,10 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
               </Box>
               <Box>
                 {memberEntity && (
-                  <ProfileMenu member={{ ...memberEntity, ...profile }} />
+                  <ProfileMenu
+                    member={{ ...memberEntity, ...profile }}
+                    refreshProfile={refreshProfile}
+                  />
                 )}
               </Box>
             </Flex>

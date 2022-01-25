@@ -3,6 +3,7 @@ import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
+import { authenticateDid } from '../utils/3box';
 
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
@@ -140,6 +141,78 @@ export const PROPOSAL_FORMS = {
       FIELD.PAYMENT_REQUEST,
     ],
     customValidations: ['nonDaoApplicant'],
+  },
+  PROFILE: {
+    id: 'PROFILE',
+    title: 'Update Basic Profile',
+    description:
+      'Editing this profile will update your profile everywhere Ceramic is used',
+    tx: null,
+    ctaText: 'Connect',
+    blurText: 'Connect to update your profile',
+    fields: [
+      [
+        FIELD.AVATAR,
+        {
+          ...FIELD.TITLE,
+          label: 'Name',
+          name: 'name',
+          placeholder: 'A name for your profile',
+          htmlFor: 'name',
+          expectType: 'string',
+          maxLength: {
+            value: 150,
+            message: 'Name must be less than 150 characters',
+          },
+        },
+        {
+          ...FIELD.DESCRIPTION,
+          label: 'Bio',
+          name: 'description',
+          htmlFor: 'description',
+          placeholder: 'A description about yourself',
+          expectType: 'string',
+          maxLength: {
+            value: 420,
+            message: 'Bio must be less than 420 characters',
+          },
+        },
+      ],
+      [
+        {
+          ...FIELD.TITLE,
+          label: 'Spirit Emoji',
+          name: 'emoji',
+          placeholder: 'An emoji to represent who you are',
+          htmlFor: 'emoji',
+          expectType: 'string',
+          maxLength: { value: 2, message: 'Not a valid emoji' },
+        },
+
+        {
+          ...FIELD.TITLE,
+          label: 'Url',
+          name: 'url',
+          placeholder: 'https://example.com',
+          htmlFor: 'url',
+          expectType: 'url',
+        },
+        {
+          ...FIELD.TITLE,
+          label: 'Location',
+          name: 'homeLocation',
+          placeholder: 'A location where you are or hope to be',
+          htmlFor: 'homeLocation',
+          expectType: 'string',
+          maxLength: {
+            value: 140,
+            message: 'Location must be less than 420 characters',
+          },
+        },
+      ],
+    ],
+    additionalOptions: [],
+    customValidations: [],
   },
   FUNDING: {
     id: 'FUNDING',
@@ -693,6 +766,35 @@ const MULTI_FORMS = {
       PROPOSAL_FORMS.CREATE_TX,
       PROPOSAL_FORMS.MULTICALL_CONFIRMATION,
     ],
+  },
+};
+
+export const STEPPER_FORMS = {
+  CERAMIC_AUTH: {
+    type: 'buttonAction',
+    id: 'CERAMIC_AUTH',
+    title: 'IDX Connect',
+    btnText: 'Connect',
+    btnLabel: 'Connect to Ceramic',
+    btnLoadingText: 'Connecting',
+    btnNextCallback: values => {
+      return values?.ceramicDid;
+    },
+    btnCallback: async (setValue, setLoading, setFormState) => {
+      setLoading(true);
+      try {
+        const [client, did] = await authenticateDid(
+          window.ethereum.selectedAddress,
+        );
+        setValue('ceramicClient', client);
+        setValue('ceramicDid', did);
+        setFormState('connected');
+      } catch (err) {
+        console.error(err);
+      }
+      setFormState('failed');
+      setLoading(false);
+    },
   },
 };
 
