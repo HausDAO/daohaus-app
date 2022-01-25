@@ -140,6 +140,7 @@ export const getApiGnosis = async (networkName, endpoint) => {
   }
 };
 
+// Use fetchSafeDetails from ./gnosis instead
 export const fetchSafeDetails = async (networkName, safeAddress) => {
   try {
     return await getApiGnosis(

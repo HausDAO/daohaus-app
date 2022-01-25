@@ -19,6 +19,7 @@ import {
 } from '../graphQL/snapshot-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
+import { isModuleEnabled } from './gnosis';
 import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
 import {
   GET_ERC721,
@@ -32,7 +33,6 @@ import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
-import { validateSafeMinion } from './vaults';
 
 const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
@@ -347,14 +347,20 @@ const completeQueries = {
         const vaultData = await Promise.all(
           vaultApiData.map(async vault => {
             if (vault.minionType === MINION_TYPES.SAFE) {
-              const { isMinionModule } = await validateSafeMinion(
-                args.chainID,
-                vault,
-              );
-              return {
-                ...vault,
-                isMinionModule,
-              };
+              try {
+                const isMinionModule = await isModuleEnabled(
+                  args.chainID,
+                  vault.safeAddress,
+                  vault.address,
+                );
+                return {
+                  ...vault,
+                  isMinionModule,
+                };
+              } catch (error) {
+                console.error(error);
+              }
+              return vault;
             }
             return vault;
           }),

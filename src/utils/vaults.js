@@ -1,9 +1,6 @@
-import { utils as Web3Utils } from 'web3';
-import { chainByID, supportedChains } from './chain';
+import { supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
-import { fetchSafeDetails } from './requests';
-import { isAmbModule } from './contract';
 import { FORM } from '../data/forms';
 import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
 import { getReadableBalance } from './tokenValue';
@@ -174,43 +171,5 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
-  }
-};
-
-export const validateSafeMinion = async (chainId, vault) => {
-  try {
-    const safeDetails = await fetchSafeDetails(
-      chainByID(chainId).networkAlt || chainByID(chainId).network,
-      vault.safeAddress,
-    );
-
-    return {
-      isMinionModule: safeDetails.modules.includes(
-        Web3Utils.toChecksumAddress(vault.address),
-      ),
-      safeDetails,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      isMinionModule: false,
-    };
-  }
-};
-
-export const getAmbModuleAddress = async ({
-  daochain,
-  foreignChainId,
-  safeAddress,
-  foreignSafeAddress,
-}) => {
-  const foreignSafe = await fetchSafeDetails(
-    chainByID(foreignChainId).networkAlt || chainByID(foreignChainId).network,
-    foreignSafeAddress,
-  );
-  if (foreignSafe) {
-    return foreignSafe.modules.find(async m => {
-      await isAmbModule(m, safeAddress, daochain, foreignChainId);
-    });
   }
 };

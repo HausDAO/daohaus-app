@@ -6,10 +6,10 @@ import { ethers } from 'ethers';
 
 import FieldWrapper from './fieldWrapper';
 import ErrorList from './ErrorList';
-import { getAmbModuleAddress } from '../utils/vaults';
 import { getLocalABI } from '../utils/abi';
 import { encodeMulti, collapseToCallData } from '../utils/txHelpers';
 import { chainByID } from '../utils/chain';
+import { fetchAmbModule } from '../utils/gnosis';
 import { CONTRACTS } from '../data/contractTX';
 
 const AmbEncoder = props => {
@@ -61,12 +61,14 @@ const AmbEncoder = props => {
   const encodeAmbTx = async () => {
     setLoading(true);
     try {
-      const ambModuleAddress = await getAmbModuleAddress({
-        daochain,
+      const ambModuleAddress = await fetchAmbModule(
+        {
+          chainId: daochain,
+          address: safeAddress,
+        },
         foreignChainId,
-        safeAddress,
         foreignSafeAddress,
-      });
+      );
 
       const ambModule = new ethers.Contract(
         ambModuleAddress,
