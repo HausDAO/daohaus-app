@@ -11,6 +11,8 @@ const FieldWrapper = ({
   children,
   label,
   info,
+  infoLink,
+  hrefLink,
   htmlFor,
   name,
   helperText,
@@ -58,6 +60,8 @@ const FieldWrapper = ({
                 transform: 'translateY(-2px)',
                 display: 'inline-block',
               }}
+              link={infoLink}
+              href={hrefLink}
             >
               <Icon as={RiInformationLine} ml={2} />
             </ToolTipWrapper>

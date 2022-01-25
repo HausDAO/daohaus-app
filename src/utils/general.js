@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'crypto-browserify';
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 import Web3 from 'web3';

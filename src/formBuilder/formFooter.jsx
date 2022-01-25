@@ -45,7 +45,9 @@ const FormFooter = props => {
     addStep,
     closeModal,
     checklist,
+    disableCallback,
   } = props;
+  const isLoading = loading === 'loading' || loading === 'loadingStepper';
 
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
   const { canInteract, interactErrors } = useCanInteract({
@@ -53,7 +55,6 @@ const FormFooter = props => {
     checklist,
   });
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
-
   return (
     <Flex flexDir='column'>
       <Flex alignItems={['flex-row', 'flex-end']} flexDir={['column', 'row']}>
@@ -73,7 +74,7 @@ const FormFooter = props => {
           <Button
             type='button'
             variant='outline'
-            disabled={loading}
+            disabled={isLoading}
             onClick={secondaryBtn.fn}
             mr={[0, 2]}
           >
@@ -86,8 +87,8 @@ const FormFooter = props => {
             }
             onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
-            isLoading={loading}
-            disabled={loading || !canInteract}
+            isLoading={isLoading}
+            disabled={isLoading || !canInteract || disableCallback()}
             mb={[2, 0]}
           >
             {ctaText ||
