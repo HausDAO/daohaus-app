@@ -38,4 +38,7 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'raribleTransfer',
     execute: 'safeMinionAction',
   },
+  [PROPOSAL_TYPES.MINION_BUYOUT]: {
+    execute: 'minionBuyoutAction',
+  },
 };

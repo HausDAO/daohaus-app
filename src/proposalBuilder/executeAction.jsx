@@ -4,9 +4,18 @@ import { AiOutlineCheck } from 'react-icons/ai';
 
 import { useTX } from '../contexts/TXContext';
 import { InactiveButton } from './proposalActionPrimitives';
+import useCanInteract from '../hooks/useCanInteract';
 
-const ExecuteAction = ({ proposal, executeTX, argsOverride }) => {
+const ExecuteAction = ({
+  proposal,
+  executeTX,
+  argsOverride,
+  disabledOverride,
+}) => {
   const { submitTransaction } = useTX();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const [loading, setLoading] = useState(false);
 
   const execute = async () => {
@@ -33,7 +42,12 @@ const ExecuteAction = ({ proposal, executeTX, argsOverride }) => {
   }
 
   return (
-    <Button onClick={execute} size='sm' isLoading={loading}>
+    <Button
+      onClick={execute}
+      size='sm'
+      isLoading={loading}
+      disabled={disabledOverride || !canInteract}
+    >
       Execute
     </Button>
   );
