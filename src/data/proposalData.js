@@ -30,4 +30,12 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'multiTx',
     execute: 'safeMinionAction',
   },
+  [PROPOSAL_TYPES.BUY_NFT_RARIBLE]: {
+    customTransferUI: 'raribleTransfer',
+    execute: 'safeMinionAction',
+  },
+  [PROPOSAL_TYPES.SELL_NFT_RARIBLE]: {
+    customTransferUI: 'raribleTransfer',
+    execute: 'safeMinionAction',
+  },
 };
