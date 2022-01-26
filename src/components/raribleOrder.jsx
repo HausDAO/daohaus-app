@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';

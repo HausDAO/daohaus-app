@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
 import { FaSpinner } from 'react-icons/fa';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import {
   Menu,
   MenuList,
