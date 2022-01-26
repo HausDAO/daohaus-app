@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import {
   Flex,
   Spinner,

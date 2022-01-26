@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 import { Flex, Button, InputGroup, Input } from '@chakra-ui/react';
 
 import { useTX } from '../contexts/TXContext';

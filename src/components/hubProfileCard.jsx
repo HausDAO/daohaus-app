@@ -28,29 +28,50 @@ const HubProfileCard = ({ address }) => {
     getProfile();
   }, [address]);
 
+  const handleAvatar = (profile, address) => {
+    if (profile?.image?.original?.src) {
+      return (
+        <Image
+          w='100px'
+          h='100px'
+          mr={6}
+          rounded='full'
+          src={`https://ipfs.infura.io/ipfs/${
+            profile?.image.original.src.match('(?<=ipfs://).+')[0]
+          }`}
+        />
+      );
+    }
+
+    if (profile?.image?.length) {
+      const url = profile?.image[0].contentUrl;
+      return (
+        <Image
+          w='100px'
+          h='100px'
+          mr={6}
+          rounded='full'
+          src={`https://ipfs.infura.io/ipfs/${profile.image[0].contentUrl['/']}`}
+        />
+      );
+    }
+    return (
+      <Image
+        w='100px'
+        h='100px'
+        mr={6}
+        rounded='full'
+        src={makeBlockie(address)}
+      />
+    );
+  };
+
   return (
     <>
       {address ? (
         <>
           <Flex direction='row' alignItems='center' pt={2}>
-            {profile?.image && profile.image[0] ? (
-              <Image
-                w='100px'
-                h='100px'
-                mr={6}
-                rounded='full'
-                src={`https://ipfs.infura.io/ipfs/${profile.image[0].contentUrl['/']}`}
-              />
-            ) : (
-              <Image
-                w='100px'
-                h='100px'
-                mr={6}
-                rounded='full'
-                src={makeBlockie(address)}
-              />
-            )}
-
+            {handleAvatar(profile, address)}
             <Flex direction='column'>
               <Box fontSize='xl' fontFamily='heading'>
                 {profile?.name || profile?.ens || truncateAddr(address)}

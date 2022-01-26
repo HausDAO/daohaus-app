@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 import { Tabs, Tab, TabList, TabPanel, TabPanels } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';

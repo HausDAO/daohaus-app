@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Flex } from '@chakra-ui/layout';
 
 import GenericSelect from './genericSelect';
