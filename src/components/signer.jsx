@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { BiErrorCircle } from 'react-icons/bi';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Divider, Flex, Link, Button, Box } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';

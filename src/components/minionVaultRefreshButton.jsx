@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiRefreshLine } from 'react-icons/ri';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Box, IconButton, Spinner } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
