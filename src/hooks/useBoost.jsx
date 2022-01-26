@@ -2,7 +2,9 @@ import { BiErrorCircle } from 'react-icons/bi';
 
 import { useDao } from '../contexts/DaoContext';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { CONTRACTS, TX } from '../data/contractTX';
+import { CONTRACTS } from '../data/contracts';
+import { TX } from '../data/contractTX';
+
 import { getReadableBalance } from '../utils/tokenValue';
 
 const useBoost = () => {

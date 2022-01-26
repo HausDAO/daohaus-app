@@ -1,4 +1,6 @@
-import { ACTIONS, CONTRACTS, DETAILS } from './contractTX';
+import { CONTRACTS } from './contracts';
+import { DETAILS } from './details';
+import { ACTIONS } from './onTxHashActions';
 
 export const VAULT_TRANSFER_TX = {
   MINION_SEND_ERC20_TOKEN: {
