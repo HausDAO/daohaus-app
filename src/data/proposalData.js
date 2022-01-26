@@ -41,4 +41,8 @@ export const CUSTOM_CARD_DATA = {
   [PROPOSAL_TYPES.MINION_BUYOUT]: {
     execute: 'minionBuyoutAction',
   },
+  [PROPOSAL_TYPES.MINION_TRIBUTE]: {
+    customTransferUI: 'minionTributeTransfer',
+    // execute: 'raribleAction',
+  },
 };
