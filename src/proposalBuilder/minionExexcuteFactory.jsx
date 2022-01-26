@@ -7,6 +7,7 @@ import UberStakingAction from './uberStakingAction';
 import { TX } from '../data/contractTX';
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
 import ExecuteMinionBuyout from './executeMinionBuyout';
+import MinionTributeAction from './minionTributeAction';
 
 const MinionExexcuteFactory = props => {
   const { proposal } = props;
@@ -38,6 +39,9 @@ const MinionExexcuteFactory = props => {
   }
   if (executeType === 'minionBuyoutAction') {
     return <ExecuteMinionBuyout {...props} />;
+  }
+  if (executeType === 'minionTributeAction') {
+    return <MinionTributeAction {...props} />;
   }
   return <ExecuteAction {...props} />;
 };

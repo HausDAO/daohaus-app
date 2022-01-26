@@ -43,6 +43,6 @@ export const CUSTOM_CARD_DATA = {
   },
   [PROPOSAL_TYPES.MINION_TRIBUTE]: {
     customTransferUI: 'minionTributeTransfer',
-    // execute: 'raribleAction',
+    execute: 'minionTributeAction',
   },
 };
