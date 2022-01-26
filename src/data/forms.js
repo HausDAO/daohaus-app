@@ -3,7 +3,11 @@ import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TX } from './contractTX';
 import { VAULT_TRANSFER_TX } from './transferContractTx';
+<<<<<<< HEAD
 import { authenticateDid } from '../utils/3box';
+=======
+import { UBERHAUS_FORMS } from './uberHausForms';
+>>>>>>> 06d93339b133e63ce77b77dd3209367c48b49548
 
 export const CORE_FORMS = {
   EDIT_PLAYLIST: {
@@ -862,4 +866,4 @@ export const BOOST_FORMS = {
   },
 };
 
-export const FORM = { ...PROPOSAL_FORMS, ...MULTI_FORMS };
+export const FORM = { ...PROPOSAL_FORMS, ...MULTI_FORMS, ...UBERHAUS_FORMS };

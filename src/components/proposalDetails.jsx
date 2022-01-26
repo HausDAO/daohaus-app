@@ -15,7 +15,7 @@ import TextBox from './TextBox';
 import TextIndicator from './textIndicator';
 import TokenDisplay from './tokenDisplay';
 import UberDaoInfo from './uberDaoInfo';
-import UberHausDelegate from './uberhausDelegate';
+import UberHausDelegate from './uberHausDelegate';
 import Vote from './voteIcon';
 import {
   determineProposalStatus,

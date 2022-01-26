@@ -45,6 +45,8 @@ const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
     }
   }, [daoOverview]);
 
+  console.log('tokenData', tokenData);
+
   const getMax = async () => {
     const max = stakingToken.balance;
     setBalance(max);
