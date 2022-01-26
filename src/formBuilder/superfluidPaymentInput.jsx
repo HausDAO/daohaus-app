@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import PaymentInput from './paymentInput';
 import { SF_ACTIVE_STREAMS } from '../graphQL/superfluid-queries';

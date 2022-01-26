@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import {
   Menu,
   MenuList,
