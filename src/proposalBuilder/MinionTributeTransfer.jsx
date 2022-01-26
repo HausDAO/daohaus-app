@@ -6,7 +6,6 @@ import { ParaMd } from '../components/typography';
 import MediaBox from '../components/mediaBox';
 
 const MinionTributeTransfer = ({ proposal = {} }) => {
-  console.log('proposal', proposal);
   return (
     <Flex justify='space-between' alignItems='flex-start'>
       <PropCardTransfer
