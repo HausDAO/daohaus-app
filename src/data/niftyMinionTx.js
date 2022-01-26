@@ -66,4 +66,15 @@ export const NIFTY_MINION_TX = {
       0,
     ],
   },
+  MINION_PROPOSE_ACTION_NIFTY: {
+    contract: CONTRACTS.SELECTED_MINION_NIFTY,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    argsFromCallback: 'proposeActionNifty',
+    createDiscourse: true,
+  },
 };

@@ -1,4 +1,5 @@
 import { CONTRACTS } from './contracts';
+import { ACTIONS } from './onTxHashActions';
 
 export const SAFE_MINION_TX = {
   SUMMON_MINION_AND_SAFE: {
@@ -38,5 +39,16 @@ export const SAFE_MINION_TX = {
     errMsg: 'Error Submitting Safe Proposal',
     successMsg: 'Safe Minion Proposal Submitted!',
     argsFromCallback: 'multiActionSafe',
+  },
+  MINION_PROPOSE_ACTION_SAFE: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    argsFromCallback: 'proposeActionSafe',
+    createDiscourse: true,
   },
 };

@@ -12,6 +12,7 @@ export const MINION_TX = {
     successMsg: 'Minion Summoned!',
     gatherArgs: ['.contextData.daoid', '.values.minionName'],
   },
+
   PAYROLL: {
     contract: CONTRACTS.SELECTED_MINION,
     name: 'proposeAction',
@@ -94,5 +95,16 @@ export const MINION_TX = {
     display: 'Executing Minion Proposal',
     errMsg: 'Error Executing Minion Proposal',
     successMsg: 'Minion Proposal Executed!',
+  },
+  MINION_PROPOSE_ACTION: {
+    contract: CONTRACTS.SELECTED_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Propose Minion Action',
+    errMsg: 'Error submitting action to minion',
+    successMsg: 'Minion Proposal Created!',
+    createDiscourse: true,
+    argsFromCallback: 'proposeActionVanilla',
   },
 };
