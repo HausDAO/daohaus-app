@@ -152,5 +152,7 @@ export const getVoteData = (proposal, address, daoMember) => {
     totalVotes,
     isPassing,
     isFailing,
+    votePassedProcessFailed:
+      isPassing && proposal.processed && !proposal.didPass,
   };
 };

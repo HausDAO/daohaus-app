@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Link, Spinner } from '@chakra-ui/react';
 
+import { RiExternalLinkLine } from 'react-icons/ri';
 import { useOverlay } from '../contexts/OverlayContext';
 import {
   buildRaribleUrl,
@@ -11,7 +12,7 @@ import {
   getOrderDataFromProposal,
 } from '../utils/rarible';
 
-const RaribleOrder = ({ proposal, orderType }) => {
+const RaribleOrder = ({ proposal, buttonSize = 'md' }) => {
   const { daochain } = useParams();
   const { errorToast } = useOverlay();
   const [needOrder, setNeedOrder] = useState(false);
@@ -81,17 +82,18 @@ const RaribleOrder = ({ proposal, orderType }) => {
   if (!needOrder) {
     return (
       <Flex direction='column' alignItems='center'>
-        <Box>Executed</Box>
-        <Link href={orderUrl} isExternal>
+        {buttonSize !== 'sm' && <Box>Executed</Box>}
+        <Link href={orderUrl} isExternal fontSize={buttonSize}>
           View order on Rarible
+          <Icon as={RiExternalLinkLine} name='rarible order' ml={1} mt='-3px' />
         </Link>
       </Flex>
     );
   }
 
   return (
-    <Button disabled={loading} onClick={makeOrder}>
-      {`Create ${orderType} Order`}
+    <Button disabled={loading} onClick={makeOrder} size={buttonSize}>
+      Create Order
     </Button>
   );
 };

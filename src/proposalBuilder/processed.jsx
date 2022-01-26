@@ -11,6 +11,7 @@ import {
   VotingInactive,
 } from './proposalActionPrimitives';
 import MinionExexcuteFactory from './minionExexcuteFactory';
+import { ParaSm } from '../components/typography';
 
 const Processed = props => {
   const { voteData, proposal } = props;
@@ -19,10 +20,17 @@ const Processed = props => {
     return (
       <PropActionBox>
         <TopStatusBox
-          status={voteData?.isPassing ? 'Passed' : 'Failed'}
+          status={
+            voteData?.isPassing && !voteData?.votePassedProcessFailed
+              ? 'Passed'
+              : 'Failed'
+          }
           appendStatusText='and processed'
           circleColor={voteData?.isPassing ? 'green' : 'red'}
         />
+        {voteData?.votePassedProcessFailed && (
+          <ParaSm>The vote passed but process function failed</ParaSm>
+        )}
         <MiddleActionBox>
           <VotingInactive
             {...props}
@@ -44,15 +52,23 @@ const Processed = props => {
   return (
     <PropActionBox>
       <TopStatusBox
-        status={voteData?.isPassing ? 'Passed' : 'Failed'}
-        appendStatusText={`and ${
-          proposal?.executed ? 'minion executed' : 'needs execution'
-        }`}
+        status={
+          voteData?.isPassing && !voteData?.votePassedProcessFailed
+            ? 'Passed'
+            : 'Failed'
+        }
+        appendStatusText={
+          !voteData?.votePassedProcessFailed &&
+          `and ${proposal?.executed ? 'minion executed' : 'needs execution'}`
+        }
         circleColor={voteData?.isPassing ? 'green' : 'red'}
         quorum
         voteData={voteData}
         proposal={proposal}
       />
+      {voteData?.votePassedProcessFailed && (
+        <ParaSm>The vote passed but failed to process</ParaSm>
+      )}
       <MiddleActionBox>
         <VotingInactive
           {...props}
@@ -63,7 +79,9 @@ const Processed = props => {
       <Flex alignItems='center'>
         <UserVoteData voteData={voteData} />
         <Flex ml='auto'>
-          {voteData.isPassing && <MinionExexcuteFactory {...props} />}
+          {voteData.isPassing && !voteData?.votePassedProcessFailed && (
+            <MinionExexcuteFactory {...props} />
+          )}
         </Flex>
       </Flex>
     </PropActionBox>

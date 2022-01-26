@@ -32,11 +32,11 @@ export const CUSTOM_CARD_DATA = {
   },
   [PROPOSAL_TYPES.BUY_NFT_RARIBLE]: {
     customTransferUI: 'raribleTransfer',
-    execute: 'safeMinionAction',
+    execute: 'raribleAction',
   },
   [PROPOSAL_TYPES.SELL_NFT_RARIBLE]: {
     customTransferUI: 'raribleTransfer',
-    execute: 'safeMinionAction',
+    execute: 'raribleAction',
   },
   [PROPOSAL_TYPES.MINION_BUYOUT]: {
     execute: 'minionBuyoutAction',

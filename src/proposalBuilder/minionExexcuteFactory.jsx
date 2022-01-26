@@ -30,7 +30,7 @@ const MinionExexcuteFactory = props => {
   if (executeType === 'UH_staking') {
     return <UberStakingAction {...props} />;
   }
-  if (executeType === 'rarible') {
+  if (executeType === 'raribleAction') {
     return <ExecuteRarible {...props} />;
   }
   if (executeType === 'safeMinionAction') {

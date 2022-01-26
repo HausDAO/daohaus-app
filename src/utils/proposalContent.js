@@ -77,6 +77,11 @@ export const defaultFilterOptions = {
       type: 'status',
     },
     {
+      name: 'Ready For Execution',
+      value: 'NeedsExecution',
+      type: 'status',
+    },
+    {
       name: 'Passed',
       value: 'Passed',
       type: 'status',

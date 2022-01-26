@@ -145,7 +145,6 @@ const MinionExecute = ({
     }
 
     if (isEscrowMinion) {
-      console.log('isEscrowMinion', isEscrowMinion);
       return <EscrowActions proposal={proposal} />;
     }
 
@@ -159,8 +158,6 @@ const MinionExecute = ({
 
       const canExecute =
         memberApplicant?.loot === '0' && memberApplicant.shares === '0';
-
-      console.log('memberApplicant', memberApplicant);
 
       return proposal?.status === 'Passed' ? (
         <Flex alignItems='center' flexDir='column'>
