@@ -1,7 +1,6 @@
 import Web3 from 'web3';
 
 import SuperfluidMinionAbi from '../contracts/superfluidMinion.json';
-import { TokenService } from './tokenService';
 import {
   MINION_STREAMS,
   SF_ACTIVE_STREAMS,
@@ -10,9 +9,12 @@ import {
 } from '../graphQL/superfluid-queries';
 import { graphQuery } from '../utils/apollo';
 import { chainByID, getGraphEndpoint } from '../utils/chain';
+import { createContract } from '../utils/contract';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { isSupertoken } from '../utils/superfluid';
 import { graphFetchAll } from '../utils/theGraph';
+// MUST be imported at the end to avoid `referenceerror cannot access MINION_TYPES before initialization` error
+import { LOCAL_ABI } from '../utils/abi';
 
 const getSuperTokenBalances = async (chainID, minion, tokens) => {
   try {
@@ -22,7 +24,9 @@ const getSuperTokenBalances = async (chainID, minion, tokens) => {
         abi: LOCAL_ABI.ERC_20,
         chainID,
       });
-      const tokenSymbol = await tokenService('symbol')();
+      const tokenSymbol = await tokenContract.methods.symbol().call();
+      const tokenBalance = await tokenContract.methods.balanceOf(minion).call();
+      const tokenDecimals = await tokenContract.methods.decimals().call();
       const superTokenInfo = await isSupertoken(
         chainID,
         token.superTokenAddress,
@@ -30,9 +34,9 @@ const getSuperTokenBalances = async (chainID, minion, tokens) => {
 
       return {
         [token.superTokenAddress]: {
-          tokenBalance: balance,
+          tokenBalance,
           symbol: tokenSymbol,
-          decimals: await tokenService('decimals')(),
+          decimals: tokenDecimals,
           registeredToken:
             superTokenInfo.superTokenAddress === token.superTokenAddress,
           underlyingTokenAddress:

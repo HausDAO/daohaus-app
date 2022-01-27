@@ -9,11 +9,12 @@ import { useToken } from '../contexts/TokenContext';
 import { useTX } from '../contexts/TXContext';
 import { TX } from '../data/contractTX';
 import { SF_ACTIVE_STREAMS } from '../graphQL/superfluid-queries';
+import { LOCAL_ABI } from '../utils/abi';
 import { graphQuery } from '../utils/apollo';
 import { supportedChains } from '../utils/chain';
+import { createContract } from '../utils/contract';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { isSupertoken } from '../utils/superfluid';
-import { TokenService } from '../services/tokenService';
 
 const SuperfluidPaymentInput = props => {
   const { daochain } = useParams();
@@ -66,12 +67,13 @@ const SuperfluidPaymentInput = props => {
     const selectedToken = currentDaoTokens.find(token => {
       return token.tokenAddress === paymentToken;
     });
+    const tokenContract = createContract({
+      address: selectedToken.tokenName,
+      abi: LOCAL_ABI.ERC_20,
+      chainID: daochain,
+    });
     const tokenName =
-      selectedToken.tokenName ||
-      (await TokenService({
-        tokenAddress: paymentToken,
-        chainID: daochain,
-      })('name')());
+      selectedToken.tokenName || (await tokenContract.methods.name().call());
     await submitTransaction({
       tx: TX.SUPERFLUID_CREATE_SUPERTOKEN,
       args: [paymentToken, 2, `Super ${tokenName}`, `${selectedToken.symbol}x`],
