@@ -44,7 +44,6 @@ const HubProfileCard = ({ address }) => {
     }
 
     if (profile?.image?.length) {
-      const url = profile?.image[0].contentUrl;
       return (
         <Image
           w='100px'
