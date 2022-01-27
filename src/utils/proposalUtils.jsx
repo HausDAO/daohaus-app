@@ -15,6 +15,17 @@ export const ProposalStatus = {
   Failed: 'Failed',
   ReadyForProcessing: 'ReadyForProcessing',
   Unsponsored: 'Unsponsored',
+  NeedsExecution: 'NeedsExecution',
+};
+
+export const BASE_ACTIVE_STATES = {
+  Unknown: 'Unknown',
+  InQueue: 'InQueue',
+  VotingPeriod: 'VotingPeriod',
+  GracePeriod: 'GracePeriod',
+  ReadyForProcessing: 'ReadyForProcessing',
+  Unsponsored: 'Unsponsored',
+  NeedsExecution: 'NeedsExecution',
 };
 
 export const PROPOSAL_TYPES = {
@@ -60,13 +71,6 @@ export const MINION_TYPES = {
   UBER: 'UberHaus minion',
 };
 
-export const MINION_ACTION_FUNCTION_NAMES = {
-  VANILLA_MINION: 'actions',
-  SAFE_MINION: 'actions',
-  UBERHAUS_MINION: 'appointments',
-  SUPERFLUID_MINION: 'streams',
-};
-
 export const inQueue = proposal => {
   const now = new Date() / 1000 || 0;
   return now < +proposal.votingPeriodStarts;
@@ -96,6 +100,9 @@ export function determineProposalStatus(proposal) {
   if (!proposal.sponsored) {
     return ProposalStatus.Unsponsored;
   }
+  if (proposal.processed && proposal.isMinion && !proposal.executed) {
+    return ProposalStatus.NeedsExecution;
+  }
   if (proposal.processed && proposal.didPass) {
     return ProposalStatus.Passed;
   }
@@ -116,6 +123,27 @@ export function determineProposalStatus(proposal) {
   }
   return ProposalStatus.Unknown;
 }
+
+export const checkCheatedExecutionCache = (proposalId, daoid) => {
+  const executeStorage = JSON.parse(
+    sessionStorage.getItem(`needsExecution-${daoid}`),
+  );
+  if (!Array.isArray(executeStorage)) return;
+  return executeStorage?.find(id => proposalId === id);
+};
+
+const checkForExecution = (proposal, daoid) =>
+  proposal &&
+  daoid &&
+  (proposal.status === ProposalStatus.Failed ||
+    proposal.status === ProposalStatus.Passed)
+    ? {
+        ...proposal,
+        status: checkCheatedExecutionCache(proposal, daoid)
+          ? ProposalStatus.NeedsExecution
+          : proposal.status,
+      }
+    : proposal;
 
 const tryGetDetails = details => {
   try {
@@ -310,6 +338,20 @@ export const determineUnreadActivityFeed = proposal => {
       (needsMemberVote || needsProcessing || !proposal.sponsored),
     message,
   };
+};
+
+export const isTwoWeeksOrOlder = proposal =>
+  Number(proposal.createdAt) > (new Date() / 1000 || 0) - 1.21e6;
+
+export const isProposalActive = proposal => {
+  const status = determineProposalStatus(proposal);
+  if (status === 'Unsponsored' && !isTwoWeeksOrOlder(proposal)) {
+    return true;
+  }
+  if (BASE_ACTIVE_STATES[status]) {
+    return true;
+  }
+  return false;
 };
 
 export const determineUnreadProposalList = (
@@ -523,7 +565,7 @@ export const getProposalDetailStatus = (proposal, status) => {
 };
 
 // return boolean as to whether user voted on a given proposal
-export const memberVote = (proposal, userAddress) => {
+export const memberVote = (proposal, userAddress = '0') => {
   const vote = proposal
     ? proposal?.votes?.find(
         vote => vote.memberAddress === userAddress?.toLowerCase(),
@@ -532,15 +574,18 @@ export const memberVote = (proposal, userAddress) => {
   return vote ? vote.uintVote : null;
 };
 
-export const handleListFilter = (proposals, filter, daoMember) => {
+export const handleListFilter = (proposals, filter, daoMember, daoid) => {
   const updatedProposals = proposals.map(proposal => ({
     ...proposal,
-    status: determineProposalStatus(proposal),
+    status: checkForExecution(determineProposalStatus(proposal), daoid),
   }));
   if (filter.value === 'All') {
     return updatedProposals;
   }
-  if (filter.value === 'Action Needed' || filter.value === 'Active') {
+  if (filter.value === 'Active') {
+    return updatedProposals.filter(proposal => isProposalActive(proposal));
+  }
+  if (filter.value === 'Action Needed') {
     return updatedProposals.filter(
       proposal =>
         determineUnreadProposalList(proposal, true, daoMember?.memberAddress)

@@ -28,24 +28,15 @@ import MinionCancel from './minionCancel';
 import EscrowActions from './escrowActions';
 
 import { TX } from '../data/contractTX';
-import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
+import { memberVote } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
 import { supportedChains } from '../utils/chain';
+import { earlyExecuteMinionType } from '../utils/minionUtils';
 
 const MotionBox = motion(Box);
-
-const getAllowance = (daoMember, delegate) => {
-  if (daoMember?.hasWallet && daoMember?.allowance) {
-    return +daoMember.allowance;
-  }
-  if (delegate?.hasWallet && delegate?.allowance) {
-    return +delegate.allowance;
-  }
-  return null;
-};
 
 const ProposalVote = ({
   daoMember,
@@ -67,13 +58,6 @@ const ProposalVote = ({
   const [loading, setLoading] = useState(false);
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [quorumNeeded, setQuorumNeeded] = useState(null);
-
-  const earlyExecuteMinionType = proposal => {
-    return (
-      proposal?.minion?.minionType === MINION_TYPES.NIFTY ||
-      proposal?.minion?.minionType === MINION_TYPES.SAFE
-    );
-  };
 
   const currentlyVoting = proposal => {
     return (
@@ -148,7 +132,6 @@ const ProposalVote = ({
       const proposalsToProcess = daoProposals
         .filter(p => p.status === 'ReadyForProcessing')
         .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
-
       if (proposalsToProcess.length > 0) {
         setNextProposal(proposalsToProcess[0]);
       }
@@ -262,10 +245,10 @@ const ProposalVote = ({
             <Flex justify='space-around'>
               {canInteract ? (
                 <>
-                  {getAllowance(daoMember, delegate) *
-                    10 ** overview?.depositToken?.decimals >=
-                    +overview?.proposalDeposit ||
-                  +overview?.proposalDeposit === 0 ? (
+                  {Number(daoMember?.depositTokenData?.allowance) ||
+                  Number(delegate?.depositTokenData?.allowance) >=
+                    Number(overview?.proposalDeposit) ||
+                  Number(overview?.proposalDeposit === 0) ? (
                     <Button
                       onClick={() => sponsorProposal(proposal?.proposalId)}
                       isDisabled={!enoughDeposit}

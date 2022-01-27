@@ -1,8 +1,11 @@
+import { CARD_BG } from '../theme';
+
 const ContentBoxComponent = {
   baseStyle: props => ({
     rounded: 'lg',
-    bg: props.bgImg ? '' : 'blackAlpha.700',
+    bg: props.bgImg ? '' : CARD_BG,
     borderWidth: '1px',
+    // border: 'none',
     borderColor: 'whiteAlpha.200',
     p: props.p || 6,
     color: 'mode.900',

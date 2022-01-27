@@ -451,7 +451,6 @@ export const chainByName = networkName => {
 
   return supportedChains[networkKey];
 };
-
 export const MM_ADDCHAIN_DATA = {
   '0x89': {
     chainId: '0x89',
@@ -540,4 +539,14 @@ export const switchNetwork = async daochain => {
       console.error(error);
     }
   }
+};
+
+export const getScanKey = chainID => {
+  if (chainID === '0x89') {
+    return process.env.REACT_APP_POLYGONSCAN_KEY;
+  }
+  if (chainID === '0x1' || chainByID === '0x4' || chainByID === '0x2a') {
+    return process.env.REACT_APP_ETHERSCAN_KEY;
+  }
+  return null;
 };
