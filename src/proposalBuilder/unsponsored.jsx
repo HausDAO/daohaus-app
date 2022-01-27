@@ -186,7 +186,7 @@ const SponsorCard = ({
         circleColor='green'
         helperText={
           depositData?.hasBalance
-            ? propStatusText.approve(depositData?.symbol)
+            ? propStatusText.Unsponsored
             : propStatusText.noFunds(depositData?.symbol)
         }
       />

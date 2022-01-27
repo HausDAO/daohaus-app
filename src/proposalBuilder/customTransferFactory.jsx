@@ -7,6 +7,8 @@ import WhitelistTokenTransfer from './whitelistTokenTransfer';
 import GuildKickTransfer from './guildKickTransfer';
 import UberRQTransfer from './uberRQTransfer';
 import MultiTxTransfer from './multiTxTransfer';
+import RaribleTransferSell from './raribleTransferSell';
+import MinionTributeTransfer from './MinionTributeTransfer';
 
 const CustomTransfer = props => {
   const { customTransferUI } = props;
@@ -30,6 +32,12 @@ const CustomTransfer = props => {
   }
   if (customTransferUI === 'multiTx') {
     return <MultiTxTransfer {...props} />;
+  }
+  if (customTransferUI === 'raribleTransfer') {
+    return <RaribleTransferSell {...props} />;
+  }
+  if (customTransferUI === 'minionTributeTransfer') {
+    return <MinionTributeTransfer {...props} />;
   }
   return null;
 };
