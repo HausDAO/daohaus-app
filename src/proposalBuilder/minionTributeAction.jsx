@@ -1,15 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import { Box, Button, Flex, Spinner } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Button, Flex, Spinner } from '@chakra-ui/react';
 
 import { TX } from '../data/contractTX';
 import { useTX } from '../contexts/TXContext';
-import useCanInteract from '../hooks/useCanInteract';
 import { ParaSm } from '../components/typography';
 
-const MinionTributeAction = ({ proposal }) => {
-  const { canInteract } = useCanInteract({
-    checklist: ['isConnected', 'isSameChain'],
-  });
+const MinionTributeAction = ({ proposal, canInteract }) => {
   const [loading, setLoading] = useState();
   const { submitTransaction } = useTX();
 
