@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { BOOST_FORMS, CORE_FORMS } from './forms';
+import { BOOST_FORMS, FORM } from './forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -334,7 +334,7 @@ export const STEPS = {
       start: true,
       type: 'form',
       next: 'STEP2',
-      form: CORE_FORMS.SUMMON_MINION_SELECTOR,
+      form: FORM.SUMMON_MINION_SELECTOR,
       isUserStep: true,
       stepLabel: 'Choose a Minion',
     },

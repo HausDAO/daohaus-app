@@ -10,7 +10,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import PlaylistSelector from '../components/playlistSelector';
 import FormList from '../components/formList';
 import SaveButton from '../components/saveButton';
-import { CORE_FORMS } from '../data/forms';
+import { FORM } from '../data/forms';
 import { chainByID } from '../utils/chain';
 import { updateProposalConfig } from '../utils/metadata';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -76,7 +76,7 @@ const ProposalTypes = () => {
     const playlist = playlists?.find(list => list.id === id);
 
     formModal({
-      ...CORE_FORMS.EDIT_PLAYLIST,
+      ...FORM.EDIT_PLAYLIST,
       title: `Edit ${playlist?.name || 'Playlist'}?`,
       onSubmit: ({ values }) => {
         const name = values?.title;
@@ -105,7 +105,7 @@ const ProposalTypes = () => {
 
   const addPlaylist = () => {
     formModal({
-      ...CORE_FORMS.ADD_PLAYLIST,
+      ...FORM.ADD_PLAYLIST,
       onSubmit: ({ values }) => {
         dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
         closeModal();
