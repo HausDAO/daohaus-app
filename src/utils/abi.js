@@ -31,6 +31,7 @@ import ESCROW_MINION from '../contracts/escrowMinion.json';
 import { MINION_TYPES } from './proposalUtils';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import { validate } from './validation';
+import { getCachedABI } from './localForage';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -57,10 +58,6 @@ export const LOCAL_ABI = Object.freeze({
   DISPERSE_APP,
 });
 
-const saveABI = async () => {};
-
-const loadABI = async () => {};
-
 const getBlockExplorerApiKey = chainID => {
   switch (chainID) {
     case '0x89': {
@@ -74,7 +71,14 @@ const getBlockExplorerApiKey = chainID => {
     }
   }
 };
-
+const test = async () => {
+  const isABIcached = await getCachedABI({
+    contractAddress: '0xE6421E9aF92aca6a81C9fD0BAbacE4a9c5691c60',
+    chainID: '0x64',
+  });
+  console.log('isABIcached', isABIcached);
+};
+test();
 const getABIurl = (contractAddress, chainID) => {
   const key = getBlockExplorerApiKey(chainID);
   return key
