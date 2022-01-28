@@ -3,7 +3,7 @@ import { chainByID, supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
 import { fetchSafeDetails } from './requests';
-import { FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { VAULT_TRANSFER_TX } from '../data/txLegos/transferContractTX';
 import { getReadableBalance } from './tokenValue';
 

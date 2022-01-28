@@ -18,7 +18,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
 import { useAppModal } from '../hooks/useModals';
-import { FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';

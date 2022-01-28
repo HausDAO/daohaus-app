@@ -19,7 +19,7 @@ import List from './list';
 import ListItem from './listItem';
 import NoListItem from './NoListItem';
 import TextBox from './TextBox';
-import { FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { areAnyFields } from '../utils/general';
 
 const handleSearch = (formsArr, str) => {

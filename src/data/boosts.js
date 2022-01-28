@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { BOOST_FORMS, FORM } from './forms';
+import { FORM } from './formLegos/forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -296,7 +296,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
+      form: FORM.DISCOURSE_FORUM_COLOR,
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
@@ -307,7 +307,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.SNAPSHOT,
+      form: FORM.SNAPSHOT,
       isUserStep: true,
       stepLabel: 'Add Space',
       next: 'STEP2',
@@ -318,7 +318,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'form',
-      form: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
+      form: FORM.WRAP_N_ZAP_LAUNCH,
       next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Deploy' },
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
@@ -351,7 +351,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.SPAM_FILTER,
+      form: FORM.SPAM_FILTER,
       next: 'STEP2',
       stepLabel: 'Select Filter Parameter',
       isUserStep: true,

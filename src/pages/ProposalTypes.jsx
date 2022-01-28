@@ -10,7 +10,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import PlaylistSelector from '../components/playlistSelector';
 import FormList from '../components/formList';
 import SaveButton from '../components/saveButton';
-import { FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { chainByID } from '../utils/chain';
 import { updateProposalConfig } from '../utils/metadata';
 import { useDaoMember } from '../contexts/DaoMemberContext';
