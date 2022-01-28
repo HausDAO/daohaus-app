@@ -12,9 +12,7 @@ const MinionExexcuteFactory = props => {
 
   const { proposalType } = proposal;
   const executeType = CUSTOM_CARD_DATA[proposalType]?.execute;
-  if (!executeType) {
-    console.log(props);
-  }
+
   if (executeType === 'executeAction') {
     return <ExecuteAction {...props} />;
   }

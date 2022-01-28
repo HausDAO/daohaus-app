@@ -88,6 +88,14 @@ export const decodeAction = async (action, params, depth = 0) => {
     return { ...targetContractABI, error: true };
   }
 
+  if (targetContractABI?.result === 'Contract source code not verified') {
+    return {
+      ...targetContractABI,
+      error: true,
+      message: targetContractABI?.result,
+    };
+  }
+
   if (depth === 5) {
     return {
       ...targetContractABI,
@@ -167,6 +175,7 @@ export const getMinionAction = async params => {
       chainID,
     });
     const action = await minionContract.methods[actionName](proposalId).call();
+
     if (SHOULD_DECODE[minionType] || SHOULD_DECODE[proposalType]) {
       const decoded = await decodeAction(action, params);
       return { ...action, decoded };

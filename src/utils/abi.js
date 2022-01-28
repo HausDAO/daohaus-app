@@ -165,6 +165,7 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
       });
       return processedABI;
     }
+    return data;
   } catch (error) {
     console.error(error);
   }
