@@ -2,7 +2,7 @@ import { MINION_TYPES, PROPOSAL_TYPES } from '../../utils/proposalUtils';
 import { FIELD, INFO_TEXT } from '../fields';
 import { TX } from '../txLegos/contractTX';
 
-export const SAFE_MINION = {
+export const SAFE_MINION_FORMS = {
   MINION_SAFE_SIMPLE: {
     id: 'MINION_SAFE_SIMPLE',
     title: 'Minion Proposal',

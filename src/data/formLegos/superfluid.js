@@ -2,7 +2,7 @@ import { MINION_TYPES, PROPOSAL_TYPES } from '../../utils/proposalUtils';
 import { FIELD } from '../fields';
 import { TX } from '../txLegos/contractTX';
 
-export const SUPERFLUID_MINION = {
+export const SUPERFLUID_MINION_FORMS = {
   NEW_SUPERFLUID_MINION: {
     required: ['minionName'],
     minionType: MINION_TYPES.SUPERFLUID,

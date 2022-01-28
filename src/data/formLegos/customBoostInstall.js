@@ -2,7 +2,7 @@ import { MINION_TYPES, PROPOSAL_TYPES } from '../../utils/proposalUtils';
 import { FIELD, INFO_TEXT } from '../fields';
 import { TX } from '../txLegos/contractTX';
 
-export const BOOST_FORMS = {
+export const CUSTOM_BOOST_INSTALL_FORMS = {
   DISCOURSE_FORUM_COLOR: {
     id: 'DISCOURSE_FORUM_COLOR',
     title: 'Discourse Forum Color',
