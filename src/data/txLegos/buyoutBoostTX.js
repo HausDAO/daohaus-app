@@ -1,6 +1,6 @@
-import { CONTRACTS } from './contracts';
-import { DETAILS } from './details';
-import { ACTIONS } from './onTxHashActions';
+import { CONTRACTS } from '../contracts';
+import { DETAILS } from '../details';
+import { ACTIONS } from '../onTxHashActions';
 
 export const BUYOUT_BOOST_TX = {
   SET_BUYOUT_TOKEN: {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Flex, Spinner, Text } from '@chakra-ui/react';
 
 import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 const EscrowActions = ({ proposal }) => {
   const { molochAddress, proposalId } = proposal;

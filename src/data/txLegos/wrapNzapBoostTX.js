@@ -1,5 +1,5 @@
-import { CONTRACTS } from './contracts';
-import { ACTIONS } from './onTxHashActions';
+import { CONTRACTS } from '../contracts';
+import { ACTIONS } from '../onTxHashActions';
 
 export const WRAPNZAP_BOOST_TX = {
   CREATE_WRAP_N_ZAP: {

@@ -1,5 +1,5 @@
-import { CONTRACTS } from './contracts';
-import { ACTIONS } from './onTxHashActions';
+import { CONTRACTS } from '../contracts';
+import { ACTIONS } from '../onTxHashActions';
 
 export const UBER_MINION_TX = {
   UBER_EXECUTE_ACTION: {

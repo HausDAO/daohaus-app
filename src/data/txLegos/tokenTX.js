@@ -1,4 +1,4 @@
-import { CONTRACTS } from './contracts';
+import { CONTRACTS } from '../contracts';
 
 export const TOKEN_TX = {
   UNLOCK_TOKEN: {

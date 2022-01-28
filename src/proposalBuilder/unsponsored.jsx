@@ -9,7 +9,7 @@ import { useTX } from '../contexts/TXContext';
 import { propStatusText } from '../data/proposalCardText';
 
 import { readableTokenBalance } from '../utils/proposalCardUtils';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { PropActionBox, TopStatusBox } from './proposalActionPrimitives';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';

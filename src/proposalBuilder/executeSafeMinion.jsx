@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ExecuteAction from './executeAction';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 const ExecuteSafeMinion = props => {
   const { proposal } = props;

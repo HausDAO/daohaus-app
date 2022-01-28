@@ -8,7 +8,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import MainViewLayout from '../components/mainViewLayout';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
 

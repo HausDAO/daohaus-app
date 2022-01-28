@@ -4,7 +4,7 @@ import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
 import { fetchSafeDetails } from './requests';
 import { FORM } from '../data/forms';
-import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
+import { VAULT_TRANSFER_TX } from '../data/txLegos/transferContractTX';
 import { getReadableBalance } from './tokenValue';
 
 export const getVaultERC20s = (daoVaults, vaultAddress, localTokenAddress) => {

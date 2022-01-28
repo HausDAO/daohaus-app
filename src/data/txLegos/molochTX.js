@@ -1,6 +1,6 @@
-import { CONTRACTS } from './contracts';
-import { ACTIONS } from './onTxHashActions';
-import { DETAILS } from './details';
+import { CONTRACTS } from '../contracts';
+import { ACTIONS } from '../onTxHashActions';
+import { DETAILS } from '../details';
 
 export const MOLOCH_TX = {
   SUBMIT_PROPOSAL: {

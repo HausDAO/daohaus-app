@@ -1,6 +1,6 @@
-import { CONTRACTS } from './contracts';
-import { ACTIONS } from './onTxHashActions';
-import { DETAILS } from './details';
+import { CONTRACTS } from '../contracts';
+import { ACTIONS } from '../onTxHashActions';
+import { DETAILS } from '../details';
 
 export const NIFTY_MINION_TX = {
   SUMMON_MINION_NIFTY: {

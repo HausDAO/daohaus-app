@@ -4,7 +4,7 @@ import { createContract } from './contract';
 import { decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 // If a minion has separate action names (ex. UBER),
 // then use Proposal types as a reference to the action name

@@ -3,7 +3,7 @@ import { BiErrorCircle } from 'react-icons/bi';
 import { useDao } from '../contexts/DaoContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { CONTRACTS } from '../data/contracts';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 import { getReadableBalance } from '../utils/tokenValue';
 

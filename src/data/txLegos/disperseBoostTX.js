@@ -1,6 +1,6 @@
-import { CONTRACTS } from './contracts';
-import { DETAILS } from './details';
-import { ACTIONS } from './onTxHashActions';
+import { CONTRACTS } from '../contracts';
+import { DETAILS } from '../details';
+import { ACTIONS } from '../onTxHashActions';
 
 export const DISPERSE_BOOST_TX = {
   DISPERSE_TOKEN: {

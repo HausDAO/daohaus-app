@@ -14,7 +14,7 @@ import { getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { CONTRACTS } from '../data/contracts';
 
 const getPath = pathString =>

@@ -19,7 +19,7 @@ import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
 import { useAppModal } from '../hooks/useModals';
 import { CORE_FORMS, FORM } from '../data/forms';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
 import {

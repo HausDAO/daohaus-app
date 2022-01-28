@@ -1,5 +1,5 @@
-import { CONTRACTS } from './contracts';
-import { ACTIONS } from './onTxHashActions';
+import { CONTRACTS } from '../contracts';
+import { ACTIONS } from '../onTxHashActions';
 
 export const SAFE_MINION_TX = {
   SUMMON_MINION_AND_SAFE: {

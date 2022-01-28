@@ -1,6 +1,6 @@
-import { CONTRACTS } from './contracts';
-import { DETAILS } from './details';
-import { ACTIONS } from './onTxHashActions';
+import { CONTRACTS } from '../contracts';
+import { DETAILS } from '../details';
+import { ACTIONS } from '../onTxHashActions';
 
 export const RARIBLE_BOOST = {
   SELL_NFT_RARIBLE: {

@@ -1,34 +1,22 @@
-// TX = {
-//   contract: String
-//   poll: String (Optional)(Defaults to name)
-//   name: String
-//   errMsg: String
-//   onTxHash: {}Strings
-//   successMsg: String
-// }
-
 import {
   checkDuplicateKeys,
   checkRequiredFields,
   validateLegos,
-} from '../utils/legos';
+} from '../../utils/legos';
 import { BUYOUT_BOOST_TX } from './buyoutBoostTX';
 import { DISPERSE_BOOST_TX } from './disperseBoostTX';
 import { ESCROW_MINION_TX } from './escrowMinionTX';
 import { MINION_TX } from './minionTX';
 import { MOLOCH_TX } from './molochTX';
 import { NIFTYINK_BOOST_TX } from './niftyInkBoostTX';
-import { NIFTY_MINION_TX } from './niftyMinionTx';
+import { NIFTY_MINION_TX } from './niftyMinionTX';
 import { RARIBLE_BOOST } from './raribleBoostTX';
-import { SAFE_MINION_TX } from './safeMinionTx';
+import { SAFE_MINION_TX } from './safeMinionTX';
 import { SUPERFLUID_MINION_TX } from './superfluidMinionTx';
 import { TOKEN_TX } from './tokenTX';
-import { VAULT_TRANSFER_TX } from './transferContractTx';
-import { UBER_MINION_TX } from './uberMinionTx';
-import { WRAPNZAP_BOOST_TX } from './wrapNzapBoost';
-
-// this was causing a site crash - used for iniitialization
-// import { HASH } from '../utils/general';
+import { VAULT_TRANSFER_TX } from './transferContractTX';
+import { UBER_MINION_TX } from './uberMinionTX';
+import { WRAPNZAP_BOOST_TX } from './wrapNzapBoostTX';
 
 const TX_REQUIRED = ['name', 'contract', 'errMsg', 'successMsg'];
 

@@ -1,6 +1,6 @@
-import { CONTRACTS } from './contracts';
-import { ACTIONS } from './onTxHashActions';
-import { DETAILS } from './details';
+import { CONTRACTS } from '../contracts';
+import { ACTIONS } from '../onTxHashActions';
+import { DETAILS } from '../details';
 
 export const ESCROW_MINION_TX = {
   ESCROW_MINION_CANCEL: {
