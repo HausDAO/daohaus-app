@@ -30,4 +30,7 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'multiTx',
     execute: 'safeMinionAction',
   },
+  [PROPOSAL_TYPES.DISPERSE]: {
+    customTransferUI: 'disperse',
+  },
 };

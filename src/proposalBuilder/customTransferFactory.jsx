@@ -7,6 +7,7 @@ import WhitelistTokenTransfer from './whitelistTokenTransfer';
 import GuildKickTransfer from './guildKickTransfer';
 import UberRQTransfer from './uberRQTransfer';
 import MultiTxTransfer from './multiTxTransfer';
+import DisperseTransfer from './disperseTransfer';
 
 const CustomTransfer = props => {
   const { customTransferUI } = props;
@@ -30,6 +31,9 @@ const CustomTransfer = props => {
   }
   if (customTransferUI === 'multiTx') {
     return <MultiTxTransfer {...props} />;
+  }
+  if (customTransferUI === 'disperse') {
+    return <DisperseTransfer {...props} />;
   }
   return null;
 };
