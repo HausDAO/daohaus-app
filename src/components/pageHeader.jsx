@@ -4,6 +4,7 @@ import { Box, Flex } from '@chakra-ui/react';
 import Web3SignIn from './web3SignIn';
 import WrongNetworkToolTip from './wrongNetworkToolTip';
 import { getTerm } from '../utils/metadata';
+import HausBalance from './hausBalance';
 
 const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
   return (
@@ -31,6 +32,7 @@ const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
         d={['none', null, null, 'flex']}
       >
         {isDao && <WrongNetworkToolTip />}
+        <HausBalance />
         <Web3SignIn isDao={isDao} />
       </Flex>
     </Flex>
