@@ -1,4 +1,7 @@
 import localforage from 'localforage';
+// developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
+// developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Browser_storage_limits_and_eviction_criteria
+// localforage.github.io/localForage/#localforage
 
 const abiStore = {
   '0x1': {},
@@ -54,13 +57,13 @@ const init = async () => {
   localforage.config({
     // driver: localforage.WEBSQL, // Force WebSQL; same as using setDriver()
     name: 'daohaus_app',
-    // version: 1.0,
+    version: 1.0,
     // size: 4980736, // Size of database, in bytes. WebSQL-only for now.
-    // storeName: 'daohaus_ABI_cache', // Should be alphanumeric, with underscores.
+    storeName: 'daohaus_ABI_cache_1', // Should be alphanumeric, with underscores.
     description: 'where we store the ABIs, ok?',
   });
-  const abiStore = await getABIstore();
-  if (!abiStore) {
+  const store = await getABIstore();
+  if (!store) {
     localforage.setItem(ABI_STORE, abiStore);
   }
 };
