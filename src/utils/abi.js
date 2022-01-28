@@ -57,6 +57,10 @@ export const LOCAL_ABI = Object.freeze({
   DISPERSE_APP,
 });
 
+const saveABI = async () => {};
+
+const loadABI = async () => {};
+
 const getBlockExplorerApiKey = chainID => {
   switch (chainID) {
     case '0x89': {
@@ -104,23 +108,34 @@ const getGnosisMasterCopy = async (address, chainID) => {
 };
 
 export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
+  // check cache
+
   const url = getABIurl(contractAddress, chainID);
   if (!url) {
     throw new Error('Could generate ABI link with the given arguments');
   }
   try {
     const response = await fetch(url);
+    // save cache
     const data = await response.json();
     if (data.message === 'OK' && IsJsonString(data?.result) && parseJSON) {
       const abiData = JSON.parse(data.result);
-      const proxyAddress = isProxyABI(abiData)
-        ? await getImplementationOf(contractAddress, chainID, abiData)
-        : isGnosisProxy(abiData) &&
-          (await getGnosisMasterCopy(contractAddress, chainID));
-      if (proxyAddress) {
+
+      if (isProxyABI(abiData)) {
+        const proxyAddress = await getImplementationOf(
+          contractAddress,
+          chainID,
+          abiData,
+        );
         const newData = await fetchABI(proxyAddress, chainID, parseJSON);
         return newData;
       }
+      if (isGnosisProxy(abiData)) {
+        const gnosisProxy = await getGnosisMasterCopy(contractAddress, chainID);
+        const newData = await fetchABI(gnosisProxy, chainID, parseJSON);
+        return newData;
+      }
+
       return abiData;
     }
     return data;
@@ -243,11 +258,8 @@ export const decodeMultisendTx = (multisendAddress, encodedTx) => {
 
 export const getLocalABI = contract => LOCAL_ABI[contract.abiName];
 const getLocalSnippet = ({ contract, fnName }) => {
-  console.log(`contract`, contract);
   const abi = getLocalABI(contract);
-  console.log(`abi`, abi);
   const snippet = abi?.find(fn => fn.name === fnName);
-  console.log(`snippet`, snippet);
   return snippet;
 };
 
