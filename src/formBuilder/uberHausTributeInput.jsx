@@ -62,7 +62,7 @@ const UberHausTributeInput = props => {
   }, [localValues]);
 
   const setMax = () => {
-    setValue('tributeOffered', balance / 10 ** decimals);
+    setValue('uberHausTributeOffered', balance / 10 ** decimals);
   };
 
   const options = spreadOptions({

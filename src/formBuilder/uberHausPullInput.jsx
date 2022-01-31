@@ -65,7 +65,7 @@ const UberHausPullInput = props => {
   };
 
   const setMax = () => {
-    setValue('pull', balance / 10 ** decimals);
+    setValue('uberHausPull', balance / 10 ** decimals);
   };
 
   const options = spreadOptions({

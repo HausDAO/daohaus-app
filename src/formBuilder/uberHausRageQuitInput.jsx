@@ -14,7 +14,7 @@ const UberHausRageQuitInput = props => {
       if (minionShares) return `Max: ${minionShares}`;
       return '0';
     }
-    if (name === 'loot') {
+    if (name === 'uberHausloot') {
       if (minionLoot) return `Max: ${minionLoot}`;
       return '0';
     }
@@ -24,8 +24,8 @@ const UberHausRageQuitInput = props => {
     if (name === 'shares') {
       setValue('shares', minionShares);
     }
-    if (name === 'loot') {
-      setValue('loot', minionLoot);
+    if (name === 'uberHausLoot') {
+      setValue('uberHausLoot', minionLoot);
     }
   };
 

@@ -54,7 +54,7 @@ const UberHausWithdrawInput = props => {
   ]);
 
   const setMax = () => {
-    setValue('withdraw', balance / 10 ** decimals);
+    setValue('uberHausWithdraw', balance / 10 ** decimals);
   };
 
   const options = spreadOptions({
