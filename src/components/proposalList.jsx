@@ -144,7 +144,6 @@ const ProposalsList = ({ proposals, customTerms }) => {
             marginLeft: '5%',
           }}
         />
-
         <ProposalSearch
           performSearch={performSearch}
           resetSearch={resetSearch}

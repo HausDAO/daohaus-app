@@ -6,6 +6,8 @@ import ExecuteSafeMinion from './executeSafeMinion';
 import UberStakingAction from './uberStakingAction';
 import { TX } from '../data/txLegos/contractTX';
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
+import ExecuteMinionBuyout from './executeMinionBuyout';
+import MinionTributeAction from './minionTributeAction';
 
 const MinionExexcuteFactory = props => {
   const { proposal } = props;
@@ -27,11 +29,17 @@ const MinionExexcuteFactory = props => {
   if (executeType === 'UH_staking') {
     return <UberStakingAction {...props} />;
   }
-  if (executeType === 'rarible') {
+  if (executeType === 'raribleAction') {
     return <ExecuteRarible {...props} />;
   }
   if (executeType === 'safeMinionAction') {
     return <ExecuteSafeMinion {...props} />;
+  }
+  if (executeType === 'minionBuyoutAction') {
+    return <ExecuteMinionBuyout {...props} />;
+  }
+  if (executeType === 'minionTributeAction') {
+    return <MinionTributeAction {...props} />;
   }
   return <ExecuteAction {...props} />;
 };

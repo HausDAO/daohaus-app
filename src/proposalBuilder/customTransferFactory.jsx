@@ -8,6 +8,8 @@ import GuildKickTransfer from './guildKickTransfer';
 import UberRQTransfer from './uberRQTransfer';
 import MultiTxTransfer from './multiTxTransfer';
 import DisperseTransfer from './disperseTransfer';
+import RaribleTransferSell from './raribleTransferSell';
+import MinionTributeTransfer from './MinionTributeTransfer';
 
 const CustomTransfer = props => {
   const { customTransferUI } = props;
@@ -34,6 +36,12 @@ const CustomTransfer = props => {
   }
   if (customTransferUI === 'disperse') {
     return <DisperseTransfer {...props} />;
+  }
+  if (customTransferUI === 'raribleTransfer') {
+    return <RaribleTransferSell {...props} />;
+  }
+  if (customTransferUI === 'minionTributeTransfer') {
+    return <MinionTributeTransfer {...props} />;
   }
   return null;
 };
