@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Flex, Spinner } from '@chakra-ui/react';
 
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { useTX } from '../contexts/TXContext';
 import { ParaSm } from '../components/typography';
 

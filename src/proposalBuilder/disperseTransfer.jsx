@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Bold, ParaMd } from '../components/typography';
+import { handleNounCase, NOUN } from '../utils/general';
 import { readableTokenBalance } from '../utils/proposalCardUtils';
 import { fetchSpecificTokenData } from '../utils/tokenValue';
 import { AsyncCardTransfer } from './proposalBriefPrimitives';
@@ -27,9 +28,10 @@ const DisperseTransfer = ({ minionAction }) => {
         setRecipientAmt(amtRecip);
       }
     };
+
     const approveTx = minionAction?.decoded?.actions[0];
     const disperseTx = minionAction?.decoded?.actions[1];
-    const tokenAddress = approveTx.to;
+    const tokenAddress = approveTx?.to;
 
     const amt = disperseTx?.data?.params[2].value?.reduce(
       (acc, amt) => acc + Number(amt),
@@ -37,10 +39,6 @@ const DisperseTransfer = ({ minionAction }) => {
     );
     const amtRecipients = disperseTx?.data?.params[1]?.value?.length;
     if (tokenAddress) {
-      console.log(
-        'minionAction?.decoded?.actions',
-        minionAction?.decoded?.actions,
-      );
       fetchThatTokenData(tokenAddress, amt, amtRecipients);
     }
     return () => (shouldUpdate = false);
@@ -56,7 +54,10 @@ const DisperseTransfer = ({ minionAction }) => {
           symbol: tokenData?.name,
         })}{' '}
       </Bold>
-      to <Bold>{recipientAmt} address</Bold>
+      to{' '}
+      <Bold>
+        {recipientAmt} {handleNounCase(recipientAmt, NOUN.ADDRESSES)}{' '}
+      </Bold>
     </ParaMd>
   );
 
