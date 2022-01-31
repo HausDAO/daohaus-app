@@ -27,7 +27,7 @@ import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
 import EscrowActions from './escrowActions';
 
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { memberVote } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';

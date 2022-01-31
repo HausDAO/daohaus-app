@@ -22,7 +22,7 @@ import { createPoll } from '../services/pollService';
 import { createForumTopic } from '../utils/discourse';
 import { customValidations } from '../utils/validation';
 import { supportedChains } from '../utils/chain';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { handleChecklist } from '../utils/appChecks';
 
 export const TXContext = createContext();

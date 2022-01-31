@@ -4,7 +4,7 @@ import ExecuteAction from './executeAction';
 import ExecuteRarible from './executeRarible';
 import ExecuteSafeMinion from './executeSafeMinion';
 import UberStakingAction from './uberStakingAction';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
 import ExecuteMinionBuyout from './executeMinionBuyout';
 import MinionTributeAction from './minionTributeAction';
@@ -14,9 +14,7 @@ const MinionExexcuteFactory = props => {
 
   const { proposalType } = proposal;
   const executeType = CUSTOM_CARD_DATA[proposalType]?.execute;
-  if (!executeType) {
-    console.log(props);
-  }
+
   if (executeType === 'executeAction') {
     return <ExecuteAction {...props} />;
   }

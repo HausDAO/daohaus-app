@@ -28,6 +28,7 @@ const useMinionAction = proposal => {
         actions,
         chainID: daochain,
       });
+
       if (action && shouldUpdate) {
         setAction({
           ...action,

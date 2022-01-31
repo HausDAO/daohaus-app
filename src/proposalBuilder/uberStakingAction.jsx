@@ -8,7 +8,7 @@ import ExecuteAction from './executeAction';
 import { createContract } from '../utils/contract';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { LOCAL_ABI } from '../utils/abi';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 const UberStakingAction = props => {
   const { proposal } = props;
