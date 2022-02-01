@@ -112,8 +112,8 @@ const collapseToCallData = values =>
   }));
 const collapseLegoToCallData = (actions, gatherArgs, data) => {
   return actions.map((action, index) => {
-    console.log('action', action);
     if (action.logTX) {
+      console.log('action', action);
       console.log(`ACTION DATA FOR TRANSACTION ${index}`);
     }
     const actionTarget = gatherArgs({

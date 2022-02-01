@@ -10,7 +10,7 @@ export const DISPERSE_BOOST_TX = {
         abi: CONTRACTS.ERC_20, // required
         fnName: 'approve', // required
         args: ['.values.tokenAddress', '.contextData.chainConfig.disperse_app'], // required
-        // logTX
+        // logTX:true
       },
       {
         targetContract: '.contextData.chainConfig.disperse_app',
@@ -30,9 +30,10 @@ export const DISPERSE_BOOST_TX = {
       {
         targetContract: '.contextData.chainConfig.disperse_app',
         abi: CONTRACTS.DISPERSE_APP,
-        fnName: 'disperseTokenSimple',
+        fnName: 'disperseEther',
         args: ['.values.userList', '.values.amountList'],
         value: '.values.disperseTotal',
+        logTX: true,
       },
     ],
     detailsToJSON: DETAILS.DISPERSE_TOKEN,
