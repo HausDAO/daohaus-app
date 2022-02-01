@@ -4,8 +4,7 @@ import { supportedChains } from './chain';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
-const apiPricedataUrl =
-  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const apiPricedataUrl = 'https://data.daohaus.club/dao-tokens';
 const mintGateUrl = 'https://link.mintgate.app/api';
 
 export const get = async endpoint => {

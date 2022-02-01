@@ -14,6 +14,8 @@ import {
   createRegisterOptions,
   inputDataFromABI,
 } from '../utils/formBuilder';
+import { handleCustomAwait } from '../utils/customAwait';
+
 import { validate, handleStepValidation } from '../utils/validation';
 
 const dev = process.env.REACT_APP_DEV;
@@ -37,6 +39,8 @@ const FormBuilder = props => {
     formStateOverride,
     txID,
     logValues,
+    defaultValues,
+    disableCallback,
     tx,
     stepValidation,
     checklist = ['isConnected', 'isSameChain'],
@@ -54,8 +58,9 @@ const FormBuilder = props => {
   const [formErrors, setFormErrors] = useState([]);
 
   const [options, setOptions] = useState(additionalOptions);
-  const localForm = parentForm || useForm({ shouldUnregister: false });
-  const { handleSubmit, watch, errors } = localForm;
+  const localForm =
+    parentForm || useForm({ shouldUnregister: false, defaultValues });
+  const { handleSubmit, watch, errors, setValue } = localForm;
   const values = watch();
 
   useEffect(() => {
@@ -192,19 +197,36 @@ const FormBuilder = props => {
       if (next?.type === 'awaitTx') {
         return handleSubmitTX(() => handleThen(next));
       }
+      if (next?.type === 'awaitCustom') {
+        return handleCustomAwait(
+          next?.awaitDef,
+          () => goToNext(next.next),
+          setFormState,
+          setValue,
+          values,
+        );
+      }
+    }
+    //  HANDLE CALLBACK ON SUBMIT
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+      return handleSubmitCallback();
     }
 
-    //  HANDLE CALLBACK ON SUBMIT
-    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function')
-      return handleSubmitCallback();
-
     //  HANDLE CONTRACT TX ON SUBMIT
-    return handleSubmitTX();
+    if (props.tx) {
+      return handleSubmitTX();
+    }
   };
 
   const renderInputs = (fields, depth = 0) => {
-    return fields?.map((field, index) =>
-      Array.isArray(field) ? (
+    if (!fields) {
+      return;
+    }
+
+    return fields.map((field, index) => {
+      const value = defaultValues?.[field?.name] || '';
+
+      return Array.isArray(field) ? (
         <Flex
           flex={1}
           flexDir='column'
@@ -216,6 +238,7 @@ const FormBuilder = props => {
       ) : (
         <InputFactory
           {...field}
+          defaultValue={value || field?.defaultValue}
           key={`${depth}-${index}`}
           registerOptions={createRegisterOptions(field, required)}
           required={required}
@@ -228,9 +251,13 @@ const FormBuilder = props => {
           localValues={localValues}
           buildABIOptions={buildABIOptions}
           formState={formState}
+          setFormState={setFormState}
+          setValue={setValue}
+          values={values}
+          defaultValues={defaultValues}
         />
-      ),
-    );
+      );
+    });
   };
 
   return (
@@ -262,6 +289,11 @@ const FormBuilder = props => {
             customSecondaryBtn={secondaryBtn}
             loading={[formStateOverride, formState].includes('loading')}
             checklist={checklist}
+            disableCallback={() =>
+              typeof disableCallback === 'function'
+                ? disableCallback(values)
+                : false
+            }
           />
         )}
       </Flex>

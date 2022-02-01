@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
+import { MINION_TYPES } from '../utils/proposalUtils';
 import GenericSelect from './genericSelect';
 
 const MinionSelect = props => {
@@ -13,7 +14,12 @@ const MinionSelect = props => {
   const minions = useMemo(() => {
     return daoOverview.minions
       .filter(minion => {
-        const customFilter = props.filters?.[minion.minionType];
+        const customFilter =
+          props.filters?.[
+            minion.crossChainMinion
+              ? MINION_TYPES.CROSSCHAIN_SAFE
+              : minion.minionType
+          ];
         return (
           minion.minionType === props.minionType &&
           (!customFilter ||

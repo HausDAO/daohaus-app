@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'crypto-browserify';
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 import Web3 from 'web3';
@@ -151,11 +151,14 @@ export const minionFromDaoOverview = ({
   searchBy,
   daoOverview,
   searchParam,
+  crossChain,
 }) => {
   if (!daoOverview || !searchBy || !searchParam) return;
   if (searchBy === 'type')
     return daoOverview.minions?.filter(
-      minion => minion.minionType === searchParam,
+      minion =>
+        minion.minionType === searchParam &&
+        !!minion.crossChainMinion === !!crossChain,
     );
   if (searchBy === 'name')
     return daoOverview.minions.find(minion => minion.details === searchParam);

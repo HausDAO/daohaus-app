@@ -204,7 +204,7 @@ export const TXProvider = ({ children }) => {
     });
 
     try {
-      const args = getArgs({ ...consolidatedData });
+      const args = await getArgs({ ...consolidatedData });
       console.log(`args`, args);
       const poll = buildTXPoll({
         ...consolidatedData,

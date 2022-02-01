@@ -40,6 +40,7 @@ import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
 import BoolSelect from './boolSelect';
 import GenericSwitch from './genericSwitch';
+import ImageInput from './imageInput';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
 import ForeignChainSelect from './foreignChainSelect';
@@ -176,6 +177,9 @@ export const InputFactory = props => {
   }
   if (type === 'boolSelect') {
     return <BoolSelect {...props} />;
+  }
+  if (type === 'imageInput') {
+    return <ImageInput {...props} />;
   }
   if (type === 'disperseListInput') {
     return <DisperseListInput {...props} />;

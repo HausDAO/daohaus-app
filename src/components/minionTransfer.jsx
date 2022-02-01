@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Tooltip } from '@chakra-ui/react';
 
 import { useAppModal } from '../hooks/useModals';
 import useCanInteract from '../hooks/useCanInteract';
+import { MINION_TYPES } from '../utils/proposalUtils';
+import { fetchAmbModule } from '../utils/gnosis';
 import { getMinionActionFormLego } from '../utils/vaults';
 
 const LABELS = {
@@ -10,11 +12,19 @@ const LABELS = {
   MINION_NOT_READY: 'Must complete your minion setup',
 };
 
-const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
+const MinionTransfer = ({
+  daochain,
+  isMember,
+  isNativeToken,
+  minion,
+  token,
+  vault,
+}) => {
   const { canInteract } = useCanInteract({
     checklist: ['isConnected', 'isSameChain'],
   });
   const { formModal } = useAppModal();
+  const [loading, setLoading] = useState(false);
 
   const enableTransfer =
     isMember &&
@@ -26,10 +36,16 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
 
   const transferFormLego = useMemo(() => {
     const tokenType = isNativeToken ? 'network' : 'erc20';
-    return getMinionActionFormLego(tokenType, vault.minionType);
+    return getMinionActionFormLego(
+      tokenType,
+      vault.minionType === vault.crossChainMinion
+        ? MINION_TYPES.CROSSCHAIN_SAFE
+        : vault.minionType,
+    );
   }, [isNativeToken]);
 
-  const openSendModal = () => {
+  const openSendModal = async () => {
+    setLoading(true);
     formModal({
       ...transferFormLego,
       localValues: {
@@ -37,14 +53,32 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
         minionAddress: minion,
         balance: token.tokenBalance,
         tokenDecimals: isNativeToken ? '18' : token.decimals,
+        foreignChainId: vault.foreignChainId,
+        ambModuleAddress:
+          vault.foreignSafeAddress &&
+          (await fetchAmbModule(
+            {
+              chainId: daochain,
+              address: vault.safeAddress,
+            },
+            vault.foreignChainId,
+            vault.foreignSafeAddress,
+          )),
       },
     });
+    setLoading(false);
   };
 
   return (
     <>
       {canInteract && enableTransfer ? (
-        <Button size='md' variant='outline' ml={6} onClick={openSendModal}>
+        <Button
+          size='md'
+          variant='outline'
+          ml={6}
+          isLoading={loading}
+          onClick={openSendModal}
+        >
           Transfer
         </Button>
       ) : (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Flex, Box, Image, useToast, Icon } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -116,6 +116,7 @@ const balanceCard = ({
         {needsSync && <SyncTokenButton token={token} />}
         {minion && token?.tokenBalance > 0 && (
           <MinionTransfer
+            daochain={daochain}
             isMember={isMember || delegate}
             isNativeToken={isNativeToken}
             minion={minion}
