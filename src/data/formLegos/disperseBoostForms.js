@@ -5,6 +5,7 @@ import { TX } from '../txLegos/contractTX';
 export const DISPERSE_FORMS = {
   MINION_DISPERSE: {
     id: 'MINION_DISPERSE',
+    dev: true,
     title: 'Disperse Tokens',
     description: 'Make a proposal to disperse tokens to a list of addresses',
     type: PROPOSAL_TYPES.DISPERSE,
