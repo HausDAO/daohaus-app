@@ -33,10 +33,9 @@ export const DISPERSE_BOOST_TX = {
         fnName: 'disperseEther',
         args: ['.values.userList', '.values.amountList'],
         value: '.values.disperseTotal',
-        logTX: true,
       },
     ],
-    detailsToJSON: DETAILS.DISPERSE_TOKEN,
+    detailsToJSON: DETAILS.DISPERSE_ETH,
   }),
 };
 
@@ -168,4 +167,3 @@ export const DISPERSE_BOOST_TX = {
 //     ],
 //   },
 // };
-console.log('DISPERSE_BOOST_TX', DISPERSE_BOOST_TX);

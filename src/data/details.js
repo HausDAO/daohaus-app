@@ -111,6 +111,5 @@ export const DETAILS = {
     link: '.values.link',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
-    isDisperseEth: true,
   },
 };

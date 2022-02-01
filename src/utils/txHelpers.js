@@ -113,8 +113,9 @@ const collapseToCallData = values =>
 const collapseLegoToCallData = (actions, gatherArgs, data) => {
   return actions.map((action, index) => {
     if (action.logTX) {
-      console.log('action', action);
       console.log(`ACTION DATA FOR TRANSACTION ${index}`);
+      console.log('action', action);
+      console.log('App State', data);
     }
     const actionTarget = gatherArgs({
       ...data,
@@ -156,6 +157,7 @@ const collapseLegoToCallData = (actions, gatherArgs, data) => {
     if (action.logTX) {
       console.log('abi: ', action.abi);
       console.log('fnName: ', action.fnName);
+      console.log('abiSnippet', abiSnippet);
     }
 
     return {
