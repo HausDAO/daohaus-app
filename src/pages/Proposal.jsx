@@ -86,6 +86,7 @@ const Proposal = ({
           MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
         ](currentProposal.proposalId).call();
 
+        console.log('action: ', action);
         setMinionAction(action);
 
         // hides execute minion button on funding and payroll proposals
