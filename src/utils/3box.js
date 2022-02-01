@@ -3,6 +3,7 @@ import { Core } from '@self.id/core';
 
 import { Caip10Link } from '@ceramicnetwork/stream-caip10-link';
 
+const ceramicNodeUrl = process.env.REACT_APP_CERAMIC_NODE_URL || 'testnet-clay';
 const ceramicNetwork = process.env.REACT_APP_CERAMIC_NETWORK || 'testnet-clay';
 
 export const authenticateDid = async address => {
@@ -15,14 +16,12 @@ export const authenticateDid = async address => {
 
   const authProvider = new EthereumAuthProvider(window.ethereum, address);
   const client = new WebClient({
-    ceramic: ceramicNetwork,
+    ceramic: ceramicNodeUrl,
     connectNetwork: ceramicNetwork,
   });
   let did = null;
   try {
     did = await client.authenticate(authProvider, true);
-    console.log('did');
-    console.log(did);
 
     const link = await Caip10Link.fromAccount(
       client.ceramic,
@@ -40,7 +39,7 @@ export const authenticateDid = async address => {
 };
 
 export const getBasicProfile = async did => {
-  const core = new Core({ ceramic: ceramicNetwork });
+  const core = new Core({ ceramic: ceramicNodeUrl });
   return core.get('basicProfile', did);
 };
 
@@ -67,7 +66,7 @@ const get3boxProfile = async address => {
 
 export const fetchProfile = async address => {
   try {
-    const core = new Core({ ceramic: ceramicNetwork });
+    const core = new Core({ ceramic: ceramicNodeUrl });
     const link = await Caip10Link.fromAccount(
       core.ceramic,
       `${address}@eip155:1`,

@@ -4,10 +4,10 @@ import { omit } from './general';
 import { validate } from './validation';
 import { createContract } from './contract';
 import { LOCAL_ABI } from './abi';
+import { chainByID } from './chain';
 
 const babe = '0x000000000000000000000000000000000000baBe';
-const tokenAPI =
-  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const tokenAPI = 'https://data.daohaus.club/dao-tokens';
 
 export const fetchTokenData = async () => {
   try {
@@ -22,22 +22,30 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
 
-export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
+export const initTokenData = async (
+  daochain,
+  graphTokenData,
+  tokenPriceSetter,
+) => {
   const tokenData = await fetchTokenData();
   if (tokenData && tokenPriceSetter) {
     tokenPriceSetter(tokenData);
   }
 
+  const network = chainByID(daochain).networkAlt || chainByID(daochain).network;
+
   return graphTokenData
     .map(tokenObj => {
       const { token, tokenBalance } = tokenObj;
+      const tokenMeta =
+        tokenData[token.tokenAddress]?.network === network &&
+        tokenData[token.tokenAddress];
 
-      const usdVal = tokenData[token.tokenAddress]?.price || 0;
+      const usdVal = tokenMeta?.price || 0;
       // TODO: overriding due to dupe grt found in cache job
-      const symbol = tokenData[token.tokenAddress]?.symbol || token.symbol;
-      // const symbol = tokenData[token.tokenAddress]?.symbol || null;
-      const logoUri = tokenData[token.tokenAddress]?.logoURI || null;
-      const tokenName = tokenData[token.tokenAddress]?.name || null;
+      const symbol = tokenMeta?.symbol || token.symbol;
+      const logoUri = tokenMeta?.logoURI || null;
+      const tokenName = tokenMeta?.name || null;
       const tokenDataObj = {
         ...omit('token', tokenObj),
         ...token,
@@ -189,9 +197,63 @@ export const fetchBalance = ({ address, chainID, tokenAddress }) => {
       chainID,
     });
     const max = tokenContract.methods.balanceOf(address).call();
-
     return max;
   } catch (error) {
     console.log(error);
+  }
+};
+
+//  for use with daoMemberContext {daoMember, delegate}
+export const getAllowance = (daoMember, delegate) => {
+  if (daoMember?.hasWallet && daoMember?.allowance) {
+    return +daoMember.allowance;
+  }
+  if (delegate?.hasWallet && delegate?.allowance) {
+    return +delegate.allowance;
+  }
+  return null;
+};
+
+export const fetchSpecificTokenData = async (
+  tokenAddress,
+  searchParams,
+  chainID,
+) => {
+  let data = {};
+  const tokenContract = createContract({
+    address: tokenAddress,
+    abi: LOCAL_ABI.ERC_20,
+    chainID,
+  });
+  if (!tokenContract || !validate.address(tokenAddress) || !searchParams)
+    return;
+  try {
+    if (searchParams.balance) {
+      const balance = await tokenContract.methods
+        .balanceOf(searchParams.balance)
+        .call();
+      data = { ...data, balance };
+    }
+    if (searchParams.allowance) {
+      const allowance = await tokenContract.methods
+        .allowance(searchParams.allowance)
+        .call();
+      data = { ...data, allowance };
+    }
+    if (searchParams.decimals) {
+      const decimals = await tokenContract.methods.decimals().call();
+      data = { ...data, decimals };
+    }
+    if (searchParams.name) {
+      const name = await tokenContract.methods.name().call();
+      data = { ...data, name };
+    }
+    if (searchParams.symbol) {
+      const symbol = await tokenContract.methods.symbol().call();
+      data = { ...data, symbol };
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
   }
 };

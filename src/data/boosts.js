@@ -1,6 +1,6 @@
 import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { BOOST_FORMS, CORE_FORMS } from './forms';
+import { FORM } from './formLegos/forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -238,17 +238,19 @@ export const CONTENT = {
       { href: 'https://disperse.app', label: 'Disperse App' },
     ],
   },
-  // SNAPSHOT: {
-  //   title: 'Snapshot Proposals',
-  //   description:
-  //     'Gasless voting for quicker, smaller decisions or just collecting signal.',
-  //   publisher: PUBLISHERS.DAOHAUS,
-  //   version: '0.5',
-  //   pars: ['AWAITING CONTENT'],
-  //   externalLinks: [
-  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
-  //   ],
-  // },
+  SNAPSHOT: {
+    title: 'Snapshot Proposals',
+    description:
+      'Conduct gasless voting or signalling for smaller DAO decisions via Snapshot',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.5',
+    pars: [
+      'Snapshot is a popular gasless signal voting solution, used by projects such as Yearn, Balancer, Sushi. The Boost allows you to obtain signals via Snapshot from members for time-sensitive proposals. If you already have a Snapshot space set up, link the Snapshot space, and start running signal proposals',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
 };
 
 export const COMMON_STEPS = {
@@ -294,10 +296,21 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
+      form: FORM.DISCOURSE_FORUM_COLOR,
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
+    },
+    STEP2: COMMON_STEPS.SIGNER,
+  },
+  ADD_SNAPSHOT: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'boostMetaForm',
+      form: FORM.SNAPSHOT,
+      isUserStep: true,
+      stepLabel: 'Add Space',
+      next: 'STEP2',
     },
     STEP2: COMMON_STEPS.SIGNER,
   },
@@ -305,7 +318,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'form',
-      form: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
+      form: FORM.WRAP_N_ZAP_LAUNCH,
       next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Deploy' },
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
@@ -321,7 +334,7 @@ export const STEPS = {
       start: true,
       type: 'form',
       next: 'STEP2',
-      form: CORE_FORMS.SUMMON_MINION_SELECTOR,
+      form: FORM.SUMMON_MINION_SELECTOR,
       isUserStep: true,
       stepLabel: 'Choose a Minion',
     },
@@ -338,7 +351,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.SPAM_FILTER,
+      form: FORM.SPAM_FILTER,
       next: 'STEP2',
       stepLabel: 'Select Filter Parameter',
       isUserStep: true,
@@ -418,7 +431,7 @@ export const BOOSTS = {
     playlist: BOOST_PLAYLISTS.BANK_BUYOUT,
     networks: {
       '0x4': true,
-      '0x1': true,
+      '0x1': false,
       '0x64': true,
       '0x89': true,
       '0xa4b1': true,
@@ -522,14 +535,19 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  // SNAPSHOT: {
-  //   id: 'SNAPSHOT',
-  //   boostContent: CONTENT.SNAPSHOT,
-  //   steps: STEPS.ADD_SNAPSHOT,
-  //   categories: ['governance'],
-  //   networks: 'all',
-  //   cost: 'free',
-  // },
+  SNAPSHOT: {
+    id: 'SNAPSHOT',
+    boostContent: CONTENT.SNAPSHOT,
+    steps: STEPS.ADD_SNAPSHOT,
+    categories: ['governance'],
+    networks: 'all',
+    cost: 'free',
+    metaFields: ['space'],
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'boost/snapshot/settings',
+    },
+  },
 };
 
 export const allBoosts = {

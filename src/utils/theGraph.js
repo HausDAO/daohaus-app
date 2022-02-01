@@ -5,12 +5,18 @@ import {
   HOME_DAO,
   HOME_DAO_TOKENS,
   SINGLE_PROPOSAL,
+  SINGLE_MEMBER,
   SPAM_FILTER_ACTIVITIES,
   SPAM_FILTER_GK_WL,
   SPAM_FILTER_TRIBUTE,
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
+import {
+  SNAPSHOT_SPACE_QUERY,
+  SNAPSHOT_PROPOSALS_QUERY,
+  SNAPSHOT_VOTES_QUERY,
+} from '../graphQL/snapshot-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
 import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
@@ -26,6 +32,8 @@ import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
 import { validateSafeMinion } from './vaults';
+
+const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -85,6 +93,48 @@ export const getWrapNZap = async (daochain, daoid) => {
   return null;
 };
 
+export const getSnapshotSpaces = async id => {
+  try {
+    return graphQuery({
+      endpoint: SNAPSHOT_ENDPOINT,
+      query: SNAPSHOT_SPACE_QUERY,
+      variables: {
+        id,
+      },
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getSnapshotProposals = async id => {
+  try {
+    return graphQuery({
+      endpoint: SNAPSHOT_ENDPOINT,
+      query: SNAPSHOT_PROPOSALS_QUERY,
+      variables: {
+        id,
+      },
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getSnapshotVotes = async id => {
+  try {
+    return graphQuery({
+      endpoint: SNAPSHOT_ENDPOINT,
+      query: SNAPSHOT_VOTES_QUERY,
+      variables: {
+        id,
+      },
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const fetchTransmutation = async args => {
   return graphQuery({
     endpoint: getGraphEndpoint(args.chainID, 'boosts_graph_url'),
@@ -132,6 +182,16 @@ export const fetchSingleProposal = async args => {
     variables: {
       molochAddress: args.molochAddress,
       proposalId: args.proposalId,
+    },
+  });
+};
+
+export const fetchSingleMember = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: SINGLE_MEMBER,
+    variables: {
+      id: `${args.molochAddress}-member-${args.memberAddress}`,
     },
   });
 };

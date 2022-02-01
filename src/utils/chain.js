@@ -195,6 +195,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    dao_conditional_helper_addr: '0x55c8F8a71aD01FC707Bbb1A04d2c0Ef246973392',
   },
   '0x89': {
     name: 'Matic',
@@ -206,7 +207,7 @@ export const supportedChains = {
     chain_id: '0x89',
     hub_sort_order: 3,
     providers: ['walletconnect'],
-    rpc_url: 'https://rpc-mainnet.maticvigil.com/',
+    rpc_url: 'https://polygon-rpc.com/',
     abi_api_url:
       'https://api.polygonscan.com/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.polygonscan.com/api',
@@ -247,6 +248,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    dao_conditional_helper_addr: '0x8beE9422987ddd6fB57Cd546d184A0a6094DF7A8',
   },
   '0xa4b1': {
     name: 'Arbitrum',
@@ -297,6 +299,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
+    dao_conditional_helper_addr: '0xF5fb9ce16dbf5B0a7b632Ed5D3F0278E0043B7AE',
   },
   '0xa4ec': {
     name: 'Celo',
@@ -398,13 +401,12 @@ export const chainByName = networkName => {
 
   return supportedChains[networkKey];
 };
-
 export const MM_ADDCHAIN_DATA = {
   '0x89': {
     chainId: '0x89',
     chainName: 'Matic Mainnet',
-    rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
-    blockExplorerUrls: ['https://explorer.matic.network/'],
+    rpcUrls: ['https://polygon-rpc.com/'],
+    blockExplorerUrls: ['https://polygonscan.com/ '],
     nativeCurrency: {
       name: 'Matic',
       symbol: 'MATIC',
@@ -414,8 +416,8 @@ export const MM_ADDCHAIN_DATA = {
   '0x64': {
     chainId: '0x64',
     chainName: 'xDai',
-    rpcUrls: ['https://dai.poa.network'],
-    blockExplorerUrls: ['https://blockscout.com/poa/xdai'],
+    rpcUrls: ['https://rpc.xdaichain.com/'],
+    blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
     nativeCurrency: {
       name: 'xDai',
       symbol: 'XDAI',
@@ -440,7 +442,7 @@ export const MM_ADDCHAIN_DATA = {
     blockExplorerUrls: ['https://arbiscan.io/'],
     nativeCurrency: {
       name: 'ethereum',
-      symbol: 'ETH',
+      symbol: 'AETH',
       decimals: 18,
     },
   },
@@ -473,3 +475,13 @@ export const EIP3085 = {
 };
 
 export const NIFTYINK_ADDRESS = '0xcf964c89f509a8c0ac36391c5460df94b91daba5';
+
+export const getScanKey = chainID => {
+  if (chainID === '0x89') {
+    return process.env.REACT_APP_POLYGONSCAN_KEY;
+  }
+  if (chainID === '0x1' || chainByID === '0x4' || chainByID === '0x2a') {
+    return process.env.REACT_APP_ETHERSCAN_KEY;
+  }
+  return null;
+};

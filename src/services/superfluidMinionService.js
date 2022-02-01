@@ -3,15 +3,17 @@ import Web3 from 'web3';
 
 import SuperfluidMinionAbi from '../contracts/superfluidMinion.json';
 import SuperfluidResolverAbi from '../contracts/iSuperfluidResolver.json';
-import { TokenService } from './tokenService';
+
 import {
   MINION_STREAMS,
   SF_ACTIVE_STREAMS,
   SF_STREAMS,
 } from '../graphQL/superfluid-queries';
+import { createContract } from '../utils/contract';
 import { chainByID, getGraphEndpoint } from '../utils/chain';
 import { graphFetchAll } from '../utils/theGraph';
 import { graphQuery } from '../utils/apollo';
+import { LOCAL_ABI } from '../utils/abi';
 
 const getSuperTokenBalances = async (
   chainID,
@@ -22,24 +24,27 @@ const getSuperTokenBalances = async (
 ) => {
   try {
     const tokenBalances = tokens.map(async token => {
-      const tokenService = TokenService({
-        tokenAddress: token.superTokenAddress,
+      const tokenContract = createContract({
+        address: token.superTokenAddress,
+        abi: LOCAL_ABI.ERC_20,
         chainID,
       });
-      const tokenSymbol = await tokenService('symbol')();
+      const tokenSymbol = await tokenContract.methods.symbol().call();
+      const balance = await tokenContract.methods.balanceOf(minion).call();
+      const tokenDecimals = await tokenContract.methods.decimals().call();
       const sToken = await sfResolver.methods
         .get(`supertokens.${sfVersion}.${tokenSymbol}`)
         .call();
       return {
         [token.superTokenAddress]: {
-          tokenBalance: await tokenService('balanceOf')(minion),
+          tokenBalance: balance,
           symbol: tokenSymbol,
-          decimals: await tokenService('decimals')(),
+          decimals: tokenDecimals,
           registeredToken: sToken !== constants.AddressZero,
           underlyingTokenAddress:
             token.underlyingTokenAddress !== token.superTokenAddress &&
             token.underlyingTokenAddress,
-          _service: tokenService,
+          _service: tokenContract,
         },
       };
     });

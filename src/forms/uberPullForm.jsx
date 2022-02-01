@@ -19,9 +19,10 @@ import { useUser } from '../contexts/UserContext';
 import MaxOutInput from '../components/maxInput';
 import TokenSelect from './tokenSelect';
 import { createPoll } from '../services/pollService';
-import { TokenService } from '../services/tokenService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
+import { createContract } from '../utils/contract';
 import { displayBalance, valToDecimalString } from '../utils/tokenValue';
+import { LOCAL_ABI } from '../utils/abi';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const FormWrapper = styled.form`
@@ -78,16 +79,16 @@ const PullForm = ({
       try {
         setLoadToken(true);
 
-        const tokenService = TokenService({
+        const tokenContract = createContract({
+          address: pullToken,
+          abi: LOCAL_ABI.ERC_20,
           chainID: UBERHAUS_DATA.NETWORK,
-          tokenAddress: pullToken,
         });
 
-        const balance = await tokenService('balanceOf')(
-          uberHausMinion.minionAddress,
-        );
-
-        const tokenDecimals = await tokenService('decimals')();
+        const balance = await tokenContract.methods
+          .balanceOf(uberHausMinion.minionAddress)
+          .call();
+        const tokenDecimals = await tokenContract.methods.decimals().call();
         const readableBalance = displayBalance(balance, tokenDecimals);
 
         setBalance({

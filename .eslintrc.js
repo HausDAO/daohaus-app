@@ -1,3 +1,5 @@
+const { off } = require('process');
+
 module.exports = {
   env: {
     es2020: true,
@@ -51,6 +53,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'guard-for-in': 'off', // priority 2, two instances
     'max-len': 'off',
+    'no-unsafe-optional-chaining': 'off',
     'no-return-assign': 'off', // priority 1, easy
     'consistent-return': 'off', // priority 2, harder basically all the services
     radix: 'off', // priority 1, parseInt ??

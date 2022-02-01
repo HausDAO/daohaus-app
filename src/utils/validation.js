@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { getSnapshotSpaces } from './theGraph';
 
 // Error Model {
 //   message: String (required)
@@ -58,6 +59,9 @@ export const validate = {
   bytes32(val) {
     return val;
   },
+  hex(val) {
+    return Web3.utils.isHexStrict(val);
+  },
   disperseList(val) {
     return val
       ?.split(/\r?\n/)
@@ -72,6 +76,14 @@ export const validate = {
           ),
         true,
       );
+  },
+  jsonStringObject(val) {
+    try {
+      const obj = JSON.parse(val);
+      return typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
+    } catch (e) {
+      return false;
+    }
   },
 };
 
@@ -204,4 +216,15 @@ export const collectTypeValidations = valString => {
     );
   }
   return val => (valFn(val) || val === '' ? true : valMsg);
+};
+
+export const handleStepValidation = {
+  validateSnapshot: async ({ values }) => {
+    const snapshotSpace = values?.space;
+    const space = await getSnapshotSpaces(snapshotSpace);
+    if (!space.space?.id) {
+      throw Error('No space found!');
+    }
+    return true;
+  },
 };

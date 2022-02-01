@@ -8,7 +8,6 @@ import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
 import EscrowActions from './escrowActions';
 import RaribleOrder from './raribleOrder';
-import { TokenService } from '../services/tokenService';
 import TextBox from './TextBox';
 import {
   MINION_TYPES,
@@ -16,8 +15,10 @@ import {
   PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { createContract } from '../utils/contract';
+import { LOCAL_ABI } from '../utils/abi';
 import { supportedChains } from '../utils/chain';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const MinionExecute = ({
   hideMinionExecuteButton,
@@ -58,20 +59,19 @@ const MinionExecute = ({
           proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
           proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
         ) {
-          const hausService = await TokenService({
+          const hausService = createContract({
+            address: UBERHAUS_DATA.STAKING_TOKEN,
+            abi: LOCAL_ABI.ERC_20,
             chainID: daochain,
-            tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
-            is32: false,
           });
 
-          const amountApproved = await hausService('allowance')({
-            accountAddr: proposal?.minionAddress,
-            contractAddr: UBERHAUS_DATA.ADDRESS,
-          });
+          const amountApproved = await hausService.methods
+            .allowance(proposal?.minionAddress, UBERHAUS_DATA.ADDRESS)
+            .call();
 
-          const minionBalance = await hausService('balanceOf')(
-            proposal.minionAddress,
-          );
+          const minionBalance = await hausService.methods
+            .balanceOf(proposal.minionAddress)
+            .call();
 
           setMinionBalance(minionBalance);
           setNeedsHausApproval(+amountApproved < +minionBalance);
@@ -156,19 +156,21 @@ const MinionExecute = ({
         member => member.memberAddress === proposal.createdBy,
       );
 
+      const canExecute =
+        memberApplicant?.loot === '0' && memberApplicant.shares === '0';
+
       return proposal?.status === 'Passed' ? (
         <Flex alignItems='center' flexDir='column'>
           <Button
             onClick={handleExecute}
             mb={4}
             disabled={
-              !memberApplicant?.didRagequit ||
-              (minionAction?.memberOnlyEnabled && !isMember)
+              !canExecute || (minionAction?.memberOnlyEnabled && !isMember)
             }
           >
             Execute Minion
           </Button>
-          {!memberApplicant?.didRagequit && (
+          {!canExecute && (
             <TextBox size='xs' align='center' w='100%'>
               Proposer Must Rage Quit Before This Minion Can Be Executed.
             </TextBox>

@@ -88,7 +88,7 @@ const FormFooter = props => {
             onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
             isLoading={isLoading}
-            disabled={isLoading || !canInteract || disableCallback()}
+            disabled={isLoading || !canInteract || disableCallback?.()}
             mb={[2, 0]}
           >
             {ctaText ||
