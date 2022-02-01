@@ -111,31 +111,52 @@ const collapseToCallData = values =>
     operation: tx.operation || '0',
   }));
 const collapseLegoToCallData = (actions, gatherArgs, data) => {
-  return actions.map(action => {
+  return actions.map((action, index) => {
+    console.log('action', action);
+    if (action.logTX) {
+      console.log(`ACTION DATA FOR TRANSACTION ${index}`);
+    }
     const actionTarget = gatherArgs({
       ...data,
       tx: { ...data.tx, gatherArgs: [action.targetContract] },
     })[0];
+    if (action.logTX) {
+      console.log('targetContract: ', actionTarget);
+    }
     const actionArgs = gatherArgs({
       ...data,
       tx: { ...data.tx, gatherArgs: action.args },
     });
-    const actionValue = actions.value
+    if (action.logTX) {
+      console.log('args: ', actionArgs);
+    }
+    const actionValue = action.value
       ? gatherArgs({
           ...data,
           tx: { ...data.tx, gatherArgs: [action.value] },
         })[0]
       : '0';
-    const actionOperation = actions.operation
+    if (action.logTX) {
+      console.log('value: ', actionValue);
+    }
+    const actionOperation = action.operation
       ? gatherArgs({
           ...data,
           tx: { ...data.tx, gatherArgs: [action.operation] },
         })[0]
       : '0';
+    if (action.logTX) {
+      console.log('operation: ', actionOperation);
+    }
     const abiSnippet = getABIsnippet(
       { contract: action.abi, fnName: action.fnName },
       data,
     );
+
+    if (action.logTX) {
+      console.log('abi: ', action.abi);
+      console.log('fnName: ', action.fnName);
+    }
 
     return {
       to: actionTarget,
