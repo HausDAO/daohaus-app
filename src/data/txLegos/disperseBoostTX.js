@@ -10,9 +10,10 @@ export const DISPERSE_BOOST_TX = {
         abi: CONTRACTS.ERC_20, // required
         fnName: 'approve', // required
         args: ['.values.tokenAddress', '.contextData.chainConfig.disperse_app'], // required
+        // logTX
       },
       {
-        targetContract: '.values.tokenAddress',
+        targetContract: '.contextData.chainConfig.disperse_app',
         abi: CONTRACTS.DISPERSE_APP,
         fnName: 'disperseTokenSimple',
         args: [
@@ -27,7 +28,7 @@ export const DISPERSE_BOOST_TX = {
   DISPERSE_ETH: buildMultiTxAction({
     actions: [
       {
-        targetContract: '.values.tokenAddress',
+        targetContract: '.contextData.chainConfig.disperse_app',
         abi: CONTRACTS.DISPERSE_APP,
         fnName: 'disperseTokenSimple',
         args: ['.values.userList', '.values.amountList'],
