@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Text, Flex } from '@chakra-ui/react';
-import hausImg from '../assets/img/Daohaus__Castle--Dark.svg';
+import hausImg from '../assets/img/haus_icon.svg';
 
 const HausBalance = () => {
   return (

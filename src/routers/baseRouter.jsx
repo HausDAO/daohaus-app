@@ -7,6 +7,7 @@ import Dao from '../pages/Dao';
 import Explore from '../pages/Explore';
 import Hub from '../pages/Hub';
 import HubBalances from '../pages/HubBalances';
+import Haus from '../pages/Haus';
 import Register from '../pages/Register';
 import Summon from '../pages/Summon';
 import SummonPartyFavor from '../pages/SummonPartyFavor';
@@ -39,6 +40,9 @@ const BaseRouter = () => {
       </Route>
       <Route exact path='/hub-balances'>
         <HubBalances />
+      </Route>
+      <Route exact path='/haus'>
+        <Haus />
       </Route>
       <Route
         path='/dao/:daochain/:daoid'
