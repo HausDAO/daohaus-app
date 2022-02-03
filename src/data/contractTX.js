@@ -1317,7 +1317,7 @@ export const TX = {
         type: 'encodeHex',
         contract: CONTRACTS.UBERHAUS_MOLOCH,
         fnName: 'ragequit',
-        gatherArgs: ['.values.shares || 0', '.values.loot || 0'],
+        gatherArgs: ['.values.shares || 0', '.values.uberHausLoot || 0'],
       },
       {
         type: 'detailsToJSON',

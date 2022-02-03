@@ -13,11 +13,8 @@ import { createContract } from '../utils/contract';
 import { getProposalHistories } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
+import { contractByProposalType } from '../utils/txHelpers';
 import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
-import {
-  contractByProposalType,
-  transactionByProposalType,
-} from '../utils/txHelpers';
 import { fetchSingleProposal } from '../utils/theGraph';
 import { proposalResolver } from '../utils/resolvers';
 
@@ -94,7 +91,10 @@ const Proposal = ({
         setMinionAction(action);
 
         // hides execute minion button on funding and payroll proposals
-        if (action[1] === '0x0000000000000000000000000000000000000000') {
+        if (
+          action[1] === '0x0000000000000000000000000000000000000000' &&
+          currentProposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_STAKE
+        ) {
           setHideMinionExecuteButton(true);
         } else {
           setHideMinionExecuteButton(false);
