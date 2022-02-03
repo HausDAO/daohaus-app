@@ -21,8 +21,8 @@ const UberHausRageQuitInput = props => {
   };
 
   const setMax = () => {
-    if (name === 'shares') {
-      setValue('shares', minionShares);
+    if (name === 'uberHausShares') {
+      setValue('uberHausShares', minionShares);
     }
     if (name === 'uberHausLoot') {
       setValue('uberHausLoot', minionLoot);
@@ -35,6 +35,8 @@ const UberHausRageQuitInput = props => {
     const uberMinionMember = localValues.uberMembers.find(
       member => member.memberAddress === localValues.minionAddress,
     );
+
+    console.log('uberMinionMember', uberMinionMember);
 
     if (+uberMinionMember.shares) {
       setMinionShares(+uberMinionMember.shares);
