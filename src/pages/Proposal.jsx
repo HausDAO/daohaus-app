@@ -14,7 +14,10 @@ import { getProposalHistories } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
 import { contractByProposalType } from '../utils/txHelpers';
-import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
+import {
+  MINION_ACTION_FUNCTION_NAMES,
+  PROPOSAL_TYPES,
+} from '../utils/proposalUtils';
 import { fetchSingleProposal } from '../utils/theGraph';
 import { proposalResolver } from '../utils/resolvers';
 
