@@ -10,7 +10,7 @@ const UberHausRageQuitInput = props => {
   const [minionLoot, setMinionLoot] = useState(0);
 
   const btnDisplay = () => {
-    if (name === 'shares') {
+    if (name === 'uberHausShares') {
       if (minionShares) return `Max: ${minionShares}`;
       return '0';
     }
