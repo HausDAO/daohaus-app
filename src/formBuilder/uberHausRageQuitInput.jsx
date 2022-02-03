@@ -14,7 +14,7 @@ const UberHausRageQuitInput = props => {
       if (minionShares) return `Max: ${minionShares}`;
       return '0';
     }
-    if (name === 'uberHausloot') {
+    if (name === 'uberHausLoot') {
       if (minionLoot) return `Max: ${minionLoot}`;
       return '0';
     }
