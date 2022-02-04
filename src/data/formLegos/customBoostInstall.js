@@ -93,7 +93,6 @@ export const CUSTOM_BOOST_INSTALL_FORMS = {
       [
         FIELD.TITLE,
         FIELD.DESCRIPTION,
-        FIELD.LINK,
         FIELD.SHARES_REQUEST,
         FIELD.LOOT_REQUEST,
         FIELD.PAYMENT_REQUEST,

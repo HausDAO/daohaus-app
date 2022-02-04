@@ -40,7 +40,7 @@ const deriveMessage = async ({
         <Bold>
           {' '}
           {readableTokenBalance({ balance, symbol: name, decimals })}
-        </Bold>
+        </Bold>{' '}
         from <Bold>{vault?.name || 'Minion'}</Bold>
       </ParaMd>,
     );
