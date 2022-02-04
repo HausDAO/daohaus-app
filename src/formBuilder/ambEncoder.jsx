@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Flex, Button, Spinner } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 
@@ -10,7 +10,7 @@ import { getLocalABI } from '../utils/abi';
 import { encodeMulti, collapseToCallData } from '../utils/txHelpers';
 import { chainByID } from '../utils/chain';
 import { fetchAmbModule } from '../utils/gnosis';
-import { CONTRACTS } from '../data/contractTX';
+import { CONTRACTS } from '../data/contracts';
 
 const AmbEncoder = props => {
   const { localForm, error } = props;

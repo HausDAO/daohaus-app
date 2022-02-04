@@ -1,5 +1,6 @@
 import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { CUSTOM_BOOST_INSTALL_FORMS } from './formLegos/customBoostInstall';
 import { FORM } from './formLegos/forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
@@ -301,14 +302,14 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'form',
-      form: BOOST_FORMS.CROSSCHAIN_MINION,
+      form: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
       next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Summon Minion' },
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },
     STEP2: {
       type: 'zodiacActionForm',
-      form: BOOST_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+      form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
       ctaText: 'Deploy & Add Module',
       // TODO: how to adapt it to Tx model
       // next: { type: 'awaitTx', then: 'STEP3' },

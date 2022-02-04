@@ -1,3 +1,4 @@
+import { CUSTOM_BOOST_INSTALL_FORMS } from './formLegos/customBoostInstall';
 import { FORM } from './formLegos/forms';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { NFT_ACTIONS } from '../utils/nftData';
@@ -152,11 +153,11 @@ export const MINIONS = {
     minionType: MINION_TYPES.SAFE,
     content: MINION_CONTENT[MINION_TYPES.CROSSCHAIN_SAFE],
     networks: MINION_NETWORKS[MINION_TYPES.CROSSCHAIN_SAFE],
-    summonForm: BOOST_FORMS.CROSSCHAIN_MINION,
+    summonForm: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
     addSummonSteps: {
       STEP3: {
         type: 'zodiacActionForm',
-        form: BOOST_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+        form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
         finish: true,
         ctaText: 'Deploy & Add Module',
         next: 'FINISH',
