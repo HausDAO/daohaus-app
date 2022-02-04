@@ -19,6 +19,7 @@ const StakeTransfer = ({ proposal = {}, minionAction }) => {
     )?.value;
     if (token !== UBERHAUS_DATA.STAKING_TOKEN.toLowerCase()) return true;
   }, [proposal, minionAction]);
+
   const stakeAmt = useMemo(() => {
     if (!minionAction?.decoded?.params?.length) return;
     const amt = minionAction.decoded.params.find(
@@ -31,6 +32,7 @@ const StakeTransfer = ({ proposal = {}, minionAction }) => {
         decimals: UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
       });
   }, [proposal, minionAction]);
+
   const sharesAmt = useMemo(() => {
     if (!minionAction?.decoded?.params?.length) return;
     const amt = minionAction.decoded.params.find(

@@ -10,8 +10,9 @@ const ExecuteAction = ({
   executeTX,
   argsOverride,
   disabledOverride,
+  canInteract,
 }) => {
-  const { submitTransaction, canInteract } = useTX();
+  const { submitTransaction } = useTX();
   const [loading, setLoading] = useState(false);
 
   const execute = async () => {

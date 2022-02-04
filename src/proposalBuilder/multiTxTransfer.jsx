@@ -89,9 +89,9 @@ const SingleActionDisplay = ({ action, index }) => {
       {isOpen && (
         <>
           <ActionItem label='Target Contract' data={action.to} />
-          {action.value !== ethers.constants.AddressZero && (
+          {/* {action.value !== ethers.constants.AddressZero && (
             <ActionItem label='Target Contract' data={action.to} />
-          )}
+          )} */}
           <TextBox size='xs' variant='label' mb={3}>
             Parameters:
           </TextBox>
