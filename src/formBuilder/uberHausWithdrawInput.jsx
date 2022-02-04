@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { getContractBalance } from '../utils/tokenValue';
+import { getContractBalance, displayBalance } from '../utils/tokenValue';
 import { spreadOptions } from '../utils/formBuilder';
 
 const UberHausWithdrawInput = props => {
@@ -36,14 +36,22 @@ const UberHausWithdrawInput = props => {
           token.tokenAddress === localValues.withdrawToken?.toLowerCase(),
       );
 
-      setBalance(token?.tokenBalance);
+      setBalance(
+        displayBalance(
+          token?.tokenBalance,
+          UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
+        ),
+      );
       setDecimals(UBERHAUS_DATA.STAKING_TOKEN_DECIMALS);
       setDaoTokens([
         {
           value: UBERHAUS_DATA.STAKING_TOKEN,
           name: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
           decimals: UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
-          balance: token.tokenBalance,
+          balance: displayBalance(
+            token?.tokenBalance,
+            UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
+          ),
         },
       ]);
     }
@@ -54,7 +62,7 @@ const UberHausWithdrawInput = props => {
   ]);
 
   const setMax = () => {
-    setValue('uberHausWithdraw', balance / 10 ** decimals);
+    setValue('uberHausWithdraw', balance);
   };
 
   const options = spreadOptions({

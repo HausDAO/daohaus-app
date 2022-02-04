@@ -506,17 +506,15 @@ export const FIELD = {
     name: 'uberHausWithdraw',
     label: 'Withdraw',
     placeholder: '0',
-    // info: INFO_TEXT.RAGE_QUIT_INPUT,
-    expectType: 'integer',
+    expectType: 'number',
   },
   UBERHAUS_PULL_INPUT: {
     type: 'uberHausPullInput',
-    htmlFor: 'uberbHausPull',
+    htmlFor: 'uberHausPull',
     name: 'uberHausPull',
     label: 'Pull',
     placeholder: '0',
-    // info: INFO_TEXT.RAGE_QUIT_INPUT,
-    expectType: 'integer',
+    expectType: 'number',
   },
 };
 

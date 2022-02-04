@@ -31,7 +31,7 @@ const UberHausProposals = ({ uberHausMinion, uberMembers, uberDelegate }) => {
     switch (propType) {
       case 'delegate': {
         formModal({
-          ...FORM.CHANGE_UBERHAUS_DELEGATE,
+          ...FORM.UBERHAUS_DELEGATE,
           localValues: {
             uberHausDaoAddress: UBERHAUS_DATA.ADDRESS,
             minionAddress: uberHausMinion.minionAddress,

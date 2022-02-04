@@ -3,8 +3,8 @@ import { TX } from './contractTX';
 import { FIELD } from './fields';
 
 export const UBERHAUS_FORMS = {
-  CHANGE_UBERHAUS_DELEGATE: {
-    id: 'CHANGE_UBERHAUS_DELEGATE',
+  UBERHAUS_DELEGATE: {
+    id: 'UBERHAUS_DELEGATE',
     title: 'Choose Champion',
     description: 'Manage your delegate to UBERhaus',
     type: PROPOSAL_TYPES.MINION_UBER_DEL,
@@ -17,7 +17,7 @@ export const UBERHAUS_FORMS = {
   },
   UBERHAUS_STAKE: {
     id: 'UBERHAUS_STAKE',
-    title: 'Stake in UBERhaus',
+    title: 'Stake in UberHaus',
     description: "Submit your DAO's membership proposal here.",
     type: PROPOSAL_TYPES.MINION_UBER_STAKE,
     tx: TX.UBERHAUS_STAKING,
@@ -28,7 +28,6 @@ export const UBERHAUS_FORMS = {
     ],
   },
   UBERHAUS_RAGEQUIT: {
-    // customValidations: ['canRagequit', 'rageQuitMinimum', 'rageQuitMax'],
     id: 'UBERHAUS_RAGEQUIT',
     title: 'RageQuit',
     description: 'Submit a proposal to RageQuit from UberHaus.',

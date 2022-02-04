@@ -1340,7 +1340,7 @@ export const TX = {
     gatherArgs: [
       '.localValues.uberHausDaoAddress',
       '.values.tributeToken',
-      '.values.withdraw' || '0',
+      '.values.uberHausWithdraw' || '0',
     ],
     createDiscourse: true,
   },
@@ -1352,7 +1352,7 @@ export const TX = {
     display: 'Submit Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Proposal submitted!',
-    gatherArgs: ['.values.tributeToken', '.values.pull' || '0'],
+    gatherArgs: ['.values.tributeToken', '.values.uberHausPull' || '0'],
     createDiscourse: true,
   },
   UBERHAUS_CLAIM_REWARDS: {
