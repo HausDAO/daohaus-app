@@ -4,7 +4,7 @@ import Web3 from 'web3';
 // import Erc20Abi from '../contracts/erc20a.json';
 import { getLocalABI } from './abi';
 import { chainByID } from './chain';
-import { CONTRACTS } from '../data/contractTX';
+import { CONTRACTS } from '../data/contracts';
 
 export const createContract = ({ address, abi, chainID, web3 }) => {
   if (!web3) {

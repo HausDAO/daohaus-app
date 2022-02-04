@@ -8,7 +8,7 @@ import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
 import { handleDecimals } from '../utils/general';
 import { getContractBalance } from '../utils/tokenValue';

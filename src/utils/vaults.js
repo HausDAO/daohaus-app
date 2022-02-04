@@ -1,8 +1,8 @@
 import { supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
-import { FORM } from '../data/forms';
-import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
+import { FORM } from '../data/formLegos/forms';
+import { VAULT_TRANSFER_TX } from '../data/txLegos/transferContractTX';
 import { getReadableBalance } from './tokenValue';
 
 export const getVaultERC20s = (daoVaults, vaultAddress, localTokenAddress) => {

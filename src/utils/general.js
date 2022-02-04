@@ -355,6 +355,10 @@ export const NOUN = {
     singular: 'proposal',
     plural: 'proposals',
   },
+  ADDRESSES: {
+    singular: 'address',
+    plural: 'addresses',
+  },
 };
 
 export const handleNounCase = (amt, noun) =>

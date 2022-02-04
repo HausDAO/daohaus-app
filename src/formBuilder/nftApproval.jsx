@@ -8,7 +8,7 @@ import { useTX } from '../contexts/TXContext';
 import { SubmitFormError } from './staticElements';
 import FieldWrapper from './fieldWrapper';
 import { NFTService } from '../services/nftService';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { supportedChains } from '../utils/chain';
 
 const NftApproval = props => {

@@ -12,7 +12,7 @@ import {
   VotingInactive,
 } from './proposalActionPrimitives';
 
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import {
   cheatExecutionStatus,
   removeExecutionCheat,

@@ -13,7 +13,7 @@ import {
 } from './proposalActionPrimitives';
 
 import { validate } from '../utils/validation';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 const VotingPeriod = ({ proposal, voteData, canInteract, isMember }) => {
   const [isLoading, setLoading] = useState(false);

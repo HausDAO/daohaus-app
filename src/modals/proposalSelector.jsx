@@ -22,7 +22,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useAppModal } from '../hooks/useModals';
 import TextBox from '../components/TextBox';
-import { FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { CARD_BG } from '../themes/theme';
 
 const ProposalSelector = () => {

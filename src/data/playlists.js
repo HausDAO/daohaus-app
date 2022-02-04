@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { FORM } from './forms';
+import { FORM } from './formLegos/forms';
 
 export const BOOST_PLAYLISTS = {
   OLD_DEV_SUITE: {

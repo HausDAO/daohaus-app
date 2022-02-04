@@ -4,7 +4,7 @@ import { createContract } from './contract';
 import { decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 // If a minion has separate action names (ex. UBER),
 // then use Proposal types as a reference to the action name
@@ -88,6 +88,14 @@ export const decodeAction = async (action, params, depth = 0) => {
     return { ...targetContractABI, error: true };
   }
 
+  if (targetContractABI?.result === 'Contract source code not verified') {
+    return {
+      ...targetContractABI,
+      error: true,
+      message: targetContractABI?.result,
+    };
+  }
+
   if (depth === 5) {
     return {
       ...targetContractABI,
@@ -167,6 +175,7 @@ export const getMinionAction = async params => {
       chainID,
     });
     const action = await minionContract.methods[actionName](proposalId).call();
+
     if (SHOULD_DECODE[minionType] || SHOULD_DECODE[proposalType]) {
       const decoded = await decodeAction(action, params);
       return { ...action, decoded };
