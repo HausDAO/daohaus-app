@@ -5,6 +5,9 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'minionTransfer',
     // execute: 'executeAction',
   },
+  [PROPOSAL_TYPES.MINION_ERC20]: {
+    customTransferUI: 'minionTransfer',
+  },
   [PROPOSAL_TYPES.MINION_RARIBLE]: {
     execute: 'executeRarible',
   },
