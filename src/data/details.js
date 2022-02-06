@@ -19,7 +19,7 @@ export const DETAILS = {
     minionType: MINION_TYPES.VANILLA,
   },
   PAYROLL_PROPOSAL: {
-    title: '.values.title',
+    title: '.values.title || Minion sends a token',
     description: `.values.description || ${HASH.EMPTY_FIELD}`,
     link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
