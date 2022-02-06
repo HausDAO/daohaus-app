@@ -17,7 +17,7 @@ export const DETAILS = {
     description: `.values.description || ${HASH.EMPTY_FIELD}`,
     link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
-    minionType: '.formData.minionType',
+    minionType: '.formData.minionType || .values.minionType',
   },
   VANILLA_MINION_PROPOSAL: {
     title: `.values.title`,

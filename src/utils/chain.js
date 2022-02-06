@@ -101,6 +101,9 @@ export const supportedChains = {
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
     escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    swapr: {
+      staking: '0x732DB307337a5ceA1FD117AF808382FaC0AFAe8a',
+    },
   },
   '0x2a': {
     name: 'Ethereum Kovan',

@@ -395,18 +395,6 @@ export const Transaction = async data => {
     });
 };
 
-//  Seaches application state for values
-export const exposeValues = data => {
-  const foundData = data.tx.exposeValues.reduce((obj, query) => {
-    return { ...obj, [query.name]: searchData(data, query.search) };
-  }, {});
-  if (foundData) {
-    const existingValues = data.values || {};
-    return { ...data, values: { ...foundData, ...existingValues } };
-  }
-  throw new Error('Could not find data with given queries');
-};
-
 export const createActions = ({ tx, uiControl, stage }) => {
   if (!tx[stage]) return;
 

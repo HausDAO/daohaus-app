@@ -9,7 +9,10 @@ export const DISPERSE_BOOST_TX = {
         targetContract: '.values.tokenAddress', // required
         abi: CONTRACTS.ERC_20, // required
         fnName: 'approve', // required
-        args: ['.values.tokenAddress', '.contextData.chainConfig.disperse_app'], // required
+        args: [
+          '.contextData.chainConfig.disperse_app',
+          '.values.disperseTotal',
+        ], // required
         // logTX:true
       },
       {

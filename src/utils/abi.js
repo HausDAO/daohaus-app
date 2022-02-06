@@ -30,6 +30,7 @@ import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
 import { MINION_TYPES } from './proposalUtils';
 import DISPERSE_APP from '../contracts/disperseApp.json';
+import SWAPR_STAKING from '../contracts/swapr_staking.json';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -56,6 +57,7 @@ export const LOCAL_ABI = Object.freeze({
   DAO_CONDITIONAL_HELPER,
   ESCROW_MINION,
   DISPERSE_APP,
+  SWAPR_STAKING,
 });
 
 const getBlockExplorerApiKey = chainID => {

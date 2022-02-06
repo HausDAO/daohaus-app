@@ -242,7 +242,7 @@ const FormBuilder = props => {
           registerOptions={createRegisterOptions(field, required)}
           required={required}
           errors={errors}
-          minionType={props.minionType}
+          minionType={props.minionType || props?.tx.minionType}
           formCondition={formCondition}
           setFormCondition={setFormCondition}
           layout={props.layout}

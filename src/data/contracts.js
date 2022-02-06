@@ -159,4 +159,9 @@ export const CONTRACTS = {
     abiName: 'DISPERSE_APP',
     conractAddress: '.contextData.chainConfig.disperse_app',
   },
+  SWAPR_STAKING: {
+    location: 'local',
+    abiName: 'SWAPR_STAKING',
+    contractAddress: '.contextData.chainConfig.swapr.staking',
+  },
 };

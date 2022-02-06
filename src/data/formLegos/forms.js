@@ -16,6 +16,7 @@ import { NIFTY_MINION_FORMS } from './niftyMinionForms';
 import { RARIBLE_FORMS } from './raribleForms';
 import { SAFE_MINION_FORMS } from './safeMinionForms';
 import { SUPERFLUID_MINION_FORMS } from './superfluidForms';
+import { SWAPR_BOOST_FORMS } from './swaprBoostForms';
 import { VANILLA_MINION_FORMS } from './vanillaMinionForms';
 
 // TEST LEGOS BEFORE PUSHING TO DEVELOP
@@ -56,4 +57,5 @@ export const FORM = {
   ...SAFE_MINION_FORMS,
   ...SUPERFLUID_MINION_FORMS,
   ...VANILLA_MINION_FORMS,
+  ...SWAPR_BOOST_FORMS,
 };

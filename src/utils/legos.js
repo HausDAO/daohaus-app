@@ -1,9 +1,7 @@
-// For some reason, I have to brin pipe in manually instead of importing it,
-//  Otherwise I get a 'cannot import before utilization error'
-
 import { CONTRACTS } from '../data/contracts';
 import { DETAILS } from '../data/details';
 import { ACTIONS } from '../data/onTxHashActions';
+import { MINION_TYPES } from './proposalUtils';
 
 export const firePlugins = ({ plugins, data }) => {
   plugins.forEach(plugin => plugin(data));
@@ -72,6 +70,8 @@ export const buildMultiTxAction = ({
   forwardFundsToken = '.contextData.daoOverview.depositToken.tokenAddress',
   memberOnlyEnabled = true,
   detailsToJSON = DETAILS.MINION_PROPOSAL,
+  minionType = MINION_TYPES.SAFE,
+  defaultValues,
 }) => {
   if (!Array.isArray(actions)) {
     throw new Error(
@@ -96,5 +96,6 @@ export const buildMultiTxAction = ({
       },
       memberOnlyEnabled,
     ],
+    minionType,
   };
 };
