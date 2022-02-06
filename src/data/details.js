@@ -85,7 +85,7 @@ export const DETAILS = {
   OFFER_NFT_TRIBUTE: {
     title: '.values.title',
     description: '.values.description',
-    link: '.values.link',
+    link: '.values.image',
     proposalType: '.formData.type',
   },
   BUY_NFT_RARIBLE: {
