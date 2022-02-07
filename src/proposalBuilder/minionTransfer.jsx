@@ -18,11 +18,16 @@ const deriveMessage = async ({
   minionAddress,
   shouldUpdate,
 }) => {
-  const tokenAddress = minionAction.to;
+  const tokenAddress =
+    minionAction.decoded.actions?.[0]?.actions?.[0]?.to ||
+    minionAction.decoded.actions?.[0]?.to ||
+    minionAction.to;
 
   const balance =
-    minionAction.decoded?.params[1]?.value ||
-    minionAction.decoded?.actions[1]?.value;
+    minionAction.decoded?.actions?.[0]?.actions[0]?.data.params[1]?.value ||
+    minionAction.decoded?.actions?.[1]?.value ||
+    minionAction.decoded?.params?.[1]?.value;
+
   const vault = daoVaults?.find(minion => minion.address === minionAddress);
   const tokenData = await fetchSpecificTokenData(
     tokenAddress,
@@ -68,7 +73,7 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
       minionAction,
       setCustomUI,
       setIsError,
-      daochain,
+      daochain: proposal.minion.foreignChainId || daochain,
       daoVaults,
       minionAddress,
       shouldUpdate,

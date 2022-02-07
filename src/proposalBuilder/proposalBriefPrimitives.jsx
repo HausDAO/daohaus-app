@@ -11,6 +11,7 @@ import { Bold, ParaMd } from '../components/typography';
 import {
   generateOfferText,
   generateRequestText,
+  getChainName,
 } from '../utils/proposalCardUtils';
 
 export const PropCardTransfer = ({
@@ -84,6 +85,24 @@ export const PropCardError = ({ message }) => {
       customUI={
         <ParaMd>{message || 'Error: could not load proposal data'}</ParaMd>
       }
+    />
+  );
+};
+
+export const PropCardCrossChain = ({ chainID, proposal }) => {
+  const homeChainName = getChainName(chainID);
+  const foreignChainName = useMemo(() => {
+    if (proposal) {
+      const { minion } = proposal;
+      const { foreignChainId } = minion;
+      return getChainName(foreignChainId);
+    }
+  }, [proposal]);
+  return (
+    <PropCardTransfer
+      action='Cross-Chain:'
+      itemText={homeChainName}
+      specialLocation={foreignChainName}
     />
   );
 };

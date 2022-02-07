@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
+import { v4 as uuid } from 'uuid';
 import Web3, { utils as Web3Utils } from 'web3';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
@@ -23,7 +24,8 @@ import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import UberHausAvatar from './uberHausAvatar';
 import { chainByID } from '../utils/chain';
-import { decodeMultisendTx } from '../utils/abi';
+import { decodeAMBTx, decodeMultisendTx } from '../utils/abi';
+import { decodeAction } from '../utils/minionUtils';
 import {
   hasMinionActions,
   MINION_TYPES,
@@ -147,6 +149,29 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                   }),
                 ),
               };
+              if (
+                hydratedAction.decodedData.actions[0]?.name ===
+                'requireToPassMessage'
+              ) {
+                // cross-chain AMB bridge call
+                const [
+                  contract,
+                  data,
+                ] = hydratedAction.decodedData.actions[0].params;
+                const ambDecodedTx = decodeAMBTx(contract.value, data.value);
+                hydratedAction.decodedData.actions[0].actions = [
+                  ...(await Promise.all(
+                    decodeMultisendTx(ambDecodedTx.to, ambDecodedTx.data).map(
+                      async action => ({
+                        ...action,
+                        data: await decodeAction(action, {
+                          chainID: proposal.minion.foreignChainId,
+                        }),
+                      }),
+                    ),
+                  )),
+                ];
+              }
               return hydratedAction;
             }
             if (action.data.slice(2).length === 0) {
@@ -203,7 +228,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   };
 
   const displayActionData = (action, idx) => (
-    <Box key={idx}>
+    <Box key={uuid()}>
       <HStack spacing={3}>
         <TextBox size='xs'>{`- Param${idx + 1}:`}</TextBox>
         <TextBox variant='value'>{action.name}</TextBox>
@@ -223,7 +248,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   const displayDecodedData = data => {
     if (data.decodedData) {
       return (
-        <>
+        <Box key={uuid()}>
           <HStack spacing={3}>
             <TextBox size='xs'>Method</TextBox>
             <TextBox variant='value'>{data.decodedData?.name}</TextBox>
@@ -237,7 +262,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           {data.decodedData?.params?.map(displayActionData)}
           {data.decodedData?.actions?.map((action, idx) => {
             return (
-              <Box key={`subaction_${idx}`}>
+              <Box key={uuid()}>
                 <HStack spacing={3}>
                   <TextBox size='xs' variant='mono'>
                     {`Action ${idx + 1}: ${action?.name || ''}`}
@@ -251,7 +276,23 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 {action?.value && (
                   <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
                 )}
-                {action?.params ? (
+                {action?.actions ? (
+                  <>
+                    <TextBox mt={2} size='xs' variant='mono'>
+                      {`Subactions: ${action?.actions?.length}`}
+                    </TextBox>
+                    <Box ml={3}>
+                      {action?.actions.map(a =>
+                        displayDecodedData({
+                          decodedData: {
+                            name: a.data.name,
+                            params: a.data.params,
+                          },
+                        }),
+                      )}
+                    </Box>
+                  </>
+                ) : action?.params ? (
                   <Box>{action.params.map(displayActionData)}</Box>
                 ) : (
                   <Box>
@@ -264,7 +305,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
               </Box>
             );
           })}
-        </>
+        </Box>
       );
     }
     return (
@@ -346,7 +387,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           >
             {minionDeets?.actions.map((action, i) => {
               return (
-                <Box key={`${action.to}_${i}`}>
+                <Box key={uuid()}>
                   {proposal.minion.minionType !== MINION_TYPES.SAFE && (
                     <TextBox size='sm' fontWeight='900'>
                       Action {i + 1}

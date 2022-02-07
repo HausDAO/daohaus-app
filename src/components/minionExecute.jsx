@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Button, Flex, Spinner } from '@chakra-ui/react';
+import { Box, Button, Flex, Link, Spinner } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -17,7 +17,7 @@ import {
 import { transactionByProposalType } from '../utils/txHelpers';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
-import { supportedChains } from '../utils/chain';
+import { chainByID, supportedChains } from '../utils/chain';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const MinionExecute = ({
@@ -127,7 +127,22 @@ const MinionExecute = ({
       return <RaribleOrder proposal={proposal} orderType={orderType} />;
 
     if (proposal.executed || minionDetails?.executed) {
-      return <Box>Executed</Box>;
+      // TODO: append executeAction TxHash
+      const monitoringAppUrl =
+        proposal.minion.crossChainMinion &&
+        chainByID(daochain).zodiac_amb_module?.monitoring_app[
+          proposal.minion.foreignChainId
+        ];
+      return (
+        <Flex alignItems='center' flexDir='column'>
+          <Box>Executed</Box>
+          {monitoringAppUrl && (
+            <Link href={`${monitoringAppUrl}/`} isExternal>
+              <Button>Watch Cross-Chain Tx</Button>
+            </Link>
+          )}
+        </Flex>
+      );
     }
 
     if (needsHausApproval) {

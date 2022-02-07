@@ -4,16 +4,22 @@ import { Flex, Box, Button } from '@chakra-ui/react';
 
 import { CardLabel, ParaMd, ParaSm } from '../components/typography';
 import CustomTransfer from './customTransferFactory';
-import { PropCardOffer, PropCardRequest } from './proposalBriefPrimitives';
+import {
+  PropCardCrossChain,
+  PropCardOffer,
+  PropCardRequest,
+} from './proposalBriefPrimitives';
 
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
 
 const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
+  const { daochain } = useParams();
   const isOffering = Number(proposal.tributeOffered) > 0;
   const isRequesting =
     Number(proposal.lootRequested) > 0 ||
     Number(proposal.sharesRequested) > 0 ||
     Number(proposal.paymentRequested) > 0;
+  const isCrossChain = proposal.minion.crossChainMinion;
   const { customTransferUI } = CUSTOM_CARD_DATA[proposal.proposalType] || {};
 
   return (
@@ -48,6 +54,9 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
         >
           {proposal.title}
         </ParaMd>
+        {isCrossChain && (
+          <PropCardCrossChain chainID={daochain} proposal={proposal} />
+        )}
         {isRequesting && <PropCardRequest proposal={proposal} />}
         {isOffering && <PropCardOffer proposal={proposal} />}
         {customTransferUI && (

@@ -59,6 +59,9 @@ export const supportedChains = {
       gas_limit: {
         '0x64': '2000000',
       },
+      monitoring_app: {
+        '0x64': 'https://alm-xdai.herokuapp.com/100/',
+      },
     },
   },
   '0x4': {
@@ -128,6 +131,9 @@ export const supportedChains = {
       ],
       gas_limit: {
         '0x64': '3000000',
+      },
+      monitoring_app: {
+        '0x64': 'https://alm-rinkeby.herokuapp.com/4/',
       },
     },
   },
@@ -244,6 +250,10 @@ export const supportedChains = {
       gas_limit: {
         '0x1': '2000000',
         '0x4': '3000000',
+      },
+      monitoring_app: {
+        '0x1': 'https://alm-xdai.herokuapp.com/1/',
+        '0x4': 'https://alm-rinkeby.herokuapp.com/100/',
       },
     },
   },

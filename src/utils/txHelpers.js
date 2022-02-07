@@ -214,7 +214,10 @@ const argBuilderCallback = Object.freeze({
       ),
       contextData.daoOverview.depositToken.tokenAddress, // _withdrawToken
       '0', // _withdrawAmount
-      detailsToJSON(values),
+      detailsToJSON({
+        ...values,
+        proposalType: PROPOSAL_TYPES.MULTI_TX_SAFE,
+      }),
       true, // _memberOnlyEnabled
     ];
   },

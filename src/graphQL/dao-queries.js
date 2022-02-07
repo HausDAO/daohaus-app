@@ -112,6 +112,8 @@ uberHausMinionExecuted
 minion {
   minionType
   minQuorum
+  crossChainMinion
+  foreignChainId
 }
 actions {
   target

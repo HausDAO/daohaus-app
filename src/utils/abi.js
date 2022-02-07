@@ -287,6 +287,14 @@ export const decodeMultisendTx = (multisendAddress, encodedTx) => {
   return transactions;
 };
 
+export const decodeAMBTx = (ambModuleAddress, encodedTx) => {
+  const ambModule = new Contract(ambModuleAddress, AMB_MODULE);
+  return ambModule.interface.decodeFunctionData(
+    'executeTransaction',
+    encodedTx,
+  );
+};
+
 export const getLocalABI = contract => LOCAL_ABI[contract.abiName];
 const getLocalSnippet = ({ contract, fnName }) => {
   const abi = getLocalABI(contract);

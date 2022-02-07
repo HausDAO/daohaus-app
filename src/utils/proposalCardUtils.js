@@ -1,4 +1,5 @@
 import humanFormat from 'human-format';
+import { chainByID } from './chain';
 import { handleNounCase, NOUN } from './general';
 import { memberVote } from './proposalUtils';
 import { getReadableBalance } from './tokenValue';
@@ -103,6 +104,10 @@ export const generateOfferText = proposal => {
   //  'NFT offered' logic here
   const text = [tributeReadable].filter(Boolean).join(', ');
   return text;
+};
+
+export const getChainName = chainID => {
+  return chainByID(chainID).name;
 };
 
 export const cheatExecutionStatus = (proposalId, daoid) => {
