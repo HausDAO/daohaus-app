@@ -35,8 +35,10 @@ const Modal = () => {
         style={{ backdropFilter: 'blur(6px)' }}
       />
       <ModalContent
+        borderWidth='1px'
+        borderColor='whiteAlpha.200'
         rounded='lg'
-        bg='black'
+        bg='#0b0b0b'
         maxWidth={width}
         maxH='100vh'
         overflowY='auto'

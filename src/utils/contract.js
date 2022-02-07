@@ -7,7 +7,7 @@ import Web3 from 'web3';
 import { getLocalABI } from './abi';
 import { chainByID } from './chain';
 import { getApiGnosis, postApiGnosis, postGnosisRelayApi } from './requests';
-import { CONTRACTS } from '../data/contractTX';
+import { CONTRACTS } from '../data/contracts';
 
 export const createContract = ({ address, abi, chainID, web3 }) => {
   if (!web3) {

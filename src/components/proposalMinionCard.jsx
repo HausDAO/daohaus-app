@@ -239,12 +239,14 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
             return (
               <Box key={`subaction_${idx}`}>
                 <HStack spacing={3}>
-                  <TextBox size='xs'>
+                  <TextBox size='xs' variant='mono'>
                     {`Action ${idx + 1}: ${action?.name || ''}`}
                   </TextBox>
                 </HStack>
                 {action?.to && (
-                  <TextBox size='xs'>{`To: ${action.to}`}</TextBox>
+                  <TextBox size='sm' variant='value' mb={2}>
+                    {`To: ${action.to}`}
+                  </TextBox>
                 )}
                 {action?.value && (
                   <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
@@ -315,7 +317,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           </Flex>
         </Flex>
       )}
-      <Modal isOpen={showModal} onClose={toggleModal} isCentered>
+      <Modal isOpen={showModal} onClose={toggleModal} isCentered size='xl'>
         <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
           rounded='lg'
@@ -351,9 +353,19 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                     </TextBox>
                   )}
                   {action.proxyTo ? (
-                    <TextBox size='xs'>Target Proxy: {action.proxyTo}</TextBox>
+                    <TextBox size='xs'>
+                      Target Proxy:{' '}
+                      <TextBox size='xs' variant='value'>
+                        {action.proxyTo}
+                      </TextBox>
+                    </TextBox>
                   ) : (
-                    <TextBox size='xs'>Target: {action.to}</TextBox>
+                    <TextBox size='xs'>
+                      Target:{' '}
+                      <TextBox size='xs' variant='value'>
+                        {action.to}
+                      </TextBox>
+                    </TextBox>
                   )}
                   <TextBox size='xs'>VALUE: {action.value || '0'}</TextBox>
                   {decodedData && displayDecodedData(decodedData[i])}

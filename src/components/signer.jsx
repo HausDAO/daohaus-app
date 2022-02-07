@@ -9,7 +9,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import ProgressIndicator from './progressIndicator';
 import TextBox from './TextBox';
-import { FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { addBoost } from '../utils/metadata';
 import { chainByID } from '../utils/chain';
 import { useTX } from '../contexts/TXContext';
