@@ -136,8 +136,11 @@ const MinionExecute = ({
       return (
         <Flex alignItems='center' flexDir='column'>
           <Box>Executed</Box>
-          {monitoringAppUrl && (
-            <Link href={`${monitoringAppUrl}/`} isExternal>
+          {monitoringAppUrl && proposal.minionExecuteActionTx?.id && (
+            <Link
+              href={`${monitoringAppUrl}/${proposal.minionExecuteActionTx.id}`}
+              isExternal
+            >
               <Button>Watch Cross-Chain Tx</Button>
             </Link>
           )}

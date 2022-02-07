@@ -78,6 +78,9 @@ guildkick
 isMinion
 lootRequested
 memberAddress
+minionExecuteActionTx {
+  id
+}
 newMember
 noShares
 noVotes
