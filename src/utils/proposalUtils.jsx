@@ -92,6 +92,16 @@ export const afterGracePeriod = proposal => {
   return now > +proposal.gracePeriodEnds;
 };
 
+const determineNeedsExecution = proposal => {
+  return (
+    proposal.processed &&
+    proposal.isMinion &&
+    !proposal.executed &&
+    proposal.didPass &&
+    proposal.proposalType !== PROPOSAL_TYPES.FUNDING
+  );
+};
+
 export function determineProposalStatus(proposal) {
   if (proposal.cancelled) {
     return ProposalStatus.Cancelled;
@@ -99,12 +109,7 @@ export function determineProposalStatus(proposal) {
   if (!proposal.sponsored) {
     return ProposalStatus.Unsponsored;
   }
-  if (
-    proposal.processed &&
-    proposal.isMinion &&
-    !proposal.executed &&
-    proposal.didPass
-  ) {
+  if (determineNeedsExecution(proposal)) {
     return ProposalStatus.NeedsExecution;
   }
   if (proposal.processed && proposal.didPass) {
@@ -236,7 +241,7 @@ export const determineProposalType = proposal => {
   if (proposal.trade) {
     return PROPOSAL_TYPES.TRADE;
   }
-  if (proposal.isMinion) {
+  if (proposal.isMinion && proposal.minionAddress === proposal.proposer) {
     return getMinionProposalType(proposal, parsedDetails);
   }
   return PROPOSAL_TYPES.FUNDING;
