@@ -99,7 +99,12 @@ export function determineProposalStatus(proposal) {
   if (!proposal.sponsored) {
     return ProposalStatus.Unsponsored;
   }
-  if (proposal.processed && proposal.isMinion && !proposal.executed) {
+  if (
+    proposal.processed &&
+    proposal.isMinion &&
+    !proposal.executed &&
+    proposal.didPass
+  ) {
     return ProposalStatus.NeedsExecution;
   }
   if (proposal.processed && proposal.didPass) {

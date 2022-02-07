@@ -20,9 +20,11 @@ const deriveMessage = async ({
 }) => {
   const tokenAddress = minionAction.to;
 
+  // decoded could have multiple actions
   const balance =
     minionAction.decoded?.params[1]?.value ||
     minionAction.decoded?.actions[1]?.value;
+
   const vault = daoVaults?.find(minion => minion.address === minionAddress);
   const tokenData = await fetchSpecificTokenData(
     tokenAddress,
