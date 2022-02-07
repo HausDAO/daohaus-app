@@ -189,7 +189,15 @@ export const addZeros = (roundedVal, decimals) => {
     .toString();
 };
 
+// here
+//
+// mainnet haus 0xf2051511B9b121394FA75B8F7d4E7424337af687
+// gnosis haus 0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb
+//
+// Hydrate with coingecko prices
 export const fetchBalance = ({ address, chainID, tokenAddress }) => {
+  console.log('here');
+  console.log(chainID);
   try {
     const tokenContract = createContract({
       address: tokenAddress,

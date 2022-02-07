@@ -11,6 +11,8 @@ import { CONTRACTS } from '../data/contractTX';
 
 export const createContract = ({ address, abi, chainID, web3 }) => {
   if (!web3) {
+    console.log(chainID);
+    console.log(chainByID(chainID));
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
   }
