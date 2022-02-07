@@ -5,7 +5,7 @@ import { ToolTipWrapper } from '../staticElements/wrappers';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 const MinionCancel = ({ proposal }) => {
   const { daochain } = useParams();

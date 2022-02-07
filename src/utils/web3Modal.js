@@ -25,7 +25,7 @@ const addNetworkProviders = chainData => {
           1: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
           4: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
           42: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-          100: 'https://rpc.xdaichain.com/',
+          100: 'https://rpc.gnosischain.com/',
           137: 'https://polygon-rpc.com/',
           42161: 'https://arb1.arbitrum.io/rpc',
           42220: 'https://forno.celo.org',

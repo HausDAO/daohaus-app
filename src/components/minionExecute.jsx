@@ -156,19 +156,21 @@ const MinionExecute = ({
         member => member.memberAddress === proposal.createdBy,
       );
 
-      return proposal?.status === 'Passed' ? (
+      const canExecute =
+        memberApplicant?.loot === '0' && memberApplicant.shares === '0';
+
+      return proposal?.status === 'NeedsExecution' ? (
         <Flex alignItems='center' flexDir='column'>
           <Button
             onClick={handleExecute}
             mb={4}
             disabled={
-              !memberApplicant?.didRagequit ||
-              (minionAction?.memberOnlyEnabled && !isMember)
+              !canExecute || (minionAction?.memberOnlyEnabled && !isMember)
             }
           >
             Execute Minion
           </Button>
-          {!memberApplicant?.didRagequit && (
+          {!canExecute && (
             <TextBox size='xs' align='center' w='100%'>
               Proposer Must Rage Quit Before This Minion Can Be Executed.
             </TextBox>

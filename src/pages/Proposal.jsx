@@ -13,7 +13,7 @@ import { createContract } from '../utils/contract';
 import { getProposalHistories } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
-import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
+import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
 import { transactionByProposalType } from '../utils/txHelpers';
 import { fetchSingleProposal } from '../utils/theGraph';
 import { proposalResolver } from '../utils/resolvers';
@@ -85,10 +85,9 @@ const Proposal = ({
         const action = await web3Contract.methods[
           MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
         ](currentProposal.proposalId).call();
-
         setMinionAction(action);
 
-        // hides execute minion button on funding and payroll proposals
+        // hides execute minion button on funding proposals
         if (action[1] === '0x0000000000000000000000000000000000000000') {
           setHideMinionExecuteButton(true);
         } else {
