@@ -92,15 +92,12 @@ export const MINION_CONTENT = {
   },
   [MINION_TYPES.CROSSCHAIN_SAFE]: {
     title: 'Cross-chain Safe Minion',
-    // TODO: update content
     description:
-      'Manage assets & execute transactions by leveraging Gnosis Safe smart wallet capabilities',
-    // TODO: update content
+      'Move assets & execute transactions on a Mainnet Gnosis Safe through your Gnosis Chain DAO proposals',
     info: [
-      "This operation will deploy a new Minion and Gnosis Safe for your DAO, and will give your DAO full control over the Safe's assets and transactions. It enables a wide variety of treasury structures and migration paths for your DAO.",
-      'Through this module, your DAO can manage collections of NFTs, manage LP positions with AMMs, and make any other arbitrary interactions.',
-      'It also enables DAOs to upgrade their governance framework over time while keeping the assets in one location.',
-      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
+      "This operation will deploy a new Gnosis Safe Minion with an AMB Module for your DAO. The Gnosis Safe Minion manages your DAO's funds & interacts with smart contracts, while the AMB Module helps relay data between chains.",
+      'By installing this Minion, your DAO will be able to vote on & pass proposals on Gnosis Chain, while controlling assets and executing transactions on Ethereum Mainnet. This gives DAOs greater access to use cases on Mainnet such as DeFis and NFTs, while minimizing governance costs.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity.',
     ],
     version: '1',
   },
