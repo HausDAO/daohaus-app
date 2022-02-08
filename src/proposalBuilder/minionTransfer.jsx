@@ -7,8 +7,27 @@ import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
 
 import { readableTokenBalance } from '../utils/proposalCardUtils';
 import { fetchSpecificTokenData } from '../utils/tokenValue';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 //  THIS IS A CUSTOM COMPONENT THAT WORKS FOR PAYROLL PROPOSALS
+const getActionDataByMinion = (minionAction, minionType) => {
+  if (minionType === MINION_TYPES.SAFE) {
+    const {
+      decoded: { actions },
+    } = minionAction;
+    const transferAction = actions[0];
+    const balance = transferAction.data?.params?.[1]?.value;
+    const tokenAddress = transferAction?.to;
+    return { balance, tokenAddress };
+  }
+  return {
+    tokenAddress: minionAction.to,
+    balance:
+      minionAction.decoded?.params[1]?.value ||
+      minionAction.decoded?.actions[1]?.value,
+  };
+};
+
 const deriveMessage = async ({
   minionAction,
   setCustomUI,
@@ -17,13 +36,12 @@ const deriveMessage = async ({
   daoVaults,
   minionAddress,
   shouldUpdate,
+  minionType,
 }) => {
-  const tokenAddress = minionAction.to;
-
-  const balance =
-    minionAction.decoded?.params[1]?.value ||
-    minionAction.decoded?.actions[1]?.value;
-
+  const { tokenAddress, balance } = getActionDataByMinion(
+    minionAction,
+    minionType,
+  );
   const vault = daoVaults?.find(minion => minion.address === minionAddress);
   const tokenData = await fetchSpecificTokenData(
     tokenAddress,
@@ -52,7 +70,10 @@ const deriveMessage = async ({
 };
 
 const MinionTransfer = ({ proposal = {}, minionAction }) => {
-  const { minionAddress } = proposal;
+  const {
+    minionAddress,
+    minion: { minionType },
+  } = proposal;
   const { daochain } = useParams();
   const { daoVaults } = useDao();
   const [customUI, setCustomUI] = useState(null);
@@ -73,6 +94,7 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
       daoVaults,
       minionAddress,
       shouldUpdate,
+      minionType,
     });
     return () => (shouldUpdate = false);
   }, [daoVaults && minionAction && !minionAddress]);
