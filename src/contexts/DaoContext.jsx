@@ -111,7 +111,7 @@ export const DaoProvider = ({ children }) => {
     uberMinionData,
   ]);
 
-  const refetch = () => {
+  const refetch = async () => {
     const bigQueryOptions = {
       args: {
         daoID: daoid.toLowerCase(),

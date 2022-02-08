@@ -401,7 +401,6 @@ export const chainByName = networkName => {
 
   return supportedChains[networkKey];
 };
-
 export const MM_ADDCHAIN_DATA = {
   '0x89': {
     chainId: '0x89',
@@ -476,3 +475,13 @@ export const EIP3085 = {
 };
 
 export const NIFTYINK_ADDRESS = '0xcf964c89f509a8c0ac36391c5460df94b91daba5';
+
+export const getScanKey = chainID => {
+  if (chainID === '0x89') {
+    return process.env.REACT_APP_POLYGONSCAN_KEY;
+  }
+  if (chainID === '0x1' || chainByID === '0x4' || chainByID === '0x2a') {
+    return process.env.REACT_APP_ETHERSCAN_KEY;
+  }
+  return null;
+};

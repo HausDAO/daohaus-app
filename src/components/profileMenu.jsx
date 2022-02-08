@@ -18,8 +18,8 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
 import { useAppModal } from '../hooks/useModals';
-import { CORE_FORMS, FORM } from '../data/forms';
-import { TX } from '../data/contractTX';
+import { FORM } from '../data/formLegos/forms';
+import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
 import {
@@ -53,9 +53,9 @@ const ProfileMenu = ({ member, refreshProfile }) => {
     });
   };
 
-  const handleRageQuitClick = () => formModal(CORE_FORMS.RAGE_QUIT);
+  const handleRageQuitClick = () => formModal(FORM.RAGE_QUIT);
 
-  const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
+  const handleUpdateDelegateClick = () => formModal(FORM.UPDATE_DELEGATE);
 
   const handleEditProfile = useCallback(() => {
     let client = null;

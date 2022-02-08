@@ -28,8 +28,10 @@ import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
+import { MINION_TYPES } from './proposalUtils';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import { validate } from './validation';
+import { cacheABI, getCachedABI } from './localForage';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -77,7 +79,7 @@ const getABIurl = (contractAddress, chainID) => {
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
 };
 
-const isProxyABI = response => {
+export const isProxyABI = response => {
   if (response?.length) {
     return response.some(fn => fn.name === 'implementation');
   }
@@ -102,7 +104,44 @@ const getGnosisMasterCopy = async (address, chainID) => {
   return masterCopy;
 };
 
+const processABI = async ({
+  abi,
+  fetchABI,
+  contractAddress,
+  chainID,
+  parseJSON,
+}) => {
+  if (isProxyABI(abi)) {
+    const proxyAddress = await getImplementationOf(
+      contractAddress,
+      chainID,
+      abi,
+    );
+    const newData = await fetchABI(proxyAddress, chainID, parseJSON);
+    return newData;
+  }
+  if (isGnosisProxy(abi)) {
+    const gnosisProxy = await getGnosisMasterCopy(contractAddress, chainID);
+    const newData = await fetchABI(gnosisProxy, chainID, parseJSON);
+    return newData;
+  }
+  return abi;
+};
+
 export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
+  const cachedABI = await getCachedABI({ contractAddress, chainID });
+
+  if (cachedABI) {
+    const processedABI = await processABI({
+      abi: cachedABI,
+      fetchABI,
+      contractAddress,
+      chainID,
+      parseJSON,
+    });
+
+    return processedABI;
+  }
   const url = getABIurl(contractAddress, chainID);
   if (!url) {
     throw new Error('Could generate ABI link with the given arguments');
@@ -111,16 +150,20 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     const response = await fetch(url);
     const data = await response.json();
     if (data.message === 'OK' && IsJsonString(data?.result) && parseJSON) {
-      const abiData = JSON.parse(data.result);
-      const proxyAddress = isProxyABI(abiData)
-        ? await getImplementationOf(contractAddress, chainID, abiData)
-        : isGnosisProxy(abiData) &&
-          (await getGnosisMasterCopy(contractAddress, chainID));
-      if (proxyAddress) {
-        const newData = await fetchABI(proxyAddress, chainID, parseJSON);
-        return newData;
-      }
-      return abiData;
+      const abi = JSON.parse(data.result);
+      cacheABI({
+        contractAddress,
+        chainID,
+        abi,
+      });
+      const processedABI = await processABI({
+        abi,
+        fetchABI,
+        contractAddress,
+        chainID,
+        parseJSON,
+      });
+      return processedABI;
     }
     return data;
   } catch (error) {
@@ -242,11 +285,8 @@ export const decodeMultisendTx = (multisendAddress, encodedTx) => {
 
 export const getLocalABI = contract => LOCAL_ABI[contract.abiName];
 const getLocalSnippet = ({ contract, fnName }) => {
-  console.log(`contract`, contract);
   const abi = getLocalABI(contract);
-  console.log(`abi`, abi);
   const snippet = abi?.find(fn => fn.name === fnName);
-  console.log(`snippet`, snippet);
   return snippet;
 };
 
@@ -285,4 +325,18 @@ export const getContractABI = async data => {
     `abi.js => getABI():
     Did not recieve a correct ABI location. Check tx data in contractTx.js`,
   );
+};
+
+export const getMinionAbi = minionType => {
+  const abis = {
+    [MINION_TYPES.NIFTY]: NIFTY_MINION,
+    [MINION_TYPES.VANILLA]: VANILLA_MINION,
+    [MINION_TYPES.SAFE]: SAFE_MINION,
+    [MINION_TYPES.SUPERFLUID]: SUPERFLUID_MINION,
+    [MINION_TYPES.UBER]: UBERHAUS_MINION,
+  };
+  if (Object.keys(abis).includes(minionType)) {
+    return abis[minionType];
+  }
+  return null;
 };

@@ -10,8 +10,8 @@ import {
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
-import { FORM } from '../data/forms';
-import { TX } from '../data/contractTX';
+import { FORM } from '../data/formLegos/forms';
+import { TX } from '../data/txLegos/contractTX';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { JANUARY_2024 } from '../utils/general';
 

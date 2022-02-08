@@ -13,6 +13,7 @@ const Button = {
       bg: 'primary.400',
       _hover: { bg: 'primary.500' },
     },
+
     sideNav: {
       bg: 'transparent',
       color: 'whiteAlpha.900',

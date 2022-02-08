@@ -33,10 +33,8 @@ export const ToolTipWrapper = ({
   href,
   onClick,
 }) => {
-  const handleClick = () => {
-    console.log('test');
-    onClick?.();
-  };
+  const handleClick = () => onClick?.();
+
   const getLinkBox = () => {
     if (href) {
       return (

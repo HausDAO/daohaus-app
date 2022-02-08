@@ -108,7 +108,7 @@ export const fetchNativeBalance = async (address, daochain) => {
 
       return json;
     } catch (error) {
-      throw new Error(error);
+      console.error(error);
     }
   } else {
     try {
@@ -119,7 +119,7 @@ export const fetchNativeBalance = async (address, daochain) => {
 
       return json;
     } catch (error) {
-      throw new Error(error);
+      console.error(error);
     }
   }
 };

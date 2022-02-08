@@ -1,6 +1,6 @@
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
-import { TX } from './contractTX';
-import { FIELD } from './fields';
+import { PROPOSAL_TYPES } from '../../utils/proposalUtils';
+import { TX } from '../txLegos/contractTX';
+import { FIELD } from '../fields';
 
 export const UBERHAUS_FORMS = {
   UBERHAUS_DELEGATE: {

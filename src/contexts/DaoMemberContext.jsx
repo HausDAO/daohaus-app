@@ -100,7 +100,7 @@ export const DaoMemberProvider = ({
     ) {
       assembleMemberWallet();
     }
-  }, [daoMember, overview, daochain, daoid, delegate]);
+  }, [daoMember, overview, daochain, daoid, delegate, address]);
 
   return (
     <DaoMemberContext.Provider

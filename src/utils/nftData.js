@@ -1,6 +1,6 @@
 import { getNftMeta } from './metadata';
 import { MINIONS } from '../data/minions';
-import { PROPOSAL_FORMS } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 
 export const nftSortOptions = [
   {
@@ -54,7 +54,7 @@ export const NFT_ACTIONS = {
     localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
     networks: { '0x1': true, '0x4': true },
     nftTypeOverride: 'sellRarible',
-    formLego: PROPOSAL_FORMS.SELL_NFT_RARIBLE,
+    formLego: FORM.SELL_NFT_RARIBLE,
   },
 };
 

@@ -1,4 +1,4 @@
-import { FORM } from './forms';
+import { FORM } from './formLegos/forms';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { NFT_ACTIONS } from '../utils/nftData';
 
