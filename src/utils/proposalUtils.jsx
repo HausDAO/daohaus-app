@@ -73,7 +73,8 @@ export const MINION_TYPES = {
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
   SAFE_MINION: 'actions',
-  UBERHAUS_MINION: 'appointments',
+  //  UBERHAUS_MINION: 'appointments',
+  UBERHAUS_MINION: 'actions',
   SUPERFLUID_MINION: 'streams',
 };
 

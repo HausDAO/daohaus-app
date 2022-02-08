@@ -79,16 +79,20 @@ const Proposal = ({
     const getMinionAction = async currentProposal => {
       try {
         const contract = contractByProposalType(currentProposal);
-
         const abi = LOCAL_ABI[contract.abiName];
         const web3Contract = createContract({
           address: currentProposal.minionAddress,
           abi,
           chainID: daochain,
         });
-        const action = await web3Contract.methods[
-          MINION_ACTION_FUNCTION_NAMES[contract.abiName]
-        ](currentProposal.proposalId).call();
+
+        let actionName = MINION_ACTION_FUNCTION_NAMES[contract.abiName];
+        if (currentProposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+          actionName = 'appointments';
+        }
+        const action = await web3Contract.methods[actionName](
+          currentProposal.proposalId,
+        ).call();
 
         setMinionAction(action);
 

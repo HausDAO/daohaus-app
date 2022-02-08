@@ -8,17 +8,17 @@ import {
 } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useTX } from '../contexts/TXContext';
+// import { useTX } from '../contexts/TXContext';
 import { useAppModal } from '../hooks/useModals';
 import { FORM } from '../data/formLegos/forms';
-import { TX } from '../data/txLegos/contractTX';
+// import { TX } from '../data/txLegos/contractTX';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { JANUARY_2024 } from '../utils/general';
 
 const UberHausProposals = ({ uberHausMinion, uberMembers, uberDelegate }) => {
   const { address } = useInjectedProvider();
   const { formModal } = useAppModal();
-  const { submitTransaction } = useTX();
+  // const { submitTransaction } = useTX();
 
   const isDelegate = useMemo(() => {
     if (uberDelegate && address) {
@@ -85,12 +85,12 @@ const UberHausProposals = ({ uberHausMinion, uberMembers, uberDelegate }) => {
         });
         break;
       }
-      case 'claimRewards': {
-        await submitTransaction({
-          tx: TX.UBERHAUS_CLAIM_REWARDS,
-        });
-        break;
-      }
+      // case 'claimRewards': {
+      //   await submitTransaction({
+      //     tx: TX.UBERHAUS_CLAIM_REWARDS,
+      //   });
+      //   break;
+      // }
       default: {
         return null;
       }
@@ -120,12 +120,12 @@ const UberHausProposals = ({ uberHausMinion, uberMembers, uberDelegate }) => {
         >
           Pull
         </MenuItemOption>
-        <MenuItemOption
+        {/* <MenuItemOption
           isDisabled={!isDelegate}
           onClick={() => handleClick('claimRewards')}
         >
           Claim Rewards
-        </MenuItemOption>
+        </MenuItemOption> */}
       </MenuList>
     </Menu>
   );
