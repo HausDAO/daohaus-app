@@ -496,10 +496,12 @@ const ProposalVote = ({
               </Flex>
             ))}
 
-          {((proposal?.status === 'Passed' && proposal?.minionAddress) ||
+          {((proposal?.status === 'NeedsExecution' &&
+            proposal?.minionAddress) ||
             earlyExecuteMinionType(proposal)) && (
             <Stack mt='15px' justify='center'>
-              {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
+              {(proposal?.status === 'NeedsExecution' &&
+                proposal?.minionAddress) ||
               (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
                 <MinionExecute
                   hideMinionExecuteButton={hideMinionExecuteButton}
@@ -508,7 +510,7 @@ const ProposalVote = ({
                   early={
                     earlyExecuteMinionType(proposal) &&
                     proposal.yesShares >= quorumNeeded &&
-                    !proposal?.status === 'Passed'
+                    !proposal?.status === 'NeedsExecution'
                   }
                 />
               ) : (

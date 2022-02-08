@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Spinner } from '@chakra-ui/spinner';
 
 import GenericInput from './genericInput';

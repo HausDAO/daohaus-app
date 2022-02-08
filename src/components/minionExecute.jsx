@@ -159,7 +159,7 @@ const MinionExecute = ({
       const canExecute =
         memberApplicant?.loot === '0' && memberApplicant.shares === '0';
 
-      return proposal?.status === 'Passed' ? (
+      return proposal?.status === 'NeedsExecution' ? (
         <Flex alignItems='center' flexDir='column'>
           <Button
             onClick={handleExecute}

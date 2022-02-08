@@ -145,6 +145,7 @@ export const getMinionAction = async params => {
   const actionName =
     MINION_ACTION_FUNCTION_NAMES[minionType] ||
     MINION_ACTION_FUNCTION_NAMES[proposalType];
+
   try {
     const minionContract = createContract({
       address: minionAddress,
