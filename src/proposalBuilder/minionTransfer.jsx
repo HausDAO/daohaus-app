@@ -28,9 +28,6 @@ const getActionDataByMinion = (minionAction, minionType) => {
   };
 };
 
-// if(minionType === MINION_TYPES.SAFE){
-//    minionAction?.decoded?.actions?[0]?.data?.params?.[1]?.value
-
 const deriveMessage = async ({
   minionAction,
   setCustomUI,
