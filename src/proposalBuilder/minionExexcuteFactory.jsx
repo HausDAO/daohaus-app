@@ -41,7 +41,7 @@ const MinionExexcuteFactory = props => {
   if (executeType === 'minionTributeAction') {
     return <MinionTributeAction {...props} />;
   }
-  return <ExecuteAction {...props} />;
+  return <ExecuteSafeMinion {...props} />;
 };
 
 export default MinionExexcuteFactory;

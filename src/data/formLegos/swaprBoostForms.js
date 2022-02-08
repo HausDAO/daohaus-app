@@ -1,26 +1,6 @@
-import { buildMultiTxAction } from '../../utils/legos';
 import { MINION_TYPES, PROPOSAL_TYPES } from '../../utils/proposalUtils';
-import { CONTRACTS } from '../contracts';
 import { FIELD } from '../fields';
 import { TX } from '../txLegos/contractTX';
-
-const swapTX = buildMultiTxAction({
-  actions: [
-    {
-      targetContract: '.values.tokenAddress',
-      abi: CONTRACTS.ERC_20,
-      fnName: 'approve',
-      args: ['.contextData.chainConfig.swapr.staking', '.values.amount'],
-    },
-    {
-      targetContract: '.contextData.chainConfig.swapr.staking',
-      abi: CONTRACTS.SWAPR_STAKING,
-      logTX: true,
-      fnName: 'stake',
-      args: ['.values.amount'],
-    },
-  ],
-});
 
 export const SWAPR_BOOST_FORMS = {
   SWAPR_STAKE: {
@@ -29,10 +9,9 @@ export const SWAPR_BOOST_FORMS = {
     title: 'Swapr Staking Proposal',
     description: 'Stake Minion Funds into a Swapr farm.',
     type: PROPOSAL_TYPES.SWAPR_STAKING,
-    // tx: TX.SUBMIT_PROPOSAL,
-    // minionType: MINION_TYPES.SAFE,
-    tx: swapTX,
-    required: ['stakingAddress', 'tokenAddress', 'amount'],
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.SWAPR_STAKE,
+    required: ['stakingAddress', 'amount', 'stakingTokenAddress'],
     fields: [
       [
         FIELD.TITLE,
@@ -41,15 +20,15 @@ export const SWAPR_BOOST_FORMS = {
           type: 'input',
           label: 'Staking Address',
           name: 'stakingAddress',
-          htmlFor: 'title',
+          htmlFor: 'stakingAddress',
           placeholder: '0x',
           expectType: 'address',
         },
         {
           type: 'input',
           label: 'Staking Token Address',
-          name: 'tokenAddress',
-          htmlFor: 'title',
+          name: 'stakingTokenAddress',
+          htmlFor: 'stakingTokenAddress',
           placeholder: '0x',
           expectType: 'address',
         },
@@ -58,12 +37,11 @@ export const SWAPR_BOOST_FORMS = {
           label: 'Amount',
           name: 'amount',
           htmlFor: 'amount',
-          placeholder: 'in wei',
+          placeholder: 'Uint256',
           expectType: 'integer',
         },
-        FIELD.DESCRIPTION,
       ],
     ],
-    additionalOptions: [FIELD.LINK],
+    additionalOptions: [FIELD.LINK, FIELD.DESCRIPTION],
   },
 };

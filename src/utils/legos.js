@@ -71,7 +71,6 @@ export const buildMultiTxAction = ({
   memberOnlyEnabled = true,
   detailsToJSON = DETAILS.MINION_PROPOSAL,
   minionType = MINION_TYPES.SAFE,
-  defaultValues,
 }) => {
   if (!Array.isArray(actions)) {
     throw new Error(

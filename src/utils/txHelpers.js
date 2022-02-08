@@ -95,7 +95,6 @@ const getMultiSendFn = () => {
 };
 
 const encodeMulti = encodedTXs => {
-  console.log('encodedTXs', encodedTXs);
   const web3 = new Web3();
   const multiSendFn = getMultiSendFn();
   return web3.eth.abi.encodeFunctionCall(multiSendFn, [

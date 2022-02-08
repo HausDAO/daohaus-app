@@ -473,6 +473,14 @@ export const FIELD = {
     placeholder: 'Choose a Token',
     expectType: 'address',
   },
+  TUTORIAL: {
+    type: 'tutorial',
+    label: 'Test',
+    name: 'stakingAddress',
+    htmlFor: 'stakingAddress',
+    placeholder: '0x',
+    expectType: 'address',
+  },
 };
 
 export const FORM_DISPLAY = {
