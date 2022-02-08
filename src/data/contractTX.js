@@ -701,7 +701,8 @@ export const TX = {
   MINION_SIMPLE_EXECUTE: {
     contract: CONTRACTS.MINION_SIMPLE_EXECUTE,
     name: 'executeAction',
-    specialPoll: 'executeAction',
+    // specialPoll: 'executeAction',
+    poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Executing Minion Proposal',
     errMsg: 'Error Executing Minion Proposal',
@@ -1283,7 +1284,7 @@ export const TX = {
           '.localValues.minionAddress',
           '.values.sharesRequested || 0',
           '0',
-          '.values.tributeOffered',
+          '.values.uberHausTributeOffered',
           '.values.tributeToken',
           '0',
           '.contextData.daoOverview.depositToken.tokenAddress',
