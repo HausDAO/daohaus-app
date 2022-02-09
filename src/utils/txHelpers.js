@@ -447,6 +447,15 @@ export const transactionByProposalType = proposal => {
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
     return TX.UBERHAUS_MINION_EXECUTE_APPOINTMENT;
   }
+  // if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+  //   return TX.MINION_SIMPLE_EXECUTE;
+  // }
+  // if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ) {
+  //   return TX.UBERHAUS_RAGEQUIT;
+  // }
+  // if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT) {
+  //   return TX.UBERHAUS_WITHDRAW;
+  // }
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return TX.SUPERFLUID_MINION_EXECUTE;
   }
@@ -454,4 +463,26 @@ export const transactionByProposalType = proposal => {
     return TX.MINION_SAFE_EXECUTE;
   }
   return TX.MINION_SIMPLE_EXECUTE;
+};
+
+export const contractByProposalType = proposal => {
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+    return CONTRACTS.LOCAL_UBERHAUS_MINION;
+  }
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+    return CONTRACTS.LOCAL_UBERHAUS_MINION;
+  }
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ) {
+    return CONTRACTS.LOCAL_UBERHAUS_MINION;
+  }
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT) {
+    return CONTRACTS.LOCAL_UBERHAUS_MINION;
+  }
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+    return CONTRACTS.SUPERFLUID_MINION_LOCAL;
+  }
+  if (proposal.minion.minionType === PROPOSAL_TYPES.MINION_SAFE) {
+    return CONTRACTS.MINION_SAFE_EXECUTE;
+  }
+  return CONTRACTS.MINION_SIMPLE_EXECUTE;
 };

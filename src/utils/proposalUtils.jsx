@@ -70,6 +70,14 @@ export const MINION_TYPES = {
   UBER: 'UberHaus minion',
 };
 
+export const MINION_ACTION_FUNCTION_NAMES = {
+  VANILLA_MINION: 'actions',
+  SAFE_MINION: 'actions',
+  //  UBERHAUS_MINION: 'appointments',
+  UBERHAUS_MINION: 'actions',
+  SUPERFLUID_MINION: 'streams',
+};
+
 export const inQueue = proposal => {
   const now = new Date() / 1000 || 0;
   return now < +proposal.votingPeriodStarts;
