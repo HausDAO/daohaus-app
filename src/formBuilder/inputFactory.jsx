@@ -43,6 +43,7 @@ import GenericSwitch from './genericSwitch';
 import ImageInput from './imageInput';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
+import Tutorial from './tutorial';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -185,6 +186,9 @@ export const InputFactory = props => {
   }
   if (type === 'memberImpact') {
     return <MemberImpact {...props} />;
+  }
+  if (type === 'tutorial') {
+    return <Tutorial {...props} />;
   }
   return null;
 };

@@ -350,14 +350,6 @@ export const FIELD = {
     placeholder: 'Proposal Name',
     expectType: 'any',
   },
-  // PARAGRAPHS: {
-  //   type: 'paragraphs',
-  //   pars: [] /* Overwrite with customCopy */,
-  // },
-  // HEADER: {
-  //   type: 'header',
-  //   headerText: 'Empty' /* Overwrite with custom Copy */,
-  // },
   MINION_TYPE_SELECT: {
     type: 'minionTypeSelect',
     name: 'minionType',
