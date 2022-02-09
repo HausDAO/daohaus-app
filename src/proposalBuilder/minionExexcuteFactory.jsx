@@ -8,11 +8,15 @@ import { TX } from '../data/txLegos/contractTX';
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
 import ExecuteMinionBuyout from './executeMinionBuyout';
 import MinionTributeAction from './minionTributeAction';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionExexcuteFactory = props => {
   const { proposal } = props;
 
-  const { proposalType } = proposal;
+  const {
+    proposalType,
+    minion: { minionType },
+  } = proposal;
   const executeType = CUSTOM_CARD_DATA[proposalType]?.execute;
 
   if (executeType === 'executeAction') {
@@ -41,7 +45,10 @@ const MinionExexcuteFactory = props => {
   if (executeType === 'minionTributeAction') {
     return <MinionTributeAction {...props} />;
   }
-  return <ExecuteSafeMinion {...props} />;
+  if (minionType === MINION_TYPES.SAFE) {
+    return <ExecuteSafeMinion {...props} />;
+  }
+  return <ExecuteAction {...props} />;
 };
 
 export default MinionExexcuteFactory;
