@@ -4,7 +4,10 @@ import { useParams } from 'react-router-dom';
 import { useOverlay } from '../contexts/OverlayContext';
 import { LOCAL_ABI } from '../utils/abi';
 import { createContract } from '../utils/contract';
-import { fetchSpecificTokenData } from '../utils/tokenValue';
+import {
+  fetchSpecificTokenData,
+  getReadableBalance,
+} from '../utils/tokenValue';
 import { validate } from '../utils/validation';
 import GenericFormDisplay from './genericFormDisplay';
 import GenericInput from './genericInput';
@@ -43,7 +46,7 @@ const getRewardsData = async ({
   safeAddress,
   shouldUpdate,
   setStakingToken,
-  setSafeBalance,
+  setStakedAmt,
   onError,
   setFormValue,
 }) => {
@@ -53,18 +56,35 @@ const getRewardsData = async ({
       daochain,
       safeAddress,
     });
+
     const tokenData = await fetchSpecificTokenData(
       tokenAddress,
       { name: true, decimals: true, balance: safeAddress },
       daochain,
     );
 
+    const readableBalance = getReadableBalance(
+      {
+        decimals: tokenData?.decimals,
+        balance: tokenData?.balance,
+      },
+      4,
+    );
+    const readableStakedAmt = getReadableBalance(
+      {
+        decimals: tokenData?.decimals,
+        balance: stakedTokensOf,
+      },
+      4,
+    );
+
     if (tokenData && tokenAddress && shouldUpdate) {
-      setStakingToken({ ...tokenData, tokenAddress });
+      setStakingToken({ ...tokenData, tokenAddress, readableBalance });
       setFormValue('stakingTokenAddress', tokenAddress);
+      setFormValue('stakingTokenDecimals', tokenData?.decimals);
     }
     if (stakedTokensOf) {
-      setSafeBalance(stakedTokensOf);
+      setStakedAmt(readableStakedAmt);
     }
   } catch (error) {
     onError?.({
@@ -81,7 +101,7 @@ const Tutorial = props => {
   const { daochain } = useParams();
 
   const [stakingToken, setStakingToken] = useState(null);
-  const [safeBalance, setSafeBalance] = useState(null);
+  const [stakedAmt, setStakedAmt] = useState(null);
 
   const stakingAddress = watch('stakingAddress');
   const safeAddress = watch('selectedSafeAddress');
@@ -93,7 +113,7 @@ const Tutorial = props => {
         stakingAddress,
         safeAddress,
         setStakingToken,
-        setSafeBalance,
+        setStakedAmt,
         shouldUpdate,
         daochain,
         setFormValue: setValue,
@@ -110,29 +130,29 @@ const Tutorial = props => {
     <>
       <GenericInput {...props} label='Farm Rewards Address' />
 
-      <Flex>
+      <Flex justifyContent='space-between'>
         <GenericFormDisplay
           localForm={localForm}
           label='Token:'
+          name='tokenName'
           override={stakingToken?.name || '--'}
           expectType='any'
         />
         <GenericFormDisplay
           localForm={localForm}
-          label='Safe Balance:'
-          override={safeBalance || '--'}
+          label='Amt Staked:'
+          name='amtStaked'
+          override={stakedAmt || '--'}
+          expectType='any'
+        />
+        <GenericFormDisplay
+          localForm={localForm}
+          label='Minion Balance:'
+          name='minionBalance'
+          override={stakingToken?.readableBalance || '--'}
           expectType='any'
         />
       </Flex>
-
-      <GenericInput
-        localForm={localForm}
-        label='Stake Amount'
-        disabled={!stakingToken}
-        name='amount'
-        expectType='number'
-        helperText={stakingToken ? '' : 'Please input staking address'}
-      />
     </>
   );
 };

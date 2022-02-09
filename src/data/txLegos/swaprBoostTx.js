@@ -9,13 +9,13 @@ export const SWAPR_BOOST_TX = {
         targetContract: '.values.stakingTokenAddress', // required
         abi: CONTRACTS.ERC_20, // required
         fnName: 'approve', // required
-        args: ['.contextData.chainConfig.swapr.staking', '.values.amount'], // required
+        args: ['.contextData.chainConfig.swapr.staking', '.values.tokenAmt'], // required
       },
       {
         targetContract: '.contextData.chainConfig.swapr.staking',
         abi: CONTRACTS.SWAPR_STAKING,
         fnName: 'stake',
-        args: ['.values.amount'],
+        args: ['.values.tokenAmt'],
       },
     ],
     detailsToJSON: DETAILS.STANDARD_PROPOSAL,

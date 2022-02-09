@@ -49,6 +49,7 @@ import UberHausTributeInput from './uberHausTributeInput';
 import UberHausRageQuitInput from './uberHausRageQuitInput';
 import UberHausWithdrawInput from './uberHausWithdrawInput';
 import UberHausPullInput from './uberHausPullInput';
+import Tutorial2 from './tutorial2';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -209,6 +210,9 @@ export const InputFactory = props => {
   }
   if (type === 'tutorial') {
     return <Tutorial {...props} />;
+  }
+  if (type === 'tutorial2') {
+    return <Tutorial2 {...props} />;
   }
   return null;
 };

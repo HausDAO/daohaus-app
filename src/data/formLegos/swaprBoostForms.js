@@ -24,6 +24,7 @@ export const SWAPR_BOOST_FORMS = {
         FIELD.TITLE,
         FIELD.MINION_SELECT,
         FIELD.TUTORIAL,
+        FIELD.TUTORIAL2,
         // {
         //   type: 'input',
         //   label: 'Staking Address',

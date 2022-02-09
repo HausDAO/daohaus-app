@@ -475,6 +475,15 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'address',
   },
+  TUTORIAL2: {
+    type: 'tutorial2',
+    label: 'Token Amount',
+    name: 'tokenAmt',
+    htmlFor: 'tokenAmt',
+    listenTo: 'stakingTokenDecimals',
+    placeholder: '3.14',
+    expectType: 'number',
+  },
   UBERHAUS_DELEGATE: {
     type: 'uberHausDelegateInput',
     htmlFor: 'uberHausDelegate',

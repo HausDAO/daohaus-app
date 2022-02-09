@@ -122,9 +122,12 @@ export const getTotalBankValue = (tokenBalances, prices) => {
   }, 0);
 };
 
-export const getReadableBalance = tokenData => {
+export const getReadableBalance = (tokenData, fixed) => {
   if (tokenData?.balance && tokenData.decimals) {
     const { balance, decimals } = tokenData;
+    if (fixed) {
+      return (Number(balance) / 10 ** Number(decimals))?.toFixed(fixed);
+    }
     return Number(balance) / 10 ** Number(decimals);
   }
 };
