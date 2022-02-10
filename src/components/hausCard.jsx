@@ -60,7 +60,7 @@ const HausCard = ({ hideLink = false }) => {
   return (
     <ContentBox mt={3} p={1}>
       <Flex alignItems='center' justifyContent='space-between' padding={6}>
-        <Flex alginItems='center'>
+        <Flex alignItems='center'>
           <Avatar name='Haus logo' src={hausImg} size='lg' />
           <Flex direction='column'>
             <Text fontSize='md' fontFamily='Roboto Mono' ml={3}>
