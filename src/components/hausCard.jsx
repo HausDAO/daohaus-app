@@ -20,21 +20,12 @@ import {
   Tfoot,
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { useAccordion } from '@chakra-ui/accordion';
-import {
-  FlexibleXYPlot,
-  XAxis,
-  YAxis,
-  LineSeries,
-  AreaSeries,
-  GradientDefs,
-} from 'react-vis';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import hausImg from '../assets/img/haus_icon.svg';
 import { fetchBalance, fetchTokenData } from '../utils/tokenValue';
 
-const HausCard = ({ showChart = false }) => {
+const HausCard = ({ hideLink = false }) => {
   const { address } = useInjectedProvider();
   const [gnosisChainBalance, setGnosisChainBalance] = useState(
     BigNumber.from('0'),
@@ -42,8 +33,6 @@ const HausCard = ({ showChart = false }) => {
   const [mainnetBalance, setMainnetBalance] = useState(BigNumber.from('0'));
   const [currentValue, setCurrentValue] = useState(0);
   const round = value => {
-    console.log('Hello');
-    console.log(value);
     return FixedNumber.fromString(ethers.utils.formatUnits(value), 18)
       .round(2)
       .toString();
@@ -58,7 +47,6 @@ const HausCard = ({ showChart = false }) => {
     });
     const tokenData = await fetchTokenData();
     setCurrentValue(tokenData[tokenAddress]?.price || 0);
-    console.log('max');
     setGnosisChainBalance(BigNumber.from(max));
   }, [address]);
 
@@ -68,7 +56,6 @@ const HausCard = ({ showChart = false }) => {
       chainID: '0x1',
       tokenAddress: '0xf2051511b9b121394fa75b8f7d4e7424337af687',
     });
-    console.log('max');
     setMainnetBalance(BigNumber.from(max));
   }, [address]);
 
@@ -86,7 +73,7 @@ const HausCard = ({ showChart = false }) => {
             </Text>
           </Flex>
         </Flex>
-        {!showChart ? (
+        {!hideLink ? (
           <Link to='/haus'>
             <Text fontSize='lg' fontFamily='Roboto Mono' ml={3}>
               ABOUT HAUS

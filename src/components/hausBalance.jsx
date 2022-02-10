@@ -3,14 +3,12 @@ import { Avatar, Text, Flex } from '@chakra-ui/react';
 import { ethers, BigNumber, FixedNumber } from 'ethers';
 import hausImg from '../assets/img/haus_icon.svg';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { fetchBalance, fetchTokenData } from '../utils/tokenValue';
+import { fetchBalance } from '../utils/tokenValue';
 
 const HausBalance = () => {
   const { address } = useInjectedProvider();
   const [balance, setBalance] = useState('0');
   const round = value => {
-    console.log('Hello');
-    console.log(value);
     return FixedNumber.fromString(ethers.utils.formatUnits(value), 18)
       .round(2)
       .toString();
@@ -28,9 +26,6 @@ const HausBalance = () => {
       chainID: '0x1',
       tokenAddress: '0xf2051511b9b121394fa75b8f7d4e7424337af687',
     });
-    console.log('Haus');
-    console.log(mainnetBalance);
-    console.log(gnosisBalance);
     setBalance(
       round(BigNumber.from(gnosisBalance).add(BigNumber.from(mainnetBalance))),
     );

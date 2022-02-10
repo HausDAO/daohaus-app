@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
 import { Avatar, Box, Divider, Flex, Text } from '@chakra-ui/react';
 import ContentBox from '../components/ContentBox';
 import Layout from '../components/layout';
@@ -61,9 +60,9 @@ const Haus = () => {
               <Text fontSize='2xl' fontWeight='800' mb='43px'>
                 Things to do with HAUS
               </Text>
-              <Flex justifyContent='space-between'>
+              <Flex justifyContent='space-between' fontWeight='700'>
                 <Flex direction='column'>
-                  <Text fontSize='xl' fontWeight='700' mb='13px'>
+                  <Text fontSize='xl' mb='13px'>
                     Get Haus
                   </Text>
                   <a
@@ -72,18 +71,14 @@ const Haus = () => {
                       pointerEvents: 'none',
                     }}
                   >
-                    <Text fontSize='sm' fontWeight='700'>
-                      ON ETHEREUM &gt;
-                    </Text>
+                    <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
                   </a>
                   <a href='https://swapr.eth.link/#/swap?chainId=100'>
-                    <Text fontSize='sm' fontWeight='700'>
-                      ON GNOSIS CHAIN &gt;
-                    </Text>
+                    <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
                   </a>
                 </Flex>
                 <Flex direction='column'>
-                  <Text fontSize='xl' fontWeight='700' mb='13px'>
+                  <Text fontSize='xl' mb='13px'>
                     Provide Liquidity
                   </Text>
                   <a
@@ -92,31 +87,25 @@ const Haus = () => {
                       pointerEvents: 'none',
                     }}
                   >
-                    <Text fontSize='sm' fontWeight='700'>
-                      ON ETHEREUM &gt;
-                    </Text>
+                    <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
                   </a>
                   <a href='https://swapr.eth.link/#/pools/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0xb0C5f3100A4d9d9532a4CfD68c55F1AE8da987Eb?chainId=100'>
-                    <Text fontSize='sm' fontWeight='700'>
-                      ON GNOSIS CHAIN &gt;
-                    </Text>
+                    <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
                   </a>
                 </Flex>
                 <Flex direction='column'>
-                  <Text fontSize='xl' fontWeight='700' mb='13px'>
+                  <Text fontSize='xl' mb='13px'>
                     Govrn
                   </Text>
                   <a href='https://uberhaus.club'>
-                    <Text fontSize='sm' fontWeight='700'>
-                      Join UBERHAUS &gt;
-                    </Text>
+                    <Text fontSize='sm'>Join UBERHAUS &gt;</Text>
                   </a>
                 </Flex>
               </Flex>
             </ContentBox>
           </Flex>
           <Box w={['100%', null, null, null, '50%']}>
-            <HausCard showChart />
+            <HausCard hideLink />
           </Box>
         </Flex>
       </MainViewLayout>

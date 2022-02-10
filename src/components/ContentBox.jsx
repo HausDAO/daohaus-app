@@ -9,8 +9,6 @@ const ContentBox = props => {
     variant,
     ...rest,
   });
-  console.log('Props');
-  console.log(rest);
 
   return <Box sx={styles} {...rest} />;
 };
