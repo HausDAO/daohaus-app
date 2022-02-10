@@ -14,21 +14,30 @@ const HausBalance = () => {
       .toString();
   };
 
-  useEffect(async () => {
-    const tokenAddress = '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
-    const gnosisBalance = await fetchBalance({
-      address,
-      chainID: '0x64',
-      tokenAddress,
-    });
-    const mainnetBalance = await fetchBalance({
-      address,
-      chainID: '0x1',
-      tokenAddress: '0xf2051511b9b121394fa75b8f7d4e7424337af687',
-    });
-    setBalance(
-      round(BigNumber.from(gnosisBalance).add(BigNumber.from(mainnetBalance))),
-    );
+  useEffect(() => {
+    const setUpBalance = async () => {
+      const tokenAddress = '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
+      const gnosisBalance = await fetchBalance({
+        address,
+        chainID: '0x64',
+        tokenAddress,
+      });
+      const mainnetBalance = await fetchBalance({
+        address,
+        chainID: '0x1',
+        tokenAddress: '0xf2051511b9b121394fa75b8f7d4e7424337af687',
+      });
+
+      setBalance(
+        round(
+          BigNumber.from(gnosisBalance).add(BigNumber.from(mainnetBalance)),
+        ),
+      );
+    };
+
+    if (address) {
+      setUpBalance();
+    }
   }, [address]);
 
   return (
