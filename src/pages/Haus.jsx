@@ -24,11 +24,11 @@ const Haus = () => {
                     As we create more value together, that value flows back to
                     the HAUS token, shared by all communities on the platform
                   </Text>
-                  <Link to='www.google.com' fontWeight='700'>
+                  <a href='https://daohaus.club/token'>
                     <Text fontSize='md' fontWeight='700'>
                       More about HAUS
                     </Text>
-                  </Link>
+                  </a>
                 </Flex>
                 <Flex direction='column' alignItems='center'>
                   <Avatar
@@ -41,11 +41,11 @@ const Haus = () => {
                       marginBottom: '26px;',
                     }}
                   />
-                  <Link to='www.google.com'>
+                  <a href='https://www.coingecko.com/en/coins/daohaus'>
                     <Text fontSize='md' fontWeight='700'>
                       View on Coingecko
                     </Text>
-                  </Link>
+                  </a>
                 </Flex>
               </Flex>
             </ContentBox>
@@ -66,44 +66,56 @@ const Haus = () => {
                   <Text fontSize='xl' fontWeight='700' mb='13px'>
                     Get Haus
                   </Text>
-                  <Link to='www.google.com'>
+                  <a
+                    to='https://daohaus.app'
+                    css={{
+                      pointerEvents: 'none',
+                    }}
+                  >
                     <Text fontSize='sm' fontWeight='700'>
                       ON ETHEREUM &gt;
                     </Text>
-                  </Link>
-                  <Link to='www.google.com'>
+                  </a>
+                  <a href='https://swapr.eth.link/#/swap?chainId=100'>
                     <Text fontSize='sm' fontWeight='700'>
                       ON GNOSIS CHAIN &gt;
                     </Text>
-                  </Link>
+                  </a>
                 </Flex>
                 <Flex direction='column'>
                   <Text fontSize='xl' fontWeight='700' mb='13px'>
                     Provide Liquidity
                   </Text>
-                  <Link to='www.google.com'>
+                  <a
+                    to='https://daohaus.app'
+                    css={{
+                      pointerEvents: 'none',
+                    }}
+                  >
                     <Text fontSize='sm' fontWeight='700'>
                       ON ETHEREUM &gt;
                     </Text>
+                  </a>
+                  <a href='https://swapr.eth.link/#/pools/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0xb0C5f3100A4d9d9532a4CfD68c55F1AE8da987Eb?chainId=100'>
                     <Text fontSize='sm' fontWeight='700'>
                       ON GNOSIS CHAIN &gt;
                     </Text>
-                  </Link>
+                  </a>
                 </Flex>
                 <Flex direction='column'>
                   <Text fontSize='xl' fontWeight='700' mb='13px'>
                     Govrn
                   </Text>
-                  <Link to='www.google.com'>
+                  <a href='https://uberhaus.club'>
                     <Text fontSize='sm' fontWeight='700'>
                       Join UBERHAUS &gt;
                     </Text>
-                  </Link>
+                  </a>
                 </Flex>
               </Flex>
             </ContentBox>
           </Flex>
-          <Box w={['100%', null, null, null, '40%']}>
+          <Box w={['100%', null, null, null, '50%']}>
             <HausCard showChart />
           </Box>
         </Flex>

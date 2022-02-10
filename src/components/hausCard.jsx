@@ -32,38 +32,15 @@ import {
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import hausImg from '../assets/img/haus_icon.svg';
-import { fetchBalance } from '../utils/tokenValue';
+import { fetchBalance, fetchTokenData } from '../utils/tokenValue';
 
 const HausCard = ({ showChart = false }) => {
-  const chartData = [
-    { x: 0, y: 8 },
-    { x: 1, y: 5 },
-    { x: 2, y: 4 },
-    { x: 3, y: 9 },
-    { x: 4, y: 1 },
-    { x: 5, y: 7 },
-    { x: 6, y: 6 },
-    { x: 7, y: 3 },
-    { x: 8, y: 2 },
-    { x: 9, y: 0 },
-  ];
-
-  const gradient = (
-    <GradientDefs>
-      <linearGradient id='gradient' x1='0' x2='0' y1='0' y2='100%'>
-        <stop offset='0%' stopColor='#FFFFFF' />
-        <stop offset='100%' stopColor='#FFFFFF' stopOpacity={0} />
-      </linearGradient>
-    </GradientDefs>
-  );
-
-  console.log(showChart);
   const { address } = useInjectedProvider();
   const [gnosisChainBalance, setGnosisChainBalance] = useState(
     BigNumber.from('0'),
   );
   const [mainnetBalance, setMainnetBalance] = useState(BigNumber.from('0'));
-  const currentValue = 32.08;
+  const [currentValue, setCurrentValue] = useState(0);
   const round = value => {
     console.log('Hello');
     console.log(value);
@@ -73,14 +50,17 @@ const HausCard = ({ showChart = false }) => {
   };
 
   useEffect(async () => {
+    const tokenAddress = '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
     const max = await fetchBalance({
       address,
       chainID: '0x64',
-      tokenAddress: '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb',
+      tokenAddress,
     });
+    const tokenData = await fetchTokenData();
+    setCurrentValue(tokenData[tokenAddress]?.price || 0);
     console.log('max');
     setGnosisChainBalance(BigNumber.from(max));
-  }, []);
+  }, [address]);
 
   useEffect(async () => {
     const max = await fetchBalance({
@@ -90,7 +70,7 @@ const HausCard = ({ showChart = false }) => {
     });
     console.log('max');
     setMainnetBalance(BigNumber.from(max));
-  }, []);
+  }, [address]);
 
   return (
     <ContentBox mt={3} p={1}>
@@ -102,7 +82,7 @@ const HausCard = ({ showChart = false }) => {
               Haus
             </Text>
             <Text fontSize='md' fontFamily='Roboto Mono' ml={3}>
-              $32.08
+              ${currentValue}
             </Text>
           </Flex>
         </Flex>
@@ -113,62 +93,28 @@ const HausCard = ({ showChart = false }) => {
             </Text>
           </Link>
         ) : (
-          <Text fontSize='lg' fontFamily='Roboto Mono' ml={3} color='#FE1D5B'>
-            7D ▼
-          </Text>
+          <></>
         )}
       </Flex>
-      {showChart ? (
-        <Flex justify='center'>
-          <Flex w='100%' minH='300px' justify='center'>
-            <FlexibleXYPlot
-              yDomain={[0, chartData[chartData.length - 1].y || 10]}
-              margin={{
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-              }}
-            >
-              <XAxis xType='time' tickTotal={0} />
-              <YAxis tickTotal={0} />
-              {gradient}
-              <LineSeries
-                animate
-                curve='curveNatural'
-                data={chartData}
-                color='#FE1D5B'
-                style={{ fill: 'none' }}
-              />
-              <AreaSeries
-                animate
-                curve='curveNatural'
-                data={chartData}
-                fill='url(#gradient)'
-                stroke='transparent'
-              />
-            </FlexibleXYPlot>
-          </Flex>
-        </Flex>
-      ) : (
-        <></>
-      )}
-      {!showChart ? (
-        <Divider
-          orientation='vertical'
+      <Divider
+        orientation='vertical'
+        css={{
+          border: '1px solid rgba(255, 255, 255, 0.15);',
+        }}
+      />
+      <Flex justifyContent='space-between' mt='5'>
+        <Accordion
+          allowToggle
+          defaultIndex={1}
+          w='100%'
           css={{
-            border: '1px solid rgba(255, 255, 255, 0.15);',
+            border: 'transparent',
           }}
-        />
-      ) : (
-        <></>
-      )}
-      <Flex justifyContent='space-between' mt='6'>
-        <Accordion allowToggle defaultIndex={1} w='100%' border='none'>
+        >
           <AccordionItem>
             {({ isExpanded }) => (
               <Table variant='unstyled'>
-                <Thead>
+                <Thead color='rgba(255, 255, 255, 0.75)'>
                   <Tr>
                     <Th>Network</Th>
                     <Th>Balance</Th>
@@ -186,11 +132,10 @@ const HausCard = ({ showChart = false }) => {
                   }}
                 >
                   <Tr>
-                    <Td>Gnosis Chain</Td>
                     <Td>
-                      {round(gnosisChainBalance.toString())}
-                      Haus
+                      <span>Gnosis Chain</span>
                     </Td>
+                    <Td>{round(gnosisChainBalance.toString())} Haus</Td>
                     <Td>
                       $
                       {(
