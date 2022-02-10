@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Avatar, Box, Divider, Flex, Text } from '@chakra-ui/react';
+import { Avatar, Box, Divider, Flex, Text, Tooltip } from '@chakra-ui/react';
 import ContentBox from '../components/ContentBox';
 import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
@@ -65,14 +65,21 @@ const Haus = () => {
                   <Text fontSize='xl' mb='13px'>
                     Get Haus
                   </Text>
-                  <a
-                    to='https://daohaus.app'
-                    css={{
-                      pointerEvents: 'none',
-                    }}
+                  <Tooltip
+                    label='Coming soon'
+                    araia-label='Coming soon'
+                    placement='right'
+                    hasArrow
                   >
-                    <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
-                  </a>
+                    <a
+                      to='https://daohaus.app'
+                      css={{
+                        pointerEvents: 'none',
+                      }}
+                    >
+                      <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
+                    </a>
+                  </Tooltip>
                   <a href='https://swapr.eth.link/#/swap?chainId=100'>
                     <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
                   </a>
@@ -81,14 +88,21 @@ const Haus = () => {
                   <Text fontSize='xl' mb='13px'>
                     Provide Liquidity
                   </Text>
-                  <a
-                    to='https://daohaus.app'
-                    css={{
-                      pointerEvents: 'none',
-                    }}
+                  <Tooltip
+                    label='Coming soon'
+                    araia-label='Coming soon'
+                    placement='right'
+                    hasArrow
                   >
-                    <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
-                  </a>
+                    <a
+                      to='https://daohaus.app'
+                      css={{
+                        pointerEvents: 'none',
+                      }}
+                    >
+                      <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
+                    </a>
+                  </Tooltip>
                   <a href='https://swapr.eth.link/#/pools/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0xb0C5f3100A4d9d9532a4CfD68c55F1AE8da987Eb?chainId=100'>
                     <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
                   </a>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Collapse } from '@chakra-ui/transition';
 import { ethers, BigNumber, FixedNumber } from 'ethers';
 import {
   Avatar,
@@ -8,7 +7,6 @@ import {
   Text,
   Accordion,
   AccordionButton,
-  AccordionPanel,
   AccordionIcon,
   AccordionItem,
   Table,
