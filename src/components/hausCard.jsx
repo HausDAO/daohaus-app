@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ethers, BigNumber, FixedNumber } from 'ethers';
 import {
   Avatar,
   Flex,
@@ -22,55 +21,43 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import hausImg from '../assets/img/haus_icon.svg';
 import { fetchBalance, fetchTokenData } from '../utils/tokenValue';
+import { numberWithCommas, fromWeiToFixedDecimal } from '../utils/general';
 
 const HausCard = ({ hideLink = false }) => {
   const { address } = useInjectedProvider();
-  const [gnosisChainBalance, setGnosisChainBalance] = useState(
-    BigNumber.from('0'),
-  );
-  const [mainnetBalance, setMainnetBalance] = useState(BigNumber.from('0'));
+  const [gnosisChainBalance, setGnosisChainBalance] = useState(0);
+  const [mainnetBalance, setMainnetBalance] = useState(0);
   const [currentValue, setCurrentValue] = useState(0);
-  const round = value => {
-    return FixedNumber.fromString(ethers.utils.formatUnits(value), 18)
-      .round(2)
-      .toString();
-  };
 
   useEffect(() => {
-    const setUpBalance = async () => {
+    const controller = new AbortController();
+
+    const fetchBalances = async () => {
       const tokenAddress = '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
-      const max = await fetchBalance({
+      const tokenData = await fetchTokenData();
+      setCurrentValue(tokenData[tokenAddress]?.price || 0);
+      const gnosisChainMax = await fetchBalance({
         address,
         chainID: '0x64',
         tokenAddress,
       });
-      const tokenData = await fetchTokenData();
-      setCurrentValue(tokenData[tokenAddress]?.price || 0);
-      setGnosisChainBalance(BigNumber.from(max));
-    };
-
-    if (address) {
-      setUpBalance();
-    }
-  }, [address]);
-
-  useEffect(async () => {
-    const setUpBalance = async () => {
-      const max = await fetchBalance({
+      setGnosisChainBalance(fromWeiToFixedDecimal(gnosisChainMax));
+      const mainnetMax = await fetchBalance({
         address,
         chainID: '0x1',
         tokenAddress: '0xf2051511b9b121394fa75b8f7d4e7424337af687',
       });
-      setMainnetBalance(BigNumber.from(max));
+      setMainnetBalance(fromWeiToFixedDecimal(mainnetMax));
     };
 
     if (address) {
-      setUpBalance();
+      fetchBalances();
     }
+    return () => controller?.abort();
   }, [address]);
 
   return (
-    <ContentBox mt={3} p={1}>
+    <ContentBox mt={3} mb={6} p={1}>
       <Flex alignItems='center' justifyContent='space-between' padding={6}>
         <Flex alignItems='center'>
           <Avatar name='Haus logo' src={hausImg} size='lg' />
@@ -79,7 +66,7 @@ const HausCard = ({ hideLink = false }) => {
               Haus
             </Text>
             <Text fontSize='md' fontFamily='Roboto Mono' ml={3}>
-              ${currentValue}
+              ${currentValue.toFixed(2)}
             </Text>
           </Flex>
         </Flex>
@@ -132,41 +119,43 @@ const HausCard = ({ hideLink = false }) => {
                     <Td>
                       <span>Gnosis Chain</span>
                     </Td>
-                    <Td>{round(gnosisChainBalance.toString())} Haus</Td>
+                    <Td>{numberWithCommas(gnosisChainBalance)} Haus</Td>
                     <Td>
                       $
-                      {(
-                        round(gnosisChainBalance.toString()) * currentValue
-                      ).toFixed(2)}
+                      {numberWithCommas(
+                        (gnosisChainBalance * currentValue).toFixed(2),
+                      )}
                     </Td>
                     <Td />
                   </Tr>
                   <Tr>
                     <Td>Ethereum</Td>
-                    <Td>{round(mainnetBalance.toString())} Haus</Td>
+                    <Td>{numberWithCommas(mainnetBalance)} Haus</Td>
                     <Td>
-                      {(
-                        round(mainnetBalance.toNumber()) * currentValue
-                      ).toFixed(2)}
+                      $
+                      {numberWithCommas(
+                        (mainnetBalance * currentValue).toFixed(2),
+                      )}
                     </Td>
                     <Td />
                   </Tr>
                 </Tbody>
                 <Tfoot>
                   <Tr>
-                    <Th>All</Th>
-                    <Th>
-                      {round(mainnetBalance.add(gnosisChainBalance).toString())}{' '}
+                    <Td>All</Td>
+                    <Td>
+                      {numberWithCommas(mainnetBalance + gnosisChainBalance)}{' '}
                       Haus
-                    </Th>
-                    <Th>
+                    </Td>
+                    <Td>
                       $
-                      {(
-                        round(
-                          mainnetBalance.add(gnosisChainBalance).toString(),
-                        ) * currentValue
-                      ).toFixed(2)}
-                    </Th>
+                      {numberWithCommas(
+                        (
+                          (mainnetBalance + gnosisChainBalance) *
+                          currentValue
+                        ).toFixed(2),
+                      )}
+                    </Td>
                     <Th />
                   </Tr>
                 </Tfoot>
