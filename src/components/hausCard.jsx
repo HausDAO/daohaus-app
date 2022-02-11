@@ -36,25 +36,37 @@ const HausCard = ({ hideLink = false }) => {
       .toString();
   };
 
-  useEffect(async () => {
-    const tokenAddress = '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
-    const max = await fetchBalance({
-      address,
-      chainID: '0x64',
-      tokenAddress,
-    });
-    const tokenData = await fetchTokenData();
-    setCurrentValue(tokenData[tokenAddress]?.price || 0);
-    setGnosisChainBalance(BigNumber.from(max));
+  useEffect(() => {
+    const setUpBalance = async () => {
+      const tokenAddress = '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
+      const max = await fetchBalance({
+        address,
+        chainID: '0x64',
+        tokenAddress,
+      });
+      const tokenData = await fetchTokenData();
+      setCurrentValue(tokenData[tokenAddress]?.price || 0);
+      setGnosisChainBalance(BigNumber.from(max));
+    };
+
+    if (address) {
+      setUpBalance();
+    }
   }, [address]);
 
   useEffect(async () => {
-    const max = await fetchBalance({
-      address,
-      chainID: '0x1',
-      tokenAddress: '0xf2051511b9b121394fa75b8f7d4e7424337af687',
-    });
-    setMainnetBalance(BigNumber.from(max));
+    const setUpBalance = async () => {
+      const max = await fetchBalance({
+        address,
+        chainID: '0x1',
+        tokenAddress: '0xf2051511b9b121394fa75b8f7d4e7424337af687',
+      });
+      setMainnetBalance(BigNumber.from(max));
+    };
+
+    if (address) {
+      setUpBalance();
+    }
   }, [address]);
 
   return (
