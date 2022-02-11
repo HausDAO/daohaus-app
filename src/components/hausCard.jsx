@@ -29,8 +29,9 @@ const HausCard = ({ hideLink = false }) => {
   const [mainnetBalance, setMainnetBalance] = useState(0);
   const [currentValue, setCurrentValue] = useState(0);
 
-  useEffect(async () => {
+  useEffect(() => {
     const controller = new AbortController();
+
     const fetchBalances = async () => {
       const tokenAddress = '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
       const tokenData = await fetchTokenData();
