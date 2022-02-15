@@ -1,6 +1,6 @@
 import { encodeMultiSend } from '@gnosis.pm/safe-contracts';
 import Web3 from 'web3';
-import { Contract, BigNumber, ethers } from 'ethers';
+import { Contract, BigNumber } from 'ethers';
 
 import { chainByID } from './chain';
 import { createContract } from './contract';
@@ -28,9 +28,11 @@ import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
-import { MINION_TYPES } from './proposalUtils';
+import POSTER from '../contracts/poster.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import SWAPR_STAKING from '../contracts/swapr_staking.json';
+
+import { MINION_TYPES } from './proposalUtils';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -58,6 +60,7 @@ export const LOCAL_ABI = Object.freeze({
   ESCROW_MINION,
   DISPERSE_APP,
   SWAPR_STAKING,
+  POSTER,
 });
 
 const getBlockExplorerApiKey = chainID => {
@@ -340,4 +343,3 @@ export const getMinionAbi = minionType => {
   }
   return null;
 };
-

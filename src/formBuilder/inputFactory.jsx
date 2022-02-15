@@ -40,16 +40,18 @@ import ListBox from './listBox';
 import { createRegisterOptions } from '../utils/formBuilder';
 import BoolSelect from './boolSelect';
 import GenericSwitch from './genericSwitch';
+import GenericSelect from './genericSelect';
 import ImageInput from './imageInput';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
-import Tutorial from './tutorial';
 import UberHausDelegateInput from './uberHausDelegateInput';
 import UberHausTributeInput from './uberHausTributeInput';
 import UberHausRageQuitInput from './uberHausRageQuitInput';
 import UberHausWithdrawInput from './uberHausWithdrawInput';
 import UberHausPullInput from './uberHausPullInput';
+import Tutorial from './tutorial';
 import Tutorial2 from './tutorial2';
+import MarkdownEditor from './mdEditor';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -69,6 +71,9 @@ export const InputFactory = props => {
 
   if (type === 'input') {
     return <GenericInput {...props} />;
+  }
+  if (type === 'select') {
+    return <GenericSelect {...props} />;
   }
   if (type === 'gatedInput') {
     return <GatedInput {...props} />;
@@ -213,6 +218,9 @@ export const InputFactory = props => {
   }
   if (type === 'tutorial2') {
     return <Tutorial2 {...props} />;
+  }
+  if (type === 'mdEditor') {
+    return <MarkdownEditor {...props} />;
   }
   return null;
 };

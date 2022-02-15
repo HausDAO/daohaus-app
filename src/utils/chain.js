@@ -104,6 +104,7 @@ export const supportedChains = {
     swapr: {
       staking: '0x732DB307337a5ceA1FD117AF808382FaC0AFAe8a',
     },
+    poster: '0x917d84787A266F9D649d519A7Ec8445eA43514D8',
   },
   '0x2a': {
     name: 'Ethereum Kovan',

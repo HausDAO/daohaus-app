@@ -176,4 +176,9 @@ export const CONTRACTS = {
     abiName: 'SWAPR_STAKING',
     contractAddress: '.contextData.chainConfig.swapr.staking',
   },
+  POSTER: {
+    location: 'local',
+    abiName: 'POSTER',
+    conractAddress: '.contextData.chainConfig.poster',
+  },
 };
