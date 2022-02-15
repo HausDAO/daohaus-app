@@ -49,6 +49,7 @@ import UberHausTributeInput from './uberHausTributeInput';
 import UberHausRageQuitInput from './uberHausRageQuitInput';
 import UberHausWithdrawInput from './uberHausWithdrawInput';
 import UberHausPullInput from './uberHausPullInput';
+import MarkdownEditor from './mdEditor';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -209,6 +210,9 @@ export const InputFactory = props => {
   }
   if (type === 'memberImpact') {
     return <MemberImpact {...props} />;
+  }
+  if (type === 'mdEditor') {
+    return <MarkdownEditor {...props} />;
   }
   return null;
 };

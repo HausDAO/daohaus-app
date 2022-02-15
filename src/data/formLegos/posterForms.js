@@ -5,6 +5,7 @@ export const POSTER_FORMS = {
   RATIFY: {
     id: 'RATIFY',
     dev: true,
+    logValues: true,
     title: 'Post a DAO doc',
     description: 'Create a proposal to ratify a DAO document',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
@@ -34,7 +35,7 @@ export const POSTER_FORMS = {
           placeholder: '--Default: Add to docs--',
         },
         {
-          type: 'md-editor',
+          type: 'mdEditor',
           name: 'content',
           htmlFor: 'content',
         },
