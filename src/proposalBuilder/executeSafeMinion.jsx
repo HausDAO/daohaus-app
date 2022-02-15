@@ -10,7 +10,7 @@ const ExecuteSafeMinion = props => {
     <ExecuteAction
       {...props}
       executeTX={TX.MINION_SAFE_EXECUTE}
-      argsOverride={[proposal.proposalId, proposal.actions[0].data]}
+      argsOverride={[proposal?.proposalId, proposal?.actions[0]?.data]}
     />
   );
 };

@@ -18,8 +18,8 @@ import { SAFE_MINION_FORMS } from './safeMinionForms';
 import { SUPERFLUID_MINION_FORMS } from './superfluidForms';
 import { VANILLA_MINION_FORMS } from './vanillaMinionForms';
 import { UBERHAUS_FORMS } from './uberHausForms';
-import { POSTER_FORMS } from './posterForms'
- 
+import { POSTER_FORMS } from './posterForms';
+
 // TEST LEGOS BEFORE PUSHING TO DEVELOP
 
 // Step 1. Uncomment
@@ -59,5 +59,5 @@ export const FORM = {
   ...SUPERFLUID_MINION_FORMS,
   ...VANILLA_MINION_FORMS,
   ...UBERHAUS_FORMS,
-  ...POSTER_FORMS
+  ...POSTER_FORMS,
 };

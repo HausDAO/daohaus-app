@@ -171,7 +171,7 @@ export const CONTRACTS = {
     abiName: 'DISPERSE_APP',
     conractAddress: '.contextData.chainConfig.disperse_app',
   },
-  DISPERSE_APP: {
+  POSTER: {
     location: 'local',
     abiName: 'POSTER',
     conractAddress: '.contextData.chainConfig.poster',
