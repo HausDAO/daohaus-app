@@ -5,7 +5,7 @@ import { AsyncCardTransfer } from './proposalBriefPrimitives';
 const getTokenData = ({ setTokenData, setError, minionAction }) => {
   try {
     const tokenAddress = minionAction?.decoded?.actions?.[0]?.to;
-    const 
+
     console.log('minionAction', minionAction);
   } catch (error) {
     console.error(error);
