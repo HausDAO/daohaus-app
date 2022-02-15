@@ -9,8 +9,37 @@ export const POSTER_FORMS = {
     description: 'Create a proposal to ratify a DAO document',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
     minionType: MINION_TYPES.SAFE,
+    customWidth: '1000px',
     // tx:
     required: ['title', 'content', 'location'],
-    fields: [[FIELD.TITLE, FIELD.POST_LOCATION, FIELD.MD_EDITOR]],
+    fields: [
+      [
+        {
+          type: 'input',
+          label: 'Post Title',
+          name: 'title',
+          htmlFor: 'title',
+          placeholder: 'Post Title',
+          expectType: 'any',
+        },
+        {
+          type: 'select',
+          name: 'location',
+          htmlFor: 'location',
+          label: 'Post Location',
+          options: [
+            // { name: 'Docs', value: 'docs' },
+            { name: 'Front Page', value: 'front-page' },
+          ],
+          placeholder: '--Default: Add to docs--',
+        },
+        {
+          type: 'md-editor',
+          name: 'content',
+          htmlFor: 'content',
+        },
+        // FIELD.MD_EDITOR,
+      ],
+    ],
   },
 };
