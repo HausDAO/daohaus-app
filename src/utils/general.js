@@ -185,6 +185,14 @@ export const numberWithCommas = num => {
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
+export const fromWeiToFixedDecimal = (value, decimals = 2) => {
+  const commaIndex = utils.formatEther(value).indexOf('.');
+  if (commaIndex === -1) {
+    return Number(utils.formatEther(value));
+  }
+  return Number(utils.formatEther(value).slice(0, commaIndex + decimals + 1));
+};
+
 export const truncateAddr = addr => {
   return addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : null;
 };

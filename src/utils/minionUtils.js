@@ -192,6 +192,7 @@ export const getMinionAction = async params => {
   const actionName =
     MINION_ACTION_FUNCTION_NAMES[minionType] ||
     MINION_ACTION_FUNCTION_NAMES[proposalType];
+
   try {
     const minionContract = createContract({
       address: minionAddress,
@@ -206,6 +207,7 @@ export const getMinionAction = async params => {
     }
     if (SHOULD_MULTI_DECODE[minionType]) {
       const decoded = await decodeMultiAction(actions, params);
+
       return { ...action, decoded };
     }
     return action;

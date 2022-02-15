@@ -174,6 +174,12 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
               }
               return hydratedAction;
             }
+
+            // console.log('action', action);
+            if (!action.data) {
+              return;
+            }
+
             if (action.data.slice(2).length === 0) {
               return buildEthTransferAction(action);
             }
