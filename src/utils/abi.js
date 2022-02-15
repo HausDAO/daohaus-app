@@ -1,6 +1,6 @@
 import { encodeMultiSend } from '@gnosis.pm/safe-contracts';
 import Web3 from 'web3';
-import { Contract, BigNumber } from 'ethers';
+import { Contract, BigNumber, ethers } from 'ethers';
 
 import { chainByID } from './chain';
 import { createContract } from './contract';
@@ -340,3 +340,4 @@ export const getMinionAbi = minionType => {
   }
   return null;
 };
+

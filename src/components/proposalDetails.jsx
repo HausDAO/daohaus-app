@@ -47,7 +47,6 @@ const ProposalDetails = ({
   const { isUberHaus, daoOverview } = useDao();
   const [status, setStatus] = useState(null);
   const { daoid } = useParams();
-
   useEffect(() => {
     if (proposal) {
       const statusStr = determineProposalStatus(proposal);

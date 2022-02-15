@@ -29,7 +29,7 @@ export const CLASSIC_FORMS = {
     id: 'FUNDING',
     title: 'Funding Proposal',
     description: 'Proposal for transferring funds to/from the DAO treasury.',
-    origin: 'classics',
+
     type: PROPOSAL_TYPES.FUNDING,
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,

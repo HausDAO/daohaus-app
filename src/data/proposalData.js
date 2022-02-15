@@ -55,4 +55,7 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'minionTributeTransfer',
     execute: 'minionTributeAction',
   },
+  [PROPOSAL_TYPES.SWAPR_STAKING]: {
+    customTransferUI: 'tutorialTransfer',
+  },
 };
