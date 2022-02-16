@@ -11,6 +11,7 @@ import DisperseTransfer from './disperseTransfer';
 import RaribleTransferSell from './raribleTransferSell';
 import MinionTributeTransfer from './MinionTributeTransfer';
 import TutorialTransfer from './tutorialTransfer';
+import PosterTransfer from './posterTransfer';
 
 const CustomTransfer = props => {
   const { customTransferUI } = props;
@@ -46,6 +47,9 @@ const CustomTransfer = props => {
   }
   if (customTransferUI === 'tutorialTransfer') {
     return <TutorialTransfer {...props} />;
+  }
+  if (customTransferUI === 'ratifyContent') {
+    return <PosterTransfer {...props} />;
   }
   return null;
 };

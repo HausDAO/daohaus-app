@@ -58,4 +58,7 @@ export const CUSTOM_CARD_DATA = {
   [PROPOSAL_TYPES.SWAPR_STAKING]: {
     customTransferUI: 'tutorialTransfer',
   },
+  [PROPOSAL_TYPES.POSTER_RATIFY]: {
+    customTransferUI: 'ratifyContent',
+  },
 };
