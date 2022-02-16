@@ -9,7 +9,7 @@ export const POSTER_BOOST_TX = {
         targetContract: '.contextData.chainConfig.poster',
         abi: CONTRACTS.POSTER,
         fnName: 'post',
-        args: ['values.encoded', 'daohaus.manifesto'],
+        args: ['.values.encoded', 'daohaus.manifesto'],
       },
     ],
     detailsToJSON: DETAILS.POSTER_RATIFY,
