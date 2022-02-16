@@ -151,4 +151,9 @@ export const DETAILS = {
     uberHaus: 'true',
     uberType: 'pull',
   },
+  POSTER_RATIFY: {
+    title: `.values.title || Proposal to Ratify Content`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+  },
 };

@@ -9,9 +9,9 @@ export const POSTER_BOOST_TX = {
         targetContract: '.contextData.chainConfig.poster',
         abi: CONTRACTS.POSTER,
         fnName: 'post',
-        args: ['values.encoded', 'contextData.daoid'],
+        args: ['values.encoded', 'daohaus.manifesto'],
       },
     ],
-    detailsToJSON: DETAILS.STANDARD_PROPOSAL,
+    detailsToJSON: DETAILS.POSTER_RATIFY,
   }),
 };

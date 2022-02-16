@@ -61,6 +61,7 @@ export const PROPOSAL_TYPES = {
   SELL_NFT_RARIBLE: 'Sell NFT',
   DISPERSE: 'Disperse Proposal',
   SWAPR_STAKING: 'Swapr Staking Proposal',
+  POSTER_RATIFY: 'Ratify Content',
 };
 
 export const MINION_TYPES = {

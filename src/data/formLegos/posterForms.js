@@ -1,4 +1,6 @@
 import { MINION_TYPES, PROPOSAL_TYPES } from '../../utils/proposalUtils';
+import { FIELD } from '../fields';
+import { TX } from '../txLegos/contractTX';
 
 export const POSTER_FORMS = {
   RATIFY: {
@@ -10,10 +12,11 @@ export const POSTER_FORMS = {
     type: PROPOSAL_TYPES.POSTER_RATIFY,
     minionType: MINION_TYPES.SAFE,
     customWidth: '1000px',
-    // tx: TX.POSTER_RATIFY,
+    tx: TX.POSTER_RATIFY,
     required: ['posterData.title', 'posterData.content'],
     fields: [
       [
+        FIELD.MINION_SELECT,
         {
           type: 'input',
           label: 'Post Title',
@@ -42,6 +45,10 @@ export const POSTER_FORMS = {
           name: 'posterData',
         },
       ],
+    ],
+    additionalOptions: [
+      FIELD.LINK,
+      { ...FIELD.TITLE, label: 'Proposal Title' },
     ],
   },
 };
