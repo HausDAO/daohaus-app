@@ -5,7 +5,9 @@ import AddressAvatar from '../components/addressAvatar';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import { Bold, Heading, ParaLg, ParaSm } from '../components/typography';
+import { FORM } from '../data/formLegos/forms';
 import { DAO_DOC_COLLECTION } from '../graphQL/postQueries';
+import { useAppModal } from '../hooks/useModals';
 import { graphQuery } from '../utils/apollo';
 import { chainByID } from '../utils/chain';
 import { timeToNow } from '../utils/general';
@@ -31,6 +33,7 @@ const getDAOdocs = async ({ setDocs, daoid, daochain }) => {
 
 const DaoDocs = () => {
   const { daochain, daoid } = useParams();
+  const { formModal } = useAppModal();
   const [docs, setDocs] = useState(null);
 
   useEffect(() => {
@@ -41,11 +44,15 @@ const DaoDocs = () => {
     });
   }, []);
 
+  const createDoc = () => {
+    formModal(FORM.RATIFY);
+  };
+
   return (
     <MainViewLayout
       isDao
       header='DAO Docs'
-      headerEl={<Button>Create Doc</Button>}
+      headerEl={<Button onClick={createDoc}>Create Doc</Button>}
     >
       <Heading fontSize='1.4rem'>DAO Documents:</Heading>
       <Flex wrap='wrap' mt={3}>
