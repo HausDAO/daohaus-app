@@ -67,7 +67,7 @@ const DaoDocs = () => {
                 </Flex>
               </Flex>
               <Box>
-                <Link href='/'>
+                <Link to={`/dao/${daochain}/${daoid}/doc/${doc.id}`}>
                   <ParaSm>Read </ParaSm>
                 </Link>
               </Box>

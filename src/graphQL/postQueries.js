@@ -19,6 +19,16 @@ export const DAO_DOC_COLLECTION = gql`
   }
 `;
 
-// export const DAO_DOC = gql`
-
-// `
+export const DAO_DOC = gql`
+  query contents($id: String!) {
+    contents(where: { id: $id }) {
+      id
+      createdAt
+      transactionHash
+      title
+      molochAddress
+      content
+      location
+    }
+  }
+`;
