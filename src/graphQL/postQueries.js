@@ -6,7 +6,7 @@ export const DAO_DOC_COLLECTION = gql`
       where: { molochAddress: $molochAddress }
       first: 1000
       orderBy: createdAt
-      orderDirection: asc
+      orderDirection: desc
     ) {
       id
       createdAt

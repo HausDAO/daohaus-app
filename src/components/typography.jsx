@@ -24,7 +24,7 @@ export const Label = props => {
 export const Heading = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='2rem' variant='label' lineHeight='168.4%;'>
+    <Text fontSize='2rem' variant='label' lineHeight='168.4%;' {...props}>
       {text || children}
     </Text>
   );
