@@ -47,7 +47,7 @@ const DaoDocs = () => {
       header='DAO Docs'
       headerEl={<Button>Create Doc</Button>}
     >
-      <Heading fontSize='1.4rem'>Ratified DAO Documents:</Heading>
+      <Heading fontSize='1.4rem'>DAO Documents:</Heading>
       <Flex wrap='wrap' mt={3}>
         {docs?.map(doc => (
           <ContentBox key={doc.id} mb={4} mr={4}>
