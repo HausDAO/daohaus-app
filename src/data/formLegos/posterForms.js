@@ -1,6 +1,4 @@
 import { MINION_TYPES, PROPOSAL_TYPES } from '../../utils/proposalUtils';
-import { FIELD } from '../fields';
-import { TX } from '../txLegos/contractTX';
 
 export const POSTER_FORMS = {
   RATIFY: {
@@ -12,39 +10,37 @@ export const POSTER_FORMS = {
     type: PROPOSAL_TYPES.POSTER_RATIFY,
     minionType: MINION_TYPES.SAFE,
     customWidth: '1000px',
-    tx: TX.POSTER_RATIFY,
-    required: ['title', 'content', 'location'],
+    // tx: TX.POSTER_RATIFY,
+    required: ['posterData.title', 'posterData.content'],
     fields: [
       [
         {
           type: 'input',
           label: 'Post Title',
-          name: 'title',
-          htmlFor: 'title',
+          name: 'posterData.title',
+          htmlFor: 'posterData.title',
           placeholder: 'Post Title',
           expectType: 'any',
         },
         {
           type: 'select',
-          name: 'location',
-          htmlFor: 'location',
+          name: 'posterData.location',
+          htmlFor: 'posterData.location',
           label: 'Post Location',
           options: [
-            // { name: 'Docs', value: 'docs' },
+            { name: 'Docs', value: 'docs' },
             { name: 'Front Page', value: 'front-page' },
           ],
-          placeholder: '--Default: Add to docs--',
         },
         {
           type: 'mdEditor',
-          name: 'content',
-          htmlFor: 'content',
+          name: 'posterData.content',
+          htmlFor: 'posterData.content',
         },
         {
           type: 'posterStringify',
           name: 'posterData',
         },
-        // FIELD.MD_EDITOR,
       ],
     ],
   },

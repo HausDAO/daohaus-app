@@ -17,11 +17,11 @@ const markdown = `
 const MarkdownEditor = props => {
   const {
     localForm: { setValue },
+    name,
   } = props;
   const [content, setContent] = useState(markdown);
-
   useEffect(() => {
-    setValue('content', content);
+    setValue(name, content);
   }, [content]);
 
   return (
