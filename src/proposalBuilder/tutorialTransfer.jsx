@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Bold, ParaMd } from '../components/typography';
 import { AsyncCardTransfer } from './proposalBriefPrimitives';
 
-const getTokenData = ({ setTokenData, setError, minionAction }) => {
+const getTokenData = ({ minionAction }) => {
   try {
-    const tokenAddress = minionAction?.decoded?.actions?.[0]?.to;
+    // const tokenAddress = minionAction?.decoded?.actions?.[0]?.to;
 
     console.log('minionAction', minionAction);
   } catch (error) {
@@ -15,7 +15,7 @@ const getTokenData = ({ setTokenData, setError, minionAction }) => {
 export const TutorialTransfer = props => {
   const { minionAction } = props;
   const [tokenData, setTokenData] = useState(null);
-  const [error, setError] = useState(null);
+  const [setError] = useState(null);
 
   useEffect(() => {
     let shouldUpdate = true;

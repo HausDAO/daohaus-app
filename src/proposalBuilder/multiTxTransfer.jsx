@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
-import { ethers } from 'ethers';
 import { v4 as uuid } from 'uuid';
 
 import { useAppModal } from '../hooks/useModals';
