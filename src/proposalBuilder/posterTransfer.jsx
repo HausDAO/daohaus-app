@@ -1,7 +1,8 @@
-import { Button } from '@chakra-ui/react';
-import MDEditor from '@uiw/react-md-editor';
 import React, { useState, useEffect } from 'react';
+import MDEditor from '@uiw/react-md-editor';
 import Web3 from 'web3';
+import { Button } from '@chakra-ui/react';
+
 import { ParaMd } from '../components/typography';
 import { useAppModal } from '../hooks/useModals';
 import { parseIfJSON } from '../utils/general';
@@ -11,7 +12,7 @@ const getContentData = ({ minionAction }) => {
   const rawJSON = minionAction?.decoded?.actions?.[0]?.data?.params?.[0]?.value;
   if (rawJSON) {
     const data = parseIfJSON(rawJSON);
-    if (data) {
+    if (data.content) {
       const withDecoded = {
         ...data,
         content: Web3.utils.hexToUtf8(data.content),
@@ -37,6 +38,7 @@ const PosterTransfer = ({ minionAction }) => {
       title: contentData?.title,
       subtitle: 'Preview Mode',
       body: <MDEditor.Markdown source={contentData?.content} />,
+      width: '1000px',
     });
   };
   const customUI = contentData?.content && (
@@ -47,7 +49,7 @@ const PosterTransfer = ({ minionAction }) => {
         variant='text'
         color='secondary.400'
         onClick={displayDetails}
-        // transform='translateY(-1px)'
+        transform='translateY(-1px)'
         lineHeight='1.1rem'
       >
         <ParaMd>View Details</ParaMd>

@@ -117,18 +117,19 @@ export const decodeMultiAction = async ([encodedMulti], params) => {
   const multiSendAddress = chainByID(chainID).safeMinion.safe_mutisend_addr;
 
   //   SINGLE ARRAY VERSION
-
-  return {
-    ...encodedMulti,
-    actions: await Promise.all(
-      decodeMultisendTx(multiSendAddress, encodedMulti.data).map(
-        async action => ({
-          ...action,
-          data: await decodeAction(action, params),
-        }),
+  if (encodedMulti?.data) {
+    return {
+      ...encodedMulti,
+      actions: await Promise.all(
+        decodeMultisendTx(multiSendAddress, encodedMulti.data).map(
+          async action => ({
+            ...action,
+            data: await decodeAction(action, params),
+          }),
+        ),
       ),
-    ),
-  };
+    };
+  }
 };
 
 export const getMinionAction = async params => {
