@@ -40,6 +40,7 @@ import Treasury from '../pages/Treasury';
 import Vaults from '../pages/Vaults';
 import ProposalsSpam from '../pages/ProposalsSpam';
 import SpamFilterSettings from '../pages/SpamFilterSettings';
+import DaoDocs from '../pages/daoDocs';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -256,6 +257,9 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/party-favor`}>
           <PartyFavor isMember={isMember} />
+        </Route>
+        <Route exact path={`${path}/docs`}>
+          <DaoDocs />
         </Route>
       </Switch>
     </Layout>

@@ -71,6 +71,8 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-rinkeby-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-rinkeby-subgraph',
+    poster_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-poster-rinkeby',
     minion_factory_addr: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x95b58a6bff3d14b7db2f5cb5f0ad413dc2940658',
