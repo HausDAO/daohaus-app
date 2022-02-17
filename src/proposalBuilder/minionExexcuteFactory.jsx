@@ -13,10 +13,7 @@ import { MINION_TYPES } from '../utils/proposalUtils';
 const MinionExexcuteFactory = props => {
   const { proposal } = props;
 
-  const {
-    proposalType,
-    minion: { minionType },
-  } = proposal;
+  const { proposalType } = proposal;
   const executeType = CUSTOM_CARD_DATA[proposalType]?.execute;
 
   if (executeType === 'executeAction') {
@@ -45,7 +42,7 @@ const MinionExexcuteFactory = props => {
   if (executeType === 'minionTributeAction') {
     return <MinionTributeAction {...props} />;
   }
-  if (minionType === MINION_TYPES.SAFE) {
+  if (proposal.minion?.minionType === MINION_TYPES.SAFE) {
     return <ExecuteSafeMinion {...props} />;
   }
   return <ExecuteAction {...props} />;
