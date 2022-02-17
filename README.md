@@ -7,6 +7,10 @@ If you've a bug to report or want to contributes, jump to the `🙏 We need your
 
 If you'd like to join our community, we coordinate and hang out on Discord. To join in the fun, hop onto our [Discord](https://discord.gg/gWH4vt3tWE) and say hi! 
 
+<a href="https://app.daohaus.club/dao/0x64/0x4bec8e49aa44bb520bd5e29d6358e22464b5eb68">
+  <img width="400px" src="https://daopreview.com/api/canvas?chainId=0x64&address=0x4bec8e49aa44bb520bd5e29d6358e22464b5eb68" alt="UberHAUS" />
+</a>
+
 ---
 
 ## Development
