@@ -44,44 +44,100 @@ const ZodiacActionForm = props => {
     goToNext(next);
   };
 
+  const prevalidateAmbAction = async (foreignChainId, safeAddress) => {
+    // Validate if connected user is a signer of the foreign safe
+    const safeSdk = await getSafe({
+      chainID: foreignChainId,
+      safeAddress, // must be a checksummed address
+    });
+    if (
+      !(await safeSdk.getOwners()).includes(
+        Web3Utils.toChecksumAddress(address),
+      )
+    ) {
+      errorToast({
+        title: 'Not a Gnosis Safe Signer',
+        description: 'You must be a signer on the Gnosis Safe',
+      });
+      return;
+    }
+
+    // Validate if current network matches the selected foreign network
+    if (foreignChainId !== injectedChain.chain_id) {
+      errorToast({
+        title: 'Wrong Chain',
+        description: 'Please connect your wallet to the foreign chain.',
+      });
+      return;
+    }
+    return true;
+  };
+
+  const deployAmbModule = async vault => {
+    const formValues = getValues();
+    const { foreignChainId, foreignSafeAddress, saltNonce } = formValues;
+    const ambConfig = chainByID(daochain).zodiac_amb_module;
+    const ambAddress = ambConfig.amb_bridge_address[foreignChainId];
+
+    const ambModuleAddress = await deployZodiacBridgeModule(
+      vault.safeAddress, // owner
+      foreignSafeAddress, // avatar
+      foreignSafeAddress, // target
+      ambAddress, // amb
+      vault.safeAddress, // controller
+      daochain, // chainId
+      injectedProvider,
+      saltNonce,
+    );
+    return ambModuleAddress;
+  };
+
+  const submitGnosisTxProposal = async (
+    foreignChainId,
+    functionName,
+    functionParams,
+    safeAddress,
+  ) => {
+    const selectedFunction = ModuleManager.abi.find(
+      entry => entry.name === functionName,
+    );
+    const hexData = safeEncodeHexFunction(selectedFunction, [
+      Web3Utils.toChecksumAddress(...functionParams),
+    ]);
+    if (!hexData.encodingError) {
+      await createGnosisSafeTxProposal({
+        chainID: foreignChainId,
+        web3: injectedProvider,
+        safeAddress, // must be a checksummed address
+        fromDelegate: Web3Utils.toChecksumAddress(address),
+        to: safeAddress, // must be a checksummed address
+        value: '0',
+        data: hexData,
+        operation: 0,
+      });
+      successToast({
+        title: 'Cross-chain Minion Summoned.',
+        description:
+          'Please check the Tx Queue on your Foreign Gnosis Safe for enabling a module.',
+      });
+      onSuccess();
+    }
+  };
+
   const handleActionGoToNext = async () => {
     const formValues = getValues();
-
     const {
       foreignChainId,
       foreignSafeAddress,
       minionName,
       zodiacAction,
-      saltNonce,
     } = formValues;
 
     if (zodiacAction === 'ambModule') {
       register('ambModuleAddress');
       const checksumSafeAddr = Web3Utils.toChecksumAddress(foreignSafeAddress);
 
-      // Validate if connected user is a signer of the foreign safe
-      const safeSdk = await getSafe({
-        chainID: foreignChainId,
-        safeAddress: checksumSafeAddr,
-      });
-      if (
-        !(await safeSdk.getOwners()).includes(
-          Web3Utils.toChecksumAddress(address),
-        )
-      ) {
-        errorToast({
-          title: 'Not a Gnosis Safe Signer',
-          description: 'You must be a signer on the Gnosis Safe',
-        });
-        return;
-      }
-
-      // Validate if current network matches the selected foreign network
-      if (foreignChainId !== injectedChain.chain_id) {
-        errorToast({
-          title: 'Wrong Chain',
-          description: 'Please connect your wallet to the foreign chain.',
-        });
+      if (!prevalidateAmbAction(foreignChainId, checksumSafeAddr)) {
         return;
       }
 
@@ -104,22 +160,8 @@ const ZodiacActionForm = props => {
         return;
       }
 
-      const ambConfig = chainByID(daochain).zodiac_amb_module;
-      const ambAddress = ambConfig.amb_bridge_address[foreignChainId];
-
       // Deploy a Zodiac Bridge module
-      const ambModuleAddress = await deployZodiacBridgeModule(
-        vault.safeAddress, // owner
-        foreignSafeAddress, // avatar
-        foreignSafeAddress, // target
-        ambAddress, // amb
-        vault.safeAddress, // controller
-        daochain, // chainId
-        injectedProvider,
-        saltNonce,
-      );
-      // const ambModuleAddress = '0xc3de2702440DA3847220f6820A523b9D20bf756f';
-
+      const ambModuleAddress = await deployAmbModule(vault);
       if (!ambModuleAddress) {
         errorToast({
           title: 'AMB Module Deployment',
@@ -131,38 +173,19 @@ const ZodiacActionForm = props => {
       setValue('ambModuleAddress', ambModuleAddress);
 
       // Submit a Tx proposal to the foreign Safe in order to add the Bridge contract as a module
-      const selectedFunction = ModuleManager.abi.find(
-        entry => entry.name === 'enableModule',
-      );
-      const hexData = safeEncodeHexFunction(selectedFunction, [
-        Web3Utils.toChecksumAddress(ambModuleAddress),
-      ]);
-      if (!hexData.encodingError) {
-        try {
-          await createGnosisSafeTxProposal({
-            chainID: foreignChainId,
-            web3: injectedProvider,
-            safeAddress: checksumSafeAddr,
-            fromDelegate: Web3Utils.toChecksumAddress(address),
-            to: checksumSafeAddr,
-            value: '0',
-            data: hexData,
-            operation: 0,
-          });
-          successToast({
-            title: 'Cross-chain Minion Summoned.',
-            description:
-              'Please check the Tx Queue on your Foreign Gnosis Safe for enabling a module.',
-          });
-          onSuccess();
-        } catch (error) {
-          errorToast({
-            title: 'Failed to Submit Gnosis Safe Tx Proposal',
-            description: error.message,
-          });
-          // onSuccess(); // TODO: REMOVE this
-          setFormState('idle');
-        }
+      try {
+        await submitGnosisTxProposal(
+          foreignChainId,
+          'enableModule',
+          [ambModuleAddress],
+          checksumSafeAddr,
+        );
+      } catch (error) {
+        errorToast({
+          title: 'Failed to Submit Gnosis Safe Tx Proposal',
+          description: error.message,
+        });
+        setFormState('idle');
       }
     }
   };
