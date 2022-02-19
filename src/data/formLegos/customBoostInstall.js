@@ -119,8 +119,6 @@ export const CUSTOM_BOOST_INSTALL_FORMS = {
         },
         {
           ...FIELD.PRECOMPUTED_MINION_NAME,
-          fields: ['_minionName', 'foreignChainId', 'foreignSafeAddress'],
-          strPattern: '0xab270234/<0>/<1>/<2>', // bytes4(keccak256(abi.encodePacked('AMBMinionSafe'))) === 0xab270234
           hidden: true,
         },
         FIELD.MINION_QUORUM,

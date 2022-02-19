@@ -315,15 +315,13 @@ export const FIELD = {
     expectType: 'any',
   },
   PRECOMPUTED_MINION_NAME: {
-    type: 'precomputedInput',
+    type: 'precomputedMinionName',
     label: 'Minion Name',
     name: 'minionName',
     helperText: 'All minions get a name',
     htmlFor: 'minionName',
     placeholder: 'Sally',
     expectType: 'any',
-    fields: ['formfield', 'formfield'],
-    strPattern: '0xbeb/<0>/<1>/<2>',
   },
   MINION_QUORUM: {
     type: 'checkGate',

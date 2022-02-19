@@ -45,7 +45,7 @@ import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
 import ForeignChainSelect from './foreignChainSelect';
 import SwitchNetwork from './switchNetwork';
-import PrecomputedInput from './precomputedInput';
+import PrecomputedMinionName from './precomputedMinionName';
 import AmbEncoder from './ambEncoder';
 import UberHausDelegateInput from './uberHausDelegateInput';
 import UberHausTributeInput from './uberHausTributeInput';
@@ -216,8 +216,8 @@ export const InputFactory = props => {
   if (type === 'switchNetwork') {
     return <SwitchNetwork {...props} />;
   }
-  if (type === 'precomputedInput') {
-    return <PrecomputedInput {...props} />;
+  if (type === 'precomputedMinionName') {
+    return <PrecomputedMinionName {...props} />;
   }
   if (type === 'ambEncoder') {
     return <AmbEncoder {...props} />;
