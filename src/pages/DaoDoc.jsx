@@ -49,6 +49,7 @@ const DaoDoc = () => {
       });
     }
   }, []);
+
   return (
     <MainViewLayout isDao header={doc?.title || 'Loading'}>
       {doc?.isDecoded ? (

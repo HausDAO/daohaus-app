@@ -13,6 +13,7 @@ import { MINION_TYPES } from '../utils/proposalUtils';
 const MinionExexcuteFactory = props => {
   const { proposal } = props;
 
+  if (!proposal.minion) return null;
   const {
     proposalType,
     minion: { minionType },
