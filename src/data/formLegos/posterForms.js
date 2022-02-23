@@ -46,17 +46,36 @@ export const POSTER_FORMS = {
       ],
     ],
     additionalOptions: [
-      FIELD.LINK,
+      FIELD.DESCRIPTION,
       { ...FIELD.TITLE, label: 'Proposal Title' },
     ],
   },
   POST_IPFS_MD: {
-    id: 'PIN_IPFS',
+    id: 'POST_IPFS_MD',
     dev: true,
     title: 'Post Markdown to IPFS',
     description: 'Post Markdown to IPFS using the Pinata API',
+    tx: TX.POSTER_IPFS_MD,
     customWidth: '1000px',
     required: ['posterData.title', 'posterData.content'],
-    fields: [],
+    fields: [
+      [
+        {
+          type: 'input',
+          label: 'Post Title',
+          name: 'posterData.title',
+          htmlFor: 'posterData.title',
+          placeholder: 'Post Title',
+          expectType: 'any',
+        },
+        FIELD.DESCRIPTION,
+        {
+          type: 'mdEditor',
+          name: 'posterData.content',
+          htmlFor: 'posterData.content',
+        },
+      ],
+    ],
+    // additionalOptions: [{ ...FIELD.TITLE, label: 'Proposal Title' }],
   },
 };
