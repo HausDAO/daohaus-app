@@ -1,7 +1,12 @@
 import { encodeMultiSend } from '@gnosis.pm/safe-contracts';
 import Web3 from 'web3';
 
-import { detailsToJSON, filterObject, HASH } from './general';
+import {
+  detailsToJSON,
+  filterObject,
+  handleJsonEscaping,
+  HASH,
+} from './general';
 import { getContractBalance, valToDecimalString } from './tokenValue';
 import {
   encodeMultisendTx,
@@ -238,19 +243,23 @@ const argBuilderCallback = Object.freeze({
       true, // _memberOnlyEnabled
     ];
   },
-  postIPFS: ({ values, formData, contextData }) => {
-    console.log('values', values);
-    console.log('formData', formData);
-    console.log('contextData', contextData);
-
-    return ipfsPrePost('dao/ipfs-key', {
+  postIPFS: async ({ values, contextData }) => {
+    const key = await ipfsPrePost('dao/ipfs-key', {
       daoAddress: contextData.daoid,
-    })
-      .then(data => {
-        return ipfsJsonPin(data, JSON.stringify(values.posterData));
-      })
-      .then(data => data)
-      .catch(error => console.error(error));
+    });
+    const pinataData = await ipfsJsonPin(key, values.posterData);
+    return [
+      JSON.stringify({
+        pinataData,
+        ipfsHash: pinataData.IpfsHash,
+        molochAddress: contextData.daoid,
+        contentType: 'IPFS-pinata',
+        location: values?.posterData?.location || 'docs',
+        title: values?.posterData?.title || 'No Title',
+        description: values?.posterData?.title || 'No description',
+      }),
+      'daohaus.manifesto',
+    ];
   },
 });
 
@@ -375,6 +384,7 @@ export const createHydratedString = data => {
 
 export const getContractAddress = data => {
   const { contractAddress } = data.tx.contract;
+
   if (contractAddress[0] === '.') {
     const path = getPath(contractAddress);
     const address = searchData(data, path);

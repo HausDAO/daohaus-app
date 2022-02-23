@@ -344,7 +344,6 @@ export const getKeyedArray = (obj, keyName = 'field') => {
 
 export const isLastItem = (list, index) => index === list?.length - 1;
 export const isFirstItem = (list, index) => index === 0;
-
 export const generateNonce = () => `0x${randomBytes(32).toString('hex')}`;
 
 export const NOUN = {
@@ -368,3 +367,15 @@ export const NOUN = {
 
 export const handleNounCase = (amt, noun) =>
   Number(amt) === 1 ? noun.singular : noun.plural;
+
+export const handleJsonEscaping = obj => {
+  return JSON.stringify(obj)
+    .replace(/\\n/g, '\\n')
+    .replace(/\\'/g, "\\'")
+    .replace(/\\"/g, '\\"')
+    .replace(/\\&/g, '\\&')
+    .replace(/\\r/g, '\\r')
+    .replace(/\\t/g, '\\t')
+    .replace(/\\b/g, '\\b')
+    .replace(/\\f/g, '\\f');
+};

@@ -179,6 +179,6 @@ export const CONTRACTS = {
   POSTER: {
     location: 'local',
     abiName: 'POSTER',
-    conractAddress: '.contextData.chainConfig.poster',
+    contractAddress: '.contextData.chainConfig.poster',
   },
 };
