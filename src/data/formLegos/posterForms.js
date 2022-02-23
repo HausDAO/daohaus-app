@@ -12,7 +12,7 @@ export const POSTER_FORMS = {
     minionType: MINION_TYPES.SAFE,
     customWidth: '1000px',
     tx: TX.POSTER_RATIFY,
-    required: ['posterData.title', 'posterData.content'],
+    required: ['posterData.title', 'posterData.content', 'selectedMinion'],
     fields: [
       [
         FIELD.MINION_SELECT,
@@ -49,5 +49,14 @@ export const POSTER_FORMS = {
       FIELD.LINK,
       { ...FIELD.TITLE, label: 'Proposal Title' },
     ],
+  },
+  POST_IPFS_MD: {
+    id: 'PIN_IPFS',
+    dev: true,
+    title: 'Post Markdown to IPFS',
+    description: 'Post Markdown to IPFS using the Pinata API',
+    customWidth: '1000px',
+    required: ['posterData.title', 'posterData.content'],
+    fields: [],
   },
 };

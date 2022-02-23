@@ -14,6 +14,7 @@ export const DAO_DOC_COLLECTION = gql`
       title
       molochAddress
       content
+      contentType
       location
     }
   }
