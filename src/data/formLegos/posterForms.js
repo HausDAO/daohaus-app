@@ -68,7 +68,7 @@ export const POSTER_FORMS = {
           placeholder: 'Post Title',
           expectType: 'any',
         },
-        FIELD.DESCRIPTION,
+        { ...FIELD.DESCRIPTION, name: 'posterData.description' },
         {
           type: 'mdEditor',
           name: 'posterData.content',

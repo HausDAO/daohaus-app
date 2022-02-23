@@ -236,6 +236,11 @@ const argBuilderCallback = Object.freeze({
       true, // _memberOnlyEnabled
     ];
   },
+  postIPFS({ values, formData, contextData }) {
+    console.log('values', values);
+    console.log('formData', formData);
+    console.log('contextData', contextData);
+  },
 });
 
 export const handleSearch = (data, arg, shouldThrow) => {
