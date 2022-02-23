@@ -16,6 +16,8 @@ import { validate } from './validation';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { TX } from '../data/txLegos/contractTX';
 import { CONTRACTS } from '../data/contracts';
+import { ipfsPrePost } from './requests';
+import { ipfsJsonPin } from './metadata';
 
 const getPath = pathString =>
   pathString
@@ -236,10 +238,19 @@ const argBuilderCallback = Object.freeze({
       true, // _memberOnlyEnabled
     ];
   },
-  postIPFS({ values, formData, contextData }) {
+  postIPFS: ({ values, formData, contextData }) => {
     console.log('values', values);
     console.log('formData', formData);
     console.log('contextData', contextData);
+
+    return ipfsPrePost('dao/ipfs-key', {
+      daoAddress: contextData.daoid,
+    })
+      .then(data => {
+        return ipfsJsonPin(data, JSON.stringify(values.posterData));
+      })
+      .then(data => data)
+      .catch(error => console.error(error));
   },
 });
 
@@ -319,7 +330,7 @@ const gatherArgs = data => {
   });
 };
 
-export const getArgs = data => {
+export const getArgs = async data => {
   const { tx } = data;
   if (data.args) {
     //  Dev adds arguments manually in the component
