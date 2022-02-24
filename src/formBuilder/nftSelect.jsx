@@ -81,6 +81,7 @@ const NftSelect = props => {
   }, [source]);
 
   useEffect(() => {
+    console.log('nfts where collections is set: ', nfts);
     if (nfts) {
       setCollections(
         nfts.reduce((acc, item) => {
