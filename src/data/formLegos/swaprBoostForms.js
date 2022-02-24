@@ -5,7 +5,6 @@ import { TX } from '../txLegos/contractTX';
 export const SWAPR_BOOST_FORMS = {
   SWAPR_STAKE: {
     id: 'SWAPR_STAKE',
-    dev: true,
     logValues: true,
     title: 'Swapr Staking Proposal',
     description: 'Stake Minion Funds into a Swapr farm.',
@@ -20,36 +19,7 @@ export const SWAPR_BOOST_FORMS = {
       'stakingTokenAddress',
     ],
     fields: [
-      [
-        FIELD.TITLE,
-        FIELD.MINION_SELECT,
-        FIELD.TUTORIAL,
-        FIELD.TUTORIAL2,
-        // {
-        //   type: 'input',
-        //   label: 'Staking Address',
-        //   name: 'stakingAddress',
-        //   htmlFor: 'stakingAddress',
-        //   placeholder: '0x',
-        //   expectType: 'address',
-        // },
-        // {
-        //   type: 'input',
-        //   label: 'Staking Token Address',
-        //   name: 'stakingTokenAddress',
-        //   htmlFor: 'stakingTokenAddress',
-        //   placeholder: '0x',
-        //   expectType: 'address',
-        // },
-        // {
-        //   type: 'input',
-        //   label: 'Amount',
-        //   name: 'amount',
-        //   htmlFor: 'amount',
-        //   placeholder: 'Uint256',
-        //   expectType: 'integer',
-        // },
-      ],
+      [FIELD.TITLE, FIELD.MINION_SELECT, FIELD.TUTORIAL, FIELD.TUTORIAL2],
     ],
     additionalOptions: [FIELD.LINK, FIELD.DESCRIPTION],
   },

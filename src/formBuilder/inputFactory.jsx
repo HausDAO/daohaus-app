@@ -223,7 +223,7 @@ export const InputFactory = props => {
   if (type === 'mdEditor') {
     return <MarkdownEditor {...props} />;
   }
-  if (type === 'posterStringify') {
+  if (type === 'posterEncoder') {
     return <PosterEncoder {...props} />;
   }
   return null;

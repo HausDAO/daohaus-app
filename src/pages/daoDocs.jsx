@@ -1,13 +1,14 @@
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import AddressAvatar from '../components/addressAvatar';
+
+import { useAppModal } from '../hooks/useModals';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import { Bold, Heading, ParaLg, ParaSm } from '../components/typography';
-import { FORM } from '../data/formLegos/forms';
+
 import { DAO_DOC_COLLECTION } from '../graphQL/postQueries';
-import { useAppModal } from '../hooks/useModals';
+import { FORM } from '../data/formLegos/forms';
 import { graphQuery } from '../utils/apollo';
 import { chainByID } from '../utils/chain';
 import { timeToNow } from '../utils/general';
@@ -53,7 +54,7 @@ const DaoDocs = () => {
   }, []);
 
   const createDoc = () => {
-    formModal(FORM.RATIFY);
+    formModal(FORM.RATIFY_MD);
   };
 
   return (

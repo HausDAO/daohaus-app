@@ -549,9 +549,14 @@ export const FIELD = {
     htmlFor: 'posterData.content',
   },
   POSTER_ENCODER: {
-    type: 'posterStringify',
+    type: 'posterEncoder',
     name: 'posterData',
   },
+  // STRINGIFY: {
+  //   type: 'stringify',
+  //   name: 'stringified',
+  //   listenTo: null, // restructure with this field targeting the field you'd like to stringify
+  // },
 };
 
 export const FORM_DISPLAY = {
