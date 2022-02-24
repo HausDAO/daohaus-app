@@ -239,20 +239,25 @@ const argBuilderCallback = Object.freeze({
     ];
   },
   postIPFS: async ({ values, contextData }) => {
-    const key = await ipfsPrePost('dao/ipfs-key', {
-      daoAddress: contextData.daoid,
-    });
-    const pinataData = await ipfsJsonPin(key, values.posterData);
-    return [
-      JSON.stringify({
-        molochAddress: contextData.daoid,
-        contentType: 'IPFS-pinata',
-        content: pinataData,
-        location: values?.posterData?.location || 'docs',
-        title: values?.posterData?.title || 'No Title',
-      }),
-      'daohaus.manifesto',
-    ];
+    try {
+      const key = await ipfsPrePost('dao/ipfs-key', {
+        daoAddress: contextData.daoid,
+      });
+      const pinataData = await ipfsJsonPin(key, values.posterData);
+      return [
+        JSON.stringify({
+          molochAddress: contextData.daoid,
+          contentType: 'IPFS-pinata',
+          // content: pinataData.IpfsHash,
+          content: JSON.stringify(pinataData),
+          location: values?.posterData?.location || 'docs',
+          title: values?.posterData?.title || 'No Title',
+        }),
+        'daohaus.manifesto',
+      ];
+    } catch (error) {
+      console.error(error);
+    }
   },
 });
 
