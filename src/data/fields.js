@@ -525,6 +525,33 @@ export const FIELD = {
     placeholder: '0',
     expectType: 'number',
   },
+  POST_TITLE: {
+    type: 'input',
+    label: 'Post Title',
+    name: 'posterData.title',
+    htmlFor: 'posterData.title',
+    placeholder: 'Post Title',
+    expectType: 'any',
+  },
+  POST_LOCATION_SELECT: {
+    type: 'select',
+    name: 'posterData.location',
+    htmlFor: 'posterData.location',
+    label: 'Post Location',
+    options: [
+      { name: 'Docs', value: 'docs' },
+      { name: 'Front Page', value: 'front-page' },
+    ],
+  },
+  MD_EDITOR: {
+    type: 'mdEditor',
+    name: 'posterData.content',
+    htmlFor: 'posterData.content',
+  },
+  POSTER_ENCODER: {
+    type: 'posterStringify',
+    name: 'posterData',
+  },
 };
 
 export const FORM_DISPLAY = {

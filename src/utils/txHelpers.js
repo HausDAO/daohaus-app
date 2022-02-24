@@ -1,12 +1,7 @@
 import { encodeMultiSend } from '@gnosis.pm/safe-contracts';
 import Web3 from 'web3';
 
-import {
-  detailsToJSON,
-  filterObject,
-  handleJsonEscaping,
-  HASH,
-} from './general';
+import { detailsToJSON, filterObject, HASH } from './general';
 import { getContractBalance, valToDecimalString } from './tokenValue';
 import {
   encodeMultisendTx,
@@ -250,13 +245,11 @@ const argBuilderCallback = Object.freeze({
     const pinataData = await ipfsJsonPin(key, values.posterData);
     return [
       JSON.stringify({
-        pinataData,
-        ipfsHash: pinataData.IpfsHash,
         molochAddress: contextData.daoid,
         contentType: 'IPFS-pinata',
+        content: pinataData,
         location: values?.posterData?.location || 'docs',
         title: values?.posterData?.title || 'No Title',
-        description: values?.posterData?.title || 'No description',
       }),
       'daohaus.manifesto',
     ];

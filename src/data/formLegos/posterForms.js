@@ -16,33 +16,10 @@ export const POSTER_FORMS = {
     fields: [
       [
         FIELD.MINION_SELECT,
-        {
-          type: 'input',
-          label: 'Post Title',
-          name: 'posterData.title',
-          htmlFor: 'posterData.title',
-          placeholder: 'Post Title',
-          expectType: 'any',
-        },
-        {
-          type: 'select',
-          name: 'posterData.location',
-          htmlFor: 'posterData.location',
-          label: 'Post Location',
-          options: [
-            { name: 'Docs', value: 'docs' },
-            { name: 'Front Page', value: 'front-page' },
-          ],
-        },
-        {
-          type: 'mdEditor',
-          name: 'posterData.content',
-          htmlFor: 'posterData.content',
-        },
-        {
-          type: 'posterStringify',
-          name: 'posterData',
-        },
+        FIELD.POST_TITLE,
+        FIELD.POST_LOCATION_SELECT,
+        FIELD.MD_EDITOR,
+        FIELD.POSTER_ENCODER,
       ],
     ],
     additionalOptions: [
@@ -60,20 +37,9 @@ export const POSTER_FORMS = {
     required: ['posterData.title', 'posterData.content'],
     fields: [
       [
-        {
-          type: 'input',
-          label: 'Post Title',
-          name: 'posterData.title',
-          htmlFor: 'posterData.title',
-          placeholder: 'Post Title',
-          expectType: 'any',
-        },
+        FIELD.POST_TITLE,
         { ...FIELD.DESCRIPTION, name: 'posterData.description' },
-        {
-          type: 'mdEditor',
-          name: 'posterData.content',
-          htmlFor: 'posterData.content',
-        },
+        FIELD.MD_EDITOR,
       ],
     ],
     // additionalOptions: [{ ...FIELD.TITLE, label: 'Proposal Title' }],
