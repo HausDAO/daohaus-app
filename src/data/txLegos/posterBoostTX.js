@@ -1,4 +1,5 @@
 import { buildMultiTxAction } from '../../utils/legos';
+import { POSTER_TAGS } from '../../utils/poster';
 import { CONTRACTS } from '../contracts';
 import { DETAILS } from '../details';
 import { ACTIONS } from '../onTxHashActions';
@@ -10,7 +11,7 @@ export const POSTER_BOOST_TX = {
         targetContract: '.contextData.chainConfig.poster',
         abi: CONTRACTS.POSTER,
         fnName: 'post',
-        args: ['.values.encoded', 'daohaus.manifesto'],
+        args: ['.values.encoded', POSTER_TAGS.MANIFESTO],
       },
     ],
     detailsToJSON: DETAILS.POSTER_RATIFY,

@@ -2,6 +2,7 @@ import deepEqual from 'deep-eql';
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import Web3 from 'web3';
+import { CONTENT_TYPES } from '../utils/poster';
 
 const PosterEncoder = props => {
   const {
@@ -25,7 +26,7 @@ const PosterEncoder = props => {
           ...posterData,
           content: Web3.utils.toHex(posterData?.content),
           molochAddress: daoid,
-          contentType: 'encoded',
+          contentType: CONTENT_TYPES.ON_CHAIN,
         }),
       );
       prev.current = posterData;
