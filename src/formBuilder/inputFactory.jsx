@@ -53,6 +53,7 @@ import Tutorial from './tutorial';
 import Tutorial2 from './tutorial2';
 import MarkdownEditor from './mdEditor';
 import PosterEncoder from './posterEncoder';
+import DocSelect from './docSelect';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -225,6 +226,9 @@ export const InputFactory = props => {
   }
   if (type === 'posterEncoder') {
     return <PosterEncoder {...props} />;
+  }
+  if (type === 'docSelect') {
+    return <DocSelect {...props} />;
   }
   return null;
 };

@@ -552,6 +552,11 @@ export const FIELD = {
     type: 'posterEncoder',
     name: 'posterData',
   },
+  DOC_SELECT: {
+    type: 'docSelect',
+    name: 'docSelect',
+    label: 'DAO Docs',
+  },
   // STRINGIFY: {
   //   type: 'stringify',
   //   name: 'stringified',
