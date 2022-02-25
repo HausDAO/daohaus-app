@@ -108,9 +108,13 @@ export const hydrate1155s = async nfts => {
     nfts.map(async nft => {
       try {
         const { token } = nft;
+        let uriToFetch;
+        if (token.URI?.includes('0x{id}') && token.identifier) {
+          uriToFetch = token.URI.replace('0x{id}', token.identifier);
+        }
         const metadata = await getNftMeta(
           token.URI.slice(0, 4) === 'http'
-            ? token.URI
+            ? uriToFetch
             : `https://daohaus.mypinata.cloud/ipfs/${token.URI.match(
                 /Qm[a-zA-Z0-9]+/,
               )}`,
