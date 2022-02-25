@@ -32,6 +32,7 @@ export const POSTER_FORMS = {
   RATIFY_DAO_DOC: {
     id: 'RATIFY_DAO_DOC',
     dev: true,
+    logValues: true,
     title: 'Ratify DAO Document',
     description: 'Create a proposal to ratify an existing DAO Doc',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
@@ -42,10 +43,14 @@ export const POSTER_FORMS = {
     fields: [
       [
         FIELD.MINION_SELECT,
-        FIELD.POST_TITLE,
-        FIELD.POST_LOCATION_SELECT,
-        // DAO doc select
-        FIELD.POSTER_ENCODER,
+        FIELD.DOC_SELECT,
+        {
+          ...FIELD.POST_LOCATION_SELECT,
+          label: 'New Location',
+          placeholder: '--Same Location--',
+          name: 'newLocation',
+        },
+        // FIELD.POSTER_ENCODER,
       ],
     ],
     additionalOptions: [

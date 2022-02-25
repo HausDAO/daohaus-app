@@ -556,6 +556,7 @@ export const FIELD = {
     type: 'docSelect',
     name: 'docSelect',
     label: 'DAO Docs',
+    listenTo: 'newLocation',
   },
   // STRINGIFY: {
   //   type: 'stringify',

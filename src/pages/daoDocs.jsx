@@ -7,31 +7,16 @@ import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import { Bold, Heading, ParaLg, ParaSm } from '../components/typography';
 
-import { DAO_DOC_COLLECTION } from '../graphQL/postQueries';
 import { FORM } from '../data/formLegos/forms';
-import { graphQuery } from '../utils/apollo';
-import { chainByID } from '../utils/chain';
 import { timeToNow } from '../utils/general';
+import { fetchDAODocs } from '../utils/poster';
 
 const getDAOdocs = async ({ setDocs, setIpfsDocs, daoid, daochain }) => {
   try {
-    const endpoint = chainByID(daochain)?.poster_graph_url;
-    const result = await graphQuery({
-      endpoint,
-      query: DAO_DOC_COLLECTION,
-      variables: {
-        molochAddress: daoid,
-      },
-    });
-    const docs = result.contents;
-    console.log('docs', docs);
+    const docs = fetchDAODocs({ daochain, daoid });
     setDocs(docs);
     setIpfsDocs(docs?.filter(doc => doc.type === 'ipfs'));
   } catch (error) {
-    // setDocs({
-    //   error: true,
-    //   message: error.message || 'Error fetching DAO docs',
-    // });
     console.error(error);
   }
 };
@@ -53,9 +38,7 @@ const DaoDocs = () => {
     });
   }, []);
 
-  const createDoc = () => {
-    formModal(FORM.RATIFY_MD);
-  };
+  const createDoc = () => formModal(FORM.RATIFY_MD);
 
   return (
     <MainViewLayout

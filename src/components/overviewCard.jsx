@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { Flex, Box, Skeleton, Button, Avatar, Spinner } from '@chakra-ui/react';
+import { useParams, useHistory, Link } from 'react-router-dom';
+import {
+  Flex,
+  Box,
+  Skeleton,
+  Button,
+  Avatar,
+  Spinner,
+  Icon,
+} from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { utils } from 'ethers';
 
+import { BiArrowToRight } from 'react-icons/bi';
+import { BsArrowRight } from 'react-icons/bs';
 import { useMetaData } from '../contexts/MetaDataContext';
 import useBoost from '../hooks/useBoost';
 import ContentBox from './ContentBox';
@@ -123,6 +133,11 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             </Button>
           )}
         </Flex>
+        <TextBox size='xl' variant='body' mt={6}>
+          <Link to='/'>
+            Manifesto <Icon as={BsArrowRight} color='secondary.500' mr={2} />
+          </Link>
+        </TextBox>
       </ContentBox>
     </Box>
   );
