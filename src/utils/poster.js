@@ -3,7 +3,8 @@ import { graphQuery } from './apollo';
 import { chainByID } from './chain';
 
 export const POSTER_TAGS = {
-  MANIFESTO: 'daohaus.manifesto',
+  MINION: 'daohaus.document.minion',
+  MEMBER: 'daohaus.document.member',
 };
 
 export const CONTENT_TYPES = {
