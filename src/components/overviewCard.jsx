@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
-import {
-  Flex,
-  Box,
-  Skeleton,
-  Button,
-  Avatar,
-  Spinner,
-  Icon,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Button, Avatar, Spinner } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { utils } from 'ethers';
 
-import { BiArrowToRight } from 'react-icons/bi';
-import { BsArrowRight } from 'react-icons/bs';
 import { useMetaData } from '../contexts/MetaDataContext';
 import useBoost from '../hooks/useBoost';
 import ContentBox from './ContentBox';
@@ -21,8 +11,8 @@ import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
 import { getActiveMembers } from '../utils/dao';
 import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
-
-const checkFrontPageDoc = () => {};
+import DocLink from './docLink';
+import { POST_LOCATIONS } from '../utils/poster';
 
 const OverviewCard = ({ daoOverview, members, daoVaults }) => {
   const { daochain, daoid } = useParams();
@@ -38,10 +28,6 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
       setActiveMembers(getActiveMembers(members));
     }
   }, [members]);
-
-  useEffect(() => {
-    checkFrontPageDoc;
-  }, []);
 
   return (
     <Box>
@@ -138,12 +124,8 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
               {`View ${getTerm(customTerms, 'snapshots')}`}
             </Button>
           )}
+          <DocLink locationName={POST_LOCATIONS.FRONT_PAGE} />
         </Flex>
-        <TextBox size='xl' variant='body' mt={6}>
-          <Link to='/'>
-            Manifesto <Icon as={BsArrowRight} color='secondary.500' mr={2} />
-          </Link>
-        </TextBox>
       </ContentBox>
     </Box>
   );

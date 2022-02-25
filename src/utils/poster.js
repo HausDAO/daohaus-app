@@ -15,6 +15,11 @@ export const CONTENT_TYPES = {
   ON_CHAIN: 'encoded',
 };
 
+export const POST_LOCATIONS = {
+  FRONT_PAGE: 'front-page',
+  DOCS: 'docs',
+};
+
 export const IPFS_TYPES = [CONTENT_TYPES.PINATA];
 
 export const fetchDAODocs = async ({ daochain, daoid }) => {
@@ -50,7 +55,6 @@ export const contentFromMinionAction = async ({ minionAction }) => {
         const hydrated = JSON.parse(data.content);
         const { IpfsHash } = hydrated;
         const ipfsContent = await getIPFSPinata({ hash: IpfsHash });
-        console.log('ipfsContent', ipfsContent);
         return ipfsContent;
       }
     } catch (error) {

@@ -1,5 +1,6 @@
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { POST_LOCATIONS } from '../utils/poster';
 
 export const INFO_TEXT = {
   SHARES_REQUEST:
@@ -539,8 +540,8 @@ export const FIELD = {
     htmlFor: 'posterData.location',
     label: 'Post Location',
     options: [
-      { name: 'Docs', value: 'docs' },
-      { name: 'Front Page', value: 'front-page' },
+      { name: 'Docs', value: POST_LOCATIONS.DOCS },
+      { name: 'Front Page', value: POST_LOCATIONS.FRONT_PAGE },
     ],
   },
   MD_EDITOR: {
