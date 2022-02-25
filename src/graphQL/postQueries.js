@@ -1,5 +1,15 @@
 import { gql } from 'apollo-boost';
 
+export const TX_HASH_POSTER = gql`
+  query contents($transactionHash: String!) {
+    contents(where: { transactionHash: $transactionHash }) {
+      id
+      createdAt
+      transactionHash
+    }
+  }
+`;
+
 export const DAO_DOC_COLLECTION = gql`
   query contents($molochAddress: String!) {
     contents(

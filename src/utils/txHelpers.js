@@ -18,6 +18,7 @@ import { TX } from '../data/txLegos/contractTX';
 import { CONTRACTS } from '../data/contracts';
 import { ipfsPrePost } from './requests';
 import { ipfsJsonPin } from './metadata';
+import { CONTENT_TYPES, POSTER_TAGS } from './poster';
 
 const getPath = pathString =>
   pathString
@@ -247,13 +248,12 @@ const argBuilderCallback = Object.freeze({
       return [
         JSON.stringify({
           molochAddress: contextData.daoid,
-          contentType: 'IPFS-pinata',
-          // content: pinataData.IpfsHash,
+          contentType: CONTENT_TYPES.PINATA,
           content: JSON.stringify(pinataData),
           location: values?.posterData?.location || 'docs',
           title: values?.posterData?.title || 'No Title',
         }),
-        'daohaus.manifesto',
+        POSTER_TAGS.MEMBER,
       ];
     } catch (error) {
       console.error(error);

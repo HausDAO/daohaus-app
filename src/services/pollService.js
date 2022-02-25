@@ -13,6 +13,7 @@ import {
   pollBoostTXHash,
   pollMinionExecuteAction,
   pollWrapNZap,
+  pollPosterTXHash,
 } from '../polls/polls';
 import {
   checkDelRewardsTest,
@@ -27,6 +28,7 @@ import {
   withdrawTokenTest,
   testTXHash,
   testWrapNZap,
+  testPosterTXHash,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -81,6 +83,36 @@ export const createPoll = ({
       startPoll({
         pollFetch: pollTXHash,
         testFn: testTXHash,
+        shouldEqual: txHash,
+        args,
+        actions,
+        txHash,
+      });
+      cachePoll?.({
+        txHash,
+        action,
+        timeSent: now,
+        status: 'unresolved',
+        resolvedMsg: tx.successMsg,
+        unresolvedMsg: 'Processing',
+        successMsg: tx.successMsg,
+        errorMsg: tx.errMsg,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: args,
+      });
+    };
+    // NEW TX specialPoll
+  } else if (action === 'subgraph-poster') {
+    return ({ chainID, actions, now, tx }) => txHash => {
+      if (!tx) return;
+      const args = { txHash, chainID, now, tx };
+      startPoll({
+        pollFetch: pollPosterTXHash,
+        testFn: testPosterTXHash,
         shouldEqual: txHash,
         args,
         actions,
