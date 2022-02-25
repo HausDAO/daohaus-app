@@ -14,7 +14,7 @@ const getDAOdocs = async ({ setDocs, shouldUpdate, daoid, daochain }) => {
   try {
     const docs = await fetchDAODocs({ daochain, daoid });
     if (docs?.length && shouldUpdate) {
-      setDocs(docs);
+      setDocs(docs.filter(doc => !doc.ratified));
     }
   } catch (error) {
     console.error(error);
@@ -23,7 +23,7 @@ const getDAOdocs = async ({ setDocs, shouldUpdate, daoid, daochain }) => {
 
 const DocSelect = props => {
   const { localForm, name, listenTo } = props;
-  const { watch, getValues, setValue } = localForm || {};
+  const { watch, setValue } = localForm || {};
 
   const { daoid, daochain } = useParams(null);
   const [docs, setDocs] = useState(null);

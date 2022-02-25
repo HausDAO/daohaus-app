@@ -30,7 +30,6 @@ export const pollTXHash = async ({ chainID, txHash }) => {
 };
 
 export const pollPosterTXHash = async ({ chainID, txHash }) => {
-  console.log('txHash', txHash);
   return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'poster_graph_url'),
     query: TX_HASH_POSTER,
@@ -40,16 +39,6 @@ export const pollPosterTXHash = async ({ chainID, txHash }) => {
   });
 };
 
-const test = async () => {
-  const result = await pollPosterTXHash({
-    chainID: '0x4',
-    txHash:
-      '0xb78a1c2c299bdd9e9bff9886edb91770505051b180397be4b9eed1ae3859faf4',
-  });
-  console.log('result', result);
-};
-
-test();
 export const pollBoostTXHash = async ({ chainID, txHash }) => {
   return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'boosts_graph_url'),

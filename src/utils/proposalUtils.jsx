@@ -62,6 +62,7 @@ export const PROPOSAL_TYPES = {
   DISPERSE: 'Disperse Proposal',
   SWAPR_STAKING: 'Swapr Staking Proposal',
   POSTER_RATIFY: 'Ratify Content',
+  POSTER_RATIFY_DOC: 'Ratify DAO DOC',
 };
 
 export const MINION_TYPES = {

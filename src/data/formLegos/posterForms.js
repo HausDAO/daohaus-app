@@ -37,9 +37,8 @@ export const POSTER_FORMS = {
     description: 'Create a proposal to ratify an existing DAO Doc',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
     minionType: MINION_TYPES.SAFE,
-    customWidth: '1000px',
-    tx: TX.POSTER_RATIFY,
-    required: ['posterData.title', 'posterData.content', 'selectedMinion'],
+    tx: TX.POSTER_RATIFY_DOC,
+    required: ['selectedMinion', 'docSelect'],
     fields: [
       [
         FIELD.MINION_SELECT,

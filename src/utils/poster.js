@@ -1,6 +1,9 @@
+import { utils } from 'web3';
 import { DAO_DOC_COLLECTION } from '../graphQL/postQueries';
 import { graphQuery } from './apollo';
 import { chainByID } from './chain';
+import { parseIfJSON } from './general';
+import { getIPFSPinata } from './metadata';
 
 export const POSTER_TAGS = {
   MINION: 'daohaus.document.minion',
@@ -27,5 +30,32 @@ export const fetchDAODocs = async ({ daochain, daoid }) => {
     return result.contents;
   } catch (error) {
     console.error(error);
+  }
+};
+
+export const contentFromMinionAction = async ({ minionAction }) => {
+  const rawJSON = minionAction?.decoded?.actions?.[0]?.data?.params?.[0]?.value;
+  if (rawJSON) {
+    const data = parseIfJSON(rawJSON);
+
+    try {
+      if (data.contentType === CONTENT_TYPES.ON_CHAIN) {
+        const withDecoded = {
+          ...data,
+          content: utils.hexToUtf8(data.content),
+        };
+        if (withDecoded) return withDecoded;
+      }
+      if (data.contentType === CONTENT_TYPES.PINATA) {
+        const hydrated = JSON.parse(data.content);
+        const { IpfsHash } = hydrated;
+        const ipfsContent = await getIPFSPinata({ hash: IpfsHash });
+        console.log('ipfsContent', ipfsContent);
+        return ipfsContent;
+      }
+    } catch (error) {
+      console.log('rawJSON', rawJSON);
+      return { error: true, message: 'Could decode content' };
+    }
   }
 };

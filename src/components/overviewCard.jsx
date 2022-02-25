@@ -22,6 +22,8 @@ import VaultTotal from './vaultTotal';
 import { getActiveMembers } from '../utils/dao';
 import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
 
+const checkFrontPageDoc = () => {};
+
 const OverviewCard = ({ daoOverview, members, daoVaults }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
@@ -36,6 +38,10 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
       setActiveMembers(getActiveMembers(members));
     }
   }, [members]);
+
+  useEffect(() => {
+    checkFrontPageDoc;
+  }, []);
 
   return (
     <Box>
