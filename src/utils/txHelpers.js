@@ -250,6 +250,7 @@ const argBuilderCallback = Object.freeze({
           molochAddress: contextData.daoid,
           contentType: CONTENT_TYPES.PINATA,
           content: JSON.stringify(pinataData),
+          description: values?.posterData?.description,
           location: values?.posterData?.location || 'docs',
           title: values?.posterData?.title || 'No Title',
         }),

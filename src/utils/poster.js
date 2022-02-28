@@ -53,7 +53,6 @@ export const getDocContent = async ({ docData }) => {
       if (withDecoded) return withDecoded;
     }
     if (docData.contentType === CONTENT_TYPES.PINATA) {
-      console.log('docData', docData);
       const hydrated = JSON.parse(docData.content);
       const { IpfsHash } = hydrated;
       const ipfsContent = await getIPFSPinata({ hash: IpfsHash });

@@ -20,6 +20,7 @@ const PosterEncoder = props => {
       //  Once we decide on the format for the boost
       //  I can recode this to use argFromCallback
       //  so that we only do this on submit
+
       setValue(
         'encoded',
         JSON.stringify({
