@@ -22,6 +22,10 @@ export const POST_LOCATIONS = {
 
 export const IPFS_TYPES = [CONTENT_TYPES.PINATA];
 
+export const isIPFS = doc => IPFS_TYPES.includes(doc?.contentType);
+export const isEncoded = doc => doc?.contentType === CONTENT_TYPES.ON_CHAIN;
+export const isRatified = doc => doc?.ratified;
+
 export const fetchDAODocs = async ({ daochain, daoid }) => {
   try {
     const endpoint = chainByID(daochain)?.poster_graph_url;
@@ -38,28 +42,39 @@ export const fetchDAODocs = async ({ daochain, daoid }) => {
   }
 };
 
+export const getDocContent = async ({ docData }) => {
+  try {
+    if (docData.contentType === CONTENT_TYPES.ON_CHAIN) {
+      const withDecoded = {
+        ...docData,
+        content: utils.hexToUtf8(docData.content),
+      };
+      if (withDecoded) return withDecoded;
+    }
+    if (docData.contentType === CONTENT_TYPES.PINATA) {
+      console.log('docData', docData);
+      const hydrated = JSON.parse(docData.content);
+      const { IpfsHash } = hydrated;
+      const ipfsContent = await getIPFSPinata({ hash: IpfsHash });
+
+      return { ...docData, content: ipfsContent?.content, isDecoded: true };
+    }
+  } catch (error) {
+    console.error(error);
+    return { error: true, message: 'Could decode content' };
+  }
+};
+
 export const contentFromMinionAction = async ({ minionAction }) => {
   const rawJSON = minionAction?.decoded?.actions?.[0]?.data?.params?.[0]?.value;
   if (rawJSON) {
-    const data = parseIfJSON(rawJSON);
+    const docData = parseIfJSON(rawJSON);
 
-    try {
-      if (data.contentType === CONTENT_TYPES.ON_CHAIN) {
-        const withDecoded = {
-          ...data,
-          content: utils.hexToUtf8(data.content),
-        };
-        if (withDecoded) return withDecoded;
-      }
-      if (data.contentType === CONTENT_TYPES.PINATA) {
-        const hydrated = JSON.parse(data.content);
-        const { IpfsHash } = hydrated;
-        const ipfsContent = await getIPFSPinata({ hash: IpfsHash });
-        return ipfsContent;
-      }
-    } catch (error) {
-      console.log('rawJSON', rawJSON);
-      return { error: true, message: 'Could decode content' };
+    if (docData) {
+      const docContent = await getDocContent({ docData });
+      return docContent;
     }
+    console.error(docData);
+    return { error: true, message: 'Post data may be corrupt' };
   }
 };

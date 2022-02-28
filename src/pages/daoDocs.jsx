@@ -9,13 +9,28 @@ import { Bold, Heading, ParaLg, ParaSm } from '../components/typography';
 
 import { FORM } from '../data/formLegos/forms';
 import { timeToNow } from '../utils/general';
-import { fetchDAODocs } from '../utils/poster';
+import { fetchDAODocs, isEncoded, isIPFS, isRatified } from '../utils/poster';
 
-const getDAOdocs = async ({ setDocs, setIpfsDocs, daoid, daochain }) => {
+const getDocsByType = async ({
+  setRatifiedDocs,
+  setIpfsDocs,
+  setChainDocs,
+  daoid,
+  daochain,
+}) => {
   try {
-    const docs = fetchDAODocs({ daochain, daoid });
-    setDocs(docs);
-    setIpfsDocs(docs?.filter(doc => doc.type === 'ipfs'));
+    const docs = await fetchDAODocs({ daochain, daoid });
+    const memberPostedIPFSdocs = docs?.filter(
+      doc => isIPFS(doc) && !isRatified(doc),
+    );
+    const memberPostedChainDocs = docs?.filter(
+      doc => isEncoded(doc?.contentType) && !isRatified(doc),
+    );
+    const ratifiedDocs = docs?.filter(doc => isRatified(doc));
+
+    setChainDocs(memberPostedChainDocs);
+    setIpfsDocs(memberPostedIPFSdocs);
+    setRatifiedDocs(ratifiedDocs);
   } catch (error) {
     console.error(error);
   }
@@ -27,14 +42,15 @@ const DaoDocs = () => {
 
   const [ratifiedDocs, setRatifiedDocs] = useState(null);
   const [ipfsDocs, setIpfsDocs] = useState(null);
-  const [docs, setDocs] = useState(null);
+  const [chainDocs, setChainDocs] = useState(null);
 
   useEffect(() => {
-    getDAOdocs({
+    getDocsByType({
       daoid,
       daochain,
-      setDocs,
+      setRatifiedDocs,
       setIpfsDocs,
+      setChainDocs,
     });
   }, []);
 
@@ -48,19 +64,19 @@ const DaoDocs = () => {
     >
       <Heading fontSize='1.4rem'>Ratified Documents:</Heading>
       <Flex wrap='wrap' mt={3}>
-        {/* {docs?.map(doc => (
+        {ratifiedDocs?.map(doc => (
           <CrappyContentBox key={doc.id} doc={doc} />
-        ))} */}
+        ))}
       </Flex>
       <Heading fontSize='1.4rem'>IPFS Documents:</Heading>
       <Flex wrap='wrap' mt={3}>
-        {/* {docs?.map(doc => (
+        {ipfsDocs?.map(doc => (
           <CrappyContentBox key={doc.id} doc={doc} />
-        ))} */}
+        ))}
       </Flex>
       <Heading fontSize='1.4rem'>DAO Documents:</Heading>
       <Flex wrap='wrap' mt={3}>
-        {docs?.map(doc => (
+        {chainDocs?.map(doc => (
           <CrappyContentBox key={doc.id} doc={doc} />
         ))}
       </Flex>

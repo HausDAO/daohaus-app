@@ -8,6 +8,7 @@ import { ParaMd } from '../components/typography';
 import { DAO_DOC } from '../graphQL/postQueries';
 import { graphQuery } from '../utils/apollo';
 import { chainByID } from '../utils/chain';
+import { getDocContent } from '../utils/poster';
 
 const decodeContent = doc => {
   const decoded = Web3.utils.hexToUtf8(doc.content);
@@ -24,9 +25,10 @@ const getDAOdoc = async ({ daochain, setDoc, docId }) => {
         id: docId,
       },
     });
-    const doc = res.contents?.[0];
-    if (doc?.content) {
-      const withDecoded = decodeContent(doc);
+    const docData = res.contents?.[0];
+    console.log('docData', docData);
+    if (docData?.content && docData?.contentType) {
+      const withDecoded = await getDocContent({ docData });
       setDoc(withDecoded);
     }
   } catch (error) {

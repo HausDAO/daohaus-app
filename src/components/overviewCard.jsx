@@ -124,8 +124,8 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
               {`View ${getTerm(customTerms, 'snapshots')}`}
             </Button>
           )}
-          <DocLink locationName={POST_LOCATIONS.FRONT_PAGE} />
         </Flex>
+        <DocLink locationName={POST_LOCATIONS.FRONT_PAGE} />
       </ContentBox>
     </Box>
   );

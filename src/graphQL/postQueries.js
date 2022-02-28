@@ -41,8 +41,12 @@ export const DAO_DOC = gql`
       transactionHash
       title
       molochAddress
+      memberAddress
       content
+      contentType
       location
+      ratified
+      description
     }
   }
 `;
