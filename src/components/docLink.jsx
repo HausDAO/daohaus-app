@@ -1,9 +1,10 @@
-import { Icon } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
+import { Icon } from '@chakra-ui/react';
 import { BsArrowRight } from 'react-icons/bs';
 import { Link, useParams } from 'react-router-dom';
-import { fetchDAODocs } from '../utils/poster';
+
 import TextBox from './TextBox';
+import { fetchDAODocs } from '../utils/poster';
 
 const recentDocByLocationName = async ({
   locationName,

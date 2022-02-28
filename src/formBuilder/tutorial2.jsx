@@ -1,7 +1,8 @@
 import React from 'react';
+
+import GenericInput from './genericInput';
 import { spreadOptions } from '../utils/formBuilder';
 import { getContractBalance } from '../utils/tokenValue';
-import GenericInput from './genericInput';
 
 const Tutorial2 = props => {
   const { registerOptions, decimals, listenTo, localForm } = props;

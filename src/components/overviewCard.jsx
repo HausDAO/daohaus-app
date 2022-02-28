@@ -9,9 +9,10 @@ import useBoost from '../hooks/useBoost';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
+import DocLink from './docLink';
+
 import { getActiveMembers } from '../utils/dao';
 import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
-import DocLink from './docLink';
 import { POST_LOCATIONS } from '../utils/poster';
 
 const OverviewCard = ({ daoOverview, members, daoVaults }) => {

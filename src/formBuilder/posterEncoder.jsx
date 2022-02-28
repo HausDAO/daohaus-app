@@ -1,7 +1,8 @@
-import deepEqual from 'deep-eql';
 import { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import Web3 from 'web3';
+import deepEqual from 'deep-eql';
+import { useParams } from 'react-router-dom';
+
 import { CONTENT_TYPES } from '../utils/poster';
 
 const PosterEncoder = props => {

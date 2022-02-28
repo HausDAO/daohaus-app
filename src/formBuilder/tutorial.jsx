@@ -1,16 +1,18 @@
-import { Flex } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Flex } from '@chakra-ui/react';
+
 import { useOverlay } from '../contexts/OverlayContext';
-import { LOCAL_ABI } from '../utils/abi';
-import { createContract } from '../utils/contract';
+import GenericFormDisplay from './genericFormDisplay';
+import GenericInput from './genericInput';
+
 import {
   fetchSpecificTokenData,
   getReadableBalance,
 } from '../utils/tokenValue';
+import { createContract } from '../utils/contract';
 import { validate } from '../utils/validation';
-import GenericFormDisplay from './genericFormDisplay';
-import GenericInput from './genericInput';
+import { LOCAL_ABI } from '../utils/abi';
 
 const getStakingData = async ({
   stakingAddress,

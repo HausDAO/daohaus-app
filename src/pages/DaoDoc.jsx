@@ -22,10 +22,8 @@ const getDAOdoc = async ({ daochain, setDoc, docId }) => {
       },
     });
     const docData = res.contents?.[0];
-
     if (docData?.content && docData?.contentType) {
       const withDecoded = await getDocContent({ docData });
-
       setDoc(withDecoded);
     }
   } catch (error) {
@@ -48,12 +46,6 @@ const DaoDoc = () => {
       });
     }
   }, []);
-
-  // if (doc === 'loading') {
-  //   return (
-
-  //   );
-  // }
 
   return (
     <MainViewLayout isDao header={doc?.title || 'Loading'}>
