@@ -16,7 +16,9 @@ const recentDocByLocationName = async ({
     const docs = await fetchDAODocs({ daochain, daoid });
     const postedDoc = docs
       ?.filter(doc => doc.location === locationName)
-      ?.sort((docA, docB) => (docA?.createdAt < docB.createdAt ? -1 : 1))?.[0];
+      ?.sort((docA, docB) =>
+        Number(docA?.createdAt) > Number(docB.createdAt) ? -1 : 1,
+      )?.[0];
     if (postedDoc && shouldUpdate) {
       setDoc(postedDoc);
     }
