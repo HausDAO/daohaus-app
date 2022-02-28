@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Flex, Box, Skeleton, Button, Avatar, Spinner } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { utils } from 'ethers';

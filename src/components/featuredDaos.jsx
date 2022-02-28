@@ -17,8 +17,7 @@ import LexAvatar from '../assets/img/lex__avatar.png';
 import MGDAvatar from '../assets/img/mgd__avatar.jpg';
 import VenturesAvatar from '../assets/img/ventures__avatar.jpg';
 import RaidAvatar from '../assets/img/raidguild__avatar.png';
-import FoundationsAvatar from '../assets/img/foundations__avatar.jpeg';
-// import MachiXAvatar from '../assets/img/machix__avatar.jpg';
+import UberHausAvatar from '../assets/img/haus__avatar.png';
 
 const featuredDaoList = [
   {
@@ -54,14 +53,6 @@ const featuredDaoList = [
     badges: ['Grants', 'xDai'],
   },
   {
-    address: '0x1b975a9daf25e7b01e0a6c72d657ff74925327a8',
-    network: '0x64',
-    image: FoundationsAvatar,
-    name: 'Foundations DAO',
-    description: 'Feedback farming worldwide',
-    badges: ['Clubs', 'xDai'],
-  },
-  {
     address: '0x4570b4faf71e23942b8b9f934b47ccedf7540162',
     network: '0x1',
     image: VenturesAvatar,
@@ -69,14 +60,14 @@ const featuredDaoList = [
     description: 'Investing in Web3 projects and teams',
     badges: ['Investments', 'Mainnet'],
   },
-  // {
-  //   address: '0xab94cb340b92c15865ed385acd0e1eabedb3c5ae',
-  //   network: '0x64',
-  //   image: MachiXAvatar,
-  //   name: 'Machi X DAO',
-  //   description: 'The airport to Web3',
-  //   badges: ['Guilds', 'xDai'],
-  // },
+  {
+    address: '0x4bec8e49aa44bb520bd5e29d6358e22464b5eb68',
+    network: '0x64',
+    image: UberHausAvatar,
+    name: 'UberHaus',
+    description: 'The overseer of the DAOhaus Ecosystem',
+    badges: ['DAO of DAOs', 'xDai'],
+  },
 ];
 
 const FeaturedDaos = () => (

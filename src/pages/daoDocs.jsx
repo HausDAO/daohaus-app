@@ -5,7 +5,13 @@ import { useParams, Link } from 'react-router-dom';
 import { useAppModal } from '../hooks/useModals';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
-import { Bold, Heading, ParaLg, ParaSm } from '../components/typography';
+import {
+  Bold,
+  Heading,
+  ParaLg,
+  ParaMd,
+  ParaSm,
+} from '../components/typography';
 
 import { FORM } from '../data/formLegos/forms';
 import { timeToNow } from '../utils/general';
@@ -89,11 +95,12 @@ const CrappyContentBox = ({ doc }) => {
 
   return (
     <ContentBox key={doc.id} mb={4} mr={4}>
-      <Flex width='300px' alignItems='top'>
+      <Flex width='400px' alignItems='top' justifyContent='space-between'>
         <Flex width='250px' flexDir='column'>
           <ParaLg fontSize='1.3rem' mb={2}>
             <Bold>{doc.title === 'n/a' ? 'Title Missing' : doc.title} </Bold>
           </ParaLg>
+          <ParaMd mb={3}>{doc?.description || 'No description'}</ParaMd>
           <ParaSm mb={2}>
             {doc.createdAt ? timeToNow(doc.createdAt) : 'n/a'}
           </ParaSm>

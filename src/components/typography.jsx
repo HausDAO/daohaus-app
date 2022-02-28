@@ -49,7 +49,7 @@ export const ParaSm = props => {
 export const ParaLg = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='1.1rem' lineHeight='1.1rem' {...props}>
+    <Text fontSize='1.1rem' lineHeight='1.25rem' {...props}>
       {text || children}
     </Text>
   );
