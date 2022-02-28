@@ -48,6 +48,7 @@ export const getDocContent = async ({ docData }) => {
       const withDecoded = {
         ...docData,
         content: utils.hexToUtf8(docData.content),
+        isDecoded: true,
       };
       if (withDecoded) return withDecoded;
     }
