@@ -542,6 +542,7 @@ export const FIELD = {
     options: [
       { name: 'Docs', value: POST_LOCATIONS.DOCS },
       { name: 'Front Page', value: POST_LOCATIONS.FRONT_PAGE },
+      { name: 'Vaults Page', value: POST_LOCATIONS.VAULT_PAGE },
     ],
   },
   MD_EDITOR: {

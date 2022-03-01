@@ -79,6 +79,7 @@ export const POSTER_FORMS = {
       [
         FIELD.POST_TITLE,
         POSTER_DESCRIPTION,
+        FIELD.POST_LOCATION_SELECT,
         FIELD.MD_EDITOR,
         FIELD.POSTER_ENCODER,
       ],

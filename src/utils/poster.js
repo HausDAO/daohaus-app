@@ -18,6 +18,7 @@ export const CONTENT_TYPES = {
 export const POST_LOCATIONS = {
   FRONT_PAGE: 'front-page',
   DOCS: 'docs',
+  VAULT_PAGE: 'vaults-page',
 };
 
 export const IPFS_TYPES = [CONTENT_TYPES.PINATA];
