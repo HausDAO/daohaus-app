@@ -17,6 +17,8 @@ import VaultCard from '../components/vaultCard';
 import { vaultFilterOptions } from '../utils/vaults';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';
+import DocLink from '../components/docLink';
+import { POST_LOCATIONS } from '../utils/poster';
 
 const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
   const { canInteract } = useCanInteract({});
@@ -109,6 +111,7 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
           )}
         </HStack>
       </Flex>
+      <DocLink locationName={POST_LOCATIONS.VAULT_PAGE} />
 
       <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>
         {listVaults &&
