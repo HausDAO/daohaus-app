@@ -103,18 +103,21 @@ export const hydrate721s = async nfts => {
   );
 };
 
+const hasUriAndIdentifer = token =>
+  token?.URI?.includes('0x{id}') && token?.identifier;
+
 export const hydrate1155s = async nfts => {
   return Promise.all(
     nfts.map(async nft => {
       try {
         const { token } = nft;
-        let uriToFetch;
-        if (token.URI?.includes('0x{id}') && token.identifier) {
-          uriToFetch = token.URI.replace('0x{id}', token.identifier);
-        }
+        const urlToFetch = hasUriAndIdentifer(token)
+          ? token.URI.replace('0x{id}', token.identifier)
+          : token.URI;
+
         const metadata = await getNftMeta(
           token.URI.slice(0, 4) === 'http'
-            ? uriToFetch
+            ? urlToFetch
             : `https://daohaus.mypinata.cloud/ipfs/${token.URI.match(
                 /Qm[a-zA-Z0-9]+/,
               )}`,
