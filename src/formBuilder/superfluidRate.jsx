@@ -59,14 +59,16 @@ const SuperfluidRate = props => {
     <>
       <InputSelect
         {...props}
-        selectName='paymentToken'
+        selectName='availableRates'
         options={rates}
         selectChange={handleBaseRateChange}
+        disabled={!paymentToken}
       />
       <GenericFormDisplay
         override={perSecond}
         localForm={localForm}
         label='Tokens Streamed Per Second'
+        name='streamedPerSecond'
         variant='value'
       />
     </>
