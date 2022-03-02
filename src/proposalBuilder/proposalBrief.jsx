@@ -22,6 +22,8 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
   const isCrossChain = proposal.minion.crossChainMinion;
   const { customTransferUI } = CUSTOM_CARD_DATA[proposal.proposalType] || {};
 
+  const { daochain, daoid } = useParams();
+
   return (
     <Flex
       width={['100%', '100%', '60%']}
@@ -68,6 +70,8 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
         )}
         <Flex display={['flex', 'flex', 'none']} mb='3'>
           <Button
+            as={Link}
+            to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
             variant='outline'
             size='sm'
             width='10rem'
