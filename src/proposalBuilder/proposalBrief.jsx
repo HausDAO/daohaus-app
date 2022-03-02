@@ -13,16 +13,14 @@ import {
 import { CUSTOM_CARD_DATA } from '../data/proposalData';
 
 const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
-  const { daochain } = useParams();
+  const { daochain, daoid } = useParams();
   const isOffering = Number(proposal.tributeOffered) > 0;
   const isRequesting =
     Number(proposal.lootRequested) > 0 ||
     Number(proposal.sharesRequested) > 0 ||
     Number(proposal.paymentRequested) > 0;
-  const isCrossChain = proposal.minion.crossChainMinion;
+  const isCrossChain = proposal.minion?.crossChainMinion;
   const { customTransferUI } = CUSTOM_CARD_DATA[proposal.proposalType] || {};
-
-  const { daochain, daoid } = useParams();
 
   return (
     <Flex

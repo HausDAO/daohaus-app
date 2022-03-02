@@ -251,15 +251,25 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
     </Box>
   );
 
-  const displayDecodedData = data => {
+  const displayDecodedData = (data, subaction = null) => {
     if (data.decodedData) {
       return (
         <Box key={uuid()}>
+          {subaction && <TextBox mt={2}>{`Subaction #${subaction}`}</TextBox>}
+          {data.decodedData.targetContract && (
+            <HStack spacing={3}>
+              <TextBox size='xs'>Target</TextBox>
+              <TextBox size='sm' variant='value'>
+                {data.decodedData.targetContract}
+              </TextBox>
+            </HStack>
+          )}
           <HStack spacing={3}>
             <TextBox size='xs'>Method</TextBox>
-            <TextBox variant='value'>{data.decodedData?.name}</TextBox>
+            <TextBox size='sm' variant='value'>
+              {data.decodedData?.name}
+            </TextBox>
           </HStack>
-          <Divider my={2} />
           <Box fontFamily='heading' mt={4}>
             {data.decodedData?.params && 'Params'}
             {data.decodedData?.actions && 'Actions'}
@@ -283,21 +293,20 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                   <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
                 )}
                 {action?.actions ? (
-                  <>
-                    <TextBox mt={2} size='xs' variant='mono'>
-                      {`Subactions: ${action?.actions?.length}`}
-                    </TextBox>
-                    <Box ml={3}>
-                      {action?.actions.map(a =>
-                        displayDecodedData({
+                  <Box ml={3}>
+                    {action?.actions.map((a, idx) =>
+                      displayDecodedData(
+                        {
                           decodedData: {
                             name: a.data.name,
                             params: a.data.params,
+                            targetContract: a.to,
                           },
-                        }),
-                      )}
-                    </Box>
-                  </>
+                        },
+                        idx + 1,
+                      ),
+                    )}
+                  </Box>
                 ) : action?.params ? (
                   <Box>{action.params.map(displayActionData)}</Box>
                 ) : (

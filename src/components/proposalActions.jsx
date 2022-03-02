@@ -21,6 +21,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
+import CrossChainMinionExecute from './crossChainMinionExecute';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import MinionExecute from './minionExecute';
@@ -523,6 +524,9 @@ const ProposalVote = ({
                 )
               )}
             </Stack>
+          )}
+          {proposal?.executed && proposal?.minionExecuteActionTx && (
+            <CrossChainMinionExecute chainID={daochain} proposal={proposal} />
           )}
           {proposal?.escrow &&
             (proposal?.status === 'Failed' ||

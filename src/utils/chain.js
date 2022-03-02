@@ -252,7 +252,7 @@ export const supportedChains = {
         '0x4': '3000000',
       },
       monitoring_app: {
-        '0x1': 'https://alm-xdai.herokuapp.com/1',
+        '0x1': 'https://alm-xdai.herokuapp.com/100',
         '0x4': 'https://alm-rinkeby.herokuapp.com/100',
       },
     },

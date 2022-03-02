@@ -62,6 +62,7 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
         return vals;
       },
       {
+        crossChainMinion: currentMinion.crossChainMinion,
         minionAddress: currentMinion.minionAddress,
         safeAddress: currentMinion.crossChainMinion
           ? currentMinion.foreignSafeAddress
@@ -84,7 +85,7 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
       action.formLego ||
       getMinionActionFormLego(
         nftType,
-        vault.minionType === vault.crossChainMinion
+        vault.crossChainMinion
           ? MINION_TYPES.CROSSCHAIN_SAFE
           : vault.minionType,
       );
