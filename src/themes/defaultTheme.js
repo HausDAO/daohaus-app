@@ -13,7 +13,7 @@ export const defaultTheme = {
   bgOverlayOpacity: 0.75,
   modeAlpha500: '#FFFFFF',
   headingFont: 'Mulish',
-  bodyFont: 'Rubik',
+  bodyFont: 'Mulish',
   monoFont: 'Space Mono',
   avatarImg: BrandImg,
   bgImg: BgImg,

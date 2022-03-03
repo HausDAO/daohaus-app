@@ -102,6 +102,9 @@ export const detailsToJSON = values => {
   if (values.minionType) {
     details.minionType = values.minionType;
   }
+  if (values.proposalType) {
+    details.proposalType = values.proposalType;
+  }
   if (values.fundsRequested) {
     details.fundsRequested = values.fundsRequested;
     details.token = values.token;
@@ -180,6 +183,14 @@ export const numberWithCommas = num => {
   if (localNoZeroDec.includes(`e-`)) return localNoZeroDec;
 
   return noZeroDec ? utils.commify(noZeroDec) : num;
+};
+
+export const fromWeiToFixedDecimal = (value, decimals = 2) => {
+  const commaIndex = utils.formatEther(value).indexOf('.');
+  if (commaIndex === -1) {
+    return Number(utils.formatEther(value));
+  }
+  return Number(utils.formatEther(value).slice(0, commaIndex + decimals + 1));
 };
 
 export const truncateAddr = addr => {
@@ -341,3 +352,25 @@ export const isLastItem = (list, index) => index === list?.length - 1;
 export const isFirstItem = (list, index) => index === 0;
 
 export const generateNonce = () => `0x${randomBytes(32).toString('hex')}`;
+
+export const NOUN = {
+  SHARES: {
+    singular: 'share',
+    plural: 'shares',
+  },
+  LOOT: {
+    singular: 'loot',
+    plural: 'loot',
+  },
+  PROPOSALS: {
+    singular: 'proposal',
+    plural: 'proposals',
+  },
+  ADDRESSES: {
+    singular: 'address',
+    plural: 'addresses',
+  },
+};
+
+export const handleNounCase = (amt, noun) =>
+  Number(amt) === 1 ? noun.singular : noun.plural;

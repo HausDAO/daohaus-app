@@ -14,10 +14,18 @@ const SwitchNetwork = ({ localForm, defaultTargetChainId, warningMessage }) => {
   const targetNetwork = chainByID(targetChainId);
   const networkLabel = targetNetwork?.name;
   const supportedEIP3085 = EIP3085.SUPPORTED[targetChainId];
+  console.log('supportedEIP3085', supportedEIP3085);
 
-  useEffect(() => {
-    console.log('injectedChain', currentChainId);
-  }, [injectedChain]);
+  const getNetworkWarningMessage = () => {
+    if (currentChainId !== targetChainId) {
+      const msg = `You need to connect to ${networkLabel} to submit this form.`;
+      return supportedEIP3085
+        ? msg
+        : `${msg} Please update your network to proceed.`;
+    }
+    return `Connected to ${networkLabel}.`;
+  };
+
   return targetChainId ? (
     <Flex align='center' direction='column' mb={4}>
       <Box
@@ -29,15 +37,7 @@ const SwitchNetwork = ({ localForm, defaultTargetChainId, warningMessage }) => {
         color='#ED873A'
         textAlign='center'
       >
-        <Box>
-          {currentChainId !== targetChainId
-            ? `You need to connect to ${networkLabel} to submit this form. ${
-                !supportedEIP3085
-                  ? 'Please update your network to proceed.'
-                  : ''
-              }`
-            : `Connected to ${networkLabel}.`}
-        </Box>
+        <Box>{getNetworkWarningMessage()}</Box>
         {warningMessage && <Box>{warningMessage}</Box>}
       </Box>
       {targetChainId &&

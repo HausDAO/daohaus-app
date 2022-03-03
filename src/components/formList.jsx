@@ -19,7 +19,7 @@ import List from './list';
 import ListItem from './listItem';
 import NoListItem from './NoListItem';
 import TextBox from './TextBox';
-import { CORE_FORMS, FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { areAnyFields } from '../utils/general';
 
 const handleSearch = (formsArr, str) => {
@@ -56,7 +56,7 @@ const FormList = ({
 
   const handleEditProposal = formId =>
     formModal({
-      ...CORE_FORMS.EDIT_PROPOSAL,
+      ...FORM.EDIT_PROPOSAL,
       onSubmit: ({ values }) => {
         dispatchPropConfig({
           action: 'EDIT_PROPOSAL',

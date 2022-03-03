@@ -7,22 +7,28 @@ export const initMemberWallet = async ({
   chainID,
   depositToken,
 }) => {
+  const { decimals, symbol } = depositToken;
+
   const tokenContract = createContract({
     address: depositToken.tokenAddress,
     abi: LOCAL_ABI.ERC_20,
     chainID,
   });
 
-  const tokenBalance = await tokenContract.methods
-    .balanceOf(memberAddress)
-    .call();
+  const balance = await tokenContract.methods.balanceOf(memberAddress).call();
 
   const allowance = await tokenContract.methods
     .allowance(memberAddress, daoAddress)
     .call();
 
+  const depositTokenData = {
+    decimals,
+    balance,
+    allowance,
+    symbol,
+  };
+
   return {
-    depositTokenBalance: tokenBalance,
-    allowance: allowance / 10 ** depositToken.decimals,
+    depositTokenData,
   };
 };

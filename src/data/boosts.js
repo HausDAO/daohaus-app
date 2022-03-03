@@ -1,6 +1,7 @@
 import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { BOOST_FORMS, CORE_FORMS } from './forms';
+import { CUSTOM_BOOST_INSTALL_FORMS } from './formLegos/customBoostInstall';
+import { FORM } from './formLegos/forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
@@ -62,15 +63,14 @@ export const CONTENT = {
     ],
   },
   SAFE_CROSSCHAIN_DEV_SUITE: {
-    title: 'Minion Cross-Chain DEV Suite (Safe Minion)',
-    // TODO: update content
+    title: 'Cross-chain Minion DEV Suite v4 (Safe Minion)',
     description:
-      'Enable interactions with another avatar on a foreign chain from your Safe Minion/Gnosis Safe vault via DAO proposals.',
+      'Move assets & execute transactions on a Mainnet Gnosis Safe through your Gnosis Chain DAO proposals.',
     publisher: PUBLISHERS.DAOHAUS,
     version: '1.00',
     pars: [
-      // TODO: update content
-      'Cross-chain Minion',
+      'Deploying a Gnosis Safe and a AMB Module, this Boost enables your DAO to manage funds and execute transactions in a Mainnet Gnosis Safe, while voting on proposals on Gnosis Chain.',
+      'This Boost gives your DAO control & access to Mainnet assets, dapps and contracts, while keeping governance and voting costs low.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
@@ -301,14 +301,14 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'form',
-      form: BOOST_FORMS.CROSSCHAIN_MINION,
+      form: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
       next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Summon Minion' },
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },
     STEP2: {
       type: 'zodiacActionForm',
-      form: BOOST_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+      form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
       ctaText: 'Deploy & Add Module',
       // TODO: how to adapt it to Tx model
       // next: { type: 'awaitTx', then: 'STEP3' },
@@ -333,7 +333,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.DISCOURSE_FORUM_COLOR,
+      form: FORM.DISCOURSE_FORUM_COLOR,
       next: 'STEP2',
       stepLabel: 'Choose Forum Color',
       isUserStep: true,
@@ -344,7 +344,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.SNAPSHOT,
+      form: FORM.SNAPSHOT,
       isUserStep: true,
       stepLabel: 'Add Space',
       next: 'STEP2',
@@ -355,7 +355,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'form',
-      form: BOOST_FORMS.WRAP_N_ZAP_LAUNCH,
+      form: FORM.WRAP_N_ZAP_LAUNCH,
       next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Deploy' },
       stepLabel: 'Deploy Wrap n Zap',
       isUserStep: true,
@@ -371,7 +371,7 @@ export const STEPS = {
       start: true,
       type: 'form',
       next: 'STEP2',
-      form: CORE_FORMS.SUMMON_MINION_SELECTOR,
+      form: FORM.SUMMON_MINION_SELECTOR,
       isUserStep: true,
       stepLabel: 'Choose a Minion',
     },
@@ -388,7 +388,7 @@ export const STEPS = {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
       type: 'boostMetaForm',
-      form: BOOST_FORMS.SPAM_FILTER,
+      form: FORM.SPAM_FILTER,
       next: 'STEP2',
       stepLabel: 'Select Filter Parameter',
       isUserStep: true,

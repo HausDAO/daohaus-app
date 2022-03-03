@@ -14,7 +14,7 @@ import {
 
 import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { chainByName } from '../utils/chain';
 
 const MinionInternalBalanceActionMenu = ({

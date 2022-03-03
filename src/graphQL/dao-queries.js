@@ -78,6 +78,9 @@ guildkick
 isMinion
 lootRequested
 memberAddress
+minionExecuteActionTx {
+  id
+}
 newMember
 noShares
 noVotes
@@ -112,6 +115,8 @@ uberHausMinionExecuted
 minion {
   minionType
   minQuorum
+  crossChainMinion
+  foreignChainId
 }
 actions {
   target

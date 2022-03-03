@@ -3,7 +3,7 @@ import { Button, Spinner, Tooltip } from '@chakra-ui/react';
 
 import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 
 const Withdraw = ({ token }) => {
   const { canInteract } = useCanInteract({

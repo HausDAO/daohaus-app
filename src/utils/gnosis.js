@@ -9,7 +9,7 @@ import { getLocalABI } from './abi';
 import { chainByID } from './chain';
 import { createContract } from './contract';
 import { postApiGnosis, postGnosisRelayApi } from './requests';
-import { CONTRACTS } from '../data/contractTX';
+import { CONTRACTS } from '../data/contracts';
 
 export const isAmbModule = async (
   address,

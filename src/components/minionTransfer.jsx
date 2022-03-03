@@ -38,9 +38,7 @@ const MinionTransfer = ({
     const tokenType = isNativeToken ? 'network' : 'erc20';
     return getMinionActionFormLego(
       tokenType,
-      vault.minionType === vault.crossChainMinion
-        ? MINION_TYPES.CROSSCHAIN_SAFE
-        : vault.minionType,
+      vault.crossChainMinion ? MINION_TYPES.CROSSCHAIN_SAFE : vault.minionType,
     );
   }, [isNativeToken]);
 

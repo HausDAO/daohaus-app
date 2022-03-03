@@ -36,6 +36,8 @@ export const INFO_TEXT = {
   NFT_TOKEN_ID:
     'This should be the Token ID for your NFT and then select the correct NFT standard.',
   BUYOUT_MINION: 'This proposal must be executed by a minion.',
+  UBERHAUS_TRIBUTE:
+    'DAOs must stake HAUS to join UberHAUS. Your UberHAUS minion will need to have HAUS before this proposal can be executed.',
 };
 export const FIELD = {
   TITLE: {
@@ -313,15 +315,13 @@ export const FIELD = {
     expectType: 'any',
   },
   PRECOMPUTED_MINION_NAME: {
-    type: 'precomputedInput',
+    type: 'precomputedMinionName',
     label: 'Minion Name',
     name: 'minionName',
     helperText: 'All minions get a name',
     htmlFor: 'minionName',
     placeholder: 'Sally',
     expectType: 'any',
-    fields: ['formfield', 'formfield'],
-    strPattern: '0xbeb/<0>/<1>/<2>',
   },
   MINION_QUORUM: {
     type: 'checkGate',
@@ -524,6 +524,47 @@ export const FIELD = {
     label: '',
     name: 'ambEncoder',
     htmlFor: 'ambEncoder',
+  },
+  UBERHAUS_DELEGATE: {
+    type: 'uberHausDelegateInput',
+    htmlFor: 'uberHausDelegate',
+    name: 'uberHausDelegate',
+    label: 'New Delegate',
+    expectType: 'address',
+  },
+  UBERHAUS_TRIBUTE: {
+    type: 'uberHausTributeInput',
+    htmlFor: 'uberHausTributeOffered',
+    name: 'uberHausTributeOffered',
+    placeholder: '0',
+    label: 'Tribute Offered',
+    info: INFO_TEXT.UBERHAUS_TRIBUTE,
+    expectType: 'number',
+  },
+  UBERHAUS_RAGE_QUIT_INPUT: {
+    type: 'uberHausRageQuitInput',
+    htmlFor: 'uberHausShares',
+    name: 'uberHausShares',
+    label: 'Shares To Rage',
+    placeholder: '0',
+    info: INFO_TEXT.RAGE_QUIT_INPUT,
+    expectType: 'integer',
+  },
+  UBERHAUS_WITHDRAW_INPUT: {
+    type: 'uberHausWithdrawInput',
+    htmlFor: 'uberHausWithdraw',
+    name: 'uberHausWithdraw',
+    label: 'Withdraw',
+    placeholder: '0',
+    expectType: 'number',
+  },
+  UBERHAUS_PULL_INPUT: {
+    type: 'uberHausPullInput',
+    htmlFor: 'uberHausPull',
+    name: 'uberHausPull',
+    label: 'Pull',
+    placeholder: '0',
+    expectType: 'number',
   },
 };
 

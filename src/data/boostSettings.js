@@ -1,5 +1,5 @@
 import { FIELD, INFO_TEXT } from './fields';
-import { BOOST_FORMS } from './forms';
+import { FORM } from './formLegos/forms';
 import { COMMON_STEPS, CONTENT } from './boosts';
 
 const SETTING_STEPS = {
@@ -7,7 +7,7 @@ const SETTING_STEPS = {
     STEP1: {
       type: 'boostMetaForm',
       form: {
-        ...BOOST_FORMS.SPAM_FILTER,
+        ...FORM.SPAM_FILTER,
         fields: [
           [
             {

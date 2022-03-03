@@ -16,7 +16,7 @@ const MinionSelect = props => {
       .filter(minion => {
         const customFilter =
           props.filters?.[
-            minion.crossChainMinion
+            localValues?.crossChainMinion
               ? MINION_TYPES.CROSSCHAIN_SAFE
               : minion.minionType
           ];

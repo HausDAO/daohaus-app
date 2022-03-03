@@ -6,7 +6,7 @@ import { handleGetProfile } from '../utils/3box';
 import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const AddressAvatar = React.memo(({ addr, hideCopy }) => {
+const AddressAvatar = React.memo(({ addr, hideCopy, sizeForPropCard }) => {
   const [profile, setProfile] = useState(null);
   const { addressProfile } = useUser(null);
   const { address } = useInjectedProvider();
@@ -74,6 +74,7 @@ const AddressAvatar = React.memo(({ addr, hideCopy }) => {
       avatarImg={avatarImage}
       name={profile?.name}
       hideCopy={hideCopy}
+      sizeForPropCard={sizeForPropCard}
     />
   );
 });

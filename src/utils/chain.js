@@ -59,6 +59,9 @@ export const supportedChains = {
       gas_limit: {
         '0x64': '2000000',
       },
+      monitoring_app: {
+        '0x64': 'https://alm-xdai.herokuapp.com/100',
+      },
     },
   },
   '0x4': {
@@ -129,6 +132,9 @@ export const supportedChains = {
       gas_limit: {
         '0x64': '3000000',
       },
+      monitoring_app: {
+        '0x64': 'https://alm-rinkeby.herokuapp.com/4',
+      },
     },
   },
   '0x2a': {
@@ -181,7 +187,7 @@ export const supportedChains = {
     chain_id: '0x64',
     hub_sort_order: 2,
     providers: ['walletconnect'],
-    rpc_url: 'https://dai.poa.network',
+    rpc_url: 'https://rpc.gnosischain.com/',
     abi_api_url:
       'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
@@ -244,6 +250,10 @@ export const supportedChains = {
       gas_limit: {
         '0x1': '2000000',
         '0x4': '3000000',
+      },
+      monitoring_app: {
+        '0x1': 'https://alm-xdai.herokuapp.com/100',
+        '0x4': 'https://alm-rinkeby.herokuapp.com/100',
       },
     },
   },
@@ -451,7 +461,6 @@ export const chainByName = networkName => {
 
   return supportedChains[networkKey];
 };
-
 export const MM_ADDCHAIN_DATA = {
   '0x89': {
     chainId: '0x89',
@@ -467,7 +476,7 @@ export const MM_ADDCHAIN_DATA = {
   '0x64': {
     chainId: '0x64',
     chainName: 'xDai',
-    rpcUrls: ['https://rpc.xdaichain.com/'],
+    rpcUrls: ['https://rpc.gnosischain.com/'],
     blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
     nativeCurrency: {
       name: 'xDai',
@@ -540,4 +549,14 @@ export const switchNetwork = async daochain => {
       console.error(error);
     }
   }
+};
+
+export const getScanKey = chainID => {
+  if (chainID === '0x89') {
+    return process.env.REACT_APP_POLYGONSCAN_KEY;
+  }
+  if (chainID === '0x1' || chainByID === '0x4' || chainByID === '0x2a') {
+    return process.env.REACT_APP_ETHERSCAN_KEY;
+  }
+  return null;
 };

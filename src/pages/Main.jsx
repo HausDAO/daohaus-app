@@ -9,6 +9,7 @@ import HubSignedOut from '../components/hubSignedOut';
 import MainViewLayout from '../components/mainViewLayout';
 import NewsFeed from '../components/newsFeed';
 import NetworkList from '../components/networkList';
+import HausCard from '../components/hausCard';
 
 const Main = () => {
   const { address } = useInjectedProvider();
@@ -43,6 +44,7 @@ const Main = () => {
         </Box>
         {address && hasDaos() ? (
           <Box w={['100%', null, null, null, '40%']}>
+            <HausCard />
             <NewsFeed />
           </Box>
         ) : (
