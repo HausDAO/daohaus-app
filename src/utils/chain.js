@@ -146,7 +146,7 @@ export const supportedChains = {
     name: 'Gnosis Chain',
     short_name: 'gc',
     nativeCurrency: 'xDai',
-    network: 'gnosis',
+    network: 'xdai',
     network_id: 100,
     chain_id: '0x64',
     hub_sort_order: 2,
