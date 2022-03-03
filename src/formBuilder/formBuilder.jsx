@@ -287,7 +287,7 @@ const FormBuilder = props => {
             goToNext={goToNext}
             errors={Object.values(formErrors)}
             customSecondaryBtn={secondaryBtn}
-            loading={[formStateOverride, formState].includes('loading')}
+            loading={formStateOverride || formState}
             checklist={checklist}
             disableCallback={() =>
               typeof disableCallback === 'function'
