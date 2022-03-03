@@ -63,7 +63,7 @@ const deriveMessage = async ({
           vault.crossChainMinion ? vault.foreignChainId : daochain,
         )
       : {
-          name: 'ETH',
+          name: chainByID(daochain).nativeCurrency,
           decimals: 18,
         };
   const { name, decimals } = tokenData || {};
