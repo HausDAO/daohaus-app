@@ -8,6 +8,7 @@ import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
 import { readableTokenBalance } from '../utils/proposalCardUtils';
 import { fetchSpecificTokenData } from '../utils/tokenValue';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { chainByID } from '../utils/chain';
 
 //  THIS IS A CUSTOM COMPONENT THAT WORKS FOR PAYROLL PROPOSALS
 const getActionDataByMinion = (minionAction, minionType, crossChainMinion) => {
