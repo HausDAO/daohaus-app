@@ -10,12 +10,20 @@ import { fetchSpecificTokenData } from '../utils/tokenValue';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 //  THIS IS A CUSTOM COMPONENT THAT WORKS FOR PAYROLL PROPOSALS
-const getActionDataByMinion = (minionAction, minionType) => {
+const getActionDataByMinion = (minionAction, minionType, crossChainMinion) => {
   if (minionType === MINION_TYPES.SAFE) {
     const {
       decoded: { actions },
     } = minionAction;
-    const transferAction = actions[0];
+    const transferAction = crossChainMinion
+      ? actions[0].actions[0]
+      : actions[0];
+    if (transferAction.data.name === 'ETH Transfer') {
+      return {
+        balance: transferAction.data?.params?.[0]?.value,
+        tokenAddress: '0x',
+      };
+    }
     const balance = transferAction.data?.params?.[1]?.value;
     const tokenAddress = transferAction?.to;
     return { balance, tokenAddress };
@@ -38,19 +46,26 @@ const deriveMessage = async ({
   shouldUpdate,
   minionType,
 }) => {
+  const vault = daoVaults?.find(minion => minion.address === minionAddress);
   const { tokenAddress, balance } = getActionDataByMinion(
     minionAction,
     minionType,
+    vault.crossChainMinion,
   );
-  const vault = daoVaults?.find(minion => minion.address === minionAddress);
-  const tokenData = await fetchSpecificTokenData(
-    tokenAddress,
-    {
-      name: true,
-      decimals: true,
-    },
-    daochain,
-  );
+  const tokenData =
+    tokenAddress !== '0x'
+      ? await fetchSpecificTokenData(
+          tokenAddress,
+          {
+            name: true,
+            decimals: true,
+          },
+          vault.crossChainMinion ? vault.foreignChainId : daochain,
+        )
+      : {
+          name: chainByID(daochain).nativeCurrency,
+          decimals: 18,
+        };
   const { name, decimals } = tokenData || {};
   if (balance && name && decimals && vault && shouldUpdate) {
     setCustomUI(
@@ -90,7 +105,7 @@ const MinionTransfer = ({ proposal = {}, minionAction }) => {
       minionAction,
       setCustomUI,
       setIsError,
-      daochain,
+      daochain: proposal.minion.foreignChainId || daochain,
       daoVaults,
       minionAddress,
       shouldUpdate,

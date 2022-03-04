@@ -55,6 +55,7 @@ const TheSummoner = props => {
     next,
     handleThen,
     currentStep,
+    updateFormSteps,
   } = props;
 
   const { daoOverview } = useDao();
@@ -69,11 +70,18 @@ const TheSummoner = props => {
   const summonData = MINIONS[minionType];
 
   useEffect(() => {
+    if (summonData.addSummonSteps) {
+      updateFormSteps(summonData.addSummonSteps);
+    }
+  }, [minionType]);
+
+  useEffect(() => {
     if (daoOverview && minionType && !menuState) {
       const minionsOfType = minionFromDaoOverview({
         searchBy: 'type',
         daoOverview,
         searchParam: minionType,
+        crossChain: false,
       });
       if (minionsOfType?.length) {
         setExistingMinions(minionsOfType);
@@ -159,6 +167,7 @@ const TheSummoner = props => {
           handleThen={handleThen}
           next={next}
           goToNext={goToNext}
+          parentForm={parentForm}
         />
         {!summonData?.summonForm && <TextBox>Error: Form not found</TextBox>}
       </Flex>

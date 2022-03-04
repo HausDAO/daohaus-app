@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 
 import { useDao } from '../contexts/DaoContext';
+import { MINION_TYPES } from '../utils/proposalUtils';
 import GenericSelect from './genericSelect';
 
 const MinionSelect = props => {
@@ -13,7 +14,12 @@ const MinionSelect = props => {
   const minions = useMemo(() => {
     return daoOverview.minions
       .filter(minion => {
-        const customFilter = props.filters?.[minion.minionType];
+        const customFilter =
+          props.filters?.[
+            localValues?.crossChainMinion
+              ? MINION_TYPES.CROSSCHAIN_SAFE
+              : minion.minionType
+          ];
         return (
           minion.minionType === props.minionType &&
           (!customFilter ||
@@ -27,11 +33,17 @@ const MinionSelect = props => {
         safe: minion.safeAddress,
         value: minion.minionAddress,
         name: minion.details,
+        crossChain: minion.crossChainMinion,
+        foreignChainId: minion.foreignChainId,
+        foreignSafeAddress: minion.foreignSafeAddress,
       }));
   }, [daoOverview, daoVaults]);
 
   useEffect(() => {
     register('selectedSafeAddress');
+    register('crossChainMinion');
+    register('foreignChainId');
+    register('foreignSafeAddress');
 
     if (localValues && localValues.minionAddress) {
       setValue(name, localValues.minionAddress);
@@ -39,15 +51,33 @@ const MinionSelect = props => {
     if (localValues && localValues.safeAddress) {
       setValue('selectedSafeAddress', localValues.safeAddress);
     }
+    if (localValues && localValues.crossChainMinion) {
+      setValue('crossChainMinion', localValues.crossChainMinion);
+    }
+    if (localValues && localValues.foreignChainId) {
+      setValue('foreignChainId', localValues.foreignChainId);
+    }
+    if (localValues && localValues.foreignSafeAddress) {
+      setValue('foreignSafeAddress', localValues.foreignSafeAddress);
+    }
   }, [name]);
 
   useEffect(() => {
     if (minionAddress) {
-      const safeAddress = minions.filter(
-        minion => minion.value === minionAddress,
-      )?.[0]?.safe;
+      const {
+        safe,
+        crossChain,
+        foreignChainId,
+        foreignSafeAddress,
+      } = minions.filter(minion => minion.value === minionAddress)?.[0];
 
-      setValue('selectedSafeAddress', safeAddress);
+      setValue('selectedSafeAddress', safe);
+
+      if (crossChain) {
+        setValue('crossChainMinion', crossChain);
+        setValue('foreignChainId', foreignChainId);
+        setValue('foreignSafeAddress', foreignSafeAddress);
+      }
     }
   }, [minionAddress]);
 

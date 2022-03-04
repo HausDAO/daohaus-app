@@ -1,7 +1,7 @@
 import Web3, { utils as Web3Utils } from 'web3';
 import abiDecoder from 'abi-decoder';
 import { createContract } from './contract';
-import { decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
+import { decodeAMBTx, decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
 import { TX } from '../data/txLegos/contractTX';
@@ -118,7 +118,7 @@ export const decodeMultiAction = async ([encodedMulti], params) => {
 
   //   SINGLE ARRAY VERSION
 
-  return {
+  const decodedActions = {
     ...encodedMulti,
     actions: await Promise.all(
       decodeMultisendTx(multiSendAddress, encodedMulti.data).map(
@@ -129,6 +129,30 @@ export const decodeMultiAction = async ([encodedMulti], params) => {
       ),
     ),
   };
+  if (decodedActions.actions[0]?.data?.name === 'requireToPassMessage') {
+    // cross-chain AMB bridge call
+    const [contract, data] = decodedActions.actions[0].data.params;
+    const ambDecodedTx = decodeAMBTx(contract.value, data.value);
+    return {
+      ...decodedActions,
+      actions: [
+        {
+          ...decodedActions.actions[0],
+          actions: await Promise.all(
+            decodeMultisendTx(ambDecodedTx.to, ambDecodedTx.data).map(
+              async action => ({
+                ...action,
+                data: await decodeAction(action, {
+                  chainID: params.foreignChainId,
+                }),
+              }),
+            ),
+          ),
+        },
+      ],
+    };
+  }
+  return decodedActions;
 
   //  CODE REVIEW
   //  Question for Sam

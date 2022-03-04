@@ -22,9 +22,12 @@ const buttonTextByFormState = formState => {
   if (formState === 'error') return 'Try Again';
 };
 const getPrimaryButtonFn = props => {
-  const { customPrimaryBtn, closeModal } = props;
+  const { customPrimaryBtn, closeModal, goToNext } = props;
   if (customPrimaryBtn?.fn) {
     return customPrimaryBtn.fn;
+  }
+  if (props.formState === 'success' && props.next && props.next !== 'FINISH') {
+    return () => goToNext(props.next);
   }
   if (props.formState === 'success') {
     return closeModal;

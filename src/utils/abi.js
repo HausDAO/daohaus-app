@@ -30,6 +30,8 @@ import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
 import { MINION_TYPES } from './proposalUtils';
 import DISPERSE_APP from '../contracts/disperseApp.json';
+import AMB_MODULE from '../contracts/ambModule.json';
+import AMB from '../contracts/iAmb.json';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -56,6 +58,8 @@ export const LOCAL_ABI = Object.freeze({
   DAO_CONDITIONAL_HELPER,
   ESCROW_MINION,
   DISPERSE_APP,
+  AMB_MODULE,
+  AMB,
 });
 
 const getBlockExplorerApiKey = chainID => {
@@ -281,6 +285,14 @@ export const decodeMultisendTx = (multisendAddress, encodedTx) => {
   }
 
   return transactions;
+};
+
+export const decodeAMBTx = (ambModuleAddress, encodedTx) => {
+  const ambModule = new Contract(ambModuleAddress, AMB_MODULE);
+  return ambModule.interface.decodeFunctionData(
+    'executeTransaction',
+    encodedTx,
+  );
 };
 
 export const getLocalABI = contract => LOCAL_ABI[contract.abiName];

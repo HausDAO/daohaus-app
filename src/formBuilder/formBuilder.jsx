@@ -36,6 +36,7 @@ const FormBuilder = props => {
     formConditions,
     setParentFields,
     indicatorStates,
+    formStateOverride,
     txID,
     logValues,
     defaultValues,
@@ -272,21 +273,21 @@ const FormBuilder = props => {
           </Flex>
         </FormControl>
         <ProgressIndicator
-          currentState={formState}
+          currentState={formStateOverride || formState}
           states={indicatorStatesOverride || indicatorStates}
         />
         {footer && (
           <FormFooter
             options={options}
             addOption={addOption}
-            formState={formState}
+            formState={formStateOverride || formState}
             ctaText={ctaText}
             closeModal={closeModal}
             next={next}
             goToNext={goToNext}
             errors={Object.values(formErrors)}
             customSecondaryBtn={secondaryBtn}
-            loading={formState}
+            loading={formStateOverride || formState}
             checklist={checklist}
             disableCallback={() =>
               typeof disableCallback === 'function'

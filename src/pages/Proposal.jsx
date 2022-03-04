@@ -96,7 +96,7 @@ const Proposal = ({
 
         setMinionAction(action);
 
-        // hides execute minion button on funding and payroll proposals
+        // hides execute minion button on funding and payroll proposals, & executed action on safe minion
         if (
           action[1] === '0x0000000000000000000000000000000000000000' &&
           currentProposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_STAKE
