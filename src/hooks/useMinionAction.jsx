@@ -7,7 +7,7 @@ import { getExecuteAction, getMinionAction } from '../utils/minionUtils';
 const useMinionAction = proposal => {
   const { minionAddress, minion, proposalId, proposalType, actions } =
     proposal || {};
-  const { minionType } = minion || {};
+  const { foreignChainId, minionType } = minion || {};
   const { daochain } = useParams();
 
   // need a less hacky solution
@@ -27,6 +27,7 @@ const useMinionAction = proposal => {
         proposalType,
         actions,
         chainID: daochain,
+        foreignChainId,
       });
 
       if (action && shouldUpdate) {

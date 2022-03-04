@@ -1,5 +1,6 @@
 import { BOOST_PLAYLISTS } from './playlists';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { CUSTOM_BOOST_INSTALL_FORMS } from './formLegos/customBoostInstall';
 import { FORM } from './formLegos/forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
@@ -56,6 +57,20 @@ export const CONTENT = {
       'Deploying a Minion and a Gnosis Safe, this Boost enables your DAO to manage funds in a Gnosis Safe, as well as do complex multi-call transactions via the Minion.',
       'This Boost is perfect for advanced DAOs looking to trade NFTs, manage LP positions in AMMs or do other arbitrary transactions',
       'To increase proposal velocity for less critical proposals, the ability to set quorum levels enable early execution when a minimum quorum is met.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
+  SAFE_CROSSCHAIN_DEV_SUITE: {
+    title: 'Cross-chain Minion DEV Suite v4 (Safe Minion)',
+    description:
+      'Move assets & execute transactions on a Mainnet Gnosis Safe through your Gnosis Chain DAO proposals.',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '1.00',
+    pars: [
+      'Deploying a Gnosis Safe and a AMB Module, this Boost enables your DAO to manage funds and execute transactions in a Mainnet Gnosis Safe, while voting on proposals on Gnosis Chain.',
+      'This Boost gives your DAO control & access to Mainnet assets, dapps and contracts, while keeping governance and voting costs low.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
@@ -282,6 +297,28 @@ export const STEPS = {
     },
     STEP2: COMMON_STEPS.SIGNER,
   },
+  CROSS_CHAIN_MINION_BOOST: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'form',
+      form: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
+      next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Summon Minion' },
+      stepLabel: 'Deploy Minion',
+      isUserStep: true,
+    },
+    STEP2: {
+      type: 'zodiacActionForm',
+      form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+      ctaText: 'Deploy & Add Module',
+      // TODO: how to adapt it to Tx model
+      // next: { type: 'awaitTx', then: 'STEP3' },
+      next: 'STEP3',
+      stepLabel: 'Deploy Brigde Module for Avatar on Foreign Chain',
+      isUserStep: true,
+      checklist: ['isConnected'],
+    },
+    STEP3: COMMON_STEPS.SIGNER,
+  },
   ADD_DISCORD: {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: {
@@ -393,6 +430,18 @@ export const BOOSTS = {
     networks: MINIONS[MINION_TYPES.SAFE].networks,
     cost: 'free',
     settings: 'none',
+  },
+  CROSS_CHAIN_MINION: {
+    id: 'CROSS_CHAIN_MINION',
+    boostContent: CONTENT.SAFE_CROSSCHAIN_DEV_SUITE,
+    minionData: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE],
+    categories: ['devTools'],
+    steps: STEPS.CROSS_CHAIN_MINION_BOOST,
+    playlist: BOOST_PLAYLISTS.CROSSCHAIN_SAFE_DEV_SUITE,
+    networks: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE].networks,
+    cost: 'free',
+    settings: 'none',
+    metaFields: ['ambModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
   },
   RARIBLE: {
     id: 'RARIBLE',

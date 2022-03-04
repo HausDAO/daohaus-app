@@ -67,6 +67,7 @@ export const MINION_TYPES = {
   NIFTY: 'nifty minion',
   SUPERFLUID: 'Superfluid minion',
   SAFE: 'SAFE MINION V0',
+  CROSSCHAIN_SAFE: 'CC SAFE MINION V0', // TODO: Label feedback
   UBER: 'UberHaus minion',
 };
 

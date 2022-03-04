@@ -116,6 +116,7 @@ const balanceCard = ({
         {needsSync && <SyncTokenButton token={token} />}
         {minion && token?.tokenBalance > 0 && (
           <MinionTransfer
+            daochain={daochain}
             isMember={isMember || delegate}
             isNativeToken={isNativeToken}
             minion={minion}
