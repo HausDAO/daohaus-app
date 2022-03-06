@@ -246,6 +246,9 @@ export const capitalizeWords = string => {
   return words.map(word => capitalize(word)).join(' ');
 };
 
+export const charLimit = (str = '', limit = 24) =>
+  str.length > limit ? `${str.slice(0, limit)}...` : str;
+
 export const daoConnectedAndSameChain = (
   address,
   injectedChainID,

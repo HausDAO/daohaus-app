@@ -45,16 +45,14 @@ const DaoDoc = () => {
         setDoc,
       });
     }
-  }, []);
+  }, [docId]);
 
   return (
     <MainViewLayout isDao header={doc?.title || 'Loading'}>
       {doc?.isDecoded && (
-        <>
-          <ContentBox mb={4}>
-            <MDEditor.Markdown source={doc?.content} />
-          </ContentBox>
-        </>
+        <ContentBox mb={4}>
+          <MDEditor.Markdown source={doc?.content} />
+        </ContentBox>
       )}
       {doc === 'loading' && <SkeletonText height='400px' />}
       <Link to={`/dao/${daochain}/${daoid}/docs`}> Back To Docs</Link>

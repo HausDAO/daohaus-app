@@ -1,42 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { useParams, Link } from 'react-router-dom';
 
 import { useAppModal } from '../hooks/useModals';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
-import {
-  Bold,
-  Heading,
-  ParaLg,
-  ParaMd,
-  ParaSm,
-} from '../components/typography';
+import { Bold, ParaLg, ParaMd, ParaSm } from '../components/typography';
 
 import { FORM } from '../data/formLegos/forms';
-import { timeToNow } from '../utils/general';
+import { charLimit, timeToNow } from '../utils/general';
 import { fetchDAODocs, isEncoded, isIPFS, isRatified } from '../utils/poster';
 
-const getDocsByType = async ({
-  setRatifiedDocs,
-  setIpfsDocs,
-  setChainDocs,
-  daoid,
-  daochain,
-}) => {
+const filters = {
+  IPFS: { fn: doc => isIPFS(doc) && !isRatified(doc), name: 'IPFS' },
+  onchain: {
+    fn: doc => isEncoded(doc?.contentType) && !isRatified(doc),
+    name: 'On Chain',
+  },
+  ratified: { fn: doc => isRatified(doc), name: 'Ratified' },
+};
+
+const getDocsByType = async ({ setDocs, shouldUpdate, daoid, daochain }) => {
   try {
     const docs = await fetchDAODocs({ daochain, daoid });
-    const memberPostedIPFSdocs = docs?.filter(
-      doc => isIPFS(doc) && !isRatified(doc),
-    );
-    const memberPostedChainDocs = docs?.filter(
-      doc => isEncoded(doc?.contentType) && !isRatified(doc),
-    );
-    const ratifiedDocs = docs?.filter(doc => isRatified(doc));
-
-    setChainDocs(memberPostedChainDocs);
-    setIpfsDocs(memberPostedIPFSdocs);
-    setRatifiedDocs(ratifiedDocs);
+    if (shouldUpdate) {
+      setDocs(docs);
+    }
   } catch (error) {
     console.error(error);
   }
@@ -46,19 +35,25 @@ const DaoDocs = () => {
   const { daochain, daoid } = useParams();
   const { formModal } = useAppModal();
 
-  const [ratifiedDocs, setRatifiedDocs] = useState(null);
-  const [ipfsDocs, setIpfsDocs] = useState(null);
-  const [chainDocs, setChainDocs] = useState(null);
+  const [docs, setDocs] = useState(null);
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
+    let shouldUpdate = true;
     getDocsByType({
       daoid,
       daochain,
-      setRatifiedDocs,
-      setIpfsDocs,
-      setChainDocs,
+      setDocs,
+      shouldUpdate,
     });
+    return () => (shouldUpdate = false);
   }, []);
+  const filterDocs = useMemo(() => {
+    if (docs) {
+      if (!filter) return docs;
+      return filters[filter]?.(docs) || docs;
+    }
+  }, [filter, docs]);
 
   const createDoc = () => formModal(FORM.RATIFY_MD);
 
@@ -68,37 +63,30 @@ const DaoDocs = () => {
       header='DAO Docs'
       headerEl={<Button onClick={createDoc}>Create Doc</Button>}
     >
-      <Heading fontSize='1.4rem'>Ratified Documents:</Heading>
-      <Flex wrap='wrap' mt={3}>
-        {ratifiedDocs?.map(doc => (
-          <CrappyContentBox key={doc.id} doc={doc} />
-        ))}
-      </Flex>
-      <Heading fontSize='1.4rem'>IPFS Documents:</Heading>
-      <Flex wrap='wrap' mt={3}>
-        {ipfsDocs?.map(doc => (
-          <CrappyContentBox key={doc.id} doc={doc} />
-        ))}
-      </Flex>
-      <Heading fontSize='1.4rem'>DAO Documents:</Heading>
-      <Flex wrap='wrap' mt={3}>
-        {chainDocs?.map(doc => (
-          <CrappyContentBox key={doc.id} doc={doc} />
-        ))}
+      <Flex mt={3} display='inline-flex' mr={6} flexDir='column'>
+        <Flex justifyContent='flex-end'>
+          <ParaMd>Text</ParaMd>
+        </Flex>
+        <Flex wrap='wrap' width='auto'>
+          {docs?.map(doc => (
+            <DocBox key={doc.id} doc={doc} />
+          ))}
+        </Flex>
       </Flex>
     </MainViewLayout>
   );
 };
 
-const CrappyContentBox = ({ doc }) => {
+const DocBox = ({ doc }) => {
   const { daochain, daoid } = useParams();
 
+  const title = doc.title === 'n/a' ? 'Title Missing' : doc.title;
   return (
-    <ContentBox key={doc.id} mb={4} mr={4}>
-      <Flex width='400px' alignItems='top' justifyContent='space-between'>
-        <Flex width='250px' flexDir='column'>
+    <ContentBox key={doc.id} mb={6} mr={4} height='225px' width='440px'>
+      <Flex alignItems='top' justifyContent='space-between'>
+        <Flex width='350px' flexDir='column'>
           <ParaLg fontSize='1.3rem' mb={2}>
-            <Bold>{doc.title === 'n/a' ? 'Title Missing' : doc.title} </Bold>
+            <Bold>{charLimit(title)} </Bold>
           </ParaLg>
           <ParaMd mb={3}>{doc?.description || 'No description'}</ParaMd>
           <ParaSm mb={2}>

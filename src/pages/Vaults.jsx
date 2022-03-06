@@ -79,6 +79,7 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
         balanceData={chartBalances}
         visibleVaults={listVaults}
       />
+      <DocLink locationName={POST_LOCATIONS.VAULT_PAGE} />
       <Flex justify='space-between' mt='5'>
         <Box>
           <ListFilter
@@ -111,7 +112,6 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
           )}
         </HStack>
       </Flex>
-      <DocLink locationName={POST_LOCATIONS.VAULT_PAGE} />
 
       <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>
         {listVaults &&
