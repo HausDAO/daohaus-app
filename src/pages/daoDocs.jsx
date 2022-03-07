@@ -95,7 +95,7 @@ const DaoDocs = () => {
     >
       <Flex mt={6} mr={6} flexDir='column' maxWidth='79.5rem'>
         <Flex justifyContent='space-between' mr={6} mb={4}>
-          <TextBox size='sm'>{`${docs?.length} documents`}</TextBox>
+          {docs && <TextBox size='sm'>{`${docs?.length} documents`}</TextBox>}
           <Dropdown
             selectedItem={filter}
             setter={setFilter}

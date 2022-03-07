@@ -6,7 +6,6 @@ const CustomMarkdownStyles = styled.div`
   max-width: 700px;
   .wmde-markdown {
     font-family: 'Mulish';
-    font-size: 1.1rem;
     h1 {
       font-size: 1.8em;
       line-height: 1;

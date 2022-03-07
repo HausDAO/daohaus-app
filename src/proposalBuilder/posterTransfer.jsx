@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import MDEditor from '@uiw/react-md-editor';
 import { Button } from '@chakra-ui/react';
 
 import { ParaMd } from '../components/typography';
+import MarkdownDisplay from '../components/MarkdownDisplay';
 import { useAppModal } from '../hooks/useModals';
 import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
 import { contentFromMinionAction } from '../utils/poster';
@@ -27,10 +27,8 @@ const PosterTransfer = ({ minionAction }) => {
 
   const displayDetails = () => {
     genericModal({
-      title: contentData?.title,
-      subtitle: 'Preview Mode',
-      body: <MDEditor.Markdown source={contentData?.content} />,
-      width: '1000px',
+      body: <MarkdownDisplay source={contentData?.content} />,
+      width: '700px',
     });
   };
   const customUI = contentData?.content && (
