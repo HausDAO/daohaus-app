@@ -26,6 +26,12 @@ export const IPFS_TYPES = [CONTENT_TYPES.PINATA];
 export const isIPFS = doc => IPFS_TYPES.includes(doc?.contentType);
 export const isEncoded = doc => doc?.contentType === CONTENT_TYPES.ON_CHAIN;
 export const isRatified = doc => doc?.ratified;
+export const isSpecialLocation = doc => doc?.location !== POST_LOCATIONS.DOCS;
+export const isCurrentDocAtLocation = (doc, specialLocationDocs) =>
+  doc &&
+  specialLocationDocs &&
+  isSpecialLocation(doc) &&
+  doc?.id === specialLocationDocs?.[doc?.location]?.id;
 
 export const fetchDAODocs = async ({ daochain, daoid }) => {
   try {
@@ -79,3 +85,15 @@ export const contentFromMinionAction = async ({ minionAction }) => {
     return { error: true, message: 'Post data may be corrupt' };
   }
 };
+
+export const getSpecialLocationDocs = docs =>
+  docs.reduce((acc, doc) => {
+    if (doc?.location === POST_LOCATIONS.DOCS) return acc;
+    if (!acc[doc?.location]) {
+      return { ...acc, [doc.location]: doc };
+    }
+    if (acc[doc?.location]?.createdAt < doc?.createdAt) {
+      return { ...acc, [doc.location]: doc };
+    }
+    return acc;
+  }, {});

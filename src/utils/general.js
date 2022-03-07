@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto-browserify';
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 import Web3 from 'web3';
 import { validate } from './validation';
@@ -196,9 +196,13 @@ export const timeToNow = time => {
   });
 };
 
-// export const formatCreatedAt = (createdAt) => {
-//   return format(new Date(createdAt * 1000), 'MMM dd, yyyy');
+// export const fullDate = time => {
+//   return format(new Date(time * 1000), 'MM dd yyyy');
 // };
+
+export const formatCreatedAt = createdAt => {
+  return format(new Date(createdAt * 1000), 'MMM dd, yyyy');
+};
 
 export const formatPeriods = (period, duration) => {
   if (period && duration) {

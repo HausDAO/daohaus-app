@@ -5,6 +5,9 @@ import styled from '@emotion/styled';
 export const Bold = styled.span`
   font-weight: 700;
 `;
+export const Italic = styled.span`
+  font-style: 'italic';
+`;
 
 export const Label = props => {
   const { text, children } = props;
