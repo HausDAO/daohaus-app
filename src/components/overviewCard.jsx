@@ -96,6 +96,7 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             </>
           )}
         </Box>
+        <DocLink locationName={POST_LOCATIONS.FRONT_PAGE} />
         <Flex mt={6}>
           <Button
             variant='outline'
@@ -126,7 +127,6 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             </Button>
           )}
         </Flex>
-        <DocLink locationName={POST_LOCATIONS.FRONT_PAGE} />
       </ContentBox>
     </Box>
   );

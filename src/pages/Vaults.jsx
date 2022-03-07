@@ -79,7 +79,6 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
         balanceData={chartBalances}
         visibleVaults={listVaults}
       />
-      <DocLink locationName={POST_LOCATIONS.VAULT_PAGE} />
       <Flex justify='space-between' mt='5'>
         <Box>
           <ListFilter
@@ -90,6 +89,7 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
           />
         </Box>
         <HStack alignItems='center'>
+          <DocLink locationName={POST_LOCATIONS.VAULT_PAGE} />
           {hasNfts && (
             <Box
               texttransform='uppercase'

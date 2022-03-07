@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Icon } from '@chakra-ui/react';
-import { BsArrowRight } from 'react-icons/bs';
+import { Flex, Icon } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 
+import { TiDocumentText } from 'react-icons/ti';
+import { HiOutlineDocumentText } from 'react-icons/hi';
 import TextBox from './TextBox';
 import { fetchDAODocs } from '../utils/poster';
 
@@ -46,11 +47,14 @@ const DocLink = ({ locationName }) => {
 
   if (!doc) return null;
   return (
-    <TextBox size='xl' variant='body' mt={6}>
-      <Link to={`/dao/${daochain}/${daoid}/doc/${doc.id}`}>
-        {doc?.title} <Icon as={BsArrowRight} color='secondary.500' mr={2} />
-      </Link>
-    </TextBox>
+    <Link to={`/dao/${daochain}/${daoid}/doc/${doc.id}`}>
+      <Flex my={3} alignItems='center'>
+        <TextBox size='md' variant='body' color='secondary.500' mr={1}>
+          {doc?.title}
+        </TextBox>
+        <HiOutlineDocumentText size='1.25rem' />
+      </Flex>
+    </Link>
   );
 };
 
