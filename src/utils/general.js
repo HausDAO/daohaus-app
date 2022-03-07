@@ -195,11 +195,6 @@ export const timeToNow = time => {
     addSuffix: true,
   });
 };
-
-// export const fullDate = time => {
-//   return format(new Date(time * 1000), 'MM dd yyyy');
-// };
-
 export const formatCreatedAt = createdAt => {
   return format(new Date(createdAt * 1000), 'MMM dd, yyyy');
 };

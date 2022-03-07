@@ -1,24 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Badge, Box, Button, Flex, Tag } from '@chakra-ui/react';
-import { useParams, Link } from 'react-router-dom';
+import { Button, Flex } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 
 import { useAppModal } from '../hooks/useModals';
-import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
-import { Label, ParaLg, ParaMd, ParaSm } from '../components/typography';
 
 import { FORM } from '../data/formLegos/forms';
-import { charLimit, formatCreatedAt } from '../utils/general';
 import {
   fetchDAODocs,
   getSpecialLocationDocs,
-  isCurrentDocAtLocation,
   isEncoded,
   isIPFS,
   isRatified,
 } from '../utils/poster';
 import Dropdown from '../components/dropdown';
 import TextBox from '../components/TextBox';
+import DocCard from '../components/docCard';
 
 const filters = {
   all: {
@@ -82,6 +79,7 @@ const DaoDocs = () => {
     });
     return () => (shouldUpdate = false);
   }, []);
+
   const filterDocs = useMemo(() => docs && filter && filter.fn(docs), [
     filter,
     docs,
@@ -95,8 +93,8 @@ const DaoDocs = () => {
       header='Documents'
       headerEl={<Button onClick={createDoc}>Create Doc</Button>}
     >
-      <Flex mt={3} mr={6} flexDir='column' maxWidth='79.5rem'>
-        <Flex justifyContent='space-between' mr={6} mb={3}>
+      <Flex mt={6} mr={6} flexDir='column' maxWidth='79.5rem'>
+        <Flex justifyContent='space-between' mr={6} mb={4}>
           <TextBox size='sm'>{`${docs?.length} documents`}</TextBox>
           <Dropdown
             selectedItem={filter}
@@ -108,7 +106,7 @@ const DaoDocs = () => {
         </Flex>
         <Flex wrap='wrap' width='auto'>
           {filterDocs?.map(doc => (
-            <DocBox
+            <DocCard
               key={doc.id}
               doc={doc}
               specialLocationDocs={specialLocationDocs}
@@ -120,40 +118,4 @@ const DaoDocs = () => {
   );
 };
 
-const DocBox = ({ doc, specialLocationDocs }) => {
-  const { daochain, daoid } = useParams();
-
-  const title = doc?.title === 'n/a' ? 'Title Missing' : doc.title;
-
-  return (
-    <ContentBox key={doc?.id} mb={6} mr={6} height='12.5rem' width='25rem'>
-      <Flex justifyContent='space-between' flexDirection='column' height='100%'>
-        <Flex width='350px' flexDir='column'>
-          <ParaLg fontSize='1.3rem' mb={2} fontWeight='500'>
-            {charLimit(title)}
-          </ParaLg>
-          <ParaSm mb={4} fontStyle='italic' fontWeight='100'>
-            {`${isRatified(doc) ? 'Ratified ' : 'Posted '} on ${
-              doc?.createdAt ? formatCreatedAt(doc.createdAt) : 'n/a'
-            }`}
-          </ParaSm>
-          <ParaMd mb={3}>{doc?.description || 'No description'}</ParaMd>
-        </Flex>
-        <Flex justifyContent='space-between' mt='auto'>
-          <Flex>
-            {isRatified(doc) && <Badge mr={2}>Ratified</Badge>}
-            {isIPFS(doc) && <Badge mr={2}>IPFS</Badge>}
-            {isEncoded(doc) && <Badge mr={2}>Chain</Badge>}
-            {isCurrentDocAtLocation(doc, specialLocationDocs) && (
-              <Badge>{doc?.location}</Badge>
-            )}
-          </Flex>
-          <Link to={`/dao/${daochain}/${daoid}/doc/${doc.id}`}>
-            <ParaMd>VIEW</ParaMd>
-          </Link>
-        </Flex>
-      </Flex>
-    </ContentBox>
-  );
-};
 export default DaoDocs;

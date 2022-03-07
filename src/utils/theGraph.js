@@ -510,7 +510,7 @@ export const hubChainQuery = async ({
         query,
         variables,
       });
-
+      console.log('chainData.membersHub', chainData.membersHub);
       const withMetaData = chainData?.membersHub
         .map(dao => {
           const withResolvedProposals = {
