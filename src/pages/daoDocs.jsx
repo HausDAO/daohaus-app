@@ -17,14 +17,20 @@ import {
   isIPFS,
   isRatified,
 } from '../utils/poster';
+import Dropdown from '../components/dropdown';
 
 const filters = {
-  IPFS: { fn: doc => isIPFS(doc) && !isRatified(doc), name: 'IPFS' },
-  onchain: {
-    fn: doc => isEncoded(doc?.contentType) && !isRatified(doc),
-    name: 'On Chain',
+  IPFS: {
+    value: 'IPFS',
+    name: 'IPFS',
+    fn: doc => isIPFS(doc) && !isRatified(doc),
   },
-  ratified: { fn: doc => isRatified(doc), name: 'Ratified' },
+  onchain: {
+    value: 'onchain',
+    name: 'On Chain',
+    fn: doc => isEncoded(doc?.contentType) && !isRatified(doc),
+  },
+  ratified: { value: 'ratified', fn: doc => isRatified(doc), name: 'Ratified' },
 };
 
 const getDocsByType = async ({
@@ -69,7 +75,7 @@ const DaoDocs = () => {
   const filterDocs = useMemo(() => {
     if (docs) {
       if (!filter) return docs;
-      return filters[filter]?.(docs) || docs;
+      return filters[filter]?.(docs);
     }
   }, [filter, docs]);
 
@@ -78,7 +84,7 @@ const DaoDocs = () => {
   return (
     <MainViewLayout
       isDao
-      header='DAO Docs'
+      header='Documents'
       headerEl={<Button onClick={createDoc}>Create Doc</Button>}
     >
       <Flex
@@ -91,6 +97,7 @@ const DaoDocs = () => {
         <Flex justifyContent='space-between' mr={6}>
           <Label fontWeight='400'>{`${docs?.length} documents`}</Label>
         </Flex>
+        <Dropdown ini />
         <Flex wrap='wrap' width='auto'>
           {docs?.map(doc => (
             <DocBox
