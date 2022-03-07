@@ -126,10 +126,6 @@ const MinionExecute = ({
     if (hasRaribleAction)
       return <RaribleOrder proposal={proposal} orderType={orderType} />;
 
-    if (proposal.executed || minionDetails?.executed) {
-      return <Box>Executed</Box>;
-    }
-
     if (needsHausApproval) {
       return (
         <ApproveUberHausToken

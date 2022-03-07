@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
-import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
 

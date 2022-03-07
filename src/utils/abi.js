@@ -31,8 +31,9 @@ import ESCROW_MINION from '../contracts/escrowMinion.json';
 import POSTER from '../contracts/poster.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import SWAPR_STAKING from '../contracts/swapr_staking.json';
-
 import { MINION_TYPES } from './proposalUtils';
+import AMB_MODULE from '../contracts/ambModule.json';
+import AMB from '../contracts/iAmb.json';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -61,6 +62,8 @@ export const LOCAL_ABI = Object.freeze({
   DISPERSE_APP,
   SWAPR_STAKING,
   POSTER,
+  AMB_MODULE,
+  AMB,
 });
 
 const getBlockExplorerApiKey = chainID => {
@@ -286,6 +289,14 @@ export const decodeMultisendTx = (multisendAddress, encodedTx) => {
   }
 
   return transactions;
+};
+
+export const decodeAMBTx = (ambModuleAddress, encodedTx) => {
+  const ambModule = new Contract(ambModuleAddress, AMB_MODULE);
+  return ambModule.interface.decodeFunctionData(
+    'executeTransaction',
+    encodedTx,
+  );
 };
 
 export const getLocalABI = contract => LOCAL_ABI[contract.abiName];

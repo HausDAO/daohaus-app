@@ -1,7 +1,7 @@
 import Web3, { utils as Web3Utils } from 'web3';
 import abiDecoder from 'abi-decoder';
 import { createContract } from './contract';
-import { decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
+import { decodeAMBTx, decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
 import { TX } from '../data/txLegos/contractTX';
@@ -117,19 +117,66 @@ export const decodeMultiAction = async ([encodedMulti], params) => {
   const multiSendAddress = chainByID(chainID).safeMinion.safe_mutisend_addr;
 
   //   SINGLE ARRAY VERSION
-  if (encodedMulti?.data) {
-    return {
-      ...encodedMulti,
-      actions: await Promise.all(
-        decodeMultisendTx(multiSendAddress, encodedMulti.data).map(
-          async action => ({
-            ...action,
-            data: await decodeAction(action, params),
-          }),
-        ),
+
+  const decodedActions = {
+    ...encodedMulti,
+    actions: await Promise.all(
+      decodeMultisendTx(multiSendAddress, encodedMulti.data).map(
+        async action => ({
+          ...action,
+          data: await decodeAction(action, params),
+        }),
       ),
+    ),
+  };
+  if (decodedActions.actions[0]?.data?.name === 'requireToPassMessage') {
+    // cross-chain AMB bridge call
+    const [contract, data] = decodedActions.actions[0].data.params;
+    const ambDecodedTx = decodeAMBTx(contract.value, data.value);
+    return {
+      ...decodedActions,
+      actions: [
+        {
+          ...decodedActions.actions[0],
+          actions: await Promise.all(
+            decodeMultisendTx(ambDecodedTx.to, ambDecodedTx.data).map(
+              async action => ({
+                ...action,
+                data: await decodeAction(action, {
+                  chainID: params.foreignChainId,
+                }),
+              }),
+            ),
+          ),
+        },
+      ],
     };
   }
+  return decodedActions;
+
+  //  CODE REVIEW
+  //  Question for Sam
+  //  Why does the data structure come in as nested arrays?
+  //  Could there be more than one collection of transactions?
+  //  If not, I clean this up a lot.
+
+  //  NESTED ARRAY VERSION
+  // const multiCalls = actions.map(multiCall => ({
+  //   ...multiCall,
+  //   actions: decodeMultisendTx(multiSendAddress, multiCall.data),
+  // }));
+  // const decoded = await Promise.all(
+  //   multiCalls.map(async multiCall => {
+  //     const decodedTx = await Promise.all(
+  //       multiCall.actions.map(async action => ({
+  //         ...action,
+  //         data: await decodeAction(action, params),
+  //       })),
+  //     );
+  //     return { ...multiCall, actions: decodedTx };
+  //   }),
+  // );
+  // return decoded;
 };
 
 export const getMinionAction = async params => {

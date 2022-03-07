@@ -181,4 +181,14 @@ export const CONTRACTS = {
     abiName: 'POSTER',
     contractAddress: '.contextData.chainConfig.poster',
   },
+  AMB_MODULE: {
+    location: 'local',
+    abiName: 'AMB_MODULE',
+    conractAddress: '.localValues.ambModuleAddress',
+  },
+  AMB: {
+    location: 'local',
+    abiName: 'AMB',
+    conractAddress: '.localValues.ambAddress',
+  },
 };

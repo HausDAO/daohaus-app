@@ -19,6 +19,7 @@ import {
 } from '../graphQL/snapshot-queries';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { omit } from './general';
+import { isModuleEnabled } from './gnosis';
 import { getApiMetadata, fetchApiVaultData, fetchMetaData } from './metadata';
 import {
   GET_ERC721,
@@ -26,12 +27,12 @@ import {
   GET_POAP,
   GET_TRANSMUTATION,
   GET_WRAP_N_ZAPS,
+  GET_MINION_BY_NAME,
 } from '../graphQL/boost-queries';
 import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { UBERHAUS_DATA } from './uberhaus';
-import { validateSafeMinion } from './vaults';
 
 const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
@@ -171,6 +172,17 @@ export const fetchPoapAddresses = async args => {
     query: GET_POAP,
     variables: {
       eventId: args.eventId,
+    },
+  });
+};
+
+export const fetchMinionByName = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: GET_MINION_BY_NAME,
+    variables: {
+      minionName: args.minionName,
+      molochAddress: args.molochAddress,
     },
   });
 };
@@ -335,14 +347,20 @@ const completeQueries = {
         const vaultData = await Promise.all(
           vaultApiData.map(async vault => {
             if (vault.minionType === MINION_TYPES.SAFE) {
-              const { isMinionModule } = await validateSafeMinion(
-                args.chainID,
-                vault,
-              );
-              return {
-                ...vault,
-                isMinionModule,
-              };
+              try {
+                const isMinionModule = await isModuleEnabled(
+                  args.chainID,
+                  vault.safeAddress,
+                  vault.address,
+                );
+                return {
+                  ...vault,
+                  isMinionModule,
+                };
+              } catch (error) {
+                console.error(error);
+              }
+              return vault;
             }
             return vault;
           }),

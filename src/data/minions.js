@@ -1,3 +1,4 @@
+import { CUSTOM_BOOST_INSTALL_FORMS } from './formLegos/customBoostInstall';
 import { FORM } from './formLegos/forms';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { NFT_ACTIONS } from '../utils/nftData';
@@ -29,6 +30,11 @@ export const MINION_NETWORKS = {
     '0x64': true,
     '0x89': true,
     '0xa4b1': true,
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE]: {
+    '0x1': false,
+    '0x4': true,
+    '0x64': true,
   },
 };
 
@@ -84,6 +90,17 @@ export const MINION_CONTENT = {
     ],
     version: '3',
   },
+  [MINION_TYPES.CROSSCHAIN_SAFE]: {
+    title: 'Cross-chain Safe Minion',
+    description:
+      'Move assets & execute transactions on a Mainnet Gnosis Safe through your Gnosis Chain DAO proposals',
+    info: [
+      "This operation will deploy a new Gnosis Safe Minion with an AMB Module for your DAO. The Gnosis Safe Minion manages your DAO's funds & interacts with smart contracts, while the AMB Module helps relay data between chains.",
+      'By installing this Minion, your DAO will be able to vote on & pass proposals on Gnosis Chain, while controlling assets and executing transactions on Ethereum Mainnet. This gives DAOs greater access to use cases on Mainnet such as DeFis and NFTs, while minimizing governance costs.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity.',
+    ],
+    version: '1',
+  },
 };
 const SETTINGS_LINKS = {
   VAULT_LINK: {
@@ -128,5 +145,25 @@ export const MINIONS = {
     summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
     nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_RARIBLE],
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE]: {
+    minionType: MINION_TYPES.SAFE,
+    content: MINION_CONTENT[MINION_TYPES.CROSSCHAIN_SAFE],
+    networks: MINION_NETWORKS[MINION_TYPES.CROSSCHAIN_SAFE],
+    summonForm: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
+    addSummonSteps: {
+      STEP3: {
+        type: 'zodiacActionForm',
+        form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+        finish: true,
+        ctaText: 'Deploy & Add Module',
+        next: 'FINISH',
+        stepLabel: 'Deploy Brigde Module for Avatar on Foreign Chain',
+        isUserStep: true,
+        checklist: ['isConnected'],
+      },
+    },
+    settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER],
   },
 };

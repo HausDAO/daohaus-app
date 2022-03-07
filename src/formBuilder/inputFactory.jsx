@@ -44,6 +44,10 @@ import GenericSelect from './genericSelect';
 import ImageInput from './imageInput';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
+import ForeignChainSelect from './foreignChainSelect';
+import SwitchNetwork from './switchNetwork';
+import PrecomputedMinionName from './precomputedMinionName';
+import AmbEncoder from './ambEncoder';
 import UberHausDelegateInput from './uberHausDelegateInput';
 import UberHausTributeInput from './uberHausTributeInput';
 import UberHausRageQuitInput from './uberHausRageQuitInput';
@@ -229,6 +233,18 @@ export const InputFactory = props => {
   }
   if (type === 'docSelect') {
     return <DocSelect {...props} />;
+  }
+  if (type === 'foreignChainSelect') {
+    return <ForeignChainSelect {...props} />;
+  }
+  if (type === 'switchNetwork') {
+    return <SwitchNetwork {...props} />;
+  }
+  if (type === 'precomputedMinionName') {
+    return <PrecomputedMinionName {...props} />;
+  }
+  if (type === 'ambEncoder') {
+    return <AmbEncoder {...props} />;
   }
   return null;
 };

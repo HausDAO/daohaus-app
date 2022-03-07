@@ -87,3 +87,17 @@ export const GET_ERC1155 = gql`
     }
   }
 `;
+
+export const GET_MINION_BY_NAME = gql`
+  query minions($molochAddress: String!, $minionName: String!) {
+    minions(
+      where: { details: $minionName, moloch: $molochAddress }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      id
+      minionAddress
+      safeAddress
+    }
+  }
+`;
