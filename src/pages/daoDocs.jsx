@@ -18,19 +18,29 @@ import {
   isRatified,
 } from '../utils/poster';
 import Dropdown from '../components/dropdown';
+import TextBox from '../components/TextBox';
 
 const filters = {
+  all: {
+    value: 'all',
+    name: 'All Docs',
+    fn: docs => docs,
+  },
   IPFS: {
     value: 'IPFS',
     name: 'IPFS',
-    fn: doc => isIPFS(doc) && !isRatified(doc),
+    fn: docs => docs.filter(doc => isIPFS(doc)),
   },
   onchain: {
     value: 'onchain',
     name: 'On Chain',
-    fn: doc => isEncoded(doc?.contentType) && !isRatified(doc),
+    fn: docs => docs.filter(doc => isEncoded(doc)),
   },
-  ratified: { value: 'ratified', fn: doc => isRatified(doc), name: 'Ratified' },
+  ratified: {
+    value: 'ratified',
+    name: 'Ratified',
+    fn: docs => docs.filter(doc => isRatified(doc)),
+  },
 };
 
 const getDocsByType = async ({
@@ -59,7 +69,7 @@ const DaoDocs = () => {
 
   const [docs, setDocs] = useState(null);
   const [specialLocationDocs, setSpecialDocs] = useState(null);
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(filters.all);
 
   useEffect(() => {
     let shouldUpdate = true;
@@ -72,34 +82,32 @@ const DaoDocs = () => {
     });
     return () => (shouldUpdate = false);
   }, []);
-  const filterDocs = useMemo(() => {
-    if (docs) {
-      if (!filter) return docs;
-      return filters[filter]?.(docs);
-    }
-  }, [filter, docs]);
+  const filterDocs = useMemo(() => docs && filter && filter.fn(docs), [
+    filter,
+    docs,
+  ]);
 
   const createDoc = () => formModal(FORM.RATIFY_MD);
-
+  const handleFilterMenuClick = e => setFilter(filters[e.target.value]);
   return (
     <MainViewLayout
       isDao
       header='Documents'
       headerEl={<Button onClick={createDoc}>Create Doc</Button>}
     >
-      <Flex
-        mt={3}
-        display='inline-flex'
-        mr={6}
-        flexDir='column'
-        maxWidth='79.5rem'
-      >
-        <Flex justifyContent='space-between' mr={6}>
-          <Label fontWeight='400'>{`${docs?.length} documents`}</Label>
+      <Flex mt={3} mr={6} flexDir='column' maxWidth='79.5rem'>
+        <Flex justifyContent='space-between' mr={6} mb={3}>
+          <TextBox size='sm'>{`${docs?.length} documents`}</TextBox>
+          <Dropdown
+            selectedItem={filter}
+            setter={setFilter}
+            items={filters}
+            label='Filter By:'
+            onClick={handleFilterMenuClick}
+          />
         </Flex>
-        <Dropdown ini />
         <Flex wrap='wrap' width='auto'>
-          {docs?.map(doc => (
+          {filterDocs?.map(doc => (
             <DocBox
               key={doc.id}
               doc={doc}

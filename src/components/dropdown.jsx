@@ -11,13 +11,13 @@ import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import TextBox from './TextBox';
 
-const Dropdown = ({ initialItem, items, label }) => {
+const Dropdown = ({ selectedItem, items, label, onClick }) => {
   return (
     <Flex alignItems='center'>
       <TextBox mr='2' size='sm'>
         {label}
       </TextBox>
-      <Menu value={initialItem?.value}>
+      <Menu value={selectedItem?.value}>
         <MenuButton
           textTransform='uppercase'
           fontFamily='heading'
@@ -26,12 +26,16 @@ const Dropdown = ({ initialItem, items, label }) => {
           _hover={{ color: 'secondary.400' }}
           display='inline-block'
         >
-          {initialItem?.name}
+          {selectedItem?.name}
           <Icon as={RiArrowDropDownFill} color='secondary.500' />
         </MenuButton>
         <MenuList>
-          {items?.map(item => (
-            <MenuItem key={item.value} value={item.value} onClick={item.fn}>
+          {Object.values(items)?.map(item => (
+            <MenuItem
+              key={item.value}
+              value={item.value}
+              onClick={onClick || item.fn}
+            >
               {item.name}
             </MenuItem>
           ))}
