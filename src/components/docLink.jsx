@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Icon } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { Link, useParams } from 'react-router-dom';
 
-import { TiDocumentText } from 'react-icons/ti';
 import { HiOutlineDocumentText } from 'react-icons/hi';
 import TextBox from './TextBox';
 import { fetchDAODocs } from '../utils/poster';

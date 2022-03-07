@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Button, Flex } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
 
-import { FORM } from '../data/formLegos/forms';
 import {
   fetchDAODocs,
   getSpecialLocationDocs,
@@ -16,6 +23,7 @@ import {
 import Dropdown from '../components/dropdown';
 import TextBox from '../components/TextBox';
 import DocCard from '../components/docCard';
+import { POSTER_FORMS } from '../data/formLegos/posterForms';
 
 const filters = {
   all: {
@@ -84,15 +92,27 @@ const DaoDocs = () => {
     filter,
     docs,
   ]);
-
-  const createDoc = () => formModal(FORM.RATIFY_MD);
   const handleFilterMenuClick = e => setFilter(filters[e.target.value]);
+  const handleForm = e => {
+    formModal(POSTER_FORMS[e.target.value]);
+  };
+  const FormMenu = (
+    <Menu>
+      <MenuButton outline='secondary.500' as={Button} variant='outline'>
+        Propose New Document
+      </MenuButton>
+      <MenuList>
+        {Object.values(POSTER_FORMS).map(form => (
+          <MenuItem key={form.id} value={form.id} onClick={handleForm}>
+            {form.title}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
+  );
+
   return (
-    <MainViewLayout
-      isDao
-      header='Documents'
-      headerEl={<Button onClick={createDoc}>Create Doc</Button>}
-    >
+    <MainViewLayout isDao header='Documents' headerEl={FormMenu}>
       <Flex mt={6} mr={6} flexDir='column' maxWidth='79.5rem'>
         <Flex justifyContent='space-between' mr={6} mb={4}>
           {docs && <TextBox size='sm'>{`${docs?.length} documents`}</TextBox>}

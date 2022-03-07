@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Badge, Flex, SkeletonText, Heading, Box } from '@chakra-ui/react';
-import MDEditor from '@uiw/react-md-editor';
 import { Link, useParams } from 'react-router-dom';
-
 import { RiArrowLeftLine } from 'react-icons/ri';
+
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
+import MarkdownDisplay from '../components/MarkdownDisplay';
+import TextBox from '../components/TextBox';
+import { ParaMd } from '../components/typography';
 
 import { DAO_DOC } from '../graphQL/postQueries';
 import { graphQuery } from '../utils/apollo';
@@ -17,9 +19,6 @@ import {
   isRatified,
   isSpecialLocation,
 } from '../utils/poster';
-import MarkdownDisplay from '../components/MarkdownDisplay';
-import TextBox from '../components/TextBox';
-import { ParaMd } from '../components/typography';
 import { formatCreatedAt } from '../utils/general';
 
 const getDAOdoc = async ({ daochain, setDoc, docId }) => {

@@ -32,7 +32,6 @@ export const POSTER_FORMS = {
   RATIFY_DAO_DOC: {
     id: 'RATIFY_DAO_DOC',
     dev: true,
-    logValues: true,
     title: 'Ratify DAO Document',
     description: 'Create a proposal to ratify an existing DAO Doc',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
