@@ -47,14 +47,17 @@ const DaoDoc = () => {
   const [doc, setDoc] = useState('loading');
 
   useEffect(() => {
+    let shouldUpdate = true;
     if (docId) {
       getDAOdoc({
         daochain,
         daoid,
         docId,
         setDoc,
+        shouldUpdate,
       });
     }
+    return () => (shouldUpdate = false);
   }, [docId]);
   const title = doc?.title === 'n/a' ? 'Title Missing' : doc.title;
   return (

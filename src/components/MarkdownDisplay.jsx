@@ -3,6 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 const CustomMarkdownStyles = styled.div`
+  width: 100%;
   max-width: 700px;
   .wmde-markdown {
     font-family: 'Mulish';

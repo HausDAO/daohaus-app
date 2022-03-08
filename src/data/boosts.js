@@ -621,7 +621,7 @@ export const BOOSTS = {
     cost: 'free',
     settings: {
       type: 'internalLink',
-      appendToDaoPath: '/docs',
+      appendToDaoPath: 'docs',
     },
   },
 };
