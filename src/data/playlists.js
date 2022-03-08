@@ -52,6 +52,11 @@ export const BOOST_PLAYLISTS = {
     id: 'disperse',
     forms: ['MINION_DISPERSE'],
   },
+  POSTER: {
+    name: 'Poster',
+    id: 'poster',
+    forms: ['RATIFY_MD', 'RATIFY_DAO_DOC', 'POST_IPFS_MD', 'POST_MD'],
+  },
 };
 
 export const defaultProposals = {

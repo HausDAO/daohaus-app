@@ -614,8 +614,10 @@ export const BOOSTS = {
   POSTER: {
     id: 'POSTER',
     boostContent: CONTENT.POSTER,
+    steps: STEPS.BASIC_BOOST,
+    playlist: BOOST_PLAYLISTS.POSTER,
     categories: ['governance', 'community'],
-    networks: { 0x64: true, 0x1: true, 0x4: true },
+    networks: { '0x64': true, '0x1': true, '0x4': true },
     cost: 'free',
     settings: {
       type: 'internalLink',
