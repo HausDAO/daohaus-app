@@ -266,6 +266,20 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  POSTER: {
+    title: 'DAO Poster',
+    description: 'Publish Markdown as a DAO using DAOhaus and Poster',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.1',
+    pars: [
+      'Poster is a simple one function contract that can post data in any shape or size to chain.',
+      'Poster can be used to provide on-boarding information to users, ratify important DAO documents, organize data DAO documents that are stored on IPFS',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+      { href: 'https://github.com/onPoster', label: 'Poster Github' },
+    ],
+  },
 };
 
 export const COMMON_STEPS = {
@@ -595,6 +609,17 @@ export const BOOSTS = {
     settings: {
       type: 'internalLink',
       appendToDaoPath: 'boost/snapshot/settings',
+    },
+  },
+  POSTER: {
+    id: 'POSTER',
+    boostContent: CONTENT.POSTER,
+    categories: ['governance', 'community'],
+    networks: { 0x64: true, 0x1: true, 0x4: true },
+    cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: '/docs',
     },
   },
 };
