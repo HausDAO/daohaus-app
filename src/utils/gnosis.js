@@ -232,6 +232,7 @@ export const createGnosisSafeTxProposal = async ({
   };
 
   try {
+    console.log('Gnosis Tx Proposal', JSON.stringify(tx));
     await postApiGnosis(
       networkName,
       `safes/${safeAddress}/multisig-transactions/`,
