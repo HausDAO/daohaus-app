@@ -50,6 +50,10 @@ const ZodiacActionForm = props => {
       chainID: foreignChainId,
       safeAddress, // must be a checksummed address
     });
+    if (!safeSdk) {
+      console.error('Safe not found');
+      return;
+    }
     if (
       !(await safeSdk.getOwners()).includes(
         Web3Utils.toChecksumAddress(address),

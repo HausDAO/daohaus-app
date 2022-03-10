@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { TiWarningOutline } from 'react-icons/ti';
 import Icon from '@chakra-ui/icon';
 import { Box, Flex, Text } from '@chakra-ui/layout';
@@ -230,44 +231,60 @@ const SafeMinionDetails = ({
           justifyContent='space-around'
           justifyItems='flex-start'
         >
-          <GnosisSafeCard
-            actionDetails={
-              injectedProvider &&
-              !vault.isMinionModule && (
-                <>
-                  <Text mt={4}>
-                    Actions Required
-                    <Icon as={TiWarningOutline} color='secondary.300' ml={2} />
-                  </Text>
-                  <Flex mt={4}>
-                    <ToolTipWrapper
-                      placement='right'
-                      tooltip
-                      tooltipText={
-                        isSafeOwner
-                          ? SF_TOOLTIP.ADD_MODULE
-                          : SF_TOOLTIP.NO_OWNER
-                      }
-                    >
-                      <Button
-                        isLoading={isLoading === 'enableMinionModule'}
-                        isDisabled={!isSafeOwner}
-                        mr={6}
-                        onClick={submitMinionModuleTxProposal}
-                        variant='outline'
-                        size='sm'
+          {safeDetails ? (
+            <GnosisSafeCard
+              actionDetails={
+                injectedProvider &&
+                !vault.isMinionModule && (
+                  <>
+                    <Text mt={4}>
+                      Actions Required
+                      <Icon
+                        as={TiWarningOutline}
+                        color='secondary.300'
+                        ml={2}
+                      />
+                    </Text>
+                    <Flex mt={4}>
+                      <ToolTipWrapper
+                        placement='right'
+                        tooltip
+                        tooltipText={
+                          isSafeOwner
+                            ? SF_TOOLTIP.ADD_MODULE
+                            : SF_TOOLTIP.NO_OWNER
+                        }
                       >
-                        Add Minion as Module
-                      </Button>
-                    </ToolTipWrapper>
-                  </Flex>
-                </>
-              )
-            }
-            handleCopy={handleCopy}
-            safeDetails={safeDetails}
-            vaultAddress={vault.address}
-          />
+                        <Button
+                          isLoading={isLoading === 'enableMinionModule'}
+                          isDisabled={!isSafeOwner}
+                          mr={6}
+                          onClick={submitMinionModuleTxProposal}
+                          variant='outline'
+                          size='sm'
+                        >
+                          Add Minion as Module
+                        </Button>
+                      </ToolTipWrapper>
+                    </Flex>
+                  </>
+                )
+              }
+              handleCopy={handleCopy}
+              safeDetails={safeDetails}
+              vaultAddress={vault.address}
+            />
+          ) : (
+            <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
+              <Icon
+                as={RiErrorWarningLine}
+                color='secondary.300'
+                mr={1}
+                transform='translateY(4px)'
+              />
+              SafesSDK Error. Try again later
+            </Flex>
+          )}
           {foreignSafeDetails && (
             <GnosisSafeCard
               actionDetails={
