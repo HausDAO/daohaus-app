@@ -27,6 +27,9 @@ export const HOME_DAO = gql`
         uberHausAddress
         uberHausDelegate
         uberHausDelegateRewardFactor
+        crossChainMinion
+        foreignChainId
+        foreignSafeAddress
       }
       depositToken {
         tokenAddress
@@ -75,6 +78,9 @@ guildkick
 isMinion
 lootRequested
 memberAddress
+minionExecuteActionTx {
+  id
+}
 newMember
 noShares
 noVotes
@@ -109,6 +115,8 @@ uberHausMinionExecuted
 minion {
   minionType
   minQuorum
+  crossChainMinion
+  foreignChainId
 }
 actions {
   target

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';

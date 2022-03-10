@@ -23,6 +23,18 @@ const SUB_FORMS = {
       ],
     ],
   },
+  START_CROSSCHAIN_SAFE_MULTI: {
+    id: 'START_CROSSCHAIN_SAFE_MULTI',
+    title: 'Safe Cross Chain Minion Transaction Builder',
+    description: 'Create a multi-transaction proposal',
+    type: PROPOSAL_TYPES.MINION_SAFE,
+    minionType: MINION_TYPES.SAFE,
+    required: ['title', 'ambModuleAddress'],
+    fields: [
+      [FIELD.TITLE, FIELD.DESCRIPTION],
+      [FIELD.CROSSCHAIN_MINION_SELECT],
+    ],
+  },
   CREATE_TX: {
     id: 'CREATE_TX',
     isTx: true,
@@ -44,6 +56,10 @@ const SUB_FORMS = {
     id: 'MULTICALL_CONFIRMATION',
     fields: [[], []],
   },
+  CROSSCHAIN_MULTICALL_CONFIRMATION: {
+    id: 'CROSSCHAIN_MULTICALL_CONFIRMATION',
+    fields: [[FIELD.AMB_ENCODER], []],
+  },
 };
 
 export const MULTI_FORMS = {
@@ -63,6 +79,23 @@ export const MULTI_FORMS = {
       SUB_FORMS.START_SAFE_MULTI,
       SUB_FORMS.CREATE_TX,
       SUB_FORMS.MULTICALL_CONFIRMATION,
+    ],
+  },
+  CROSSCHAIN_SAFE_TX_BUILDER: {
+    id: 'CROSSCHAIN_SAFE_TX_BUILDER',
+    isTxBuilder: true,
+    type: 'multiForm',
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.CROSSCHAIN_SAFE_MULTICALL,
+    title: 'Cross Chain Safe Minion TX Builder',
+    description: 'Create a multi-transaction proposal',
+    footer: 'end',
+    collapse: 'all',
+    customWidth: `900px`,
+    forms: [
+      SUB_FORMS.START_CROSSCHAIN_SAFE_MULTI,
+      SUB_FORMS.CREATE_TX,
+      SUB_FORMS.CROSSCHAIN_MULTICALL_CONFIRMATION,
     ],
   },
 };

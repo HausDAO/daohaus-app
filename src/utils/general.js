@@ -102,6 +102,9 @@ export const detailsToJSON = values => {
   if (values.minionType) {
     details.minionType = values.minionType;
   }
+  if (values.proposalType) {
+    details.proposalType = values.proposalType;
+  }
   if (values.fundsRequested) {
     details.fundsRequested = values.fundsRequested;
     details.token = values.token;
@@ -151,11 +154,14 @@ export const minionFromDaoOverview = ({
   searchBy,
   daoOverview,
   searchParam,
+  crossChain,
 }) => {
   if (!daoOverview || !searchBy || !searchParam) return;
   if (searchBy === 'type')
     return daoOverview.minions?.filter(
-      minion => minion.minionType === searchParam,
+      minion =>
+        minion.minionType === searchParam &&
+        !!minion.crossChainMinion === !!crossChain,
     );
   if (searchBy === 'name')
     return daoOverview.minions.find(minion => minion.details === searchParam);
@@ -177,6 +183,14 @@ export const numberWithCommas = num => {
   if (localNoZeroDec.includes(`e-`)) return localNoZeroDec;
 
   return noZeroDec ? utils.commify(noZeroDec) : num;
+};
+
+export const fromWeiToFixedDecimal = (value, decimals = 2) => {
+  const commaIndex = utils.formatEther(value).indexOf('.');
+  if (commaIndex === -1) {
+    return Number(utils.formatEther(value));
+  }
+  return Number(utils.formatEther(value).slice(0, commaIndex + decimals + 1));
 };
 
 export const truncateAddr = addr => {

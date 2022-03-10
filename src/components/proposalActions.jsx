@@ -21,6 +21,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
+import CrossChainMinionExecute from './crossChainMinionExecute';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import MinionExecute from './minionExecute';
@@ -496,10 +497,12 @@ const ProposalVote = ({
               </Flex>
             ))}
 
-          {((proposal?.status === 'Passed' && proposal?.minionAddress) ||
+          {((proposal?.status === 'NeedsExecution' &&
+            proposal?.minionAddress) ||
             earlyExecuteMinionType(proposal)) && (
             <Stack mt='15px' justify='center'>
-              {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
+              {(proposal?.status === 'NeedsExecution' &&
+                proposal?.minionAddress) ||
               (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
                 <MinionExecute
                   hideMinionExecuteButton={hideMinionExecuteButton}
@@ -508,7 +511,7 @@ const ProposalVote = ({
                   early={
                     earlyExecuteMinionType(proposal) &&
                     proposal.yesShares >= quorumNeeded &&
-                    !proposal?.status === 'Passed'
+                    !proposal?.status === 'NeedsExecution'
                   }
                 />
               ) : (
@@ -521,6 +524,9 @@ const ProposalVote = ({
                 )
               )}
             </Stack>
+          )}
+          {proposal?.executed && proposal?.minionExecuteActionTx && (
+            <CrossChainMinionExecute chainID={daochain} proposal={proposal} />
           )}
           {proposal?.escrow &&
             (proposal?.status === 'Failed' ||

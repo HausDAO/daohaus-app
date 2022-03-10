@@ -19,7 +19,7 @@ export const DETAILS = {
     minionType: MINION_TYPES.VANILLA,
   },
   PAYROLL_PROPOSAL: {
-    title: '.values.title',
+    title: '.values.title || Minion sends a token',
     description: `.values.description || ${HASH.EMPTY_FIELD}`,
     link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
@@ -78,7 +78,7 @@ export const DETAILS = {
   OFFER_NFT_TRIBUTE: {
     title: '.values.title',
     description: '.values.description',
-    link: '.values.link',
+    link: '.values.image',
     proposalType: '.formData.type',
   },
   BUY_NFT_RARIBLE: {
@@ -104,5 +104,44 @@ export const DETAILS = {
     link: '.values.link',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
+  },
+  UBERHAUS_DELEGATE: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'delegate',
+  },
+  UBERHAUS_STAKING: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'staking',
+  },
+  UBERHAUS_RAGEQUIT: {
+    title: `UberHaus RageQuit`,
+    description: `This is a proposal to ragequit from UberHaus`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'ragequit',
+  },
+  UBERHAUS_WITHDRAW: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'withdraw',
+  },
+  UBERHAUS_PULL: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    uberHaus: 'true',
+    uberType: 'pull',
   },
 };

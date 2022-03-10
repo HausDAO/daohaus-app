@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiExternalLinkLine } from 'react-icons/ri';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Flex, Link } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
 

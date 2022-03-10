@@ -1,3 +1,5 @@
+import { UBERHAUS_DATA } from '../utils/uberhaus';
+
 export const CONTRACTS = {
   CURRENT_MOLOCH: {
     location: 'local',
@@ -94,7 +96,17 @@ export const CONTRACTS = {
     abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  UBERHAUS_MOLOCH: {
+    location: 'local',
+    abiName: 'MOLOCH_V2',
+    contractAddress: UBERHAUS_DATA.ADDRESS,
+  },
   UBERHAUS_MINION: {
+    location: 'local',
+    abiName: 'UBERHAUS_MINION',
+    contractAddress: '.localValues.minionAddress',
+  },
+  LOCAL_UBERHAUS_MINION: {
     location: 'local',
     abiName: 'UBERHAUS_MINION',
     contractAddress: '.localValues.minionAddress',
@@ -158,5 +170,15 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'DISPERSE_APP',
     conractAddress: '.contextData.chainConfig.disperse_app',
+  },
+  AMB_MODULE: {
+    location: 'local',
+    abiName: 'AMB_MODULE',
+    conractAddress: '.localValues.ambModuleAddress',
+  },
+  AMB: {
+    location: 'local',
+    abiName: 'AMB',
+    conractAddress: '.localValues.ambAddress',
   },
 };

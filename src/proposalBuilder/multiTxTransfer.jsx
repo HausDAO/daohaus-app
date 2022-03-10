@@ -88,23 +88,48 @@ const SingleActionDisplay = ({ action, index }) => {
       <Divider mb={3} />
       {isOpen && (
         <>
-          <ActionItem label='Target Contract' data={action.to} />
           {action.value !== ethers.constants.AddressZero && (
             <ActionItem label='Target Contract' data={action.to} />
           )}
-          <TextBox size='xs' variant='label' mb={3}>
-            Parameters:
-          </TextBox>
-          <Box ml='6'>
-            {action.data.params.map((param, index, params) => (
-              <Box key={uuid()} mb={3}>
-                <ActionItem label='Name:' data={param.name} />
-                <ActionItem label='Data Type:' data={param.type} />
-                <ActionItem label='Value:' data={param.value.toString()} />
-                {index !== params?.length - 1 && <Divider />}
+          {action.actions ? (
+            <>
+              <Box mb={3}>
+                <ActionItem
+                  label='Value:'
+                  data={Number(action.value).toString(10)}
+                />
+                <ActionItem
+                  label='Actions:'
+                  data={`x${action.actions.length}`}
+                />
               </Box>
-            ))}
-          </Box>
+              <Box ml='6'>
+                {action.actions?.map((subaction, idx) => (
+                  <SingleActionDisplay
+                    key={uuid()}
+                    action={subaction}
+                    index={idx}
+                  />
+                ))}
+              </Box>
+            </>
+          ) : (
+            <>
+              <TextBox size='xs' variant='label' mb={3}>
+                Parameters:
+              </TextBox>
+              <Box ml='6'>
+                {action.data.params.map((param, index, params) => (
+                  <Box key={uuid()} mb={3}>
+                    <ActionItem label='Name:' data={param.name} />
+                    <ActionItem label='Data Type:' data={param.type} />
+                    <ActionItem label='Value:' data={param.value.toString()} />
+                    {index !== params?.length - 1 && <Divider />}
+                  </Box>
+                ))}
+              </Box>
+            </>
+          )}
           <Divider />
         </>
       )}

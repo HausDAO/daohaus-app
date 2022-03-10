@@ -28,12 +28,16 @@ export const INFO_TEXT = {
     'Allows the DAO to execute proposals once a set percentage of passed votes has been reached. We recommend 50% or higher. This cannot be changed once deployed.',
   RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
   SAFE_ADDRESS: 'Address of an already deployed Gnosis Safe.',
+  FOREIGN_SAFE_ADDRESS:
+    'Address of an already deployed Gnosis Safe on the Foreign Chain.',
   TRIBUTE_MINION:
     'This is the minion that will receive the NFT after the proposal passes.',
   NFT_ADDRESS: 'This should be the contract address for the NFT.',
   NFT_TOKEN_ID:
     'This should be the Token ID for your NFT and then select the correct NFT standard.',
   BUYOUT_MINION: 'This proposal must be executed by a minion.',
+  UBERHAUS_TRIBUTE:
+    'DAOs must stake HAUS to join UberHAUS. Your UberHAUS minion will need to have HAUS before this proposal can be executed.',
 };
 export const FIELD = {
   TITLE: {
@@ -171,7 +175,23 @@ export const FIELD = {
     expectType: 'address',
     filters: {
       [MINION_TYPES.SAFE]: minionVault => {
-        return minionVault.isMinionModule;
+        return minionVault.isMinionModule && !minionVault.crossChainMinion;
+      },
+      [MINION_TYPES.CROSSCHAIN_SAFE]: minionVault => {
+        return minionVault.crossChainMinion;
+      },
+    },
+  },
+  CROSSCHAIN_MINION_SELECT: {
+    type: 'minionSelect',
+    label: 'Select a minion',
+    name: 'selectedMinion',
+    htmlFor: 'selectedMinion',
+    placeholder: 'Choose a cross-chain minion',
+    expectType: 'address',
+    filters: {
+      [MINION_TYPES.SAFE]: minionVault => {
+        return minionVault.isMinionModule && minionVault.crossChainMinion;
       },
     },
   },
@@ -287,6 +307,15 @@ export const FIELD = {
   },
   MINION_NAME: {
     type: 'input',
+    label: 'Minion Name',
+    name: 'minionName',
+    helperText: 'All minions get a name',
+    htmlFor: 'minionName',
+    placeholder: 'Sally',
+    expectType: 'any',
+  },
+  PRECOMPUTED_MINION_NAME: {
+    type: 'precomputedMinionName',
     label: 'Minion Name',
     name: 'minionName',
     helperText: 'All minions get a name',
@@ -472,6 +501,70 @@ export const FIELD = {
     htmlFor: 'tokenAddress',
     placeholder: 'Choose a Token',
     expectType: 'address',
+  },
+  FOREIGN_CHAIN_SELECT: {
+    type: 'foreignChainSelect',
+    label: 'Select a Foreign Chain',
+    name: 'foreignChainId',
+    htmlFor: 'foreignChainId',
+    placeholder: 'Choose a Foreign Chain',
+    expectType: 'any',
+  },
+  SWITCH_NETWORK: {
+    type: 'switchNetwork',
+    label: 'Switch Network',
+    name: 'swithNetwork',
+    htmlFor: 'swithNetwork',
+    placeholder: 'Change Network',
+    warningMessage: '',
+    expectType: 'any',
+  },
+  AMB_ENCODER: {
+    type: 'ambEncoder',
+    label: '',
+    name: 'ambEncoder',
+    htmlFor: 'ambEncoder',
+  },
+  UBERHAUS_DELEGATE: {
+    type: 'uberHausDelegateInput',
+    htmlFor: 'uberHausDelegate',
+    name: 'uberHausDelegate',
+    label: 'New Delegate',
+    expectType: 'address',
+  },
+  UBERHAUS_TRIBUTE: {
+    type: 'uberHausTributeInput',
+    htmlFor: 'uberHausTributeOffered',
+    name: 'uberHausTributeOffered',
+    placeholder: '0',
+    label: 'Tribute Offered',
+    info: INFO_TEXT.UBERHAUS_TRIBUTE,
+    expectType: 'number',
+  },
+  UBERHAUS_RAGE_QUIT_INPUT: {
+    type: 'uberHausRageQuitInput',
+    htmlFor: 'uberHausShares',
+    name: 'uberHausShares',
+    label: 'Shares To Rage',
+    placeholder: '0',
+    info: INFO_TEXT.RAGE_QUIT_INPUT,
+    expectType: 'integer',
+  },
+  UBERHAUS_WITHDRAW_INPUT: {
+    type: 'uberHausWithdrawInput',
+    htmlFor: 'uberHausWithdraw',
+    name: 'uberHausWithdraw',
+    label: 'Withdraw',
+    placeholder: '0',
+    expectType: 'number',
+  },
+  UBERHAUS_PULL_INPUT: {
+    type: 'uberHausPullInput',
+    htmlFor: 'uberHausPull',
+    name: 'uberHausPull',
+    label: 'Pull',
+    placeholder: '0',
+    expectType: 'number',
   },
 };
 

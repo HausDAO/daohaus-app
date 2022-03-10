@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Spinner } from '@chakra-ui/spinner';
 
 import GenericSelect from './genericSelect';
@@ -23,6 +23,7 @@ const AbiInput = props => {
 
   const targetContract = localForm.watch(listenTo || 'targetContract');
   const abiInput = localForm.watch(name);
+  const targetChain = localForm.watch('foreignChainId');
   const helperText = isDisabled && 'Please enter a target contract';
 
   const abiRef = useRef(null);
@@ -32,7 +33,7 @@ const AbiInput = props => {
       try {
         setLoading(true);
         setIsDisabled(false);
-        const abi = await fetchABI(targetContract, daochain);
+        const abi = await fetchABI(targetContract, targetChain ?? daochain);
         const fns = formatFNsAsSelectOptions(getABIfunctions(abi));
         setOptions(fns);
         setLoading(false);
@@ -45,7 +46,7 @@ const AbiInput = props => {
       getABI();
       contractRef.current = targetContract;
     }
-  }, [targetContract, daochain]);
+  }, [targetContract, targetChain, daochain]);
 
   useEffect(() => {
     if (abiInput) {

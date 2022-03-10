@@ -67,7 +67,16 @@ export const MINION_TYPES = {
   NIFTY: 'nifty minion',
   SUPERFLUID: 'Superfluid minion',
   SAFE: 'SAFE MINION V0',
+  CROSSCHAIN_SAFE: 'CC SAFE MINION V0', // TODO: Label feedback
   UBER: 'UberHaus minion',
+};
+
+export const MINION_ACTION_FUNCTION_NAMES = {
+  VANILLA_MINION: 'actions',
+  SAFE_MINION: 'actions',
+  //  UBERHAUS_MINION: 'appointments',
+  UBERHAUS_MINION: 'actions',
+  SUPERFLUID_MINION: 'streams',
 };
 
 export const inQueue = proposal => {
@@ -92,6 +101,16 @@ export const afterGracePeriod = proposal => {
   return now > +proposal.gracePeriodEnds;
 };
 
+const determineNeedsExecution = proposal => {
+  return (
+    proposal.processed &&
+    proposal.isMinion &&
+    !proposal.executed &&
+    proposal.didPass &&
+    proposal.proposalType !== PROPOSAL_TYPES.FUNDING
+  );
+};
+
 export function determineProposalStatus(proposal) {
   if (proposal.cancelled) {
     return ProposalStatus.Cancelled;
@@ -99,7 +118,7 @@ export function determineProposalStatus(proposal) {
   if (!proposal.sponsored) {
     return ProposalStatus.Unsponsored;
   }
-  if (proposal.processed && proposal.isMinion && !proposal.executed) {
+  if (determineNeedsExecution(proposal)) {
     return ProposalStatus.NeedsExecution;
   }
   if (proposal.processed && proposal.didPass) {
@@ -231,7 +250,7 @@ export const determineProposalType = proposal => {
   if (proposal.trade) {
     return PROPOSAL_TYPES.TRADE;
   }
-  if (proposal.isMinion) {
+  if (proposal.isMinion && proposal.minionAddress === proposal.proposer) {
     return getMinionProposalType(proposal, parsedDetails);
   }
   return PROPOSAL_TYPES.FUNDING;

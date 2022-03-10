@@ -13,8 +13,11 @@ import { createContract } from '../utils/contract';
 import { getProposalHistories } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import { LOCAL_ABI } from '../utils/abi';
-import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
-import { transactionByProposalType } from '../utils/txHelpers';
+import { contractByProposalType } from '../utils/txHelpers';
+import {
+  MINION_ACTION_FUNCTION_NAMES,
+  PROPOSAL_TYPES,
+} from '../utils/proposalUtils';
 import { fetchSingleProposal } from '../utils/theGraph';
 import { proposalResolver } from '../utils/resolvers';
 
@@ -75,20 +78,29 @@ const Proposal = ({
   useEffect(() => {
     const getMinionAction = async currentProposal => {
       try {
-        const tx = transactionByProposalType(currentProposal);
-        const abi = LOCAL_ABI[tx.contract.abiName];
+        const contract = contractByProposalType(currentProposal);
+        const abi = LOCAL_ABI[contract.abiName];
         const web3Contract = createContract({
           address: currentProposal.minionAddress,
           abi,
           chainID: daochain,
         });
-        const action = await web3Contract.methods[
-          MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
-        ](currentProposal.proposalId).call();
+
+        let actionName = MINION_ACTION_FUNCTION_NAMES[contract.abiName];
+        if (currentProposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+          actionName = 'appointments';
+        }
+        const action = await web3Contract.methods[actionName](
+          currentProposal.proposalId,
+        ).call();
+
         setMinionAction(action);
 
-        // hides execute minion button on funding and payroll proposals
-        if (action[1] === '0x0000000000000000000000000000000000000000') {
+        // hides execute minion button on funding and payroll proposals, & executed action on safe minion
+        if (
+          action[1] === '0x0000000000000000000000000000000000000000' &&
+          currentProposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_STAKE
+        ) {
           setHideMinionExecuteButton(true);
         } else {
           setHideMinionExecuteButton(false);

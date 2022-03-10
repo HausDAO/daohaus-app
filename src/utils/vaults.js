@@ -1,8 +1,6 @@
-import { utils as Web3Utils } from 'web3';
-import { chainByID, supportedChains } from './chain';
+import { supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
-import { fetchSafeDetails } from './requests';
 import { FORM } from '../data/formLegos/forms';
 import { VAULT_TRANSFER_TX } from '../data/txLegos/transferContractTX';
 import { getReadableBalance } from './tokenValue';
@@ -109,6 +107,26 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
       tx: VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
     };
   }
+  if (vaultMinionType === MINION_TYPES.CROSSCHAIN_SAFE) {
+    const tx = {
+      ...VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
+      gatherArgs: [
+        {
+          ...VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`]
+            .gatherArgs[0],
+          crossChain: true, // mark as cross-chain
+        },
+        ...VAULT_TRANSFER_TX[
+          `${tokenFormsString[tokenType]}_SAFE`
+        ].gatherArgs.slice(1),
+      ],
+    };
+    return {
+      ...formLego,
+      minionType: MINION_TYPES.SAFE,
+      tx,
+    };
+  }
 
   return formLego;
 };
@@ -158,8 +176,10 @@ export const getVaultListData = (minion, daochain, daoid) => {
     case MINION_TYPES.SAFE:
       return {
         badgeColor: 'pink',
-        badgeTextColor: '#632b16',
-        badgeName: 'GNOSIS SAFE',
+        badgeTextColor: minion.crossChainMinion ? '#632fef' : '#632b16',
+        badgeName: minion.crossChainMinion
+          ? 'CROSS-CHAIN MINION'
+          : 'GNOSIS SAFE',
         badgeVariant: 'outline',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
@@ -171,26 +191,5 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
-  }
-};
-
-export const validateSafeMinion = async (chainId, vault) => {
-  try {
-    const safeDetails = await fetchSafeDetails(
-      chainByID(chainId).networkAlt || chainByID(chainId).network,
-      vault,
-    );
-
-    return {
-      isMinionModule: safeDetails.modules.includes(
-        Web3Utils.toChecksumAddress(vault.address),
-      ),
-      safeDetails,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      isMinionModule: false,
-    };
   }
 };

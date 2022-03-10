@@ -43,6 +43,15 @@ import GenericSwitch from './genericSwitch';
 import ImageInput from './imageInput';
 import DisperseListInput from './disperseListInput';
 import MinionTokenSelect from './minionTokenSelect';
+import ForeignChainSelect from './foreignChainSelect';
+import SwitchNetwork from './switchNetwork';
+import PrecomputedMinionName from './precomputedMinionName';
+import AmbEncoder from './ambEncoder';
+import UberHausDelegateInput from './uberHausDelegateInput';
+import UberHausTributeInput from './uberHausTributeInput';
+import UberHausRageQuitInput from './uberHausRageQuitInput';
+import UberHausWithdrawInput from './uberHausWithdrawInput';
+import UberHausPullInput from './uberHausPullInput';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -183,8 +192,35 @@ export const InputFactory = props => {
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
   }
+  if (type === 'uberHausDelegateInput') {
+    return <UberHausDelegateInput {...props} />;
+  }
+  if (type === 'uberHausTributeInput') {
+    return <UberHausTributeInput {...props} />;
+  }
+  if (type === 'uberHausRageQuitInput') {
+    return <UberHausRageQuitInput {...props} />;
+  }
+  if (type === 'uberHausWithdrawInput') {
+    return <UberHausWithdrawInput {...props} />;
+  }
+  if (type === 'uberHausPullInput') {
+    return <UberHausPullInput {...props} />;
+  }
   if (type === 'memberImpact') {
     return <MemberImpact {...props} />;
+  }
+  if (type === 'foreignChainSelect') {
+    return <ForeignChainSelect {...props} />;
+  }
+  if (type === 'switchNetwork') {
+    return <SwitchNetwork {...props} />;
+  }
+  if (type === 'precomputedMinionName') {
+    return <PrecomputedMinionName {...props} />;
+  }
+  if (type === 'ambEncoder') {
+    return <AmbEncoder {...props} />;
   }
   return null;
 };

@@ -9,10 +9,10 @@ const DaoToDaoMemberInfo = ({
   membership,
   delegate,
   needDelegateKeySet,
-  openModal,
+  // openModal,
   handleNominateDelegateClick,
   isMember,
-  userNetworkMismatchOrNotMember,
+  // userNetworkMismatchOrNotMember,
   refetchAllies,
 }) => {
   return (
@@ -65,7 +65,7 @@ const DaoToDaoMemberInfo = ({
               </Button>
             </>
           )}
-
+          {/* 
           {membership &&
             delegate &&
             !needDelegateKeySet &&
@@ -74,7 +74,7 @@ const DaoToDaoMemberInfo = ({
               <Button w='25%' onClick={openModal}>
                 Manage
               </Button>
-            )}
+            )} */}
         </Flex>
       </Box>
     </>

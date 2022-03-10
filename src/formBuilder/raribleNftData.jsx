@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Flex, Button, Spinner } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
