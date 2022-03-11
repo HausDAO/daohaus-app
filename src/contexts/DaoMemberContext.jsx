@@ -29,7 +29,9 @@ export const DaoMemberProvider = ({
   useEffect(() => {
     const checkForMember = daoMembers => {
       return daoMembers.find(
-        member => member.memberAddress === address && Number(member.shares) > 0,
+        member =>
+          member.memberAddress === address.toLowerCase() &&
+          Number(member.shares) > 0,
       );
     };
 
