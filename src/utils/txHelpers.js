@@ -114,67 +114,74 @@ export const collapseToCallData = values =>
     value: tx.minionValue || '0',
     operation: tx.operation || '0',
   }));
-const collapseLegoToCallData = async (actions, gatherArgs, data) => {
-  return actions.map(async (action, index) => {
-    if (action.logTX) {
-      console.log(`ACTION DATA FOR TRANSACTION ${index}`);
-      console.log('action', action);
-      console.log('App State', data);
-    }
-    // Why undefined?
-    const actionTarget = await gatherArgs({
-      ...data,
-      tx: { ...data.tx, gatherArgs: [action.targetContract] },
-    });
+const collapseLegoToCallData = (actions, gatherArgs, data) => {
+  return Promise.all(
+    actions.map(async (action, index) => {
+      if (action.logTX) {
+        console.log(`ACTION DATA FOR TRANSACTION ${index}`);
+        console.log('action', action);
+        console.log('App State', data);
+      }
+      // Why undefined?
+      const actionTargetArray = await gatherArgs({
+        ...data,
+        tx: { ...data.tx, gatherArgs: [action.targetContract] },
+      });
+      const actionTarget = actionTargetArray[0];
+      if (action.logTX) {
+        console.log('targetContract: ', actionTarget);
+      }
+      const actionArgs = await gatherArgs({
+        ...data,
+        tx: { ...data.tx, gatherArgs: action.args },
+      });
+      if (action.logTX) {
+        console.log('args: ', actionArgs);
+      }
+      const actionValueArray = action.value
+        ? await gatherArgs({
+            ...data,
+            tx: { ...data.tx, gatherArgs: [action.value] },
+          })
+        : '0';
+      const actionValue = Array.isArray(actionValueArray)
+        ? actionValueArray[0]
+        : actionValueArray;
 
-    if (action.logTX) {
-      console.log('targetContract: ', actionTarget[0]);
-    }
-    const actionArgs = await gatherArgs({
-      ...data,
-      tx: { ...data.tx, gatherArgs: action.args },
-    });
-    if (action.logTX) {
-      console.log('args: ', actionArgs);
-    }
-    const actionValue = action.value
-      ? await gatherArgs({
-          ...data,
-          tx: { ...data.tx, gatherArgs: [action.value] },
-        })
-      : '0';
-    if (action.logTX) {
-      console.log('value: ', actionValue);
-    }
-    const actionOperation = action.operation
-      ? await gatherArgs({
-          ...data,
-          tx: { ...data.tx, gatherArgs: [action.operation] },
-        })[0]
-      : '0';
-    if (action.logTX) {
-      console.log('operation: ', actionOperation);
-    }
-    const abiSnippet = getABIsnippet(
-      { contract: action.abi, fnName: action.fnName },
-      data,
-    );
+      if (action.logTX) {
+        console.log('value: ', actionValue);
+      }
+      const actionOperationArray = action.operation
+        ? await gatherArgs({
+            ...data,
+            tx: { ...data.tx, gatherArgs: [action.operation] },
+          })[0]
+        : '0';
+      const actionOperation = Array.isArray(actionOperationArray)
+        ? actionOperationArray[0]
+        : actionOperationArray;
+      if (action.logTX) {
+        console.log('operation: ', actionOperation);
+      }
+      const abiSnippet = getABIsnippet(
+        { contract: action.abi, fnName: action.fnName },
+        data,
+      );
 
-    if (action.logTX) {
-      console.log('abi: ', action.abi);
-      console.log('fnName: ', action.fnName);
-      console.log('abiSnippet', abiSnippet);
-    }
+      if (action.logTX) {
+        console.log('abi: ', action.abi);
+        console.log('fnName: ', action.fnName);
+        console.log('abiSnippet', abiSnippet);
+      }
 
-    return {
-      to: actionTarget[0],
-      data: safeEncodeHexFunction(abiSnippet, actionArgs || []),
-      value: Array.isArray(actionValue) ? actionValue[0] : actionValue,
-      operation: Array.isArray(actionOperation)
-        ? actionOperation[0]
-        : actionOperation,
-    };
-  });
+      return {
+        to: actionTarget,
+        data: safeEncodeHexFunction(abiSnippet, actionArgs || []),
+        value: actionValue,
+        operation: actionOperation,
+      };
+    }),
+  );
 };
 
 const argBuilderCallback = Object.freeze({
@@ -316,8 +323,9 @@ export const handleSearch = (data, arg, shouldThrow) => {
   return searchData(data, path, shouldThrow);
 };
 
-export const encodeMultiAction = ({ data, arg, gatherArgs }) => {
-  return encodeMulti(collapseLegoToCallData(arg.actions, gatherArgs, data));
+export const encodeMultiAction = async ({ data, arg, gatherArgs }) => {
+  const callData = await collapseLegoToCallData(arg.actions, gatherArgs, data);
+  return encodeMulti(callData);
 };
 
 const gatherArgs = async data => {
