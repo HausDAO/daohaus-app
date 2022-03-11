@@ -62,7 +62,7 @@ export const InjectedProvider = ({ children }) => {
     const web3 = new Web3(provider);
     if (web3?.currentProvider?.selectedAddress) {
       setInjectedProvider(web3);
-      setAddress(web3.currentProvider.selectedAddress);
+      setAddress(web3.currentProvider.selectedAddress.toLowerCase());
       setInjectedChain(chain);
       setWeb3Modal(web3Modal);
     }
