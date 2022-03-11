@@ -8,6 +8,7 @@ export const POSTER_BOOST_TX = {
   POSTER_RATIFY: buildMultiTxAction({
     actions: [
       {
+        logTX: true,
         targetContract: '.contextData.chainConfig.poster',
         abi: CONTRACTS.POSTER,
         fnName: 'post',
@@ -19,6 +20,7 @@ export const POSTER_BOOST_TX = {
   POSTER_RATIFY_DOC: buildMultiTxAction({
     actions: [
       {
+        logTX: true,
         targetContract: '.contextData.chainConfig.poster',
         abi: CONTRACTS.POSTER,
         fnName: 'post',

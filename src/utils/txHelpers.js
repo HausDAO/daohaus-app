@@ -114,21 +114,23 @@ export const collapseToCallData = values =>
     value: tx.minionValue || '0',
     operation: tx.operation || '0',
   }));
-const collapseLegoToCallData = (actions, gatherArgs, data) => {
-  return actions.map((action, index) => {
+const collapseLegoToCallData = async (actions, gatherArgs, data) => {
+  return actions.map(async (action, index) => {
     if (action.logTX) {
       console.log(`ACTION DATA FOR TRANSACTION ${index}`);
       console.log('action', action);
       console.log('App State', data);
     }
-    const actionTarget = gatherArgs({
+    // Why undefined?
+    const actionTarget = await gatherArgs({
       ...data,
       tx: { ...data.tx, gatherArgs: [action.targetContract] },
-    })[0];
+    });
+
     if (action.logTX) {
-      console.log('targetContract: ', actionTarget);
+      console.log('targetContract: ', actionTarget[0]);
     }
-    const actionArgs = gatherArgs({
+    const actionArgs = await gatherArgs({
       ...data,
       tx: { ...data.tx, gatherArgs: action.args },
     });
@@ -136,16 +138,16 @@ const collapseLegoToCallData = (actions, gatherArgs, data) => {
       console.log('args: ', actionArgs);
     }
     const actionValue = action.value
-      ? gatherArgs({
+      ? await gatherArgs({
           ...data,
           tx: { ...data.tx, gatherArgs: [action.value] },
-        })[0]
+        })
       : '0';
     if (action.logTX) {
       console.log('value: ', actionValue);
     }
     const actionOperation = action.operation
-      ? gatherArgs({
+      ? await gatherArgs({
           ...data,
           tx: { ...data.tx, gatherArgs: [action.operation] },
         })[0]
@@ -165,10 +167,12 @@ const collapseLegoToCallData = (actions, gatherArgs, data) => {
     }
 
     return {
-      to: actionTarget,
+      to: actionTarget[0],
       data: safeEncodeHexFunction(abiSnippet, actionArgs || []),
-      value: actionValue,
-      operation: actionOperation,
+      value: Array.isArray(actionValue) ? actionValue[0] : actionValue,
+      operation: Array.isArray(actionOperation)
+        ? actionOperation[0]
+        : actionOperation,
     };
   });
 };

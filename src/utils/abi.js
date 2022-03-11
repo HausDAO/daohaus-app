@@ -194,6 +194,8 @@ export const formatFNsAsSelectOptions = abi => {
 };
 
 export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
+  console.log('selectedFunction', selectedFunction);
+  console.log('inputVals', inputVals);
   if (!selectedFunction || !Array.isArray(inputVals))
     throw new Error(
       'Incorrect params passed to safeEncodeHexFunction in abi.js',
