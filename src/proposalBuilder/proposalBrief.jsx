@@ -6,6 +6,7 @@ import { CardLabel, ParaMd, ParaSm } from '../components/typography';
 import CustomTransfer from './customTransferFactory';
 import {
   PropCardCrossChain,
+  PropCardDate,
   PropCardOffer,
   PropCardRequest,
 } from './proposalBriefPrimitives';
@@ -66,6 +67,10 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
             minionAction={minionAction}
           />
         )}
+        <PropCardDate
+          label='Submitted on'
+          dateTimeMillis={proposal?.createdAt}
+        />
         <Flex display={['flex', 'flex', 'none']} mb='3'>
           <Button
             as={Link}

@@ -1,6 +1,6 @@
 import humanFormat from 'human-format';
 import { chainByID } from './chain';
-import { handleNounCase, NOUN } from './general';
+import { formatDate, handleNounCase, NOUN } from './general';
 import { memberVote } from './proposalUtils';
 import { getReadableBalance } from './tokenValue';
 
@@ -61,6 +61,10 @@ const getPaymentReadable = ({
         symbol: paymentTokenSymbol,
       })
     : '';
+
+export const generateProposalDateText = dateTimeMillis => {
+  return formatDate(dateTimeMillis);
+};
 
 export const generateRequestText = proposal => {
   const {
@@ -131,7 +135,7 @@ export const removeExecutionCheat = (proposalId, daoid) => {
 export const getVoteData = (proposal, address, daoMember) => {
   const hasVoted = memberVote(proposal, address);
   const votedYes = hasVoted === 1;
-  const votedNo = hasVoted === 0;
+  const votedNo = hasVoted === 2;
   const userYes = votedYes && Number(daoMember?.shares);
   const userNo = votedNo && Number(daoMember?.shares);
   const totalYes = Number(proposal?.yesShares);
@@ -147,9 +151,9 @@ export const getVoteData = (proposal, address, daoMember) => {
     userYes,
     userNo,
     userYesReadable:
-      daoMember && userYes && `(${readableNumber({ amount: userYes })})`,
+      daoMember && userYes && `(+${readableNumber({ amount: userYes })})`,
     userNoReadable:
-      daoMember && userNo && `(${readableNumber({ amount: userNo })})`,
+      daoMember && userNo && `(+${readableNumber({ amount: userNo })})`,
     totalYes,
     totalNo,
     totalYesReadable: `(${readableNumber({ amount: totalYes })})`,
