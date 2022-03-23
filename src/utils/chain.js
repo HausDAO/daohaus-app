@@ -485,6 +485,65 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
+  '0x0a': {
+    name: 'Optimism Mainnet',
+    short_name: 'optimism',
+    nativeCurrency: 'ETH',
+    network: 'optimism',
+    network_id: 10,
+    chain_id: '0x0a',
+    hub_sort_order: 3, //TODO check if this is correct
+    providers: ['walletconnect'],
+    // , 'portis', 'fortmatic'
+    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    abi_api_url:
+      'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api-optimistic.etherscan.io/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-optimism',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-optimism',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-optimism',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-optimism-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-optimism-subgraph',
+    minion_factory_addr: '', //TODO add address post deployment
+    moloch_factory_addr: '', //TODO add address post deployment
+    dai_contract: '', //TODO add address post deployment
+    wrapper_contract: '', //TODO add address post deployment
+    wrap_n_zap_factory_addr: '', //TODO add address post deployment
+    block_explorer: 'https://optimistic.etherscan.io',
+    niftyMinion: {
+      minion_factory_addr: '', //TODO add address post deployment
+      version: 'v1',
+    },
+    safeMinion: {
+      minion_factory_addr: '', //TODO add address post deployment
+      safe_mutisend_addr: '', //TODO add address post deployment
+      safe_sign_lib_addr: '', //TODO add address post deployment
+    },
+    escrow_minion: '', //TODO add address post deployment
+    disperse_app: '', //TODO add address post deployment
+    zodiac_amb_module: {
+      amb_bridge_address: {
+        '0x0a': '', //TODO add address post deployment
+      },
+      foreign_networks: [
+        {
+          name: 'optimism',
+          value: '0x0a',
+        },
+      ],
+      gas_limit: {
+        '0x0a': '2000000',
+      },
+      monitoring_app: {
+        '0x0a': '', //TODO add address post deployment
+      },
+    },
+  },
   '0x4a': {
     chainId: '0x4a',
     chainName: 'IDchain',
@@ -518,6 +577,17 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
+  '0x0a': {
+    chainId: '0x0a',
+    chainName: 'Optimism',
+    rpcUrls: ['https://mainnet.optimism.io'],
+    blockExplorerUrls: ['https://optimistic.etherscan.io'],
+    nativeCurrency: {
+      name: 'ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+  }
 };
 
 export const EIP3085 = {
