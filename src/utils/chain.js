@@ -181,6 +181,7 @@ export const supportedChains = {
   '0x64': {
     name: 'Gnosis Chain',
     short_name: 'gc',
+    shortNamePrefix: 'gno',
     nativeCurrency: 'xDai',
     network: 'xdai',
     network_id: 100,
