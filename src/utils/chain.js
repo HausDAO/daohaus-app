@@ -214,11 +214,11 @@ export const supportedChains = {
     },
     safeMinion: {
       minion_factory_addr: '', //TODO add address post deployment
-      safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa', //TODO add address post deployment
+      safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
       safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
     },
     escrow_minion: '', //TODO team will add
-    disperse_app: '', //TODO team will add
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0xa': '', //TODO team will add
@@ -277,7 +277,7 @@ export const supportedChains = {
       safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
     },
     escrow_minion: '', //TODO add address post deployment
-    disperse_app: '', //TODO add address post deployment
+    disperse_app: '0x3EFAD41f0edDD24B44fd312a0f6a7205Ef84174E',
     zodiac_amb_module: {  //TODO to be filled out by team
       amb_bridge_address: {
         '0x0a': '',
