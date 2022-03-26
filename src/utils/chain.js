@@ -262,7 +262,7 @@ export const supportedChains = {
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-optimism-subgraph',
     minion_factory_addr: '0x30fc234011A3b322A8Fd43f0eA8Cab7035D77749',
-    moloch_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
+    moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
     dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
     wrapper_contract: '0xc40AFFB1198b02859E4418C0E0dd210132315940',
     wrap_n_zap_factory_addr: '0xDd4f9aBB56F96C333a3c2120252C6Fe827a2Bfb4',
