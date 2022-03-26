@@ -178,6 +178,124 @@ export const supportedChains = {
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
+  '0xa': {
+    name: 'Optimism Mainnet',
+    short_name: 'optimism',
+    nativeCurrency: 'ETH',
+    network: 'optimism',
+    network_id: 10,
+    chain_id: '0xa',
+    hub_sort_order: 3, //TODO not sure what to set this as
+    providers: ['walletconnect'],
+    // , 'portis', 'fortmatic'
+    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    abi_api_url:
+      'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api-optimistic.etherscan.io/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-optimism',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-optimism',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-optimism',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-optimism-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-optimism-subgraph',
+    minion_factory_addr: '',  //TODO add address post deployment
+    moloch_factory_addr: '',  //TODO add address post deployment
+    dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+    wrapper_contract: '0x4200000000000000000000000000000000000006',
+    wrap_n_zap_factory_addr: '',  //TODO add address post deployment
+    block_explorer: 'https://optimistic.etherscan.io',
+    niftyMinion: {
+      minion_factory_addr: '', //TODO add address post deployment
+      version: 'v1',
+    },
+    safeMinion: {
+      minion_factory_addr: '', //TODO add address post deployment
+      safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa', //TODO add address post deployment
+      safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
+    },
+    escrow_minion: '', //TODO team will add
+    disperse_app: '', //TODO team will add
+    zodiac_amb_module: {
+      amb_bridge_address: {
+        '0xa': '', //TODO team will add
+      },
+      foreign_networks: [
+        {
+          name: 'optimism',
+          value: '0xa',
+        },
+      ],
+      gas_limit: {
+        '0xa': '2000000',
+      },
+      monitoring_app: {
+        '0xa': '', //TODO team will add
+      },
+    },
+  },
+  '0x45': {
+    name: 'Optimism Kovan',
+    short_name: 'kovan-optimism',
+    nativeCurrency: 'ETH',
+    network: 'kovan-optimism',
+    network_id: 69,
+    chain_id: '0x45',
+    hub_sort_order: 3, //TODO not sure what to set this as
+    providers: ['walletconnect'],
+    // , 'portis', 'fortmatic'
+    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    abi_api_url:
+      'https://api-kovan-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api-kovan-optimistic.etherscan.io/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan-optimism',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan-optimism',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan-optimism',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-kovan-optimism-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-optimism-subgraph',
+    minion_factory_addr: '', //TODO MinionFactory address post deployment
+    moloch_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
+    dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+    wrapper_contract: '0xc40AFFB1198b02859E4418C0E0dd210132315940',
+    wrap_n_zap_factory_addr: '0xDd4f9aBB56F96C333a3c2120252C6Fe827a2Bfb4',
+    block_explorer: 'https://kovan-optimistic.etherscan.io',
+    niftyMinion: {
+      minion_factory_addr: '', //TODO add address post deployment
+      version: 'v1',
+    },
+    safeMinion: {
+      minion_factory_addr: '0x19b36b818380ae482256bEd9953266d9720a4212',
+      safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
+      safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
+    },
+    escrow_minion: '', //TODO add address post deployment
+    disperse_app: '', //TODO add address post deployment
+    zodiac_amb_module: {  //TODO to be filled out by team
+      amb_bridge_address: {
+        '0x0a': '',
+      },
+      foreign_networks: [
+        {
+          name: 'optimism',
+          value: '0x0a',
+        },
+      ],
+      gas_limit: {
+        '0x0a': '2000000',
+      },
+      monitoring_app: {
+        '0x0a': '', //TODO to be filled out by team
+      },
+    },
+  },
   '0x64': {
     name: 'Gnosis Chain',
     short_name: 'gc',
@@ -444,6 +562,7 @@ export const chainByNetworkId = networkId => {
   const idMapping = {
     1: supportedChains['0x1'],
     4: supportedChains['0x4'],
+    10: supportedChains['0xa'],
     42: supportedChains['0x2a'],
     74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
@@ -485,65 +604,6 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
-  '0x0a': {
-    name: 'Optimism Mainnet',
-    short_name: 'optimism',
-    nativeCurrency: 'ETH',
-    network: 'optimism',
-    network_id: 10,
-    chain_id: '0x0a',
-    hub_sort_order: 3, //TODO check if this is correct
-    providers: ['walletconnect'],
-    // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
-    abi_api_url:
-      'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url: 'https://api-optimistic.etherscan.io/api',
-    subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-optimism',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-optimism',
-    boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-optimism',
-    erc721_graph_url:
-      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-optimism-subgraph',
-    erc1155_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-optimism-subgraph',
-    minion_factory_addr: '', //TODO add address post deployment
-    moloch_factory_addr: '', //TODO add address post deployment
-    dai_contract: '', //TODO add address post deployment
-    wrapper_contract: '', //TODO add address post deployment
-    wrap_n_zap_factory_addr: '', //TODO add address post deployment
-    block_explorer: 'https://optimistic.etherscan.io',
-    niftyMinion: {
-      minion_factory_addr: '', //TODO add address post deployment
-      version: 'v1',
-    },
-    safeMinion: {
-      minion_factory_addr: '', //TODO add address post deployment
-      safe_mutisend_addr: '', //TODO add address post deployment
-      safe_sign_lib_addr: '', //TODO add address post deployment
-    },
-    escrow_minion: '', //TODO add address post deployment
-    disperse_app: '', //TODO add address post deployment
-    zodiac_amb_module: {
-      amb_bridge_address: {
-        '0x0a': '', //TODO add address post deployment
-      },
-      foreign_networks: [
-        {
-          name: 'optimism',
-          value: '0x0a',
-        },
-      ],
-      gas_limit: {
-        '0x0a': '2000000',
-      },
-      monitoring_app: {
-        '0x0a': '', //TODO add address post deployment
-      },
-    },
-  },
   '0x4a': {
     chainId: '0x4a',
     chainName: 'IDchain',
@@ -577,8 +637,8 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
-  '0x0a': {
-    chainId: '0x0a',
+  '0xa': {
+    chainId: '0xa',
     chainName: 'Optimism',
     rpcUrls: ['https://mainnet.optimism.io'],
     blockExplorerUrls: ['https://optimistic.etherscan.io'],
@@ -592,6 +652,7 @@ export const MM_ADDCHAIN_DATA = {
 
 export const EIP3085 = {
   SUPPORTED: {
+    '0xa': true,
     '0x64': true,
     '0x89': true,
     '0x4a': true,
