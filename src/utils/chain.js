@@ -188,7 +188,7 @@ export const supportedChains = {
     hub_sort_order: 3, //TODO not sure what to set this as
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    rpc_url: "https://mainnet.optimism.io",
     abi_api_url:
       'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api-optimistic.etherscan.io/api',
@@ -202,18 +202,18 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-optimism-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-optimism-subgraph',
-    minion_factory_addr: '',  //TODO add address post deployment
-    moloch_factory_addr: '',  //TODO add address post deployment
+    minion_factory_addr: '0xc7286c3D9dBe3abD50Ac99E2860D3e750B755dcd',
+    moloch_factory_addr: '0x032865ACfc05E769902Fe90Bcc9d511875a74E66',
     dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
     wrapper_contract: '0x4200000000000000000000000000000000000006',
-    wrap_n_zap_factory_addr: '',  //TODO add address post deployment
+    wrap_n_zap_factory_addr: '0x5D1ADccB9092eFc65E094Dd8972Bc0d9224b3C41',
     block_explorer: 'https://optimistic.etherscan.io',
     niftyMinion: {
       minion_factory_addr: '', //TODO add address post deployment
       version: 'v1',
     },
     safeMinion: {
-      minion_factory_addr: '', //TODO add address post deployment
+      minion_factory_addr: '0xE01F3F0F09E778e1AD83Fbdaa00e86676F317C6e',
       safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
       safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
     },
@@ -247,7 +247,7 @@ export const supportedChains = {
     hub_sort_order: 3, //TODO not sure what to set this as
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    rpc_url: "https://kovan-optimistic.etherscan.io",
     abi_api_url:
       'https://api-kovan-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api-kovan-optimistic.etherscan.io/api',
@@ -261,7 +261,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-kovan-optimism-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-optimism-subgraph',
-    minion_factory_addr: '', //TODO MinionFactory address post deployment
+    minion_factory_addr: '0x30fc234011A3b322A8Fd43f0eA8Cab7035D77749',
     moloch_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
     dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
     wrapper_contract: '0xc40AFFB1198b02859E4418C0E0dd210132315940',
