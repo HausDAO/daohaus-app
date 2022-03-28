@@ -63,7 +63,7 @@ const getPaymentReadable = ({
     : '';
 
 export const generateProposalDateText = dateTimeMillis => {
-  return formatDate(dateTimeMillis);
+  return formatDate(dateTimeMillis, "hh:mm aaaaa'm' MMM dd, yyyy");
 };
 
 export const generateRequestText = proposal => {

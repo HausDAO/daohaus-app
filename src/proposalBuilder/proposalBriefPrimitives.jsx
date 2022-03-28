@@ -6,7 +6,7 @@ import {
   RiErrorWarningLine,
 } from 'react-icons/ri';
 
-import { Bold, ParaMd } from '../components/typography';
+import { Bold, CardLabel, ParaMd } from '../components/typography';
 
 import {
   generateOfferText,
@@ -66,7 +66,9 @@ export const PropCardDate = ({ label, dateTimeMillis }) => {
       return generateProposalDateText(dateTimeMillis);
     }
   }, [dateTimeMillis]);
-  return <PropCardTransfer action={label} itemText={submissionDateText} />;
+  return (
+    <CardLabel textTransform='none'>{`${label} ${submissionDateText}`}</CardLabel>
+  );
 };
 
 export const PropCardRequest = ({ proposal }) => {

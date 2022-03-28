@@ -202,8 +202,8 @@ export const timeToNow = time => {
   });
 };
 
-export const formatDate = dateTimeMillis => {
-  return format(new Date(dateTimeMillis * 1000), 'MMM dd, yyyy');
+export const formatDate = (dateTimeMillis, formatDate = 'MMM dd, yyyy') => {
+  return format(new Date(dateTimeMillis * 1000), formatDate);
 };
 
 export const formatPeriods = (period, duration) => {
