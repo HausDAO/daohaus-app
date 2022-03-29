@@ -65,22 +65,20 @@ const Haus = () => {
                   <Text fontSize='xl' mb='13px'>
                     Get Haus
                   </Text>
-                  <Tooltip
-                    label='Coming soon'
-                    araia-label='Coming soon'
-                    placement='right'
-                    hasArrow
+
+                  <a
+                    target='_blank'
+                    rel='noreferrer noopener'
+                    href='https://app.balancer.fi/#/trade/ether/0xf2051511b9b121394fa75b8f7d4e7424337af687'
                   >
-                    <a
-                      to='https://daohaus.app'
-                      css={{
-                        pointerEvents: 'none',
-                      }}
-                    >
-                      <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
-                    </a>
-                  </Tooltip>
-                  <a href='https://swapr.eth.link/#/swap?chainId=100'>
+                    <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
+                  </a>
+
+                  <a
+                    target='_blank'
+                    rel='noreferrer noopener'
+                    href='https://swapr.eth.link/#/swap?chainId=100'
+                  >
                     <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
                   </a>
                 </Flex>
@@ -88,22 +86,18 @@ const Haus = () => {
                   <Text fontSize='xl' mb='13px'>
                     Provide Liquidity
                   </Text>
-                  <Tooltip
-                    label='Coming soon'
-                    araia-label='Coming soon'
-                    placement='right'
-                    hasArrow
+                  <a
+                    target='_blank'
+                    rel='noreferrer noopener'
+                    href='https://app.balancer.fi/#/pool/0x17ddd9646a69c9445cd8a9f921d4cd93bf50d108000200000000000000000159'
                   >
-                    <a
-                      to='https://daohaus.app'
-                      css={{
-                        pointerEvents: 'none',
-                      }}
-                    >
-                      <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
-                    </a>
-                  </Tooltip>
-                  <a href='https://swapr.eth.link/#/pools/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0xb0C5f3100A4d9d9532a4CfD68c55F1AE8da987Eb?chainId=100'>
+                    <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
+                  </a>
+                  <a
+                    target='_blank'
+                    rel='noreferrer noopener'
+                    href='https://swapr.eth.link/#/pools/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0xb0C5f3100A4d9d9532a4CfD68c55F1AE8da987Eb?chainId=100'
+                  >
                     <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
                   </a>
                 </Flex>
