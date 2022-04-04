@@ -49,3 +49,9 @@ ul.rc-pagination {
 #WEB3_CONNECT_MODAL_ID .web3modal-modal-lightbox {
   z-index: 2000;
 }
+
+/* quick fix community button hover */
+
+button.chakra-button.css-rpzzga:hover svg{
+  color:  var(--chakra-colors-secondary-500);
+}
