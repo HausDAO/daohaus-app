@@ -4310,6 +4310,14 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
 
+"@santteegt/ethereum-block-by-date@1.4.8":
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/@santteegt/ethereum-block-by-date/-/ethereum-block-by-date-1.4.8.tgz#dce24a62939b57ea728ee52d8bf95e854dd49bb7"
+  integrity sha512-7xnuKzdzAknzi6rMjI+O4AisKOrCqesJDhQJbSr11TrKR/Ml4Hu1UwkJ37sM1LfWspNUOtkdONmeUuJCAQNUtA==
+  dependencies:
+    moment "^2.29.1"
+    web3 "^1.6.1"
+
 "@self.id/core@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@self.id/core/-/core-0.1.0.tgz#06ef38487a939ec800a18f8dd183bc319d9a8e04"
@@ -10665,13 +10673,6 @@ eth-sig-util@^1.4.2:
   dependencies:
     ethereumjs-abi "git+https://github.com/ethereumjs/ethereumjs-abi.git"
     ethereumjs-util "^5.1.1"
-
-ethereum-block-by-date@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/ethereum-block-by-date/-/ethereum-block-by-date-1.4.3.tgz#99522444f4bd5cccbdd99636602706d335c6ef95"
-  integrity sha512-u4NqWnYGcFaleZWSRGJ1MbJT0WsdILOh7budPckN7siJaAXPMoKTuqIe9TGY1yIzfXUjj4vc+MrdsMz5NZZ4eQ==
-  dependencies:
-    moment "^2.29.1"
 
 ethereum-blockies-base64@^1.0.2:
   version "1.0.2"

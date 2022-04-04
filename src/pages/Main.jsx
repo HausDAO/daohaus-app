@@ -42,14 +42,11 @@ const Main = () => {
             <HubSignedOut />
           )}
         </Box>
-        {address && hasDaos() ? (
+        {address && (
           <Box w={['100%', null, null, null, '40%']}>
             <HausCard />
-            <NewsFeed />
-          </Box>
-        ) : (
-          <Box w={['100%', null, null, null, '40%']}>
-            <FeaturedDaos />
+
+            {hasDaos() ? <NewsFeed /> : <FeaturedDaos />}
           </Box>
         )}
       </Flex>
