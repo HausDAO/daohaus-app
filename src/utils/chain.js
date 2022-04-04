@@ -190,7 +190,7 @@ export const supportedChains = {
     providers: ['walletconnect'],
     rpc_url: 'https://rpc.gnosischain.com/',
     archive_node_url:
-      'https://poa-xdai-archival.gateway.pokt.network/v1/lb/62437f8d52a531003a30310d',
+      'https://poa-xdai-archival.gateway.pokt.network/v1/lb/624b0c653bd808003a85478e',
     abi_api_url:
       'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
