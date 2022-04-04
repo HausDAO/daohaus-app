@@ -89,7 +89,7 @@ const HausChart = ({ address, balanceData, fetchBalanceData, tokenPrice }) => {
 
   return (
     <Box>
-      <ContentBox minH='360px'>
+      <ContentBox minH='360px' border='none'>
         <Flex wrap='wrap' align='center' position='relative'>
           <Flex alignItems='center'>
             <Avatar name='Haus logo' src={hausImg} size='lg' />
