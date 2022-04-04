@@ -9,11 +9,11 @@ export const StatusCircle = ({ color }) => (
   <Box borderRadius='50%' background={color} h='.6rem' w='.6rem' mr='2' />
 );
 export const VoteButton = props => {
-  const { votes } = props;
+  const { voteslabel, votes } = props;
   if (votes === 'yes') {
     return (
       <Button size='sm' minW='4rem' {...props}>
-        Yes
+        {`Yes ${voteslabel}`}
       </Button>
     );
   }
@@ -26,7 +26,7 @@ export const VoteButton = props => {
         color='black'
         {...props}
       >
-        No
+        {`No ${voteslabel}`}
       </Button>
     );
   }
@@ -176,12 +176,14 @@ export const VotingActive = ({
         onClick={voteNo}
         isDisabled={disableAll}
         isLoading={loadingAll}
+        voteslabel={voteData.totalNoReadable}
       />
       <VoteButton
         votes='yes'
         onClick={voteYes}
         isDisabled={disableAll}
         isLoading={loadingAll}
+        voteslabel={voteData.totalYesReadable}
       />
     </Flex>
   </>

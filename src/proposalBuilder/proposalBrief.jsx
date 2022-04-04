@@ -2,10 +2,11 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Flex, Box, Button } from '@chakra-ui/react';
 
-import { CardLabel, ParaMd, ParaSm } from '../components/typography';
+import { CardLabel, ParaMd } from '../components/typography';
 import CustomTransfer from './customTransferFactory';
 import {
   PropCardCrossChain,
+  PropCardDate,
   PropCardOffer,
   PropCardRequest,
 } from './proposalBriefPrimitives';
@@ -44,7 +45,6 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
           w='100%'
         >
           <CardLabel>{proposal.proposalType}</CardLabel>
-          <DetailsLink proposalId={proposal.proposalId} />
         </Flex>
         <ParaMd
           fontWeight='700'
@@ -66,16 +66,27 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
             minionAction={minionAction}
           />
         )}
-        <Flex display={['flex', 'flex', 'none']} mb='3'>
+        <Flex
+          display='flex'
+          align={['none', 'center']}
+          direction={['column', 'row']}
+          justify={['none', 'space-between']}
+          mb='3'
+        >
+          <PropCardDate
+            label='Submitted'
+            dateTimeMillis={proposal?.createdAt}
+          />
           <Button
             as={Link}
+            fontWeight='bold'
             to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
             variant='outline'
             size='sm'
-            width='10rem'
+            width='8rem'
             mt={['4', '4', '0']}
           >
-            More Details
+            View Details
           </Button>
         </Flex>
       </Box>
@@ -84,14 +95,3 @@ const ProposalCardBrief = ({ proposal = {}, minionAction }) => {
 };
 
 export default ProposalCardBrief;
-
-const DetailsLink = ({ proposalId }) => {
-  const { daochain, daoid } = useParams();
-  return (
-    <Box display={['none', 'none', 'block']}>
-      <Link to={`/dao/${daochain}/${daoid}/proposals/${proposalId}`}>
-        <ParaSm>More Details</ParaSm>
-      </Link>
-    </Box>
-  );
-};
