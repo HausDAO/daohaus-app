@@ -25,7 +25,7 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
   const { canInteract } = useCanInteract({
     checklist: ['isConnected', 'isSameChain'],
   });
-  const { daoOverview } = useDao();
+  const { daoOverview, daoVaults } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
   const { formModal } = useAppModal();
@@ -33,9 +33,10 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
   const [loading, setLoading] = useState(false);
 
   const nftActions = useMemo(() => {
+    const vaultMatch = vault || daoVaults.find(v => v.address === minion);
     if (minionType) {
       return getNftCardActions(
-        vault.crossChainMinion ? MINION_TYPES.CROSSCHAIN_SAFE : minionType,
+        vaultMatch.crossChainMinion ? MINION_TYPES.CROSSCHAIN_SAFE : minionType,
         nft,
         daochain,
       );
