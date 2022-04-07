@@ -13,6 +13,7 @@
     "@gnosis.pm/safe-core-sdk": "^2.0.0",
     "@gnosis.pm/safe-web3-lib": "^1.0.0",
     "@gnosis.pm/zodiac": "^1.0.3",
+    "@santteegt/ethereum-block-by-date": "1.4.8",
     "@self.id/core": "^0.1.0",
     "@self.id/web": "^0.1.0",
     "@walletconnect/web3-provider": "^1.6.5",

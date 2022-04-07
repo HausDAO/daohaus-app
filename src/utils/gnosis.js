@@ -221,7 +221,11 @@ export const createGnosisSafeTxProposal = async ({
   const r = signature.slice(0, 66);
   const s = signature.slice(66, 130);
   // eth_sign signature -> signature_type > 30 -> v = v + 4
-  const v = (parseInt(signature.slice(130, 132), 16) + 4).toString(16);
+  const preV = parseInt(signature.slice(130, 132), 16);
+  const v =
+    preV < 2
+      ? (preV === 0 ? 31 : 32).toString(16) // workaround Ledger signatures -> https://ethereum.stackexchange.com/a/113727
+      : (preV + 4).toString(16);
 
   const tx = {
     ...txProposal.tx,
@@ -232,7 +236,6 @@ export const createGnosisSafeTxProposal = async ({
   };
 
   try {
-    console.log('Gnosis Tx Proposal', signature, JSON.stringify(tx));
     await postApiGnosis(
       networkName,
       `safes/${safeAddress}/multisig-transactions/`,
