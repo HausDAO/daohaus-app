@@ -72,7 +72,7 @@ export const supportedChains = {
     network: 'rinkeby',
     network_id: 4,
     chain_id: '0x4',
-    hub_sort_order: 6,
+    hub_sort_order: 8,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
@@ -185,7 +185,7 @@ export const supportedChains = {
     network: 'optimism',
     network_id: 10,
     chain_id: '0xa',
-    hub_sort_order: 3, //TODO not sure what to set this as
+    hub_sort_order: 4, //TODO not sure what to set this as
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
     rpc_url: "https://mainnet.optimism.io",
@@ -199,7 +199,7 @@ export const supportedChains = {
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-optimism',
     erc721_graph_url:
-      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-optimism-subgraph',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-optimism-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-optimism-subgraph',
     minion_factory_addr: '0xc7286c3D9dBe3abD50Ac99E2860D3e750B755dcd',
@@ -384,7 +384,7 @@ export const supportedChains = {
     networkAlt: 'polygon',
     network_id: 137,
     chain_id: '0x89',
-    hub_sort_order: 3,
+    hub_sort_order: 5,
     providers: ['walletconnect'],
     rpc_url: 'https://polygon-rpc.com/',
     abi_api_url:
@@ -436,7 +436,7 @@ export const supportedChains = {
     network: 'arbitrum',
     network_id: 42161,
     chain_id: '0xa4b1',
-    hub_sort_order: 4,
+    hub_sort_order: 3,
     providers: ['walletconnect'],
     rpc_url: 'https://arb1.arbitrum.io/rpc',
     abi_api_url:
@@ -487,7 +487,7 @@ export const supportedChains = {
     network: 'celo',
     network_id: 42220,
     chain_id: '0xa4ec',
-    hub_sort_order: 5,
+    hub_sort_order: 6,
     providers: ['walletconnect'],
     rpc_url: 'https://forno.celo.org',
     abi_api_url:
