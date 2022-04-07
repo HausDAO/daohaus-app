@@ -237,65 +237,65 @@ export const supportedChains = {
       },
     },
   },
-  '0x45': {
-    name: 'Optimism Kovan',
-    short_name: 'kovan-optimism',
-    nativeCurrency: 'ETH',
-    network: 'kovan-optimism',
-    network_id: 69,
-    chain_id: '0x45',
-    hub_sort_order: 3, //TODO not sure what to set this as
-    providers: ['walletconnect'],
-    // , 'portis', 'fortmatic'
-    rpc_url: "https://kovan-optimistic.etherscan.io",
-    abi_api_url:
-      'https://api-kovan-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url: 'https://api-kovan-optimistic.etherscan.io/api',
-    subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan-optimism',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan-optimism',
-    boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan-optimism',
-    erc721_graph_url:
-      'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-kovan-optimism-subgraph',
-    erc1155_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-optimism-subgraph',
-    minion_factory_addr: '0x30fc234011A3b322A8Fd43f0eA8Cab7035D77749',
-    moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
-    dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
-    wrapper_contract: '0xc40AFFB1198b02859E4418C0E0dd210132315940',
-    wrap_n_zap_factory_addr: '0xDd4f9aBB56F96C333a3c2120252C6Fe827a2Bfb4',
-    block_explorer: 'https://kovan-optimistic.etherscan.io',
-    niftyMinion: {
-      minion_factory_addr: '', //TODO add address post deployment
-      version: 'v1',
-    },
-    safeMinion: {
-      minion_factory_addr: '0x19b36b818380ae482256bEd9953266d9720a4212',
-      safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
-      safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
-    },
-    escrow_minion: '', //TODO add address post deployment
-    disperse_app: '0x3EFAD41f0edDD24B44fd312a0f6a7205Ef84174E',
-    zodiac_amb_module: {  //TODO to be filled out by team
-      amb_bridge_address: {
-        '0x0a': '',
-      },
-      foreign_networks: [
-        {
-          name: 'optimism',
-          value: '0x0a',
-        },
-      ],
-      gas_limit: {
-        '0x0a': '2000000',
-      },
-      monitoring_app: {
-        '0x0a': '', //TODO to be filled out by team
-      },
-    },
-  },
+//   '0x45': {
+//     name: 'Optimism Kovan',
+//     short_name: 'kovan-optimism',
+//     nativeCurrency: 'ETH',
+//     network: 'kovan-optimism',
+//     network_id: 69,
+//     chain_id: '0x45',
+//     hub_sort_order: 3, //TODO not sure what to set this as
+//     providers: ['walletconnect'],
+//     // , 'portis', 'fortmatic'
+//     rpc_url: "https://kovan-optimistic.etherscan.io",
+//     abi_api_url:
+//       'https://api-kovan-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
+//     tokenlist_api_url: 'https://api-kovan-optimistic.etherscan.io/api',
+//     subgraph_url:
+//       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan-optimism',
+//     stats_graph_url:
+//       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan-optimism',
+//     boosts_graph_url:
+//       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan-optimism',
+//     erc721_graph_url:
+//       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-kovan-optimism-subgraph',
+//     erc1155_graph_url:
+//       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-optimism-subgraph',
+//     minion_factory_addr: '0x30fc234011A3b322A8Fd43f0eA8Cab7035D77749',
+//     moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
+//     dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+//     wrapper_contract: '0xc40AFFB1198b02859E4418C0E0dd210132315940',
+//     wrap_n_zap_factory_addr: '0xDd4f9aBB56F96C333a3c2120252C6Fe827a2Bfb4',
+//     block_explorer: 'https://kovan-optimistic.etherscan.io',
+//     niftyMinion: {
+//       minion_factory_addr: '', //TODO add address post deployment
+//       version: 'v1',
+//     },
+//     safeMinion: {
+//       minion_factory_addr: '0x19b36b818380ae482256bEd9953266d9720a4212',
+//       safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
+//       safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
+//     },
+//     escrow_minion: '', //TODO add address post deployment
+//     disperse_app: '0x3EFAD41f0edDD24B44fd312a0f6a7205Ef84174E',
+//     zodiac_amb_module: {  //TODO to be filled out by team
+//       amb_bridge_address: {
+//         '0x0a': '',
+//       },
+//       foreign_networks: [
+//         {
+//           name: 'optimism',
+//           value: '0x0a',
+//         },
+//       ],
+//       gas_limit: {
+//         '0x0a': '2000000',
+//       },
+//       monitoring_app: {
+//         '0x0a': '', //TODO to be filled out by team
+//       },
+//     },
+//   },
   '0x64': {
     name: 'Gnosis Chain',
     short_name: 'gc',
