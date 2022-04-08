@@ -30,6 +30,7 @@ export const MINION_NETWORKS = {
     '0x64': true,
     '0x89': true,
     '0xa4b1': true,
+    '0xa': true,
   },
   [MINION_TYPES.CROSSCHAIN_SAFE]: {
     '0x1': false,
