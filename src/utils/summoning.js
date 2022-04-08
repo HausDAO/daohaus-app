@@ -202,6 +202,17 @@ export const daoPresets = chainId => {
     });
   }
 
+  if (chainId === '0x0a') {
+    presets = presets.map(preset => {
+      preset.currency = 'ETH';
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
+
+      return preset;
+    });
+  }
+
   return presets;
 };
 
@@ -247,6 +258,14 @@ export const currencyOptions = chainId => {
       {
         value: 'CELO',
         label: 'CELO',
+        address: supportedChains[chainId].wrapper_contract,
+      },
+    ];
+  } else if (chainId === '0x0a') {
+    options = [
+      {
+        value: 'ETH',
+        label: 'ETH',
         address: supportedChains[chainId].wrapper_contract,
       },
     ];

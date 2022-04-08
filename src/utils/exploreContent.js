@@ -50,6 +50,12 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'network',
     default: true,
   },
+  {
+    name: 'Optimism',
+    value: 10,
+    type: 'network',
+    default: true,
+  },
   // {
   //   name: 'IDChain',
   //   value: 74,
