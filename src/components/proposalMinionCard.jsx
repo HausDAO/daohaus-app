@@ -107,44 +107,19 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 multisendAddress,
                 action.data,
               );
-              hydratedAction.decodedMultisend = decodedMultisend;
               hydratedAction.decodedData = {
                 name: 'multiSend',
                 actions: await Promise.all(
                   decodedMultisend.map(async action => {
-                    if (action.data.slice(2).length === 0) {
-                      return buildEthTransferAction(action);
-                    }
-                    let json = await decodeFromEtherscan(action);
-                    if (json.status === '0') {
-                      return {
-                        to: action.to,
-                        value: Web3Utils.toBN(action.value).toString(),
-                      };
-                    }
-                    let parsed = JSON.parse(json.result);
-                    const imp = parsed.find(p => p.name === 'implementation');
-                    if (imp) {
-                      hydratedAction.proxyTo = await checkIfProxy(
-                        parsed,
-                        action.to,
-                      );
-                      json =
-                        hydratedAction.proxyTo &&
-                        (await decodeFromEtherscan(hydratedAction));
-                      if (!json || json.status === '0') {
-                        return {
-                          to: action.to,
-                          value: Web3Utils.toBN(action.value).toString(),
-                        };
-                      }
-                      parsed = JSON.parse(json.result);
-                    }
-                    abiDecoder.addABI(parsed);
+                    const decodedAction = await decodeAction(action, {
+                      chainID: daochain,
+                    });
                     return {
-                      ...abiDecoder.decodeMethod(action.data),
+                      ...decodedAction,
                       to: action.to,
-                      value: Web3Utils.toBN(action.value).toString(),
+                      value:
+                        Number(action.value) > 0 &&
+                        Web3Utils.toBN(action.value).toString(),
                     };
                   }),
                 ),
@@ -245,7 +220,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
       </HStack>
       <HStack spacing={3} pl={3}>
         <TextBox size='xs'>Value:</TextBox>
-        <TextBox variant='value'>{action.value.toString()}</TextBox>
+        <TextBox variant='value'>{action.value?.toString() || '0x'}</TextBox>
       </HStack>
       <Divider my={2} />
     </Box>
@@ -263,6 +238,11 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 {data.decodedData.targetContract}
               </TextBox>
             </HStack>
+          )}
+          {data.decodedData.value && (
+            <TextBox size='xs' variant='mono'>
+              {`Value ${data.decodedData.value}`}
+            </TextBox>
           )}
           <HStack spacing={3}>
             <TextBox size='xs'>Method</TextBox>
@@ -285,12 +265,19 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                   </TextBox>
                 </HStack>
                 {action?.to && (
-                  <TextBox size='sm' variant='value' mb={2}>
-                    {`To: ${action.to}`}
-                  </TextBox>
+                  <HStack spacing={3}>
+                    <TextBox size='xs' variant='mono'>
+                      Target
+                    </TextBox>
+                    <TextBox size='xs' variant='value' mb={2}>
+                      {action.to}
+                    </TextBox>
+                  </HStack>
                 )}
                 {action?.value && (
-                  <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
+                  <TextBox size='xs' variant='mono'>
+                    {`Value ${action?.value}`}
+                  </TextBox>
                 )}
                 {action?.actions ? (
                   <Box ml={3}>
@@ -301,6 +288,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                             name: a.data.name,
                             params: a.data.params,
                             targetContract: a.to,
+                            value: a.value,
                           },
                         },
                         idx + 1,

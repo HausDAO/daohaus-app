@@ -65,6 +65,7 @@ const SingleActionDisplay = ({ action, index }) => {
   return (
     <Box mb={6}>
       <Button
+        disabled={action.data.error}
         variant='ghost'
         textAlign='left'
         justifyContent='flex-start'
@@ -73,7 +74,10 @@ const SingleActionDisplay = ({ action, index }) => {
         onClick={toggleOpen}
       >
         <Flex width='100%' justifyContent='center' alignItems='flex-start'>
-          <ActionItem label={`TX ${index + 1}`} data={action.data.name} />
+          <ActionItem
+            label={`TX ${index + 1}`}
+            data={action.data.name || action.data.message}
+          />
           <Icon
             as={isOpen ? BiChevronDown : BiChevronUp}
             ml='auto'
@@ -81,7 +85,6 @@ const SingleActionDisplay = ({ action, index }) => {
             h='25px'
             cursor='pointer'
             color='secondary.400'
-            onClick={toggleOpen}
           />
         </Flex>
       </Button>
