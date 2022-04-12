@@ -126,7 +126,7 @@ export const supportedChains = {
     swapr: {
       staking: '0x732DB307337a5ceA1FD117AF808382FaC0AFAe8a',
     },
-    poster: '0x000000000000cd17345801aa8147b8d3950260ff',
+    poster: '0x917d84787A266F9D649d519A7Ec8445eA43514D8',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',

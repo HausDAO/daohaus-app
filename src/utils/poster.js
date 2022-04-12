@@ -35,7 +35,7 @@ export const isCurrentDocAtLocation = (doc, specialLocationDocs) =>
 
 export const fetchDAODocs = async ({ daochain, daoid }) => {
   try {
-    const endpoint = chainByID(daochain)?.poster_graph_url;
+    const endpoint = chainByID(daochain)?.subgraph_url;
     const result = await graphQuery({
       endpoint,
       query: DAO_DOC_COLLECTION,
