@@ -41,6 +41,9 @@ export const ParaMd = props => {
     </Text>
   );
 };
+
+<ParaMd>Text</ParaMd>;
+
 export const ParaSm = props => {
   const { text, children } = props;
   return (

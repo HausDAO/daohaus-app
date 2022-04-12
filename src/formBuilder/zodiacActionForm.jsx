@@ -50,6 +50,10 @@ const ZodiacActionForm = props => {
       chainID: foreignChainId,
       safeAddress, // must be a checksummed address
     });
+    if (!safeSdk) {
+      console.error('Safe not found');
+      return;
+    }
     if (
       !(await safeSdk.getOwners()).includes(
         Web3Utils.toChecksumAddress(address),
@@ -102,7 +106,7 @@ const ZodiacActionForm = props => {
       entry => entry.name === functionName,
     );
     const hexData = safeEncodeHexFunction(selectedFunction, [
-      Web3Utils.toChecksumAddress(...functionParams),
+      ...functionParams,
     ]);
     if (!hexData.encodingError) {
       await createGnosisSafeTxProposal({
@@ -177,7 +181,7 @@ const ZodiacActionForm = props => {
         await submitGnosisTxProposal(
           foreignChainId,
           'enableModule',
-          [ambModuleAddress],
+          [Web3Utils.toChecksumAddress(ambModuleAddress)],
           checksumSafeAddr,
         );
       } catch (error) {

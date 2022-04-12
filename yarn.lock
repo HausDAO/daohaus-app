@@ -2759,7 +2759,7 @@
     elliptic "6.5.4"
     hash.js "1.1.7"
 
-"@ethersproject/solidity@5.5.0", "@ethersproject/solidity@^5.0.0":
+"@ethersproject/solidity@5.5.0", "@ethersproject/solidity@^5.0.0", "@ethersproject/solidity@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/solidity/-/solidity-5.5.0.tgz#2662eb3e5da471b85a20531e420054278362f93f"
   integrity sha512-9NgZs9LhGMj6aCtHXhtmFQ4AN4sth5HuFXVvAQtzmm0jpSCNOTGtrHZJAeYTh7MBjRR8brylWZxBZR9zDStXbw==
@@ -2911,25 +2911,39 @@
   resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-contracts/-/safe-contracts-1.3.0.tgz#316741a7690d8751a1f701538cfc9ec80866eedc"
   integrity sha512-1p+1HwGvxGUVzVkFjNzglwHrLNA67U/axP0Ct85FzzH8yhGJb4t9jDjPYocVMzLorDoWAfKicGy1akPY9jXRVw==
 
-"@gnosis.pm/safe-core-sdk-types@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-types/-/safe-core-sdk-types-0.1.1.tgz#908c394cb4660493b4e9c8e01b5a7aa36efafd30"
-  integrity sha512-PghXGDaI5Foq37nZGmI90U2OKMeGtxh5KqkDqou9aFHwGVa/nf9HRQPxG9/XUzcyfe9OlKttDlJnR3XnC3dSDw==
-
-"@gnosis.pm/safe-core-sdk@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk/-/safe-core-sdk-1.3.0.tgz#ba21c6163c6a06e3fc51f5c7dac650e46fe8a779"
-  integrity sha512-laKkyJUv0llPPG5ep2+18v/anIEGi+KjarNoeVAutYzIeAAkSvvVbY8qyfczh5bWQkqvQ3K1l/QLUJ8Kx4hm3g==
+"@gnosis.pm/safe-core-sdk-types@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-types/-/safe-core-sdk-types-1.0.0.tgz#8f8f4d262ac8ff0f5b3b5f4dd1198974c80762b3"
+  integrity sha512-/MiMfXth/5rnCNvBWPmVYXP66/UZqHiwfOc3BwERVRTvUnF95jD4DOT/K/EjCW0oH9PhwXkFs2mXraKkGQL77Q==
   dependencies:
-    "@gnosis.pm/safe-core-sdk-types" "^0.1.1"
-    "@gnosis.pm/safe-deployments" "^1.7.0"
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/contracts" "^5.5.0"
+    "@gnosis.pm/safe-deployments" "^1.8.0"
+    web3-core "^1.7.0"
+
+"@gnosis.pm/safe-core-sdk@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk/-/safe-core-sdk-2.0.0.tgz#9c64dd4e5647e845eff6a5a01bd16e948c1afefd"
+  integrity sha512-fAUxRrQ/pyTV80S9e5DMCWIGLDDvUsdBzPUZupqe+Uc0FwnbJhMpCofzoHkTEONhnJQJCU3AzPcOBEkmtw8voQ==
+  dependencies:
+    "@ethersproject/solidity" "^5.5.0"
+    "@gnosis.pm/safe-core-sdk-types" "^1.0.0"
+    "@gnosis.pm/safe-deployments" "^1.8.0"
     ethereumjs-util "^7.1.3"
     semver "^7.3.5"
+    web3-utils "^1.7.0"
 
-"@gnosis.pm/safe-deployments@^1.7.0":
+"@gnosis.pm/safe-deployments@^1.8.0":
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-deployments/-/safe-deployments-1.10.0.tgz#ba624e862de1bc74b4bd889fd6cb8b4473fa7290"
   integrity sha512-ka8G630+7cGP4zFP0XEIBV9bjN1PuV1fvtAB8uGoYvyeRreLVPEIY8hTfFq4hm+Pvs7Kd2K7hDyXQ2Nuj0pfIg==
+
+"@gnosis.pm/safe-web3-lib@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-web3-lib/-/safe-web3-lib-1.0.0.tgz#4189276d8f953768723b4fb2b653a17696a33530"
+  integrity sha512-WrC3329UlEr6jN3L6/xkwmGHkjCK1kj3paVnX7zJCocZcHQsoRWhctAr8YPZ/h07nIst2UUUkyIKo2lnaZhzHQ==
+  dependencies:
+    "@gnosis.pm/safe-core-sdk-types" "^1.0.0"
 
 "@gnosis.pm/zodiac@^1.0.3":
   version "1.0.3"
@@ -3459,6 +3473,14 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
+
+"@santteegt/ethereum-block-by-date@1.4.8":
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/@santteegt/ethereum-block-by-date/-/ethereum-block-by-date-1.4.8.tgz#dce24a62939b57ea728ee52d8bf95e854dd49bb7"
+  integrity sha512-7xnuKzdzAknzi6rMjI+O4AisKOrCqesJDhQJbSr11TrKR/Ml4Hu1UwkJ37sM1LfWspNUOtkdONmeUuJCAQNUtA==
+  dependencies:
+    moment "^2.29.1"
+    web3 "^1.6.1"
 
 "@self.id/core@^0.1.0":
   version "0.1.0"
@@ -14894,9 +14916,9 @@ minimist-options@^4.0.2:
     kind-of "^6.0.3"
 
 minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
 minipass-collect@^1.0.2:
   version "1.0.2"
@@ -15001,6 +15023,11 @@ mock-fs@^4.1.0:
   version "4.14.0"
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.14.0.tgz#ce5124d2c601421255985e6e94da80a7357b1b18"
   integrity sha512-qYvlv/exQ4+svI3UOvPUpLDF0OMX5euvUH0Ny4N5QyRyhNdgAgUrVH3iUINSzEPLvx0kbo/Bp28GJKIqvE7URw==
+
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -15321,9 +15348,9 @@ node-fetch@2.6.7, node-fetch@^2.6.0, node-fetch@^2.6.1:
     whatwg-url "^5.0.0"
 
 node-forge@^1.2.0:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-1.2.1.tgz#82794919071ef2eb5c509293325cec8afd0fd53c"
-  integrity sha512-Fcvtbb+zBcZXbTTVwqGA5W+MKBj56UjVRevvchv5XrcyXbmNdesfZL37nlcWOfpgHhgmxApw3tQbTr4CqNmX4w==
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-1.3.0.tgz#37a874ea723855f37db091e6c186e5b67a01d4b2"
+  integrity sha512-08ARB91bUi6zNKzVmaj3QO7cr397uiDT2nJ63cHjyNtCTWIgvS47j3eT0WfzUwS9+6Z5YshRaoasFkXCKrIYbA==
 
 node-gyp-build@^4.2.0, node-gyp-build@^4.3.0:
   version "4.3.0"
@@ -21024,7 +21051,7 @@ web3-core-subscriptions@1.7.1:
     eventemitter3 "4.0.4"
     web3-core-helpers "1.7.1"
 
-web3-core@1.7.1:
+web3-core@1.7.1, web3-core@^1.7.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/web3-core/-/web3-core-1.7.1.tgz#ef9b7f03909387b9ab783f34cdc5ebcb50248368"
   integrity sha512-HOyDPj+4cNyeNPwgSeUkhtS0F+Pxc2obcm4oRYPW5ku6jnTO34pjaij0us+zoY3QEusR8FfAKVK1kFPZnS7Dzw==
@@ -21200,7 +21227,7 @@ web3-shh@1.7.1:
     web3-core-subscriptions "1.7.1"
     web3-net "1.7.1"
 
-web3-utils@1.7.1, web3-utils@^1.2.1:
+web3-utils@1.7.1, web3-utils@^1.2.1, web3-utils@^1.7.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.1.tgz#77d8bacaf426c66027d8aa4864d77f0ed211aacd"
   integrity sha512-fef0EsqMGJUgiHPdX+KN9okVWshbIumyJPmR+btnD1HgvoXijKEkuKBv0OmUqjbeqmLKP2/N9EiXKJel5+E1Dw==

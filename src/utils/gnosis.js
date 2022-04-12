@@ -1,5 +1,7 @@
 import SafeMasterCopy from '@gnosis.pm/safe-contracts/build/artifacts/contracts/GnosisSafe.sol/GnosisSafe.json';
-import Safe, { Web3Adapter } from '@gnosis.pm/safe-core-sdk';
+import Safe from '@gnosis.pm/safe-core-sdk';
+import { getSafeSingletonDeployment } from '@gnosis.pm/safe-deployments';
+import Web3Adapter from '@gnosis.pm/safe-web3-lib';
 import { deployAndSetUpModule } from '@gnosis.pm/zodiac';
 import { ethers } from 'ethers';
 import { encodeMulti, encodeSingle, TransactionType } from 'ethers-multisend';
@@ -39,14 +41,49 @@ export const getSafe = async ({
   safeAddress,
   signerAddress,
 }) => {
-  const rpcUrl = chainByID(chainID).rpc_url;
-  const web3 =
-    injectedProvider || new Web3(new Web3.providers.HttpProvider(rpcUrl));
-  const ethAdapter = new Web3Adapter({
-    web3,
-    signerAddress,
-  });
-  return Safe.create({ ethAdapter, safeAddress });
+  try {
+    const rpcUrl = chainByID(chainID).rpc_url;
+    const web3 =
+      injectedProvider || new Web3(new Web3.providers.HttpProvider(rpcUrl));
+    const ethAdapter = new Web3Adapter({
+      web3,
+      signerAddress,
+    });
+    // TODO: Workaround when dealing with GnosisSafe w/version < 1.3.0
+    // == BEGIN
+    const networkChainId = (await ethAdapter.getChainId()).toString();
+    const deployment = getSafeSingletonDeployment({
+      version: '1.3.0',
+      network: networkChainId,
+      released: true,
+    });
+    const contractNetworks = {
+      [networkChainId]: {
+        multisendAddress: '',
+        safeProxyFactoryAddress: '',
+        safeMasterCopyAddress: '',
+        safeMasterCopyAbi: deployment?.abi,
+      },
+    };
+    // == END
+    const safeSdk = await Safe.create({
+      ethAdapter,
+      safeAddress,
+      contractNetworks,
+    });
+    return safeSdk;
+  } catch (error) {
+    console.log('ERROR getSafe', error);
+  }
+};
+
+const isModuleEnabledInternal = async (safeSdk, moduleAddress) => {
+  const v = await safeSdk.getContractVersion();
+  if (v === '1.1.1') {
+    const modules = await safeSdk.getModules();
+    return modules.map(m => m.toLowerCase()).includes(moduleAddress);
+  }
+  return safeSdk?.isModuleEnabled(moduleAddress);
 };
 
 export const isModuleEnabled = async (chainID, safeAddress, moduleAddress) => {
@@ -54,7 +91,7 @@ export const isModuleEnabled = async (chainID, safeAddress, moduleAddress) => {
     chainID,
     safeAddress,
   });
-  return safeSdk.isModuleEnabled(moduleAddress);
+  return isModuleEnabledInternal(safeSdk, moduleAddress);
 };
 
 export const fetchAmbModule = async (
@@ -66,7 +103,8 @@ export const fetchAmbModule = async (
     chainID: foreignChainId,
     safeAddress: foreignSafeAddress,
   });
-  const modules = await safeSdk.getModules();
+  const modules = await safeSdk?.getModules();
+  if (!modules) return;
   return (
     await Promise.all(
       modules.map(async moduleAddress => {
@@ -94,12 +132,14 @@ export const fetchSafeDetails = async ({
     safeAddress,
   });
 
+  if (!safeSdk) return;
+
   return {
     address: safeSdk.getAddress(),
     owners: await safeSdk.getOwners(),
     threshold: await safeSdk.getThreshold(),
     isMinionModule:
-      minionAddress && (await safeSdk.isModuleEnabled(minionAddress)),
+      minionAddress && (await isModuleEnabledInternal(safeSdk, minionAddress)),
     ambModuleAddress:
       ambController &&
       (await fetchAmbModule(ambController, chainID, safeAddress)),
@@ -129,6 +169,7 @@ export const createGnosisSafeTxProposal = async ({
     chainID,
     safeAddress,
   });
+  if (!safeSdk) throw new Error('Safe not found');
   const gasEstimate =
     ['mainnnet', 'rinkeby', 'goerli'].includes(networkName) &&
     (await postGnosisRelayApi(
@@ -180,7 +221,11 @@ export const createGnosisSafeTxProposal = async ({
   const r = signature.slice(0, 66);
   const s = signature.slice(66, 130);
   // eth_sign signature -> signature_type > 30 -> v = v + 4
-  const v = (parseInt(signature.slice(130, 132), 16) + 4).toString(16);
+  const preV = parseInt(signature.slice(130, 132), 16);
+  const v =
+    preV < 2
+      ? (preV === 0 ? 31 : 32).toString(16) // workaround Ledger signatures -> https://ethereum.stackexchange.com/a/113727
+      : (preV + 4).toString(16);
 
   const tx = {
     ...txProposal.tx,
@@ -220,6 +265,7 @@ export const encodeSwapSafeOwnersBy = async (
       chainID,
       safeAddress,
     });
+    if (!safeSdk) throw new Error('Safe not found');
     const currentOwners = await safeSdk.getOwners();
     const txs = [
       encodeSingle({

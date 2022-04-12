@@ -6,10 +6,11 @@ import {
   RiErrorWarningLine,
 } from 'react-icons/ri';
 
-import { Bold, ParaMd } from '../components/typography';
+import { Bold, CardLabel, ParaMd } from '../components/typography';
 
 import {
   generateOfferText,
+  generateProposalDateText,
   generateRequestText,
   getChainName,
 } from '../utils/proposalCardUtils';
@@ -59,6 +60,17 @@ export const PropCardTransfer = ({
     </Flex>
   );
 };
+export const PropCardDate = ({ label, dateTimeMillis }) => {
+  const submissionDateText = useMemo(() => {
+    if (dateTimeMillis) {
+      return generateProposalDateText(dateTimeMillis);
+    }
+  }, [dateTimeMillis]);
+  return (
+    <CardLabel textTransform='none'>{`${label} ${submissionDateText}`}</CardLabel>
+  );
+};
+
 export const PropCardRequest = ({ proposal }) => {
   const requestText = useMemo(() => {
     if (proposal) {

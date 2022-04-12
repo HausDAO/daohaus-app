@@ -72,7 +72,7 @@ export const supportedChains = {
     network: 'rinkeby',
     network_id: 4,
     chain_id: '0x4',
-    hub_sort_order: 6,
+    hub_sort_order: 8,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
@@ -184,9 +184,69 @@ export const supportedChains = {
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
   },
+  '0xa': {
+    name: 'Optimism Mainnet',
+    short_name: 'optimism',
+    nativeCurrency: 'ETH',
+    network: 'optimism',
+    network_id: 10,
+    chain_id: '0xa',
+    hub_sort_order: 4, // TODO not sure what to set this as
+    providers: ['walletconnect'],
+    // , 'portis', 'fortmatic'
+    rpc_url: 'https://mainnet.optimism.io',
+    abi_api_url:
+      'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api-optimistic.etherscan.io/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-optimism',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-optimism',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-optimism',
+    erc721_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-optimism-subgraph',
+    erc1155_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-optimism-subgraph',
+    minion_factory_addr: '0xc7286c3D9dBe3abD50Ac99E2860D3e750B755dcd',
+    moloch_factory_addr: '0x032865ACfc05E769902Fe90Bcc9d511875a74E66',
+    dai_contract: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+    wrapper_contract: '0x4200000000000000000000000000000000000006',
+    wrap_n_zap_factory_addr: '0x5D1ADccB9092eFc65E094Dd8972Bc0d9224b3C41',
+    block_explorer: 'https://optimistic.etherscan.io',
+    niftyMinion: {
+      minion_factory_addr: '', // TODO add address post deployment
+      version: 'v1',
+    },
+    safeMinion: {
+      minion_factory_addr: '0xE01F3F0F09E778e1AD83Fbdaa00e86676F317C6e',
+      safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
+      safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
+    },
+    escrow_minion: '', // TODO team will add
+    disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    zodiac_amb_module: {
+      amb_bridge_address: {
+        '0xa': '', // TODO team will add
+      },
+      foreign_networks: [
+        {
+          name: 'optimism',
+          value: '0xa',
+        },
+      ],
+      gas_limit: {
+        '0xa': '2000000',
+      },
+      monitoring_app: {
+        '0xa': '', // TODO team will add
+      },
+    },
+  },
   '0x64': {
     name: 'Gnosis Chain',
     short_name: 'gc',
+    shortNamePrefix: 'gno',
     nativeCurrency: 'xDai',
     network: 'xdai',
     network_id: 100,
@@ -194,6 +254,8 @@ export const supportedChains = {
     hub_sort_order: 2,
     providers: ['walletconnect'],
     rpc_url: 'https://rpc.gnosischain.com/',
+    archive_node_url:
+      'https://poa-xdai-archival.gateway.pokt.network/v1/lb/624b0c653bd808003a85478e',
     abi_api_url:
       'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
@@ -264,14 +326,14 @@ export const supportedChains = {
     },
   },
   '0x89': {
-    name: 'Matic',
-    short_name: 'matic',
+    name: 'Polygon',
+    short_name: 'polygon',
     nativeCurrency: 'MATIC',
     network: 'matic',
     networkAlt: 'polygon',
     network_id: 137,
     chain_id: '0x89',
-    hub_sort_order: 3,
+    hub_sort_order: 5,
     providers: ['walletconnect'],
     rpc_url: 'https://polygon-rpc.com/',
     abi_api_url:
@@ -323,7 +385,7 @@ export const supportedChains = {
     network: 'arbitrum',
     network_id: 42161,
     chain_id: '0xa4b1',
-    hub_sort_order: 4,
+    hub_sort_order: 3,
     providers: ['walletconnect'],
     rpc_url: 'https://arb1.arbitrum.io/rpc',
     abi_api_url:
@@ -374,7 +436,7 @@ export const supportedChains = {
     network: 'celo',
     network_id: 42220,
     chain_id: '0xa4ec',
-    hub_sort_order: 5,
+    hub_sort_order: 6,
     providers: ['walletconnect'],
     rpc_url: 'https://forno.celo.org',
     abi_api_url:
@@ -449,6 +511,7 @@ export const chainByNetworkId = networkId => {
   const idMapping = {
     1: supportedChains['0x1'],
     4: supportedChains['0x4'],
+    10: supportedChains['0xa'],
     42: supportedChains['0x2a'],
     74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
@@ -523,10 +586,22 @@ export const MM_ADDCHAIN_DATA = {
       decimals: 18,
     },
   },
+  '0xa': {
+    chainId: '0xa',
+    chainName: 'Optimism',
+    rpcUrls: ['https://mainnet.optimism.io'],
+    blockExplorerUrls: ['https://optimistic.etherscan.io'],
+    nativeCurrency: {
+      name: 'ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+  },
 };
 
 export const EIP3085 = {
   SUPPORTED: {
+    '0xa': true,
     '0x64': true,
     '0x89': true,
     '0x4a': true,

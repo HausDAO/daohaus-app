@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Text, Flex } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { ethers, BigNumber, FixedNumber } from 'ethers';
 import hausImg from '../assets/img/haus_icon.svg';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -41,20 +42,22 @@ const HausBalance = () => {
   }, [address]);
 
   return (
-    <Flex
-      background='#1A84DD'
-      height='42px'
-      justifyContent='center'
-      alignItems='center'
-      mr='38px'
-      padding='11px'
-      borderRadius='2px'
-    >
-      <Avatar name='Haus logo' src={hausImg} size='sm' />
-      <Text fontSize='sm' fontFamily='Roboto Mono' ml={3}>
-        {balance} Haus
-      </Text>
-    </Flex>
+    <Link to='/haus'>
+      <Flex
+        background='#1A84DD'
+        height='42px'
+        justifyContent='center'
+        alignItems='center'
+        mr='38px'
+        padding='11px'
+        borderRadius='2px'
+      >
+        <Avatar name='Haus logo' src={hausImg} size='sm' />
+        <Text fontSize='sm' fontFamily='Roboto Mono' ml={3} color='white'>
+          {balance} Haus
+        </Text>
+      </Flex>
+    </Link>
   );
 };
 
