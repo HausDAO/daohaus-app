@@ -28,6 +28,7 @@ import { formatNativeData } from '../utils/vaults';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';
+import { BOOST_PLAYLISTS } from '../data/playlists';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
@@ -43,8 +44,12 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoMetaData } = useMetaData();
 
   const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
-  const superfluidEnabled =
-    vault?.minionType === MINION_TYPES.SAFE && !vault?.foreignChainId;
+  const isSuperfluidEnabled =
+    vault?.minionType === MINION_TYPES.SAFE &&
+    !vault?.foreignChainId &&
+    daoMetaData?.proposalConfig?.playlists?.some(
+      p => p.id === BOOST_PLAYLISTS.SUPERFLUID_SAFE.id,
+    );
 
   const handleCopy = () => {
     toast({
@@ -174,7 +179,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               Vault Books
             </Button>
           )}
-          {superfluidEnabled && (
+          {isSuperfluidEnabled && (
             <Button
               variant='outline'
               as={Link}
