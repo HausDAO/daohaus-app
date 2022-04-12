@@ -58,6 +58,7 @@ const baseFlowFieldsV2 = `
     id
   }
   flowUpdatedEvents {
+    id
     flowRate
     timestamp
     totalAmountStreamedUntilTimestamp
@@ -118,6 +119,33 @@ export const SF_ACTIVE_STREAMS = gql`
           id
           underlyingAddress
         }
+      }
+    }
+  }
+`;
+
+export const SF_ACTIVE_STREAMS_V2 = gql`
+  query activeStreams(
+    $ownerAddress: String!
+    $supertokenAddress: String!
+    $recipientAddress: String!
+  ) {
+    streams(
+      where: {
+        sender: $ownerAddress
+        receiver: $recipientAddress
+        token: $supertokenAddress
+      }
+    ) {
+      currentFlowRate
+      token {
+        id
+      }
+      sender {
+        id
+      }
+      receiver {
+        id
       }
     }
   }

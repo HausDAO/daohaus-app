@@ -61,7 +61,12 @@ export const SUPERFLUID_MINION_FORMS = {
         FIELD.SUPERFLUID_RATE,
       ],
     ],
-    customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
+    customValidations: [
+      'nonDaoApplicant',
+      // TODO: validation impl incomplete -> should check minion balance & then requested payment
+      // 'superFluidStreamMinimum',
+      'noActiveStream',
+    ],
   },
   SUPERFLUID_UPGRADE_TOKEN: {
     id: 'SUPERTOKEN_UPGRADE',

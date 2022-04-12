@@ -74,7 +74,7 @@ const StreamListItemV2 = ({
           </ToolTipWrapper>
         )}
         <Link
-          href={`https://app.superfluid.finance/streams/${network}/${stream.createdTxHash}/17`}
+          href={`https://app.superfluid.finance/streams/${network}/${stream.createdTxHash}/${stream.createdIdx}/v1`}
           isExternal
         >
           <Button leftIcon={<Icon as={VscLinkExternal} />} variant='outline'>

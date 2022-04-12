@@ -39,6 +39,7 @@ import SF_SUPERTOKEN from '../contracts/superfluidSupertoken.json';
 import SF_SUPERTOKEN_FACTORY from '../contracts/superfluidTokenFactory.json';
 import AMB_MODULE from '../contracts/ambModule.json';
 import AMB from '../contracts/iAmb.json';
+import SF_UUPS_PROXIABLE from '../contracts/uupsProxiable.json';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -109,6 +110,12 @@ const isGnosisProxy = response => {
   );
 };
 
+const isSuperfluidProxy = response => {
+  return (
+    response.length === 3 && response.some(fn => fn.name === 'initializeProxy')
+  );
+};
+
 const getImplementationOf = async (address, chainID, abi) => {
   const web3Contract = createContract({ address, abi, chainID });
   const newAddress = await web3Contract.methods.implementation().call();
@@ -134,6 +141,16 @@ const processABI = async ({
       chainID,
       abi,
     );
+    const newData = await fetchABI(proxyAddress, chainID, parseJSON);
+    return newData;
+  }
+  if (isSuperfluidProxy(abi)) {
+    const proxy = createContract({
+      address: contractAddress,
+      abi: SF_UUPS_PROXIABLE,
+      chainID,
+    });
+    const proxyAddress = await proxy.methods.getCodeAddress().call();
     const newData = await fetchABI(proxyAddress, chainID, parseJSON);
     return newData;
   }

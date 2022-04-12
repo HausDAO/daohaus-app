@@ -70,7 +70,7 @@ export const DETAILS = {
     minionType: MINION_TYPES.SAFE,
   },
   SUPERFLUID_DOWNGRADE_SUPERTOKEN: {
-    title: 'Downgrade Supertoken',
+    title: '.values.title || Downgrade Supertoken',
     description: `Downgrade Supertoken & Return Funds to Treasury`,
     proposalType: 'Superfluid Proposal',
     minionType: MINION_TYPES.SAFE,

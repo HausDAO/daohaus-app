@@ -164,7 +164,11 @@ const SuperfluidMinionDetails = ({
                   <TextBox size='md' color='whiteAlpha.900'>
                     {minionData.minionType}:{' '}
                     <Box as='span' color='primary.100'>
-                      {truncateAddr(minionData.minionAddress)}
+                      {truncateAddr(
+                        minionData?.minionType === MINION_TYPES.SAFE
+                          ? minionData.safeAddress
+                          : minionData.minionAddress,
+                      )}
                     </Box>
                   </TextBox>
                   <CopyToClipboard

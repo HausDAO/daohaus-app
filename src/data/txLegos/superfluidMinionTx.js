@@ -412,5 +412,5 @@ export const SUPERFLUID_MINION_TX = {
       },
       true, // _memberOnlyEnabled
     ],
-  }
+  },
 };

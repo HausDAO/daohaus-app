@@ -274,7 +274,11 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         address={proposal?.minionAddress}
         label={`${minion?.crossChainMinion ? 'cross-chain ' : ''}minion`}
         tooltip
-        tooltipText={TIP_LABELS.FUNDING_MINION_PROPOSAL}
+        tooltipText={
+          proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID
+            ? generateSFLabels(proposal)
+            : TIP_LABELS.FUNDING_MINION_PROPOSAL
+        }
         link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
         shouldFetchProfile
         name={minionName}
@@ -291,7 +295,11 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
         address={proposal?.minionAddress}
         label={`${minion?.crossChainMinion ? 'cross-chain ' : ''}minion`}
         tooltip
-        tooltipText={TIP_LABELS.MINION_PROPOSAL}
+        tooltipText={
+          proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID
+            ? generateSFLabels(proposal)
+            : TIP_LABELS.MINION_PROPOSAL
+        }
         link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
         shouldFetchProfile
         name={minionName}

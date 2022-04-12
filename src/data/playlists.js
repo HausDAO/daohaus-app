@@ -15,7 +15,12 @@ export const BOOST_PLAYLISTS = {
   SAFE_DEV_SUITE: {
     name: 'Safe Minion Classics',
     id: 'safeMinionClassics',
-    forms: ['MINION_SAFE_SIMPLE', 'MINION_BUYOUT_TOKEN', 'SAFE_TX_BUILDER'],
+    forms: [
+      'MINION_SAFE_SIMPLE',
+      'MINION_BUYOUT_TOKEN',
+      'SAFE_SUPERFLUID_STREAM', // TODO: disable playlist action per network
+      'SAFE_TX_BUILDER',
+    ],
   },
   CROSSCHAIN_SAFE_DEV_SUITE: {
     name: 'Cross Chain Safe Minion Classics',

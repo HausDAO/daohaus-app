@@ -418,7 +418,10 @@ const gatherArgs = async data => {
           }),
         );
         if (arg.contract) {
-          return safeEncodeHexFunction(getABIsnippet(arg), vals);
+          return safeEncodeHexFunction(
+            getABIsnippet(arg),
+            vals.flatMap(v => v),
+          );
         }
         return [...vals].flatMap(v => v);
       }
@@ -649,7 +652,9 @@ export const contractByProposalType = proposal => {
     return CONTRACTS.LOCAL_UBERHAUS_MINION;
   }
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
-    return CONTRACTS.SUPERFLUID_MINION_LOCAL;
+    return proposal.minion.minionType === MINION_TYPES.SAFE
+      ? CONTRACTS.MINION_SAFE_EXECUTE
+      : CONTRACTS.SUPERFLUID_MINION_LOCAL;
   }
   if (proposal.minion.minionType === PROPOSAL_TYPES.MINION_SAFE) {
     return CONTRACTS.MINION_SAFE_EXECUTE;

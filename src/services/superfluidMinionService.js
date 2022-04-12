@@ -87,12 +87,12 @@ export const SuperfluidMinionService = ({
                 ownerAddress: minion,
               },
             });
-            const sfInflows = sfAccount?.account?.inflows;
-            const sfOutflows = sfAccount?.account?.outflows;
+            const sfInflows = sfAccount?.account?.inflows || [];
+            const sfOutflows = sfAccount?.account?.outflows || [];
             const tokens = Array.from(
               new Set([
-                ...(sfInflows?.map(s => s.token.id) || []),
-                ...(sfOutflows?.map(s => s.token.id) || []),
+                ...(sfInflows.map(s => s.token.id) || []),
+                ...(sfOutflows.map(s => s.token.id) || []),
               ]),
             ).map(token => {
               const s =
@@ -108,11 +108,9 @@ export const SuperfluidMinionService = ({
               minion,
               tokens,
             );
-
             const flows = await Promise.all(
               sfOutflows.map(async outStream => {
                 const decimals = superTokens[outStream.token.id]?.decimals;
-                console.log('SToken decimals', outStream.token.id, decimals);
                 const createdEvent = outStream.flowUpdatedEvents.find(
                   e => e.type === 0,
                 );
@@ -121,6 +119,9 @@ export const SuperfluidMinionService = ({
                 );
                 // TODO: what if multiple stopped events?
                 const active = !stoppedEvent;
+                const createdIndexRegx = createdEvent.id.match(
+                  /FlowUpdated-0x[\w\d]{64}-([0-9]+)/,
+                );
                 if (active) {
                   // TODO: consider flowRate update (e.g. updatedAtTimestamp > createdAtTimestamp)
                   const netFlow =
@@ -133,6 +134,8 @@ export const SuperfluidMinionService = ({
                     active,
                     netFlow,
                     createdTxHash: createdEvent.transactionHash,
+                    createdIdx:
+                      createdIndexRegx?.length === 2 && createdIndexRegx[1],
                   };
                 }
                 return {
@@ -141,6 +144,8 @@ export const SuperfluidMinionService = ({
                   netFlow:
                     Number(outStream.streamedUntilUpdatedAt) / 10 ** decimals,
                   createdTxHash: createdEvent.transactionHash,
+                  createdIdx:
+                    createdIndexRegx?.length === 2 && createdIndexRegx[1],
                 };
               }),
             );
@@ -183,7 +188,6 @@ export const SuperfluidMinionService = ({
               underlyingTokenAddress: s.token.underlyingAddress,
             };
           });
-
           const superTokens = await getSuperTokenBalances(
             chainID,
             minion,

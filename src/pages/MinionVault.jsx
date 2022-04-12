@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Flex,
+  HStack,
   useToast,
   Icon,
   Link as ChakraLink,
@@ -42,6 +43,8 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoMetaData } = useMetaData();
 
   const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
+  const superfluidEnabled =
+    vault?.minionType === MINION_TYPES.SAFE && !vault?.foreignChainId;
 
   const handleCopy = () => {
     toast({
@@ -160,23 +163,27 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
           <Icon as={BiArrowBack} color='secondary.500' mr={2} />
           All Vaults
         </Flex>
-        {isBooksBoostEnabled && (
-          <Button
-            variant='outline'
-            as={ChakraLink}
-            isExternal
-            href={`${DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
-          >
-            Vault Books
-          </Button>
-        )}
-        <Button
-          variant='outline'
-          as={Link}
-          to={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion}`}
-        >
-          View Superfluid Streams
-        </Button>
+        <HStack spacing='4'>
+          {isBooksBoostEnabled && (
+            <Button
+              variant='outline'
+              as={ChakraLink}
+              isExternal
+              href={`${DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
+            >
+              Vault Books
+            </Button>
+          )}
+          {superfluidEnabled && (
+            <Button
+              variant='outline'
+              as={Link}
+              to={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion}`}
+            >
+              Superfluid Streams
+            </Button>
+          )}
+        </HStack>
       </Flex>
       {!vault && <Loading message='Fetching treasury holdings...' />}
       {vault && (

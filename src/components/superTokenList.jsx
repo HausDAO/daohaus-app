@@ -6,8 +6,8 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
-import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
-import { FORM } from '../data/forms';
+import { SUPERFLUID_MINION_TX } from '../data/txLegos/superfluidMinionTx';
+import { SUPERFLUID_MINION_FORMS as FORM } from '../data/formLegos/superfluidForms';
 import { useAppModal } from '../hooks/useModals';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -116,14 +116,15 @@ const SuperTokenList = ({
     });
     try {
       await submitTransaction({
-        tx: VAULT_TRANSFER_TX.MINION_DOWNGRADE_RETURN_TOKEN_SAFE,
+        tx: SUPERFLUID_MINION_TX.MINION_DOWNGRADE_RETURN_TOKEN_SAFE,
         localValues: {
           downgradeValue: token.tokenBalance,
-          minionTransfer: token.tokenBalance, // TODO: also sum underlyng token balance if any
+          minionTransfer: token.tokenBalance,
           minionAddress: minion,
         },
         values: {
           superTokenAddress,
+          title: `Downgrade ${token.symbol}`,
           tokenAddress: token.underlyingTokenAddress,
         },
       });

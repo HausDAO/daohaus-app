@@ -7,14 +7,11 @@ import ErrorList from './ErrorList';
 import PaymentInput from './paymentInput';
 import { useToken } from '../contexts/TokenContext';
 import { useTX } from '../contexts/TXContext';
-import { TX } from '../data/contractTX';
-import { SF_ACTIVE_STREAMS } from '../graphQL/superfluid-queries';
+import { SUPERFLUID_MINION_TX as TX } from '../data/txLegos/superfluidMinionTx';
 import { LOCAL_ABI } from '../utils/abi';
-import { graphQuery } from '../utils/apollo';
-import { supportedChains } from '../utils/chain';
 import { createContract } from '../utils/contract';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { isSupertoken } from '../utils/superfluid';
+import { fetchActiveStream, isSupertoken } from '../utils/superfluid';
 
 const SuperfluidPaymentInput = props => {
   const { daochain } = useParams();
@@ -26,10 +23,13 @@ const SuperfluidPaymentInput = props => {
   const [loading, setLoading] = useState(false);
   const [txError /* setTxError */] = useState(null); // TODO: manage error
   const [hasSupertoken, setHasSupertoken] = useState(null);
+  const [sTokenDeployed, setSTokenDeployed] = useState(false);
 
   const paymentToken = watch('paymentToken');
+  const paymentRequested = watch('paymentRequested');
   const applicant = watch('applicant');
   const minion = watch('selectedMinion');
+  const selectedSafeAddress = watch('selectedSafeAddress');
 
   useEffect(() => {
     register('activeStream');
@@ -56,8 +56,10 @@ const SuperfluidPaymentInput = props => {
           superTokenAddress !== ethers.constants.AddressZero,
       );
       setFormCondition(isSuperToken ? 'withSupertoken' : 'upgradeToSupertoken');
-      // TODO: allowance value
-      setValue('allowanceToApply', ethers.constants.MaxUint256.toString());
+      setValue(
+        'allowanceToApply',
+        paymentRequested || ethers.constants.MaxUint256.toString(),
+      );
       setFetchingSupertoken(false);
     }
   };
@@ -68,7 +70,7 @@ const SuperfluidPaymentInput = props => {
       return token.tokenAddress === paymentToken;
     });
     const tokenContract = createContract({
-      address: selectedToken.tokenName,
+      address: selectedToken.tokenAddress,
       abi: LOCAL_ABI.ERC_20,
       chainID: daochain,
     });
@@ -80,6 +82,9 @@ const SuperfluidPaymentInput = props => {
       localValues: {
         paymentToken,
       },
+      lifeCycleFns: {
+        afterTx: () => setSTokenDeployed(true),
+      },
     });
     await checkSuperToken();
     setLoading(false);
@@ -87,18 +92,12 @@ const SuperfluidPaymentInput = props => {
 
   useEffect(() => {
     const checkActiveStream = async () => {
-      const chainConfig = supportedChains[daochain];
-      const accountStreams = await graphQuery({
-        endpoint: chainConfig.superfluid.subgraph_url,
-        query: SF_ACTIVE_STREAMS,
-        variables: {
-          ownerAddress: minion,
-          recipientAddress: applicant.toLowerCase(),
-        },
-      });
-
-      const activeStream = accountStreams?.account?.flowsOwned?.find(
-        s => s.token?.underlyingAddress === paymentToken,
+      const activeStream = await fetchActiveStream(
+        daochain,
+        minionType === MINION_TYPES.SAFE ? selectedSafeAddress : minion,
+        paymentToken,
+        applicant.toLowerCase(),
+        minionType === MINION_TYPES.SAFE,
       );
       setValue('activeStream', activeStream);
     };
@@ -106,17 +105,13 @@ const SuperfluidPaymentInput = props => {
     if (paymentToken && applicant && minion) {
       checkActiveStream();
     }
-    // TODO: is this still required?
-    // if (paymentToken) {
-    //   checkSuperToken();
-    // }
   }, [applicant, paymentToken, minion]);
 
   useEffect(() => {
     if (paymentToken) {
       checkSuperToken();
     }
-  }, [paymentToken]);
+  }, [paymentRequested, paymentToken]);
 
   return (
     <>
@@ -130,7 +125,7 @@ const SuperfluidPaymentInput = props => {
               variant='outline'
               size='xs'
               onClick={deploySupertoken}
-              disabled={loading}
+              disabled={loading || sTokenDeployed}
               isLoading={loading}
             >
               Create Supertoken

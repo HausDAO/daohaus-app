@@ -8,7 +8,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useUser } from '../contexts/UserContext';
-import { TX } from '../data/contractTX';
+import { SUPERFLUID_MINION_TX as TX } from '../data/txLegos/superfluidMinionTx';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import StreamListItem from './StreamListItem';
