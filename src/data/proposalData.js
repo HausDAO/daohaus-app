@@ -36,6 +36,10 @@ export const CUSTOM_CARD_DATA = {
     customTransferUI: 'multiTx',
     execute: 'safeMinionAction',
   },
+  [PROPOSAL_TYPES.MINION_SAFE]: {
+    customTransferUI: 'multiTx',
+    execute: 'safeMinionAction',
+  },
   [PROPOSAL_TYPES.DISPERSE]: {
     customTransferUI: 'disperse',
   },
@@ -53,5 +57,11 @@ export const CUSTOM_CARD_DATA = {
   [PROPOSAL_TYPES.MINION_TRIBUTE]: {
     customTransferUI: 'minionTributeTransfer',
     execute: 'minionTributeAction',
+  },
+  [PROPOSAL_TYPES.SWAPR_STAKING]: {
+    customTransferUI: 'tutorialTransfer',
+  },
+  [PROPOSAL_TYPES.POSTER_RATIFY]: {
+    customTransferUI: 'ratifyContent',
   },
 };

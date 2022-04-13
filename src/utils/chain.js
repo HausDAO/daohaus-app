@@ -46,6 +46,8 @@ export const supportedChains = {
     },
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0x000000000000cd17345801aa8147b8d3950260ff',
+
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
@@ -89,6 +91,8 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-rinkeby-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-rinkeby-subgraph',
+    poster_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-poster-rinkeby',
     minion_factory_addr: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x95b58a6bff3d14b7db2f5cb5f0ad413dc2940658',
@@ -119,6 +123,10 @@ export const supportedChains = {
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
     escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    swapr: {
+      staking: '0x732DB307337a5ceA1FD117AF808382FaC0AFAe8a',
+    },
+    poster: '0x917d84787A266F9D649d519A7Ec8445eA43514D8',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',
@@ -288,6 +296,7 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    poster: '0x000000000000cd17345801aa8147b8d3950260ff',
     niftyMinion: {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',

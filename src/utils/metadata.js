@@ -265,6 +265,16 @@ export const ipfsJsonPin = async (creds, obj) => {
   }
 };
 
+export const getIPFSPinata = async ({ hash }) => {
+  const url = `https://daohaus.mypinata.cloud/ipfs/${hash}`;
+  try {
+    const res = await fetch(url);
+    return res.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const post = async (endpoint, data) => {
   const url = `${metadataApiUrl}/${endpoint}`;
   try {

@@ -10,6 +10,16 @@ export const testTXHash = (data, shouldEqual, pollId) => {
   );
 };
 
+export const testPosterTXHash = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data?.contents?.[0]?.transactionHash === shouldEqual;
+  }
+  clearInterval(pollId);
+  throw new Error(
+    'Did not receive results from the graph based on the given transaction hash',
+  );
+};
+
 export const testWrapNZap = (data, shouldEqual, pollId) => {
   if (data) {
     return data === shouldEqual;

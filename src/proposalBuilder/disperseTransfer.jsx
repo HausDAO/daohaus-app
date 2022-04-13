@@ -6,6 +6,59 @@ import { readableTokenBalance } from '../utils/proposalCardUtils';
 import { fetchSpecificTokenData } from '../utils/tokenValue';
 import { AsyncCardTransfer } from './proposalBriefPrimitives';
 
+const displayToken = async ({
+  minionAction,
+  daochain,
+  setTokenData,
+  setRecipientAmt,
+  shouldUpdate,
+}) => {
+  const approveTx = minionAction?.decoded?.actions[0];
+  const disperseTx = minionAction?.decoded?.actions[1];
+  const tokenAddress = approveTx?.to;
+
+  const amt = disperseTx?.data?.params[2].value?.reduce(
+    (acc, amt) => acc + Number(amt),
+    0,
+  );
+  const amtRecipients = disperseTx?.data?.params[1]?.value?.length;
+  const tokenData = await fetchSpecificTokenData(
+    tokenAddress,
+    { name: true, decimals: true },
+    daochain,
+  );
+  if (tokenData && shouldUpdate) {
+    setTokenData({
+      name: tokenData?.name,
+      decimals: tokenData?.decimals,
+      balance: amt,
+    });
+    setRecipientAmt(amtRecipients);
+  }
+};
+
+const displayEth = ({
+  minionAction,
+  setTokenData,
+  setRecipientAmt,
+  shouldUpdate,
+}) => {
+  const disperseTx = minionAction?.decoded?.actions[0];
+  const amt = disperseTx?.data?.params[1].value?.reduce(
+    (acc, amt) => acc + Number(amt),
+    0,
+  );
+  const amtRecipients = disperseTx?.data?.params[0]?.value?.length;
+  if (amt && amtRecipients && shouldUpdate) {
+    setTokenData({
+      name: 'ETH',
+      decimals: 18,
+      balance: amt,
+    });
+    setRecipientAmt(amtRecipients);
+  }
+};
+
 const DisperseTransfer = ({ minionAction }) => {
   const { daochain } = useParams();
   const [tokenData, setTokenData] = useState(null);
@@ -13,34 +66,31 @@ const DisperseTransfer = ({ minionAction }) => {
 
   useEffect(() => {
     let shouldUpdate = true;
-    const fetchThatTokenData = async (tokenAddress, amt, amtRecip) => {
-      const tokenData = await fetchSpecificTokenData(
-        tokenAddress,
-        { name: true, decimals: true },
-        daochain,
+
+    if (!minionAction) return;
+
+    if (minionAction) {
+      const isDisperseEth = minionAction?.decoded?.actions?.some(
+        action => action?.data?.name === 'disperseEther',
       );
-      if (tokenData && shouldUpdate) {
-        setTokenData({
-          name: tokenData?.name,
-          decimals: tokenData?.decimals,
-          balance: amt,
+      if (isDisperseEth) {
+        displayEth({
+          minionAction,
+          setTokenData,
+          setRecipientAmt,
+          shouldUpdate,
         });
-        setRecipientAmt(amtRecip);
+      } else {
+        displayToken({
+          minionAction,
+          daochain,
+          setTokenData,
+          setRecipientAmt,
+          shouldUpdate,
+        });
       }
-    };
-
-    const approveTx = minionAction?.decoded?.actions[0];
-    const disperseTx = minionAction?.decoded?.actions[1];
-    const tokenAddress = approveTx?.to;
-
-    const amt = disperseTx?.data?.params[2].value?.reduce(
-      (acc, amt) => acc + Number(amt),
-      0,
-    );
-    const amtRecipients = disperseTx?.data?.params[1]?.value?.length;
-    if (tokenAddress) {
-      fetchThatTokenData(tokenAddress, amt, amtRecipients);
     }
+
     return () => (shouldUpdate = false);
   }, [minionAction]);
 

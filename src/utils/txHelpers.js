@@ -18,6 +18,9 @@ import { chainByID } from './chain';
 import { encodeAmbTxProposal } from './gnosis';
 import { TX } from '../data/txLegos/contractTX';
 import { CONTRACTS } from '../data/contracts';
+import { ipfsPrePost } from './requests';
+import { ipfsJsonPin } from './metadata';
+import { CONTENT_TYPES, POSTER_TAGS } from './poster';
 
 const getPath = pathString =>
   pathString
@@ -111,6 +114,75 @@ export const collapseToCallData = values =>
     value: tx.minionValue || '0',
     operation: tx.operation || '0',
   }));
+const collapseLegoToCallData = (actions, gatherArgs, data) => {
+  return Promise.all(
+    actions.map(async (action, index) => {
+      if (action.logTX) {
+        console.log(`ACTION DATA FOR TRANSACTION ${index}`);
+        console.log('action', action);
+        console.log('App State', data);
+      }
+      // Why undefined?
+      const actionTargetArray = await gatherArgs({
+        ...data,
+        tx: { ...data.tx, gatherArgs: [action.targetContract] },
+      });
+      const actionTarget = actionTargetArray[0];
+      if (action.logTX) {
+        console.log('targetContract: ', actionTarget);
+      }
+      const actionArgs = await gatherArgs({
+        ...data,
+        tx: { ...data.tx, gatherArgs: action.args },
+      });
+      if (action.logTX) {
+        console.log('args: ', actionArgs);
+      }
+      const actionValueArray = action.value
+        ? await gatherArgs({
+            ...data,
+            tx: { ...data.tx, gatherArgs: [action.value] },
+          })
+        : '0';
+      const actionValue = Array.isArray(actionValueArray)
+        ? actionValueArray[0]
+        : actionValueArray;
+
+      if (action.logTX) {
+        console.log('value: ', actionValue);
+      }
+      const actionOperationArray = action.operation
+        ? await gatherArgs({
+            ...data,
+            tx: { ...data.tx, gatherArgs: [action.operation] },
+          })[0]
+        : '0';
+      const actionOperation = Array.isArray(actionOperationArray)
+        ? actionOperationArray[0]
+        : actionOperationArray;
+      if (action.logTX) {
+        console.log('operation: ', actionOperation);
+      }
+      const abiSnippet = getABIsnippet(
+        { contract: action.abi, fnName: action.fnName },
+        data,
+      );
+
+      if (action.logTX) {
+        console.log('abi: ', action.abi);
+        console.log('fnName: ', action.fnName);
+        console.log('abiSnippet', abiSnippet);
+      }
+
+      return {
+        to: actionTarget,
+        data: safeEncodeHexFunction(abiSnippet, actionArgs || []),
+        value: actionValue,
+        operation: actionOperation,
+      };
+    }),
+  );
+};
 
 const argBuilderCallback = Object.freeze({
   proposeActionVanilla({ values, formData }) {
@@ -180,6 +252,27 @@ const argBuilderCallback = Object.freeze({
       true, // _memberOnlyEnabled
     ];
   },
+  postIPFS: async ({ values, contextData }) => {
+    try {
+      const key = await ipfsPrePost('dao/ipfs-key', {
+        daoAddress: contextData.daoid,
+      });
+      const pinataData = await ipfsJsonPin(key, values.posterData);
+      return [
+        JSON.stringify({
+          molochAddress: contextData.daoid,
+          contentType: CONTENT_TYPES.PINATA,
+          content: JSON.stringify(pinataData),
+          description: values?.posterData?.description,
+          location: values?.posterData?.location || 'docs',
+          title: values?.posterData?.title || 'No Title',
+        }),
+        POSTER_TAGS.MEMBER,
+      ];
+    } catch (error) {
+      console.error(error);
+    }
+  },
   crossChainMultiActionSafe(data) {
     const { contextData, values } = data;
     const localChain = chainByID(contextData.daochain);
@@ -228,6 +321,11 @@ export const handleSearch = (data, arg, shouldThrow) => {
   if (!path.length)
     throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
   return searchData(data, path, shouldThrow);
+};
+
+export const encodeMultiAction = async ({ data, arg, gatherArgs }) => {
+  const callData = await collapseLegoToCallData(arg.actions, gatherArgs, data);
+  return encodeMulti(callData);
 };
 
 const gatherArgs = async data => {
@@ -307,6 +405,9 @@ const gatherArgs = async data => {
         }
         return encodedTx;
       }
+      if (arg.type === 'encodeMultiAction') {
+        return encodeMultiAction({ data, arg, gatherArgs });
+      }
       if (arg.type === 'nestedArgs') {
         const vals = await Promise.all(
           arg.gatherArgs.map(async a => {
@@ -369,6 +470,7 @@ export const createHydratedString = data => {
 
 export const getContractAddress = data => {
   const { contractAddress } = data.tx.contract;
+
   if (contractAddress[0] === '.') {
     const path = getPath(contractAddress);
     const address = searchData(data, path);
@@ -402,18 +504,6 @@ export const Transaction = async data => {
       console.error(error);
       return error;
     });
-};
-
-//  Seaches application state for values
-export const exposeValues = data => {
-  const foundData = data.tx.exposeValues.reduce((obj, query) => {
-    return { ...obj, [query.name]: searchData(data, query.search) };
-  }, {});
-  if (foundData) {
-    const existingValues = data.values || {};
-    return { ...data, values: { ...foundData, ...existingValues } };
-  }
-  throw new Error('Could not find data with given queries');
 };
 
 export const createActions = ({ tx, uiControl, stage }) => {

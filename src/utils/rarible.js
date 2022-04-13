@@ -227,17 +227,17 @@ export const compareOrder = (ipfsData, orderRes) => {
 };
 
 export const buildRaribleUrl = (orderData, daochain) => {
-  const tokenId = orderData.make.assetType.tokenId || orderData.take.assetType.tokenId;
-  const contract =
-    orderData.make.assetType.tokenId
-      ? orderData.make.assetType.contract
-      : orderData.take.assetType.contract;
+  const tokenId =
+    orderData.make.assetType.tokenId || orderData.take.assetType.tokenId;
+  const contract = orderData.make.assetType.tokenId
+    ? orderData.make.assetType.contract
+    : orderData.take.assetType.contract;
   return `${supportedChains[daochain].rarible.base_url}/token/${contract}:${tokenId}`;
 };
 
 export const fetchNftMeta = async (daochain, itemId) => {
   return getRaribleApi(daochain, `nft/items/${itemId}/meta`);
-}
+};
 
 export const fetchLazyNftMeta = async (daochain, itemId) => {
   try {
@@ -246,4 +246,4 @@ export const fetchLazyNftMeta = async (daochain, itemId) => {
   } catch (error) {
     console.error(error);
   }
-}
+};

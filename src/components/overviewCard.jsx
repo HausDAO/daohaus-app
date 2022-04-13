@@ -9,8 +9,11 @@ import useBoost from '../hooks/useBoost';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
+import DocLink from './docLink';
+
 import { getActiveMembers } from '../utils/dao';
 import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
+import { POST_LOCATIONS } from '../utils/poster';
 
 const OverviewCard = ({ daoOverview, members, daoVaults }) => {
   const { daochain, daoid } = useParams();
@@ -93,6 +96,7 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             </>
           )}
         </Box>
+        <DocLink locationName={POST_LOCATIONS.FRONT_PAGE} />
         <Flex mt={6}>
           <Button
             variant='outline'

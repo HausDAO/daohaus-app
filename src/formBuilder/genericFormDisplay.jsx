@@ -34,7 +34,7 @@ const GenericFormDisplay = props => {
   return (
     <FieldWrapper label={label} {...props}>
       <InputGroup>
-        <Input type='hidden' name={name} ref={register} />
+        <Input type='hidden' name={name} ref={register} id={name} />
         <TextBox size='sm' variant={variant}>
           {display || fallback}
         </TextBox>

@@ -12,6 +12,13 @@ export const DETAILS = {
     link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
   },
+  MINION_PROPOSAL: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    minionType: '.formData.minionType || .values.minionType',
+  },
   VANILLA_MINION_PROPOSAL: {
     title: `.values.title`,
     description: `.values.description`,
@@ -92,7 +99,7 @@ export const DETAILS = {
   },
   DISPERSE_TOKEN: {
     title: '.values.title || Disperse Proposal',
-    description: '.values.description',
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
     link: '.values.link',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
@@ -143,5 +150,9 @@ export const DETAILS = {
     proposalType: '.formData.type',
     uberHaus: 'true',
     uberType: 'pull',
+  },
+  POSTER_RATIFY: {
+    title: `.values.title || Proposal to Ratify Content`,
+    proposalType: '.formData.type',
   },
 };

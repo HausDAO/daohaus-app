@@ -28,8 +28,10 @@ import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
-import { MINION_TYPES } from './proposalUtils';
+import POSTER from '../contracts/poster.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
+import SWAPR_STAKING from '../contracts/swapr_staking.json';
+import { MINION_TYPES } from './proposalUtils';
 import AMB_MODULE from '../contracts/ambModule.json';
 import AMB from '../contracts/iAmb.json';
 import { validate } from './validation';
@@ -58,6 +60,8 @@ export const LOCAL_ABI = Object.freeze({
   DAO_CONDITIONAL_HELPER,
   ESCROW_MINION,
   DISPERSE_APP,
+  SWAPR_STAKING,
+  POSTER,
   AMB_MODULE,
   AMB,
 });
@@ -190,6 +194,8 @@ export const formatFNsAsSelectOptions = abi => {
 };
 
 export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
+  console.log('selectedFunction', selectedFunction);
+  console.log('inputVals', inputVals);
   if (!selectedFunction || !Array.isArray(inputVals))
     throw new Error(
       'Incorrect params passed to safeEncodeHexFunction in abi.js',
@@ -316,8 +322,6 @@ const getRemoteSnippet = async ({ contract, fnName }, data) => {
 
 export const getABIsnippet = (params, data) => {
   const { contract } = params;
-
-  console.log('params, data', params, data);
   if (contract.location === 'local') return getLocalSnippet(params);
   if (contract.location === 'fetch') return getRemoteSnippet(params, data);
   if (contract.location === 'static') return contract.value;

@@ -17,6 +17,7 @@ import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
+import { TX_HASH_POSTER } from '../graphQL/postQueries';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({
@@ -24,6 +25,16 @@ export const pollTXHash = async ({ chainID, txHash }) => {
     query: TX_HASH,
     variables: {
       id: txHash,
+    },
+  });
+};
+
+export const pollPosterTXHash = async ({ chainID, txHash }) => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'poster_graph_url'),
+    query: TX_HASH_POSTER,
+    variables: {
+      transactionHash: txHash,
     },
   });
 };
