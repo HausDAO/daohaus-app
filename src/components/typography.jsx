@@ -5,6 +5,9 @@ import styled from '@emotion/styled';
 export const Bold = styled.span`
   font-weight: 700;
 `;
+export const Italic = styled.span`
+  font-style: 'italic';
+`;
 
 export const Label = props => {
   const { text, children } = props;
@@ -24,7 +27,7 @@ export const Label = props => {
 export const Heading = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='2rem' variant='label' lineHeight='168.4%;'>
+    <Text fontSize='2rem' variant='label' lineHeight='168.4%;' {...props}>
       {text || children}
     </Text>
   );
@@ -38,6 +41,7 @@ export const ParaMd = props => {
     </Text>
   );
 };
+
 export const ParaSm = props => {
   const { text, children } = props;
   return (
@@ -49,7 +53,7 @@ export const ParaSm = props => {
 export const ParaLg = props => {
   const { text, children } = props;
   return (
-    <Text fontSize='1.1rem' lineHeight='1.1rem' {...props}>
+    <Text fontSize='1.1rem' lineHeight='1.25rem' {...props}>
       {text || children}
     </Text>
   );

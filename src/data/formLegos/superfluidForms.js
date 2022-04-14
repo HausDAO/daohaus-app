@@ -34,4 +34,54 @@ export const SUPERFLUID_MINION_FORMS = {
     ],
     customValidations: ['nonDaoApplicant', 'streamMinimum', 'noActiveStream'],
   },
+  SAFE_SUPERFLUID_STREAM: {
+    id: 'SAFE_SUPERFLUID_STREAM',
+    title: 'Superfluid Payment Stream',
+    description: 'Stream funds from the Safe Minion',
+    type: PROPOSAL_TYPES.MINION_SUPERFLUID,
+    minionType: MINION_TYPES.SAFE,
+    formConditions: ['upgradeToSupertoken', 'withSupertoken'],
+    tx: {
+      type: 'formCondition',
+      upgradeToSupertoken: TX.SAFE_SUPERFLUID_UPGRADE_N_STREAM,
+      withSupertoken: TX.SAFE_SUPERFLUID_STREAM,
+    },
+    required: [
+      'title',
+      'applicant',
+      'selectedMinion',
+      'paymentRequested',
+      'superfluidRate',
+    ],
+    fields: [
+      [FIELD.MINION_SELECT, FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [
+        FIELD.APPLICANT,
+        FIELD.SUPERFLUID_PAYMENT_REQUEST,
+        FIELD.SUPERFLUID_RATE,
+      ],
+    ],
+    customValidations: [
+      'nonDaoApplicant',
+      // TODO: validation impl incomplete -> should check minion balance & then requested payment
+      // 'superFluidStreamMinimum',
+      'noActiveStream',
+    ],
+  },
+  SUPERFLUID_UPGRADE_TOKEN: {
+    id: 'SUPERTOKEN_UPGRADE',
+    title: 'Superfluid Token Upgrade Proposal',
+    description:
+      'Proposal for requesting & upgrading funds to supertokens from the DAO treasury.',
+    minionType: MINION_TYPES.SAFE,
+    type: PROPOSAL_TYPES.MINION_SUPERFLUID,
+    required: ['title', 'applicant'],
+    tx: TX.SAFE_SUPERFLUID_UPGRADE_TOKEN,
+    fields: [
+      [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+      [FIELD.MINION_SELECT, FIELD.SUPERFLUID_PAYMENT_REQUEST],
+    ],
+    // TODO: paymentToken not a supertoken
+    // customValidations: ['nonDaoApplicant'],
+  },
 };

@@ -1,4 +1,4 @@
-const { off } = require('process');
+// const { off } = require('process');
 
 module.exports = {
   env: {
@@ -35,7 +35,7 @@ module.exports = {
       configFile: './babel.config.json',
     },
   },
-  plugins: ['react', 'react-hooks'],
+  plugins: ['react-hooks', 'react'],
   settings: {
     react: {
       version: 'detect',

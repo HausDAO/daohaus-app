@@ -13,6 +13,8 @@ import {
   pollBoostTXHash,
   pollMinionExecuteAction,
   pollWrapNZap,
+  pollSupertokenCreated,
+  pollPosterTXHash,
 } from '../polls/polls';
 import {
   checkDelRewardsTest,
@@ -27,6 +29,8 @@ import {
   withdrawTokenTest,
   testTXHash,
   testWrapNZap,
+  superTokenTest,
+  testPosterTXHash,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -81,6 +85,36 @@ export const createPoll = ({
       startPoll({
         pollFetch: pollTXHash,
         testFn: testTXHash,
+        shouldEqual: txHash,
+        args,
+        actions,
+        txHash,
+      });
+      cachePoll?.({
+        txHash,
+        action,
+        timeSent: now,
+        status: 'unresolved',
+        resolvedMsg: tx.successMsg,
+        unresolvedMsg: 'Processing',
+        successMsg: tx.successMsg,
+        errorMsg: tx.errMsg,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: args,
+      });
+    };
+    // NEW TX specialPoll
+  } else if (action === 'subgraph-poster') {
+    return ({ chainID, actions, now, tx }) => txHash => {
+      if (!tx) return;
+      const args = { txHash, chainID, now, tx };
+      startPoll({
+        pollFetch: pollPosterTXHash,
+        testFn: testPosterTXHash,
         shouldEqual: txHash,
         args,
         actions,
@@ -403,6 +437,44 @@ export const createPoll = ({
             tokenAddress,
             expectedBalance,
             chainID,
+          },
+        });
+      }
+    };
+    // Review all params
+  } else if (action === 'superTokenCreated') {
+    return ({ chainID, createdAt, paymentToken, actions }) => txHash => {
+      startPoll({
+        pollFetch: pollSupertokenCreated,
+        testFn: superTokenTest,
+        shouldEqual: true,
+        args: {
+          chainID,
+          underlyingTokenAddress: paymentToken,
+          createdAt,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Supertoken Created!',
+          unresolvedMsg: 'Deploying Supertoken',
+          successMsg: 'Supertoken Created Successfully!',
+          errorMsg: `Error creating a Supertoken for ${paymentToken}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            chainID,
+            createdAt,
+            underlyingTokenAddress: paymentToken,
           },
         });
       }

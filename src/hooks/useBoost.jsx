@@ -21,8 +21,6 @@ const useBoost = () => {
     // custom boost related functions
     spamFilterNotice(tx) {
       if (!tx || tx.type === 'formCondition') return null;
-
-      console.log('tx', tx);
       const proposalTypeNeedsTribute =
         tx.name !== TX.WHITELIST_TOKEN_PROPOSAL.name &&
         tx.name !== TX.GUILDKICK_PROPOSAL.name &&

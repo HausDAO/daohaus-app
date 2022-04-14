@@ -47,10 +47,20 @@ export const BOOST_PLAYLISTS = {
     id: 'Superfluid minion',
     forms: ['SUPERFLUID_STREAM'],
   },
+  SUPERFLUID_SAFE: {
+    name: 'Superfluid',
+    id: 'superfluidSafeMinion',
+    forms: ['SAFE_SUPERFLUID_STREAM'],
+  },
   DISPERSE: {
     name: 'Disperse',
     id: 'disperse',
     forms: ['MINION_DISPERSE'],
+  },
+  POSTER: {
+    name: 'Poster',
+    id: 'poster',
+    forms: ['RATIFY_MD', 'RATIFY_DAO_DOC', 'POST_IPFS_MD', 'POST_MD'],
   },
 };
 

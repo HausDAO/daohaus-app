@@ -61,7 +61,11 @@ const Processed = props => {
           !voteData?.votePassedProcessFailed &&
           `and ${proposal?.executed ? 'minion executed' : 'needs execution'}`
         }
-        circleColor={voteData?.isPassing ? 'green' : 'red'}
+        circleColor={
+          voteData?.isPassing && !voteData?.votePassedProcessFailed
+            ? 'green'
+            : 'red'
+        }
         quorum
         voteData={voteData}
         proposal={proposal}

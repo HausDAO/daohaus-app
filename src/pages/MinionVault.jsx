@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Flex,
+  HStack,
   useToast,
   Icon,
   Link as ChakraLink,
@@ -27,6 +28,7 @@ import { formatNativeData } from '../utils/vaults';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';
+import { BOOST_PLAYLISTS } from '../data/playlists';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
@@ -42,6 +44,12 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoMetaData } = useMetaData();
 
   const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
+  const isSuperfluidEnabled =
+    vault?.minionType === MINION_TYPES.SAFE &&
+    !vault?.foreignChainId &&
+    daoMetaData?.proposalConfig?.playlists?.some(
+      p => p.id === BOOST_PLAYLISTS.SUPERFLUID_SAFE.id,
+    );
 
   const handleCopy = () => {
     toast({
@@ -160,16 +168,27 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
           <Icon as={BiArrowBack} color='secondary.500' mr={2} />
           All Vaults
         </Flex>
-        {isBooksBoostEnabled && (
-          <Button
-            variant='outline'
-            as={ChakraLink}
-            isExternal
-            href={`${DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
-          >
-            Vault Books
-          </Button>
-        )}
+        <HStack spacing='4'>
+          {isBooksBoostEnabled && (
+            <Button
+              variant='outline'
+              as={ChakraLink}
+              isExternal
+              href={`${DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
+            >
+              Vault Books
+            </Button>
+          )}
+          {isSuperfluidEnabled && (
+            <Button
+              variant='outline'
+              as={Link}
+              to={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion}`}
+            >
+              Superfluid Streams
+            </Button>
+          )}
+        </HStack>
       </Flex>
       {!vault && <Loading message='Fetching treasury holdings...' />}
       {vault && (

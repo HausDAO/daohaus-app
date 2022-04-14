@@ -28,10 +28,17 @@ import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
 import WRAP_N_ZAP from '../contracts/wrapNZap.json';
 import ESCROW_MINION from '../contracts/escrowMinion.json';
-import { MINION_TYPES } from './proposalUtils';
+import POSTER from '../contracts/poster.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
+import SWAPR_STAKING from '../contracts/swapr_staking.json';
+import { MINION_TYPES } from './proposalUtils';
+import SF_CFA from '../contracts/superfluidCFA.json';
+import SF_HOST from '../contracts/superfluid.json';
+import SF_SUPERTOKEN from '../contracts/superfluidSupertoken.json';
+import SF_SUPERTOKEN_FACTORY from '../contracts/superfluidTokenFactory.json';
 import AMB_MODULE from '../contracts/ambModule.json';
 import AMB from '../contracts/iAmb.json';
+import SF_UUPS_PROXIABLE from '../contracts/uupsProxiable.json';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -58,6 +65,12 @@ export const LOCAL_ABI = Object.freeze({
   DAO_CONDITIONAL_HELPER,
   ESCROW_MINION,
   DISPERSE_APP,
+  SF_CFA,
+  SF_HOST,
+  SF_SUPERTOKEN,
+  SF_SUPERTOKEN_FACTORY,
+  SWAPR_STAKING,
+  POSTER,
   AMB_MODULE,
   AMB,
 });
@@ -96,6 +109,12 @@ const isGnosisProxy = response => {
   );
 };
 
+const isSuperfluidProxy = response => {
+  return (
+    response.length === 3 && response.some(fn => fn.name === 'initializeProxy')
+  );
+};
+
 const getImplementationOf = async (address, chainID, abi) => {
   const web3Contract = createContract({ address, abi, chainID });
   const newAddress = await web3Contract.methods.implementation().call();
@@ -121,6 +140,16 @@ const processABI = async ({
       chainID,
       abi,
     );
+    const newData = await fetchABI(proxyAddress, chainID, parseJSON);
+    return newData;
+  }
+  if (isSuperfluidProxy(abi)) {
+    const proxy = createContract({
+      address: contractAddress,
+      abi: SF_UUPS_PROXIABLE,
+      chainID,
+    });
+    const proxyAddress = await proxy.methods.getCodeAddress().call();
     const newData = await fetchABI(proxyAddress, chainID, parseJSON);
     return newData;
   }
@@ -190,6 +219,8 @@ export const formatFNsAsSelectOptions = abi => {
 };
 
 export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
+  console.log('selectedFunction', selectedFunction);
+  console.log('inputVals', inputVals);
   if (!selectedFunction || !Array.isArray(inputVals))
     throw new Error(
       'Incorrect params passed to safeEncodeHexFunction in abi.js',
@@ -316,8 +347,6 @@ const getRemoteSnippet = async ({ contract, fnName }, data) => {
 
 export const getABIsnippet = (params, data) => {
   const { contract } = params;
-
-  console.log('params, data', params, data);
   if (contract.location === 'local') return getLocalSnippet(params);
   if (contract.location === 'fetch') return getRemoteSnippet(params, data);
   if (contract.location === 'static') return contract.value;

@@ -1,5 +1,6 @@
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { POST_LOCATIONS } from '../utils/poster';
 
 export const INFO_TEXT = {
   SHARES_REQUEST:
@@ -379,14 +380,6 @@ export const FIELD = {
     placeholder: 'Proposal Name',
     expectType: 'any',
   },
-  // PARAGRAPHS: {
-  //   type: 'paragraphs',
-  //   pars: [] /* Overwrite with customCopy */,
-  // },
-  // HEADER: {
-  //   type: 'header',
-  //   headerText: 'Empty' /* Overwrite with custom Copy */,
-  // },
   MINION_TYPE_SELECT: {
     type: 'minionTypeSelect',
     name: 'minionType',
@@ -502,6 +495,23 @@ export const FIELD = {
     placeholder: 'Choose a Token',
     expectType: 'address',
   },
+  TUTORIAL: {
+    type: 'tutorial',
+    label: 'Test',
+    name: 'stakingAddress',
+    htmlFor: 'stakingAddress',
+    placeholder: '0x',
+    expectType: 'address',
+  },
+  TUTORIAL2: {
+    type: 'tutorial2',
+    label: 'Token Amount',
+    name: 'tokenAmt',
+    htmlFor: 'tokenAmt',
+    listenTo: 'stakingTokenDecimals',
+    placeholder: '3.14',
+    expectType: 'number',
+  },
   FOREIGN_CHAIN_SELECT: {
     type: 'foreignChainSelect',
     label: 'Select a Foreign Chain',
@@ -566,6 +576,45 @@ export const FIELD = {
     placeholder: '0',
     expectType: 'number',
   },
+  POST_TITLE: {
+    type: 'input',
+    label: 'Post Title',
+    name: 'posterData.title',
+    htmlFor: 'posterData.title',
+    placeholder: 'Post Title',
+    expectType: 'any',
+  },
+  POST_LOCATION_SELECT: {
+    type: 'select',
+    name: 'posterData.location',
+    htmlFor: 'posterData.location',
+    label: 'Post Location',
+    options: [
+      { name: 'Docs', value: POST_LOCATIONS.DOCS },
+      { name: 'Front Page', value: POST_LOCATIONS.FRONT_PAGE },
+      { name: 'Vaults Page', value: POST_LOCATIONS.VAULT_PAGE },
+    ],
+  },
+  MD_EDITOR: {
+    type: 'mdEditor',
+    name: 'posterData.content',
+    htmlFor: 'posterData.content',
+  },
+  POSTER_ENCODER: {
+    type: 'posterEncoder',
+    name: 'posterData',
+  },
+  DOC_SELECT: {
+    type: 'docSelect',
+    name: 'docSelect',
+    label: 'DAO Docs',
+    listenTo: 'newLocation',
+  },
+  // STRINGIFY: {
+  //   type: 'stringify',
+  //   name: 'stringified',
+  //   listenTo: null, // restructure with this field targeting the field you'd like to stringify
+  // },
 };
 
 export const FORM_DISPLAY = {
