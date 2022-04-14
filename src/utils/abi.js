@@ -32,7 +32,6 @@ import POSTER from '../contracts/poster.json';
 import DISPERSE_APP from '../contracts/disperseApp.json';
 import SWAPR_STAKING from '../contracts/swapr_staking.json';
 import { MINION_TYPES } from './proposalUtils';
-import DISPERSE_APP from '../contracts/disperseApp.json';
 import SF_CFA from '../contracts/superfluidCFA.json';
 import SF_HOST from '../contracts/superfluid.json';
 import SF_SUPERTOKEN from '../contracts/superfluidSupertoken.json';
