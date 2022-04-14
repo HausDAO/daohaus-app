@@ -120,3 +120,13 @@ export const wrapNZapSummonTest = data => {
 export const transmutationSummonTest = data => {
   return data?.transmutations?.length > 0;
 };
+
+export const superTokenTest = (data, shouldEqual, pollId) => {
+  if (data.tokens) {
+    return data.tokens.length > 0 === shouldEqual;
+  }
+  clearInterval(pollId);
+  throw new Error(
+    `Poll test did not recieve the expected results from the graph: ${data}`,
+  );
+};

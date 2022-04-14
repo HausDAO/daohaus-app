@@ -76,14 +76,8 @@ export const isEthTransfer = action => action?.data?.slice(2)?.length === 0;
 
 export const maxRateLimit = async () => {};
 
-export const decodeAction = async (action, params, depth = 0) => {
-  if (isEthTransfer(action)) {
-    return buildEthTransferAction(action);
-  }
-  const { chainID } = params || {};
-  const { to, data } = action || {};
+export const fetchActionABI = async (to, chainID, depth) => {
   const targetContractABI = await fetchABI(to, chainID);
-
   if (targetContractABI?.result === null) {
     return { ...targetContractABI, error: true };
   }
@@ -105,11 +99,46 @@ export const decodeAction = async (action, params, depth = 0) => {
   }
 
   if (targetContractABI?.result === 'Max rate limit reached') {
-    return decodeAction(action, params, depth + 1);
+    return fetchActionABI(to, chainID, depth + 1);
   }
 
+  return targetContractABI;
+};
+
+export const decodeAction = async (action, params, depth = 0) => {
+  if (isEthTransfer(action)) {
+    return buildEthTransferAction(action);
+  }
+  const { chainID } = params || {};
+  const { to, data } = action || {};
+  const targetContractABI = await fetchActionABI(to, chainID, depth);
+  if (targetContractABI.error) {
+    return targetContractABI;
+  }
   abiDecoder.addABI(targetContractABI);
-  return abiDecoder.decodeMethod(data);
+  const decodedAction = abiDecoder.decodeMethod(data);
+  if (decodedAction.name === 'callAgreement') {
+    return {
+      ...decodedAction,
+      actions: [
+        {
+          to: decodedAction.params[0].value,
+          data: await decodeAction(
+            {
+              to: decodedAction.params[0].value,
+              data: decodedAction.params[1].value,
+            },
+            {
+              chainID,
+            },
+            depth + 1,
+          ),
+          value: '0',
+        },
+      ],
+    };
+  }
+  return decodedAction;
 };
 
 export const decodeMultiAction = async ([encodedMulti], params) => {

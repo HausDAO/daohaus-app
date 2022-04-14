@@ -24,11 +24,13 @@ export const generateSFLabels = proposal => {
     const tokenRate = JSON.parse(proposal?.details)?.tokenRate;
     return {
       title: 'Superfluid Proposal',
-      pars: [
-        'This Minion will execute an agreement using Superfluid Protocol.',
-        'Constant Flow Agreement',
-        `Rate: ${tokenRate}`,
-      ],
+      pars: tokenRate
+        ? [
+            'This Minion will execute an agreement using Superfluid Protocol.',
+            'Constant Flow Agreement',
+            `Rate: ${tokenRate}`,
+          ]
+        : [],
     };
   } catch (error) {
     console.error('Could not parse details.tokenRate rate from JSON');
@@ -69,5 +71,8 @@ export const SF_LABEL = {
   TOKEN_BALANCES: {
     body:
       'To fund the Superfluid Minion you need to make a funding proposal from the DAO to the minion. Do not send tokens directly.',
+  },
+  CANCEL_STREAM: {
+    body: 'This action will send a DAO proposal to cancel the stream',
   },
 };

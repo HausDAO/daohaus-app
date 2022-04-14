@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { Box, Button, Divider, Flex, Icon } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Box, Button, Divider, Flex, Icon, Skeleton } from '@chakra-ui/react';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
+import { ethers } from 'ethers';
 import { v4 as uuid } from 'uuid';
 
-import { ethers } from 'ethers';
 import { useAppModal } from '../hooks/useModals';
 import TextBox from '../components/TextBox';
-import { ParaMd } from '../components/typography';
+import { Bold, ParaMd } from '../components/typography';
 import { AsyncCardTransfer, PropCardError } from './proposalBriefPrimitives';
+import { MINION_TYPES } from '../utils/proposalUtils';
+import { fetchSpecificTokenData } from '../utils/tokenValue';
 
-const MultiTxTransfer = ({ minionAction }) => {
+const SuperfluidTransfer = ({ minionAction, proposal }) => {
+  const { daochain } = useParams();
+  const [loading, setLoading] = useState(false);
+  const [streamRateDetails, setstreamRateDetails] = useState(null);
   const { genericModal } = useAppModal();
 
   if (minionAction?.status === 'error') {
@@ -26,7 +32,39 @@ const MultiTxTransfer = ({ minionAction }) => {
     });
   };
 
-  const customUI = (
+  const streamDetails = async () => {
+    setLoading(true);
+    const details = JSON.parse(proposal.details);
+    if (details.tokenRate) {
+      const token = await fetchSpecificTokenData(
+        details.token,
+        {
+          symbol: true,
+          decimals: true,
+        },
+        daochain,
+      );
+      const sliceIdx = details.tokenRate.indexOf(' per ');
+      setstreamRateDetails(
+        sliceIdx > 0
+          ? `${details.tokenRate.slice(0, sliceIdx)} ${
+              token.symbol
+            } ${details.tokenRate.slice(sliceIdx)}`
+          : `${Number(
+              Number(details.tokenRate) / 10 ** Number(token.decimals),
+            ).toPrecision(10)} ${token.symbol} per sec`,
+      );
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (proposal) {
+      streamDetails();
+    }
+  }, [proposal]);
+
+  const customUI = proposal.minion.minionType === MINION_TYPES.SAFE && (
     <ParaMd>
       Multicall x{minionAction?.decoded?.actions?.length} (
       <Button
@@ -34,7 +72,6 @@ const MultiTxTransfer = ({ minionAction }) => {
         variant='text'
         color='secondary.400'
         onClick={displayDetails}
-        // transform='translateY(-1px)'
         lineHeight='1.1rem'
       >
         <ParaMd>View Details</ParaMd>
@@ -44,11 +81,26 @@ const MultiTxTransfer = ({ minionAction }) => {
   );
 
   return (
-    <AsyncCardTransfer isLoaded={minionAction?.decoded} customUI={customUI} />
+    <Skeleton isLoaded={!loading && minionAction?.decoded} height='3rem'>
+      <Flex direction='column'>
+        {streamRateDetails && (
+          <ParaMd height='1.5rem'>
+            <Bold>Streaming Rate: </Bold>
+            {streamRateDetails}
+          </ParaMd>
+        )}
+        {proposal.minion.minionType === MINION_TYPES.SAFE && (
+          <AsyncCardTransfer
+            isLoaded={minionAction?.decoded}
+            customUI={customUI}
+          />
+        )}
+      </Flex>
+    </Skeleton>
   );
 };
 
-export default MultiTxTransfer;
+export default SuperfluidTransfer;
 
 const ActionItem = ({ label, data }) => (
   <Box mb={2}>
@@ -94,7 +146,7 @@ const SingleActionDisplay = ({ action, index }) => {
           {action.value !== ethers.constants.AddressZero && (
             <ActionItem label='Target Contract' data={action.to} />
           )}
-          {action.actions ? (
+          {action.data.actions ? (
             <>
               <Box mb={3}>
                 <ActionItem
@@ -103,11 +155,11 @@ const SingleActionDisplay = ({ action, index }) => {
                 />
                 <ActionItem
                   label='Actions:'
-                  data={`x${action.actions.length}`}
+                  data={`x${action.data.actions.length}`}
                 />
               </Box>
               <Box ml='6'>
-                {action.actions?.map((subaction, idx) => (
+                {action.data.actions?.map((subaction, idx) => (
                   <SingleActionDisplay
                     key={uuid()}
                     action={subaction}
@@ -126,7 +178,10 @@ const SingleActionDisplay = ({ action, index }) => {
                   <Box key={uuid()} mb={3}>
                     <ActionItem label='Name:' data={param.name} />
                     <ActionItem label='Data Type:' data={param.type} />
-                    <ActionItem label='Value:' data={param.value.toString()} />
+                    <ActionItem
+                      label='Value:'
+                      data={param.value?.toString() || '0x'}
+                    />
                     {index !== params?.length - 1 && <Divider />}
                   </Box>
                 ))}

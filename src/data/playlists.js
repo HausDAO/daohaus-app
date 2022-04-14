@@ -47,6 +47,11 @@ export const BOOST_PLAYLISTS = {
     id: 'Superfluid minion',
     forms: ['SUPERFLUID_STREAM'],
   },
+  SUPERFLUID_SAFE: {
+    name: 'Superfluid',
+    id: 'superfluidSafeMinion',
+    forms: ['SAFE_SUPERFLUID_STREAM'],
+  },
   DISPERSE: {
     name: 'Disperse',
     id: 'disperse',
