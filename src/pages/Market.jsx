@@ -50,6 +50,7 @@ const handleDaoRelation = data => {
       return {
         ...BOOSTS[boostKey],
         isAvailable: checkAvailable(boostData, daochain),
+        isDeprecated: boostData.deprecated,
         isInstalled: checkBoostInstalled(boostData, daoMetaData),
       };
     }),

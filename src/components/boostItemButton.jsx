@@ -18,6 +18,15 @@ const BoostItemButton = ({
         mainText='Details'
       />
     );
+  if (boost.isDeprecated)
+    return (
+      <ListItemButton
+        onClick={openDetails}
+        helperText='deprecated'
+        value={boost}
+        mainText='Details'
+      />
+    );
   if (!boost.isInstalled)
     return (
       <ListItemButton
