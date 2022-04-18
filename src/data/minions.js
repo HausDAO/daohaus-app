@@ -19,9 +19,9 @@ export const MINION_NETWORKS = {
     '0xa4ec': true,
   },
   [MINION_TYPES.SUPERFLUID]: {
-    // '0x64': true,
-    // '0x89': true,
-    // '0x4': true,
+    '0x64': true,
+    '0x89': true,
+    '0x4': true,
   },
   [MINION_TYPES.SAFE]: {
     '0x1': true,
@@ -119,6 +119,7 @@ export const MINIONS = {
   [MINION_TYPES.VANILLA]: {
     minionType: MINION_TYPES.VANILLA,
     content: MINION_CONTENT[MINION_TYPES.VANILLA],
+    deprecated: true,
     networks: MINION_NETWORKS[MINION_TYPES.VANILLA],
     summonForm: FORM.NEW_VANILLA_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
@@ -127,6 +128,7 @@ export const MINIONS = {
   [MINION_TYPES.NIFTY]: {
     minionType: MINION_TYPES.NIFTY,
     content: MINION_CONTENT[MINION_TYPES.NIFTY],
+    deprecated: true,
     networks: MINION_NETWORKS[MINION_TYPES.NIFTY],
     summonForm: FORM.NEW_NIFTY_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
@@ -135,6 +137,7 @@ export const MINIONS = {
   [MINION_TYPES.SUPERFLUID]: {
     minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
+    deprecated: true,
     networks: MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
     summonForm: FORM.NEW_SUPERFLUID_MINION,
     settings: SETTINGS_LINKS.SF_LINK,
