@@ -26,9 +26,9 @@ const PaymentInput = props => {
   const paymentToken = watch('paymentToken');
   const maxBtnDisplay = useMemo(() => {
     if (validate.number(token?.balance) || token?.balance === 0) {
-      return `Max: ${handleDecimals(token.balance, token.decimals)?.toFixed(
-        4,
-      )}`;
+      return `Max: ${Math.floor(
+        handleDecimals(token.balance, token.decimals) * 10_000,
+      ) / 10_000}`;
     }
     return 'Error: Not found.';
   }, [token]);
@@ -75,7 +75,11 @@ const PaymentInput = props => {
 
   const setMax = () => {
     if (!token?.balance) return;
-    setValue('paymentRequested', token.balance / 10 ** token.decimals);
+    setValue(
+      'paymentRequested',
+      Math.floor(handleDecimals(token.balance, token.decimals) * 10_000) /
+        10_000,
+    );
   };
 
   const options = spreadOptions({
