@@ -28,6 +28,7 @@ export const CONTENT = {
       'Want a simple way to execute smart contract calls automatically based on the outcome of your proposals?',
       'Also known as a vanilla minion, it is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed. ',
       'This way, you can upgrade your DAO experience by seamlessly go from voting to execution without any coordination lags.',
+      '⚠️ This boost has been deprecated. Use Minion DEV Suite V3 instead.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
@@ -42,6 +43,7 @@ export const CONTENT = {
     pars: [
       'The V2 Minion is similar to the vanilla minion with the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met',
       'Also know as a Nifty Minion',
+      '⚠️ This boost has been deprecated. Use Minion DEV Suite V3 instead.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
@@ -417,6 +419,7 @@ export const BOOSTS = {
     boostContent: CONTENT.OLD_DEV_SUITE,
     minionData: MINIONS[MINION_TYPES.VANILLA],
     categories: ['devTools'],
+    deprecated: true,
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.OLD_DEV_SUITE,
     settings: 'none',
@@ -428,6 +431,7 @@ export const BOOSTS = {
     boostContent: CONTENT.NIFTY_DEV_SUITE,
     minionData: MINIONS[MINION_TYPES.NIFTY],
     categories: ['devTools'],
+    deprecated: true,
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NIFTY_DEV_SUITE,
     networks: MINIONS[MINION_TYPES.NIFTY].networks,

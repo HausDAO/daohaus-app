@@ -5,7 +5,7 @@ import { Flex } from '@chakra-ui/layout';
 import GenericSelect from './genericSelect';
 import Paragraphs from './Paragraphs';
 import TextBox from '../components/TextBox';
-import { MINION_CONTENT, MINION_NETWORKS } from '../data/minions';
+import { MINIONS } from '../data/minions';
 import { MINION_TYPES } from '../utils/proposalUtils';
 
 const noneSelected = {
@@ -19,21 +19,22 @@ const noneSelected = {
 
 const minions = Object.entries(MINION_TYPES).map(([key, value]) => ({
   id: key,
-  name: MINION_CONTENT[value].title,
+  name: MINIONS[value]?.content?.title,
   value,
 }));
 
 const MinionTypeSelect = props => {
   const { daochain } = useParams();
   const [minionType, setMinionType] = useState(null);
-  const currentMinion = MINION_CONTENT[minionType];
+  const currentMinion = MINIONS[minionType]?.content;
 
   const eligableMinions = useMemo(() => {
     if (!minions || !daochain) return;
     return minions?.filter(
       minion =>
-        MINION_NETWORKS?.[minion.value]?.[daochain] ||
-        MINION_NETWORKS?.[minion.value] === 'all',
+        !MINIONS[minion.value]?.deprecated &&
+        (MINIONS?.[minion.value]?.networks?.[daochain] ||
+          MINIONS?.[minion.value]?.networks === 'all'),
     );
   }, [minions, daochain]);
 
