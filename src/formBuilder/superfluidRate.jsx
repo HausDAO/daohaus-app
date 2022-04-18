@@ -22,6 +22,7 @@ const SuperfluidRate = props => {
 
   const superfluidRate = watch('superfluidRate');
   const paymentToken = watch('paymentToken');
+  const rateString = watch('rateString');
 
   useEffect(() => {
     register('weiRatePerSec');
@@ -33,14 +34,14 @@ const SuperfluidRate = props => {
       const newRate = parseFloat(
         Number(superfluidRate) / Number(baseRate),
       ).toFixed(10);
-      const selectedTokenDecimals = currentDaoTokens.find(token => {
+      const selectedToken = currentDaoTokens.find(token => {
         return token.tokenAddress === paymentToken;
-      }).decimals;
+      });
       const weiRatePerSec = parseInt(
-        (Number(superfluidRate) * 10 ** Number(selectedTokenDecimals)) /
+        (Number(superfluidRate) * 10 ** Number(selectedToken.decimals)) /
           Number(baseRate),
       );
-      setPerSecond(newRate);
+      setPerSecond(`${newRate} ${selectedToken.symbol}/sec`);
       setValue(
         'rateString',
         `${superfluidRate} ${
@@ -48,6 +49,8 @@ const SuperfluidRate = props => {
         }`,
       );
       setValue('weiRatePerSec', weiRatePerSec);
+    } else {
+      setValue('rateString', '');
     }
   }, [superfluidRate, baseRate]);
 
@@ -64,13 +67,15 @@ const SuperfluidRate = props => {
         selectChange={handleBaseRateChange}
         disabled={!paymentToken}
       />
-      <GenericFormDisplay
-        override={perSecond}
-        localForm={localForm}
-        label='Tokens Streamed Per Second'
-        name='streamedPerSecond'
-        variant='value'
-      />
+      {rateString && (
+        <GenericFormDisplay
+          override={perSecond}
+          localForm={localForm}
+          label='Rate:'
+          name='streamedPerSecond'
+          variant='value'
+        />
+      )}
     </>
   );
 };

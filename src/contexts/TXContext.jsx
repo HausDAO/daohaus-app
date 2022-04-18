@@ -11,7 +11,6 @@ import { useToken } from './TokenContext';
 import { useUser } from './UserContext';
 import {
   createActions,
-  exposeValues,
   getArgs,
   handleFieldModifiers,
   createHydratedString,
@@ -246,10 +245,12 @@ export const TXProvider = ({ children }) => {
     if (!txExists) {
       throw new Error('TX CONTEXT: TX does not exist');
     }
-
-    //  Searches for items within the data tree and adds them to {values}
-    if (data?.tx?.exposeValues) {
-      return createTX(exposeValues({ ...data, contextData, injectedProvider }));
+    if (data?.tx?.minionType) {
+      const newData = {
+        ...data,
+        formData: { ...data?.formData, minionType: data?.tx?.minionType },
+      };
+      return createTX(newData);
     }
     return createTX(data);
   };

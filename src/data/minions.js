@@ -19,9 +19,9 @@ export const MINION_NETWORKS = {
     '0xa4ec': true,
   },
   [MINION_TYPES.SUPERFLUID]: {
-    '0x64': true,
-    '0x89': true,
-    '0x4': true,
+    // '0x64': true,
+    // '0x89': true,
+    // '0x4': true,
   },
   [MINION_TYPES.SAFE]: {
     '0x1': true,

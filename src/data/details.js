@@ -12,6 +12,13 @@ export const DETAILS = {
     link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
   },
+  MINION_PROPOSAL: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    minionType: '.formData.minionType || .values.minionType',
+  },
   VANILLA_MINION_PROPOSAL: {
     title: `.values.title`,
     description: `.values.description`,
@@ -49,8 +56,24 @@ export const DETAILS = {
     link: `.values.link || ${HASH.EMPTY_FIELD}`,
     proposalType: '.formData.type',
     recipient: '.values.applicant',
-    token: '.values.paymentToken',
+    token: '.values.superTokenAddress || .values.paymentToken',
     tokenRate: '.values.rateString',
+  },
+  SUPERFLUID_CANCEL_STREAM: {
+    title: `.values.title`,
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: 'Superfluid Proposal',
+    recipient: '.localValues.receiverAddress',
+    token: '.localValues.superTokenAddress',
+    tokenRate: '.localValues.rateString',
+    minionType: MINION_TYPES.SAFE,
+  },
+  SUPERFLUID_DOWNGRADE_SUPERTOKEN: {
+    title: '.values.title || Downgrade Supertoken',
+    description: `Downgrade Supertoken & Return Funds to Treasury`,
+    proposalType: 'Superfluid Proposal',
+    minionType: MINION_TYPES.SAFE,
   },
   SELL_NFT_RARIBLE: {
     title: 'Rarible NFT Sell Order',
@@ -92,7 +115,7 @@ export const DETAILS = {
   },
   DISPERSE_TOKEN: {
     title: '.values.title || Disperse Proposal',
-    description: '.values.description',
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
     link: '.values.link',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.SAFE,
@@ -143,5 +166,9 @@ export const DETAILS = {
     proposalType: '.formData.type',
     uberHaus: 'true',
     uberType: 'pull',
+  },
+  POSTER_RATIFY: {
+    title: `.values.title || Proposal to Ratify Content`,
+    proposalType: '.formData.type',
   },
 };

@@ -1,4 +1,4 @@
-const { off } = require('process');
+// const { off } = require('process');
 
 module.exports = {
   env: {
@@ -9,9 +9,7 @@ module.exports = {
   // prettier should be last
   extends: [
     'eslint:recommended',
-    'airbnb',
     'plugin:prettier/recommended',
-    'plugin:react/recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -35,7 +33,7 @@ module.exports = {
       configFile: './babel.config.json',
     },
   },
-  plugins: ['react', 'react-hooks'],
+  plugins: ['react-hooks'],
   settings: {
     react: {
       version: 'detect',

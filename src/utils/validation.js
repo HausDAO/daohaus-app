@@ -98,7 +98,9 @@ export const customValidations = {
     return false;
   },
   superFluidStreamMinimum({ values }) {
-    const minDeposit = Web3.utils.toWei(values.paymentRequested);
+    // TODO: Check either if minion has enough balance or payment requested is enough
+    const minDeposit = values.paymentRequested;
+    // TODO: fetch minimum stream value from SF governance contracts
     if (Number(minDeposit) < Number(values.weiRatePerSec) * 3600) {
       return {
         name: 'paymentRequested',
@@ -120,7 +122,7 @@ export const customValidations = {
     return false;
   },
   noActiveStream({ values }) {
-    if (values.activeStreams) {
+    if (values.activeStream) {
       return {
         name: 'applicant',
         message:

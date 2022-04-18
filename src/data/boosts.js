@@ -266,6 +266,20 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  POSTER: {
+    title: 'DAO Poster',
+    description: 'Publish Markdown as a DAO using DAOhaus and Poster',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.1',
+    pars: [
+      'Poster is a simple one function contract that can post data in any shape or size to chain.',
+      'Poster can be used to provide on-boarding information to users, ratify important DAO documents, organize data DAO documents that are stored on IPFS',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+      { href: 'https://github.com/onPoster', label: 'Poster Github' },
+    ],
+  },
 };
 
 export const COMMON_STEPS = {
@@ -499,14 +513,32 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
+  // SUPERFLUID: {
+  //   id: 'SUPERFLUID',
+  //   boostContent: CONTENT.SUPERFLUID,
+  //   minionData: MINIONS[MINION_TYPES.SUPERFLUID],
+  //   categories: ['payments'],
+  //   steps: STEPS.MINION_BOOST,
+  //   networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
+  //   playlist: BOOST_PLAYLISTS.SUPERFLUID,
+  //   cost: 'free',
+  //   settings: 'none',
+  // },
   SUPERFLUID: {
     id: 'SUPERFLUID',
     boostContent: CONTENT.SUPERFLUID,
-    minionData: MINIONS[MINION_TYPES.SUPERFLUID],
     categories: ['payments'],
+    minionData: MINIONS[MINION_TYPES.SAFE],
     steps: STEPS.MINION_BOOST,
-    networks: MINIONS[MINION_TYPES.SUPERFLUID].networks,
-    playlist: BOOST_PLAYLISTS.SUPERFLUID,
+    playlist: BOOST_PLAYLISTS.SUPERFLUID_SAFE,
+    networks: {
+      '0x1': false,
+      '0x4': true,
+      '0xa': true,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+    },
     cost: 'free',
     settings: 'none',
   },
@@ -595,6 +627,19 @@ export const BOOSTS = {
     settings: {
       type: 'internalLink',
       appendToDaoPath: 'boost/snapshot/settings',
+    },
+  },
+  POSTER: {
+    id: 'POSTER',
+    boostContent: CONTENT.POSTER,
+    steps: STEPS.BASIC_BOOST,
+    playlist: BOOST_PLAYLISTS.POSTER,
+    categories: ['governance', 'community'],
+    networks: { '0x64': true, '0x1': true, '0x4': true },
+    cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'docs',
     },
   },
 };

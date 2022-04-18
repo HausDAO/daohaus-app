@@ -109,7 +109,6 @@ const ProposalVote = ({
         .call();
 
       if (shouldUpdate) {
-        console.log('tokenBalance', tokenBalance);
         setEnoughDeposit(
           +overview?.proposalDeposit === 0 ||
             +tokenBalance / 10 ** overview?.depositToken.decimals >=

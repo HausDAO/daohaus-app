@@ -46,6 +46,8 @@ export const supportedChains = {
     },
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0x000000000000cd17345801aa8147b8d3950260ff',
+
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
@@ -89,6 +91,8 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-rinkeby-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-rinkeby-subgraph',
+    poster_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-poster-rinkeby',
     minion_factory_addr: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x95b58a6bff3d14b7db2f5cb5f0ad413dc2940658',
@@ -101,13 +105,18 @@ export const supportedChains = {
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
+      cfa: '0xF4C5310E51F6079F601a5fb7120bC72a70b96e2A',
+      host: '0xeD5B5b32110c3Ded02a07c8b8e97513FAfb883B6',
       minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
       resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
       subgraph_url:
         'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-rinkeby',
+      subgraph_url_v2:
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-rinkeby',
       superapp_addr: {
         v1: '0x7d8151FAB5D6742F1c574fff472B6794062C2D0C',
       },
+      supertoken_factory: '0xd465e36e607d493cd4CC1e83bea275712BECd5E0',
       version: 'v1',
     },
     rarible: {
@@ -119,6 +128,10 @@ export const supportedChains = {
     dao_conditional_helper_addr: '0xc50462aEa8873f6343a2Fd2103aE1dD21d53bC27',
     escrow_minion: '0xEB28321b7952CC34bFb734413b58496A889C9660',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    swapr: {
+      staking: '0x732DB307337a5ceA1FD117AF808382FaC0AFAe8a',
+    },
+    poster: '0x917d84787A266F9D649d519A7Ec8445eA43514D8',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',
@@ -217,6 +230,14 @@ export const supportedChains = {
       safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
       safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
     },
+    superfluid: {
+      cfa: '0x204C6f131bb7F258b2Ea1593f5309911d8E458eD',
+      host: '0x567c4B141ED61923967cA25Ef4906C8781069a10',
+      resolver: '0x743B5f46BC86caF41bE4956d9275721E0531B186',
+      subgraph_url_v2:
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
+      supertoken_factory: '0x8276469A443D5C6B7146BED45e2abCaD3B6adad9',
+    },
     escrow_minion: '', // TODO team will add
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     zodiac_amb_module: {
@@ -279,15 +300,21 @@ export const supportedChains = {
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
     superfluid: {
+      cfa: '0xEbdA4ceF883A7B12c4E669Ebc58927FBa8447C7D',
+      host: '0x2dFe937cD98Ab92e59cF3139138f18c823a4efE7',
       minion_factory_addr: '0xfC86DfDd3b2e560729c78b51dF200384cfe87438',
       resolver: '0xD2009765189164b495c110D61e4D301729079911',
       subgraph_url:
         'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-xdai',
+      subgraph_url_v2:
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-xdai',
       superapp_addr: {
         v1: '0x9fc9420F277b7C25E17B67008b35CCB01c5c9B63',
       },
+      supertoken_factory: '0x23410e2659380784498509698ed70E414D384880',
       version: 'v1',
     },
+    poster: '0x000000000000cd17345801aa8147b8d3950260ff',
     niftyMinion: {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
@@ -356,13 +383,18 @@ export const supportedChains = {
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
+      cfa: '0x6EeE6060f715257b970700bc2656De21dEdF074C',
+      host: '0x3E14dC1b13c488a8d5D310918780c983bD5982E7',
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
       resolver: '0xE0cc76334405EE8b39213E620587d815967af39C',
       subgraph_url:
         'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-matic',
+      subgraph_url_v2:
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-matic',
       superapp_addr: {
         v1: '0xdb4D89F2199b9Cf451B7Ff4bdC94b1c96De4bdD0',
       },
+      supertoken_factory: '0x2C90719f25B10Fc5646c82DA3240C76Fa5BcCF34',
       version: 'v1',
     },
     niftyMinion: {
@@ -408,13 +440,12 @@ export const supportedChains = {
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     superfluid: {
-      minion_factory_addr: '',
-      resolver: '',
-      subgraph_url: '',
-      superapp_addr: {
-        v1: '',
-      },
-      version: 'v1',
+      cfa: '0x731FdBB12944973B500518aea61942381d7e240D',
+      host: '0xCf8Acb4eF033efF16E8080aed4c7D5B9285D2192',
+      resolver: '0x609b9d9d6Ee9C3200745A79B9d3398DBd63d509F',
+      subgraph_url_v2:
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-arbitrum-one',
+      supertoken_factory: '0x1C21Ead77fd45C84a4c916Db7A6635D0C6FF09D6',
     },
     niftyMinion: {
       minion_factory_addr: '0xA92CbC525EabFa5baE4e0ff7bDa8E011B43B9aCC',

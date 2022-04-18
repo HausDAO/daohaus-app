@@ -15,7 +15,7 @@ import {
   Td,
   Tfoot,
 } from '@chakra-ui/react';
-import ETHDater from '@santteegt/ethereum-block-by-date';
+import ETHDater from 'ethereum-block-by-date';
 import { Link } from 'react-router-dom';
 import { subDays } from 'date-fns';
 import Web3 from 'web3';
