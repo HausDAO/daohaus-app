@@ -320,6 +320,11 @@ export const handleDecimals = (balance, decimals, fallback = '--') => {
   return Number(balance) / 10 ** Number(decimals);
 };
 
+export const handleBNDecimals = (balance, decimals, fallback = '--') => {
+  if (!balance || !decimals) return fallback;
+  return utils.formatUnits(balance, decimals).toString();
+};
+
 export const handlePossibleNumber = (val, comma = true, roundAmt = 4) => {
   if (val == null) return;
   if (validate.number(val)) {
