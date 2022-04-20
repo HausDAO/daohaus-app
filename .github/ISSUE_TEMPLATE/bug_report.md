@@ -18,15 +18,25 @@ Steps to reproduce the behavior:
 4. See error
 
 **Expected behavior**
+
 A clear and concise description of what you expected to happen.
 
 **Actual behavior**
+
 A clear and concise description of what is actually happening.
 
 **Screenshots**
+
 If applicable, add screenshots to help explain your problem.
 
+**Additional Questions**
+
+1. [ ] Is there a security breach? 
+2. [ ] Is there an issue with the smart contracts? 
+3. [ ] Is there a loss of funds, shares or loot? 
+
 **Application area**
+
 Where in the app is this happening?
 - FrontEnd (please include route/section if possible)
 - Subgraph
