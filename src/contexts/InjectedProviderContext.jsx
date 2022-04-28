@@ -128,6 +128,11 @@ export const InjectedProvider = ({ children }) => {
     setAddress(null);
     setWeb3Modal(defaultModal);
     web3Modal.clearCachedProvider();
+    if (localStorage.getItem('walletconnect')) {
+      // cleanup cache if it was using WalletConnect
+      localStorage.removeItem('walletconnect');
+      window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER');
+    }
   };
 
   return (

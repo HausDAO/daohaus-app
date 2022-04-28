@@ -58,6 +58,7 @@ import Tutorial2 from './tutorial2';
 import MarkdownEditor from './mdEditor';
 import PosterEncoder from './posterEncoder';
 import DocSelect from './docSelect';
+import WalletConnectTx from './walletConnectTx';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -245,6 +246,9 @@ export const InputFactory = props => {
   }
   if (type === 'ambEncoder') {
     return <AmbEncoder {...props} />;
+  }
+  if (type === 'walletConnectTx') {
+    return <WalletConnectTx {...props} />;
   }
   return null;
 };
