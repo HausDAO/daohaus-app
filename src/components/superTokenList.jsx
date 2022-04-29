@@ -243,10 +243,10 @@ const SuperTokenList = ({
       <ContentBox mt={6}>
         <Flex>
           <Box w='15%' d={['none', null, null, 'inline-block']}>
-            <TextBox size='xs'>Asset</TextBox>
+            <TextBox size='xs'>Supertoken</TextBox>
           </Box>
           <Box w={['35%', null, null, '35%']}>
-            <TextBox size='xs'>Internal Bal.</TextBox>
+            <TextBox size='xs'>Balance</TextBox>
           </Box>
           <Box w='40%' d={['none', null, null, 'inline-block']}>
             <TextBox size='xs'>Actions</TextBox>
