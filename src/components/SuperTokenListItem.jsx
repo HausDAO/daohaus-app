@@ -81,7 +81,7 @@ const SuperTokenListItem = ({
               isLoading={isLoading && loadingCond === 'withdraw'}
               disabled={shouldDisableWithdraw}
             >
-              Return Balance
+              Return Balance to DAO
             </Button>
           </ToolTipWrapper>
           {token.underlyingTokenAddress && (
@@ -97,7 +97,7 @@ const SuperTokenListItem = ({
                 loadingText='Upgrading'
                 isLoading={isLoading && loadingCond === 'upgrade'}
               >
-                Convert
+                Request Funds
               </Button>
             </ToolTipWrapper>
           )}
