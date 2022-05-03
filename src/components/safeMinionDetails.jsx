@@ -271,6 +271,14 @@ const SafeMinionDetails = ({
                 )
               }
               handleCopy={handleCopy}
+              minionDetails={
+                Number(vault.minQuorum) > 0 && (
+                  <Box>
+                    <Text>Proposal Minimum Quorum</Text>
+                    <Text fontWeight='bold'>{vault.minQuorum}%</Text>
+                  </Box>
+                )
+              }
               safeDetails={safeDetails}
               vaultAddress={vault.address}
             />

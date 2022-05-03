@@ -6,7 +6,7 @@ import ModButton from './modButton';
 
 import { getContractBalance } from '../utils/tokenValue';
 import { validate } from '../utils/validation';
-import { handleDecimals } from '../utils/general';
+import { handleBNDecimals, handleDecimals } from '../utils/general';
 import { spreadOptions } from '../utils/formBuilder';
 
 const PaymentInput = props => {
@@ -75,7 +75,10 @@ const PaymentInput = props => {
 
   const setMax = () => {
     if (!token?.balance) return;
-    setValue('paymentRequested', token.balance / 10 ** token.decimals);
+    setValue(
+      'paymentRequested',
+      handleBNDecimals(token.balance, token.decimals),
+    );
   };
 
   const options = spreadOptions({

@@ -23,6 +23,7 @@ const BoostDetails = ({
   next,
   userSteps,
   isAvailable,
+  isInstalled,
   secondaryBtn,
   playlist,
 }) => {
@@ -145,7 +146,7 @@ const BoostDetails = ({
       <Box>
         <Flex alignItems='flex-end' flexDir='column'>
           <Flex>
-            {isAvailable && playlist && (
+            {isAvailable && isInstalled && playlist && (
               <Button
                 type='button'
                 variant='outline'

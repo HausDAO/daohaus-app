@@ -348,6 +348,9 @@ const completeQueries = {
           vaultApiData.map(async vault => {
             if (vault.minionType === MINION_TYPES.SAFE) {
               try {
+                const minion = graphOverview.moloch.minions.find(
+                  minion => minion.minionAddress === vault.address,
+                );
                 const isMinionModule = await isModuleEnabled(
                   args.chainID,
                   vault.safeAddress,
@@ -356,6 +359,7 @@ const completeQueries = {
                 return {
                   ...vault,
                   isMinionModule,
+                  minQuorum: minion.minQuorum,
                 };
               } catch (error) {
                 console.error(error);

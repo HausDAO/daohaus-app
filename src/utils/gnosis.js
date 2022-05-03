@@ -401,3 +401,21 @@ export const encodeAmbTxProposal = async (
     console.error('failed to encodeAmbTxMessage', error);
   }
 };
+
+export const encodeSafeSignMessage = (chainId, message) => {
+  const config = chainByID(chainId).safeMinion;
+  if (config.safe_sign_lib_addr) {
+    const abi = getLocalABI(CONTRACTS.LOCAL_SAFE_SIGNLIB);
+    const signMessageFn = abi.find(
+      ({ type, name }) => type === 'function' && name === 'signMessage',
+    );
+    const web3 = new Web3();
+    const data = web3.eth.abi.encodeFunctionCall(signMessageFn, [message]);
+    return {
+      to: config.safe_sign_lib_addr,
+      data,
+      value: '0',
+      operation: '1',
+    };
+  }
+};
