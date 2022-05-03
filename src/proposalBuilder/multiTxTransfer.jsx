@@ -94,6 +94,9 @@ const SingleActionDisplay = ({ action, index }) => {
           {action.value !== ethers.constants.AddressZero && (
             <ActionItem label='Target Contract' data={action.to} />
           )}
+          {Number(action.value) > 0 && (
+            <ActionItem label='Value' data={Number(action.value)} />
+          )}
           {action.actions ? (
             <>
               <Box mb={3}>
@@ -116,7 +119,7 @@ const SingleActionDisplay = ({ action, index }) => {
                 ))}
               </Box>
             </>
-          ) : (
+          ) : action.data.params.length ? (
             <>
               <TextBox size='xs' variant='label' mb={3}>
                 Parameters:
@@ -132,7 +135,7 @@ const SingleActionDisplay = ({ action, index }) => {
                 ))}
               </Box>
             </>
-          )}
+          ) : null}
           <Divider />
         </>
       )}

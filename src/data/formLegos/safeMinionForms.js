@@ -41,6 +41,24 @@ export const SAFE_MINION_FORMS = {
       [FIELD.BUYOUT_PAYMENT_REQUEST],
     ],
   },
+  MINION_WALLETCONNECT: {
+    id: 'MINION_WALLETCONNECT',
+    title: 'Minion WalletConnect Proposal',
+    description: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['title', 'selectedMinion', 'wcTxRequest'],
+    minionType: MINION_TYPES.SAFE,
+    tx: TX.GENERIC_SAFE_MULTICALL,
+    fields: [
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.DESCRIPTION,
+        { ...FIELD.PAYMENT_REQUEST, hidden: true },
+      ],
+      [FIELD.WALLETCONNECT_TX],
+    ],
+  },
   NEW_SAFE_MINION: {
     formConditions: ['easy', 'advanced'],
     tx: {

@@ -615,6 +615,12 @@ export const FIELD = {
   //   name: 'stringified',
   //   listenTo: null, // restructure with this field targeting the field you'd like to stringify
   // },
+  WALLETCONNECT_TX: {
+    type: 'walletConnectTx',
+    name: 'wcTxRequest',
+    label: 'WalletConnect Link',
+    expectType: 'any',
+  },
 };
 
 export const FORM_DISPLAY = {
