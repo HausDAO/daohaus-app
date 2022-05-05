@@ -21,6 +21,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import NftCard from '../components/nftCard';
 import TextBox from '../components/TextBox';
 import SafeMinionDetails from '../components/safeMinionDetails';
+import { useAppModal } from '../hooks/useModals';
 import { fetchSafeDetails } from '../utils/gnosis';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
@@ -29,11 +30,13 @@ import { MINION_TYPES } from '../utils/proposalUtils';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';
 import { BOOST_PLAYLISTS } from '../data/playlists';
+import { getWalletConnectFormLego } from '../utils/vaults';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
+  const { closeModal, formModal } = useAppModal();
   const [vault, setVault] = useState(null);
   const [erc20Balances, setErc20Balances] = useState(null);
   const [nativeBalance, setNativeBalance] = useState(null);
@@ -42,8 +45,8 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const [foreignSafeDetails, setForeignSafeDetails] = useState(null);
 
   const { daoMetaData } = useMetaData();
-
-  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
+  const isCrossChainMinion = vault?.foreignChainId && vault?.foreignSafeAddress;
+  const isBooksBoostEnabled = vault && daoMetaData?.boosts?.DAO_BOOKS?.active;
   const isSuperfluidEnabled =
     vault?.minionType === MINION_TYPES.SAFE &&
     !vault?.foreignChainId &&
@@ -59,6 +62,24 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       duration: 3000,
       isClosable: true,
     });
+  };
+
+  const openWalletConnectTxProposalModal = () => {
+    const formLego = getWalletConnectFormLego(vault.minionType);
+    if (formLego) {
+      formModal({
+        ...formLego,
+        next: {
+          type: 'awaitTx',
+        },
+        goToNext: () => {},
+        handleThen: () => closeModal(),
+        localValues: {
+          minionAddress: minion,
+          safeAddress: vault.safeAddress,
+        },
+      });
+    }
   };
 
   const ctaButton = useMemo(() => {
@@ -177,6 +198,14 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               href={`${DAO_BOOKS_HOST}/dao/${daoid}/minion/${minion}`}
             >
               Vault Books
+            </Button>
+          )}
+          {vault && vault.safeAddress && !isCrossChainMinion && (
+            <Button
+              variant='outline'
+              onClick={openWalletConnectTxProposalModal}
+            >
+              Use WalletConnect
             </Button>
           )}
           {isSuperfluidEnabled && (

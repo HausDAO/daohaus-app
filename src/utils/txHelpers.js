@@ -110,7 +110,9 @@ export const encodeMulti = encodedTXs => {
 export const collapseToCallData = values =>
   values.TX.map(tx => ({
     to: tx.targetContract,
-    data: safeEncodeHexFunction(JSON.parse(tx.abiInput), tx.abiArgs || []),
+    data:
+      tx.data ||
+      safeEncodeHexFunction(JSON.parse(tx.abiInput), tx.abiArgs || []),
     value: tx.minionValue || '0',
     operation: tx.operation || '0',
   }));
@@ -507,6 +509,7 @@ export const Transaction = async data => {
       return txHash;
     })
     .on('error', error => {
+      data.lifeCycleFns?.onTxError?.(error);
       console.error(error);
       return error;
     });
