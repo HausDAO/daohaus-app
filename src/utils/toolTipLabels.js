@@ -56,10 +56,12 @@ export const SF_LABEL = {
     body: 'You can cancel this stream before the proposal voting period ends.',
   },
   WITHDRAW: {
-    body: 'Outstanding balance will be downgraded and sent back to the DAO',
+    body:
+      'Outstanding balance will be downgraded and sent back to the DAO treasury',
   },
   UPGRADE: {
-    body: 'This action will convert the token balance into supertoken balance',
+    body:
+      'This action will request token funds from the DAO treasury so they can be conveted into Supertoken for streaming',
   },
   REGISTER: {
     title: 'IMPORTANT',

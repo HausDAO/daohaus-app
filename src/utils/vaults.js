@@ -131,6 +131,12 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
   return formLego;
 };
 
+export const getWalletConnectFormLego = vaultMinionType => {
+  if (vaultMinionType === MINION_TYPES.SAFE) {
+    return FORM.MINION_WALLETCONNECT;
+  }
+};
+
 export const vaultFilterOptions = [
   {
     name: 'All Vaults',

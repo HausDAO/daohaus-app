@@ -253,6 +253,9 @@ export const determineProposalType = proposal => {
   if (proposal.trade) {
     return PROPOSAL_TYPES.TRADE;
   }
+  if (parsedDetails.proposalType === PROPOSAL_TYPES.SIGNAL) {
+    return PROPOSAL_TYPES.SIGNAL;
+  }
   if (proposal.isMinion && proposal.minionAddress === proposal.proposer) {
     return getMinionProposalType(proposal, parsedDetails);
   }

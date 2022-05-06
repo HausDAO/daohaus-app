@@ -57,6 +57,9 @@ const FormBuilder = props => {
   const [formFields, setFields] = useState(null);
   const [formErrors, setFormErrors] = useState([]);
 
+  const [customSecondaryBtn, setCustomSecondaryBtn] = useState(secondaryBtn);
+  const [customLifecycleFns, setCustomLifecycleFns] = useState([]);
+
   const [options, setOptions] = useState(additionalOptions);
   const localForm =
     parentForm || useForm({ shouldUnregister: false, defaultValues });
@@ -157,6 +160,7 @@ const FormBuilder = props => {
           tx: checkConditionalTx({ tx: props.tx, condition: formCondition }),
           lifeCycleFns: {
             ...props?.lifeCycleFns,
+            ...customLifecycleFns,
             onCatch() {
               setFormState('error');
               props?.lifeCycleFns?.onCatch?.();
@@ -255,6 +259,13 @@ const FormBuilder = props => {
           setValue={setValue}
           values={values}
           defaultValues={defaultValues}
+          setCustomSecondaryBtn={setCustomSecondaryBtn}
+          setCustomLifecycleFns={updatedFns =>
+            setCustomLifecycleFns(prevState => ({
+              ...prevState,
+              ...updatedFns,
+            }))
+          }
         />
       );
     });
@@ -286,7 +297,7 @@ const FormBuilder = props => {
             next={next}
             goToNext={goToNext}
             errors={Object.values(formErrors)}
-            customSecondaryBtn={secondaryBtn}
+            customSecondaryBtn={customSecondaryBtn}
             loading={formStateOverride || formState}
             checklist={checklist}
             disableCallback={() =>
