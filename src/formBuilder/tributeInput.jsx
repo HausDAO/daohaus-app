@@ -135,6 +135,9 @@ const TributeInput = props => {
     });
     setLoading(false);
     setNeedsUnlock(!result);
+    if (result) {
+      setAllowance(unlockAmount);
+    }
   };
   const setMax = () => {
     setValue('tributeOffered', balance / 10 ** decimals);
