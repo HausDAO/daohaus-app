@@ -46,9 +46,11 @@ export const getSupertokenOf = async (
 
 export const isSupertoken = async (chainId, tokenAddress, useV2 = false) => {
   const superTokenInfo = await getSupertokenOf(chainId, tokenAddress, useV2);
+  const config = chainByID(chainId);
   return {
     superTokenAddress: superTokenInfo?.address,
     isSuperToken: superTokenInfo?.address === tokenAddress,
+    isNativeWrapper: config.wrapper_contract.toLowerCase() === tokenAddress,
   };
 };
 

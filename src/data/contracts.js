@@ -81,6 +81,11 @@ export const CONTRACTS = {
     abiName: 'ERC_20',
     contractAddress: '.localValues.tokenAddress',
   },
+  NATIVE_WRAPPER: {
+    location: 'local',
+    abiName: 'NATIVE_WRAPPER',
+    contractAddress: '.values.tokenAddress',
+  },
   NIFTY_INK: {
     location: 'local',
     abiName: 'NIFTY_INK',
@@ -180,6 +185,11 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'SF_HOST',
     contractAddress: '.contextData.chainConfig.superfluid.host',
+  },
+  SUPERFLUID_SETH: {
+    location: 'local',
+    abiName: 'SF_SETH',
+    contractAddress: '.values.superTokenAddress',
   },
   SUPERTOKEN: {
     location: 'local',
