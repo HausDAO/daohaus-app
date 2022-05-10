@@ -221,4 +221,9 @@ export const CONTRACTS = {
     abiName: 'AMB',
     conractAddress: '.localValues.ambAddress',
   },
+  MOLOCH_TOKEN_FACTORY: {
+    location: 'local',
+    abiName: 'MOLOCH_TOKEN_FACTORY',
+    contractAddress: '.contextData.chainConfig.moloch_token_factory',
+  },
 };

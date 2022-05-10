@@ -6,16 +6,22 @@ import DaoContractSettings from '../components/daoContractSettings';
 import DaoMetaOverview from '../components/daoMetaOverview';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
-import { fetchTransmutation, getWrapNZap } from '../utils/theGraph';
+import {
+  fetchTransmutation,
+  getWrapNZap,
+  getMolochToken,
+} from '../utils/theGraph';
 
 const Settings = ({ overview, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
   const [wrapNZap, setWrapNZap] = useState(null);
   const [transmutationContract, setTransmutationContract] = useState(null);
+  const [molochToken, setMolochToken] = useState(null);
 
   useEffect(() => {
     const getWNZ = async () => {
       setWrapNZap(await getWrapNZap(daochain, daoid));
+      setMolochToken(await getMolochToken(daochain, daoid));
       const transmutationRes = await fetchTransmutation({
         chainID: daochain,
         molochAddress: daoid,
@@ -43,6 +49,7 @@ const Settings = ({ overview, daoMetaData, customTerms }) => {
             overview={overview}
             customTerms={customTerms}
             wrapNZap={wrapNZap}
+            molochToken={molochToken}
             transmutationContract={transmutationContract}
           />
           <Flex justify='space-between' mt={6}>

@@ -1,0 +1,64 @@
+[
+  {
+    "type": "constructor",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "_template",
+        "internalType": "address payable"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "MolochTokenCreated",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "molochToken",
+        "internalType": "address",
+        "indexed": false
+      },
+      {
+        "type": "address",
+        "name": "moloch",
+        "internalType": "address",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "name",
+        "internalType": "string",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "symbol",
+        "internalType": "string",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "summonMolochToken",
+    "inputs": [
+      { "type": "address", "name": "_moloch", "internalType": "address" },
+      { "type": "string", "name": "_name", "internalType": "string" },
+      { "type": "string", "name": "_symbol", "internalType": "string" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "", "internalType": "address payable" }
+    ],
+    "name": "template",
+    "inputs": []
+  }
+]
