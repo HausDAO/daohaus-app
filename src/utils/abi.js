@@ -34,11 +34,13 @@ import SWAPR_STAKING from '../contracts/swapr_staking.json';
 import { MINION_TYPES } from './proposalUtils';
 import SF_CFA from '../contracts/superfluidCFA.json';
 import SF_HOST from '../contracts/superfluid.json';
+import SF_SETH from '../contracts/superfluidSETHProxy.json';
 import SF_SUPERTOKEN from '../contracts/superfluidSupertoken.json';
 import SF_SUPERTOKEN_FACTORY from '../contracts/superfluidTokenFactory.json';
 import AMB_MODULE from '../contracts/ambModule.json';
 import AMB from '../contracts/iAmb.json';
 import SF_UUPS_PROXIABLE from '../contracts/uupsProxiable.json';
+import NATIVE_WRAPPER from '../contracts/nativeWrapper.json';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -67,12 +69,14 @@ export const LOCAL_ABI = Object.freeze({
   DISPERSE_APP,
   SF_CFA,
   SF_HOST,
+  SF_SETH,
   SF_SUPERTOKEN,
   SF_SUPERTOKEN_FACTORY,
   SWAPR_STAKING,
   POSTER,
   AMB_MODULE,
   AMB,
+  NATIVE_WRAPPER,
 });
 
 const getBlockExplorerApiKey = chainID => {

@@ -44,7 +44,11 @@ const SuperfluidPaymentInput = props => {
     });
     if (selectedToken) {
       setFetchingSupertoken(true);
-      const { superTokenAddress, isSuperToken } = await isSupertoken(
+      const {
+        superTokenAddress,
+        isNativeWrapper,
+        isSuperToken,
+      } = await isSupertoken(
         daochain,
         paymentToken,
         minionType === MINION_TYPES.SAFE,
@@ -55,7 +59,13 @@ const SuperfluidPaymentInput = props => {
         !!superTokenAddress &&
           superTokenAddress !== ethers.constants.AddressZero,
       );
-      setFormCondition(isSuperToken ? 'withSupertoken' : 'upgradeToSupertoken');
+      setFormCondition(
+        isSuperToken
+          ? 'withSupertoken'
+          : isNativeWrapper
+          ? 'withNativeWrapper'
+          : 'upgradeToSupertoken',
+      );
       setValue(
         'allowanceToApply',
         paymentRequested || ethers.constants.MaxUint256.toString(),
