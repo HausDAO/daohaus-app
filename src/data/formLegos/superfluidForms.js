@@ -37,12 +37,13 @@ export const SUPERFLUID_MINION_FORMS = {
   SAFE_SUPERFLUID_STREAM: {
     id: 'SAFE_SUPERFLUID_STREAM',
     title: 'Superfluid Payment Stream',
-    description: 'Stream funds from the Safe Minion',
+    description: 'Stream funds through the Safe Minion',
     type: PROPOSAL_TYPES.MINION_SUPERFLUID,
     minionType: MINION_TYPES.SAFE,
     formConditions: ['upgradeToSupertoken', 'withSupertoken'],
     tx: {
       type: 'formCondition',
+      withNativeWrapper: TX.SAFE_SUPERFLUID_NATIVE_UPGRADE_N_STREAM,
       upgradeToSupertoken: TX.SAFE_SUPERFLUID_UPGRADE_N_STREAM,
       withSupertoken: TX.SAFE_SUPERFLUID_STREAM,
     },
