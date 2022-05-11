@@ -100,6 +100,16 @@ export const MEMBERS_LIST = gql`
       memberAddress
       exists
       createdAt
+      isDao {
+        id
+      }
+      isSafeMinion {
+        id
+        minions {
+          minionAddress
+          molochAddress
+        }
+      }
       moloch {
         id
         totalShares
