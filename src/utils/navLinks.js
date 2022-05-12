@@ -13,7 +13,7 @@ import {
   RiSearch2Line,
   RiImage2Line,
 } from 'react-icons/ri';
-import { FaDiscourse, FaRegHandshake } from 'react-icons/fa';
+import { FaDiscourse } from 'react-icons/fa';
 
 // no slash on the path
 export const defaultDaoData = [
@@ -27,7 +27,8 @@ export const defaultDaoData = [
   },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-  { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
+  // temp hide uberhaus, remove in future pr
+  // { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },

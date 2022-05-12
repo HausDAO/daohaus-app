@@ -171,4 +171,11 @@ export const CUSTOM_BOOST_INSTALL_FORMS = {
       ],
     ],
   },
+  MOLOCH_TOKEN_LAUNCH: {
+    id: 'MOLOCH_TOKEN_LAUNCH',
+    title: 'Deploy Moloch Token',
+    fields: [[FIELD.TOKEN_NAME, FIELD.TOKEN_SYMBOL]],
+    required: ['token_name', 'token_symbol'],
+    tx: TX.CREATE_MOLOCH_TOKEN,
+  },
 };

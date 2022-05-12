@@ -3,15 +3,15 @@ import { Flex, Box, Badge } from '@chakra-ui/react';
 import { format } from 'date-fns';
 
 import AddressAvatar from './addressAvatar';
+import EntityAvatar from './entityAvatar';
 import useBoost from '../hooks/useBoost';
 import StaticAvatar from './staticAvatar';
 
 const MemberCard = ({ member, selectMember, selectedMember }) => {
   const { isActive } = useBoost();
 
-  const handleSelect = () => {
-    selectMember(member);
-  };
+  const handleSelect = () =>
+    selectMember(prevMember => prevMember?.id !== member.id && member);
 
   return (
     <Flex
@@ -44,11 +44,13 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
               hideCopy
             />
           ) : (
-            <AddressAvatar
-              addr={member.memberAddress}
-              hideCopy
-              alwaysShowName
-            />
+            <Box>
+              {!member.isDao && !member.isSafeMinion ? (
+                <AddressAvatar addr={member.memberAddress} hideCopy />
+              ) : (
+                <EntityAvatar member={member} />
+              )}
+            </Box>
           )}
           {member.jailed ? (
             <Badge variant='solid' colorScheme='red' mr={5} height='100%'>

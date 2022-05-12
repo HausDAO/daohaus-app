@@ -7,10 +7,7 @@ module.exports = {
     browser: true,
   },
   // prettier should be last
-  extends: [
-    'eslint:recommended',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
