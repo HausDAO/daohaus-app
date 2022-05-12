@@ -226,4 +226,9 @@ export const CONTRACTS = {
     abiName: 'MOLOCH_TOKEN_FACTORY',
     contractAddress: '.contextData.chainConfig.moloch_token_factory',
   },
+  ERC_20_SUMMON: {
+    location: 'local',
+    abiName: 'ERC_20_SUMMON',
+    contractAddress: '.contextData.chainConfig.erc20_summon',
+  },
 };

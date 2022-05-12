@@ -10,7 +10,6 @@ const POSTER_DESCRIPTION = {
 export const POSTER_FORMS = {
   RATIFY_MD: {
     id: 'RATIFY_MD',
-    dev: true,
     title: 'Ratify Markdown',
     description: 'Create a proposal to ratify markdown',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
@@ -31,7 +30,6 @@ export const POSTER_FORMS = {
   },
   RATIFY_DAO_DOC: {
     id: 'RATIFY_DAO_DOC',
-    dev: true,
     title: 'Ratify DAO Document',
     description: 'Create a proposal to ratify an existing DAO Doc',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
@@ -57,7 +55,6 @@ export const POSTER_FORMS = {
   },
   POST_IPFS_MD: {
     id: 'POST_IPFS_MD',
-    dev: true,
     title: 'Post Markdown to IPFS',
     description: 'Post Markdown to IPFS using the Pinata API',
     tx: TX.POSTER_IPFS_MD,
@@ -67,7 +64,6 @@ export const POSTER_FORMS = {
   },
   POST_MD: {
     id: 'POST_MD',
-    dev: true,
     title: 'Post markdown to chain',
     description: 'Publish MD on chain and assign to Docs',
     tx: TX.POSTER_MD,
