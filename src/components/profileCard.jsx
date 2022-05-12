@@ -1,6 +1,6 @@
 import React from 'react';
-import { RiQuestionLine, RiLoginBoxLine } from 'react-icons/ri';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { RiQuestionLine } from 'react-icons/ri';
+import { useParams } from 'react-router-dom';
 import {
   Avatar,
   Flex,
@@ -16,10 +16,10 @@ import { format } from 'date-fns';
 import ContentBox from './ContentBox';
 import ProfileMenu from './profileMenu';
 import TextBox from './TextBox';
-import UberHausMemberAvatar from './uberHausMemberAvatar';
+// import UberHausMemberAvatar from './uberHausMemberAvatar';
 import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
 import { calcPower, calcValue } from '../utils/profile';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
+// import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const ProfileCard = ({
   overview,
@@ -198,7 +198,8 @@ const ProfileCard = ({
             </TextBox>
           )}
 
-          {memberEntity && memberEntity.isUberMinion && (
+          {/* // temp hide uberhaus, remove in future pr */}
+          {/* {memberEntity && memberEntity.isUberMinion && (
             <Flex direction='column' width='100%'>
               <TextBox size='xs' mt={5} mb={3}>
                 This is the UberHaus Minion for
@@ -222,7 +223,7 @@ const ProfileCard = ({
                 </RouterLink>
               </Flex>
             </Flex>
-          )}
+          )} */}
         </Flex>
       ) : null}
     </ContentBox>

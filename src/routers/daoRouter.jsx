@@ -12,8 +12,8 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useToken } from '../contexts/TokenContext';
 
-import Allies from '../pages/Allies';
-import Clone from '../pages/Clone';
+// import Allies from '../pages/Allies';
+// import Clone from '../pages/Clone';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import Layout from '../components/layout';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
@@ -196,7 +196,8 @@ const DaoRouter = () => {
             members={daoMembers}
           />
         </Route>
-        <Route exact path={`${path}/allies`}>
+        {/* // temp hide uberhaus, remove in future pr */}
+        {/* <Route exact path={`${path}/allies`}>
           <Allies
             daoOverview={daoOverview}
             daoMetaData={daoMetaData}
@@ -204,7 +205,10 @@ const DaoRouter = () => {
             isMember={isMember}
             daoMembers={daoMembers}
           />
-        </Route>
+        </Route> */}
+        {/* <Route exact path={`${path}/uberhaus/clone`}>
+          <Clone daoMembers={daoMembers} daoOverview={daoOverview} isUberHaus />
+        </Route> */}
 
         <Redirect
           from={`${path}/proposals/hardcore`}
@@ -227,7 +231,6 @@ const DaoRouter = () => {
             delegate={delegate}
           />
         </Route>
-
         <Route exact path={`${path}/profile/:userid`}>
           <Profile
             members={daoMembers}
@@ -236,9 +239,6 @@ const DaoRouter = () => {
             activities={daoActivities}
             daoMember={daoMember}
           />
-        </Route>
-        <Route exact path={`${path}/uberhaus/clone`}>
-          <Clone daoMembers={daoMembers} daoOverview={daoOverview} isUberHaus />
         </Route>
         <Route exact path={`${path}/boost/mintgate`}>
           <MintGate daoMetaData={daoMetaData} />
