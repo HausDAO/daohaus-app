@@ -621,6 +621,22 @@ export const FIELD = {
     label: 'WalletConnect Link',
     expectType: 'any',
   },
+  TOKEN_NAME: {
+    type: 'input',
+    label: 'Name',
+    name: 'token_name',
+    htmlFor: 'token_name',
+    placeholder: 'Token Name',
+    expectType: 'any',
+  },
+  TOKEN_SYMBOL: {
+    type: 'input',
+    label: 'Symbol',
+    name: 'token_symbol',
+    htmlFor: 'token_symbol',
+    placeholder: 'Token Symbol',
+    expectType: 'any',
+  },
 };
 
 export const FORM_DISPLAY = {

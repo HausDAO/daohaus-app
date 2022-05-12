@@ -25,6 +25,7 @@ const DaoContractSettings = ({
   overview,
   customTerms,
   wrapNZap,
+  molochToken,
   transmutationContract,
 }) => {
   const { daochain, daoid } = useParams();
@@ -34,10 +35,12 @@ const DaoContractSettings = ({
   });
   const { successToast } = useOverlay();
 
-  const copiedToast = () => {
+  const copiedToast = (copiedAddressText, wrapNZap) => {
     successToast({
-      title: 'Copied Wrap-N-Zap address!',
-      description: `ONLY SEND ${supportedChains[daochain].nativeCurrency} TO THIS ADDRESS!`,
+      title: `Copied ${copiedAddressText} address!`,
+      description:
+        wrapNZap &&
+        `ONLY SEND ${supportedChains[daochain].nativeCurrency} TO THIS ADDRESS!`,
     });
   };
 
@@ -74,7 +77,29 @@ const DaoContractSettings = ({
                 <CopyToClipboard
                   text={wrapNZap}
                   mx={2}
-                  onCopy={copiedToast}
+                  onCopy={() => copiedToast('Wrap-N-Zap', true)}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <Icon
+                    as={FaCopy}
+                    color='secondarytransmutationRes.transmutations[0].300'
+                    ml={2}
+                  />
+                </CopyToClipboard>
+              </Flex>
+            </Box>
+          </Flex>
+        )}
+        {molochToken && (
+          <Flex justify='space-between'>
+            <TextBox size='xs'>Moloch Token</TextBox>
+            <Box fontFamily='mono' variant='value' fontSize='sm'>
+              <Flex color='secondary.400' align='center'>
+                <Box>{molochToken}</Box>
+                <CopyToClipboard
+                  text={molochToken}
+                  mx={2}
+                  onCopy={() => copiedToast('Moloch Token')}
                   _hover={{ cursor: 'pointer' }}
                 >
                   <Icon

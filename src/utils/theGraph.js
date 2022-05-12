@@ -28,6 +28,7 @@ import {
   GET_TRANSMUTATION,
   GET_WRAP_N_ZAPS,
   GET_MINION_BY_NAME,
+  GET_MOLOCH_TOKEN,
 } from '../graphQL/boost-queries';
 import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
@@ -655,4 +656,18 @@ export const balanceChainQuery = async ({ address, reactSetter }) => {
       console.error(error);
     }
   });
+};
+
+export const getMolochToken = async (daochain, daoid) => {
+  const records = await graphQuery({
+    endpoint: getGraphEndpoint(daochain, 'boosts_graph_url'),
+    query: GET_MOLOCH_TOKEN,
+    variables: {
+      contractAddress: daoid,
+    },
+  });
+  if (records.molochTokens?.length > 0) {
+    return records.molochTokens[0].id;
+  }
+  return null;
 };

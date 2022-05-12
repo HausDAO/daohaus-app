@@ -20,6 +20,7 @@ import { VAULT_TRANSFER_TX } from './transferContractTX';
 import { UBER_MINION_TX } from './uberMinionTX';
 import { WRAPNZAP_BOOST_TX } from './wrapNzapBoostTX';
 import { POSTER_BOOST_TX } from './posterBoostTX';
+import { MOLOCH_TOKEN_FACTORY_TX } from './molochTokenTX';
 
 // TEST LEGOS BEFORE PUSHING TO DEVELOP
 
@@ -65,4 +66,5 @@ export const TX = {
   ...TOKEN_TX,
   ...SWAPR_BOOST_TX,
   ...POSTER_BOOST_TX,
+  ...MOLOCH_TOKEN_FACTORY_TX,
 };
