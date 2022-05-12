@@ -353,6 +353,7 @@ export const supportedChains = {
   '0x89': {
     name: 'Polygon',
     short_name: 'polygon',
+    shortNamePrefix: 'matic',
     nativeCurrency: 'MATIC',
     network: 'matic',
     networkAlt: 'polygon',
