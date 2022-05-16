@@ -12,11 +12,12 @@ import {
 } from './proposalActionPrimitives';
 import MinionExexcuteFactory from './minionExexcuteFactory';
 import { ParaSm } from '../components/typography';
+import { isMinionProposalType } from '../utils/proposalUtils';
 
 const Processed = props => {
   const { voteData, proposal } = props;
 
-  if (!proposal.isMinion) {
+  if (!isMinionProposalType(proposal)) {
     return (
       <PropActionBox>
         <TopStatusBox

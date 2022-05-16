@@ -233,6 +233,9 @@ const getMinionProposalType = (proposal, details) => {
   return getUberTypeFromGraphData(proposal);
 };
 
+export const isMinionProposalType = proposal =>
+  proposal.isMinion && proposal.proposer === proposal.minionAddress;
+
 export const determineProposalType = proposal => {
   // can return a wide array of data types and structures. Be very defensive when dealing with
   // anything returned from tryGetDetails.
@@ -256,7 +259,7 @@ export const determineProposalType = proposal => {
   if (parsedDetails.proposalType === PROPOSAL_TYPES.SIGNAL) {
     return PROPOSAL_TYPES.SIGNAL;
   }
-  if (proposal.isMinion && proposal.minionAddress === proposal.proposer) {
+  if (isMinionProposalType(proposal)) {
     return getMinionProposalType(proposal, parsedDetails);
   }
   return PROPOSAL_TYPES.FUNDING;
