@@ -30,7 +30,7 @@ const SnapshotCard = ({ snapshot }) => {
     >
       <Stack spacing={4}>
         <TextBox size='lg' color='whiteAlpha.900' maxW='80%'>
-          {snapshot.name}
+          {snapshot.title}
         </TextBox>
         <TextBox variant='value' size='sm'>
           {snapshot.body.length > 225
