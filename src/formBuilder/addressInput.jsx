@@ -10,6 +10,15 @@ import { handleGetProfile } from '../utils/3box';
 import { isEthAddress, truncateAddr } from '../utils/general';
 import { lookupENS } from '../utils/ens';
 
+const ModButtonWithLoading = ({ loading, fn }) => {
+  return (
+    <>
+      {loading && <Spinner mr={2} />}
+      <ModButton text='Address' fn={fn} />
+    </>
+  );
+};
+
 const AddressInput = props => {
   const { daoMembers } = useDao();
   const { name, localForm, localValues } = props;
@@ -17,12 +26,16 @@ const AddressInput = props => {
   const [textMode, setTextMode] = useState(true);
   const [userAddresses, setAddresses] = useState([]);
   const [helperText, setHelperText] = useState('Use ETH address or ENS');
+  const [loadingMembers, setLoadingMembers] = useState(false);
 
   const { setValue } = localForm;
+
+  console.log('userAddresses', userAddresses);
 
   useEffect(() => {
     let shouldSet = true;
     const fetchMembers = async () => {
+      setLoadingMembers(true);
       const memberProfiles = await Promise.all(
         getActiveMembers(daoMembers)?.map(async member => {
           const profile = await handleGetProfile(member.memberAddress);
@@ -38,6 +51,7 @@ const AddressInput = props => {
           };
         }),
       );
+      setLoadingMembers(false);
       if (shouldSet) {
         setAddresses(memberProfiles);
       }
@@ -97,7 +111,10 @@ const AddressInput = props => {
           {...props}
           placeholder='Select an Address'
           options={userAddresses}
-          btn={<ModButton text='Address' fn={switchElement} />}
+          listLoading={loadingMembers}
+          btn={
+            <ModButtonWithLoading loading={loadingMembers} fn={switchElement} />
+          }
         />
       )}
     </>
