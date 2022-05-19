@@ -30,8 +30,6 @@ const AddressInput = props => {
 
   const { setValue } = localForm;
 
-  console.log('userAddresses', userAddresses);
-
   useEffect(() => {
     let shouldSet = true;
     const fetchMembers = async () => {
