@@ -16,6 +16,7 @@ const GenericSelect = props => {
     mb,
     registerOptions,
     formState,
+    listLoading,
   } = props;
   const { register } = localForm || {};
   return (
@@ -25,7 +26,7 @@ const GenericSelect = props => {
         placeholder={placeholder}
         id={htmlFor}
         name={name}
-        disabled={disabled || formState === 'loading'}
+        disabled={disabled || formState === 'loading' || listLoading}
         onChange={onChange}
         ref={register(registerOptions)}
       >
