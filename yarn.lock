@@ -3228,9 +3228,9 @@
     "@glazed/tile-loader" "^0.2.0"
 
 "@glazed/did-datastore@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@glazed/did-datastore/-/did-datastore-0.3.0.tgz#e02c0b00de802daa6720b21e42464dba2543579b"
-  integrity sha512-NEL24PX8Bhc+WxVnFFPuDvTh781hG/Gq6ZlTE2p9EkOugPIJXco2yULld+UKknd8fJSYb4U3kATxb/WWznfB+w==
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@glazed/did-datastore/-/did-datastore-0.3.1.tgz#c09f6143733f6ae761cb6ce5c435a777bae21d64"
+  integrity sha512-BZYElSHPGfMCZyjPTqQOH1r27Ytwe6ZoBgwCYmg9IuYV5SVd+3TqDNcIP5CZnfQ+RbtU5c/Z19/ZpEVnqJ76Bw==
   dependencies:
     "@ceramicnetwork/streamid" "^2.0.0"
     "@glazed/constants" "^0.2.0"
@@ -9366,9 +9366,9 @@ detective@^5.2.0:
     minimist "^1.1.1"
 
 did-jwt@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-6.0.0.tgz#f07897cb8eb2e1ef975570fc6340b6fae28125a2"
-  integrity sha512-ZtpKcE/vD2CkVRiRbr/43qTYItCkV1QEIG5inMwEnuMzmf+otUhX/xkLMOsQPLmRN8nqTJo58bGXRCsKf5L2rw==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-6.1.0.tgz#75cb339f218e9d6a46e53bdbea7e35cef7502b10"
+  integrity sha512-NPv18017jVuuKIaM3T/4E5CmRWbc+9a4r+ggKEuiXu3u49q7IbqFEcgEibPXBPC5fgqpyECKN3i8EmjGuQouFg==
   dependencies:
     "@stablelib/ed25519" "^1.0.2"
     "@stablelib/random" "^1.0.1"
