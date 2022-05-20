@@ -229,7 +229,11 @@ const ProposalVote = ({
                       shouldWrapChildren
                       placement='bottom'
                       label={`Insufficient Funds: You only have ${Number(
-                        daoMember?.depositTokenBalance,
+                        daoMember?.tokenBalances?.find(
+                          ({ token }) =>
+                            token?.tokenAddress ===
+                            overview?.depositToken?.tokenAddress,
+                        )?.tokenBalance || 0,
                       )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
