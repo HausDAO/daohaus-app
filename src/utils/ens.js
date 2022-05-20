@@ -1,10 +1,12 @@
 import { gql } from 'apollo-boost';
-import { ethers } from 'ethers';
+import { ethers, Contract } from 'ethers';
 import { graphQuery } from './apollo';
 import { chainByID } from './chain';
 
 const ensClient =
   'https://api.thegraph.com/subgraphs/name/ezynda3/ens-subgraph';
+
+const REVERSE_RESOLVER_ADDRESS = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
 const REVERSE_RESOLVER_QUERY = gql`
   query reverseRegistrations($user: String!) {
@@ -15,6 +17,28 @@ const REVERSE_RESOLVER_QUERY = gql`
   }
 `;
 
+const ensReverseRecordRequest = async address => {
+  const provider = ethers.getDefaultProvider(chainByID('0x1').rpc_url);
+  const abi = [
+    {
+      inputs: [
+        { internalType: 'address[]', name: 'addresses', type: 'address[]' },
+      ],
+      name: 'getNames',
+      outputs: [{ internalType: 'string[]', name: 'r', type: 'string[]' }],
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ];
+
+  try {
+    const contract = new Contract(REVERSE_RESOLVER_ADDRESS, abi, provider);
+    return await contract.getNames([address]);
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
 const fetchENS = async address => {
   try {
     const result = await graphQuery({
@@ -24,10 +48,17 @@ const fetchENS = async address => {
         user: address.toLowerCase(),
       },
     });
+
     if (result.reverseRegistrations.length) {
       // look into dealing with multiple. get most recent
       return result.reverseRegistrations.sort((a, b) => b.block - a.block)[0]
         .name;
+    }
+
+    const recordRequest = await ensReverseRecordRequest(address.toLowerCase());
+
+    if (recordRequest.length) {
+      return recordRequest[0];
     }
 
     return false;
