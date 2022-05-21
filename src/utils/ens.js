@@ -33,10 +33,9 @@ const ensReverseRecordRequest = async address => {
   ];
   try {
     const contract = new Contract(REVERSE_RESOLVER_ADDRESS, abi, provider);
-    const names = await contract.getNames([address]);
-    return normalize(names[0]);
+    return await contract.getNames([address]);
   } catch (e) {
-    return null;
+    return Promise.reject(e);
   }
 };
 
@@ -56,7 +55,10 @@ const fetchENS = async address => {
     }
     const recordRequest = await ensReverseRecordRequest(address.toLowerCase());
     if (recordRequest.length) {
-      return recordRequest[0];
+      const name = recordRequest[0];
+      if (normalize(name) === name) {
+        return name;
+      }
     }
     return false;
   } catch (error) {
