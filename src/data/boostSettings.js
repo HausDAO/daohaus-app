@@ -1,5 +1,4 @@
 import { FIELD, INFO_TEXT } from './fields';
-import { FORM } from './formLegos/forms';
 import { COMMON_STEPS, CONTENT } from './boosts';
 
 const SETTING_STEPS = {
@@ -7,7 +6,9 @@ const SETTING_STEPS = {
     STEP1: {
       type: 'boostMetaForm',
       form: {
-        ...FORM.SPAM_FILTER,
+        id: 'SPAM_FILTER',
+        title: 'Minimum Tribute',
+        required: ['paymentRequested'],
         fields: [
           [
             {
@@ -20,6 +21,18 @@ const SETTING_STEPS = {
               ...FIELD.BASIC_SWITCH,
               label: 'Spam filter active?',
               name: 'active',
+            },
+            {
+              ...FIELD.PAYMENT_REQUEST,
+              label: '<A></A>mount in Deposit Token',
+              info: INFO_TEXT.SPAM_FILTER_AMOUNT,
+              depositTokenOnly: true,
+              hideMax: true,
+            },
+            {
+              ...FIELD.BASIC_SWITCH,
+              name: 'membersOnly',
+              label: 'Hide new proposal button from non members?',
             },
           ],
         ],
