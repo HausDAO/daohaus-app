@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost';
 import { ethers, Contract } from 'ethers';
+import { normalize } from 'eth-ens-namehash';
 import { graphQuery } from './apollo';
 import { chainByID } from './chain';
 
@@ -30,12 +31,12 @@ const ensReverseRecordRequest = async address => {
       type: 'function',
     },
   ];
-
   try {
     const contract = new Contract(REVERSE_RESOLVER_ADDRESS, abi, provider);
-    return await contract.getNames([address]);
+    const names = await contract.getNames([address]);
+    return normalize(names[0]);
   } catch (e) {
-    return Promise.reject(e);
+    return null;
   }
 };
 
@@ -48,19 +49,15 @@ const fetchENS = async address => {
         user: address.toLowerCase(),
       },
     });
-
     if (result.reverseRegistrations.length) {
       // look into dealing with multiple. get most recent
       return result.reverseRegistrations.sort((a, b) => b.block - a.block)[0]
         .name;
     }
-
     const recordRequest = await ensReverseRecordRequest(address.toLowerCase());
-
     if (recordRequest.length) {
       return recordRequest[0];
     }
-
     return false;
   } catch (error) {
     console.error(error);
