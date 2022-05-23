@@ -46,7 +46,7 @@ export const defaultFilterOptions = {
     },
     {
       name: 'Minion Proposals',
-      value: 'Minion Proposal',
+      value: /Minion/i,
       type: 'proposalType',
     },
   ],

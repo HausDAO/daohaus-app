@@ -620,6 +620,12 @@ export const handleListFilter = (proposals, filter, daoMember, daoid) => {
     );
   }
 
+  if (filter.value instanceof RegExp) {
+    return updatedProposals.filter(proposal =>
+      filter.value.test(proposal[filter.type]),
+    );
+  }
+
   return updatedProposals.filter(
     proposal => proposal[filter.type] === filter.value,
   );
