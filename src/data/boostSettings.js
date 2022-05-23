@@ -1,3 +1,4 @@
+import { merge } from 'lodash';
 import { FIELD, INFO_TEXT } from './fields';
 import { FORM } from './formLegos/forms';
 import { COMMON_STEPS, CONTENT } from './boosts';
@@ -9,19 +10,22 @@ const SETTING_STEPS = {
       form: {
         ...FORM.SPAM_FILTER,
         fields: [
-          [
-            {
-              ...FIELD.PAYMENT_REQUEST,
-              label: 'Amount in Deposit Token',
-              info: INFO_TEXT.SPAM_FILTER_AMOUNT,
-              hideMax: true,
-            },
-            {
-              ...FIELD.BASIC_SWITCH,
-              label: 'Spam filter active?',
-              name: 'active',
-            },
-          ],
+          merge(
+            [
+              {
+                ...FIELD.PAYMENT_REQUEST,
+                label: 'Amount in Deposit Token',
+                info: INFO_TEXT.SPAM_FILTER_AMOUNT,
+                hideMax: true,
+              },
+              {
+                ...FIELD.BASIC_SWITCH,
+                label: 'Spam filter active?',
+                name: 'active',
+              },
+            ],
+            FORM.SPAM_FILTER.fields,
+          ),
         ],
       },
       next: 'STEP2',
