@@ -29,7 +29,7 @@ import MinionCancel from './minionCancel';
 import EscrowActions from './escrowActions';
 
 import { TX } from '../data/txLegos/contractTX';
-import { memberVote } from '../utils/proposalUtils';
+import { isMinionProposalType, memberVote } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { createContract } from '../utils/contract';
@@ -519,7 +519,7 @@ const ProposalVote = ({
                 />
               ) : (
                 quorumNeeded &&
-                !proposal.isMinion && (
+                isMinionProposalType(proposal) && (
                   <Text size='sm' textAlign='center' maxW='60%' m='auto'>
                     {proposal?.minion?.minQuorum}% quorum or{' '}
                     {utils.commify(quorumNeeded)} shares needed for Early
