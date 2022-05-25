@@ -38,14 +38,4 @@ export const POSTER_BOOST_TX = {
     successMsg: 'Posted Doc!',
     argsFromCallback: 'postIPFS',
   },
-  POSTER_MD: {
-    contract: CONTRACTS.POSTER,
-    name: 'post',
-    onTxHash: ACTIONS.PROPOSAL,
-    poll: 'subgraph',
-    display: 'Posting...',
-    errMsg: 'Error Posting Doc',
-    successMsg: 'Posted Doc!',
-    gatherArgs: ['.values.encoded', POSTER_TAGS.MEMBER],
-  },
 };

@@ -65,21 +65,4 @@ export const POSTER_FORMS = {
     required: ['posterData.title', 'posterData.content'],
     fields: [[FIELD.POST_TITLE, POSTER_DESCRIPTION, FIELD.MD_EDITOR]],
   },
-  POST_MD: {
-    id: 'POST_MD',
-    dev: true,
-    title: 'Post markdown to chain',
-    description: 'Publish MD on chain and assign to Docs',
-    tx: TX.POSTER_MD,
-    customWidth: '1000px',
-    required: ['posterData.title', 'posterData.content'],
-    fields: [
-      [
-        FIELD.POST_TITLE,
-        POSTER_DESCRIPTION,
-        FIELD.MD_EDITOR,
-        FIELD.POSTER_ENCODER,
-      ],
-    ],
-  },
 };
