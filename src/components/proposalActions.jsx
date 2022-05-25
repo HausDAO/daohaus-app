@@ -518,7 +518,8 @@ const ProposalVote = ({
                   }
                 />
               ) : (
-                quorumNeeded && (
+                quorumNeeded &&
+                !proposal.isMinion && (
                   <Text size='sm' textAlign='center' maxW='60%' m='auto'>
                     {proposal?.minion?.minQuorum}% quorum or{' '}
                     {utils.commify(quorumNeeded)} shares needed for Early
