@@ -109,9 +109,6 @@ const ProposalVote = ({
         .call();
 
       if (shouldUpdate) {
-        daoMember.depositTokenBalance =
-          tokenBalance / 10 ** overview?.depositToken.decimals;
-
         setEnoughDeposit(
           +overview?.proposalDeposit === 0 ||
             +tokenBalance / 10 ** overview?.depositToken.decimals >=
@@ -129,7 +126,7 @@ const ProposalVote = ({
     () => {
       shouldUpdate = false;
     };
-  }, [overview, address, proposal, injectedChain, daoMember]);
+  }, [overview, address, proposal, injectedChain]);
 
   useEffect(() => {
     if (daoProposals) {
@@ -232,7 +229,7 @@ const ProposalVote = ({
                       shouldWrapChildren
                       placement='bottom'
                       label={`Insufficient Funds: You only have ${Number(
-                        daoMember?.depositTokenBalance || 0,
+                        daoMember?.depositTokenBalance,
                       )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
