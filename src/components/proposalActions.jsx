@@ -29,7 +29,7 @@ import MinionCancel from './minionCancel';
 import EscrowActions from './escrowActions';
 
 import { TX } from '../data/txLegos/contractTX';
-import { memberVote } from '../utils/proposalUtils';
+import { isMinionProposalType, memberVote } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { createContract } from '../utils/contract';
@@ -109,6 +109,9 @@ const ProposalVote = ({
         .call();
 
       if (shouldUpdate) {
+        daoMember.depositTokenBalance =
+          tokenBalance / 10 ** overview?.depositToken.decimals;
+
         setEnoughDeposit(
           +overview?.proposalDeposit === 0 ||
             +tokenBalance / 10 ** overview?.depositToken.decimals >=
@@ -126,7 +129,7 @@ const ProposalVote = ({
     () => {
       shouldUpdate = false;
     };
-  }, [overview, address, proposal, injectedChain]);
+  }, [overview, address, proposal, injectedChain, daoMember]);
 
   useEffect(() => {
     if (daoProposals) {
@@ -229,7 +232,7 @@ const ProposalVote = ({
                       shouldWrapChildren
                       placement='bottom'
                       label={`Insufficient Funds: You only have ${Number(
-                        daoMember?.depositTokenBalance,
+                        daoMember?.depositTokenBalance || 0,
                       )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
@@ -515,7 +518,8 @@ const ProposalVote = ({
                   }
                 />
               ) : (
-                quorumNeeded && (
+                quorumNeeded &&
+                isMinionProposalType(proposal) && (
                   <Text size='sm' textAlign='center' maxW='60%' m='auto'>
                     {proposal?.minion?.minQuorum}% quorum or{' '}
                     {utils.commify(quorumNeeded)} shares needed for Early
