@@ -171,4 +171,8 @@ export const DETAILS = {
     title: `.values.title || Proposal to Ratify Content`,
     proposalType: '.formData.type',
   },
+  MILLION: {
+    title: `Mint a Million!!!`,
+    proposalType: '.formData.type',
+  },
 };

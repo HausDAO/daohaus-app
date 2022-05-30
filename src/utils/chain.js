@@ -131,6 +131,7 @@ export const supportedChains = {
     swapr: {
       staking: '0x732DB307337a5ceA1FD117AF808382FaC0AFAe8a',
     },
+    erc20_summon: '0xe4E893AffD33dDED43ECdf8bBC550639c84485e5',
     poster: '0x917d84787A266F9D649d519A7Ec8445eA43514D8',
     moloch_token_factory: '0x12d1a14c06c3b75e541ec7e30a87e13beeda2965',
     zodiac_amb_module: {
