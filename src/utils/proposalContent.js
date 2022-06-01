@@ -1,5 +1,3 @@
-import swordImg from '../assets/img/swords-white.svg';
-
 export const actionNeededFilter = {
   name: 'Action Needed',
   value: 'Action Needed',
@@ -46,7 +44,7 @@ export const defaultFilterOptions = {
     },
     {
       name: 'Minion Proposals',
-      value: 'Minion Proposal',
+      value: /Minion/i,
       type: 'proposalType',
     },
   ],
@@ -116,44 +114,4 @@ export const sortOptions = {
     { name: 'Oldest', value: 'submissionDateAsc' },
     { name: 'Most Votes', value: 'voteCountDesc' },
   ],
-};
-
-export const daoToDaoProposalTypes = () => {
-  return [
-    {
-      name: 'Stake',
-      subhead: 'Have your DAO join UBERhaus',
-      proposalType: 'd2dStake',
-      image: swordImg,
-      show: true,
-    },
-    {
-      name: 'Vote',
-      subhead: 'Vote on proposals in UberHaus',
-      proposalType: 'd2dVote',
-      image: swordImg,
-      show: false,
-    },
-    {
-      name: 'Delegate',
-      subhead: "Manage your DAO's delegate",
-      proposalType: 'd2dDelegate',
-      image: swordImg,
-      show: true,
-    },
-    {
-      name: 'Rage Quit',
-      subhead: 'RageQuit your % of $HAUS from UBERhaus',
-      proposalType: 'd2dRageQuit',
-      image: swordImg,
-      show: true,
-    },
-    {
-      name: 'Pull/Withdraw',
-      subhead: 'Pull or withdraw funds',
-      proposalType: 'd2dWithdraw',
-      image: swordImg,
-      show: true,
-    },
-  ];
 };

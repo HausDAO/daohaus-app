@@ -22,16 +22,10 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
-import UberHausAvatar from './uberHausAvatar';
 import { chainByID } from '../utils/chain';
 import { decodeAMBTx, decodeMultisendTx } from '../utils/abi';
 import { decodeAction } from '../utils/minionUtils';
-import {
-  hasMinionActions,
-  MINION_TYPES,
-  PROPOSAL_TYPES,
-} from '../utils/proposalUtils';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { hasMinionActions, MINION_TYPES } from '../utils/proposalUtils';
 
 const ProposalMinionCard = ({ proposal, minionAction }) => {
   const { daochain } = useParams();
@@ -188,11 +182,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
       setDecodedData(promRes);
     };
 
-    if (
-      proposal &&
-      minionDeets &&
-      proposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_DEL
-    ) {
+    if (proposal && minionDeets) {
       hydrateActions();
     }
   }, [proposal, minionDeets]);
@@ -201,10 +191,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
     setShowModal(prevState => !prevState);
   };
 
-  const getAvatar = addr => {
-    if (addr?.toLowerCase() === UBERHAUS_DATA.ADDRESS.toLowerCase()) {
-      return <UberHausAvatar />;
-    }
+  const getAvatar = () => {
     return <AddressAvatar addr={minionDeets.to} alwaysShowName />;
   };
 
@@ -332,7 +319,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 <TextBox size='xs' mb={3}>
                   {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
                 </TextBox>
-                {minionDeets?.to && getAvatar(minionDeets.to)}
+                {minionDeets?.to && getAvatar()}
                 {minionDeets?.nominee && (
                   <Box>
                     <AddressAvatar addr={minionDeets.nominee} alwaysShowName />

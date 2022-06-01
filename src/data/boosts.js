@@ -282,6 +282,18 @@ export const CONTENT = {
       { href: 'https://github.com/onPoster', label: 'Poster Github' },
     ],
   },
+  MOLOCH_TOKEN: {
+    title: 'Moloch Token',
+    description: 'Wrap DAO shares in ERC20 token for use in tooling',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.1',
+    pars: [
+      'Moloch Token gives DAOs an easy way to use DAO tooling with ERC20 support',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+    ],
+  },
 };
 
 export const COMMON_STEPS = {
@@ -374,6 +386,17 @@ export const STEPS = {
       form: FORM.WRAP_N_ZAP_LAUNCH,
       next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Deploy' },
       stepLabel: 'Deploy Wrap n Zap',
+      isUserStep: true,
+    },
+    STEP2: COMMON_STEPS.SIGNER,
+  },
+  ADD_MOLOCH_TOKEN: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'form',
+      form: FORM.MOLOCH_TOKEN_LAUNCH,
+      next: { type: 'awaitTx', then: 'STEP2', ctaText: 'Deploy' },
+      stepLabel: 'Deploy Moloch Token',
       isUserStep: true,
     },
     STEP2: COMMON_STEPS.SIGNER,
@@ -645,6 +668,15 @@ export const BOOSTS = {
       type: 'internalLink',
       appendToDaoPath: 'docs',
     },
+  },
+  MOLOCH_TOKEN: {
+    id: 'MOLOCH_TOKEN',
+    boostContent: CONTENT.MOLOCH_TOKEN,
+    steps: STEPS.ADD_MOLOCH_TOKEN,
+    categories: ['tooling', 'community'],
+    networks: 'all',
+    cost: 'free',
+    settings: 'none',
   },
 };
 

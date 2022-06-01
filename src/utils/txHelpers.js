@@ -618,18 +618,6 @@ export const getTxFromName = name => {
 };
 
 export const transactionByProposalType = proposal => {
-  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-    return TX.UBERHAUS_MINION_EXECUTE_APPOINTMENT;
-  }
-  // if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
-  //   return TX.MINION_SIMPLE_EXECUTE;
-  // }
-  // if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ) {
-  //   return TX.UBERHAUS_RAGEQUIT;
-  // }
-  // if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT) {
-  //   return TX.UBERHAUS_WITHDRAW;
-  // }
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return proposal.minion.minionType === PROPOSAL_TYPES.MINION_SAFE
       ? TX.MINION_SAFE_EXECUTE
@@ -642,18 +630,6 @@ export const transactionByProposalType = proposal => {
 };
 
 export const contractByProposalType = proposal => {
-  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-    return CONTRACTS.LOCAL_UBERHAUS_MINION;
-  }
-  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
-    return CONTRACTS.LOCAL_UBERHAUS_MINION;
-  }
-  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ) {
-    return CONTRACTS.LOCAL_UBERHAUS_MINION;
-  }
-  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT) {
-    return CONTRACTS.LOCAL_UBERHAUS_MINION;
-  }
   if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
     return proposal.minion.minionType === MINION_TYPES.SAFE
       ? CONTRACTS.MINION_SAFE_EXECUTE

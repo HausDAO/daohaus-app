@@ -54,6 +54,97 @@ export const SUPERFLUID_MINION_TX = {
     errMsg: 'Error Creating Supertoken',
     successMsg: 'Supertoken Created Successfully',
   },
+  SAFE_SUPERFLUID_NATIVE_UPGRADE_N_STREAM: {
+    contract: CONTRACTS.SELECTED_MINION_SAFE,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Submitting Stream Proposal',
+    errMsg: 'Error Submitting Proposals',
+    successMsg: 'Proposal Submitted',
+    gatherArgs: [
+      {
+        // _transactions,
+        type: 'encodeSafeActions',
+        contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
+        fnName: 'multiSend',
+        to: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '.values.paymentToken',
+              '.values.superTokenAddress',
+              '.contextData.chainConfig.superfluid.host',
+            ],
+          },
+        ],
+        value: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              '0',
+              '.values.paymentRequested', // minDeposit
+              '0',
+            ],
+          },
+        ],
+        data: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: [
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.NATIVE_WRAPPER,
+                fnName: 'withdraw',
+                gatherArgs: [
+                  '.values.paymentRequested', // unwrap minDeposit
+                ],
+              },
+              {
+                type: 'encodeHex',
+                contract: CONTRACTS.SUPERFLUID_SETH,
+                fnName: 'upgradeByETH',
+                gatherArgs: [],
+              },
+              {
+                type: 'nestedArgs',
+                contract: CONTRACTS.SUPERFLUID_HOST,
+                fnName: 'callAgreement',
+                gatherArgs: [
+                  '.contextData.chainConfig.superfluid.cfa',
+                  {
+                    type: 'encodeHex',
+                    contract: CONTRACTS.SUPERFLUID_CFA,
+                    fnName: 'createFlow',
+                    gatherArgs: [
+                      '.values.superTokenAddress',
+                      '.values.applicant',
+                      '.values.weiRatePerSec',
+                      '0x', // TODO: new bytes(0) // placeholder
+                    ],
+                  },
+                  '0x',
+                ],
+              },
+            ],
+          },
+        ],
+        operation: [
+          {
+            type: 'nestedArgs',
+            gatherArgs: ['0', '0', '0'],
+          },
+        ],
+      },
+      '.values.paymentToken', // _withdrawToken
+      '.values.paymentRequested', // _withdrawAmount
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.SUPERFLUID_STREAM,
+      },
+      true, // _memberOnlyEnabled
+    ],
+  },
   SAFE_SUPERFLUID_UPGRADE_N_STREAM: {
     contract: CONTRACTS.SELECTED_MINION_SAFE,
     name: 'proposeAction',

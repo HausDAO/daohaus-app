@@ -101,3 +101,11 @@ export const GET_MINION_BY_NAME = gql`
     }
   }
 `;
+
+export const GET_MOLOCH_TOKEN = gql`
+  query molochTokens($contractAddress: String!) {
+    molochTokens(where: { moloch: $contractAddress }) {
+      id
+    }
+  }
+`;

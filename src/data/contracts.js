@@ -1,5 +1,3 @@
-import { UBERHAUS_DATA } from '../utils/uberhaus';
-
 export const CONTRACTS = {
   CURRENT_MOLOCH: {
     location: 'local',
@@ -81,6 +79,11 @@ export const CONTRACTS = {
     abiName: 'ERC_20',
     contractAddress: '.localValues.tokenAddress',
   },
+  NATIVE_WRAPPER: {
+    location: 'local',
+    abiName: 'NATIVE_WRAPPER',
+    contractAddress: '.values.tokenAddress',
+  },
   NIFTY_INK: {
     location: 'local',
     abiName: 'NIFTY_INK',
@@ -94,21 +97,6 @@ export const CONTRACTS = {
   MINION_SAFE_EXECUTE: {
     location: 'local',
     abiName: 'SAFE_MINION',
-    contractAddress: '.localValues.minionAddress',
-  },
-  UBERHAUS_MOLOCH: {
-    location: 'local',
-    abiName: 'MOLOCH_V2',
-    contractAddress: UBERHAUS_DATA.ADDRESS,
-  },
-  UBERHAUS_MINION: {
-    location: 'local',
-    abiName: 'UBERHAUS_MINION',
-    contractAddress: '.localValues.minionAddress',
-  },
-  LOCAL_UBERHAUS_MINION: {
-    location: 'local',
-    abiName: 'UBERHAUS_MINION',
     contractAddress: '.localValues.minionAddress',
   },
   SUPERFLUID_MINION_LOCAL: {
@@ -181,6 +169,11 @@ export const CONTRACTS = {
     abiName: 'SF_HOST',
     contractAddress: '.contextData.chainConfig.superfluid.host',
   },
+  SUPERFLUID_SETH: {
+    location: 'local',
+    abiName: 'SF_SETH',
+    contractAddress: '.values.superTokenAddress',
+  },
   SUPERTOKEN: {
     location: 'local',
     abiName: 'SF_SUPERTOKEN',
@@ -210,5 +203,10 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'AMB',
     conractAddress: '.localValues.ambAddress',
+  },
+  MOLOCH_TOKEN_FACTORY: {
+    location: 'local',
+    abiName: 'MOLOCH_TOKEN_FACTORY',
+    contractAddress: '.contextData.chainConfig.moloch_token_factory',
   },
 };

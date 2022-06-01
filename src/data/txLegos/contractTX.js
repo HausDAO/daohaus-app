@@ -17,9 +17,9 @@ import { SUPERFLUID_MINION_TX } from './superfluidMinionTx';
 import { SWAPR_BOOST_TX } from './swaprBoostTx';
 import { TOKEN_TX } from './tokenTX';
 import { VAULT_TRANSFER_TX } from './transferContractTX';
-import { UBER_MINION_TX } from './uberMinionTX';
 import { WRAPNZAP_BOOST_TX } from './wrapNzapBoostTX';
 import { POSTER_BOOST_TX } from './posterBoostTX';
+import { MOLOCH_TOKEN_FACTORY_TX } from './molochTokenTX';
 
 // TEST LEGOS BEFORE PUSHING TO DEVELOP
 
@@ -34,7 +34,6 @@ import { POSTER_BOOST_TX } from './posterBoostTX';
 //     SAFE_MINION_TX,
 //     SUPERFLUID_MINION_TX,
 //     VAULT_TRANSFER_TX,
-//     UBER_MINION_TX,
 //     WRAPNZAP_BOOST_TX,
 //     NIFTYINK_BOOST_TX,
 //     RARIBLE_BOOST,
@@ -56,7 +55,6 @@ export const TX = {
   ...SAFE_MINION_TX,
   ...SUPERFLUID_MINION_TX,
   ...VAULT_TRANSFER_TX,
-  ...UBER_MINION_TX,
   ...WRAPNZAP_BOOST_TX,
   ...NIFTYINK_BOOST_TX,
   ...RARIBLE_BOOST,
@@ -65,4 +63,5 @@ export const TX = {
   ...TOKEN_TX,
   ...SWAPR_BOOST_TX,
   ...POSTER_BOOST_TX,
+  ...MOLOCH_TOKEN_FACTORY_TX,
 };

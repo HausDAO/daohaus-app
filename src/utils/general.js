@@ -17,8 +17,6 @@ export const SECONDS = {
   PER_WEEK: 604800,
 };
 
-export const JANUARY_2024 = 1705936544;
-
 export const calcSeconds = (val, unit) => {
   if (!unit || !val) return;
 
@@ -82,12 +80,6 @@ export const detailsToJSON = values => {
   }
   if (values.forumId) {
     details.forumId = values.forumId;
-  }
-  if (values.uberHaus) {
-    details.uberHaus = values.uberHaus;
-  }
-  if (values.uberType) {
-    details.uberType = values.uberType;
   }
   if (values.ratePerSec) {
     details.recipient = values.recipient;

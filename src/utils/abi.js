@@ -22,7 +22,6 @@ import SAFE_MULTISEND from '../contracts/safeMultisend.json';
 import SAFE_SIGNLIB from '../contracts/safeSignMessageLib.json';
 import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
 import SUPERFLUID_MINION_FACTORY from '../contracts/superfluidMinionFactory.json';
-import UBERHAUS_MINION from '../contracts/uberHausMinion.json';
 import VANILLA_MINION from '../contracts/minion.json';
 import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
@@ -34,11 +33,14 @@ import SWAPR_STAKING from '../contracts/swapr_staking.json';
 import { MINION_TYPES } from './proposalUtils';
 import SF_CFA from '../contracts/superfluidCFA.json';
 import SF_HOST from '../contracts/superfluid.json';
+import SF_SETH from '../contracts/superfluidSETHProxy.json';
 import SF_SUPERTOKEN from '../contracts/superfluidSupertoken.json';
 import SF_SUPERTOKEN_FACTORY from '../contracts/superfluidTokenFactory.json';
 import AMB_MODULE from '../contracts/ambModule.json';
 import AMB from '../contracts/iAmb.json';
 import SF_UUPS_PROXIABLE from '../contracts/uupsProxiable.json';
+import NATIVE_WRAPPER from '../contracts/nativeWrapper.json';
+import MOLOCH_TOKEN_FACTORY from '../contracts/molochTokenFactory.json';
 import { validate } from './validation';
 import { cacheABI, getCachedABI } from './localForage';
 
@@ -51,7 +53,6 @@ export const LOCAL_ABI = Object.freeze({
   ERC_1155,
   ERC_1155_METADATA,
   NIFTY_INK,
-  UBERHAUS_MINION,
   SUPERFLUID_MINION,
   SUPERFLUID_MINION_FACTORY,
   SAFE_MINION_FACTORY,
@@ -67,12 +68,15 @@ export const LOCAL_ABI = Object.freeze({
   DISPERSE_APP,
   SF_CFA,
   SF_HOST,
+  SF_SETH,
   SF_SUPERTOKEN,
   SF_SUPERTOKEN_FACTORY,
   SWAPR_STAKING,
   POSTER,
   AMB_MODULE,
   AMB,
+  NATIVE_WRAPPER,
+  MOLOCH_TOKEN_FACTORY,
 });
 
 const getBlockExplorerApiKey = chainID => {
@@ -374,7 +378,6 @@ export const getMinionAbi = minionType => {
     [MINION_TYPES.VANILLA]: VANILLA_MINION,
     [MINION_TYPES.SAFE]: SAFE_MINION,
     [MINION_TYPES.SUPERFLUID]: SUPERFLUID_MINION,
-    [MINION_TYPES.UBER]: UBERHAUS_MINION,
   };
   if (Object.keys(abis).includes(minionType)) {
     return abis[minionType];

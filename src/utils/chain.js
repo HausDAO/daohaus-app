@@ -47,7 +47,7 @@ export const supportedChains = {
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     poster: '0x000000000000cd17345801aa8147b8d3950260ff',
-
+    moloch_token_factory: '0x94b68149aA9603eeF3fD31A63f6d52AdB4f978D9',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
@@ -132,6 +132,7 @@ export const supportedChains = {
       staking: '0x732DB307337a5ceA1FD117AF808382FaC0AFAe8a',
     },
     poster: '0x917d84787A266F9D649d519A7Ec8445eA43514D8',
+    moloch_token_factory: '0x12d1a14c06c3b75e541ec7e30a87e13beeda2965',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',
@@ -176,7 +177,6 @@ export const supportedChains = {
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-subgraph',
     minion_factory_addr: '0xCE63803E265617c55567a7A7b584fF2dbD76210B',
-    uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
     transmutation_factory_addr: '0xbca622291fFe797C77a8Bc6D000584b22877e971',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
@@ -190,6 +190,7 @@ export const supportedChains = {
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    moloch_token_factory: '0x2298cc330a4c359aea3583ddd81bacfab53d7da5',
   },
   '0xa': {
     name: 'Optimism Mainnet',
@@ -240,6 +241,7 @@ export const supportedChains = {
     },
     escrow_minion: '', // TODO team will add
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    moloch_token_factory: '0xdb0f2d9ef30ffae97474d6db8c1f0e999934737d',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0xa': '', // TODO team will add
@@ -297,7 +299,6 @@ export const supportedChains = {
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
-    uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
     superfluid: {
       cfa: '0xEbdA4ceF883A7B12c4E669Ebc58927FBa8447C7D',
@@ -320,6 +321,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    moloch_token_factory: '0xF89e2f69FB1351D37b9F82e77bbF10A02cdC5042',
     dao_conditional_helper_addr: '0x55c8F8a71aD01FC707Bbb1A04d2c0Ef246973392',
     zodiac_amb_module: {
       amb_bridge_address: {
@@ -349,6 +351,7 @@ export const supportedChains = {
   '0x89': {
     name: 'Polygon',
     short_name: 'polygon',
+    shortNamePrefix: 'matic',
     nativeCurrency: 'MATIC',
     network: 'matic',
     networkAlt: 'polygon',
@@ -402,6 +405,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    moloch_token_factory: '0x651657ffc274f492c8006e847350e12ed1c8491a',
     dao_conditional_helper_addr: '0x8beE9422987ddd6fB57Cd546d184A0a6094DF7A8',
   },
   '0xa4b1': {
@@ -452,6 +456,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
+    moloch_token_factory: '0x691086c17418589688f0d3031cfc8d9400df8817',
     dao_conditional_helper_addr: '0xF5fb9ce16dbf5B0a7b632Ed5D3F0278E0043B7AE',
   },
   '0xa4ec': {
@@ -502,6 +507,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    moloch_token_factory: '',
   },
   // '0x4a': {
   //   name: 'IDChain',

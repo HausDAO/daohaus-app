@@ -17,7 +17,6 @@ import LexAvatar from '../assets/img/lex__avatar.png';
 import MGDAvatar from '../assets/img/mgd__avatar.jpg';
 import VenturesAvatar from '../assets/img/ventures__avatar.jpg';
 import RaidAvatar from '../assets/img/raidguild__avatar.png';
-import UberHausAvatar from '../assets/img/haus__avatar.png';
 
 const featuredDaoList = [
   {
@@ -59,14 +58,6 @@ const featuredDaoList = [
     name: 'Venture DAO',
     description: 'Investing in Web3 projects and teams',
     badges: ['Investments', 'Mainnet'],
-  },
-  {
-    address: '0x4bec8e49aa44bb520bd5e29d6358e22464b5eb68',
-    network: '0x64',
-    image: UberHausAvatar,
-    name: 'UberHaus',
-    description: 'The overseer of the DAOhaus Ecosystem',
-    badges: ['DAO of DAOs', 'xDai'],
   },
 ];
 

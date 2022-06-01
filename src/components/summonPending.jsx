@@ -21,7 +21,7 @@ import TextBox from './TextBox';
 import { POPUP_CONTENT } from '../data/txModalContent';
 import { supportedChains } from '../utils/chain';
 
-const SummonPending = ({ txHash, success, chainId, isUberHaus = false }) => {
+const SummonPending = ({ txHash, success, chainId }) => {
   const { daoid, daochain } = useParams();
   return (
     <ContentBox
@@ -88,13 +88,7 @@ const SummonPending = ({ txHash, success, chainId, isUberHaus = false }) => {
           <Box fontSize='xl' fontFamily='heading' fontWeight={700}>
             {POPUP_CONTENT.summonMoloch.successText}
           </Box>
-          <Button
-            as={RouterLink}
-            to={`/register/${chainId}/${success}${
-              isUberHaus ? `?parentDao=${daoid}&parentChainId=${daochain}` : ''
-            }`}
-            mt={3}
-          >
+          <Button as={RouterLink} to={`/register/${chainId}/${success}`} mt={3}>
             CONFIGURE DAO
           </Button>
         </Box>
@@ -130,16 +124,6 @@ const SummonPending = ({ txHash, success, chainId, isUberHaus = false }) => {
                 ),
               )}
             </Stack>
-            {!isUberHaus ? (
-              <>
-                <Box fontSize='xs' textAlign='left'>
-                  {POPUP_CONTENT.summonMoloch.waitingText}
-                </Box>
-                <Button variant='outline' as={RouterLink} to='/' mt={5}>
-                  GO TO HUB
-                </Button>
-              </>
-            ) : null}
           </Flex>
         </Box>
       )}

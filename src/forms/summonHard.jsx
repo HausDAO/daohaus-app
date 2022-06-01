@@ -17,7 +17,7 @@ import TextBox from '../components/TextBox';
 import TimeInput from '../components/timeInput';
 import { validateSummonresAndShares } from '../utils/summoning';
 
-const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
+const SummonHard = ({ daoData, handleSummon, networkName }) => {
   const [currentError, setCurrentError] = useState(null);
   const {
     register,
@@ -96,12 +96,6 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
               here as well, separated by a comma and a space (0x58eb...,
               0xf7s4..., etc). The first one will be the primary token.
             </Box>
-            {isUberHaus ? (
-              <Box my={5} color='secondary.500'>
-                We have pre-filled this with the the wrapped native token for
-                the network and the HAUS token.
-              </Box>
-            ) : null}
             <Textarea
               className='inline-field'
               name='approvedToken'
