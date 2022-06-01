@@ -24,9 +24,6 @@ export const HOME_DAO = gql`
         details
         minQuorum
         safeAddress
-        uberHausAddress
-        uberHausDelegate
-        uberHausDelegateRewardFactor
         crossChainMinion
         foreignChainId
         foreignSafeAddress
@@ -111,7 +108,6 @@ yesVotes
 molochAddress
 molochVersion
 minionAddress
-uberHausMinionExecuted
 minion {
   minionType
   minQuorum

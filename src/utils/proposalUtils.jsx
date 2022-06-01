@@ -35,10 +35,6 @@ export const PROPOSAL_TYPES = {
   WHITELIST: 'Whitelist Token Proposal',
   GUILDKICK: 'Guildkick Proposal',
   TRADE: 'Trade Proposal',
-  MINION_UBER_STAKE: 'UberHAUS Staking Proposal',
-  MINION_UBER_RQ: 'UberHAUS RageQuit Proposal',
-  MINION_UBER_DEL: 'UberHAUS Delegate Proposal',
-  MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
   MINION_SAFE: 'SAFE MINION V0',
@@ -71,14 +67,11 @@ export const MINION_TYPES = {
   SUPERFLUID: 'Superfluid minion',
   SAFE: 'SAFE MINION V0',
   CROSSCHAIN_SAFE: 'CC SAFE MINION V0', // TODO: Label feedback
-  UBER: 'UberHaus minion',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
   SAFE_MINION: 'actions',
-  //  UBERHAUS_MINION: 'appointments',
-  UBERHAUS_MINION: 'actions',
   SUPERFLUID_MINION: 'streams',
 };
 
@@ -185,27 +178,6 @@ const tryGetDetails = details => {
 };
 
 const getMinionProposalType = (proposal, details) => {
-  const getUberTypeFromDetails = details => {
-    // TODO - temp for bad prop
-    // if (
-    //   details?.uberType === 'staking'
-    // ) {
-    if (
-      details?.uberType === 'staking' ||
-      details?.uberType === PROPOSAL_TYPES.MINION_UBER_STAKE
-    ) {
-      return PROPOSAL_TYPES.MINION_UBER_STAKE;
-    }
-    if (details?.uberType === 'delegate') {
-      return PROPOSAL_TYPES.MINION_UBER_DEL;
-    }
-    if (details?.uberType === 'ragequit') {
-      return PROPOSAL_TYPES.MINION_UBER_RQ;
-    }
-    console.warn('Uberhaus Minion type not detected');
-    console.log(details);
-    return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
-  };
   const getUberTypeFromGraphData = proposal => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
@@ -227,9 +199,6 @@ const getMinionProposalType = (proposal, details) => {
     return details.proposalType;
   }
 
-  if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
-    return getUberTypeFromDetails(details);
-  }
   return getUberTypeFromGraphData(proposal);
 };
 
@@ -654,23 +623,6 @@ export const searchProposals = (rawAddress, filterArr, proposals) => {
     activeFilters.some(
       filter => proposal[filter.value] === address && proposal,
     ),
-  );
-};
-
-export const pendingUberHausStakingProposalChildDao = prop => {
-  return (
-    prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE &&
-    !prop.cancelled &&
-    !prop.uberHausMinionExecuted
-  );
-};
-
-export const pendingUberHausStakingProposal = (prop, minionAddress) => {
-  return (
-    prop.applicant === minionAddress &&
-    prop.proposalType === 'Member Proposal' &&
-    !prop.cancelled &&
-    !prop.processed
   );
 };
 

@@ -2,7 +2,6 @@ import Web3 from 'web3';
 
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { NFTService } from '../services/nftService';
-import { UberHausMinionService } from '../services/uberHausMinionService';
 import {
   DAO_POLL,
   MINION_POLL,
@@ -10,7 +9,6 @@ import {
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { TX_HASH } from '../graphQL/general';
-import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { SF_SUPERTOKEN_CREATED } from '../graphQL/superfluid-queries';
 import { createContract } from '../utils/contract';
 import { getContractABI, LOCAL_ABI } from '../utils/abi';
@@ -234,26 +232,6 @@ export const withdrawTokenFetch = async ({
   }
 };
 
-export const pollUberHausDelegateSet = async ({
-  uberHausAddress,
-  minionAddress,
-  chainID,
-}) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: UBERHAUS_MEMBER_DELEGATE,
-      variables: {
-        molochAddress: uberHausAddress,
-        memberAddress: minionAddress,
-      },
-    });
-    return res.members[0];
-  } catch (error) {
-    return error;
-  }
-};
-
 export const pollGuildFunds = async ({
   chainID,
   uberMinionAddress,
@@ -274,21 +252,4 @@ export const pollGuildFunds = async ({
   } catch (error) {
     return error;
   }
-};
-
-export const pollDelegateRewards = async ({
-  uberMinionAddress,
-  chainID,
-  delegateAddress,
-}) => {
-  try {
-    const delegate = await UberHausMinionService({
-      uberMinionAddress,
-      chainID,
-    })('delegateByAddress')(delegateAddress);
-    return delegate;
-  } catch (error) {
-    console.error(error);
-  }
-  return null;
 };

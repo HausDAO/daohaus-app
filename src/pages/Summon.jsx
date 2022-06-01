@@ -154,25 +154,6 @@ const Summon = () => {
     }
   };
 
-  // const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
-  //   const cloneData = {
-  //     ...daoConstants(injectedChain.chain_id),
-  //     summoner: '',
-  //     summonerAndShares: cloneMembers(daoMembers),
-  //     approvedToken:
-  //       injectedChain.chainId === daoNetwork
-  //         ? cloneTokens(daoOverview)
-  //         : tokenMsg,
-  //     ...cloneDaoPresets(daoOverview, daoMembers),
-  //   };
-
-  //   if (injectedChain.chainId !== daoNetwork) {
-  //     cloneData.proposalDeposit = '0';
-  //     cloneData.processingReward = '0';
-  //   }
-  //   setDaoData(cloneData);
-  // };
-
   return (
     <Layout>
       <MainViewLayout header='Summon'>

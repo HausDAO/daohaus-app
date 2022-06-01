@@ -27,8 +27,6 @@ export const defaultDaoData = [
   },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-  // temp hide uberhaus, remove in future pr
-  // { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },

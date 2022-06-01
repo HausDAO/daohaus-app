@@ -16,10 +16,8 @@ import { format } from 'date-fns';
 import ContentBox from './ContentBox';
 import ProfileMenu from './profileMenu';
 import TextBox from './TextBox';
-// import UberHausMemberAvatar from './uberHausMemberAvatar';
 import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
 import { calcPower, calcValue } from '../utils/profile';
-// import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const ProfileCard = ({
   overview,
@@ -72,7 +70,6 @@ const ProfileCard = ({
     return profile?.name ? profile.name : truncateAddr(userid);
   };
 
-  // console.log(memberEntity);
   return (
     <ContentBox>
       {userid ? (
@@ -197,33 +194,6 @@ const ProfileCard = ({
               </Link>
             </TextBox>
           )}
-
-          {/* // temp hide uberhaus, remove in future pr */}
-          {/* {memberEntity && memberEntity.isUberMinion && (
-            <Flex direction='column' width='100%'>
-              <TextBox size='xs' mt={5} mb={3}>
-                This is the UberHaus Minion for
-              </TextBox>
-              <Flex direction='row' justifyContent='space-between'>
-                <UberHausMemberAvatar
-                  addr={memberEntity.uberMinion.molochAddress}
-                  metadata={memberEntity.uberMeta}
-                  hideCopy
-                  alwaysShowName
-                />
-                <RouterLink
-                  to={`/dao/${UBERHAUS_DATA.NETWORK}/${memberEntity.uberMinion.molochAddress}`}
-                >
-                  <Icon
-                    as={RiLoginBoxLine}
-                    color='secondary.500'
-                    h='25px'
-                    w='25px'
-                  />
-                </RouterLink>
-              </Flex>
-            </Flex>
-          )} */}
         </Flex>
       ) : null}
     </ContentBox>

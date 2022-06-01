@@ -48,11 +48,6 @@ import ForeignChainSelect from './foreignChainSelect';
 import SwitchNetwork from './switchNetwork';
 import PrecomputedMinionName from './precomputedMinionName';
 import AmbEncoder from './ambEncoder';
-import UberHausDelegateInput from './uberHausDelegateInput';
-import UberHausTributeInput from './uberHausTributeInput';
-import UberHausRageQuitInput from './uberHausRageQuitInput';
-import UberHausWithdrawInput from './uberHausWithdrawInput';
-import UberHausPullInput from './uberHausPullInput';
 import Tutorial from './tutorial';
 import Tutorial2 from './tutorial2';
 import MarkdownEditor from './mdEditor';
@@ -201,21 +196,6 @@ export const InputFactory = props => {
   }
   if (type === 'minionTokenSelect') {
     return <MinionTokenSelect {...props} />;
-  }
-  if (type === 'uberHausDelegateInput') {
-    return <UberHausDelegateInput {...props} />;
-  }
-  if (type === 'uberHausTributeInput') {
-    return <UberHausTributeInput {...props} />;
-  }
-  if (type === 'uberHausRageQuitInput') {
-    return <UberHausRageQuitInput {...props} />;
-  }
-  if (type === 'uberHausWithdrawInput') {
-    return <UberHausWithdrawInput {...props} />;
-  }
-  if (type === 'uberHausPullInput') {
-    return <UberHausPullInput {...props} />;
   }
   if (type === 'memberImpact') {
     return <MemberImpact {...props} />;

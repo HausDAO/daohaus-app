@@ -17,7 +17,6 @@ import MemberCard from '../components/memberCard';
 import MembersChart from '../components/membersChart';
 import MemberInfoWrapper from '../components/memberInfoWrapper';
 import TextBox from '../components/TextBox';
-import UberHausMemberCard from '../components/uberHausMemberCard';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import {
@@ -207,19 +206,11 @@ const Members = React.memo(
               {listMembers?.map(member => {
                 return (
                   <Box key={member.id}>
-                    {member.uberMinion ? (
-                      <UberHausMemberCard
-                        member={member}
-                        selectMember={setSelectedMember}
-                        selectedMember={selectedMember}
-                      />
-                    ) : (
-                      <MemberCard
-                        member={member}
-                        selectMember={setSelectedMember}
-                        selectedMember={selectedMember}
-                      />
-                    )}
+                    <MemberCard
+                      member={member}
+                      selectMember={setSelectedMember}
+                      selectedMember={selectedMember}
+                    />
                   </Box>
                 );
               })}

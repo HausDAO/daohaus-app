@@ -44,7 +44,6 @@ const baseListFields = `
   molochAddress
   molochVersion
   minionAddress
-  uberHausMinionExecuted
   moloch {
     gracePeriodLength
     periodDuration

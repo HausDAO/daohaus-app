@@ -93,16 +93,6 @@ export const guildFundTest = (data, shouldEqual, pollId) => {
   );
 };
 
-export const uberHausDelegateSetTest = (data, shouldEqual, pollId) => {
-  if (data) {
-    return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
-  }
-  clearInterval(pollId);
-  throw new Error(
-    `Poll test did not recieve the expected results from the graph: ${data}`,
-  );
-};
-
 export const checkDelRewardsTest = (data, shouldEqual, pollId) => {
   if (data) {
     return data?.rewarded === true;
