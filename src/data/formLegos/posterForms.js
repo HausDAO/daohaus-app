@@ -11,8 +11,9 @@ export const POSTER_FORMS = {
   RATIFY_MD: {
     id: 'RATIFY_MD',
     dev: true,
-    title: 'Ratify Markdown',
-    description: 'Create a proposal to ratify markdown',
+    title: 'Publish & Ratify Document',
+    description:
+      'Create a Markdown document on IPFS and propose document for ratification by the DAO',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
     minionType: MINION_TYPES.SAFE,
     customWidth: '1000px',
@@ -58,8 +59,9 @@ export const POSTER_FORMS = {
   POST_IPFS_MD: {
     id: 'POST_IPFS_MD',
     dev: true,
-    title: 'Post Markdown to IPFS',
-    description: 'Post Markdown to IPFS using the Pinata API',
+    title: 'Publish New Document',
+    description:
+      'Create and post a Markdown document to IPFS using the Pinata API',
     tx: TX.POSTER_IPFS_MD,
     customWidth: '1000px',
     required: ['posterData.title', 'posterData.content'],
