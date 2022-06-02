@@ -72,7 +72,7 @@ export const POSTER_FORMS = {
     dev: true,
     title: 'Configure Document Location',
     description:
-      'Propose & edit where Ratified documents are shown in the DAO’s page',
+      "Propose & edit where Ratified documents are shown in the DAO's page",
     customWidth: '500px',
     required: ['docSelect', 'posterData.location'],
     tx: TX.POST_LOCATION,
