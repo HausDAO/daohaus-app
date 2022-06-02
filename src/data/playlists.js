@@ -60,7 +60,7 @@ export const BOOST_PLAYLISTS = {
   POSTER: {
     name: 'Poster',
     id: 'poster',
-    forms: ['RATIFY_MD', 'RATIFY_DAO_DOC', 'POST_IPFS_MD', 'POST_MD'],
+    forms: ['RATIFY_MD', 'RATIFY_DAO_DOC', 'POST_IPFS_MD', 'POST_LOCATION'],
   },
 };
 
