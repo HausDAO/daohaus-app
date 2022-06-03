@@ -73,13 +73,22 @@ export const POSTER_FORMS = {
     title: 'Configure Document Location',
     description:
       "Propose & edit where Ratified documents are shown in the DAO's page",
+    type: PROPOSAL_TYPES.POSTER_UPDATE_LOCATION,
+    minionType: MINION_TYPES.SAFE,
     customWidth: '500px',
-    required: ['docSelect', 'posterData.location'],
+    required: ['selectedMinion', 'docSelect', 'posterData.content'],
     tx: TX.POST_LOCATION,
-    fields: [[FIELD.DOC_SELECT, FIELD.POST_LOCATION_SELECT]],
-    additionalOptions: [
-      POSTER_DESCRIPTION,
-      { ...FIELD.TITLE, label: 'Proposal Title' },
+    fields: [
+      [
+        FIELD.MINION_SELECT,
+        FIELD.DOC_SELECT,
+        {
+          ...FIELD.POST_LOCATION_SELECT,
+          label: 'New Location',
+          placeholder: '--Update Location--',
+          name: 'newLocation',
+        },
+      ],
     ],
   },
 };
