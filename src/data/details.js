@@ -171,4 +171,8 @@ export const DETAILS = {
     title: `.values.title || Proposal to Ratify Content`,
     proposalType: '.formData.type',
   },
+  POSTER_LOCATION: {
+    title: `.values.title || Proposal to Update Doc Location`,
+    proposalType: '.formData.type',
+  },
 };

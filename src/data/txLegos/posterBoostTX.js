@@ -38,4 +38,15 @@ export const POSTER_BOOST_TX = {
     successMsg: 'Posted Doc!',
     argsFromCallback: 'postIPFS',
   },
+  POST_LOCATION: buildMultiTxAction({
+    actions: [
+      {
+        targetContract: '.contextData.chainConfig.poster',
+        abi: CONTRACTS.POSTER,
+        fnName: 'post',
+        args: ['.values.docContentData', POSTER_TAGS.MINION],
+      },
+    ],
+    detailsToJSON: DETAILS.POSTER_LOCATION,
+  }),
 };
