@@ -76,7 +76,7 @@ export const POSTER_FORMS = {
     type: PROPOSAL_TYPES.POSTER_UPDATE_LOCATION,
     minionType: MINION_TYPES.SAFE,
     customWidth: '500px',
-    required: ['selectedMinion', 'docSelect', 'posterData.content'],
+    required: ['selectedMinion', 'docSelect', 'posterData.location'],
     tx: TX.POST_LOCATION,
     fields: [
       [

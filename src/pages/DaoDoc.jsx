@@ -89,7 +89,7 @@ const DaoDoc = () => {
               {isRatified(doc) && <Badge mr={2}>Ratified</Badge>}
               {isIPFS(doc) && <Badge mr={2}>IPFS</Badge>}
               {isEncoded(doc) && <Badge mr={2}>Chain</Badge>}
-              {isSpecialLocation(doc) && <Badge mr={2}>doc.location</Badge>}
+              {isSpecialLocation(doc) && <Badge mr={2}>{doc?.location}</Badge>}
             </Flex>
           )}
         </Flex>
