@@ -14,6 +14,7 @@ const NoticeBanner = () => {
         <Link
           color='white'
           href='https://status.thegraph.com/incidents/l3vzzpl87l9w'
+          isExternal
         >
           Monitor the incident here
           <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
