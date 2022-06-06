@@ -7,9 +7,12 @@ import MobileNav from '../nav/mobileNav';
 import { themeImagePath } from '../utils/metadata';
 
 import '../global.css';
+import { useParams } from 'react-router-dom';
+import NoticeBanner from './noticeBanner';
 
 const Layout = ({ children, dao }) => {
   const { theme } = useCustomTheme();
+  const { daochain } = useParams();
   const mainNav = useBreakpointValue({
     lg: <DesktopNav dao={dao} />,
     md: <MobileNav dao={dao} />,
@@ -55,6 +58,7 @@ const Layout = ({ children, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
+        {daochain === '0x64' && <NoticeBanner />}
         {children}
       </Flex>
     </Flex>
