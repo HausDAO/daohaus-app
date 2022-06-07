@@ -295,6 +295,19 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  GOOGLE_LIT: {
+    title: 'Lit Google',
+    description: 'Share google documents with the dao',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.1',
+    pars: [
+      'This boost allows daos to share google docs with other users in the dao',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+      { href: 'https://github.com/LIT-Protocol', label: 'Lit Github' },
+    ],
+  },
 };
 
 export const COMMON_STEPS = {
@@ -678,6 +691,15 @@ export const BOOSTS = {
     networks: 'all',
     cost: 'free',
     settings: 'none',
+  },
+  GOOGLE_LIT: {
+    id: 'GOOGLE_LIT',
+    boostContent: CONTENT.GOOGLE_LIT,
+    steps: STEPS.BASIC_BOOST,
+    // playlist: BOOST_PLAYLISTS.GOOGLE_LIT,
+    categories: ['community'],
+    networks: { '0x64': true, '0x1': true, '0x4': true }, // TODO: Add more
+    cost: 'free',
   },
 };
 
