@@ -41,6 +41,7 @@ import ProposalsSpam from '../pages/ProposalsSpam';
 import SpamFilterSettings from '../pages/SpamFilterSettings';
 import DaoDocs from '../pages/daoDocs';
 import DaoDoc from '../pages/DaoDoc';
+import LitProtocolGoogle from '../pages/LitProtocolGoogle';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -241,6 +242,20 @@ const DaoRouter = () => {
             refetchMetaData={refetchMetaData}
           />
         </Route>
+        {/* <Route exact path={`${path}/boost/lit-protocol/google/settings`}>
+          <LitProtocolGoogleSettings
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
+        </Route> */}
+        <Route exact path={`${path}/boost/lit-protocol/google`}>
+          <LitProtocolGoogle
+            isMember={isMember}
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
+        </Route>
+
         <Route exact path={`${path}/party-favor`}>
           <PartyFavor isMember={isMember} />
         </Route>

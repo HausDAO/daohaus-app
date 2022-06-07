@@ -296,7 +296,7 @@ export const CONTENT = {
     ],
   },
   GOOGLE_LIT: {
-    title: 'Lit Google',
+    title: 'Lit Protocol Google Drive',
     description: 'Share google documents with the dao',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.1',
@@ -696,10 +696,23 @@ export const BOOSTS = {
     id: 'GOOGLE_LIT',
     boostContent: CONTENT.GOOGLE_LIT,
     steps: STEPS.BASIC_BOOST,
-    // playlist: BOOST_PLAYLISTS.GOOGLE_LIT,
     categories: ['community'],
-    networks: { '0x64': true, '0x1': true, '0x4': true }, // TODO: Add more
+    networks: {
+      // LIT_NETWORKS - https://github.com/LIT-Protocol/lit-js-sdk/blob/main/src/lib/constants.js#L30
+      '0x1': true,
+      '0x4': true,
+      '0x2a': true,
+      '0xa': true,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+      '0xa4ec': true,
+    },
     cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'boost/lit/settings',
+    },
   },
 };
 

@@ -62,11 +62,11 @@ export const BOOST_PLAYLISTS = {
     id: 'poster',
     forms: ['RATIFY_DAO_DOC', 'POST_IPFS_MD', 'POST_MD'],
   },
-  GOOGLE_LIT: {
-    name: 'Google Lit',
-    id: 'google_lit',
-    forms: ['SAFE_SUPERFLUID_STREAM'],
-  },
+  // GOOGLE_LIT: {
+  //   name: 'Google Lit',
+  //   id: 'google_lit',
+  //   forms: ['SAFE_SUPERFLUID_STREAM'],
+  // },
 };
 
 export const defaultProposals = {
