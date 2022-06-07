@@ -38,7 +38,7 @@ export const POSTER_BOOST_TX = {
     successMsg: 'Posted Doc!',
     argsFromCallback: 'postIPFS',
   },
-  POST_LOCATION: buildMultiTxAction({
+  POST_MD: buildMultiTxAction({
     actions: [
       {
         targetContract: '.contextData.chainConfig.poster',
