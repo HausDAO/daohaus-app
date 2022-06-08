@@ -30,6 +30,7 @@ export const HOME_DAO = gql`
         crossChainMinion
         foreignChainId
         foreignSafeAddress
+        safeMinionVersion
       }
       depositToken {
         tokenAddress

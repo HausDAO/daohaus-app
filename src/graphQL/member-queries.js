@@ -108,6 +108,7 @@ export const MEMBERS_LIST = gql`
         minions {
           minionAddress
           molochAddress
+          safeMinionVersion
         }
       }
       moloch {
