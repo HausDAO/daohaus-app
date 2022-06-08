@@ -15,8 +15,6 @@ import MainViewLayout from '../components/mainViewLayout';
 import {
   fetchDAODocs,
   getSpecialLocationDocs,
-  isEncoded,
-  isIPFS,
   isRatified,
 } from '../utils/poster';
 import Dropdown from '../components/dropdown';
