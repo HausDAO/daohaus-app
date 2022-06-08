@@ -67,8 +67,8 @@ export const POSTER_FORMS = {
       { ...FIELD.TITLE, label: 'Proposal Title' },
     ],
   },
-  POST_LOCATION: {
-    id: 'POST_LOCATION',
+  POST_MD: {
+    id: 'POST_MD',
     dev: true,
     title: 'Configure Document Location',
     description:
@@ -77,7 +77,7 @@ export const POSTER_FORMS = {
     minionType: MINION_TYPES.SAFE,
     customWidth: '500px',
     required: ['selectedMinion', 'docSelect', 'posterData.location'],
-    tx: TX.POST_LOCATION,
+    tx: TX.POST_MD,
     fields: [
       [
         FIELD.MINION_SELECT,
