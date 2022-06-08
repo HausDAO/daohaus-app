@@ -269,13 +269,14 @@ export const CONTENT = {
     ],
   },
   POSTER: {
-    title: 'DAO Poster',
-    description: 'Publish Markdown as a DAO using DAOhaus and Poster',
+    title: 'Publish Boost',
+    description:
+      'The Publish Boost helps your DAO create and post Markdown documents to IPFS. Once documents are published, the DAO can vote to ratify and display them in the DAO’s home and vaults page.',
     publisher: PUBLISHERS.DAOHAUS,
     version: '0.1',
     pars: [
-      'Poster is a simple one function contract that can post data in any shape or size to chain.',
-      'Poster can be used to provide on-boarding information to users, ratify important DAO documents, organize data DAO documents that are stored on IPFS',
+      'This is useful for providing important information to people visiting the DAO’s page, such as new member handbooks, process documents or treasury memos.',
+      'Through the Poster contract, IPFS and the DAO’s voting process, the documents are published, ratified and displayed in a decentralized and trustless way.',
     ],
     externalLinks: [
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
