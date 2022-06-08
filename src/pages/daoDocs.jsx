@@ -30,16 +30,6 @@ const filters = {
     name: 'All Docs',
     fn: docs => docs,
   },
-  IPFS: {
-    value: 'IPFS',
-    name: 'IPFS',
-    fn: docs => docs.filter(doc => isIPFS(doc)),
-  },
-  onchain: {
-    value: 'onchain',
-    name: 'On Chain',
-    fn: docs => docs.filter(doc => isEncoded(doc)),
-  },
   ratified: {
     value: 'ratified',
     name: 'Ratified',
