@@ -153,7 +153,7 @@ export const handleLoadCurrentUser = async authSig => {
       displayName: profileData.displayName,
       avatar: profileData.photoLink,
     };
-    console.log('info:::::', userInfo, userProfile);
-    await getAllSharedGoogleDocs(authSig, userProfile.idOnService);
+
+    return userProfile;
   }
 };

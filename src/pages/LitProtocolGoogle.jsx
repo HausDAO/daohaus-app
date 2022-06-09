@@ -22,6 +22,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   const [googleDocs, setgoogleDocs] = useState({});
   const [showSignatureButton, setShowSignatureButton] = useState(false);
   const [authSig, setAuthSig] = useState(null);
+  const [profile, setProfile] = useState(null);
   const { errorToast } = useOverlay();
 
   // useEffect(() => {
@@ -40,22 +41,20 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   useEffect(() => {
     const localAuthSig = loadStoredAuthSig();
 
-    setShowSignatureButton(true);
     if (localAuthSig) {
+      setShowSignatureButton(true);
       setAuthSig(localAuthSig);
-      checkIfUserExists(authSig)
+      checkIfUserExists(localAuthSig)
         .then(res => {
           if (res.data.status === 'success') {
-            handleLoadCurrentUser(authSig);
+            setProfile(handleLoadCurrentUser(localAuthSig));
             setShowSignatureButton(false);
           } else {
             errorToast(res.data.message);
-            setShowSignatureButton(true);
           }
         })
         .catch(err => {
           errorToast(err.message);
-          setShowSignatureButton(true);
         });
     } else {
       setShowSignatureButton(true);
@@ -65,8 +64,9 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   useEffect(() => {
     const getAllGoogleDocs = async () => {
       try {
-        const localgoogleDocs = await getAllSharedGoogleDocs();
-        setgoogleDocs(localgoogleDocs);
+        setgoogleDocs(
+          await getAllSharedGoogleDocs(authSig, profile?.idOnService),
+        );
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -80,11 +80,13 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
     if (
       daoMetaData &&
       'GOOGLE_LIT' in daoMetaData?.boosts &&
-      daoMetaData?.boosts?.GOOGLE_LIT.active
+      daoMetaData?.boosts?.GOOGLE_LIT.active &&
+      profile?.idOnService &&
+      authSig?.sig
     ) {
       getAllGoogleDocs();
     }
-  }, [daoMetaData?.boosts]);
+  }, [daoMetaData?.boosts, authSig, profile?.idOnService]);
 
   const performWithAuthSig = async (
     callback,
@@ -126,7 +128,10 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   const handleSignAuthMessage = async () => {
     console.log('chain', daoMetaData);
     await performWithAuthSig(
-      async authSig => await handleLoadCurrentUser(authSig),
+      async authSig => {
+        const user = await handleLoadCurrentUser(authSig);
+        setProfile(user);
+      },
       {
         chain: daoMetaData?.network,
       },
