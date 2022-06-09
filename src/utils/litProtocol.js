@@ -118,18 +118,20 @@ export const getUserProfile = async authSig => {
   }
 };
 
-export const getAllSharedGoogleDocs = async (authSig, idOnService) => {
+export const getAllSharedGoogleDocs = async daoAddress => {
   try {
-    const response = await fetch(`${LIT_API_HOST}/api/google/getAllShares`, {
+    const response = await fetch(`${LIT_API_HOST}/api/google/getDAOShares`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        authSig,
-        idOnService,
-      }),
+      body: JSON.stringify({ daoAddress, source: 'daohaus' }),
     });
+
+    // body: JSON.stringify({
+    //   authSig,
+    //   idOnService,
+    // }),
 
     return response.json();
   } catch (err) {

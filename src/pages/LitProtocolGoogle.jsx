@@ -62,10 +62,13 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   }, []);
 
   useEffect(() => {
+    console.log(daoMetaData?.contractAddress);
+    if (!daoMetaData?.contractAddress) return;
+
     const getAllGoogleDocs = async () => {
       try {
         setgoogleDocs(
-          await getAllSharedGoogleDocs(authSig, profile?.idOnService),
+          await getAllSharedGoogleDocs(daoMetaData.contractAddress),
         );
         setLoading(false);
       } catch (err) {
@@ -86,7 +89,12 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
     ) {
       getAllGoogleDocs();
     }
-  }, [daoMetaData?.boosts, authSig, profile?.idOnService]);
+  }, [
+    daoMetaData?.boosts,
+    authSig,
+    profile?.idOnService,
+    !daoMetaData?.contractAddress,
+  ]);
 
   const performWithAuthSig = async (
     callback,
