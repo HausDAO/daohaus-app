@@ -40,7 +40,7 @@ export const supportedChains = {
       version: 'v1',
     },
     safeMinion: {
-      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      minion_factory_addr: '0x594AF060c08EeA9f559Bc668484E50596BcB2CFB',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
