@@ -13,7 +13,6 @@ import {
   handleLoadCurrentUser,
   getAllSharedGoogleDocs,
   STANDARD_CONTRACT_TYPE,
-  storeAuthSig,
   loadStoredAuthSig,
 } from '../utils/litProtocol';
 
@@ -23,38 +22,25 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   const [googleDocs, setgoogleDocs] = useState({});
   const [showSignatureButton, setShowSignatureButton] = useState(false);
   const [authSig, setAuthSig] = useState(null);
-  const [litProtocolClient, setLitProtocolClient] = useState(null);
   const { errorToast } = useOverlay();
 
-  const getAllGoogleDocs = async () => {
-    try {
-      const localgoogleDocs = await getAllSharedGoogleDocs();
-      setgoogleDocs(localgoogleDocs);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-      errorToast({
-        title: 'Fetching google docs failed',
-      });
-    }
-  };
+  // useEffect(() => {
+  //   const loadLitClient = async () => {
+  //     // potentially build a client incorporate error handling
+  //     // https://developer.litprotocol.com/docs/LitTools/JSSDK/errorHandling
+  //     const client = new LitJsSdk.LitNodeClient();
+  //     console.log(client);
+  //     await client.connect();
+  //     setLitProtocolClient(client);
+  //   };
 
-  useEffect(() => {
-    const loadLitClient = async () => {
-      // potentially build a client incorporate error handling
-      // https://developer.litprotocol.com/docs/LitTools/JSSDK/errorHandling
-      const client = new LitJsSdk.LitNodeClient();
-      await client.connect();
-      setLitProtocolClient(client);
-    };
-
-    loadLitClient();
-  }, []);
+  //   loadLitClient();
+  // }, []);
 
   useEffect(() => {
     const localAuthSig = loadStoredAuthSig();
 
+    setShowSignatureButton(true);
     if (localAuthSig) {
       setAuthSig(localAuthSig);
       checkIfUserExists(authSig)
@@ -64,17 +50,33 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
             setShowSignatureButton(false);
           } else {
             errorToast(res.data.message);
+            setShowSignatureButton(true);
           }
         })
         .catch(err => {
           errorToast(err.message);
+          setShowSignatureButton(true);
         });
     } else {
       setShowSignatureButton(true);
     }
-  }, [authSig]);
+  }, []);
 
   useEffect(() => {
+    const getAllGoogleDocs = async () => {
+      try {
+        const localgoogleDocs = await getAllSharedGoogleDocs();
+        setgoogleDocs(localgoogleDocs);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        errorToast({
+          title: 'Fetching google docs failed',
+        });
+      }
+    };
+
     if (
       daoMetaData &&
       'GOOGLE_LIT' in daoMetaData?.boosts &&
@@ -90,11 +92,11 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   ) => {
     let currentAuthSig = authSig;
     if (!currentAuthSig) {
+      // console.log(litProtocolClient);
       try {
-        currentAuthSig = await litProtocolClient.checkAndSignAuthMessage({
+        currentAuthSig = await LitJsSdk.checkAndSignAuthMessage({
           chain,
         });
-        storeAuthSig(currentAuthSig);
         setAuthSig(currentAuthSig);
       } catch (e) {
         if (e.code === 4001) {
@@ -112,6 +114,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
           errorToast({ title: e.message });
           return false;
         } else {
+          console.log(e);
           throw e;
         }
       }
@@ -121,10 +124,11 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   };
 
   const handleSignAuthMessage = async () => {
+    console.log('chain', daoMetaData);
     await performWithAuthSig(
       async authSig => await handleLoadCurrentUser(authSig),
       {
-        chain: daoMetaData?.chain,
+        chain: daoMetaData?.network,
       },
     );
   };
