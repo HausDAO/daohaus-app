@@ -711,7 +711,7 @@ export const BOOSTS = {
     cost: 'free',
     settings: {
       type: 'internalLink',
-      appendToDaoPath: 'boost/lit/settings',
+      appendToDaoPath: 'boost/lit-protocol/google',
     },
   },
 };
