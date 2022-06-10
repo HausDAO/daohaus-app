@@ -47,7 +47,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
       setLoading(false);
       return;
     }
-    console.log(profile?.idOnService, authSig?.sig, daoMetaData?.boosts);
     const getAllGoogleDocs = async () => {
       try {
         setgoogleDocs(await getSharedGoogleDocs(authSig, profile?.idOnService));
@@ -64,20 +63,14 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
       setLoading(false);
     };
 
-    console.log(
-      daoMetaData,
-      daoMetaData?.boosts?.GOOGLE_LIT.active,
-      profile?.idOnService,
-      authSig?.sig,
-
-      'isTrue?',
+    if (
       daoMetaData &&
-        daoMetaData?.boosts?.GOOGLE_LIT.active &&
-        profile?.idOnService &&
-        authSig?.sig,
-    );
-
-    getAllGoogleDocs();
+      daoMetaData?.boosts?.GOOGLE_LIT.active &&
+      profile?.idOnService &&
+      authSig?.sig
+    ) {
+      getAllGoogleDocs();
+    }
   }, [daoMetaData, authSig, profile]);
 
   const performWithAuthSig = async (
@@ -86,7 +79,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   ) => {
     let currentAuthSig = authSig;
     if (!currentAuthSig) {
-      // console.log(litProtocolClient);
       try {
         currentAuthSig = await LitJsSdk.checkAndSignAuthMessage({
           chain,
@@ -119,7 +111,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
 
   const handleSignAuthMessage = async () => {
     setLoading(true);
-    console.log('chain', daoMetaData);
     await performWithAuthSig(
       async authSig => {
         const user = await handleLoadCurrentUser(authSig);
@@ -150,7 +141,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
           isExternal
           mr={10}
         >
-          Sign
+          Sign In
         </Button>
       </Flex>
     );
@@ -180,7 +171,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
     </Flex>
   );
 
-  console.log(daoMetaData);
   return (
     <MainViewLayout
       header='Lit Protocol - Google Docs'
@@ -191,7 +181,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
         {showSignatureButton && <LitAuthSigButton />}
         {!loading ? (
           // daoMetaData && 'googleLit' in daoMetaData?.boosts ? (
-          daoMetaData ? (
+          daoMetaData && daoMetaData?.boosts?.GOOGLE_LIT?.active ? (
             Object.keys(googleDocs).length > 0 ? (
               Object.values(googleDocs)
                 .slice(0, 10)
@@ -203,11 +193,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
                         googleDoc={googleDoc}
                       />
                     ),
-                  /* <SnapshotCard
-                      key={googleLit.id}
-                      googleLitId={googleLit.od}
-                      googleLit={googleLit}
-                    /> */
                 )
             ) : (
               <Flex mt='100px' w='100%' justify='center'>
