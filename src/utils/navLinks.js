@@ -21,8 +21,6 @@ export const defaultDaoDataLoading = [
   { icon: RiTeamLine, label: 'Members', path: 'members' },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-  // temp hide uberhaus, remove in future pr
-  // { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultDaoData = [
   { icon: RiBookMarkLine, label: 'Proposals', path: 'proposals' },
@@ -75,7 +73,7 @@ export const generateDaoLinks = (
 };
 
 export const generateDaoLinksLoading = (chainID, daoID) => {
-  let links = [...defaultDaoData];
+  let links = [...defaultDaoDataLoading];
   return links.map(link => {
     const path = `/dao/${chainID}/${daoID}/${link.path}`;
     return {
