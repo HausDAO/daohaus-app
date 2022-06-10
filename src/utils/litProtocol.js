@@ -33,7 +33,7 @@ export const loadStoredAuthSig = () => {
   return JSON.parse(localStorage.getItem(AUTH_SIG_STORAGE_KEY));
 };
 
-export const googleLitSignOut = () => {
+export const deleteStoredAuthSig = () => {
   return localStorage.removeItem(AUTH_SIG_STORAGE_KEY);
 };
 
@@ -120,6 +120,23 @@ export const getUserProfile = async authSig => {
   try {
     // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L172-L194
     const response = await fetch(`${LIT_API_HOST}/api/google/getUserProfile`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ authSig }),
+    });
+
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const signOutUser = async authSig => {
+  try {
+    // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L381
+    const response = await fetch(`${LIT_API_HOST}/api/google/signOutUser`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

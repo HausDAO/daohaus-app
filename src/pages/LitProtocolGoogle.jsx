@@ -15,7 +15,8 @@ import {
   getSharedDaoGoogleDocs,
   STANDARD_CONTRACT_TYPE,
   loadStoredAuthSig,
-  googleLitSignOut,
+  deleteStoredAuthSig,
+  signOutUser,
 } from '../utils/litProtocol';
 import GoogleLitCard from '../components/GoogleLitCard';
 
@@ -43,7 +44,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   }, []);
 
   useEffect(() => {
-    if (!profile?.idOnService || !authSig?.sig || !daoMetaData?.boosts) {
+    if (!profile || !daoMetaData?.boosts) {
       setLoading(false);
       return;
     }
@@ -63,15 +64,10 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
       setLoading(false);
     };
 
-    if (
-      daoMetaData &&
-      daoMetaData?.boosts?.GOOGLE_LIT.active &&
-      profile?.idOnService &&
-      authSig?.sig
-    ) {
+    if (daoMetaData && daoMetaData?.boosts?.GOOGLE_LIT.active) {
       getAllGoogleDocs();
     }
-  }, [daoMetaData, authSig, profile]);
+  }, [daoMetaData?.boosts, authSig, profile]);
 
   const performWithAuthSig = async (
     callback,
@@ -124,10 +120,15 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   };
 
   const handleSignOut = async () => {
-    googleLitSignOut();
-    setProfile(null);
-    setAuthSig(null);
-    setShowSignatureButton(true);
+    try {
+      await signOutUser();
+      deleteStoredAuthSig();
+      setProfile(null);
+      setAuthSig(null);
+      setShowSignatureButton(true);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   console.log(googleDocs);
@@ -141,7 +142,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
           isExternal
           mr={10}
         >
-          Sign In
+          Authenticate Lit Protocol
         </Button>
       </Flex>
     );
