@@ -25,16 +25,31 @@ const USER_ERROR_CODE_MAP = {
   rpc_error: 'There are issues talking to the chain, please try again later',
 };
 
-export const getLitStorageKey = daoAddress => {
-  return `${AUTH_SIG_STORAGE_KEY}-${daoAddress}`;
-};
-
-export const storeAuthSig = (authSig, daoAddress) => {
-  localStorage.setItem(getLitStorageKey(daoAddress), JSON.stringify(authSig));
+export const storeAuthSig = authSig => {
+  localStorage.setItem(AUTH_SIG_STORAGE_KEY, JSON.stringify(authSig));
 };
 
 export const loadStoredAuthSig = () => {
   return JSON.parse(localStorage.getItem(AUTH_SIG_STORAGE_KEY));
+};
+
+export const googleLitSignOut = () => {
+  return localStorage.removeItem(AUTH_SIG_STORAGE_KEY);
+};
+
+export const getAssetType = assetTypeScope => {
+  if (assetTypeScope.includes('file')) {
+    return 'file';
+  } else if (assetTypeScope.includes('document')) {
+    return 'document';
+  } else if (assetTypeScope.includes('spreadsheets')) {
+    return 'spreadsheets';
+  } else if (assetTypeScope.includes('presentation')) {
+    return 'presentation';
+  } else if (assetTypeScope.includes('forms')) {
+    return 'forms';
+  }
+  return assetTypeScope.split('google-apps.')[1];
 };
 
 const handleServerLitError = e => {
@@ -81,8 +96,8 @@ const handleServerLitError = e => {
 // };
 
 export const checkIfUserExists = async authSig => {
-  // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L104-L170
   try {
+    // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L104-L170
     const response = await fetch(
       `${LIT_API_HOST}/api/google/checkIfUserExists`,
       {
@@ -102,8 +117,8 @@ export const checkIfUserExists = async authSig => {
 };
 
 export const getUserProfile = async authSig => {
-  // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L172-L194
   try {
+    // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L172-L194
     const response = await fetch(`${LIT_API_HOST}/api/google/getUserProfile`, {
       method: 'POST',
       headers: {
@@ -118,8 +133,29 @@ export const getUserProfile = async authSig => {
   }
 };
 
-export const getAllSharedGoogleDocs = async daoAddress => {
+export const getSharedGoogleDocs = async (authSig, idOnService) => {
   try {
+    // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L196
+    const response = await fetch(`${LIT_API_HOST}/api/google/getAllShares`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        authSig,
+        idOnService,
+      }),
+    });
+
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getSharedDaoGoogleDocs = async daoAddress => {
+  try {
+    // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L398
     const response = await fetch(`${LIT_API_HOST}/api/google/getDAOShares`, {
       method: 'POST',
       headers: {
@@ -127,11 +163,6 @@ export const getAllSharedGoogleDocs = async daoAddress => {
       },
       body: JSON.stringify({ daoAddress, source: 'daohaus' }),
     });
-
-    // body: JSON.stringify({
-    //   authSig,
-    //   idOnService,
-    // }),
 
     return response.json();
   } catch (err) {

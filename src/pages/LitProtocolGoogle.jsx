@@ -11,66 +11,48 @@ import TextBox from '../components/TextBox';
 import {
   checkIfUserExists,
   handleLoadCurrentUser,
-  getAllSharedGoogleDocs,
+  getSharedGoogleDocs,
+  getSharedDaoGoogleDocs,
   STANDARD_CONTRACT_TYPE,
   loadStoredAuthSig,
+  googleLitSignOut,
 } from '../utils/litProtocol';
+import GoogleLitCard from '../components/GoogleLitCard';
 
 const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   const { daoid, daochain } = useParams();
   const [loading, setLoading] = useState(true);
   const [googleDocs, setgoogleDocs] = useState({});
-  const [showSignatureButton, setShowSignatureButton] = useState(false);
+  const [showSignatureButton, setShowSignatureButton] = useState(true);
   const [authSig, setAuthSig] = useState(null);
   const [profile, setProfile] = useState(null);
   const { errorToast } = useOverlay();
-
-  // useEffect(() => {
-  //   const loadLitClient = async () => {
-  //     // potentially build a client incorporate error handling
-  //     // https://developer.litprotocol.com/docs/LitTools/JSSDK/errorHandling
-  //     const client = new LitJsSdk.LitNodeClient();
-  //     console.log(client);
-  //     await client.connect();
-  //     setLitProtocolClient(client);
-  //   };
-
-  //   loadLitClient();
-  // }, []);
 
   useEffect(() => {
     const localAuthSig = loadStoredAuthSig();
 
     if (localAuthSig) {
-      setShowSignatureButton(true);
       setAuthSig(localAuthSig);
-      checkIfUserExists(localAuthSig)
-        .then(res => {
-          if (res.data.status === 'success') {
-            setProfile(handleLoadCurrentUser(localAuthSig));
-            setShowSignatureButton(false);
-          } else {
-            errorToast(res.data.message);
-          }
-        })
-        .catch(err => {
-          errorToast(err.message);
-        });
+      if (checkIfUserExists(localAuthSig)) {
+        setProfile(handleLoadCurrentUser(localAuthSig));
+        setShowSignatureButton(false);
+      }
     } else {
       setShowSignatureButton(true);
     }
   }, []);
 
   useEffect(() => {
-    console.log(daoMetaData?.contractAddress);
-    if (!daoMetaData?.contractAddress) return;
-
+    if (!profile?.idOnService || !authSig?.sig || !daoMetaData?.boosts) {
+      setLoading(false);
+      return;
+    }
+    console.log(profile?.idOnService, authSig?.sig, daoMetaData?.boosts);
     const getAllGoogleDocs = async () => {
       try {
-        setgoogleDocs(
-          await getAllSharedGoogleDocs(daoMetaData.contractAddress),
-        );
+        setgoogleDocs(await getSharedGoogleDocs(authSig, profile?.idOnService));
         setLoading(false);
+        setShowSignatureButton(false);
       } catch (err) {
         console.log(err);
         setLoading(false);
@@ -78,23 +60,25 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
           title: 'Fetching google docs failed',
         });
       }
+
+      setLoading(false);
     };
 
-    if (
+    console.log(
+      daoMetaData,
+      daoMetaData?.boosts?.GOOGLE_LIT.active,
+      profile?.idOnService,
+      authSig?.sig,
+
+      'isTrue?',
       daoMetaData &&
-      'GOOGLE_LIT' in daoMetaData?.boosts &&
-      daoMetaData?.boosts?.GOOGLE_LIT.active &&
-      profile?.idOnService &&
-      authSig?.sig
-    ) {
-      getAllGoogleDocs();
-    }
-  }, [
-    daoMetaData?.boosts,
-    authSig,
-    profile?.idOnService,
-    !daoMetaData?.contractAddress,
-  ]);
+        daoMetaData?.boosts?.GOOGLE_LIT.active &&
+        profile?.idOnService &&
+        authSig?.sig,
+    );
+
+    getAllGoogleDocs();
+  }, [daoMetaData, authSig, profile]);
 
   const performWithAuthSig = async (
     callback,
@@ -134,11 +118,13 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   };
 
   const handleSignAuthMessage = async () => {
+    setLoading(true);
     console.log('chain', daoMetaData);
     await performWithAuthSig(
       async authSig => {
         const user = await handleLoadCurrentUser(authSig);
         setProfile(user);
+        setLoading(false);
       },
       {
         chain: daoMetaData?.network,
@@ -146,7 +132,28 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
     );
   };
 
+  const handleSignOut = async () => {
+    googleLitSignOut();
+    setProfile(null);
+    setAuthSig(null);
+    setShowSignatureButton(true);
+  };
+
   console.log(googleDocs);
+
+  const LitAuthSigButton = () =>
+    isMember && (
+      <Flex>
+        <Button
+          onClick={handleSignAuthMessage}
+          rightIcon={<RiAddFill />}
+          isExternal
+          mr={10}
+        >
+          Sign
+        </Button>
+      </Flex>
+    );
 
   const addNewGoogleDoc = isMember && (
     <Flex>
@@ -159,78 +166,63 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
       >
         Share Google Drive Item
       </Button>
-      {/*
-      <Button
-        as={RouterLink}
-        to={`/dao/${daochain}/${daoid}/boost/snapshot/settings`}
-      >
-        Boost Settings
-      </Button> */}
-    </Flex>
-  );
 
-  const LitAuthSigButton = () =>
-    isMember ? (
-      <Flex>
+      {profile && (
         <Button
-          onClick={handleSignAuthMessage}
-          href={`https://oauth-app.litgateway.com/google?source=daohaus&dao_address=${daoMetaData?.address}&dao_name=${daoMetaData?.name}&contract_type=${STANDARD_CONTRACT_TYPE}`}
+          onClick={handleSignOut}
           rightIcon={<RiAddFill />}
           isExternal
           mr={10}
         >
-          Sign
+          Sign Out
         </Button>
-        {/*
-      <Button
-        as={RouterLink}
-        to={`/dao/${daochain}/${daoid}/boost/lit-protocol/google/settings`}
-      >
-        Boost Settings
-      </Button> */}
-      </Flex>
-    ) : (
-      <Flex>You are not a member of this Dao</Flex>
-    );
+      )}
+    </Flex>
+  );
 
+  console.log(daoMetaData);
   return (
     <MainViewLayout
       header='Lit Protocol - Google Docs'
       headerEl={Object.keys(googleDocs).length > 0 && addNewGoogleDoc}
       isDao
     >
-      {showSignatureButton ? (
-        <LitAuthSigButton />
-      ) : (
-        <Flex as={Stack} direction='column' spacing={4} w='100%'>
-          {!loading ? (
-            // daoMetaData && 'googleLit' in daoMetaData?.boosts ? (
-            daoMetaData && 'GOOGLE_LIT' in daoMetaData?.boosts ? (
-              Object.keys(googleDocs).length > 0 ? (
-                Object.values(googleDocs)
-                  .slice(0, 10)
-                  .map(googleLit => ({
-                    /* <SnapshotCard
+      <Flex as={Stack} direction='column' spacing={4} w='100%'>
+        {showSignatureButton && <LitAuthSigButton />}
+        {!loading ? (
+          // daoMetaData && 'googleLit' in daoMetaData?.boosts ? (
+          daoMetaData ? (
+            Object.keys(googleDocs).length > 0 ? (
+              Object.values(googleDocs)
+                .slice(0, 10)
+                .map(
+                  googleDoc =>
+                    googleDoc && (
+                      <GoogleLitCard
+                        key={googleDoc?.id}
+                        googleDoc={googleDoc}
+                      />
+                    ),
+                  /* <SnapshotCard
                       key={googleLit.id}
                       googleLitId={googleLit.od}
                       googleLit={googleLit}
                     /> */
-                  }))
-              ) : (
-                <Flex mt='100px' w='100%' justify='center'>
-                  <TextBox variant='value' size='lg'>
-                    No Google Docs found.
-                  </TextBox>
-                </Flex>
-              )
+                )
             ) : (
-              <BoostNotActive />
+              <Flex mt='100px' w='100%' justify='center'>
+                <TextBox variant='value' size='lg'>
+                  No Google Docs found.
+                </TextBox>
+              </Flex>
             )
           ) : (
-            <Spinner size='xl' />
-          )}
-        </Flex>
-      )}
+            <BoostNotActive />
+          )
+        ) : (
+          <Spinner size='xl' />
+        )}
+      </Flex>
     </MainViewLayout>
   );
 };
