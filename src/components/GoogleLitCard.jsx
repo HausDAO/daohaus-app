@@ -6,19 +6,6 @@ import { getAssetType } from '../utils/litProtocol';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 
-// accessControlConditions: "[{\"contractAddress\":\"0x33505b8dba67eb39fd65e3270cefacbe5b9da4cd\",\"standardContractType\":\"MolochDAOv2.1\",\"chain\":\"ethereum\",\"method\":\"members\",\"parameters\":[\":userAddress\"],\"returnValueTest\":{\"comparator\":\"=\",\"value\":\"true\"}}]"
-// assetIdOnService: "1wncxq6LEzvAHfGXVcOvNeHU0t-0IcE1ERSeKTApvsLo"
-// assetType: "application/vnd.google-apps.spreadsheet"
-// connectedServiceId: "c49459b7-b966-4f29-82b6-56bf2ff0e577"
-// createdAt: new Date("2022-06-07T20:33:30.392Z")
-// daoAddress: null
-// id: "a6062ff0-a351-44b3-bf17-c6c7b20643cb"
-// name: "ETH NYC - June 23th - June 28th"
-// role: "reader"
-// source: null
-// updatedAt: "2022-06-07T20:33:30.392Z"
-// userId: "0xb0cffe0260bf4ea7b59915fbea17273a8b9209f6"
-
 const GoogleLitCard = ({ googleDoc }) => {
   // https://oauth-app.litgateway.com/google/l/5e5ec2da-578c-43b5-ba76-c326526f8621
   return (

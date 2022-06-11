@@ -1,5 +1,5 @@
 export const STANDARD_CONTRACT_TYPE = 'MolochDAOv2.1';
-export const LIT_API_HOST = 'https://oauth-app.litgateway.com'; // TODO get lit protocol host endpoint
+export const LIT_API_HOST = 'https://oauth-app.litgateway.com';
 const AUTH_SIG_STORAGE_KEY = 'lit-auth-signature';
 
 // https://developer.litprotocol.com/docs/LitTools/JSSDK/errorHandling
@@ -52,7 +52,7 @@ export const getAssetType = assetTypeScope => {
   return assetTypeScope.split('google-apps.')[1];
 };
 
-const handleServerLitError = e => {
+export const handleLitServerError = e => {
   if (e.code === 4001) {
     // redirect to lit oauth connect UI
     // window.location = 'https://litgateway.com/apps';
@@ -76,24 +76,30 @@ const handleServerLitError = e => {
   }
 };
 
-// export const loadLitProtocol = async () => {
-//   // potentially build a client incorporate error handling
-//   // https://developer.litprotocol.com/docs/LitTools/JSSDK/errorHandling
-//   const client = new LitJsSdk.LitNodeClient();
-//   await client.connect();
-// };
+export const redirectToLitOauthUI = async () => {
+  window.location.replace('https://oauth-app.litgateway.com/google');
+};
 
-// export const signLitAuth = async chain => {
-//   try {
-//     return await litProtocolClient.checkAndSignAuthMessage({
-//       chain,
-//     });
-//     // storeAuthSig(currentAuthSig);
-//     // setAuthSig(currentAuthSig);
-//   } catch (e) {
-//     return handleServerLitError(e);
-//   }
-// };
+export const handleLoadCurrentUser = async authSig => {
+  const userInfo = await getUserProfile(authSig);
+  // check for google drive scope and sign user out if scope is not present
+  if (
+    userInfo['scope'] &&
+    userInfo['scope'].includes('https://www.googleapis.com/auth/drive.file')
+  ) {
+    const profileData = JSON.parse(userInfo.extraData);
+    // if accessToken is necessary for certain calls (potentially "unshare" document)
+    // const accessToken = profileData.accessToken; // if we need jwt access token for some api call
+    const userProfile = {
+      idOnService: userInfo.idOnService,
+      email: userInfo.email,
+      displayName: profileData.displayName,
+      avatar: profileData.photoLink,
+    };
+
+    return userProfile;
+  }
+};
 
 export const checkIfUserExists = async authSig => {
   try {
@@ -184,26 +190,5 @@ export const getSharedDaoGoogleDocs = async daoAddress => {
     return response.json();
   } catch (err) {
     throw new Error(err);
-  }
-};
-
-export const handleLoadCurrentUser = async authSig => {
-  const userInfo = await getUserProfile(authSig);
-  // check for google drive scope and sign user out if scope is not present
-  if (
-    userInfo['scope'] &&
-    userInfo['scope'].includes('https://www.googleapis.com/auth/drive.file')
-  ) {
-    const profileData = JSON.parse(userInfo.extraData);
-    // if accessToken is necessary for certain calls (potentially "unshare" document)
-    // const accessToken = profileData.accessToken; // if we need jwt access token for some api call
-    const userProfile = {
-      idOnService: userInfo.idOnService,
-      email: userInfo.email,
-      displayName: profileData.displayName,
-      avatar: profileData.photoLink,
-    };
-
-    return userProfile;
   }
 };

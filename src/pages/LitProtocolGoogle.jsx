@@ -17,6 +17,8 @@ import {
   loadStoredAuthSig,
   deleteStoredAuthSig,
   signOutUser,
+  handleLitServerError,
+  redirectToLitOauthUI,
 } from '../utils/litProtocol';
 import GoogleLitCard from '../components/GoogleLitCard';
 
@@ -27,20 +29,24 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
   const [showSignatureButton, setShowSignatureButton] = useState(true);
   const [authSig, setAuthSig] = useState(null);
   const [profile, setProfile] = useState(null);
-  const { errorToast } = useOverlay();
+  const { errorToast, warningToast } = useOverlay();
 
   useEffect(() => {
-    const localAuthSig = loadStoredAuthSig();
+    const checkAndSetProfile = async () => {
+      const localAuthSig = loadStoredAuthSig();
 
-    if (localAuthSig) {
-      setAuthSig(localAuthSig);
-      if (checkIfUserExists(localAuthSig)) {
-        setProfile(handleLoadCurrentUser(localAuthSig));
-        setShowSignatureButton(false);
+      if (localAuthSig) {
+        setAuthSig(localAuthSig);
+        if (await checkIfUserExists(localAuthSig)) {
+          setProfile(await handleLoadCurrentUser(localAuthSig));
+          setShowSignatureButton(false);
+        }
+      } else {
+        setShowSignatureButton(true);
       }
-    } else {
-      setShowSignatureButton(true);
-    }
+    };
+
+    checkAndSetProfile();
   }, []);
 
   useEffect(() => {
@@ -64,7 +70,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
       setLoading(false);
     };
 
-    if (daoMetaData && daoMetaData?.boosts?.GOOGLE_LIT.active) {
+    if (daoMetaData && daoMetaData?.boosts?.GOOGLE_LIT.active && profile) {
       getAllGoogleDocs();
     }
   }, [daoMetaData?.boosts, authSig, profile]);
@@ -76,47 +82,42 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
     let currentAuthSig = authSig;
     if (!currentAuthSig) {
       try {
+        console.log(chain);
         currentAuthSig = await LitJsSdk.checkAndSignAuthMessage({
           chain,
         });
         setAuthSig(currentAuthSig);
-      } catch (e) {
-        if (e.code === 4001) {
-          // redirect to lit oauth connect UI
-          // window.location = 'https://litgateway.com/apps';
-          errorToast({
-            title: 'Could not connect to Lit Protocol -> redirect',
-          });
-          return;
-        }
-        if (e?.errorCode === 'no_wallet') {
-          errorToast({ title: 'You need a wallet to use the Lit Protocol' });
-          return false;
-        } else if (e?.errorCode === 'wrong_network') {
-          errorToast({ title: e.message });
-          return false;
+
+        if (await checkIfUserExists(authSig)) {
+          return await callback(currentAuthSig);
         } else {
-          console.log(e);
-          throw e;
+          throw 'User needs to authorize Lit through gogle UI';
+          // warningToast('Redirecting you to lit oauth connect UI');
+          // await redirectToLitOauthUI();
+          // return
         }
+      } catch (e) {
+        return handleLitServerError(e);
       }
     }
-
-    return await callback(currentAuthSig);
   };
 
   const handleSignAuthMessage = async () => {
     setLoading(true);
-    await performWithAuthSig(
-      async authSig => {
-        const user = await handleLoadCurrentUser(authSig);
-        setProfile(user);
-        setLoading(false);
-      },
-      {
-        chain: daoMetaData?.network,
-      },
-    );
+    try {
+      await performWithAuthSig(
+        async authSig => {
+          setProfile(await handleLoadCurrentUser(authSig));
+          setLoading(false);
+        },
+        {
+          chain: daoMetaData?.network,
+        },
+      );
+    } catch (e) {
+      errorToast(e);
+      setLoading(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -160,12 +161,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
       </Button>
 
       {profile && (
-        <Button
-          onClick={handleSignOut}
-          rightIcon={<RiAddFill />}
-          isExternal
-          mr={10}
-        >
+        <Button onClick={handleSignOut} rightIcon={<RiAddFill />} mr={10}>
           Sign Out
         </Button>
       )}
