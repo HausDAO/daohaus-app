@@ -1,6 +1,5 @@
 export const STANDARD_CONTRACT_TYPE = 'MolochDAOv2.1';
 export const LIT_API_HOST = 'https://oauth-app.litgateway.com';
-const AUTH_SIG_STORAGE_KEY = 'lit-auth-signature';
 
 // https://developer.litprotocol.com/docs/LitTools/JSSDK/errorHandling
 const LIT_DAO_HAUS_ERROR_MAP = [
@@ -25,16 +24,34 @@ const USER_ERROR_CODE_MAP = {
   rpc_error: 'There are issues talking to the chain, please try again later',
 };
 
-export const storeAuthSig = authSig => {
-  localStorage.setItem(AUTH_SIG_STORAGE_KEY, JSON.stringify(authSig));
+// using wallet address allows for more than one lit auth sig to be stored at a time,
+// ie a user can use different wallets without conflicting keys
+const AUTH_SIG_STORAGE_KEY = 'lit-auth-signature';
+const buildAuthSigKey = walletAddress => {
+  return `${AUTH_SIG_STORAGE_KEY}-${walletAddress}`;
 };
 
-export const loadStoredAuthSig = () => {
-  return JSON.parse(localStorage.getItem(AUTH_SIG_STORAGE_KEY));
+export const storeAuthSig = (authSig, walletAddress) => {
+  localStorage.setItem(buildAuthSigKey(walletAddress), JSON.stringify(authSig));
 };
 
-export const deleteStoredAuthSig = () => {
-  return localStorage.removeItem(AUTH_SIG_STORAGE_KEY);
+export const loadStoredAuthSig = walletAddress => {
+  const authSig = JSON.parse(
+    localStorage.getItem(buildAuthSigKey(walletAddress)),
+  );
+
+  if (authSig) {
+    localStorage.setItem(AUTH_SIG_STORAGE_KEY, JSON.stringify(authSig));
+  } else {
+    localStorage.removeItem(AUTH_SIG_STORAGE_KEY);
+  }
+
+  return authSig;
+};
+
+export const deleteStoredAuthSigs = walletAddress => {
+  localStorage.removeItem(buildAuthSigKey(walletAddress));
+  localStorage.removeItem(AUTH_SIG_STORAGE_KEY);
 };
 
 export const getAssetType = assetTypeScope => {
@@ -187,6 +204,21 @@ export const getSharedDaoGoogleDocs = async daoAddress => {
       body: JSON.stringify({ daoAddress, source: 'daohaus' }),
     });
 
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const deleteShare = async shareUuid => {
+  try {
+    const response = await fetch(`${LIT_API_HOST}/api/google/deleteShare`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uuid: shareUuid }),
+    });
     return response.json();
   } catch (err) {
     throw new Error(err);
