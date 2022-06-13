@@ -8,11 +8,23 @@ const POSTER_DESCRIPTION = {
 };
 
 export const POSTER_FORMS = {
+  POST_IPFS_MD: {
+    id: 'POST_IPFS_MD',
+    dev: true,
+    title: 'Publish New Document',
+    description:
+      'Create and post a Markdown document to IPFS using the Pinata API',
+    tx: TX.POSTER_IPFS_MD,
+    customWidth: '1000px',
+    required: ['posterData.title', 'posterData.content'],
+    fields: [[FIELD.POST_TITLE, POSTER_DESCRIPTION, FIELD.MD_EDITOR]],
+  },
   RATIFY_MD: {
     id: 'RATIFY_MD',
     dev: true,
-    title: 'Ratify Markdown',
-    description: 'Create a proposal to ratify markdown',
+    title: 'Publish & Ratify Document',
+    description:
+      'Create a Markdown document on IPFS and propose document for ratification by the DAO',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
     minionType: MINION_TYPES.SAFE,
     customWidth: '1000px',
@@ -32,8 +44,8 @@ export const POSTER_FORMS = {
   RATIFY_DAO_DOC: {
     id: 'RATIFY_DAO_DOC',
     dev: true,
-    title: 'Ratify DAO Document',
-    description: 'Create a proposal to ratify an existing DAO Doc',
+    title: 'Ratify Existing Document',
+    description: 'Propose an existing document for ratification by the DAO',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
     minionType: MINION_TYPES.SAFE,
     tx: TX.POSTER_RATIFY_DOC,
@@ -55,30 +67,27 @@ export const POSTER_FORMS = {
       { ...FIELD.TITLE, label: 'Proposal Title' },
     ],
   },
-  POST_IPFS_MD: {
-    id: 'POST_IPFS_MD',
-    dev: true,
-    title: 'Post Markdown to IPFS',
-    description: 'Post Markdown to IPFS using the Pinata API',
-    tx: TX.POSTER_IPFS_MD,
-    customWidth: '1000px',
-    required: ['posterData.title', 'posterData.content'],
-    fields: [[FIELD.POST_TITLE, POSTER_DESCRIPTION, FIELD.MD_EDITOR]],
-  },
   POST_MD: {
     id: 'POST_MD',
     dev: true,
-    title: 'Post markdown to chain',
-    description: 'Publish MD on chain and assign to Docs',
-    tx: TX.POSTER_MD,
-    customWidth: '1000px',
-    required: ['posterData.title', 'posterData.content'],
+    title: 'Configure Document Location',
+    description:
+      "Propose & edit where Ratified documents are shown in the DAO's page",
+    type: PROPOSAL_TYPES.POSTER_UPDATE_LOCATION,
+    minionType: MINION_TYPES.SAFE,
+    customWidth: '500px',
+    required: ['selectedMinion', 'docSelect', 'posterData.location'],
+    tx: TX.POST_MD,
     fields: [
       [
-        FIELD.POST_TITLE,
-        POSTER_DESCRIPTION,
-        FIELD.MD_EDITOR,
-        FIELD.POSTER_ENCODER,
+        FIELD.MINION_SELECT,
+        FIELD.DOC_SELECT,
+        {
+          ...FIELD.POST_LOCATION_SELECT,
+          label: 'New Location',
+          placeholder: '--Update Location--',
+          name: 'newLocation',
+        },
       ],
     ],
   },
