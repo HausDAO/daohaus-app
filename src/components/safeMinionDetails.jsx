@@ -76,11 +76,24 @@ const SafeMinionDetails = ({
   const [isLoading, setLoading] = useState(null);
   const [isSafeOwner, safeOwner] = useState(false);
   const [isForeignSafeOwner, foreignSafeOwner] = useState(false);
+  const [safeMinionVersion, setSafeMinionVersion] = useState(null);
   const { daoOverview } = useDao();
   const { daoMember } = useDaoMember();
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
   const { submitTransaction } = useTX();
+
+  useEffect(() => {
+    if (daoOverview) {
+      const minionMatch = daoOverview.minions.find(
+        m => m.minionAddress.toLowerCase() === vault.address.toLowerCase(),
+      );
+
+      if (minionMatch) {
+        setSafeMinionVersion(minionMatch.safeMinionVersion);
+      }
+    }
+  }, [vault, daoOverview]);
 
   const submitEnableModuleTxProposal = async (
     chainID,
@@ -370,6 +383,13 @@ const SafeMinionDetails = ({
             />
           )}
         </Flex>
+        {safeMinionVersion && safeMinionVersion === '1' && (
+          <Text fontSize='xs' mt={4}>
+            ** This is a early version of the Safe Minion. It might not work in
+            the Gnosis Safe UI. Summon a new Safe Minion if you need to use that
+            UI.
+          </Text>
+        )}
       </Box>
     </ContentBox>
   );
