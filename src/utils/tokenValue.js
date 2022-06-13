@@ -28,6 +28,8 @@ export const initTokenData = async (
   tokenPriceSetter,
 ) => {
   const tokenData = await fetchTokenData();
+
+  console.log('tokenData', tokenData);
   if (tokenData && tokenPriceSetter) {
     tokenPriceSetter(tokenData);
   }
@@ -41,8 +43,11 @@ export const initTokenData = async (
         tokenData[token.tokenAddress]?.network === network &&
         tokenData[token.tokenAddress];
 
-      const usdVal = tokenMeta?.price || 0;
-      // TODO: overriding due to dupe grt found in cache job
+      let usdVal = tokenMeta?.price || 0;
+      // TODO: overriding due to one off wxdai issue
+      if (token.tokenAddress === '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d') {
+        usdVal = tokenData[token.tokenAddress].price;
+      }
       const symbol = tokenMeta?.symbol || token.symbol;
       const logoUri = tokenMeta?.logoURI || null;
       const tokenName = tokenMeta?.name || null;
