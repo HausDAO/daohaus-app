@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Flex, Spinner } from '@chakra-ui/react';
 import { ToolTipWrapper } from '../staticElements/wrappers';
@@ -6,13 +6,16 @@ import { ToolTipWrapper } from '../staticElements/wrappers';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import { TX } from '../data/txLegos/contractTX';
+import { useDao } from '../contexts/DaoContext';
 
 const MinionCancel = ({ proposal }) => {
   const { daochain } = useParams();
-  const { injectedProvider } = useInjectedProvider();
+  const { injectedProvider, address } = useInjectedProvider();
   const { submitTransaction } = useTX();
+  const { daoMembers } = useDao();
 
   const [loading, setLoading] = useState(false);
+  const [isMember, setIsMember] = useState(false);
 
   const cancelMinion = async () => {
     if (proposal?.escrow) {
@@ -38,6 +41,10 @@ const MinionCancel = ({ proposal }) => {
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
 
+  useEffect(() => {
+    setIsMember(daoMembers?.some(member => member.memberAddress === address));
+  }, [address]);
+
   const getMinionAction = () => {
     return (
       <ToolTipWrapper
@@ -49,7 +56,7 @@ const MinionCancel = ({ proposal }) => {
           display: 'inline-block',
         }}
       >
-        <Button onClick={cancelMinion} disabled={!isCorrectChain}>
+        <Button onClick={cancelMinion} disabled={!isCorrectChain || !isMember}>
           Cancel Minion
         </Button>
       </ToolTipWrapper>
