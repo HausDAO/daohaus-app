@@ -17,11 +17,6 @@ import {
 import { FaDiscourse } from 'react-icons/fa';
 
 // no slash on the path
-export const defaultDaoDataLoading = [
-  { icon: RiTeamLine, label: 'Members', path: 'members' },
-  { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
-  { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-];
 export const defaultDaoData = [
   { icon: RiBookMarkLine, label: 'Proposals', path: 'proposals' },
   { icon: RiBankLine, label: 'Vaults', path: 'vaults' },
@@ -73,7 +68,10 @@ export const generateDaoLinks = (
 };
 
 export const generateDaoLinksLoading = (chainID, daoID) => {
-  let links = [...defaultDaoDataLoading];
+  let links = [...defaultDaoData];
+  links = links.filter(
+    link => link.label !== 'Gallery' && link.label !== 'Documents',
+  );
   return links.map(link => {
     const path = `/dao/${chainID}/${daoID}/${link.path}`;
     return {

@@ -19,17 +19,16 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
 
   let navLinks;
   if (dao?.chainID && dao?.daoID) {
-    if (dao.daoProposals && dao.daoVaults && dao.daoMetaData) {
-      navLinks = generateDaoLinks(
-        dao.chainID,
-        dao.daoID,
-        dao.daoProposals,
-        dao.daoVaults,
-        dao.daoMetaData,
-      );
-    } else {
-      navLinks = generateDaoLinksLoading(dao.chainID, dao.daoID);
-    }
+    navLinks =
+      dao.daoProposals && dao.daoVaults && dao.daoMetaData
+        ? generateDaoLinks(
+            dao.chainID,
+            dao.daoID,
+            dao.daoProposals,
+            dao.daoVaults,
+            dao.daoMetaData,
+          )
+        : generateDaoLinksLoading(dao.chainID, dao.daoID);
   } else {
     navLinks = defaultHubData;
   }
