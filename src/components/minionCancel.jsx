@@ -6,16 +6,14 @@ import { ToolTipWrapper } from '../staticElements/wrappers';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import { TX } from '../data/txLegos/contractTX';
-import { useDao } from '../contexts/DaoContext';
 
 const MinionCancel = ({ proposal }) => {
   const { daochain } = useParams();
   const { injectedProvider, address } = useInjectedProvider();
   const { submitTransaction } = useTX();
-  const { daoMembers } = useDao();
 
   const [loading, setLoading] = useState(false);
-  const [isMember, setIsMember] = useState(false);
+  const [isProposer, setIsProposer] = useState(false);
 
   const cancelMinion = async () => {
     if (proposal?.escrow) {
@@ -42,8 +40,8 @@ const MinionCancel = ({ proposal }) => {
     daochain === injectedProvider?.currentProvider?.chainId;
 
   useEffect(() => {
-    setIsMember(daoMembers?.some(member => member.memberAddress === address));
-  }, [address]);
+    setIsProposer(proposal?.proposer === address);
+  }, [address, proposal?.proposer]);
 
   const getMinionAction = () => {
     return (
@@ -56,7 +54,10 @@ const MinionCancel = ({ proposal }) => {
           display: 'inline-block',
         }}
       >
-        <Button onClick={cancelMinion} disabled={!isCorrectChain || !isMember}>
+        <Button
+          onClick={cancelMinion}
+          disabled={!isCorrectChain || !isProposer}
+        >
           Cancel Minion
         </Button>
       </ToolTipWrapper>
