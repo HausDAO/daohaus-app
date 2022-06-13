@@ -177,7 +177,6 @@ export const supportedChains = {
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-kovan-subgraph',
     minion_factory_addr: '0xCE63803E265617c55567a7A7b584fF2dbD76210B',
-    uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
     transmutation_factory_addr: '0xbca622291fFe797C77a8Bc6D000584b22877e971',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
@@ -300,7 +299,6 @@ export const supportedChains = {
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
-    uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
     transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
     superfluid: {
       cfa: '0xEbdA4ceF883A7B12c4E669Ebc58927FBa8447C7D',

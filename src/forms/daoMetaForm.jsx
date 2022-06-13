@@ -43,7 +43,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const [loading, setLoading] = useState();
   const [uploading, setUploading] = useState();
   const { register, handleSubmit } = useForm();
-  const location = useLocation();
 
   const onSubmit = async data => {
     setLoading(true);
@@ -67,19 +66,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
         version: metadata.version,
         signature,
       };
-
-      if (location.search) {
-        const searchParams = getQueryStringParams(location.search);
-        if (searchParams.parentDao && searchParams.parentChainId) {
-          const ally = {
-            parent: searchParams.parentDao,
-            parentNetwork: supportedChains[searchParams.parentChainId].network,
-            allyType: 'uberHausBurner',
-          };
-
-          updateData.ally = ally;
-        }
-      }
 
       const res = await put('dao/update', updateData);
 

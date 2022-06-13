@@ -22,7 +22,6 @@ import SAFE_MULTISEND from '../contracts/safeMultisend.json';
 import SAFE_SIGNLIB from '../contracts/safeSignMessageLib.json';
 import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
 import SUPERFLUID_MINION_FACTORY from '../contracts/superfluidMinionFactory.json';
-import UBERHAUS_MINION from '../contracts/uberHausMinion.json';
 import VANILLA_MINION from '../contracts/minion.json';
 import VANILLA_MINION_FACTORY from '../contracts/minionFactory.json';
 import WRAP_N_ZAP_FACTORY from '../contracts/wrapNZapFactory.json';
@@ -54,7 +53,6 @@ export const LOCAL_ABI = Object.freeze({
   ERC_1155,
   ERC_1155_METADATA,
   NIFTY_INK,
-  UBERHAUS_MINION,
   SUPERFLUID_MINION,
   SUPERFLUID_MINION_FACTORY,
   SAFE_MINION_FACTORY,
@@ -380,7 +378,6 @@ export const getMinionAbi = minionType => {
     [MINION_TYPES.VANILLA]: VANILLA_MINION,
     [MINION_TYPES.SAFE]: SAFE_MINION,
     [MINION_TYPES.SUPERFLUID]: SUPERFLUID_MINION,
-    [MINION_TYPES.UBER]: UBERHAUS_MINION,
   };
   if (Object.keys(abis).includes(minionType)) {
     return abis[minionType];

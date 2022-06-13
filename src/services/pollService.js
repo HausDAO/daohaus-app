@@ -1,13 +1,10 @@
 import {
-  pollDelegateRewards,
   pollGuildFunds,
   pollMinionCancel,
-  pollMinionProposal,
   pollMinionSummon,
   pollMolochSummon,
   pollTokenAllowances,
   pollTokenApproval,
-  pollUberHausDelegateSet,
   withdrawTokenFetch,
   pollTXHash,
   pollBoostTXHash,
@@ -17,15 +14,12 @@ import {
   pollPosterTXHash,
 } from '../polls/polls';
 import {
-  checkDelRewardsTest,
   guildFundTest,
   minionExecuteTest,
-  minonProposalTest,
   minonSummonTest,
   molochSummonTest,
   tokenAllowanceTest,
   tokenApprovedTest,
-  uberHausDelegateSetTest,
   withdrawTokenTest,
   testTXHash,
   testWrapNZap,
@@ -368,35 +362,6 @@ export const createPoll = ({
         });
       }
     };
-  } else if (action === 'uberHausProposeAction') {
-    return ({ minionAddress, createdAt, chainID, actions }) => txHash => {
-      startPoll({
-        pollFetch: pollMinionProposal,
-        testFn: minonProposalTest,
-        shouldEqual: createdAt,
-        args: { minionAddress, chainID, createdAt },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'UberHAUS proposal submitted',
-          unresolvedMsg: 'Submitting UberHAUS proposal',
-          successMsg: `UberHAUS proposal submitted for ${minionAddress} on ${chainID}`,
-          errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { minionAddress, createdAt, chainID },
-        });
-      }
-    };
   } else if (action === 'superfluidWithdrawBalance') {
     return ({
       minionAddress,
@@ -595,158 +560,6 @@ export const createPoll = ({
             tokenAddress,
             shouldEqual: uber ? expectedBalance : 0,
           },
-        });
-      }
-    };
-  } else if (action === 'pullGuildFunds') {
-    return ({
-      tokenAddress,
-      actions,
-      chainID,
-      uberMinionAddress,
-      expectedBalance,
-    }) => txHash => {
-      startPoll({
-        pollFetch: pollGuildFunds,
-        testFn: guildFundTest,
-        shouldEqual: expectedBalance,
-        args: {
-          chainID,
-          uberMinionAddress,
-          tokenAddress,
-        },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Pulled Tokens to Guild Bank',
-          unresolvedMsg: 'Pulling tokens from UberHUAS Minion',
-          successMsg: 'Successfully pulled tokens!',
-          errorMsg: 'There was an error withdrawing tokens',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: {
-            chainID,
-            uberMinionAddress,
-            expectedBalance,
-            tokenAddress,
-          },
-        });
-      }
-    };
-  } else if (action === 'uberHausNominateDelegate') {
-    return ({
-      chainID,
-      minionAddress,
-      newDelegateAddress,
-      actions,
-      createdAt,
-    }) => txHash => {
-      startPoll({
-        pollFetch: pollMinionProposal,
-        testFn: minonProposalTest,
-        shouldEqual: newDelegateAddress,
-        args: { createdAt, minionAddress, chainID },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'Created uberHAUS delegate proposal',
-          unresolvedMsg: 'Creating proposal',
-          successMsg: 'Created uberHAUS delegate proposal',
-          errorMsg: 'Poll error on nominateDelegate',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, minionAddress },
-        });
-      }
-    };
-  } else if (action === 'setInitialDelegate') {
-    return ({
-      chainID,
-      minionAddress,
-      uberHausAddress,
-      delegateAddress,
-      actions,
-    }) => txHash => {
-      startPoll({
-        pollFetch: pollUberHausDelegateSet,
-        testFn: uberHausDelegateSetTest,
-        shouldEqual: delegateAddress,
-        args: {
-          uberHausAddress,
-          minionAddress,
-          delegateAddress,
-          chainID,
-        },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'UberHAUS delegate set',
-          unresolvedMsg: 'Setting UberHAUS delegate',
-          successMsg: 'Set UberHAUS delegate',
-          errorMsg: 'Poll error on setInitialDelegate',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, minionAddress },
-        });
-      }
-    };
-  } else if (action === 'claimDelegateReward') {
-    return ({
-      chainID,
-      uberMinionAddress,
-      delegateAddress,
-      actions,
-    }) => txHash => {
-      startPoll({
-        pollFetch: pollDelegateRewards,
-        testFn: checkDelRewardsTest,
-        args: { uberMinionAddress, delegateAddress, chainID },
-        actions,
-        txHash,
-      });
-      if (cachePoll) {
-        cachePoll({
-          txHash,
-          action,
-          timeSent: Date.now(),
-          status: 'unresolved',
-          resolvedMsg: 'UberHAUS delegate rewards claimed',
-          unresolvedMsg: 'Claiming UberHAUS delegate rewards',
-          successMsg: 'UberHAUS delegate rewards claimed',
-          errorMsg: 'Poll error on claimDelegateReward',
-          pollData: {
-            action,
-            interval,
-            tries,
-          },
-          pollArgs: { chainID, uberMinionAddress, delegateAddress },
         });
       }
     };

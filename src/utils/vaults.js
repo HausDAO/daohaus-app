@@ -163,14 +163,6 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion.minionAddress}`,
       };
-    case MINION_TYPES.UBER:
-      return {
-        badgeColor: 'purple',
-        badgeTextColor: 'white',
-        badgeName: 'UHS',
-        badgeVariant: 'solid',
-        url: `/dao/${daochain}/${daoid}/allies`,
-      };
     case MINION_TYPES.NIFTY:
       return {
         badgeColor: 'orange',
