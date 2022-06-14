@@ -243,11 +243,7 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/boost/lit-protocol/google`}>
-          <LitProtocolGoogle
-            isMember={isMember}
-            daoMetaData={daoMetaData}
-            refetchMetaData={refetchMetaData}
-          />
+          <LitProtocolGoogle isMember={isMember} daoMetaData={daoMetaData} />
         </Route>
 
         <Route exact path={`${path}/party-favor`}>

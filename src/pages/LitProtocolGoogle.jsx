@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
-import { RiAddFill } from 'react-icons/ri';
 import { Flex, Stack, Button, Link, Spinner, VStack } from '@chakra-ui/react';
 import LitJsSdk from 'lit-js-sdk';
 import { useOverlay } from '../contexts/OverlayContext';
 import BoostNotActive from '../components/boostNotActive';
 import MainViewLayout from '../components/mainViewLayout';
-import SnapshotCard from '../components/snapshotCard';
 import TextBox from '../components/TextBox';
 import {
   checkIfUserExists,
   handleLoadCurrentUser,
   getSharedGoogleDocs,
-  getSharedDaoGoogleDocs,
+  getSharedDaoGoogleDocs, // to be used when Lit has functionality hooked up.
   STANDARD_CONTRACT_TYPE,
   loadStoredAuthSig,
   signOutUser,
@@ -26,15 +23,14 @@ import {
 import GoogleLitCard from '../components/GoogleLitCard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
-  const { daoid, daochain } = useParams();
+const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
   const { address } = useInjectedProvider();
   const [loading, setLoading] = useState(true);
   const [googleDocs, setgoogleDocs] = useState([]);
   const [showSignatureButton, setShowSignatureButton] = useState(true);
   const [authSig, setAuthSig] = useState(null);
   const [profile, setProfile] = useState(null);
-  const { errorToast, successToast } = useOverlay();
+  const { errorToast, warningToast, successToast } = useOverlay();
 
   useEffect(() => {
     const checkAndSetProfile = async () => {
@@ -101,8 +97,8 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
       } else {
         // TODO handle this case - create frontend user on Lit side..
         // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L104
-        // warningToast({title: 'Redirecting you to lit oauth connect UI'});
-        // await redirectToLitOauthUI();
+        warningToast({ title: 'Redirecting you to lit oauth connect UI' });
+        await redirectToLitOauthUI();
       }
 
       await callback(currentAuthSig);
@@ -204,7 +200,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData, refetchMetaData }) => {
                     googleDoc={googleDoc}
                     getLinkFromShare={getLinkFromShare}
                     handleDeleteShare={handleDeleteShare}
-                    daoMetaData={daoMetaData}
                   />
                 ))
             ) : (
