@@ -65,6 +65,20 @@ export const generateDaoLinks = (
   });
 };
 
+export const generateDaoLinksLoading = (chainID, daoID) => {
+  let links = [...defaultDaoData];
+  links = links.filter(
+    link => link.label !== 'Gallery' && link.label !== 'Documents',
+  );
+  return links.map(link => {
+    const path = `/dao/${chainID}/${daoID}/${link.path}`;
+    return {
+      ...link,
+      path,
+    };
+  });
+};
+
 export const defaultSocialLinks = [
   { icon: RiDiscordFill, label: 'Discord', href: 'https://discord.gg/daohaus' },
   {
