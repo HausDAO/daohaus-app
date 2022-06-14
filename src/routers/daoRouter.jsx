@@ -242,12 +242,6 @@ const DaoRouter = () => {
             refetchMetaData={refetchMetaData}
           />
         </Route>
-        {/* <Route exact path={`${path}/boost/lit-protocol/google/settings`}>
-          <LitProtocolGoogleSettings
-            daoMetaData={daoMetaData}
-            refetchMetaData={refetchMetaData}
-          />
-        </Route> */}
         <Route exact path={`${path}/boost/lit-protocol/google`}>
           <LitProtocolGoogle
             isMember={isMember}
