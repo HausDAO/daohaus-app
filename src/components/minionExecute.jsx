@@ -37,7 +37,6 @@ const MinionExecute = ({
 
   const hasraribleOrder = proposal.title.match(/Rarible NFT (Buy|Sell) Order/);
   const hasRaribleAction = hasraribleOrder && proposal.executed;
-  const orderType = hasraribleOrder && hasraribleOrder[1];
 
   const isEscrowMinion =
     proposal?.minionAddress?.toLowerCase() ===
@@ -66,8 +65,11 @@ const MinionExecute = ({
   };
 
   const getMinionAction = () => {
-    if (hasRaribleAction)
-      return <RaribleOrder proposal={proposal} orderType={orderType} />;
+    const isMember = daoMembers?.some(
+      member => member.memberAddress === address,
+    );
+
+    if (hasRaribleAction) return <RaribleOrder proposal={proposal} />;
 
     if (hideMinionExecuteButton) {
       return null;
@@ -78,9 +80,6 @@ const MinionExecute = ({
     }
 
     if (proposalType === PROPOSAL_TYPES.MINION_BUYOUT) {
-      const isMember = daoMembers?.find(
-        member => member.memberAddress === address,
-      );
       const memberApplicant = daoMembers.find(
         member => member.memberAddress === proposal.createdBy,
       );
@@ -110,7 +109,12 @@ const MinionExecute = ({
 
     if (hideMinionExecuteButton === false) {
       return (
-        <Button onClick={handleExecute} disabled={!isCorrectChain}>
+        <Button
+          onClick={handleExecute}
+          disabled={
+            !isCorrectChain || (minionAction?.memberOnlyEnabled && !isMember)
+          }
+        >
           {early && 'Early '}Execute Minion
         </Button>
       );
