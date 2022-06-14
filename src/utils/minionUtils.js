@@ -2,7 +2,7 @@ import Web3, { utils as Web3Utils } from 'web3';
 import abiDecoder from 'abi-decoder';
 import { createContract } from './contract';
 import { decodeAMBTx, decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
-import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
+import { MINION_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
 import { TX } from '../data/txLegos/contractTX';
 
@@ -16,9 +16,6 @@ export const MINION_ACTION_FUNCTION_NAMES = {
   [MINION_TYPES.NIFTY]: 'actions',
   SAFE_MINION: 'actions',
   [MINION_TYPES.SAFE]: 'actions',
-  [PROPOSAL_TYPES.MINION_UBER_STAKE]: 'actions',
-  [PROPOSAL_TYPES.MINION_UBER_DEL]: 'appointments',
-  [PROPOSAL_TYPES.MINION_UBER_RQ]: 'actions',
   SUPERFLUID_MINION: 'streams',
   [MINION_TYPES.SUPERFLUID]: 'streams',
 };
@@ -26,19 +23,11 @@ export const MINION_ACTION_FUNCTION_NAMES = {
 export const SHOULD_DECODE = {
   [MINION_TYPES.NIFTY]: true,
   [MINION_TYPES.VANILLA]: true,
-  [PROPOSAL_TYPES.MINION_UBER_STAKE]: true,
-  [PROPOSAL_TYPES.MINION_UBER_RQ]: true,
 };
 
 export const SHOULD_MULTI_DECODE = {
   [MINION_TYPES.SAFE]: true,
 };
-
-// const getUHAction = proposalType => {
-//   return proposalType === PROPOSAL_TYPES.MINION_UBER_DEL
-//     ? 'appointments'
-//     : 'actions';
-// };
 
 export const getProxiedAddress = async (abi, to, daochain) => {
   try {
@@ -261,8 +250,5 @@ export const getExecuteAction = ({ minion }) => {
   }
   if (minionType === MINION_TYPES.SAFE) {
     return TX.MINION_SAFE_EXECUTE;
-  }
-  if (minionType === MINION_TYPES.UBER) {
-    return TX.UBER_EXECUTE_ACTION;
   }
 };

@@ -6,7 +6,6 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import MemberInfoGuts from './memberInfoGuts';
-import UberHausMemberInfoGuts from './uberHausMemberInfoGuts';
 import { getTerm, getTitle } from '../utils/metadata';
 
 const MemberInfo = ({ member, customTerms, hideCopy }) => {
@@ -37,11 +36,7 @@ const MemberInfo = ({ member, customTerms, hideCopy }) => {
             )}
           </Flex>
           <ContentBox mt={3}>
-            {member.isUberMinion ? (
-              <UberHausMemberInfoGuts member={member} />
-            ) : (
-              <MemberInfoGuts member={member} hideCopy={hideCopy} />
-            )}
+            <MemberInfoGuts member={member} hideCopy={hideCopy} />
           </ContentBox>
         </>
       )}

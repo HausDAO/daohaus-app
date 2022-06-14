@@ -60,15 +60,6 @@ export const MINION_CONTENT = {
     publisher: 'DAOhaus',
     version: '2',
   },
-  [MINION_TYPES.UBER]: {
-    title: 'Uberhaus Minion',
-    description: 'Join and participate in UberHaus - the DAOs of DAOs',
-    info: [
-      'UberHaus is the DAO of DAOs - governing the ecosystem and roadmap of DAOhaus.',
-      'As the gateway to UberHaus governance, the UberHaus Minion enables you to stake your HAUS tokens, manage delegates, withdraw funds and rage-quit from UberHaus.',
-    ],
-    publisher: 'DAOhaus',
-  },
   [MINION_TYPES.SUPERFLUID]: {
     title: 'Superfluid Minion',
     description: 'Stream Tokens from a minion vault via Superfluid Protocol',
@@ -106,9 +97,6 @@ export const MINION_CONTENT = {
 const SETTINGS_LINKS = {
   VAULT_LINK: {
     localUrl: '/dao/{.daochain}/{.daoid}/vaults/minion/{.minionAddress}',
-  },
-  UBER_LINK: {
-    localUrl: '/dao/{.daochain}/{.daoid}/allies',
   },
   SF_LINK: {
     localUrl: `/dao/{.daochain}/{.daoid}/settings/superfluid-minion/{.minionAddress}`,

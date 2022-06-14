@@ -13,7 +13,6 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useToken } from '../contexts/TokenContext';
 
 // import Allies from '../pages/Allies';
-// import Clone from '../pages/Clone';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import Layout from '../components/layout';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
@@ -196,20 +195,6 @@ const DaoRouter = () => {
             members={daoMembers}
           />
         </Route>
-        {/* // temp hide uberhaus, remove in future pr */}
-        {/* <Route exact path={`${path}/allies`}>
-          <Allies
-            daoOverview={daoOverview}
-            daoMetaData={daoMetaData}
-            proposals={daoActivities?.proposals}
-            isMember={isMember}
-            daoMembers={daoMembers}
-          />
-        </Route> */}
-        {/* <Route exact path={`${path}/uberhaus/clone`}>
-          <Clone daoMembers={daoMembers} daoOverview={daoOverview} isUberHaus />
-        </Route> */}
-
         <Redirect
           from={`${path}/proposals/hardcore`}
           to={`${path}/proposals/audit`}

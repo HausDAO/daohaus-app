@@ -1,11 +1,4 @@
 export const TIP_LABELS = {
-  UBER_PROPOSAL: {
-    title: 'Uber Proposal',
-    pars: [
-      'This Proposal was created by an UberHaus Minion.',
-      "To perform the minion's action, hit the 'Execute' button after processing the proposal",
-    ],
-  },
   MINION_PROPOSAL: {
     title: 'Minion Proposal',
     pars: [
