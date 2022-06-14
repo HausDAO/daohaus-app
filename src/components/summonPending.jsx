@@ -4,7 +4,7 @@ import {
   RiErrorWarningLine,
   RiCheckLine,
 } from 'react-icons/ri';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -22,7 +22,6 @@ import { POPUP_CONTENT } from '../data/txModalContent';
 import { supportedChains } from '../utils/chain';
 
 const SummonPending = ({ txHash, success, chainId }) => {
-  const { daoid, daochain } = useParams();
   return (
     <ContentBox
       m={[10, 'auto', 0, 'auto']}
