@@ -39,7 +39,7 @@ import { earlyExecuteMinionType } from '../utils/minionUtils';
 
 const MotionBox = motion(Box);
 
-const ProposalVote = ({
+const ProposalActions = ({
   daoMember,
   daoProposals,
   delegate,
@@ -289,7 +289,10 @@ const ProposalVote = ({
                 )}
               {proposal?.minionAddress &&
                 proposal?.proposer === proposal?.minionAddress && (
-                  <MinionCancel proposal={proposal} />
+                  <MinionCancel
+                    proposal={proposal}
+                    minionAction={minionAction}
+                  />
                 )}
             </Flex>
           </Flex>
@@ -511,7 +514,7 @@ const ProposalVote = ({
                   early={
                     earlyExecuteMinionType(proposal) &&
                     proposal.yesShares >= quorumNeeded &&
-                    !proposal?.status === 'NeedsExecution'
+                    proposal?.status === 'NeedsExecution'
                   }
                 />
               ) : (
@@ -542,4 +545,4 @@ const ProposalVote = ({
   );
 };
 
-export default ProposalVote;
+export default ProposalActions;

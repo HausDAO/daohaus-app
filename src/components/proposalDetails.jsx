@@ -14,8 +14,6 @@ import ProposalMinionCard from './proposalMinionCard';
 import TextBox from './TextBox';
 import TextIndicator from './textIndicator';
 import TokenDisplay from './tokenDisplay';
-import UberDaoInfo from './uberDaoInfo';
-import UberHausDelegate from './uberHausDelegate';
 import Vote from './voteIcon';
 import {
   determineProposalStatus,
@@ -28,7 +26,6 @@ import {
 import { getCustomProposalTerm } from '../utils/metadata';
 import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
 import { handleDecimals } from '../utils/general';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const urlify = text => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -44,9 +41,8 @@ const ProposalDetails = ({
 }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
-  const { isUberHaus, daoOverview } = useDao();
+  const { daoOverview } = useDao();
   const [status, setStatus] = useState(null);
-  const { daoid } = useParams();
   useEffect(() => {
     if (proposal) {
       const statusStr = determineProposalStatus(proposal);
@@ -55,9 +51,6 @@ const ProposalDetails = ({
   }, [proposal]);
 
   const handleRecipient = () => {
-    if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
-      return <UberDaoInfo proposal={proposal} />;
-    }
     if (proposal?.minion) {
       return (
         <MinionBox
@@ -221,9 +214,6 @@ const ProposalDetails = ({
               ))}
           </Flex>
         </Flex>
-        {proposal?.minion?.minionType === MINION_TYPES.UBER && (
-          <UberHausDelegate proposal={proposal} />
-        )}
       </ContentBox>
     </Box>
   );
@@ -250,18 +240,6 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
 
   const { minionType } = proposal.minion;
 
-  if (minionType === MINION_TYPES.UBER) {
-    return (
-      <MemberIndicator
-        address={proposal?.minionAddress}
-        label='uberhaus minion'
-        tooltip
-        tooltipText={TIP_LABELS.UBER_PROPOSAL}
-        shouldFetchProfile
-        name={minionName}
-      />
-    );
-  }
   // handles case of a funding proposal sending funds to a minion address
   if (
     [MINION_TYPES.VANILLA, MINION_TYPES.NIFTY, MINION_TYPES.SAFE].includes(

@@ -5,7 +5,11 @@ import { Stack } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 // import { useMetaData } from '../contexts/MetaDataContext';
 import NavLink from './navlink';
-import { defaultHubData, generateDaoLinks } from '../utils/navLinks';
+import {
+  defaultHubData,
+  generateDaoLinks,
+  generateDaoLinksLoading,
+} from '../utils/navLinks';
 import { getTerm } from '../utils/metadata';
 
 const NavLinkList = ({ dao, view, toggleNav = null }) => {
@@ -13,20 +17,22 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
 
   const { address } = useInjectedProvider();
 
-  const navLinks =
-    dao?.chainID &&
-    dao?.daoID &&
-    dao.daoProposals &&
-    dao.daoVaults &&
-    dao.daoMetaData
-      ? generateDaoLinks(
-          dao.chainID,
-          dao.daoID,
-          dao.daoProposals,
-          dao.daoVaults,
-          dao.daoMetaData,
-        )
-      : defaultHubData;
+  let navLinks;
+  if (dao?.chainID && dao?.daoID) {
+    navLinks =
+      dao.daoProposals && dao.daoVaults && dao.daoMetaData
+        ? generateDaoLinks(
+            dao.chainID,
+            dao.daoID,
+            dao.daoProposals,
+            dao.daoVaults,
+            dao.daoMetaData,
+          )
+        : generateDaoLinksLoading(dao.chainID, dao.daoID);
+  } else {
+    navLinks = defaultHubData;
+  }
+
   const inDao = dao?.daoID && address;
 
   return (

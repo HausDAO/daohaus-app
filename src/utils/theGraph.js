@@ -11,7 +11,6 @@ import {
   SPAM_FILTER_TRIBUTE,
 } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import {
   SNAPSHOT_SPACE_QUERY,
   SNAPSHOT_PROPOSALS_QUERY,
@@ -33,7 +32,6 @@ import {
 import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
 import { calcTotalUSD, fetchTokenData } from './tokenValue';
-import { UBERHAUS_DATA } from './uberhaus';
 
 const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
@@ -65,18 +63,6 @@ export const fetchBankValues = async args => {
     subfield: 'balances',
     variables: {
       molochAddress: args.daoID,
-    },
-  });
-};
-
-export const fetchUberHausData = async args => {
-  return graphQuery({
-    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
-    query: UBERHAUS_QUERY,
-    variables: {
-      molochAddress: args.molochAddress,
-      memberAddress: args.memberAddress,
-      minionId: args.minionId,
     },
   });
 };
@@ -438,9 +424,6 @@ const completeQueries = {
       if (setter.setDaoProposals) {
         setter.setDaoProposals(resolvedActivity.proposals);
       }
-      if (setter.setUberProposals) {
-        setter.setUberProposals(resolvedActivity.proposals);
-      }
     } catch (error) {
       console.error(error);
     }
@@ -459,26 +442,6 @@ const completeQueries = {
       setter(graphMembers);
     } catch (error) {
       console.error(error);
-    }
-  },
-  async uberMinionData(args, setter) {
-    if (args.daoID === UBERHAUS_DATA.ADDRESS) {
-      try {
-        const uberMinions = await graphQuery({
-          endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
-          query: UBER_MINIONS,
-          variables: {
-            minionType: 'UberHaus minion',
-            molochAddress: args.daoID,
-          },
-        });
-
-        setter(uberMinions?.minions);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      setter(null);
     }
   },
 };

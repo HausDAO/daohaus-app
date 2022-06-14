@@ -29,8 +29,6 @@ export const defaultDaoData = [
   { icon: RiFileList2Line, label: 'Documents', path: 'docs' },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-  // temp hide uberhaus, remove in future pr
-  // { icon: FaRegHandshake, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
@@ -58,6 +56,20 @@ export const generateDaoLinks = (
   if (!('POSTER' in boosts)) {
     links = links.filter(link => link.label !== 'Documents');
   }
+  return links.map(link => {
+    const path = `/dao/${chainID}/${daoID}/${link.path}`;
+    return {
+      ...link,
+      path,
+    };
+  });
+};
+
+export const generateDaoLinksLoading = (chainID, daoID) => {
+  let links = [...defaultDaoData];
+  links = links.filter(
+    link => link.label !== 'Gallery' && link.label !== 'Documents',
+  );
   return links.map(link => {
     const path = `/dao/${chainID}/${daoID}/${link.path}`;
     return {
