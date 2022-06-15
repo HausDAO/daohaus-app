@@ -118,109 +118,62 @@ export const handleLoadCurrentUser = async authSig => {
   }
 };
 
-export const checkIfUserExists = async authSig => {
+export const handleLitRequest = async (endpoint, method, body) => {
   try {
-    // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L104-L170
-    const response = await fetch(
-      `${LIT_API_HOST}/api/google/checkIfUserExists`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          authSig,
-        }),
+    const response = await fetch(`${LIT_API_HOST}/${endpoint}`, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify(body),
+    });
+
     return response.json();
   } catch (err) {
     throw new Error(err);
   }
+};
+
+export const checkIfUserExists = async authSig => {
+  // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L104-L170
+  return await handleLitRequest('api/google/checkIfUserExists', 'POST', {
+    authSig,
+  });
 };
 
 export const getUserProfile = async authSig => {
-  try {
-    // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L172-L194
-    const response = await fetch(`${LIT_API_HOST}/api/google/getUserProfile`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ authSig }),
-    });
-
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
+  // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L172-L194
+  return await handleLitRequest('api/google/getUserProfile', 'POST', {
+    authSig,
+  });
 };
 
 export const signOutUser = async authSig => {
-  try {
-    // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L381
-    const response = await fetch(`${LIT_API_HOST}/api/google/signOutUser`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ authSig }),
-    });
-
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
+  // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L381
+  return await handleLitRequest('api/google/signOutUser', 'POST', {
+    authSig,
+  });
 };
 
 export const getSharedGoogleDocs = async (authSig, idOnService) => {
-  try {
-    // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L196
-    const response = await fetch(`${LIT_API_HOST}/api/google/getAllShares`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        authSig,
-        idOnService,
-      }),
-    });
-
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
+  // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L196
+  return await handleLitRequest('api/google/getAllShares', 'POST', {
+    authSig,
+    idOnService,
+  });
 };
 
 export const getSharedDaoGoogleDocs = async daoAddress => {
-  try {
-    // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L398
-    const response = await fetch(`${LIT_API_HOST}/api/google/getDAOShares`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ daoAddress, source: 'daohaus' }),
-    });
-
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
+  // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L398
+  return await handleLitRequest('api/google/getDAOShares', 'POST', {
+    daoAddress,
+    source: 'daohaus',
+  });
 };
 
 export const deleteShare = async shareUuid => {
-  try {
-    const response = await fetch(`${LIT_API_HOST}/api/google/deleteShare`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ uuid: shareUuid }),
-    });
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
+  // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L398
+  return await handleLitRequest('api/google/deleteShare', 'POST', {
+    uuid: shareUuid,
+  });
 };
