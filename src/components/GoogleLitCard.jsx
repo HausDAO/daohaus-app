@@ -54,10 +54,10 @@ const GoogleLitCard = ({ googleDoc, getLinkFromShare, handleDeleteShare }) => {
             text={`${LIT_API_HOST}/google/l/${googleDoc.id}`}
             onCopy={getLinkFromShare}
           >
-            <Button>SHARE LINK</Button>
+            <Button>COPY LINK</Button>
           </CopyToClipboard>
           <Button onClick={() => handleDeleteShare(googleDoc)} ml={10}>
-            <ParaMd>DELETE</ParaMd>
+            <ParaMd>UNSHARE</ParaMd>
           </Button>
         </Flex>
       </Stack>
