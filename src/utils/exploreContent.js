@@ -103,6 +103,11 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'purpose',
   },
   {
+    name: 'Moloch V2.5',
+    value: '2.5',
+    type: 'version',
+  },
+  {
     name: 'Moloch V2.1',
     value: '2.1',
     type: 'version',
