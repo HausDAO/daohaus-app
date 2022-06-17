@@ -1,3 +1,17 @@
+export const getRPCUrl = chainId => {
+  // if chainId exists, its a rivet chain, otherwise return the RPC URL
+  switch (chainId) {
+    case 4:
+      return process.env?.REACT_APP_RPC_URI?.split('.rpc')?.join(
+        '.rinkeby.rpc',
+      );
+    case 1:
+      return process.env?.REACT_APP_RPC_URI?.split('.rpc')?.join('.eth.rpc');
+    default:
+      return process.env.REACT_APP_RPC_URI;
+  }
+};
+
 export const supportedChains = {
   '0x1': {
     name: 'Ethereum Mainnet',
@@ -9,7 +23,7 @@ export const supportedChains = {
     hub_sort_order: 1,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    rpc_url: getRPCUrl(1),
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.etherscan.io/api',
@@ -77,7 +91,7 @@ export const supportedChains = {
     hub_sort_order: 8,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
+    rpc_url: getRPCUrl(4),
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api-rinkeby.etherscan.io/api',
