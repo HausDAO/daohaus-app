@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
+import { Spinner } from '@chakra-ui/react';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useFormConditions } from '../utils/formBuilder';
 import GenericTextArea from './genericTextArea';
 
 const DisperseListInput = props => {
-  const { localForm, formCondition, disperseType } = props;
+  const { localForm, localValues, formCondition, disperseType } = props;
   const { register, watch, setValue } = localForm;
+  const [loading, setLoading] = useState(false);
+  const [availableBalance, setAvailableBalance] = useState();
   const [displayTotal, setDisplayTotal] = useState();
   const [inputError, setInputError] = useState();
 
+  const { injectedProvider } = useInjectedProvider();
   const [fundingType] = useFormConditions({
     values: [disperseType],
     condition: formCondition,
@@ -18,6 +23,8 @@ const DisperseListInput = props => {
   const tokenAddress = watch('tokenAddress');
   const tokenDecimals = watch('selectedTokenDecimals');
   const tokenBalance = watch('selectedTokenBalance');
+  const selectedSafeAddress =
+    localValues?.safeAddress || watch('selectedSafeAddress');
 
   useEffect(() => {
     register('userList');
@@ -26,7 +33,24 @@ const DisperseListInput = props => {
   }, []);
 
   useEffect(() => {
-    const filterInput = (input, zeroPadding) => {
+    const getVaultBalance = async () => {
+      setLoading(true);
+      setAvailableBalance(
+        fundingType === 'eth'
+          ? await injectedProvider.eth.getBalance(selectedSafeAddress)
+          : tokenAddress
+          ? tokenBalance
+          : BigNumber.from(0),
+      );
+      setLoading(false);
+    };
+    if (selectedSafeAddress) {
+      getVaultBalance();
+    }
+  }, [fundingType, selectedSafeAddress, tokenAddress, tokenBalance]);
+
+  useEffect(() => {
+    const filterInput = async (input, zeroPadding) => {
       const rawList = input?.split(/\r?\n/);
       const userList = [];
       const amountList = [];
@@ -52,7 +76,7 @@ const DisperseListInput = props => {
       if (
         userList?.length > 0 &&
         amountList?.length === userList.length &&
-        disperseTotal.gt(tokenBalance)
+        disperseTotal.gt(availableBalance)
       ) {
         setValue('userList', null);
         setValue('amountList', null);
@@ -76,18 +100,28 @@ const DisperseListInput = props => {
       }
     };
 
-    if (disperseList && fundingType === 'token' && tokenDecimals) {
-      filterInput(disperseList, tokenDecimals);
-    } else if (disperseList && fundingType === 'eth') {
-      filterInput(disperseList, 18);
+    if (disperseList && availableBalance) {
+      if (fundingType === 'token' && !tokenAddress) {
+        setInputError('Please Select a Token First!');
+      } else {
+        filterInput(disperseList, fundingType === 'token' ? tokenDecimals : 18);
+      }
+    } else {
+      setInputError(null);
     }
-  }, [disperseList, tokenAddress, fundingType, tokenBalance, tokenDecimals]);
+  }, [disperseList, availableBalance]);
 
   return (
     <GenericTextArea
       info='Accepts a distribution list where each line should have an address followed by a single amount. Addresses and amounts can be seperated by any form of delimeter.'
       {...props}
-      helperText={inputError ?? (displayTotal && `Total: ${displayTotal}`)}
+      helperText={
+        loading ? (
+          <Spinner size='xs' />
+        ) : (
+          inputError ?? (displayTotal && `Total: ${displayTotal}`)
+        )
+      }
     />
   );
 };
