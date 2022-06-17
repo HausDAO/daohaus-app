@@ -1,6 +1,6 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
-import { chainByID, chainByNetworkId } from './chain';
+import { chainByID, chainByNetworkId, getRPCUrl } from './chain';
 
 const isInjected = () => window.ethereum?.chainId;
 
@@ -22,8 +22,8 @@ const addNetworkProviders = chainData => {
       options: {
         // infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
         rpc: {
-          1: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
-          4: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
+          1: getRPCUrl(1),
+          4: getRPCUrl(4),
           42: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
           100: 'https://rpc.gnosischain.com/',
           137: 'https://polygon-rpc.com/',
