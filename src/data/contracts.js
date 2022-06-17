@@ -209,4 +209,9 @@ export const CONTRACTS = {
     abiName: 'MOLOCH_TOKEN_FACTORY',
     contractAddress: '.contextData.chainConfig.moloch_token_factory',
   },
+  HEDGEY_BATCH_MINT: {
+    location: 'local',
+    abiName: 'HEDGEY_BATCH_MINT',
+    contractAddress: '.contextData.chainConfig.hedgey_batch_mint_addr',
+  },
 };
