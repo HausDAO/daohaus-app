@@ -104,7 +104,7 @@ export const EXPLORE_FILTER_OPTIONS = [
   },
   {
     name: 'Moloch V2.5',
-    value: '2.5',
+    value: '2.2',
     type: 'version',
   },
   {
