@@ -1,5 +1,7 @@
+// the REACT_APP_RPC_URI can use any provider url,
+// however, you should use getRpcUrl() in order access REACT_APP_RPC_URI
+// as it needs to maintain backward compatability with the rivet provider
 export const getRPCUrl = chainId => {
-  // if chainId exists, its a rivet chain, otherwise return the RPC URL
   switch (chainId) {
     case 4:
       return process.env?.REACT_APP_RPC_URI?.split('.rpc')?.join(
