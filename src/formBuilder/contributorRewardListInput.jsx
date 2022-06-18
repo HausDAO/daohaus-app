@@ -30,7 +30,7 @@ const ContributorRewardListInput = props => {
       const dateList = [];
       let rewardTotal = BigNumber.from(0);
 
-      rawList.forEach(item => {
+      rawList?.forEach(item => {
         const address = item.match(/0x[a-fA-F0-9]{40}/)?.[0];
         const rawAmount = item
           .replace(address, '')
