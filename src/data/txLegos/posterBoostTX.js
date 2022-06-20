@@ -5,18 +5,6 @@ import { DETAILS } from '../details';
 import { ACTIONS } from '../onTxHashActions';
 
 export const POSTER_BOOST_TX = {
-  POSTER_RATIFY: buildMultiTxAction({
-    actions: [
-      {
-        logTX: true,
-        targetContract: '.contextData.chainConfig.poster',
-        abi: CONTRACTS.POSTER,
-        fnName: 'post',
-        args: ['.values.encoded', POSTER_TAGS.MINION],
-      },
-    ],
-    detailsToJSON: DETAILS.POSTER_RATIFY,
-  }),
   POSTER_RATIFY_DOC: buildMultiTxAction({
     actions: [
       {
