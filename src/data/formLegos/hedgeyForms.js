@@ -5,8 +5,6 @@ import { TX } from '../txLegos/contractTX';
 export const HEDGEY_FORMS = {
   CONTRIBUTOR_REWARDS_BOOST: {
     id: 'CONTRIBUTOR_REWARDS_BOOST',
-    dev: true,
-    logValues: true,
     title: 'Hedgey Contributor Rewards',
     description: 'Distribute contributor rewards as time-locked NFTs',
     type: PROPOSAL_TYPES.HEDGEY_CONTRIBUTOR_REWARDS,
