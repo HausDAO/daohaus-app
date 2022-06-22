@@ -261,7 +261,7 @@ export const currencyOptions = chainId => {
         address: supportedChains[chainId].wrapper_contract,
       },
     ];
-  } else if (chainId === '0x0a') {
+  } else if (chainId === '0x0a' || chainId === '0x5') {
     options = [
       {
         value: 'ETH',
