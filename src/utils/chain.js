@@ -167,6 +167,44 @@ export const supportedChains = {
       },
     },
   },
+  '0x5': {
+    name: 'Görli',
+    short_name: 'görli',
+    nativeCurrency: 'GOR',
+    network: 'gorli',
+    networkAlt: 'gorli',
+    network_id: 5,
+    chain_id: '0x5',
+    hub_sort_order: 9,
+    providers: ['walletconnect'],
+    rpc_url: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    abi_api_url:
+      'https://api.goerli.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api.goerli.etherscan.io/api',
+    // subgraph_url:
+    //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
+    // stats_graph_url:
+    //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
+    // boosts_graph_url:
+    //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-matic',
+    // erc721_graph_url:
+    //   'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
+    // erc1155_graph_url:
+    //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
+    // minion_factory_addr: '0x02e458B5eEF8f23e78AefaC0F15f5d294C3762e9',
+    // moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
+    // dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+    // wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905', // 0xf1347fa0cd6e8bbd9aace2256d7d3cfaeaf3390cddc2ce437e0d5e5060e132dc
+    // escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
+    block_explorer: 'https://goerli.etherscan.io/',
+    // safeMinion: {
+    //   minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+    //   safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+    //   safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    // },
+    // disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+  },
   '0x2a': {
     name: 'Ethereum Kovan',
     short_name: 'kovan',
