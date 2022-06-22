@@ -191,19 +191,18 @@ export const supportedChains = {
     //   'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
     // erc1155_graph_url:
     //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
-    // minion_factory_addr: '0x02e458B5eEF8f23e78AefaC0F15f5d294C3762e9',
-    // moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
-    // dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-    // wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-    wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905', // 0xf1347fa0cd6e8bbd9aace2256d7d3cfaeaf3390cddc2ce437e0d5e5060e132dc
-    // escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
+    moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
+    dai_contract: '0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844',
+    wrapper_contract: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+    wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
+    escrow_minion: '0xceE7f251Bd38B21E8F71C1d62cFbb18219a7F606',
     block_explorer: 'https://goerli.etherscan.io/',
-    // safeMinion: {
-    //   minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
-    //   safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
-    //   safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
-    // },
-    // disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    safeMinion: {
+      minion_factory_addr: '0x121931c0Bc458A5f13F3861444AeB036cc8a5363',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
+    disperse_app: '0x3D0e848b6C55153E2b0154734ac6b5288A7f1B6F',
   },
   '0x2a': {
     name: 'Ethereum Kovan',
