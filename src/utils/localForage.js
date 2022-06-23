@@ -6,7 +6,6 @@ import localforage from 'localforage';
 const abiStore = {
   '0x1': {},
   '0x5': {},
-  '0x2a': {},
   '0xa': {},
   '0x64': {},
   '0x89': {},

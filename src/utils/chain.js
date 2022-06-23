@@ -569,7 +569,6 @@ export const chainByNetworkId = networkId => {
     1: supportedChains['0x1'],
     5: supportedChains['0x5'],
     10: supportedChains['0xa'],
-    42: supportedChains['0x2a'],
     74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
@@ -667,7 +666,6 @@ export const EIP3085 = {
   },
   NOT_SUPPORTED: {
     '0x1': true,
-    '0x2a': true,
     '0x5': true,
   },
 };
@@ -693,7 +691,7 @@ export const getScanKey = chainID => {
   if (chainID === '0x89') {
     return process.env.REACT_APP_POLYGONSCAN_KEY;
   }
-  if (chainID === '0x1' || chainByID === '0x5' || chainByID === '0x2a') {
+  if (chainID === '0x1' || chainByID === '0x5') {
     return process.env.REACT_APP_ETHERSCAN_KEY;
   }
   return null;
