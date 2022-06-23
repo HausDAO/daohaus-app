@@ -95,6 +95,8 @@ export const fetchNativeBalance = async (address, daochain) => {
   if (
     daochain === '0x1' ||
     daochain === '0x4' ||
+    daochain === '0x5' ||
+    daochain === '0xa' ||
     daochain === '0x2a' ||
     daochain === '0x89' ||
     daochain === '0xa4b1'
