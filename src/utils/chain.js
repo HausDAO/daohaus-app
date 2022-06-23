@@ -181,19 +181,17 @@ export const supportedChains = {
     abi_api_url:
       'https://api.goerli.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.goerli.etherscan.io/api',
-    // update
     subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-goerli',
     stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-stats-goerli',
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-matic',
-    erc721_graph_url:
-      'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
-    erc1155_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
-    // update
-    // moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-boosts-goerli',
+    // TODO update graph endpoints when ready
+    // erc721_graph_url:
+    //   'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
+    // erc1155_graph_url:
+    //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
     moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
     wrapper_contract: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
