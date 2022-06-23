@@ -193,12 +193,8 @@ export const supportedChains = {
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
     // update
-    // 0xA8680d0E43aDe8BC32eCCF6C446eCe4CA15d4258 - molochsummmoner
-    // 0x0080C8Ec84E1CA7E8A2c68FcCFB6C42f4D2103bD
     // moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
-    minion_factory_addr: '0x25D59ad2b29e25221b844Ae3F406Ff9B3bC90f14',
     moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
-    dai_contract: '0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844',
     wrapper_contract: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
     escrow_minion: '0xceE7f251Bd38B21E8F71C1d62cFbb18219a7F606',
@@ -207,22 +203,6 @@ export const supportedChains = {
       minion_factory_addr: '0x121931c0Bc458A5f13F3861444AeB036cc8a5363',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
-    },
-    // deprecated
-    superfluid: {
-      cfa: '0xEd6BcbF6907D4feEEe8a8875543249bEa9D308E8',
-      host: '0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9',
-      // minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
-      resolver: '0x3710AB3fDE2B61736B8BB0CE845D6c61F667a78E',
-      subgraph_url:
-        'https://thegraph.com/hosted-service/subgraph/superfluid-finance/superfluid-goerli',
-      subgraph_url_v2:
-        'https://thegraph.com/hosted-service/subgraph/superfluid-finance/protocol-v1-goerli',
-      // superapp_addr: {
-      //   v1: '0x7d8151FAB5D6742F1c574fff472B6794062C2D0C',
-      // },
-      supertoken_factory: '0x94f26B4c8AD12B18c12f38E878618f7664bdcCE2',
-      version: 'v1',
     },
     disperse_app: '0x3D0e848b6C55153E2b0154734ac6b5288A7f1B6F',
     poster: '0x3c1f4802be7e26d95b31ef7a566e18f42e360cab',
@@ -595,6 +575,7 @@ export const chainByNetworkId = networkId => {
   const idMapping = {
     1: supportedChains['0x1'],
     4: supportedChains['0x4'],
+    5: supportedChains['0x5'],
     10: supportedChains['0xa'],
     42: supportedChains['0x2a'],
     74: supportedChains['0x4a'],
@@ -696,6 +677,7 @@ export const EIP3085 = {
     '0x1': true,
     '0x2a': true,
     '0x4': true,
+    '0x5': true,
   },
 };
 
@@ -720,7 +702,12 @@ export const getScanKey = chainID => {
   if (chainID === '0x89') {
     return process.env.REACT_APP_POLYGONSCAN_KEY;
   }
-  if (chainID === '0x1' || chainByID === '0x4' || chainByID === '0x2a') {
+  if (
+    chainID === '0x1' ||
+    chainByID === '0x4' ||
+    chainByID === '0x5' ||
+    chainByID === '0x2a'
+  ) {
     return process.env.REACT_APP_ETHERSCAN_KEY;
   }
   return null;
