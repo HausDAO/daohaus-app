@@ -63,16 +63,6 @@ export const EXPLORE_FILTER_OPTIONS = [
   //   default: true,
   // },
   {
-    name: 'Kovan',
-    value: 42,
-    type: 'network',
-  },
-  {
-    name: 'Rinkeby',
-    value: 4,
-    type: 'network',
-  },
-  {
     name: 'Göerli',
     value: 5,
     type: 'network',

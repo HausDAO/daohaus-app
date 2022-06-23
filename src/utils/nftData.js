@@ -52,7 +52,7 @@ export const NFT_ACTIONS = {
     tooltTipLabel: 'Make a proposal to create a sell order on Rarible',
     modalName: 'sellRarible',
     localValues: ['tokenId', 'contractAddress', 'tokenBalance'],
-    networks: { '0x1': true, '0x4': true },
+    networks: { '0x1': true },
     nftTypeOverride: 'sellRarible',
     formLego: FORM.SELL_NFT_RARIBLE,
   },

@@ -492,7 +492,7 @@ export const BOOSTS = {
     categories: ['nft'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.RARIBLE,
-    networks: { '0x4': true, '0x1': true, '0x5': true },
+    networks: { '0x1': true, '0x5': true },
     cost: 'free',
     settings: 'none',
   },
@@ -504,7 +504,6 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NFT_TRIBUTE,
     networks: {
-      '0x4': true,
       '0x1': true,
       '0x5': true,
       '0x64': true,
@@ -522,7 +521,6 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.BANK_BUYOUT,
     networks: {
-      '0x4': true,
       '0x1': false,
       '0x5': true,
       '0x64': true,
@@ -564,7 +562,6 @@ export const BOOSTS = {
     networks: {
       '0x1': false,
       '0x5': false,
-      '0x4': true,
       '0xa': true,
       '0x64': true,
       '0x89': true,
@@ -666,7 +663,7 @@ export const BOOSTS = {
     steps: STEPS.BASIC_BOOST,
     playlist: BOOST_PLAYLISTS.POSTER,
     categories: ['governance', 'community'],
-    networks: { '0x64': true, '0x1': true, '0x4': true, '0x5': true },
+    networks: { '0x64': true, '0x1': true, '0x5': true },
     cost: 'free',
     settings: {
       type: 'internalLink',

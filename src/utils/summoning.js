@@ -180,17 +180,6 @@ export const daoPresets = chainId => {
     });
   }
 
-  if (chainId === '0x4a') {
-    presets = presets.map(preset => {
-      preset.currency = 'WEIDI';
-      preset.approvedToken = supportedChains[chainId].wrapper_contract;
-      preset.proposalDeposit = '10000000000000000000';
-      preset.processingReward = '1000000000000000000';
-
-      return preset;
-    });
-  }
-
   if (chainId === '0xa4ec') {
     presets = presets.map(preset => {
       preset.currency = 'CELO';

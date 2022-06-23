@@ -94,7 +94,6 @@ const fetchBlockScoutAPIData = async (address, module) => {
 export const fetchNativeBalance = async (address, daochain) => {
   if (
     daochain === '0x1' ||
-    daochain === '0x4' ||
     daochain === '0x5' ||
     daochain === '0xa' ||
     daochain === '0x2a' ||
@@ -137,7 +136,6 @@ export const fetchTokenTransferHistory = async (
   const moduleParams = `?module=account&action=tokentx&contractaddress=${tokenAddress}&startblock=${startBlock}&page=${page}&offset=${offset}&address=`;
   if (
     daochain === '0x1' ||
-    daochain === '0x4' ||
     daochain === '0x2a' ||
     daochain === '0x89' ||
     daochain === '0xa4b1'
@@ -160,12 +158,7 @@ export const fetchTokenTransferHistory = async (
 
 export const getExplorerLink = (tokenAddress, chainID) => {
   const slugStart = chainByID(chainID)?.block_explorer;
-  if (
-    chainID === '0x1' ||
-    chainID === '0x4' ||
-    chainID === '0x5' ||
-    chainID === '0x2a'
-  ) {
+  if (chainID === '0x1' || chainID === '0x5' || chainID === '0x2a') {
     return `${slugStart}/token/${tokenAddress}`;
   }
   if (chainID === '0x64' || chainID === '0x89') {
