@@ -1,27 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { Flex, Stack, Button, Link, Spinner, VStack } from '@chakra-ui/react';
+import { Button, Flex, Link, Spinner, Stack, VStack } from '@chakra-ui/react';
 import LitJsSdk from 'lit-js-sdk';
-import { useOverlay } from '../contexts/OverlayContext';
+import React, { useEffect, useState } from 'react';
+
 import BoostNotActive from '../components/boostNotActive';
+import GoogleLitCard from '../components/GoogleLitCard';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import {
   checkIfUserExists,
-  handleLoadCurrentUser,
-  getSharedGoogleDocs,
-  getSharedDaoGoogleDocs, // to be used when Lit has functionality hooked up.
-  STANDARD_CONTRACT_TYPE,
-  loadStoredAuthSig,
-  signOutUser,
-  handleLitServerError,
-  redirectToLitOauthUI,
-  deleteStoredAuthSigs,
-  storeAuthSig,
-  LIT_API_HOST,
   deleteShare,
+  deleteStoredAuthSigs,
+  getSharedGoogleDocs,
+  handleLitServerError,
+  handleLoadCurrentUser,
+  LIT_API_HOST,
+  loadStoredAuthSig,
+  redirectToLitOauthUI,
+  signOutUser,
+  STANDARD_CONTRACT_TYPE,
+  storeAuthSig,
 } from '../utils/litProtocol';
-import GoogleLitCard from '../components/GoogleLitCard';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+
+import { capitalize } from '../utils/general';
+import { Bold } from '../components/typography';
 
 const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
   const { address } = useInjectedProvider();
@@ -34,7 +37,10 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
 
   useEffect(() => {
     const checkAndSetProfile = async () => {
-      const localAuthSig = loadStoredAuthSig(address);
+      const localAuthSig = loadStoredAuthSig(
+        address,
+        daoMetaData?.contractAddress,
+      );
 
       if (localAuthSig) {
         setAuthSig(localAuthSig);
@@ -50,7 +56,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
     };
 
     checkAndSetProfile();
-  }, [address]);
+  }, [address, daoMetaData?.contractAddress]);
 
   const getAllGoogleDocs = async () => {
     try {
@@ -87,7 +93,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
       currentAuthSig = await await LitJsSdk.checkAndSignAuthMessage({
         chain,
       });
-      storeAuthSig(currentAuthSig, address);
+      storeAuthSig(currentAuthSig, address, daoMetaData?.contractAddress);
       setAuthSig(currentAuthSig);
 
       userExists = await checkIfUserExists(currentAuthSig);
@@ -95,7 +101,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
         await callback(currentAuthSig);
         return;
       } else {
-        // TODO handle this case - create frontend user on Lit side..
         // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L104
         warningToast({ title: 'Redirecting you to lit oauth connect UI' });
         await redirectToLitOauthUI();
@@ -127,7 +132,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
 
   const handleSignOut = async () => {
     try {
-      deleteStoredAuthSigs(address);
+      deleteStoredAuthSigs(address, daoMetaData?.contractAddress);
       setProfile(null);
       setAuthSig(null);
       setgoogleDocs([]);
@@ -139,14 +144,34 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
     }
   };
 
-  console.log(googleDocs);
-
   const LitAuthSigButton = () =>
     isMember && (
-      <Flex>
-        <Button onClick={handleSignAuthMessage}>
-          Authenticate Lit Protocol
-        </Button>
+      <Flex as={Stack}>
+        <Flex as={VStack} spacing={4} alignItems='center'>
+          <TextBox>
+            <Bold>1)</Bold> This link will redirect you to the{' '}
+            <Bold>Lit App Portal where</Bold> you will have to connect to google
+            via <Bold>mainnet</Bold>
+          </TextBox>
+          <Button
+            as={Link}
+            href='https://oauth-app.litgateway.com/google'
+            isExternal
+            mr={10}
+          >
+            Connect to Lit App Portal
+          </Button>
+        </Flex>
+        <Flex as={VStack} spacing={4} alignItems='center'>
+          <TextBox>
+            <Bold>2)</Bold> Reconnect to{' '}
+            <Bold>{capitalize(daoMetaData?.network)} </Bold>
+            after step 1 and generate an authentication token.
+          </TextBox>
+          <Button onClick={handleSignAuthMessage}>
+            Authneticate Lit Protocol on {capitalize(daoMetaData?.network)}
+          </Button>
+        </Flex>
       </Flex>
     );
 
@@ -154,7 +179,7 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
     <Flex>
       <Button
         as={Link}
-        href={`${LIT_API_HOST}/google?source=daohaus&dao_address=${daoMetaData?.address}&dao_name=${daoMetaData?.name}&contract_type=${STANDARD_CONTRACT_TYPE}`}
+        href={`${LIT_API_HOST}/google?source=daohaus&dao_address=${daoMetaData?.contractAddress}&dao_name=${daoMetaData?.name}&contract_type=${STANDARD_CONTRACT_TYPE}`}
         isExternal
         mr={10}
       >
@@ -204,10 +229,13 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
                 ))
             ) : (
               <Flex as={VStack} mt='100px' w='100%' justify='center'>
-                {showSignatureButton && <LitAuthSigButton />}
-                <TextBox variant='value' size='lg'>
-                  No Google Docs found.
-                </TextBox>
+                {showSignatureButton ? (
+                  <LitAuthSigButton />
+                ) : (
+                  <TextBox variant='value' size='lg'>
+                    No Google Docs found.
+                  </TextBox>
+                )}
               </Flex>
             )
           ) : (

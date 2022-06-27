@@ -27,17 +27,20 @@ const USER_ERROR_CODE_MAP = {
 // using wallet address allows for more than one lit auth sig to be stored at a time,
 // ie a user can use different wallets without conflicting keys
 const AUTH_SIG_STORAGE_KEY = 'lit-auth-signature';
-const buildAuthSigKey = walletAddress => {
-  return `${AUTH_SIG_STORAGE_KEY}-${walletAddress}`;
+const buildAuthSigKey = (walletAddress, daoAddress) => {
+  return `${AUTH_SIG_STORAGE_KEY}-${walletAddress}-${daoAddress}`;
 };
 
-export const storeAuthSig = (authSig, walletAddress) => {
-  localStorage.setItem(buildAuthSigKey(walletAddress), JSON.stringify(authSig));
+export const storeAuthSig = (authSig, walletAddress, daoAddress) => {
+  localStorage.setItem(
+    buildAuthSigKey(walletAddress, daoAddress),
+    JSON.stringify(authSig),
+  );
 };
 
-export const loadStoredAuthSig = walletAddress => {
+export const loadStoredAuthSig = (walletAddress, daoAddress) => {
   const authSig = JSON.parse(
-    localStorage.getItem(buildAuthSigKey(walletAddress)),
+    localStorage.getItem(buildAuthSigKey(walletAddress, daoAddress)),
   );
 
   if (authSig) {
@@ -49,8 +52,8 @@ export const loadStoredAuthSig = walletAddress => {
   return authSig;
 };
 
-export const deleteStoredAuthSigs = walletAddress => {
-  localStorage.removeItem(buildAuthSigKey(walletAddress));
+export const deleteStoredAuthSigs = (walletAddress, daoAddress) => {
+  localStorage.removeItem(buildAuthSigKey(walletAddress, daoAddress));
   localStorage.removeItem(AUTH_SIG_STORAGE_KEY);
 };
 
