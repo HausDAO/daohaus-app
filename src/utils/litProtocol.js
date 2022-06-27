@@ -166,9 +166,15 @@ export const getSharedGoogleDocs = async (authSig, idOnService) => {
   });
 };
 
-export const getSharedDaoGoogleDocs = async daoAddress => {
-  // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L398
+export const getSharedDaoGoogleDocs = async (
+  authSig,
+  idOnService,
+  daoAddress,
+) => {
+  // https://github.com/LIT-Protocol/lit-oauth/blob/main/server/oauth/google.js#L401
   return await handleLitRequest('api/google/getDAOShares', 'POST', {
+    authSig,
+    idOnService,
     daoAddress,
     source: 'daohaus',
   });

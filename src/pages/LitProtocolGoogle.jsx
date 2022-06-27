@@ -12,7 +12,7 @@ import {
   checkIfUserExists,
   deleteShare,
   deleteStoredAuthSigs,
-  getSharedGoogleDocs,
+  getSharedDaoGoogleDocs,
   handleLitServerError,
   handleLoadCurrentUser,
   LIT_API_HOST,
@@ -60,7 +60,13 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
 
   const getAllGoogleDocs = async () => {
     try {
-      setgoogleDocs(await getSharedGoogleDocs(authSig, profile?.idOnService));
+      setgoogleDocs(
+        await getSharedDaoGoogleDocs(
+          authSig,
+          profile?.idOnService,
+          daoMetaData?.contractAddress,
+        ),
+      );
       setShowSignatureButton(false);
     } catch (err) {
       console.log(err);
