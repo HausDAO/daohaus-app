@@ -29,7 +29,11 @@ import MinionCancel from './minionCancel';
 import EscrowActions from './escrowActions';
 
 import { TX } from '../data/txLegos/contractTX';
-import { isMinionProposalType, memberVote } from '../utils/proposalUtils';
+import {
+  isMinionProposalType,
+  memberVote,
+  ProposalStatus,
+} from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { createContract } from '../utils/contract';
@@ -326,12 +330,16 @@ const ProposalActions = ({
                               justiy='center'
                               align='center'
                             >
-                              <Icon
+                              <Button
                                 as={FaThumbsUp}
                                 color='green.500'
                                 w='25px'
                                 h='25px'
                                 _hover={{ cursor: 'pointer' }}
+                                disabled={
+                                  proposal?.status === ProposalStatus.Passed ||
+                                  proposal?.status === ProposalStatus.Failed
+                                }
                                 onClick={() => submitVote(proposal, 1)}
                               />
                             </Flex>
@@ -344,13 +352,17 @@ const ProposalActions = ({
                               justiy='center'
                               align='center'
                             >
-                              <Icon
+                              <Button
                                 as={FaThumbsDown}
                                 color='red.500'
                                 w='25px'
                                 h='25px'
                                 transform='rotateY(180deg)'
                                 _hover={{ cursor: 'pointer' }}
+                                disabled={
+                                  proposal?.status === ProposalStatus.Passed ||
+                                  proposal?.status === ProposalStatus.Failed
+                                }
                                 onClick={() => submitVote(proposal, 2)}
                               />
                             </Flex>
