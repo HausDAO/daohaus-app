@@ -183,19 +183,20 @@ export const supportedChains = {
     providers: ['walletconnect'],
     rpc_url: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
-      'https://api.goerli.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url: 'https://api.goerli.etherscan.io/api',
+      'https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api-goerli.etherscan.io/api',
     subgraph_url:
-      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-goerli',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-goerli',
     stats_graph_url:
-      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-stats-goerli',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-goerli',
     boosts_graph_url:
-      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-boosts-goerli',
-    // TODO update graph endpoints when ready
-    // erc721_graph_url:
-    //   'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
-    // erc1155_graph_url:
-    //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-goerli',
+    erc721_graph_url:
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/erc721-goerli-subgraph',
+    erc1155_graph_url:
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/erc1155-goerli-subgraph',
+    shaman_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-shamans-goerli',
     moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
     wrapper_contract: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',

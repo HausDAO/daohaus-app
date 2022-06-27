@@ -8,6 +8,7 @@ export const MINION_NETWORKS = {
     '0x64': true,
     '0x89': true,
     '0x4': true,
+    '0x5': true,
     '0x1': true,
     '0x2a': true,
   },
@@ -22,10 +23,12 @@ export const MINION_NETWORKS = {
     '0x64': true,
     '0x89': true,
     '0x4': true,
+    '0x5': true,
   },
   [MINION_TYPES.SAFE]: {
     '0x1': true,
     '0x4': true,
+    '0x5': true,
     '0x2a': true,
     '0x64': true,
     '0x89': true,
@@ -35,6 +38,7 @@ export const MINION_NETWORKS = {
   [MINION_TYPES.CROSSCHAIN_SAFE]: {
     '0x1': false,
     '0x4': true,
+    '0x5': true,
     '0x64': true,
   },
 };

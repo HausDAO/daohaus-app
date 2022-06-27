@@ -559,7 +559,7 @@ export const BOOSTS = {
     categories: ['nft'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.RARIBLE,
-    networks: { '0x4': true, '0x1': true, '0x5': true },
+    networks: { '0x4': true, '0x1': true },
     cost: 'free',
     settings: 'none',
   },
@@ -573,7 +573,6 @@ export const BOOSTS = {
     networks: {
       '0x4': true,
       '0x1': true,
-      '0x5': true,
       '0x64': true,
       '0x89': true,
       '0xa4b1': true,
