@@ -421,6 +421,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0x119E1a9421dF2d310a324e04f0ECe83278618ddc',
     moloch_token_factory: '0x651657ffc274f492c8006e847350e12ed1c8491a',
     dao_conditional_helper_addr: '0x8beE9422987ddd6fB57Cd546d184A0a6094DF7A8',
   },
