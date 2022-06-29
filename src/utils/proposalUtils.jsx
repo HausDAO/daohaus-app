@@ -17,7 +17,6 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
   NeedsExecution: 'NeedsExecution',
 };
-
 export const BASE_ACTIVE_STATES = {
   Unknown: 'Unknown',
   InQueue: 'InQueue',
