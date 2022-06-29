@@ -71,12 +71,25 @@ const ContributorRewardListInput = props => {
         dateList?.length === userList.length &&
         rewardTotal.gt(0)
       ) {
-        setInputError(null);
-        setValue('userList', userList);
-        setValue('amountList', amountList);
-        setValue('dateList', dateList);
-        setValue('rewardTotal', rewardTotal.toString());
-        setDisplayTotal(utils.formatUnits(rewardTotal, zeroPadding));
+        const datesValid = dateList.reduce((acc, item) => {
+          return acc && item && !isNaN(item) && item > 0;
+        }, true);
+
+        if (datesValid) {
+          setInputError(null);
+          setValue('userList', userList);
+          setValue('amountList', amountList);
+          setValue('dateList', dateList);
+          setValue('rewardTotal', rewardTotal.toString());
+          setDisplayTotal(utils.formatUnits(rewardTotal, zeroPadding));
+        } else {
+          setValue('userList', null);
+          setValue('amountList', null);
+          setValue('dateList', null);
+          setInputError(
+            'You must either set the Reward Unlock Date or provide an override date for each recipient',
+          );
+        }
       } else {
         setInputError(null);
         setValue('userList', null);

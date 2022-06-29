@@ -234,18 +234,6 @@ export const customValidations = {
       };
     }
   },
-  validContributorRewards({ values }) {
-    const valid = values.dateList.reduce((acc, item) => {
-      return acc && item && !isNaN(item) && item > 0;
-    }, true);
-    if (!valid)
-      return {
-        name: 'contributorRewardList',
-        message:
-          'You must either set the Reward Unlock Date or provide an override date for each recipient',
-      };
-    return false;
-  },
 };
 
 export const collectTypeValidations = valString => {

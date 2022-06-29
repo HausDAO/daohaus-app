@@ -33,6 +33,5 @@ export const HEDGEY_FORMS = {
         },
       ],
     ],
-    customValidations: ['validContributorRewards'],
   },
 };
