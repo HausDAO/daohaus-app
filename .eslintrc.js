@@ -39,9 +39,9 @@ module.exports = {
   rules: {
     // default rules
     'no-console': 'off',
-    'no-unused-vars': 'warn', // change to 'error' 🙏
-    'react/jsx-uses-react': 'error',
-    'react/jsx-uses-vars': 'error',
+    // 'no-unused-vars': 'warn', // change to 'error' 🙏
+    // 'react/jsx-uses-react': 'error',
+    // 'react/jsx-uses-vars': 'error',
     'no-param-reassign': 'off', // priority 1, easy
     'no-shadow': 'off', // priority 1, med
     'no-nested-ternary': 'off', // priority 2, med
