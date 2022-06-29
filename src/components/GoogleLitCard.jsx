@@ -17,7 +17,6 @@ import TextBox from './TextBox';
 import { ParaMd } from './typography';
 
 const GoogleLitCard = ({ googleDoc, getLinkFromShare, handleDeleteShare }) => {
-  // https://oauth-app.litgateway.com/google/l/5e5ec2da-578c-43b5-ba76-c326526f8621
   return (
     <ContentBox w='60%'>
       <Stack spacing={4}>

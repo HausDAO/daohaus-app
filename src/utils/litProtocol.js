@@ -14,6 +14,7 @@ const LIT_DAO_HAUS_ERROR_MAP = [
   'invalid_unified_condition_type',
   'unknown_error',
 ];
+
 const USER_ERROR_CODE_MAP = {
   no_wallet: 'You need a wallet to use the Lit Protocol',
   not_authorized: 'You are not authorized to view this page',

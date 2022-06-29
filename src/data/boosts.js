@@ -295,6 +295,11 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  /*
+ TODO commenting out until we hear back from Lit on remaining integration items.
+  see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897
+  for more details.
+
   GOOGLE_LIT: {
     title: 'Lit Protocol Google Drive',
     description: 'Share google documents with the dao',
@@ -308,6 +313,7 @@ export const CONTENT = {
       { href: 'https://github.com/LIT-Protocol', label: 'Lit Github' },
     ],
   },
+  */
 };
 
 export const COMMON_STEPS = {
@@ -692,28 +698,34 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  GOOGLE_LIT: {
-    id: 'GOOGLE_LIT',
-    boostContent: CONTENT.GOOGLE_LIT,
-    steps: STEPS.BASIC_BOOST,
-    categories: ['community'],
-    networks: {
-      // LIT_NETWORKS - https://github.com/LIT-Protocol/lit-js-sdk/blob/main/src/lib/constants.js#L30
-      '0x1': true,
-      '0x4': true,
-      '0x2a': true,
-      '0xa': true,
-      '0x64': true,
-      '0x89': true,
-      '0xa4b1': true,
-      '0xa4ec': true,
+  /*
+    TODO commenting out until we hear back from Lit on remaining integration items.
+    see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897
+    for more details.
+
+    GOOGLE_LIT: {
+      id: 'GOOGLE_LIT',
+      boostContent: CONTENT.GOOGLE_LIT,
+      steps: STEPS.BASIC_BOOST,
+      categories: ['community'],
+      networks: {
+        // LIT_NETWORKS - https://github.com/LIT-Protocol/lit-js-sdk/blob/main/src/lib/constants.js#L30
+        '0x1': true,
+        '0x4': true,
+        '0x2a': true,
+        '0xa': true,
+        '0x64': true,
+        '0x89': true,
+        '0xa4b1': true,
+        '0xa4ec': true,
+      },
+      cost: 'free',
+      settings: {
+        type: 'internalLink',
+        appendToDaoPath: 'boost/lit-protocol/google',
+      },
     },
-    cost: 'free',
-    settings: {
-      type: 'internalLink',
-      appendToDaoPath: 'boost/lit-protocol/google',
-    },
-  },
+  */
 };
 
 export const allBoosts = {
