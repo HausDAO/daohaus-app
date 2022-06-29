@@ -42,7 +42,9 @@ import AMB from '../contracts/iAmb.json';
 import SF_UUPS_PROXIABLE from '../contracts/uupsProxiable.json';
 import NATIVE_WRAPPER from '../contracts/nativeWrapper.json';
 import MOLOCH_TOKEN_FACTORY from '../contracts/molochTokenFactory.json';
+import SBT_FACTORY from '../contracts/sbtFactory.json';
 import { validate } from './validation';
+
 import { cacheABI, getCachedABI } from './localForage';
 
 export const LOCAL_ABI = Object.freeze({
@@ -79,6 +81,7 @@ export const LOCAL_ABI = Object.freeze({
   AMB,
   NATIVE_WRAPPER,
   MOLOCH_TOKEN_FACTORY,
+  SBT_FACTORY,
 });
 
 const getBlockExplorerApiKey = chainID => {

@@ -209,4 +209,9 @@ export const CONTRACTS = {
     abiName: 'MOLOCH_TOKEN_FACTORY',
     contractAddress: '.contextData.chainConfig.moloch_token_factory',
   },
+  SBT_FACTORY: {
+    location: 'local',
+    abiName: 'SBT_FACTORY',
+    contractAddress: '.contextData.chainConfig.sbt_factory',
+  },
 };

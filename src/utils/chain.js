@@ -336,6 +336,7 @@ export const supportedChains = {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
+    sbt_factory: '0xb1b470Bc443934F6a92987F2F535B8AC9b96da88',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '0xF89e2f69FB1351D37b9F82e77bbF10A02cdC5042',
     dao_conditional_helper_addr: '0x55c8F8a71aD01FC707Bbb1A04d2c0Ef246973392',
