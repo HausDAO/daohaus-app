@@ -20,7 +20,7 @@ import { VAULT_TRANSFER_TX } from './transferContractTX';
 import { WRAPNZAP_BOOST_TX } from './wrapNzapBoostTX';
 import { POSTER_BOOST_TX } from './posterBoostTX';
 import { MOLOCH_TOKEN_FACTORY_TX } from './molochTokenTX';
-import { SBT_TX } from './sbtTX';
+// import { SBT_TX } from './sbtTX';
 // TEST LEGOS BEFORE PUSHING TO DEVELOP
 
 // const TX_REQUIRED = ['name', 'contract', 'errMsg', 'successMsg'];
@@ -64,5 +64,4 @@ export const TX = {
   ...SWAPR_BOOST_TX,
   ...POSTER_BOOST_TX,
   ...MOLOCH_TOKEN_FACTORY_TX,
-  ...SBT_TX,
 };
