@@ -307,7 +307,7 @@ const ProposalActions = ({
                   display='flex'
                   flexDirection='row'
                 >
-                  {currentlyVoting(proposal) ? (
+                  {currentlyVoting(proposal) && !proposal?.executed ? (
                     <>
                       {daoConnectedAndSameChain(
                         address,
