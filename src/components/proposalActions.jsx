@@ -307,13 +307,14 @@ const ProposalActions = ({
                   display='flex'
                   flexDirection='row'
                 >
-                  {currentlyVoting(proposal) && !proposal?.executed ? (
+                  {currentlyVoting(proposal) ? (
                     <>
                       {daoConnectedAndSameChain(
                         address,
                         daochain,
                         injectedChain?.chainId,
                       ) &&
+                        !proposal?.executed &&
                         canInteract &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
