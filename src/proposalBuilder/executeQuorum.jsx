@@ -6,15 +6,18 @@ import { ParaSm } from '../components/typography';
 import { earlyExecuteMinionType, getExecuteAction } from '../utils/minionUtils';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { useTX } from '../contexts/TXContext';
+import { useDao } from '../contexts/DaoContext';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
 export const ExecuteQuorum = ({ proposal, voteData }) => {
-  const { totalVotes, totalYes } = voteData;
+  const { totalYes } = voteData;
   const { submitTransaction } = useTX();
+  const { daoOverview } = useDao();
 
   const theme = useTheme();
+  const totalShares = daoOverview?.totalShares;
   const percYesVotes =
-    totalVotes && totalYes && ((totalYes / totalVotes) * 100).toFixed();
+    totalShares && totalYes && ((totalYes / totalShares) * 100).toFixed();
   const hasReachedQuorum = percYesVotes >= Number(proposal?.minion?.minQuorum);
 
   const execute = async () => {
