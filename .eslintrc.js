@@ -6,8 +6,14 @@ module.exports = {
     node: true,
     browser: true,
   },
+  root: true,
   // prettier should be last
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    'plugin:react/recommended',
+    // 'plugin:react/app',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -30,7 +36,7 @@ module.exports = {
       configFile: './babel.config.json',
     },
   },
-  plugins: ['react-hooks', 'react', 'react-app'],
+  plugins: ['react-hooks', 'react'],
   settings: {
     react: {
       version: 'detect',
