@@ -114,6 +114,7 @@ minion {
   minQuorum
   crossChainMinion
   foreignChainId
+  safeMinionVersion
 }
 actions {
   target

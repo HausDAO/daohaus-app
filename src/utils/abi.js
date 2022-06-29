@@ -17,6 +17,7 @@ import NIFTY_INK from '../contracts/niftyInk.json';
 import NIFTY_MINION_FACTORY from '../contracts/minionNiftyFactory.json';
 import NIFTY_MINION from '../contracts/minionNifty.json';
 import SAFE_MINION from '../contracts/safeMinion.json';
+import SAFE_MINION_V2 from '../contracts/safeMinionV2.json';
 import SAFE_MINION_FACTORY from '../contracts/safeMinionFactory.json';
 import SAFE_MULTISEND from '../contracts/safeMultisend.json';
 import SAFE_SIGNLIB from '../contracts/safeSignMessageLib.json';
@@ -57,6 +58,7 @@ export const LOCAL_ABI = Object.freeze({
   SUPERFLUID_MINION_FACTORY,
   SAFE_MINION_FACTORY,
   SAFE_MINION,
+  SAFE_MINION_V2,
   SAFE_MULTISEND,
   SAFE_SIGNLIB,
   VANILLA_MINION_FACTORY,
@@ -372,15 +374,17 @@ export const getContractABI = async data => {
   );
 };
 
-export const getMinionAbi = minionType => {
+export const getMinionAbi = (minionType, version = '1') => {
+  const minionTypeVersion = `${minionType}_${version}`;
   const abis = {
-    [MINION_TYPES.NIFTY]: NIFTY_MINION,
-    [MINION_TYPES.VANILLA]: VANILLA_MINION,
-    [MINION_TYPES.SAFE]: SAFE_MINION,
-    [MINION_TYPES.SUPERFLUID]: SUPERFLUID_MINION,
+    [`${MINION_TYPES.NIFTY}_1`]: NIFTY_MINION,
+    [`${MINION_TYPES.VANILLA}_1`]: VANILLA_MINION,
+    [`${MINION_TYPES.SAFE}_1`]: SAFE_MINION,
+    [`${MINION_TYPES.SAFE}_2`]: SAFE_MINION_V2,
+    [`${MINION_TYPES.SUPERFLUID}_1`]: SUPERFLUID_MINION,
   };
-  if (Object.keys(abis).includes(minionType)) {
-    return abis[minionType];
+  if (Object.keys(abis).includes(minionTypeVersion)) {
+    return abis[minionTypeVersion];
   }
   return null;
 };
