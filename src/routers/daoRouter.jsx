@@ -41,7 +41,7 @@ import ProposalsSpam from '../pages/ProposalsSpam';
 import SpamFilterSettings from '../pages/SpamFilterSettings';
 import DaoDocs from '../pages/daoDocs';
 import DaoDoc from '../pages/DaoDoc';
-// import LitProtocolGoogle from '../pages/LitProtocolGoogle';
+import LitProtocolGoogle from '../pages/LitProtocolGoogle';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -243,15 +243,14 @@ const DaoRouter = () => {
           />
         </Route>
         {/*
-          TODO commenting out until we hear back from Lit on remaining integration items.
-          see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897
-          for more details.
-
+          TODO adding a flag to activate the LIT integration until the Lit team gets back to us
+          see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897 for more details.
+        */}
+        {process.env.REACT_APP_DEV && (
           <Route exact path={`${path}/boost/lit-protocol/google`}>
             <LitProtocolGoogle isMember={isMember} daoMetaData={daoMetaData} />
           </Route>
-        */}
-
+        )}
         <Route exact path={`${path}/party-favor`}>
           <PartyFavor isMember={isMember} />
         </Route>

@@ -5,6 +5,27 @@ import { FORM } from './formLegos/forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
+let litContent = {};
+if (process.env.REACT_APP_DEV) {
+  /*
+    TODO adding a flag to activate the LIT integration until the Lit team gets back to us
+    see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897 for more details.
+  */
+  litContent['GOOGLE_LIT'] = {
+    title: 'Lit Protocol Google Drive',
+    description: 'Share google documents with the dao',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.1',
+    pars: [
+      'This boost allows daos to share google docs with other users in the dao',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+      { href: 'https://github.com/LIT-Protocol', label: 'Lit Github' },
+    ],
+  };
+}
+
 export const CONTENT = {
   DEV_SUITE: {
     title: 'DEV Suite',
@@ -295,25 +316,7 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-  /*
- TODO commenting out until we hear back from Lit on remaining integration items.
-  see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897
-  for more details.
-
-  GOOGLE_LIT: {
-    title: 'Lit Protocol Google Drive',
-    description: 'Share google documents with the dao',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '0.1',
-    pars: [
-      'This boost allows daos to share google docs with other users in the dao',
-    ],
-    externalLinks: [
-      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
-      { href: 'https://github.com/LIT-Protocol', label: 'Lit Github' },
-    ],
-  },
-  */
+  ...litContent,
 };
 
 export const COMMON_STEPS = {
@@ -455,6 +458,36 @@ export const STEPS = {
     STEP2: { ...COMMON_STEPS.SIGNER, daoRefetch: true },
   },
 };
+
+let litBoost = {};
+if (process.env.REACT_APP_DEV) {
+  /*
+    TODO adding a flag to activate the LIT integration until the Lit team gets back to us
+    see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897 for more details.
+  */
+  litBoost['GOOGLE_LIT'] = {
+    id: 'GOOGLE_LIT',
+    boostContent: CONTENT.GOOGLE_LIT,
+    steps: STEPS.BASIC_BOOST,
+    categories: ['community'],
+    networks: {
+      // LIT_NETWORKS - https://github.com/LIT-Protocol/lit-js-sdk/blob/main/src/lib/constants.js#L30
+      '0x1': true,
+      '0x4': true,
+      '0x2a': true,
+      '0xa': true,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+      '0xa4ec': true,
+    },
+    cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'boost/lit-protocol/google',
+    },
+  };
+}
 
 export const BOOSTS = {
   OLD_DEV_SUITE: {
@@ -698,34 +731,7 @@ export const BOOSTS = {
     cost: 'free',
     settings: 'none',
   },
-  /*
-    TODO commenting out until we hear back from Lit on remaining integration items.
-    see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897
-    for more details.
-
-    GOOGLE_LIT: {
-      id: 'GOOGLE_LIT',
-      boostContent: CONTENT.GOOGLE_LIT,
-      steps: STEPS.BASIC_BOOST,
-      categories: ['community'],
-      networks: {
-        // LIT_NETWORKS - https://github.com/LIT-Protocol/lit-js-sdk/blob/main/src/lib/constants.js#L30
-        '0x1': true,
-        '0x4': true,
-        '0x2a': true,
-        '0xa': true,
-        '0x64': true,
-        '0x89': true,
-        '0xa4b1': true,
-        '0xa4ec': true,
-      },
-      cost: 'free',
-      settings: {
-        type: 'internalLink',
-        appendToDaoPath: 'boost/lit-protocol/google',
-      },
-    },
-  */
+  ...litBoost,
 };
 
 export const allBoosts = {
