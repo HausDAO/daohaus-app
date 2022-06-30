@@ -636,7 +636,9 @@ export const contractByProposalType = proposal => {
       : CONTRACTS.SUPERFLUID_MINION_LOCAL;
   }
   if (proposal.minion.minionType === PROPOSAL_TYPES.MINION_SAFE) {
-    return CONTRACTS.MINION_SAFE_EXECUTE;
+    return proposal.minion.safeMinionVersion === '2'
+      ? CONTRACTS.MINION_SAFE_V2_EXECUTE
+      : CONTRACTS.MINION_SAFE_EXECUTE;
   }
   return CONTRACTS.MINION_SIMPLE_EXECUTE;
 };
