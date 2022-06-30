@@ -36,16 +36,24 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
     });
   };
 
+  const Quorum = color => (
+    <>
+      <BiTachometer color={color} size='1.2rem' />
+      <ParaSm ml={1}>
+        {percYesVotes}/{proposal.minion.minQuorum}%
+      </ParaSm>
+    </>
+  );
+
   if (!proposal?.minion?.minQuorum || !earlyExecuteMinionType(proposal))
     return null;
-  if (hasReachedQuorum && !proposal.executed) {
-    return (
+  if (hasReachedQuorum) {
+    return !proposal.executed ? (
       <Button variant='ghost' size='fit-content' onClick={execute} p='0'>
-        <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />
-        <ParaSm ml={1}>
-          {percYesVotes}/{proposal.minion.minQuorum}%
-        </ParaSm>
+        <Quorum color={theme?.colors?.secondary?.[500]} />
       </Button>
+    ) : (
+      <Quorum color={theme?.colors?.secondary?.[500]} />
     );
   }
 
@@ -62,10 +70,7 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
         }}
       >
         <Flex alignItems='center'>
-          <BiTachometer color='white' size='1.2rem' />
-          <ParaSm ml={1}>
-            {percYesVotes}/{proposal.minion.minQuorum}%
-          </ParaSm>
+          <Quorum color='white' />
         </Flex>
       </ToolTipWrapper>
     </Flex>
