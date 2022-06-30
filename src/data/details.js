@@ -136,4 +136,8 @@ export const DETAILS = {
     title: `.values.title || Proposal to Update Doc Location`,
     proposalType: '.formData.type',
   },
+  SBT_SUMMON: {
+    title: `Summon Soul Bound Token`,
+    proposalType: '.formData.type',
+  },
 };

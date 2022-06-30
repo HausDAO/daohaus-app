@@ -10,7 +10,7 @@ const POSTER_DESCRIPTION = {
 export const POSTER_FORMS = {
   POST_IPFS_MD: {
     id: 'POST_IPFS_MD',
-    dev: true,
+    // dev: true,
     title: 'Publish New Document',
     description:
       'Create and post a Markdown document to IPFS using the Pinata API',
@@ -21,7 +21,7 @@ export const POSTER_FORMS = {
   },
   RATIFY_DAO_DOC: {
     id: 'RATIFY_DAO_DOC',
-    dev: true,
+    // dev: true,
     title: 'Ratify Existing Document',
     description: 'Propose an existing document for ratification by the DAO',
     type: PROPOSAL_TYPES.POSTER_RATIFY,
@@ -47,7 +47,7 @@ export const POSTER_FORMS = {
   },
   POST_MD: {
     id: 'POST_MD',
-    dev: true,
+    // dev: true,
     title: 'Configure Document Location',
     description:
       "Propose & edit where Ratified documents are shown in the DAO's page",
