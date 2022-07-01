@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BigNumber, utils } from 'ethers';
 
 import GenericTextArea from './genericTextArea';
