@@ -195,7 +195,7 @@ const ProposalActions = ({
     });
     setLoading(false);
   };
-  console.log([proposal]);
+
   return (
     <>
       <ContentBox position='relative'>
@@ -298,6 +298,7 @@ const ProposalActions = ({
             </Flex>
           </Flex>
         )}
+
         {(proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' && (
             <>
@@ -328,10 +329,12 @@ const ProposalActions = ({
                               align='center'
                             >
                               <IconButton
-                                icon={<FaThumbsUp />}
+                                as={FaThumbsUp}
                                 color='green.500'
                                 w='25px'
                                 h='25px'
+                                minWidth='26px'
+                                background='none'
                                 _hover={{ cursor: 'pointer' }}
                                 disabled={proposal?.executed}
                                 onClick={() => submitVote(proposal, 1)}
@@ -347,10 +350,12 @@ const ProposalActions = ({
                               align='center'
                             >
                               <IconButton
-                                icon={<FaThumbsDown />}
+                                as={FaThumbsDown}
                                 color='red.500'
                                 w='25px'
                                 h='25px'
+                                minWidth='26px'
+                                background='none'
                                 transform='rotateY(180deg)'
                                 _hover={{ cursor: 'pointer' }}
                                 disabled={proposal?.executed}
@@ -517,7 +522,8 @@ const ProposalActions = ({
                     early={
                       earlyExecuteMinionType(proposal) &&
                       proposal.yesShares >= quorumNeeded &&
-                      proposal?.status === 'NeedsExecution'
+                      proposal?.status === 'NeedsExecution' &&
+                      !proposal?.processed
                     }
                   />
                 ) : (
