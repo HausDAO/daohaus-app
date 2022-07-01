@@ -37,12 +37,12 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
   };
 
   const Quorum = color => (
-    <>
+    <Flex alignItems='center'>
       <BiTachometer color={color} size='1.2rem' />
       <ParaSm ml={1}>
         {percYesVotes}/{proposal.minion.minQuorum}%
       </ParaSm>
-    </>
+    </Flex>
   );
 
   if (!proposal?.minion?.minQuorum || !earlyExecuteMinionType(proposal))
@@ -69,9 +69,7 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
           ],
         }}
       >
-        <Flex alignItems='center'>
-          <Quorum color='white' />
-        </Flex>
+        <Quorum color='white' />
       </ToolTipWrapper>
     </Flex>
   );
