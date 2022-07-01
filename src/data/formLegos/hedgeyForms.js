@@ -9,6 +9,7 @@ export const HEDGEY_FORMS = {
     description: 'Distribute contributor rewards as time-locked NFTs',
     type: PROPOSAL_TYPES.HEDGEY_CONTRIBUTOR_REWARDS,
     minionType: MINION_TYPES.SAFE,
+    dev: true,
     tx: TX.CONTRIBUTOR_REWARDS_TOKEN,
     required: ['selectedMinion', 'contributorRewardList', 'tokenAddress'],
     fields: [
