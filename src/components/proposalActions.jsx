@@ -319,49 +319,61 @@ const ProposalActions = ({
                         canInteract &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
-                            <Flex
+                            <IconButton
+                              icon={
+                                <Flex justiy='center' align='center'>
+                                  <Icon boxSize='1.5em' as={FaThumbsUp}></Icon>
+                                </Flex>
+                              }
                               p={3}
+                              size='xl'
+                              color='green.500'
+                              background='none'
+                              borderRadius='40px'
                               borderWidth='1px'
                               borderColor='green.500'
                               borderStyle='solid'
+                              _hover={{ cursor: 'pointer' }}
+                              _disabled={{
+                                borderColor: 'green.900',
+                                color: 'green.900',
+                                cursor: 'not-allowed',
+                                _hover: {
+                                  cursor: 'not-allowed',
+                                },
+                              }}
+                              isDisabled={proposal?.executed}
+                              onClick={() => submitVote(proposal, 1)}
+                            />
+                            <IconButton
+                              icon={
+                                <Flex p={3} justiy='center' align='center'>
+                                  <Icon
+                                    boxSize='1.5em'
+                                    as={FaThumbsDown}
+                                  ></Icon>
+                                </Flex>
+                              }
                               borderRadius='40px'
-                              justiy='center'
-                              align='center'
-                            >
-                              <IconButton
-                                as={FaThumbsUp}
-                                color='green.500'
-                                w='25px'
-                                h='25px'
-                                minWidth='26px'
-                                background='none'
-                                _hover={{ cursor: 'pointer' }}
-                                disabled={proposal?.executed}
-                                onClick={() => submitVote(proposal, 1)}
-                              />
-                            </Flex>
-                            <Flex
-                              p={3}
                               borderWidth='1px'
                               borderColor='red.500'
                               borderStyle='solid'
-                              borderRadius='40px'
-                              justiy='center'
-                              align='center'
-                            >
-                              <IconButton
-                                as={FaThumbsDown}
-                                color='red.500'
-                                w='25px'
-                                h='25px'
-                                minWidth='26px'
-                                background='none'
-                                transform='rotateY(180deg)'
-                                _hover={{ cursor: 'pointer' }}
-                                disabled={proposal?.executed}
-                                onClick={() => submitVote(proposal, 2)}
-                              />
-                            </Flex>
+                              color='red.500'
+                              size='xl'
+                              background='none'
+                              _hover={{ cursor: 'pointer' }}
+                              _disabled={{
+                                color: 'red.900',
+                                borderColor: 'red.900',
+                                cursor: 'not-allowed',
+                                _hover: {
+                                  cursor: 'not-allowed',
+                                },
+                              }}
+                              transform='rotateY(180deg)'
+                              isDisabled={proposal?.executed}
+                              onClick={() => submitVote(proposal, 2)}
+                            />
                           </Flex>
                         )}
                       <Flex
@@ -522,7 +534,6 @@ const ProposalActions = ({
                     early={
                       earlyExecuteMinionType(proposal) &&
                       proposal.yesShares >= quorumNeeded &&
-                      proposal?.status === 'NeedsExecution' &&
                       !proposal?.processed
                     }
                   />
