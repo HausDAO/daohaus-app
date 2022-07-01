@@ -22,7 +22,7 @@ import {
 import { formatCreatedAt } from '../utils/general';
 
 const getDAOdoc = async ({ daochain, setDoc, docId }) => {
-  const endpoint = chainByID(daochain)?.poster_graph_url;
+  const endpoint = chainByID(daochain)?.subgraph_url;
   try {
     const res = await graphQuery({
       endpoint,
@@ -31,6 +31,7 @@ const getDAOdoc = async ({ daochain, setDoc, docId }) => {
         id: docId,
       },
     });
+
     const docData = res.contents?.[0];
     if (docData?.content && docData?.contentType) {
       const withDecoded = await getDocContent({ docData });
