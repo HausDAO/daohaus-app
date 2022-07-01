@@ -1,5 +1,5 @@
-import React from 'react';
-import { Flex, Box, Button } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Flex, Box, Button, Link } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
@@ -19,14 +19,8 @@ const Main = () => {
     return userHubDaos.some(network => network.data.length);
   };
 
-  const ctaButton = (
-    <Button as='a' href='https://3box.io/hub' target='_blank' variant='outline'>
-      Edit 3Box Profile
-    </Button>
-  );
-
   return (
-    <MainViewLayout header='Hub' headerEl={address ? ctaButton : null}>
+    <MainViewLayout header='Hub'>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}

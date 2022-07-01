@@ -29,6 +29,8 @@ import {
   authenticateDid,
 } from '../utils/3box';
 
+import { getProfileForm } from '../utils/profile';
+
 const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
   const { address, injectedProvider } = useInjectedProvider();
@@ -57,83 +59,16 @@ const ProfileMenu = ({ member, refreshProfile }) => {
 
   const handleUpdateDelegateClick = () => formModal(FORM.UPDATE_DELEGATE);
 
-  const handleEditProfile = useCallback(() => {
-    let client = null;
-    let did = null;
-    stepperModal({
-      DISPLAY: {
-        type: 'buttonAction',
-        title: 'Edit Ceramic Profile',
-        checklist: ['isConnected', 'isMember'],
-        btnText: 'Connect',
-        btnLabel: 'Connect to Ceramic',
-        btnLoadingText: 'Connecting',
-        btnNextCallback: values => {
-          return values?.ceramicDid;
-        },
-        btnCallback: async (setValue, setLoading, setFormState) => {
-          setLoading(true);
-          try {
-            [client, did] = await authenticateDid(
-              window.ethereum.selectedAddress,
-            );
-            setValue('ceramicClient', client);
-            setValue('ceramicDid', did);
-            const profile = await getBasicProfile(did.id);
-            setValue('name', profile?.name || '');
-            setValue('emoji', profile?.emoji || '');
-            setValue('description', profile?.description || '');
-            setValue('homeLocation', profile?.homeLocation || '');
-            setValue('url', profile?.url || '');
-            setValue('image', profile?.image || '');
-            setFormState('success');
-          } catch (err) {
-            console.error(err);
-            setFormState('failed');
-          }
-          setLoading(false);
-        },
-        next: 'STEP2',
-        start: true,
-      },
-      STEP2: {
-        type: 'form',
-        title: 'Edit Ceramic Profile',
-        subtitle: 'Connected to Ceramic',
-        form: {
-          ...FORM.PROFILE,
-          ctaText: 'Submit',
-          formSuccessMessage: 'Connected',
-          checklist: ['isConnected', 'isMember'],
-          onSubmit: async ({ values }) => {
-            const profileArray = Object.entries({
-              name: values?.name || null,
-              emoji: values?.emoji || null,
-              description: values?.description || null,
-              homeLocation: values?.homeLocation || null,
-              url: values?.url || null,
-              image: values?.image || null,
-            }).filter(value => value[1] !== null);
-            const profile = Object.fromEntries(profileArray);
+  const profileForm = getProfileForm(profile => {
+    successToast({ title: 'Updated Profile!' });
+    refreshProfile(profile);
+    closeModal();
+  });
 
-            await setBasicProfile(client, did, profile);
-            cacheProfile(profile, member.memberAddress);
-            refreshProfile(profile);
-            await refreshMemberProfile();
-            successToast({ title: 'Updated Profile!' });
-            client = null;
-            did = null;
-            closeModal();
-          },
-        },
-        ctaText: 'Finish',
-        isUserStep: true,
-        finish: true,
-        stepLabel: 'Update profile',
-      },
-    });
+  const handleEditProfile = useCallback(() => {
+    stepperModal(profileForm);
     history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
-  }, [member.memberAddress, refreshMemberProfile]);
+  }, [member.memberAddress, refreshMemberProfile, profileForm]);
 
   useEffect(() => {
     const edit = new URLSearchParams(location.search).get('edit');
