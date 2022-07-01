@@ -20,6 +20,7 @@ import { SWAPR_BOOST_FORMS } from './swaprBoostForms';
 import { VANILLA_MINION_FORMS } from './vanillaMinionForms';
 import { POSTER_FORMS } from './posterForms';
 // import { SBT_FORMS } from './sbtForms';
+import { HEDGEY_FORMS } from './hedgeyForms';
 
 // TEST LEGOS BEFORE PUSHING TO DEVELOP
 
@@ -61,4 +62,5 @@ export const FORM = {
   ...VANILLA_MINION_FORMS,
   ...SWAPR_BOOST_FORMS,
   ...POSTER_FORMS,
+  ...HEDGEY_FORMS,
 };

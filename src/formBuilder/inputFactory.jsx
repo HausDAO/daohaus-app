@@ -5,6 +5,7 @@ import AddressInput from './addressInput';
 import BuyoutPaymentInput from './buyoutPaymentInput';
 import ColorPicker from './colorPicker';
 import DateRange from './dateRange';
+import DateSelect from './dateSelect';
 import DiscourseMeta from './discourseMeta';
 import GatedInput from './gatedInput';
 import GenericFormDisplay from './genericFormDisplay';
@@ -54,6 +55,7 @@ import MarkdownEditor from './mdEditor';
 import PosterEncoder from './posterEncoder';
 import DocSelect from './docSelect';
 import WalletConnectTx from './walletConnectTx';
+import ContributorRewardListInput from './contributorRewardListInput';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -130,6 +132,9 @@ export const InputFactory = props => {
   }
   if (type === 'dateRange') {
     return <DateRange {...props} />;
+  }
+  if (type === 'dateSelect') {
+    return <DateSelect {...props} />;
   }
   if (type === 'targetInk') {
     return <NiftyInkUrl {...props} />;
@@ -229,6 +234,9 @@ export const InputFactory = props => {
   }
   if (type === 'walletConnectTx') {
     return <WalletConnectTx {...props} />;
+  }
+  if (type === 'contributorRewardListInput') {
+    return <ContributorRewardListInput {...props} />;
   }
   return null;
 };
