@@ -314,6 +314,7 @@ const ProposalActions = ({
                         daochain,
                         injectedChain?.chainId,
                       ) &&
+                        !proposal?.executed &&
                         canInteract &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
