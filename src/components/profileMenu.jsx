@@ -22,12 +22,6 @@ import { FORM } from '../data/formLegos/forms';
 import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
-import {
-  getBasicProfile,
-  setBasicProfile,
-  cacheProfile,
-  authenticateDid,
-} from '../utils/3box';
 
 import { getProfileForm } from '../utils/profile';
 

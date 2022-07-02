@@ -5,7 +5,6 @@ import Web3SignIn from './web3SignIn';
 import WrongNetworkToolTip from './wrongNetworkToolTip';
 import { getTerm } from '../utils/metadata';
 import HausBalance from './hausBalance';
-import { useHistory } from 'react-router-dom';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useAppModal } from '../hooks/useModals';
 import { getProfileForm } from '../utils/profile';
@@ -18,7 +17,6 @@ const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
 
   const profileForm = getProfileForm(() => {
     successToast({ title: 'Updated Profile!' });
-    // refreshProfile(profile);
     closeModal();
   });
 
@@ -42,9 +40,11 @@ const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
         >
           {customTerms ? getTerm(customTerms, header) : header}
         </Box>
-        <Button onClick={handleEditProfile} variant='outline'>
-          Edit 3Box Profile
-        </Button>
+        {isDao && (
+          <Button onClick={handleEditProfile} mr={5} variant='outline'>
+            Edit 3Box Profile
+          </Button>
+        )}
         {headerEl}
       </Flex>
       <Flex

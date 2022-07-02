@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Flex, Box, Button, Link } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
+import React from 'react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useUser } from '../contexts/UserContext';
 import FeaturedDaos from '../components/featuredDaos';
+import HausCard from '../components/hausCard';
 import HubProfileCard from '../components/hubProfileCard';
 import HubSignedOut from '../components/hubSignedOut';
 import MainViewLayout from '../components/mainViewLayout';
-import NewsFeed from '../components/newsFeed';
 import NetworkList from '../components/networkList';
-import HausCard from '../components/hausCard';
+import NewsFeed from '../components/newsFeed';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useUser } from '../contexts/UserContext';
 
 const Main = () => {
   const { address } = useInjectedProvider();
