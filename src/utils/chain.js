@@ -257,6 +257,7 @@ export const supportedChains = {
     },
     escrow_minion: '', // TODO team will add
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0x119E1a9421dF2d310a324e04f0ECe83278618ddc',
     moloch_token_factory: '0xdb0f2d9ef30ffae97474d6db8c1f0e999934737d',
     zodiac_amb_module: {
       amb_bridge_address: {
@@ -421,7 +422,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
-    poster: '0x119E1a9421dF2d310a324e04f0ECe83278618ddc',
+    poster: '0xc59220828774cB373700e7fEf92Aba4417C6B175',
     moloch_token_factory: '0x651657ffc274f492c8006e847350e12ed1c8491a',
     dao_conditional_helper_addr: '0x8beE9422987ddd6fB57Cd546d184A0a6094DF7A8',
   },
@@ -474,6 +475,7 @@ export const supportedChains = {
     },
     disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
     moloch_token_factory: '0x691086c17418589688f0d3031cfc8d9400df8817',
+    poster: '0x10ecbe39b914bdb43850932eb9d505cd0c673321',
     dao_conditional_helper_addr: '0xF5fb9ce16dbf5B0a7b632Ed5D3F0278E0043B7AE',
   },
   '0xa4ec': {
