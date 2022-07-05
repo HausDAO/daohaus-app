@@ -43,7 +43,7 @@ const MinionTokenSelect = props => {
       return 'Select a Minion First';
     }
     if (loadingInfo) {
-      return <Spinner />;
+      return <Spinner size='xs' />;
     }
     if (
       selectedToken &&

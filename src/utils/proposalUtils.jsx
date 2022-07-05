@@ -17,7 +17,6 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
   NeedsExecution: 'NeedsExecution',
 };
-
 export const BASE_ACTIVE_STATES = {
   Unknown: 'Unknown',
   InQueue: 'InQueue',
@@ -60,6 +59,7 @@ export const PROPOSAL_TYPES = {
   POSTER_RATIFY: 'Ratify Content',
   POSTER_RATIFY_DOC: 'Ratify DAO DOC',
   POSTER_UPDATE_LOCATION: 'change location of DAO DOC',
+  SBT_SUMMON: 'Summon SBT',
 };
 
 export const MINION_TYPES = {
@@ -73,6 +73,7 @@ export const MINION_TYPES = {
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
   SAFE_MINION: 'actions',
+  SAFE_MINION_V2: 'actions',
   SUPERFLUID_MINION: 'streams',
 };
 

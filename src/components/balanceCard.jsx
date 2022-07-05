@@ -97,13 +97,15 @@ const balanceCard = ({
         <>
           <Box w='20%' d={['none', null, null, 'inline-block']}>
             <Box fontFamily='mono'>
-              <Box>{`$${numberWithCommas(token?.usd.toFixed(2)) || 0}`}</Box>
+              <Box>{`$${numberWithCommas(token?.usd?.toFixed(2)) || 0}`}</Box>
             </Box>
           </Box>
           <Box w={['25%', null, null, '30%']}>
             <Box fontFamily='mono'>
               <Box>
-                {`$${numberWithCommas(token?.totalUSD.toFixed(2)) || 0}`}
+                {!isNaN(token?.totalUSD)
+                  ? `$${numberWithCommas(token?.totalUSD?.toFixed(2)) || 0}`
+                  : `$0`}
               </Box>
             </Box>
           </Box>

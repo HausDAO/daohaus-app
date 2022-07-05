@@ -1,3 +1,19 @@
+// the REACT_APP_RPC_URI can use any provider url,
+// however, you should use getRpcUrl() in order access REACT_APP_RPC_URI
+// as it needs to maintain backward compatability with the rivet provider
+export const getRPCUrl = chainId => {
+  switch (chainId) {
+    case 4:
+      return process.env?.REACT_APP_RPC_URI?.split('.rpc')?.join(
+        '.rinkeby.rpc',
+      );
+    case 1:
+      return process.env?.REACT_APP_RPC_URI?.split('.rpc')?.join('.eth.rpc');
+    default:
+      return process.env.REACT_APP_RPC_URI;
+  }
+};
+
 export const supportedChains = {
   '0x1': {
     name: 'Ethereum Mainnet',
@@ -9,7 +25,7 @@ export const supportedChains = {
     hub_sort_order: 1,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+    rpc_url: getRPCUrl(1),
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.etherscan.io/api',
@@ -40,7 +56,7 @@ export const supportedChains = {
       version: 'v1',
     },
     safeMinion: {
-      minion_factory_addr: '0xbC37509A283E2bb67fd151c34E72e826C501E108',
+      minion_factory_addr: '0x594AF060c08EeA9f559Bc668484E50596BcB2CFB',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
@@ -77,7 +93,7 @@ export const supportedChains = {
     hub_sort_order: 8,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
+    rpc_url: getRPCUrl(4),
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api-rinkeby.etherscan.io/api',
@@ -185,7 +201,7 @@ export const supportedChains = {
     escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
     block_explorer: 'https://kovan.etherscan.io',
     safeMinion: {
-      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      minion_factory_addr: '0x98B550caBec2602eE2c2259179d1A935777Ff257',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
@@ -227,7 +243,7 @@ export const supportedChains = {
       version: 'v1',
     },
     safeMinion: {
-      minion_factory_addr: '0xE01F3F0F09E778e1AD83Fbdaa00e86676F317C6e',
+      minion_factory_addr: '0x8C0463EAfc0B91d7A246CA391Dc4f81E9E6Bd029',
       safe_mutisend_addr: '0x998739BFdAAdde7C933B942a68053933098f9EDa',
       safe_sign_lib_addr: '0x98FFBBF51bb33A056B08ddf711f289936AafF717',
     },
@@ -295,7 +311,7 @@ export const supportedChains = {
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     block_explorer: 'https://blockscout.com/poa/xdai',
     safeMinion: {
-      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      minion_factory_addr: '0xBD090EF169c0C8589Acb33406C29C20d22bb4a55',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
@@ -320,6 +336,7 @@ export const supportedChains = {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
+    sbt_factory: '0xb1b470Bc443934F6a92987F2F535B8AC9b96da88',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '0xF89e2f69FB1351D37b9F82e77bbF10A02cdC5042',
     dao_conditional_helper_addr: '0x55c8F8a71aD01FC707Bbb1A04d2c0Ef246973392',
@@ -381,7 +398,7 @@ export const supportedChains = {
     escrow_minion: '0xc9f9e7fc92a7d3b2b3554be850fff462b7b382e7',
     block_explorer: 'https://polygonscan.com',
     safeMinion: {
-      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      minion_factory_addr: '0x594AF060c08EeA9f559Bc668484E50596BcB2CFB',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
@@ -439,7 +456,7 @@ export const supportedChains = {
     escrow_minion: '0xc9f9E7FC92A7D3B2b3554be850fFF462B7b382E7',
     block_explorer: 'https://arbiscan.io/',
     safeMinion: {
-      minion_factory_addr: '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
+      minion_factory_addr: '0x51498dDdd2A8cdeC82932E08A37eBaF346C38EFd',
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
@@ -493,7 +510,7 @@ export const supportedChains = {
       version: 'v1',
     },
     safeMinion: {
-      minion_factory_addr: '',
+      minion_factory_addr: '0x51498dDdd2A8cdeC82932E08A37eBaF346C38EFd',
       safe_mutisend_addr: '',
       safe_sign_lib_addr: '',
     },
@@ -506,32 +523,10 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    poster: '0x55fB3D52bF8D2c56cA2159A107aA43e8C16015a1',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '',
   },
-  // '0x4a': {
-  //   name: 'IDChain',
-  //   short_name: 'idchain',
-  //   nativeCurrency: 'EIDI',
-  //   network_id: 74,
-  //   chain_id: '0x4a',
-  //   hub_sort_order: 4,
-  //   providers: ['walletconnect'],
-  //   rpc_url: 'https://idchain.one/rpc/',
-  //   abi_api_url:
-  //     'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
-  //   subgraph_url:
-  //     'https://graph.idchain.one/subgraphs/name/idchain/daohaus-supergraph',
-  //   stats_graph_url:
-  //     'https://graph.idchain.one/subgraphs/name/idchain/daohaus-stats',
-  //   boosts_graph_url: '',
-  //   minion_factory_addr: '0x90253955D4066eE27C183B4644089a5A04A888F1',
-  //   moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
-  //   dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
-  //   wrapper_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
-  //   wrap_n_zap_factory_addr: '0x',
-  //   block_explorer: 'https://explorer.idchain.one',
-  // },
 };
 
 export const chainByID = chainID => supportedChains[chainID];

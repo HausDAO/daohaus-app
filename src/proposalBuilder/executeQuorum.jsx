@@ -6,15 +6,18 @@ import { ParaSm } from '../components/typography';
 import { earlyExecuteMinionType, getExecuteAction } from '../utils/minionUtils';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { useTX } from '../contexts/TXContext';
+import { useDao } from '../contexts/DaoContext';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
 export const ExecuteQuorum = ({ proposal, voteData }) => {
-  const { totalVotes, totalYes } = voteData;
+  const { totalYes } = voteData;
   const { submitTransaction } = useTX();
+  const { daoOverview } = useDao();
 
   const theme = useTheme();
+  const totalShares = daoOverview?.totalShares;
   const percYesVotes =
-    totalVotes && totalYes && ((totalYes / totalVotes) * 100).toFixed();
+    totalShares && totalYes && ((totalYes / totalShares) * 100).toFixed();
   const hasReachedQuorum = percYesVotes >= Number(proposal?.minion?.minQuorum);
 
   const execute = async () => {
@@ -33,16 +36,24 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
     });
   };
 
+  const Quorum = color => (
+    <Flex alignItems='center'>
+      <BiTachometer color={color} size='1.2rem' />
+      <ParaSm ml={1}>
+        {percYesVotes}/{proposal.minion.minQuorum}%
+      </ParaSm>
+    </Flex>
+  );
+
   if (!proposal?.minion?.minQuorum || !earlyExecuteMinionType(proposal))
     return null;
-  if (hasReachedQuorum && !proposal.executed) {
-    return (
+  if (hasReachedQuorum) {
+    return !proposal.executed ? (
       <Button variant='ghost' size='fit-content' onClick={execute} p='0'>
-        <BiTachometer color={theme?.colors?.secondary?.[500]} size='1.2rem' />
-        <ParaSm ml={1}>
-          {percYesVotes}/{proposal.minion.minQuorum}%
-        </ParaSm>
+        <Quorum color={theme?.colors?.secondary?.[500]} />
       </Button>
+    ) : (
+      <Quorum color={theme?.colors?.secondary?.[500]} />
     );
   }
 
@@ -58,12 +69,7 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
           ],
         }}
       >
-        <Flex alignItems='center'>
-          <BiTachometer color='white' size='1.2rem' />
-          <ParaSm ml={1}>
-            {percYesVotes}/{proposal.minion.minQuorum}%
-          </ParaSm>
-        </Flex>
+        <Quorum color='white' />
       </ToolTipWrapper>
     </Flex>
   );

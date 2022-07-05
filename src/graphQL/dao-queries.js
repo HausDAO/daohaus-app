@@ -27,6 +27,7 @@ export const HOME_DAO = gql`
         crossChainMinion
         foreignChainId
         foreignSafeAddress
+        safeMinionVersion
       }
       depositToken {
         tokenAddress
@@ -113,6 +114,7 @@ minion {
   minQuorum
   crossChainMinion
   foreignChainId
+  safeMinionVersion
 }
 actions {
   target
