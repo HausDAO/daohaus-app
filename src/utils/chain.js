@@ -523,6 +523,7 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    poster: '0x55fB3D52bF8D2c56cA2159A107aA43e8C16015a1',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '',
   },
