@@ -53,12 +53,14 @@ const get3boxProfile = async address => {
     const response = await fetch(
       `https://ipfs.3box.io/profile?address=${address}`,
     );
-    if (response.status === 'error') {
+
+    if (response.status === 'error' || response.status === 404) {
       console.warn('Profile does not exist');
+      return null;
     }
 
-    const boxProfile = response.json();
-    return boxProfile;
+    // boxProfile
+    return await response.json();
   } catch (error) {
     console.warn(error);
   }
