@@ -43,7 +43,7 @@ export const getProfileForm = onSubmitCallback => {
   return {
     DISPLAY: {
       type: 'buttonAction',
-      title: 'Edit Ceramic Profile',
+      title: 'Edit Profile',
       checklist: ['isConnected'],
       btnText: 'Connect',
       btnLabel: 'Connect to Ceramic',
@@ -78,7 +78,7 @@ export const getProfileForm = onSubmitCallback => {
     },
     STEP2: {
       type: 'form',
-      title: 'Edit Ceramic Profile',
+      title: 'Edit Profile',
       subtitle: 'Connected to Ceramic',
       form: {
         ...FORM.PROFILE,

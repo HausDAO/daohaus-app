@@ -9,11 +9,13 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useAppModal } from '../hooks/useModals';
 import { getProfileForm } from '../utils/profile';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useLocation } from 'react-router-dom';
 
 const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
   const { address } = useInjectedProvider();
   const { successToast } = useOverlay();
   const { stepperModal, closeModal } = useAppModal();
+  const { pathname } = useLocation();
 
   const profileForm = getProfileForm(() => {
     successToast({ title: 'Updated Profile!' });
@@ -40,9 +42,9 @@ const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
         >
           {customTerms ? getTerm(customTerms, header) : header}
         </Box>
-        {isDao && (
+        {isDao && pathname?.match(/\/profile\//) && (
           <Button onClick={handleEditProfile} mr={5} variant='outline'>
-            Edit 3Box Profile
+            Edit Profile
           </Button>
         )}
         {headerEl}
