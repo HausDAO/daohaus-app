@@ -316,6 +316,21 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  HEDGEY_BOOST: {
+    title: 'Hedgey Time-locked Token Distribution',
+    description:
+      'This boost allows you to send multiple DAO contributors time-locked tokens inside NFT wrappers.',
+    publisher: PUBLISHERS.HEDGEY,
+    version: '0.1',
+    pars: [
+      'This boost allows DAOs to send a group of recipients any token, in any amount, which are locked until a custom unlock date. Recipients receive a unique NFT that acts as a right to their locked tokens. Each recipient can be set to receive different amounts of tokens and unlock dates.',
+      'You must possess your NFT to claim tokens. To claim tokens, recipients must redeem (burn) the NFT after the unlock date. Reach out to our support if you want to add your logo to your Hedgey NFTs (see DAOHaus and ShapeShift). For help getting started or questions, reach out to us on our Discord.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/hedgey', label: 'Boost Support' },
+      { href: 'https://github.com/hedgey-finance', label: 'Hedgey Github' },
+    ],
+  },
   ...litContent,
 };
 
@@ -423,6 +438,17 @@ export const STEPS = {
       isUserStep: true,
     },
     STEP2: COMMON_STEPS.SIGNER,
+  },
+  HEDGEY_BOOST: {
+    DISPLAY: COMMON_STEPS.DISPLAY,
+    STEP1: {
+      type: 'signer',
+      title: 'Member Signature',
+      playlist: BOOST_PLAYLISTS.HEDGEY,
+      stepLabel: 'Add Boost & Sign',
+      finish: true,
+      isUserStep: true,
+    },
   },
   BASIC_BOOST: {
     DISPLAY: COMMON_STEPS.DISPLAY,
@@ -732,6 +758,15 @@ export const BOOSTS = {
     settings: 'none',
   },
   ...litBoost,
+  HEDGEY_BOOST: {
+    id: 'HEDGEY_BOOST',
+    boostContent: CONTENT.HEDGEY_BOOST,
+    steps: STEPS.HEDGEY_BOOST,
+    categories: ['tooling', 'community'],
+    networks: 'all',
+    cost: 'free',
+    settings: 'none',
+  },
 };
 
 export const allBoosts = {

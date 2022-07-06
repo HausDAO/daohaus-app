@@ -62,6 +62,11 @@ export const BOOST_PLAYLISTS = {
     id: 'poster',
     forms: ['RATIFY_DAO_DOC', 'POST_IPFS_MD', 'POST_MD'],
   },
+  HEDGEY: {
+    name: 'Hedgey',
+    id: 'hedgey',
+    forms: ['HEDGEY_BOOST'],
+  },
 };
 
 export const defaultProposals = {
@@ -116,7 +121,7 @@ export const generateNewConfig = ({ daoMetaData }) => {
     }
     return acc;
   }, PLAYLISTS);
-
+  console.log(playlists);
   return {
     // playlists: PLAYLISTS,
     playlists,

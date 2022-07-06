@@ -18,4 +18,10 @@ export const PUBLISHERS = {
       address: '0xbceaa243b78912e55cbf1a3a5ff74d5713ea4353',
     },
   },
+  HEDGEY: {
+    logo: 'hedgey',
+    name: 'Hedgey Finance',
+    link: 'https://hedgey.finance',
+    daoData: {},
+  },
 };
