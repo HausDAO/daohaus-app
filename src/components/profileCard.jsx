@@ -85,7 +85,7 @@ const ProfileCard = ({
               <Box fontFamily='heading' fontSize='xs' textAlign='center' mt={5}>
                 {memberEntity?.exists ? (
                   <>
-                    {`Joined 
+                    {`Joined
                     ${
                       memberEntity?.createdAt
                         ? format(
