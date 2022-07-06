@@ -140,10 +140,10 @@ const NftViewModal = () => {
                         </Box>
                       )}
                     </Flex>
-                    {nftViewModal.name && nftViewModal.metadata.external_url && (
+                    {nftViewModal.name && nftViewModal.metadata?.external_url && (
                       <Box
                         as={Link}
-                        href={nftViewModal.metadata.external_url}
+                        href={nftViewModal.metadata?.external_url}
                         isExternal
                         size='xl'
                         color='secondary.500'
