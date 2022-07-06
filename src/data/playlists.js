@@ -65,7 +65,7 @@ export const BOOST_PLAYLISTS = {
   HEDGEY: {
     name: 'Hedgey',
     id: 'hedgey',
-    forms: ['HEDGEY_BOOST'],
+    forms: ['CONTRIBUTOR_REWARDS_BOOST'],
   },
 };
 

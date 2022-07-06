@@ -439,17 +439,6 @@ export const STEPS = {
     },
     STEP2: COMMON_STEPS.SIGNER,
   },
-  HEDGEY_BOOST: {
-    DISPLAY: COMMON_STEPS.DISPLAY,
-    STEP1: {
-      type: 'signer',
-      title: 'Member Signature',
-      playlist: BOOST_PLAYLISTS.HEDGEY,
-      stepLabel: 'Add Boost & Sign',
-      finish: true,
-      isUserStep: true,
-    },
-  },
   BASIC_BOOST: {
     DISPLAY: COMMON_STEPS.DISPLAY,
     STEP1: COMMON_STEPS.SIGNER,
@@ -761,7 +750,9 @@ export const BOOSTS = {
   HEDGEY_BOOST: {
     id: 'HEDGEY_BOOST',
     boostContent: CONTENT.HEDGEY_BOOST,
-    steps: STEPS.HEDGEY_BOOST,
+    steps: STEPS.MINION_BOOST,
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    playlist: BOOST_PLAYLISTS.HEDGEY,
     categories: ['tooling', 'community'],
     networks: 'all',
     cost: 'free',
