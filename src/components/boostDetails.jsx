@@ -34,7 +34,7 @@ const BoostDetails = ({
     pars = [],
     externalLinks = [],
   } = boostContent;
-  const { name, daoData } = publisher;
+  const { name, link, daoData } = publisher;
 
   const [loading, setLoading] = useState(false);
   const { successToast, errorToast } = useOverlay();
@@ -85,15 +85,27 @@ const BoostDetails = ({
   return (
     <Flex flexDirection='column'>
       <Flex justifyContent='space-between' flexWrap='wrap'>
-        <MemberIndicator
-          link={`/dao/${daoData?.network}/${daoData?.address}`}
-          label='Publisher'
-          name={name}
-          layoutProps={{ mb: '6' }}
-          address={daoData?.address}
-          shouldFetchProfile={false}
-          onClick={closeModal}
-        />
+        {daoData?.address ? (
+          <MemberIndicator
+            link={`/dao/${daoData?.network}/${daoData?.address}`}
+            label='Publisher'
+            name={name}
+            layoutProps={{ mb: '6' }}
+            address={daoData?.address}
+            shouldFetchProfile={false}
+            onClick={closeModal}
+          />
+        ) : (
+          <TextIndicator
+            label='Publisher'
+            value={name}
+            size='sm'
+            mb={3}
+            href={link}
+            isExternal
+          />
+        )}
+
         <TextIndicator
           label='Network'
           value={isAvailable ? 'Available' : 'Not Available'}

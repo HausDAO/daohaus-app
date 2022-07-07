@@ -39,6 +39,10 @@ const MinionSelect = props => {
       }));
   }, [daoOverview, daoVaults]);
 
+  console.log('minions', daoOverview.minions, daoVaults);
+
+  console.log('props', props);
+
   useEffect(() => {
     register('selectedSafeAddress');
     register('crossChainMinion');

@@ -1,0 +1,53 @@
+[
+  {
+    "type": "constructor",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      { "type": "address", "name": "_template", "internalType": "address" }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "SummonSBT",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "token",
+        "internalType": "address",
+        "indexed": true
+      },
+      {
+        "type": "address",
+        "name": "receiver",
+        "internalType": "address",
+        "indexed": true
+      },
+      {
+        "type": "string",
+        "name": "details",
+        "internalType": "string",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "summonSBT",
+    "inputs": [
+      { "type": "string", "name": "name", "internalType": "string" },
+      { "type": "string", "name": "symbol", "internalType": "string" },
+      { "type": "address", "name": "receiver", "internalType": "address" },
+      { "type": "string", "name": "details", "internalType": "string" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "template",
+    "inputs": []
+  }
+]

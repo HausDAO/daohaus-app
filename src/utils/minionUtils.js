@@ -205,9 +205,10 @@ export const getMinionAction = async params => {
     minionType,
     proposalType,
     actions,
+    safeMinionVersion,
   } = params;
 
-  const abi = getMinionAbi(minionType);
+  const abi = getMinionAbi(minionType, safeMinionVersion || '1');
   const actionName =
     MINION_ACTION_FUNCTION_NAMES[minionType] ||
     MINION_ACTION_FUNCTION_NAMES[proposalType];

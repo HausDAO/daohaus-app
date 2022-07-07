@@ -229,7 +229,7 @@ const ProposalActions = ({
                       shouldWrapChildren
                       placement='bottom'
                       label={`Insufficient Funds: You only have ${Number(
-                        daoMember?.depositTokenBalance,
+                        daoMember?.depositTokenData?.balance,
                       )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
@@ -314,6 +314,7 @@ const ProposalActions = ({
                         daochain,
                         injectedChain?.chainId,
                       ) &&
+                        !proposal?.executed &&
                         canInteract &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>

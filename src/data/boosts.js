@@ -5,6 +5,27 @@ import { FORM } from './formLegos/forms';
 import { MINIONS } from './minions';
 import { PUBLISHERS } from './publishers';
 
+let litContent = {};
+if (process.env.REACT_APP_DEV) {
+  /*
+    TODO adding a flag to activate the LIT integration until the Lit team gets back to us
+    see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897 for more details.
+  */
+  litContent['GOOGLE_LIT'] = {
+    title: 'Lit Protocol Google Drive',
+    description: 'Share google documents with the dao',
+    publisher: PUBLISHERS.DAOHAUS,
+    version: '0.1',
+    pars: [
+      'This boost allows daos to share google docs with other users in the dao',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+      { href: 'https://github.com/LIT-Protocol', label: 'Lit Github' },
+    ],
+  };
+}
+
 export const CONTENT = {
   DEV_SUITE: {
     title: 'DEV Suite',
@@ -295,6 +316,22 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  HEDGEY_BOOST: {
+    title: 'Hedgey Time-locked Token Distribution',
+    description:
+      'This boost allows you to send multiple DAO contributors time-locked tokens inside NFT wrappers.',
+    publisher: PUBLISHERS.HEDGEY,
+    version: '0.1',
+    pars: [
+      'This boost allows DAOs to send a group of recipients any token, in any amount, which are locked until a custom unlock date. Recipients receive a unique NFT that acts as a right to their locked tokens. Each recipient can be set to receive different amounts of tokens and unlock dates.',
+      'You must possess your NFT to claim tokens. To claim tokens, recipients must redeem (burn) the NFT after the unlock date. Reach out to our support if you want to add your logo to your Hedgey NFTs (see DAOHaus and ShapeShift). For help getting started or questions, reach out to us on our Discord.',
+    ],
+    externalLinks: [
+      { href: 'https://discord.gg/hedgey', label: 'Boost Support' },
+      { href: 'https://github.com/hedgey-finance', label: 'Hedgey Github' },
+    ],
+  },
+  ...litContent,
 };
 
 export const COMMON_STEPS = {
@@ -436,6 +473,36 @@ export const STEPS = {
     STEP2: { ...COMMON_STEPS.SIGNER, daoRefetch: true },
   },
 };
+
+let litBoost = {};
+if (process.env.REACT_APP_DEV) {
+  /*
+    TODO adding a flag to activate the LIT integration until the Lit team gets back to us
+    see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897 for more details.
+  */
+  litBoost['GOOGLE_LIT'] = {
+    id: 'GOOGLE_LIT',
+    boostContent: CONTENT.GOOGLE_LIT,
+    steps: STEPS.BASIC_BOOST,
+    categories: ['community'],
+    networks: {
+      // LIT_NETWORKS - https://github.com/LIT-Protocol/lit-js-sdk/blob/main/src/lib/constants.js#L30
+      '0x1': true,
+      '0x4': true,
+      '0x2a': true,
+      '0xa': true,
+      '0x64': true,
+      '0x89': true,
+      '0xa4b1': true,
+      '0xa4ec': true,
+    },
+    cost: 'free',
+    settings: {
+      type: 'internalLink',
+      appendToDaoPath: 'boost/lit-protocol/google',
+    },
+  };
+}
 
 export const BOOSTS = {
   OLD_DEV_SUITE: {
@@ -674,6 +741,18 @@ export const BOOSTS = {
     id: 'MOLOCH_TOKEN',
     boostContent: CONTENT.MOLOCH_TOKEN,
     steps: STEPS.ADD_MOLOCH_TOKEN,
+    categories: ['tooling', 'community'],
+    networks: 'all',
+    cost: 'free',
+    settings: 'none',
+  },
+  ...litBoost,
+  HEDGEY_BOOST: {
+    id: 'HEDGEY_BOOST',
+    boostContent: CONTENT.HEDGEY_BOOST,
+    steps: STEPS.MINION_BOOST,
+    minionData: MINIONS[MINION_TYPES.SAFE],
+    playlist: BOOST_PLAYLISTS.HEDGEY,
     categories: ['tooling', 'community'],
     networks: 'all',
     cost: 'free',

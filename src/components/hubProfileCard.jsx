@@ -15,7 +15,7 @@ const HubProfileCard = ({ address }) => {
       if (address) {
         try {
           const data = await handleGetProfile(address);
-          if (data.status === 'error') {
+          if (!data) {
             return;
           }
           setProfile(data);

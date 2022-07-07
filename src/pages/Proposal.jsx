@@ -12,9 +12,8 @@ import TextBox from '../components/TextBox';
 import { createContract } from '../utils/contract';
 import { getProposalHistories } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
-import { LOCAL_ABI } from '../utils/abi';
-import { contractByProposalType } from '../utils/txHelpers';
-import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
+import { getMinionAbi } from '../utils/abi';
+import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
 import { fetchSingleProposal } from '../utils/theGraph';
 import { proposalResolver } from '../utils/resolvers';
 
@@ -75,15 +74,15 @@ const Proposal = ({
   useEffect(() => {
     const getMinionAction = async currentProposal => {
       try {
-        const contract = contractByProposalType(currentProposal);
-        const abi = LOCAL_ABI[contract.abiName];
+        const { minionType, safeMinionVersion } = currentProposal.minion;
+        const abi = getMinionAbi(minionType, safeMinionVersion || '1');
         const web3Contract = createContract({
           address: currentProposal.minionAddress,
           abi,
           chainID: daochain,
         });
 
-        const actionName = MINION_ACTION_FUNCTION_NAMES[contract.abiName];
+        const actionName = MINION_ACTION_FUNCTION_NAMES[minionType];
         const action = await web3Contract.methods[actionName](
           currentProposal.proposalId,
         ).call();
