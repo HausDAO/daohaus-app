@@ -171,6 +171,45 @@ export const supportedChains = {
       },
     },
   },
+  '0x5': {
+    name: 'Göerli',
+    short_name: 'göerli',
+    nativeCurrency: 'GOR',
+    network: 'goerli',
+    networkAlt: 'goerli',
+    network_id: 5,
+    chain_id: '0x5',
+    hub_sort_order: 9,
+    providers: ['walletconnect'],
+    rpc_url: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    abi_api_url:
+      'https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api-goerli.etherscan.io/api',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-goerli',
+    stats_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-goerli',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-goerli',
+    erc721_graph_url:
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/erc721-goerli-subgraph',
+    erc1155_graph_url:
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/erc1155-goerli-subgraph',
+    shaman_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-shamans-goerli',
+    moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
+    wrapper_contract: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+    wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
+    escrow_minion: '0xceE7f251Bd38B21E8F71C1d62cFbb18219a7F606',
+    block_explorer: 'https://goerli.etherscan.io/',
+    safeMinion: {
+      minion_factory_addr: '0x121931c0Bc458A5f13F3861444AeB036cc8a5363',
+      safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
+      safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
+    },
+    disperse_app: '0x3D0e848b6C55153E2b0154734ac6b5288A7f1B6F',
+    poster: '0x3c1f4802be7e26d95b31ef7a566e18f42e360cab',
+  },
   '0x2a': {
     name: 'Ethereum Kovan',
     short_name: 'kovan',
@@ -554,6 +593,7 @@ export const chainByNetworkId = networkId => {
   const idMapping = {
     1: supportedChains['0x1'],
     4: supportedChains['0x4'],
+    5: supportedChains['0x5'],
     10: supportedChains['0xa'],
     42: supportedChains['0x2a'],
     74: supportedChains['0x4a'],
@@ -655,6 +695,7 @@ export const EIP3085 = {
     '0x1': true,
     '0x2a': true,
     '0x4': true,
+    '0x5': true,
   },
 };
 
@@ -679,7 +720,12 @@ export const getScanKey = chainID => {
   if (chainID === '0x89') {
     return process.env.REACT_APP_POLYGONSCAN_KEY;
   }
-  if (chainID === '0x1' || chainByID === '0x4' || chainByID === '0x2a') {
+  if (
+    chainID === '0x1' ||
+    chainByID === '0x4' ||
+    chainByID === '0x5' ||
+    chainByID === '0x2a'
+  ) {
     return process.env.REACT_APP_ETHERSCAN_KEY;
   }
   return null;

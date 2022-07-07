@@ -73,6 +73,11 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'network',
   },
   {
+    name: 'Göerli',
+    value: 5,
+    type: 'network',
+  },
+  {
     name: 'Grants (Accelerators)',
     value: 'Grants',
     type: 'purpose',
