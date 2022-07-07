@@ -261,6 +261,7 @@ export const supportedChains = {
     },
     escrow_minion: '', // TODO team will add
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0x119E1a9421dF2d310a324e04f0ECe83278618ddc',
     moloch_token_factory: '0xdb0f2d9ef30ffae97474d6db8c1f0e999934737d',
     hedgey_nft_addr: '0x4bc8ea84bdc3ebb01d495e5d1605d4f082aeb5d7',
     hedgey_batch_mint_addr: '0x0ad2501f3CD2016EDC0e4D9d0E6e31ee34b0C9Af',
@@ -430,6 +431,7 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0xc59220828774cB373700e7fEf92Aba4417C6B175',
     moloch_token_factory: '0x651657ffc274f492c8006e847350e12ed1c8491a',
     hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
     hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
@@ -484,6 +486,7 @@ export const supportedChains = {
     },
     disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
     moloch_token_factory: '0x691086c17418589688f0d3031cfc8d9400df8817',
+    poster: '0x10ecbe39b914bdb43850932eb9d505cd0c673321',
     hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
     hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
     dao_conditional_helper_addr: '0xF5fb9ce16dbf5B0a7b632Ed5D3F0278E0043B7AE',
