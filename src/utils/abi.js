@@ -43,6 +43,7 @@ import SF_UUPS_PROXIABLE from '../contracts/uupsProxiable.json';
 import NATIVE_WRAPPER from '../contracts/nativeWrapper.json';
 import MOLOCH_TOKEN_FACTORY from '../contracts/molochTokenFactory.json';
 import SBT_FACTORY from '../contracts/sbtFactory.json';
+import HEDGEY_BATCH_MINT from '../contracts/hedgeyBatchMint.json';
 import { validate } from './validation';
 
 import { cacheABI, getCachedABI } from './localForage';
@@ -82,6 +83,7 @@ export const LOCAL_ABI = Object.freeze({
   NATIVE_WRAPPER,
   MOLOCH_TOKEN_FACTORY,
   SBT_FACTORY,
+  HEDGEY_BATCH_MINT,
 });
 
 const getBlockExplorerApiKey = chainID => {

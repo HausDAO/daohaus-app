@@ -32,6 +32,7 @@ export const ToolTipWrapper = ({
   layoutProps,
   href,
   onClick,
+  isExternal,
 }) => {
   const handleClick = () => onClick?.();
 
@@ -44,6 +45,7 @@ export const ToolTipWrapper = ({
           display='inline-block'
           {...layoutProps}
           onClick={handleClick}
+          isExternal={isExternal}
         >
           {children}
         </Box>

@@ -5,6 +5,7 @@ import HubAccountModal from '../modals/hubAccountModal';
 import Layout from '../components/layout';
 import Main from './Main';
 import { defaultHubData } from '../utils/navLinks';
+import Modal from '../modals/modal';
 
 const Hub = () => {
   const { theme, resetTheme } = useContext(CustomThemeContext);
@@ -18,6 +19,7 @@ const Hub = () => {
   const HubScopedModals = () => (
     <>
       <HubAccountModal />
+      <Modal />
     </>
   );
 

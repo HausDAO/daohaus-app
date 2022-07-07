@@ -23,6 +23,7 @@ const TextIndicator = ({
   numString,
   fallback = '--',
   link,
+  href,
   tooltip,
   tooltipText,
   size,
@@ -30,12 +31,15 @@ const TextIndicator = ({
   roundAmt = 4,
   append,
   onClick,
+  isExternal,
 }) => {
   const text = numString ? value : handlePossibleNumber(value, comma, roundAmt);
 
   return (
     <ToolTipWrapper
       link={link}
+      href={href}
+      isExternal={isExternal}
       tooltip={tooltip}
       tooltipText={tooltipText}
       onClick={onClick}
