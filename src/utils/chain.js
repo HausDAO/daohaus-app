@@ -64,6 +64,8 @@ export const supportedChains = {
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     poster: '0x000000000000cd17345801aa8147b8d3950260ff',
     moloch_token_factory: '0x94b68149aA9603eeF3fD31A63f6d52AdB4f978D9',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0xB3d4EFE7ECF102afCd3262cF4d5fc768D0c55459',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
@@ -149,6 +151,8 @@ export const supportedChains = {
     },
     poster: '0x917d84787A266F9D649d519A7Ec8445eA43514D8',
     moloch_token_factory: '0x12d1a14c06c3b75e541ec7e30a87e13beeda2965',
+    hedgey_nft_addr: '0x4bc8ea84bdc3ebb01d495e5d1605d4f082aeb5d7',
+    hedgey_batch_mint_addr: '0x0ad2501f3CD2016EDC0e4D9d0E6e31ee34b0C9Af',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0xc38D4991c951fE8BCE1a12bEef2046eF36b0FA4A',
@@ -258,6 +262,8 @@ export const supportedChains = {
     escrow_minion: '', // TODO team will add
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '0xdb0f2d9ef30ffae97474d6db8c1f0e999934737d',
+    hedgey_nft_addr: '0x4bc8ea84bdc3ebb01d495e5d1605d4f082aeb5d7',
+    hedgey_batch_mint_addr: '0x0ad2501f3CD2016EDC0e4D9d0E6e31ee34b0C9Af',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0xa': '', // TODO team will add
@@ -339,6 +345,8 @@ export const supportedChains = {
     sbt_factory: '0xb1b470Bc443934F6a92987F2F535B8AC9b96da88',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '0xF89e2f69FB1351D37b9F82e77bbF10A02cdC5042',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
     dao_conditional_helper_addr: '0x55c8F8a71aD01FC707Bbb1A04d2c0Ef246973392',
     zodiac_amb_module: {
       amb_bridge_address: {
@@ -423,6 +431,8 @@ export const supportedChains = {
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '0x651657ffc274f492c8006e847350e12ed1c8491a',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
     dao_conditional_helper_addr: '0x8beE9422987ddd6fB57Cd546d184A0a6094DF7A8',
   },
   '0xa4b1': {
@@ -474,6 +484,8 @@ export const supportedChains = {
     },
     disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
     moloch_token_factory: '0x691086c17418589688f0d3031cfc8d9400df8817',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
     dao_conditional_helper_addr: '0xF5fb9ce16dbf5B0a7b632Ed5D3F0278E0043B7AE',
   },
   '0xa4ec': {
@@ -526,6 +538,8 @@ export const supportedChains = {
     poster: '0x55fB3D52bF8D2c56cA2159A107aA43e8C16015a1',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
   },
 };
 
