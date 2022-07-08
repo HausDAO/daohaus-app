@@ -149,6 +149,7 @@ export const fetchSafeDetails = async ({
     ambModuleAddress:
       ambController &&
       (await fetchAmbModule(ambController, chainID, safeAddress)),
+    gnosisSafeVersion: await safeSdk.getContractVersion(),
   };
 };
 
