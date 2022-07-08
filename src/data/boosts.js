@@ -572,6 +572,7 @@ export const BOOSTS = {
     playlist: BOOST_PLAYLISTS.NFT_TRIBUTE,
     networks: {
       '0x4': true,
+      '0x5': true,
       '0x1': true,
       '0x64': true,
       '0x89': true,

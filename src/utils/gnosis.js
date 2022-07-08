@@ -40,6 +40,7 @@ export const getSafe = async ({
   injectedProvider,
   safeAddress,
   signerAddress,
+  patchV1,
 }) => {
   try {
     const rpcUrl = chainByID(chainID).rpc_url;
@@ -49,11 +50,11 @@ export const getSafe = async ({
       web3,
       signerAddress,
     });
-    // TODO: Workaround when dealing with GnosisSafe w/version < 1.3.0
+    // Workaround when dealing with GnosisSafe w/version < 1.3.0
     // == BEGIN
     const networkChainId = (await ethAdapter.getChainId()).toString();
     const deployment = getSafeSingletonDeployment({
-      version: '1.3.0',
+      version: patchV1 ? '1.1.1' : '1.3.0',
       network: networkChainId,
       released: true,
     });
@@ -80,10 +81,15 @@ export const getSafe = async ({
 const isModuleEnabledInternal = async (safeSdk, moduleAddress) => {
   const v = await safeSdk.getContractVersion();
   if (v === '1.1.1') {
-    const modules = await safeSdk.getModules();
+    const safeSdkV1 = await getSafe({
+      chainID: `0x${(await safeSdk.getChainId()).toString(16)}`,
+      safeAddress: safeSdk.getAddress(),
+      patchV1: true,
+    });
+    const modules = await safeSdkV1.getModules();
     return modules.map(m => m.toLowerCase()).includes(moduleAddress);
   }
-  return safeSdk?.isModuleEnabled(moduleAddress);
+  return safeSdk.isModuleEnabled(moduleAddress);
 };
 
 export const isModuleEnabled = async (chainID, safeAddress, moduleAddress) => {
@@ -143,6 +149,7 @@ export const fetchSafeDetails = async ({
     ambModuleAddress:
       ambController &&
       (await fetchAmbModule(ambController, chainID, safeAddress)),
+    gnosisSafeVersion: await safeSdk.getContractVersion(),
   };
 };
 

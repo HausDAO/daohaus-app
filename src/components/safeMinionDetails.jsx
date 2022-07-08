@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiExternalLinkLine } from 'react-icons/ri';
 import { TiWarningOutline } from 'react-icons/ti';
 import Icon from '@chakra-ui/icon';
-import { Box, Flex, Text } from '@chakra-ui/layout';
+import { Box, Flex, Link, Text } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/react';
 import { utils as Web3Utils } from 'web3';
 import ModuleManager from '@gnosis.pm/safe-contracts/build/artifacts/contracts/base/ModuleManager.sol/ModuleManager.json';
@@ -82,6 +82,8 @@ const SafeMinionDetails = ({
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
   const { submitTransaction } = useTX();
+
+  const chainConfig = chainByID(daochain);
 
   useEffect(() => {
     if (daoOverview) {
@@ -383,6 +385,26 @@ const SafeMinionDetails = ({
             />
           )}
         </Flex>
+        {safeDetails?.gnosisSafeVersion?.split('.')[1] < 3 && (
+          <Text fontSize='xs' mt={4}>
+            ** Your Gnosis Safe version is {safeDetails.gnosisSafeVersion}.
+            Please consider upgrading it to a newer version.
+            <Link
+              href={`https://gnosis-safe.io/app/${chainConfig.shortNamePrefix ||
+                chainConfig.short_name}:${
+                safeDetails.address
+              }/settings/details`}
+              isExternal
+            >
+              <Icon
+                as={RiExternalLinkLine}
+                name='explorer link'
+                color='secondary.300'
+                _hover={{ cursor: 'pointer' }}
+              />
+            </Link>
+          </Text>
+        )}
         {safeMinionVersion && safeMinionVersion === '1' && (
           <Text fontSize='xs' mt={4}>
             ** This is a early version of the Safe Minion. It might not work in

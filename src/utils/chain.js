@@ -200,7 +200,7 @@ export const supportedChains = {
     moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
     wrapper_contract: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
-    escrow_minion: '0xceE7f251Bd38B21E8F71C1d62cFbb18219a7F606',
+    escrow_minion: '0xF95abF7f2e46f3f7F114b219bafBAa0272711059',
     block_explorer: 'https://goerli.etherscan.io/',
     safeMinion: {
       minion_factory_addr: '0x121931c0Bc458A5f13F3861444AeB036cc8a5363',
