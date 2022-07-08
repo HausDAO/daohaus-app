@@ -242,15 +242,9 @@ const DaoRouter = () => {
             refetchMetaData={refetchMetaData}
           />
         </Route>
-        {/*
-          TODO adding a flag to activate the LIT integration until the Lit team gets back to us
-          see latest comments on https://github.com/HausDAO/daohaus-app/pull/1897 for more details.
-        */}
-        {process.env.REACT_APP_DEV && (
-          <Route exact path={`${path}/boost/lit-protocol/google`}>
-            <LitProtocolGoogle isMember={isMember} daoMetaData={daoMetaData} />
-          </Route>
-        )}
+        <Route exact path={`${path}/boost/lit-protocol/google`}>
+          <LitProtocolGoogle isMember={isMember} daoMetaData={daoMetaData} />
+        </Route>
         <Route exact path={`${path}/party-favor`}>
           <PartyFavor isMember={isMember} />
         </Route>
