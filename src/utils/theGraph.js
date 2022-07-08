@@ -306,6 +306,8 @@ const completeQueries = {
         },
       });
 
+      console.log(graphOverview);
+
       const daoTokenBalances = await graphQuery({
         endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
         query: HOME_DAO_TOKENS,

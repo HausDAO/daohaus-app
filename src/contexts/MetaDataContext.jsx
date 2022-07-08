@@ -60,7 +60,7 @@ export const MetaDataProvider = ({ children }) => {
   }, [userHubDaos, daochain, daoid]);
 
   useEffect(() => {
-    const getApiMetadata = async () => {
+    const getDaoApiMetadata = async () => {
       try {
         const [data] = await fetchMetaData(daoid);
         if (shouldUpdateTheme.current && !daoMetaData) {
@@ -81,7 +81,7 @@ export const MetaDataProvider = ({ children }) => {
       }
     };
     if (daoid) {
-      getApiMetadata();
+      getDaoApiMetadata();
     }
   }, [daoid]);
 

@@ -17,6 +17,15 @@ export const HOME_DAO = gql`
       proposalDeposit
       processingReward
       guildBankAddress
+      customTheme: records(
+        first: 1
+        orderBy: createdAt
+        orderDirection: desc
+        where: { table: "customTheme" }
+      ) {
+        id
+        content
+      }
       minions {
         createdAt
         minionAddress
@@ -186,7 +195,7 @@ export const SPAM_FILTER_ACTIVITIES = gql`
 export const SPAM_FILTER_GK_WL = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!) {
     proposals(
-      where: { 
+      where: {
         molochAddress: $contractAddr
         createdAt_gt: $createdAt
         sponsored: false
@@ -211,7 +220,7 @@ export const SPAM_FILTER_GK_WL = gql`
 export const SPAM_FILTER_TRIBUTE = gql`
   query molochActivities($contractAddr: String!, $createdAt: String!, $requiredTributeMin: String!, $requiredTributeToken: String!) {
     proposals(
-      where: { 
+      where: {
         molochAddress: $contractAddr
         createdAt_gt: $createdAt
         sponsored: false
