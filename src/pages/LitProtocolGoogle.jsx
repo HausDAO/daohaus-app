@@ -9,22 +9,20 @@ import TextBox from '../components/TextBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import {
+  buildLitUrl,
   checkIfUserExists,
   deleteShare,
   deleteStoredAuthSigs,
   getSharedDaoGoogleDocs,
   handleLitServerError,
   handleLoadCurrentUser,
-  LIT_API_HOST,
   loadStoredAuthSig,
   redirectToLitOauthUI,
   signOutUser,
-  STANDARD_CONTRACT_TYPE,
   storeAuthSig,
 } from '../utils/litProtocol';
 
-import { capitalize } from '../utils/general';
-import { Bold } from '../components/typography';
+import { debounce } from '../utils/debounce';
 
 const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
   const { address } = useInjectedProvider();
@@ -89,15 +87,13 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
     }
   }, [daoMetaData?.boosts, authSig, profile]);
 
-  const performWithAuthSig = async (
-    callback,
-    { chain } = { chain: 'ethereum' },
-  ) => {
+  const performWithAuthSig = async callback => {
     let currentAuthSig = authSig;
     try {
       let userExists;
-      currentAuthSig = await await LitJsSdk.checkAndSignAuthMessage({
-        chain,
+      currentAuthSig = await LitJsSdk.checkAndSignAuthMessage({
+        // agnostic signature; Lit only needs the wallet address
+        chain: null,
       });
       storeAuthSig(currentAuthSig, address, daoMetaData?.contractAddress);
       setAuthSig(currentAuthSig);
@@ -108,8 +104,10 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
         return;
       } else {
         // https://github.com/LIT-Protocol/lit-oauth/blob/51b6efc4c45ee6b0bf0ebfed4f8713c6c045b954/server/oauth/google.js#L104
-        warningToast({ title: 'Redirecting you to lit oauth connect UI' });
-        await redirectToLitOauthUI();
+        warningToast({
+          title: 'Redirecting you to lit oauth connect UI for login',
+        });
+        debounce(await redirectToLitOauthUI(daoMetaData, currentAuthSig), 400);
       }
 
       await callback(currentAuthSig);
@@ -121,17 +119,12 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
   const handleSignAuthMessage = async () => {
     setLoading(true);
     try {
-      await performWithAuthSig(
-        async authSig => {
-          setProfile(await handleLoadCurrentUser(authSig));
-          setLoading(false);
-        },
-        {
-          chain: daoMetaData?.network,
-        },
-      );
+      await performWithAuthSig(async authSig => {
+        setProfile(await handleLoadCurrentUser(authSig));
+        setLoading(false);
+      });
     } catch (e) {
-      errorToast(e);
+      errorToast({ title: e.errorCode });
       setLoading(false);
     }
   };
@@ -154,38 +147,18 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
     isMember && (
       <Flex as={Stack}>
         <Flex as={VStack} spacing={4} alignItems='center'>
-          <TextBox>
-            <Bold>1)</Bold> This link will redirect you to the{' '}
-            <Bold>Lit App Portal where</Bold> you will have to connect to google
-            via <Bold>mainnet</Bold>
-          </TextBox>
-          <Button
-            as={Link}
-            href='https://oauth-app.litgateway.com/google'
-            isExternal
-            mr={10}
-          >
-            Connect to Lit App Portal
-          </Button>
-        </Flex>
-        <Flex as={VStack} spacing={4} alignItems='center'>
-          <TextBox>
-            <Bold>2)</Bold> Reconnect to{' '}
-            <Bold>{capitalize(daoMetaData?.network)} </Bold>
-            after step 1 and generate an authentication token.
-          </TextBox>
           <Button onClick={handleSignAuthMessage}>
-            Authneticate Lit Protocol on {capitalize(daoMetaData?.network)}
+            Click to Authneticate Lit Protocol
           </Button>
         </Flex>
       </Flex>
     );
 
-  const addNewGoogleDoc = isMember && (
+  const addNewGoogleDoc = isMember && authSig && (
     <Flex>
       <Button
         as={Link}
-        href={`${LIT_API_HOST}/google?source=daohaus&dao_address=${daoMetaData?.contractAddress}&dao_name=${daoMetaData?.name}&contract_type=${STANDARD_CONTRACT_TYPE}`}
+        href={buildLitUrl(daoMetaData, authSig)}
         isExternal
         mr={10}
       >
