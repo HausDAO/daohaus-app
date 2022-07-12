@@ -97,8 +97,16 @@ export const handleLitServerError = e => {
   }
 };
 
-export const redirectToLitOauthUI = async () => {
-  window.location.replace('https://oauth-app.litgateway.com/google');
+export const redirectToLitOauthUI = async (daoMetaData, currentAuthSig) => {
+  window.location.replace(buildLitUrl(daoMetaData, currentAuthSig));
+};
+
+export const buildLitUrl = (daoMetaData, authSig) => {
+  return `${LIT_API_HOST}/google?source=chain=${
+    daoMetaData?.network
+  }&daohaus&dao_address=${daoMetaData?.contractAddress}&dao_name=${
+    daoMetaData?.name
+  }&contract_type=${STANDARD_CONTRACT_TYPE}&s=${JSON.stringify(authSig)}`;
 };
 
 export const handleLoadCurrentUser = async authSig => {
