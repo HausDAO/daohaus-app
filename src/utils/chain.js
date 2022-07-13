@@ -72,7 +72,7 @@ export const supportedChains = {
       },
       foreign_networks: [
         {
-          name: 'xDAI',
+          name: 'GnosisChain',
           value: '0x64',
         },
       ],
@@ -82,6 +82,29 @@ export const supportedChains = {
       monitoring_app: {
         '0x64': 'https://alm-xdai.herokuapp.com/100',
       },
+    },
+    zodiac_nomad_module: {
+      bridge_domain_ids: {
+        '0x64': 2019844457,
+      },
+      domainId: 6648936,
+      environment: 'production',
+      homeContract: '0x92d3404a7e6c91455bbd81475cd9fad96acff4c8',
+      masterCopyAddress: {
+        '0x64': '0xFF8E1e6490CbaAb9db07b6ac665BF768E5396A61',
+      },
+      moduleProxyFactory: {
+        '0x64': '0x00000000062c52e29e8029dc2413172f6d619d85', // TODO: remove when Goerli is officially available
+      },
+      xAppConnectionManager: {
+        '0x64': '0x1e107186352122b763c766504ee28cb913cd83c5',
+      },
+      foreign_networks: [
+        {
+          name: 'GnosisChain',
+          value: '0x64',
+        },
+      ],
     },
   },
   '0x4': {
@@ -170,10 +193,34 @@ export const supportedChains = {
         '0x64': 'https://alm-rinkeby.herokuapp.com/4',
       },
     },
+    zodiac_nomad_module: {
+      bridge_domain_ids: {
+        '0x5': 3331,
+      },
+      domainId: 1111,
+      environment: 'staging',
+      homeContract: '0xba64e033fafd08e1b14e034fcd31d10e9534ba8e',
+      masterCopyAddress: {
+        '0x5': '0x471dBa2D598F8764f6C883FAD35ab099700503f5',
+      },
+      moduleProxyFactory: {
+        '0x5': '0x1E4DE3A0C887228BD88E90976dd02aB6e348077F', // TODO: remove when Goerli is officially available
+      },
+      xAppConnectionManager: {
+        '0x5': '0xae2398fe62f348a343a454c3d0cb81885f2bb269',
+      },
+      foreign_networks: [
+        {
+          name: 'Goerli',
+          value: '0x5',
+        },
+      ],
+    },
   },
   '0x5': {
     name: 'Göerli',
-    short_name: 'göerli',
+    short_name: 'goerli',
+    shortNamePrefix: 'gor',
     nativeCurrency: 'GOR',
     network: 'goerli',
     networkAlt: 'goerli',
@@ -209,6 +256,29 @@ export const supportedChains = {
     },
     disperse_app: '0x3D0e848b6C55153E2b0154734ac6b5288A7f1B6F',
     poster: '0x3c1f4802be7e26d95b31ef7a566e18f42e360cab',
+    zodiac_nomad_module: {
+      bridge_domain_ids: {
+        '0x4': 1111,
+      },
+      domainId: 3331,
+      environment: 'staging',
+      homeContract: '0x2698210d52378c0c01765ac7e79a10e8a226fbae',
+      masterCopyAddress: {
+        '0x4': '0xe733E725e9F4192Fbf41E6f79bAbD9dcF72F1d40',
+      },
+      moduleProxyFactory: {
+        '0x4': '0x00000000062c52e29e8029dc2413172f6d619d85', // TODO: remove when Goerli is officially available
+      },
+      xAppConnectionManager: {
+        '0x4': '0xd65a4fecda0b6339281ebf8467397d867ed08066',
+      },
+      foreign_networks: [
+        {
+          name: 'Rinkeby',
+          value: '0x4',
+        },
+      ],
+    },
   },
   '0x2a': {
     name: 'Ethereum Kovan',
@@ -411,6 +481,29 @@ export const supportedChains = {
         '0x1': 'https://alm-xdai.herokuapp.com/100',
         '0x4': 'https://alm-rinkeby.herokuapp.com/100',
       },
+    },
+    zodiac_nomad_module: {
+      bridge_domain_ids: {
+        '0x1': 6648936,
+      },
+      domainId: 2019844457,
+      environment: 'production',
+      homeContract: '0x4fce8a84c8f2ade7159596208dcbff7ffad5d459',
+      masterCopyAddress: {
+        '0x1': '0xFF8E1e6490CbaAb9db07b6ac665BF768E5396A61',
+      },
+      moduleProxyFactory: {
+        '0x1': '0x00000000062c52e29e8029dc2413172f6d619d85', // TODO: remove when Goerli is officially available
+      },
+      xAppConnectionManager: {
+        '0x1': '0xfe8874778f946ac2990a29eba3cfd50760593b2f',
+      },
+      foreign_networks: [
+        {
+          name: 'Ethereum',
+          value: '0x1',
+        },
+      ],
     },
   },
   '0x89': {

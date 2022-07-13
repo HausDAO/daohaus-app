@@ -22,9 +22,11 @@ import { ToolTipWrapper } from '../staticElements/wrappers';
 import { safeEncodeHexFunction } from '../utils/abi';
 import { chainByID } from '../utils/chain';
 import {
+  BRIDGE_MODULES,
   createGnosisSafeTxProposal,
   deployZodiacBridgeModule,
-  encodeAmbTxProposal,
+  deployZodiacNomadModule,
+  encodeBridgeTxProposal,
   encodeSwapSafeOwnersBy,
 } from '../utils/gnosis';
 
@@ -41,7 +43,7 @@ const SF_TOOLTIP = {
     body:
       'You MUST be a Gnosis Safe signer in order to submit a Tx proposal to add the minion as a module',
   },
-  ADD_AMB_MODULE: {
+  ADD_BRIDGE_MODULE: {
     title: 'ACTION REQUIRED',
     pars: [
       'To control a Gnosis Safe on a foreign network, it needs to have a brigde module enabled',
@@ -144,32 +146,54 @@ const SafeMinionDetails = ({
     setLoading(null);
   };
 
-  const submitAmbModuleTxProposal = async () => {
-    setLoading('enableAmbModule');
+  const submitBridgeModuleTxProposal = async () => {
+    setLoading('enableBridgeModule');
     try {
-      // Deploy a Zodiac Bridge module
-      const ambConfig = chainByID(daochain).zodiac_amb_module;
-      const ambAddress = ambConfig.amb_bridge_address[vault.foreignChainId];
-      const ambModuleAddress = await deployZodiacBridgeModule(
-        vault.safeAddress, // owner
-        vault.foreignSafeAddress, // avatar
-        vault.foreignSafeAddress, // target
-        ambAddress, // amb
-        vault.safeAddress, // controller
-        daochain, // chainId
-        injectedProvider,
-      );
-      if (!ambModuleAddress) {
+      const deployModuleTx = async () => {
+        if (vault.bridgeModule === BRIDGE_MODULES.AMB_MODULE) {
+          const ambConfig = chainByID(daochain).zodiac_amb_module;
+          const ambAddress = ambConfig.amb_bridge_address[vault.foreignChainId];
+          return deployZodiacBridgeModule(
+            vault.safeAddress, // owner
+            vault.foreignSafeAddress, // avatar
+            vault.foreignSafeAddress, // target
+            ambAddress, // amb
+            vault.safeAddress, // controller
+            daochain, // chainId
+            injectedProvider,
+          );
+        }
+        if (vault.bridgeModule === BRIDGE_MODULES.NOMAD_MODULE) {
+          const zodiacConfig = chainByID(daochain).zodiac_nomad_module;
+          const { domainId } = zodiacConfig;
+          const xAppConnectionManager =
+            zodiacConfig.xAppConnectionManager[vault.foreignChainId];
+          return deployZodiacNomadModule(
+            vault.foreignSafeAddress, // owner
+            vault.foreignSafeAddress, // avatar
+            vault.foreignSafeAddress, // target
+            xAppConnectionManager, // xAppConnectionManager on Foreign Chain
+            vault.safeAddress, // Controller on Home Chain
+            domainId, // Domain ID on Home Chain
+            daochain, // chainId
+            vault.foreignChainId,
+            injectedProvider,
+          );
+        }
+      };
+
+      const moduleAddress = await deployModuleTx();
+      if (!moduleAddress) {
         errorToast({
-          title: 'AMB Module Deployment',
-          description: 'Failed to deploy the AMB Module.',
+          title: 'Module Deployment',
+          description: 'Failed to deploy the Bridge Module.',
         });
       } else {
         // Send Tx Proposla to foreign safe
         await submitEnableModuleTxProposal(
           vault.foreignChainId,
           vault.foreignSafeAddress,
-          ambModuleAddress,
+          moduleAddress,
         );
       }
     } catch (error) {
@@ -187,14 +211,16 @@ const SafeMinionDetails = ({
       const encodedTx = await encodeSwapSafeOwnersBy(
         vault.foreignChainId,
         vault.foreignSafeAddress,
-        foreignSafeDetails.ambModuleAddress,
+        foreignSafeDetails.crossChainModuleAddress,
       );
-      const txProposal = await encodeAmbTxProposal(
-        foreignSafeDetails.ambModuleAddress,
+      const { bridgeModule, foreignChainId } = vault;
+      const txProposal = await encodeBridgeTxProposal({
+        bridgeModule,
+        bridgeModuleAddress: foreignSafeDetails.crossChainModuleAddress,
         daochain,
         encodedTx,
-        vault.foreignChainId,
-      );
+        foreignChainId,
+      });
       await submitTransaction({
         tx: {
           ...TX.GENERIC_SAFE_MULTICALL,
@@ -311,13 +337,13 @@ const SafeMinionDetails = ({
           {foreignSafeDetails && (
             <GnosisSafeCard
               actionDetails={
-                (!foreignSafeDetails.ambModuleAddress ||
+                (!foreignSafeDetails.crossChainModuleAddress ||
                   !foreignSafeDetails.owners.includes(
-                    foreignSafeDetails.ambModuleAddress,
+                    foreignSafeDetails.crossChainModuleAddress,
                   ) > 0) && (
                   <>
                     <Text mt={4}>Actions</Text>
-                    {!foreignSafeDetails.ambModuleAddress && (
+                    {!foreignSafeDetails.crossChainModuleAddress && (
                       <Flex mt={4}>
                         <ToolTipWrapper
                           placement='right'
@@ -325,18 +351,18 @@ const SafeMinionDetails = ({
                           tooltipText={
                             isForeignSafeOwner &&
                             vault.foreignChainId === injectedChain.chainId
-                              ? SF_TOOLTIP.ADD_AMB_MODULE
+                              ? SF_TOOLTIP.ADD_BRIDGE_MODULE
                               : SF_TOOLTIP.WRONG_CHAIN_N_OWNER
                           }
                         >
                           <Button
-                            isLoading={isLoading === 'enableAmbModule'}
+                            isLoading={isLoading === 'enableBridgeModule'}
                             isDisabled={
                               !isForeignSafeOwner ||
                               vault.foreignChainId !== injectedChain.chainId
                             }
                             mr={6}
-                            onClick={submitAmbModuleTxProposal}
+                            onClick={submitBridgeModuleTxProposal}
                             variant='outline'
                             rightIcon={<TiWarningOutline />}
                             size='sm'
@@ -346,9 +372,9 @@ const SafeMinionDetails = ({
                         </ToolTipWrapper>
                       </Flex>
                     )}
-                    {foreignSafeDetails.ambModuleAddress &&
+                    {foreignSafeDetails.crossChainModuleAddress &&
                       !foreignSafeDetails.owners.includes(
-                        foreignSafeDetails.ambModuleAddress,
+                        foreignSafeDetails.crossChainModuleAddress,
                       ) && (
                         <Flex mt={4}>
                           <ToolTipWrapper
@@ -381,6 +407,12 @@ const SafeMinionDetails = ({
               handleCopy={handleCopy}
               safeDetails={foreignSafeDetails}
               targetChain={vault.foreignChainId}
+              zodiacModules={[
+                {
+                  name: vault.bridgeModule,
+                  address: foreignSafeDetails.crossChainModuleAddress,
+                },
+              ]}
               title='Foreign Gnosis Safe'
             />
           )}

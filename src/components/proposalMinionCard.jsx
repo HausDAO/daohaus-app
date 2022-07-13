@@ -23,7 +23,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
-import { decodeAMBTx, decodeMultisendTx } from '../utils/abi';
+import { decodeAMBTx, decodeMultisendTx, decodeNomadTx } from '../utils/abi';
 import { decodeAction } from '../utils/minionUtils';
 import { hasMinionActions, MINION_TYPES } from '../utils/proposalUtils';
 
@@ -94,9 +94,8 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           const hydratedAction = { ...action };
           try {
             if (proposal.minion.minionType === MINION_TYPES.SAFE) {
-              const multisendAddress = `${
-                chainByID(daochain).safeMinion.safe_mutisend_addr
-              }`;
+              const chainConfig = chainByID(daochain);
+              const multisendAddress = `${chainConfig.safeMinion.safe_mutisend_addr}`;
               const decodedMultisend = decodeMultisendTx(
                 multisendAddress,
                 action.data,
@@ -138,6 +137,36 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                         }),
                       }),
                     ),
+                  )),
+                ];
+              }
+              if (
+                hydratedAction.decodedData.actions[0]?.name === 'dispatch' &&
+                chainConfig.zodiac_nomad_module?.homeContract &&
+                hydratedAction.decodedData.actions[0]?.to ===
+                  chainConfig.zodiac_nomad_module.homeContract
+              ) {
+                // cross-chain Nomad bridge call
+                const [
+                  ,
+                  recipientAddress,
+                  messageBody,
+                ] = hydratedAction.decodedData.actions[0].params;
+                const nomadDecodedTx = decodeNomadTx(
+                  recipientAddress.value,
+                  messageBody.value,
+                );
+                hydratedAction.decodedData.actions[0].actions = [
+                  ...(await Promise.all(
+                    decodeMultisendTx(
+                      nomadDecodedTx.to,
+                      nomadDecodedTx.data,
+                    ).map(async action => ({
+                      ...action,
+                      data: await decodeAction(action, {
+                        chainID: proposal.minion.foreignChainId,
+                      }),
+                    })),
                   )),
                 ];
               }

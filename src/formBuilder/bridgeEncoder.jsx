@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
+import { encodeMulti } from 'ethers-multisend';
 import { Flex, Button, Spinner } from '@chakra-ui/react';
-import { ethers } from 'ethers';
 
 import FieldWrapper from './fieldWrapper';
 import ErrorList from './ErrorList';
-import { getLocalABI } from '../utils/abi';
-import { encodeMulti, collapseToCallData } from '../utils/txHelpers';
-import { chainByID } from '../utils/chain';
-import { fetchAmbModule } from '../utils/gnosis';
-import { CONTRACTS } from '../data/contracts';
+import { collapseToCallData } from '../utils/txHelpers';
+import {
+  encodeBridgeTxProposal,
+  fetchCrossChainZodiacModule,
+} from '../utils/gnosis';
 
-const AmbEncoder = props => {
+const BridgeEncoder = props => {
   const { localForm, error } = props;
   const { register, setValue, watch } = localForm;
   const { daochain } = useParams();
@@ -24,7 +24,8 @@ const AmbEncoder = props => {
   const foreignChainId = watch('foreignChainId');
   const safeAddress = watch('selectedSafeAddress');
   const foreignSafeAddress = watch('foreignSafeAddress');
-  const ambTx = watch('ambTx');
+  const bridgeModule = watch('bridgeModule');
+  const bridgeTx = watch('bridgeTx');
 
   const prevMultiTx = (value => {
     const ref = useRef();
@@ -35,14 +36,14 @@ const AmbEncoder = props => {
   })(multiTx);
 
   useEffect(() => {
-    register('ambTx');
+    register('bridgeTx');
   }, []);
 
   useEffect(() => {
     const txChanged = JSON.stringify(multiTx) !== JSON.stringify(prevMultiTx);
     if (txChanged) {
       setNeedOrder(true);
-      setValue('ambTx', false);
+      setValue('bridgeTx', false);
     } else if (!prevMultiTx) {
       setNeedOrder(true);
     }
@@ -58,29 +59,26 @@ const AmbEncoder = props => {
     [daochain, foreignChainId, safeAddress, foreignSafeAddress, multiTx],
   );
 
-  const encodeAmbTx = async () => {
+  const encodeBridgeTx = async () => {
     setLoading(true);
     try {
-      const ambModuleAddress = await fetchAmbModule(
-        {
-          chainId: daochain,
+      const bridgeModuleAddress = await fetchCrossChainZodiacModule({
+        chainID: foreignChainId,
+        crossChainController: {
           address: safeAddress,
+          bridgeModule: bridgeModule,
+          chainId: daochain,
         },
+        safeAddress: foreignSafeAddress,
+      });
+      const encodedTx = await encodeBridgeTxProposal({
+        bridgeModule,
+        bridgeModuleAddress,
+        daochain,
+        encodedTx: encodeMulti(collapseToCallData({ TX: multiTx })),
         foreignChainId,
-        foreignSafeAddress,
-      );
-
-      const ambModule = new ethers.Contract(
-        ambModuleAddress,
-        getLocalABI(CONTRACTS.AMB_MODULE),
-      );
-      const moduleTx = await ambModule.populateTransaction.executeTransaction(
-        chainByID(foreignChainId).safeMinion.safe_mutisend_addr,
-        '0',
-        encodeMulti(collapseToCallData({ TX: multiTx })),
-        '1',
-      );
-      setValue('ambTx', moduleTx);
+      });
+      setValue('bridgeTx', encodedTx);
       setNeedOrder(false);
       setLoading(false);
     } catch (err) {
@@ -96,14 +94,14 @@ const AmbEncoder = props => {
         <Button
           variant='outline'
           size='xs'
-          onClick={encodeAmbTx}
+          onClick={encodeBridgeTx}
           disabled={!canSetup || loading || !needOrder}
           mt={3}
           mr={3}
         >
           Encode Cross-chain Transaction
         </Button>
-        {ambTx && !needOrder && (
+        {bridgeTx && !needOrder && (
           <RiCheckboxCircleLine
             style={{
               width: '25px',
@@ -124,4 +122,4 @@ const AmbEncoder = props => {
   );
 };
 
-export default AmbEncoder;
+export default BridgeEncoder;

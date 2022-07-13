@@ -11,12 +11,14 @@ import { chainByID } from '../utils/chain';
 import {
   createGnosisSafeTxProposal,
   deployZodiacBridgeModule,
+  deployZodiacNomadModule,
   getSafe,
 } from '../utils/gnosis';
 import { fetchMinionByName } from '../utils/theGraph';
 
 const ZodiacActionForm = props => {
   const {
+    boostId,
     currentStep,
     goToNext,
     metaFields,
@@ -44,7 +46,7 @@ const ZodiacActionForm = props => {
     goToNext(next);
   };
 
-  const prevalidateAmbAction = async (foreignChainId, safeAddress) => {
+  const prevalidateBridgeAction = async (foreignChainId, safeAddress) => {
     // Validate if connected user is a signer of the foreign safe
     const safeSdk = await getSafe({
       chainID: foreignChainId,
@@ -52,7 +54,7 @@ const ZodiacActionForm = props => {
     });
     if (!safeSdk) {
       console.error('Safe not found');
-      return;
+      return false;
     }
     if (
       !(await safeSdk.getOwners()).includes(
@@ -63,7 +65,7 @@ const ZodiacActionForm = props => {
         title: 'Not a Gnosis Safe Signer',
         description: 'You must be a signer on the Gnosis Safe',
       });
-      return;
+      return false;
     }
 
     // Validate if current network matches the selected foreign network
@@ -72,7 +74,7 @@ const ZodiacActionForm = props => {
         title: 'Wrong Chain',
         description: 'Please connect your wallet to the foreign chain.',
       });
-      return;
+      return false;
     }
     return true;
   };
@@ -94,6 +96,28 @@ const ZodiacActionForm = props => {
       saltNonce,
     );
     return ambModuleAddress;
+  };
+
+  const deployNomadModule = async vault => {
+    const formValues = getValues();
+    const { foreignChainId, foreignSafeAddress, saltNonce } = formValues;
+    const zodiacConfig = chainByID(daochain).zodiac_nomad_module;
+    const { domainId } = zodiacConfig;
+    const xAppConnectionManager =
+      zodiacConfig.xAppConnectionManager[foreignChainId];
+    const zodiacModuleAddress = await deployZodiacNomadModule(
+      foreignSafeAddress, // owner
+      foreignSafeAddress, // avatar
+      foreignSafeAddress, // target
+      xAppConnectionManager, // xAppConnectionManager on Foreign Chain
+      vault.safeAddress, // Controller on Home Chain
+      domainId, // Domain ID on Home Chain
+      daochain,
+      foreignChainId,
+      injectedProvider,
+      saltNonce,
+    );
+    return zodiacModuleAddress;
   };
 
   const submitGnosisTxProposal = async (
@@ -124,7 +148,49 @@ const ZodiacActionForm = props => {
         description:
           'Please check the Tx Queue on your Foreign Gnosis Safe for enabling a module.',
       });
-      onSuccess();
+      return true;
+    }
+  };
+
+  // Deploy a Zodiac Module
+  const deployZodiacModule = async (
+    addressFieldName,
+    moduleDeployerFnc,
+    args,
+  ) => {
+    register(addressFieldName);
+    const moduleAddress = await moduleDeployerFnc(...args);
+    if (!moduleAddress) {
+      errorToast({
+        title: 'Module Deployment',
+        description: 'Failed to deploy the Zodiac Module.',
+      });
+      setFormState('idle');
+      return;
+    }
+    setValue(addressFieldName, moduleAddress);
+    return moduleAddress;
+  };
+
+  // Submit a Tx proposal to the foreign Safe in order to add a contract as a module
+  const submitEnableModuleTxProposal = async (
+    foreignChainId,
+    moduleAddress,
+    safeAddress,
+  ) => {
+    try {
+      return submitGnosisTxProposal(
+        foreignChainId,
+        'enableModule',
+        [Web3Utils.toChecksumAddress(moduleAddress)],
+        safeAddress,
+      );
+    } catch (error) {
+      errorToast({
+        title: 'Failed to Submit Gnosis Safe Tx Proposal',
+        description: error.message,
+      });
+      setFormState('idle');
     }
   };
 
@@ -137,60 +203,110 @@ const ZodiacActionForm = props => {
       zodiacAction,
     } = formValues;
 
-    if (zodiacAction === 'ambModule') {
-      register('ambModuleAddress');
-      const checksumSafeAddr = Web3Utils.toChecksumAddress(foreignSafeAddress);
+    const checksumSafeAddr = Web3Utils.toChecksumAddress(foreignSafeAddress);
 
-      if (!prevalidateAmbAction(foreignChainId, checksumSafeAddr)) {
-        return;
-      }
+    setFormState('loading');
 
-      setFormState('loading');
+    if (!(await prevalidateBridgeAction(foreignChainId, checksumSafeAddr))) {
+      setFormState('idle');
+      return;
+    }
 
-      // Fetch Minion Safe that was deployed on a previous step
-      const rs = await fetchMinionByName({
-        chainID: daochain,
-        minionName: minionName.split('/')[1],
-        molochAddress: daoid,
+    // Fetch Minion Safe that was deployed on a previous step
+    const rs = await fetchMinionByName({
+      chainID: daochain,
+      minionName: minionName.split('/')[1],
+      molochAddress: daoid,
+    });
+    const vault = rs.minions.length && rs.minions[0];
+    if (!vault) {
+      errorToast({
+        title: 'Minion Safe Not Ready',
+        description:
+          'Your Minion Safe is being setup. Please try again in a few minutes.',
       });
-      const vault = rs.minions.length && rs.minions[0];
-      if (!vault) {
-        errorToast({
-          title: 'Minion Safe Not Ready',
-          description:
-            'Your Minion Safe is being setup. Please try again in a few minutes.',
-        });
-        setFormState('idle');
-        return;
-      }
+      setFormState('idle');
+      return;
+    }
 
-      // Deploy a Zodiac Bridge module
-      const ambModuleAddress = await deployAmbModule(vault);
-      if (!ambModuleAddress) {
-        errorToast({
-          title: 'AMB Module Deployment',
-          description: 'Failed to deploy the AMB Module.',
-        });
-        setFormState('idle');
-        return;
-      }
-      setValue('ambModuleAddress', ambModuleAddress);
+    console.log('ZODIAC ACTION =>', zodiacAction);
+    if (zodiacAction === 'ambModule') {
+      // register('ambModuleAddress');
+
+      // if (!prevalidateBridgeAction(foreignChainId, checksumSafeAddr)) {
+      //   return;
+      // }
+
+      // setFormState('loading');
+
+      // // Fetch Minion Safe that was deployed on a previous step
+      // const rs = await fetchMinionByName({
+      //   chainID: daochain,
+      //   minionName: minionName.split('/')[1],
+      //   molochAddress: daoid,
+      // });
+      // const vault = rs.minions.length && rs.minions[0];
+      // if (!vault) {
+      //   errorToast({
+      //     title: 'Minion Safe Not Ready',
+      //     description:
+      //       'Your Minion Safe is being setup. Please try again in a few minutes.',
+      //   });
+      //   setFormState('idle');
+      //   return;
+      // }
+
+      // // Deploy a Zodiac Bridge module
+      // const ambModuleAddress = await deployAmbModule(vault);
+      // if (!ambModuleAddress) {
+      //   errorToast({
+      //     title: 'AMB Module Deployment',
+      //     description: 'Failed to deploy the AMB Module.',
+      //   });
+      //   setFormState('idle');
+      //   return;
+      // }
+      // setValue('ambModuleAddress', ambModuleAddress);
+      const ambModuleAddress = await deployZodiacModule(
+        'ambModuleAddress',
+        deployAmbModule,
+        [vault],
+      );
 
       // Submit a Tx proposal to the foreign Safe in order to add the Bridge contract as a module
-      try {
-        await submitGnosisTxProposal(
-          foreignChainId,
-          'enableModule',
-          [Web3Utils.toChecksumAddress(ambModuleAddress)],
-          checksumSafeAddr,
-        );
-      } catch (error) {
-        errorToast({
-          title: 'Failed to Submit Gnosis Safe Tx Proposal',
-          description: error.message,
-        });
-        setFormState('idle');
-      }
+      // try {
+      //   await submitGnosisTxProposal(
+      //     foreignChainId,
+      //     'enableModule',
+      //     [Web3Utils.toChecksumAddress(ambModuleAddress)],
+      //     checksumSafeAddr,
+      //   );
+      // } catch (error) {
+      //   errorToast({
+      //     title: 'Failed to Submit Gnosis Safe Tx Proposal',
+      //     description: error.message,
+      //   });
+      //   setFormState('idle');
+      // }
+      const success = await submitEnableModuleTxProposal(
+        foreignChainId,
+        ambModuleAddress,
+        checksumSafeAddr,
+      );
+      if (success) onSuccess();
+    }
+    if (zodiacAction === 'nomadModule') {
+      const nomadModuleAddress = await deployZodiacModule(
+        'nomadModuleAddress',
+        deployNomadModule,
+        [vault],
+      );
+      const success = await submitEnableModuleTxProposal(
+        foreignChainId,
+        nomadModuleAddress,
+        checksumSafeAddr,
+      );
+      if (success) onSuccess();
     }
   };
 
@@ -204,6 +320,7 @@ const ZodiacActionForm = props => {
       secondaryBtn={secondaryBtn}
       checklist={currentStep.checklist}
       formStateOverride={formState}
+      boostId={boostId}
     />
   );
 };

@@ -22,6 +22,11 @@ export const BOOST_PLAYLISTS = {
     id: 'crossChainSafeMinionClassics',
     forms: ['CROSSCHAIN_SAFE_TX_BUILDER'],
   },
+  SAFE_NOMAD_CROSSCHAIN_DEV_SUITE: {
+    name: 'Cross Chain Safe Minion Nomad Classics',
+    id: 'crossChainSafeMinionNomadClassics',
+    forms: ['CROSSCHAIN_SAFE_TX_BUILDER_NOMAD'],
+  },
   RARIBLE: {
     name: 'Rarible',
     id: 'rarible',

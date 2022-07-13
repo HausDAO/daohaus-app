@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import GenericSelect from './genericSelect';
-import { chainByID } from '../utils/chain';
+import { getAvailableCrossChainIds } from '../utils/gnosis';
 
 const ForeignChainSelect = props => {
+  const { boostId, localForm, name, values } = props;
+  const { setValue, watch } = localForm;
   const { daochain } = useParams();
-  const availableNetworks =
-    chainByID(daochain).zodiac_amb_module?.foreign_networks || [];
+  const [defaultValue, setDefaultValue] = useState();
+  const [networks, setAvailableNetworks] = useState();
 
-  return <GenericSelect options={availableNetworks} {...props} />;
+  const selectedValue = watch(name);
+
+  useEffect(() => {
+    const { zodiacModule, availableNetworks } = getAvailableCrossChainIds(
+      boostId,
+      daochain,
+      values.minionType,
+    );
+    setValue('zodiacAction', zodiacModule);
+    setAvailableNetworks(availableNetworks);
+    if (selectedValue) {
+      setDefaultValue(selectedValue);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!selectedValue && defaultValue) {
+      setValue(name, defaultValue);
+    }
+  }, [selectedValue]);
+
+  return <GenericSelect options={networks} {...props} />;
 };
 
 export default ForeignChainSelect;

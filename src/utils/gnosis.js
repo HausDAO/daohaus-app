@@ -3,15 +3,26 @@ import Safe from '@gnosis.pm/safe-core-sdk';
 import { getSafeSingletonDeployment } from '@gnosis.pm/safe-deployments';
 import Web3Adapter from '@gnosis.pm/safe-web3-lib';
 import { deployAndSetUpModule } from '@gnosis.pm/zodiac';
-import { ethers } from 'ethers';
+import { utils as NomadUtils } from '@nomad-xyz/multi-provider';
+import { ethers, utils } from 'ethers';
 import { encodeMulti, encodeSingle, TransactionType } from 'ethers-multisend';
 import Web3 from 'web3';
 
-import { getLocalABI } from './abi';
+import { getLocalABI, getABIsnippet } from './abi';
 import { chainByID } from './chain';
 import { createContract } from './contract';
+import { generateNonce } from './general';
+import { MINION_TYPES } from './proposalUtils';
 import { postApiGnosis, postGnosisRelayApi } from './requests';
 import { CONTRACTS } from '../data/contracts';
+import { BOOSTS } from '../data/boosts';
+
+export const BRIDGE_MODULES = {
+  AMB_MODULE: 'AMBModule',
+  NOMAD_MODULE: 'NomadModule',
+};
+
+const NomadSDK = await import('@nomad-xyz/sdk');
 
 export const isAmbModule = async (
   address,
@@ -31,6 +42,25 @@ export const isAmbModule = async (
     return props.every(v => !!v);
   } catch (error) {
     console.error('Not an AMB module', address, error);
+    return false;
+  }
+};
+
+export const isNomadModule = async (
+  address,
+  controller,
+  domainId,
+  targetChainId,
+) => {
+  const abi = getLocalABI(CONTRACTS.NOMAD_MODULE);
+  const contract = createContract({ address, abi, chainID: targetChainId });
+  try {
+    const valid = await contract.methods
+      .isController(controller, domainId)
+      .call();
+    return valid;
+  } catch (error) {
+    console.error('Not an Nomad module', address, error);
     return false;
   }
 };
@@ -136,11 +166,69 @@ export const fetchAmbModule = async (
   ).find(v => v);
 };
 
+export const fetchNomadModule = async (
+  controller, // { address, domainId }
+  foreignChainId,
+  foreignSafeAddress,
+) => {
+  const safeSdk = await getSafe({
+    chainID: foreignChainId,
+    safeAddress: foreignSafeAddress,
+  });
+  const modules = await safeSdk?.getModules();
+  if (!modules) return;
+  return (
+    await Promise.all(
+      modules.map(async moduleAddress => {
+        return (
+          (await isNomadModule(
+            moduleAddress,
+            controller.address,
+            controller.domainId,
+            foreignChainId,
+          )) && moduleAddress
+        );
+      }),
+    )
+  ).find(v => v);
+};
+
+export const fetchCrossChainZodiacModule = async ({
+  chainID,
+  crossChainController, // { address, bridgeModule, chainId }
+  safeAddress,
+}) => {
+  const { bridgeModule } = crossChainController;
+  if (bridgeModule === BRIDGE_MODULES.AMB_MODULE)
+    return fetchAmbModule(
+      {
+        chainId: crossChainController.chainId,
+        address: crossChainController.address,
+      },
+      chainID,
+      safeAddress,
+    );
+  if (bridgeModule === BRIDGE_MODULES.NOMAD_MODULE) {
+    const { domainId } = chainByID(
+      crossChainController.chainId,
+    )?.zodiac_nomad_module;
+    if (domainId)
+      return fetchNomadModule(
+        {
+          domainId,
+          address: crossChainController.address,
+        },
+        chainID,
+        safeAddress,
+      );
+  }
+};
+
 export const fetchSafeDetails = async ({
   chainID,
   safeAddress,
   minionAddress,
-  ambController, // if cross-chain minion -> { chainid, address }
+  crossChainController, // if cross-chain minion -> { address, bridgeModule, chainId }
 }) => {
   const safeSdk = await getSafe({
     chainID,
@@ -155,9 +243,13 @@ export const fetchSafeDetails = async ({
     threshold: await safeSdk.getThreshold(),
     isMinionModule:
       minionAddress && (await isModuleEnabledInternal(safeSdk, minionAddress)),
-    ambModuleAddress:
-      ambController &&
-      (await fetchAmbModule(ambController, chainID, safeAddress)),
+    crossChainModuleAddress:
+      crossChainController &&
+      (await fetchCrossChainZodiacModule({
+        chainID,
+        crossChainController,
+        safeAddress,
+      })),
     gnosisSafeVersion: await safeSdk.getContractVersion(),
   };
 };
@@ -369,7 +461,7 @@ export const deployZodiacBridgeModule = async (
         ],
         values: [owner, avatar, target, amb, controller, bridgeChainId],
       },
-      saltNonce || Date.now().toString(),
+      saltNonce || generateNonce(),
     );
     const provider = new ethers.providers.Web3Provider(
       injectedProvider.currentProvider,
@@ -382,10 +474,109 @@ export const deployZodiacBridgeModule = async (
   }
 };
 
+export const deployZodiacNomadModule = async (
+  owner,
+  avatar,
+  target,
+  manager,
+  controller,
+  controllerDomain,
+  chainId,
+  foreignChainId,
+  injectedProvider,
+  saltNonce = null,
+) => {
+  try {
+    const { masterCopyAddress, moduleProxyFactory } = chainByID(
+      chainId,
+    ).zodiac_nomad_module;
+
+    const provider = new ethers.providers.Web3Provider(
+      injectedProvider.currentProvider,
+    );
+
+    // TODO: This is a temporary solution until NomadModule is officialy added to Zodiac
+    // Then, use `prepareZodiacModuleSetupTx` defined above
+    const factoryAbi = [
+      'function deployModule(address masterCopy, bytes memory initializer, uint256 saltNonce) public returns (address proxy)',
+    ];
+    const factory = new ethers.Contract(
+      moduleProxyFactory[foreignChainId],
+      factoryAbi,
+      provider,
+    );
+
+    const moduleAbi = getLocalABI(CONTRACTS.NOMAD_MODULE);
+    const masterCopyModule = new ethers.Contract(
+      masterCopyAddress[foreignChainId],
+      moduleAbi,
+      provider,
+    );
+    const args = {
+      types: ['address', 'address', 'address', 'address', 'address', 'uint32'],
+      values: [owner, avatar, target, manager, controller, controllerDomain],
+    };
+
+    const encodedInitParams = ethers.utils.defaultAbiCoder.encode(
+      args.types,
+      args.values,
+    );
+    const moduleSetupData = masterCopyModule.interface.encodeFunctionData(
+      'setUp',
+      [encodedInitParams],
+    );
+    const calculateProxyAddress = (
+      factory,
+      masterCopy,
+      initData,
+      proxySaltNonce,
+    ) => {
+      const byteCode =
+        '0x602d8060093d393df3363d3d373d3d3d363d73' +
+        masterCopy.toLowerCase().replace(/^0x/, '') +
+        '5af43d82803e903d91602b57fd5bf3';
+      const salt = ethers.utils.solidityKeccak256(
+        ['bytes32', 'uint256'],
+        [ethers.utils.solidityKeccak256(['bytes'], [initData]), proxySaltNonce],
+      );
+      return ethers.utils.getCreate2Address(
+        factory.address,
+        salt,
+        ethers.utils.keccak256(byteCode),
+      );
+    };
+    const proxySaltNonce = saltNonce || generateNonce();
+    const expectedModuleAddress = calculateProxyAddress(
+      factory,
+      masterCopyModule.address,
+      moduleSetupData,
+      proxySaltNonce,
+    );
+    const deployData = factory.interface.encodeFunctionData('deployModule', [
+      masterCopyModule.address,
+      moduleSetupData,
+      proxySaltNonce,
+    ]);
+
+    const transaction = {
+      data: deployData,
+      to: factory.address,
+      value: ethers.BigNumber.from(0),
+    };
+    // END TODO
+
+    const tx = await provider.getSigner().sendTransaction(transaction);
+    await tx.wait();
+    return expectedModuleAddress;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const encodeAmbTxProposal = async (
   ambModuleAddress,
   chainId,
-  encodedTx,
+  encodedTx, // multisend encoded tx -> { to, data, value, operation }
   targetChainId,
 ) => {
   const config = chainByID(targetChainId).zodiac_amb_module;
@@ -415,6 +606,224 @@ export const encodeAmbTxProposal = async (
     };
   } catch (error) {
     console.error('failed to encodeAmbTxMessage', error);
+  }
+};
+
+export const encodeNomadTxProposal = async (
+  nomadModuleAddress,
+  chainId,
+  encodedTx, // multisend encoded tx -> { to, data, value, operation }
+  targetChainId,
+) => {
+  const homeChainConfig = chainByID(chainId);
+  const targetChainConfig = chainByID(targetChainId);
+  const homeNomadConfig = homeChainConfig.zodiac_nomad_module;
+  if (
+    !homeNomadConfig.bridge_domain_ids[targetChainId] ||
+    !targetChainConfig?.safeMinion?.safe_mutisend_addr
+  ) {
+    throw new Error('Nomad not available for target chain', targetChainId);
+  }
+  const destinationDomainId = homeNomadConfig.bridge_domain_ids[targetChainId];
+  // Nomad module from Avatar in foreign chain
+  const recipientAddress = utils.hexlify(
+    NomadUtils.canonizeId(nomadModuleAddress),
+  );
+  const messageBody = ethers.utils.defaultAbiCoder.encode(
+    ['address', 'uint256', 'bytes', 'uint8'],
+    [encodedTx.to, encodedTx.value, encodedTx.data, encodedTx.operation],
+  );
+  const dispatchFunction = getABIsnippet({
+    contract: CONTRACTS.NOMAD_HOME,
+    fnName: 'dispatch',
+  });
+  return {
+    targetContract: homeNomadConfig.homeContract,
+    abiInput: JSON.stringify(dispatchFunction),
+    abiArgs: [destinationDomainId, recipientAddress, messageBody],
+  };
+};
+
+export const encodeBridgeTxProposal = async ({
+  bridgeModule,
+  bridgeModuleAddress,
+  daochain,
+  encodedTx,
+  foreignChainId,
+}) => {
+  if (bridgeModule === BRIDGE_MODULES.AMB_MODULE)
+    return encodeAmbTxProposal(
+      bridgeModuleAddress,
+      daochain,
+      encodedTx,
+      foreignChainId,
+    );
+  if (bridgeModule === BRIDGE_MODULES.NOMAD_MODULE)
+    return encodeNomadTxProposal(
+      bridgeModuleAddress,
+      daochain,
+      encodedTx,
+      foreignChainId,
+    );
+};
+
+const nomadRegisterRpcProvider = (core, network, rpcURI) => {
+  core.registerRpcProvider(
+    network === 'mainnet' ? 'ethereum' : network,
+    rpcURI,
+  );
+};
+
+const getNomadMessages = (core, network, txHash) => {
+  return NomadSDK.NomadMessage.baseFromTransactionHash(
+    core,
+    network === 'mainnet' ? 'ethereum' : network,
+    txHash,
+  );
+};
+
+export const getNomadTxStatus = async ({
+  homeChainId,
+  foreignChainId,
+  txHash,
+}) => {
+  try {
+    const homeChainConfig = chainByID(homeChainId);
+    const foreignChainConfig = chainByID(foreignChainId);
+    const core = new NomadSDK.NomadContext(
+      homeChainConfig.zodiac_nomad_module.environment,
+    );
+    nomadRegisterRpcProvider(
+      core,
+      homeChainConfig.network,
+      homeChainConfig.rpc_url,
+    );
+    nomadRegisterRpcProvider(
+      core,
+      foreignChainConfig.network,
+      foreignChainConfig.rpc_url,
+    );
+    const messages = await getNomadMessages(
+      core,
+      homeChainConfig.network,
+      txHash,
+    );
+    const msgToInspect = messages.length && messages[0];
+    const nomadStatus = await msgToInspect.events(); // { status, events }
+
+    if (nomadStatus.status === NomadSDK.MessageStatus.Dispatched)
+      return {
+        statusMsg: 'Dispatched',
+        stage: 'Home',
+        txHash: nomadStatus.events[0].transactionHash,
+      };
+
+    if (nomadStatus.status === NomadSDK.MessageStatus.Included)
+      return {
+        statusMsg: 'Processing',
+        stage: 'Home',
+        txHash: nomadStatus.events[1].transactionHash,
+      };
+
+    if (nomadStatus.status === NomadSDK.MessageStatus.Relayed)
+      return {
+        statusMsg: 'Relayed',
+        stage: 'Replica',
+        txHash: nomadStatus.events[2].transactionHash,
+      };
+
+    if (nomadStatus.status === NomadSDK.MessageStatus.Processed) {
+      return {
+        statusMsg: 'Processed',
+        stage: 'Replica',
+        success: nomadStatus.events[3].event.args.success,
+        txHash: nomadStatus.events[3].transactionHash,
+      };
+    } else {
+      // 0: None | 1: Proven | 2: Processed
+      const replicaStatus = await msgToInspect.replicaStatus();
+      if (replicaStatus === NomadSDK.ReplicaMessageStatus.None)
+        return {
+          statusMsg: 'Waiting Period',
+          stage: 'Replica',
+        };
+      return {
+        statusMsg: 'Proven',
+        stage: 'Replica',
+      };
+    }
+  } catch (error) {
+    console.error('Failed to getNomadTxStatus', error);
+  }
+};
+
+export const processNomadMessage = async ({
+  homeChainId,
+  foreignChainId,
+  txHash,
+  injectedProvider, // must be connected to the foreign chain
+}) => {
+  try {
+    const homeChainConfig = chainByID(homeChainId);
+    const foreignChainConfig = chainByID(foreignChainId);
+    const core = new NomadSDK.NomadContext(
+      homeChainConfig.zodiac_nomad_module.environment,
+    );
+    nomadRegisterRpcProvider(
+      core,
+      homeChainConfig.network,
+      homeChainConfig.rpc_url,
+    );
+    nomadRegisterRpcProvider(
+      core,
+      foreignChainConfig.network,
+      foreignChainConfig.rpc_url,
+    );
+    const messages = await getNomadMessages(
+      core,
+      homeChainConfig.network,
+      txHash,
+    );
+    const nomadMessage = messages.length && messages[0];
+    const nomadStatus = await nomadMessage.events(); // { status, events }
+    if (nomadStatus.status !== NomadSDK.MessageStatus.Relayed) return false;
+
+    const provider = new ethers.providers.Web3Provider(
+      injectedProvider.currentProvider,
+    );
+    core.registerSigner(
+      foreignChainConfig.network === 'mainnet'
+        ? 'ethereum'
+        : foreignChainConfig.network,
+      provider.getSigner(),
+    );
+    const tx = await core.process(nomadMessage);
+    await tx.wait();
+    return true;
+  } catch (error) {
+    console.error('Failed to processNomadMessage', error);
+  }
+};
+
+export const getAvailableCrossChainIds = (boostId, chainId, minionType) => {
+  if (
+    boostId === BOOSTS.CROSS_CHAIN_MINION.id ||
+    minionType === MINION_TYPES.CROSSCHAIN_SAFE
+  ) {
+    return {
+      zodiacModule: 'ambModule',
+      availableNetworks: chainByID(chainId).zodiac_amb_module?.foreign_networks,
+    };
+  }
+  if (
+    boostId === BOOSTS.CROSS_CHAIN_MINION_NOMAD.id ||
+    minionType === MINION_TYPES.CROSSCHAIN_SAFE_NOMAD
+  ) {
+    return {
+      zodiacModule: 'nomadModule',
+      availableNetworks: chainByID(chainId).zodiac_nomad_module
+        ?.foreign_networks,
+    };
   }
 };
 
