@@ -134,6 +134,8 @@ export const DETAILS = {
   },
   POSTER_LOCATION: {
     title: `.values.title || Proposal to Update Doc Location`,
+    newLocation: `.values.newLocation`,
+    docId: `.values.docSelect`,
     proposalType: '.formData.type',
   },
   SBT_SUMMON: {

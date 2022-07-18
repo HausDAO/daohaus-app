@@ -260,6 +260,35 @@ export const titleMaker = proposal => {
     return proposal.details ? proposal.details : 'Proposal';
   }
 };
+
+export const newLocationMaker = proposal => {
+  if (!proposal.details) {
+    proposal.details = '';
+  }
+  const details = proposal.details.split('~');
+  if (details[0] === 'id') {
+    return details[3];
+  }
+  if (details[0][0] === '{') {
+    let parsedDetails;
+
+    try {
+      parsedDetails = IsJsonString(proposal.details)
+        ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
+        : '';
+      return (
+        [parsedDetails.newLocation, parsedDetails.docId] ||
+        'Whoops! Could not parse JSON data'
+      );
+    } catch {
+      console.log("Couldn't parse JSON from metadata");
+      return 'Proposal';
+    }
+  } else {
+    return proposal.details ? proposal.details : 'Proposal';
+  }
+};
+
 export const hashMaker = proposal => {
   try {
     const parsed =
