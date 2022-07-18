@@ -108,6 +108,15 @@ export const getSafe = async ({
   }
 };
 
+const getSafeInternal = async ({ chainID, safeAddress }) => {
+  const safeSdk = await getSafe({ chainID, safeAddress });
+  const v = await safeSdk.getContractVersion();
+  if (v === '1.1.1') {
+    return getSafe({ chainID, safeAddress, patchV1: true });
+  }
+  return safeSdk;
+};
+
 const isModuleEnabledInternal = async (safeSdk, moduleAddress) => {
   const v = await safeSdk.getContractVersion();
   if (v === '1.1.1') {
@@ -128,15 +137,6 @@ export const isModuleEnabled = async (chainID, safeAddress, moduleAddress) => {
     safeAddress,
   });
   return isModuleEnabledInternal(safeSdk, moduleAddress);
-};
-
-const getSafeInternal = async ({ chainID, safeAddress }) => {
-  const safeSdk = await getSafe({ chainID, safeAddress });
-  const v = await safeSdk.getContractVersion();
-  if (v === '1.1.1') {
-    return getSafe({ chainID, safeAddress, patchV1: true });
-  }
-  return safeSdk;
 };
 
 export const fetchAmbModule = async (
@@ -171,7 +171,7 @@ export const fetchNomadModule = async (
   foreignChainId,
   foreignSafeAddress,
 ) => {
-  const safeSdk = await getSafe({
+  const safeSdk = await getSafeInternal({
     chainID: foreignChainId,
     safeAddress: foreignSafeAddress,
   });

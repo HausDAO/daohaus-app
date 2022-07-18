@@ -388,7 +388,10 @@ export const decodeAMBTx = (ambModuleAddress, encodedTx) => {
 };
 
 export const decodeNomadTx = (recipientAddress, messageBody) => {
-  const nomadModuleAddress = EthersUtils.hexStripZeros(recipientAddress);
+  const nomadModuleAddress = `0x${recipientAddress.substring(
+    recipientAddress.length - 40,
+    recipientAddress.length,
+  )}`;
   const [to, , data] = EthersUtils.defaultAbiCoder.decode(
     ['address', 'uint256', 'bytes', 'uint8'],
     messageBody,
