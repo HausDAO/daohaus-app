@@ -100,12 +100,21 @@ export const isModuleEnabled = async (chainID, safeAddress, moduleAddress) => {
   return isModuleEnabledInternal(safeSdk, moduleAddress);
 };
 
+const getSafeInternal = async ({ chainID, safeAddress }) => {
+  const safeSdk = await getSafe({ chainID, safeAddress });
+  const v = await safeSdk.getContractVersion();
+  if (v === '1.1.1') {
+    return getSafe({ chainID, safeAddress, patchV1: true });
+  }
+  return safeSdk;
+};
+
 export const fetchAmbModule = async (
   ambController, // { chainId, address }
   foreignChainId,
   foreignSafeAddress,
 ) => {
-  const safeSdk = await getSafe({
+  const safeSdk = await getSafeInternal({
     chainID: foreignChainId,
     safeAddress: foreignSafeAddress,
   });
