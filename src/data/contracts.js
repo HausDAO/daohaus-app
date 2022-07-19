@@ -99,6 +99,11 @@ export const CONTRACTS = {
     abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  MINION_SAFE_V2_EXECUTE: {
+    location: 'local',
+    abiName: 'SAFE_MINION_V2',
+    contractAddress: '.localValues.minionAddress',
+  },
   SUPERFLUID_MINION_LOCAL: {
     location: 'local',
     abiName: 'SUPERFLUID_MINION',
