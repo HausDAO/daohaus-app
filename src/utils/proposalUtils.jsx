@@ -74,6 +74,7 @@ export const MINION_TYPES = {
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
   SAFE_MINION: 'actions',
+  SAFE_MINION_V2: 'actions',
   SUPERFLUID_MINION: 'streams',
 };
 

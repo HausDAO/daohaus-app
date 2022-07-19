@@ -15,6 +15,7 @@ export const MINION_ACTION_FUNCTION_NAMES = {
   NIFTY_MINION: 'actions',
   [MINION_TYPES.NIFTY]: 'actions',
   SAFE_MINION: 'actions',
+  SAFE_V2_MINION: 'actions',
   [MINION_TYPES.SAFE]: 'actions',
   SUPERFLUID_MINION: 'streams',
   [MINION_TYPES.SUPERFLUID]: 'streams',
