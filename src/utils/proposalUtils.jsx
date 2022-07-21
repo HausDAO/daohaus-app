@@ -60,6 +60,7 @@ export const PROPOSAL_TYPES = {
   POSTER_RATIFY_DOC: 'Ratify DAO DOC',
   POSTER_UPDATE_LOCATION: 'change location of DAO DOC',
   SBT_SUMMON: 'Summon SBT',
+  SBT_MINT: 'Mint SBT',
   HEDGEY_CONTRIBUTOR_REWARDS: 'Hedgey Contributor Rewards',
 };
 

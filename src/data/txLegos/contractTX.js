@@ -20,7 +20,7 @@ import { VAULT_TRANSFER_TX } from './transferContractTX';
 import { WRAPNZAP_BOOST_TX } from './wrapNzapBoostTX';
 import { POSTER_BOOST_TX } from './posterBoostTX';
 import { MOLOCH_TOKEN_FACTORY_TX } from './molochTokenTX';
-// import { SBT_TX } from './sbtTX';
+import { SBT_TX } from './sbtTX';
 import { HEDGEY_CONTRIBUTOR_REWARDS_BOOST_TX } from './hedgeyContributorRewardsBoostTX';
 
 // TEST LEGOS BEFORE PUSHING TO DEVELOP
@@ -67,4 +67,5 @@ export const TX = {
   ...POSTER_BOOST_TX,
   ...MOLOCH_TOKEN_FACTORY_TX,
   ...HEDGEY_CONTRIBUTOR_REWARDS_BOOST_TX,
+  ...SBT_TX,
 };

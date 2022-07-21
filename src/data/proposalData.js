@@ -55,4 +55,7 @@ export const CUSTOM_CARD_DATA = {
   [PROPOSAL_TYPES.POSTER_RATIFY]: {
     customTransferUI: 'ratifyContent',
   },
+  [PROPOSAL_TYPES.SBT_SUMMON]: {
+    customTransferUI: 'sbtSummonTransfer',
+  },
 };

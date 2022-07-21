@@ -56,6 +56,7 @@ import PosterEncoder from './posterEncoder';
 import DocSelect from './docSelect';
 import WalletConnectTx from './walletConnectTx';
 import ContributorRewardListInput from './contributorRewardListInput';
+import GoofyCustomField from './goofyCustomField';
 
 export const InputFactory = props => {
   const { type, formCondition, required } = props;
@@ -237,6 +238,9 @@ export const InputFactory = props => {
   }
   if (type === 'contributorRewardListInput') {
     return <ContributorRewardListInput {...props} />;
+  }
+  if (type === 'goofyCustomField') {
+    return <GoofyCustomField {...props} />;
   }
   return null;
 };

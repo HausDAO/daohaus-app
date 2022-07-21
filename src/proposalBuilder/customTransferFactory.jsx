@@ -10,6 +10,7 @@ import MinionTributeTransfer from './MinionTributeTransfer';
 import SuperfluidTransfer from './superfluidTransfer';
 import TutorialTransfer from './tutorialTransfer';
 import PosterTransfer from './posterTransfer';
+import SbtTransfer from './sbtTransfer';
 
 const CustomTransfer = props => {
   const { customTransferUI } = props;
@@ -43,7 +44,9 @@ const CustomTransfer = props => {
   if (customTransferUI === 'ratifyContent') {
     return <PosterTransfer {...props} />;
   }
-  return null;
+  if (customTransferUI === 'sbtSummonTransfer') {
+    return <SbtTransfer {...props} />;
+  }
 };
 
 export default CustomTransfer;
