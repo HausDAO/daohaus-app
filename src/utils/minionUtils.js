@@ -254,3 +254,7 @@ export const getExecuteAction = ({ minion }) => {
     return TX.MINION_SAFE_EXECUTE;
   }
 };
+
+export const isEarlyExecutionMinion = minion => {
+  return Number(minion?.minQuorum) > 0;
+};
