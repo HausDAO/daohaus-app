@@ -34,7 +34,7 @@
     "graphql": "^15.4.0",
     "https-browserify": "^1.0.0",
     "human-format": "^0.11.0",
-    "lit-js-sdk": "^1.1.182",
+    "lit-js-sdk": "^1.1.203",
     "localforage": "^1.10.0",
     "os-browserify": "^0.3.0",
     "path": "^0.12.7",

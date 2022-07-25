@@ -106,7 +106,9 @@ export const buildLitUrl = (daoMetaData, authSig) => {
     daoMetaData?.network
   }&daohaus&dao_address=${daoMetaData?.contractAddress}&dao_name=${
     daoMetaData?.name
-  }&contract_type=${STANDARD_CONTRACT_TYPE}&s=${JSON.stringify(authSig)}`;
+  }&contract_type=${STANDARD_CONTRACT_TYPE}&auth_sig=${JSON.stringify(
+    authSig,
+  )}`;
 };
 
 export const handleLoadCurrentUser = async authSig => {

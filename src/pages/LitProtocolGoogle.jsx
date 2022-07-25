@@ -33,29 +33,6 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
   const [profile, setProfile] = useState(null);
   const { errorToast, warningToast, successToast } = useOverlay();
 
-  useEffect(() => {
-    const checkAndSetProfile = async () => {
-      const localAuthSig = loadStoredAuthSig(
-        address,
-        daoMetaData?.contractAddress,
-      );
-
-      if (localAuthSig) {
-        setAuthSig(localAuthSig);
-        if (await checkIfUserExists(localAuthSig)) {
-          setProfile(await handleLoadCurrentUser(localAuthSig));
-          setShowSignatureButton(false);
-        }
-      } else {
-        setAuthSig(null);
-        setProfile(null);
-        setShowSignatureButton(true);
-      }
-    };
-
-    checkAndSetProfile();
-  }, [address, daoMetaData?.contractAddress]);
-
   const getAllGoogleDocs = async () => {
     try {
       setgoogleDocs(
@@ -76,24 +53,15 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (!profile || !daoMetaData?.boosts) {
-      setLoading(false);
-      return;
-    }
-
-    if (daoMetaData && daoMetaData?.boosts?.GOOGLE_LIT.active && profile) {
-      getAllGoogleDocs();
-    }
-  }, [daoMetaData?.boosts, authSig, profile]);
-
   const performWithAuthSig = async callback => {
     let currentAuthSig = authSig;
+    console.log(daoMetaData);
     try {
       let userExists;
       currentAuthSig = await LitJsSdk.checkAndSignAuthMessage({
         // agnostic signature; Lit only needs the wallet address
-        chain: null,
+        switchChain: false,
+        chain: daoMetaData?.network,
       });
       storeAuthSig(currentAuthSig, address, daoMetaData?.contractAddress);
       setAuthSig(currentAuthSig);
@@ -142,6 +110,40 @@ const LitProtocolGoogle = ({ isMember, daoMetaData }) => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    const checkAndSetProfile = async () => {
+      const localAuthSig = loadStoredAuthSig(
+        address,
+        daoMetaData?.contractAddress,
+      );
+
+      if (localAuthSig) {
+        setAuthSig(localAuthSig);
+        if (await checkIfUserExists(localAuthSig)) {
+          setProfile(await handleLoadCurrentUser(localAuthSig));
+          setShowSignatureButton(false);
+        }
+      } else {
+        setAuthSig(null);
+        setProfile(null);
+        setShowSignatureButton(true);
+      }
+    };
+
+    checkAndSetProfile();
+  }, [address, daoMetaData?.contractAddress]);
+
+  useEffect(() => {
+    if (!profile || !daoMetaData?.boosts) {
+      setLoading(false);
+      return;
+    }
+
+    if (daoMetaData && daoMetaData?.boosts?.GOOGLE_LIT.active && profile) {
+      getAllGoogleDocs();
+    }
+  }, [daoMetaData?.boosts, authSig, profile]);
 
   const LitAuthSigButton = () =>
     isMember && (
