@@ -4,6 +4,8 @@ import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri';
 import { Box, Flex, Icon, Input } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
+import FieldWrapper from './fieldWrapper';
+
 const CustomWrapper = styled(Box)`
   .react-datepicker {
     display: flex;
@@ -217,21 +219,23 @@ const DateSelect = props => {
   );
 
   return (
-    <CustomWrapper width={width}>
-      <Input type='hidden' htmlFor={htmlFor} name={name} ref={register} />
-      <DatePicker
-        placeholderText={placeholderText}
-        showTimeSelect={showTimeSelect}
-        renderCustomHeader={renderHeader}
-        selected={selected}
-        onChange={setSelected}
-        minDate={minDate}
-        minTime={minTime}
-        dateFormat='dd/MM/yyyy h:mm aa'
-        maxDate={maxDate}
-        maxTime={maxTime}
-      />
-    </CustomWrapper>
+    <FieldWrapper {...props}>
+      <CustomWrapper width={width}>
+        <Input type='hidden' htmlFor={htmlFor} name={name} ref={register} />
+        <DatePicker
+          placeholderText={placeholderText}
+          showTimeSelect={showTimeSelect}
+          renderCustomHeader={renderHeader}
+          selected={selected}
+          onChange={setSelected}
+          minDate={minDate}
+          minTime={minTime}
+          dateFormat='dd/MM/yyyy h:mm aa'
+          maxDate={maxDate}
+          maxTime={maxTime}
+        />
+      </CustomWrapper>
+    </FieldWrapper>
   );
 };
 
