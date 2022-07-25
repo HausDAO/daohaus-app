@@ -3,7 +3,11 @@ import { Button, Flex, useTheme } from '@chakra-ui/react';
 
 import { BiTachometer } from 'react-icons/bi';
 import { ParaSm } from '../components/typography';
-import { earlyExecuteMinionType, getExecuteAction } from '../utils/minionUtils';
+import {
+  earlyExecuteMinionType,
+  getExecuteAction,
+  isEarlyExecutionMinion,
+} from '../utils/minionUtils';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { useTX } from '../contexts/TXContext';
 import { useDao } from '../contexts/DaoContext';
@@ -45,7 +49,10 @@ export const ExecuteQuorum = ({ proposal, voteData }) => {
     </Flex>
   );
 
-  if (!proposal?.minion?.minQuorum || !earlyExecuteMinionType(proposal))
+  if (
+    !earlyExecuteMinionType(proposal) ||
+    !isEarlyExecutionMinion(proposal?.minion)
+  )
     return null;
   if (hasReachedQuorum) {
     return !proposal.executed ? (
