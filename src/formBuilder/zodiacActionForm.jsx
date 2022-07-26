@@ -229,65 +229,12 @@ const ZodiacActionForm = props => {
       return;
     }
 
-    console.log('ZODIAC ACTION =>', zodiacAction);
     if (zodiacAction === 'ambModule') {
-      // register('ambModuleAddress');
-
-      // if (!prevalidateBridgeAction(foreignChainId, checksumSafeAddr)) {
-      //   return;
-      // }
-
-      // setFormState('loading');
-
-      // // Fetch Minion Safe that was deployed on a previous step
-      // const rs = await fetchMinionByName({
-      //   chainID: daochain,
-      //   minionName: minionName.split('/')[1],
-      //   molochAddress: daoid,
-      // });
-      // const vault = rs.minions.length && rs.minions[0];
-      // if (!vault) {
-      //   errorToast({
-      //     title: 'Minion Safe Not Ready',
-      //     description:
-      //       'Your Minion Safe is being setup. Please try again in a few minutes.',
-      //   });
-      //   setFormState('idle');
-      //   return;
-      // }
-
-      // // Deploy a Zodiac Bridge module
-      // const ambModuleAddress = await deployAmbModule(vault);
-      // if (!ambModuleAddress) {
-      //   errorToast({
-      //     title: 'AMB Module Deployment',
-      //     description: 'Failed to deploy the AMB Module.',
-      //   });
-      //   setFormState('idle');
-      //   return;
-      // }
-      // setValue('ambModuleAddress', ambModuleAddress);
       const ambModuleAddress = await deployZodiacModule(
         'ambModuleAddress',
         deployAmbModule,
         [vault],
       );
-
-      // Submit a Tx proposal to the foreign Safe in order to add the Bridge contract as a module
-      // try {
-      //   await submitGnosisTxProposal(
-      //     foreignChainId,
-      //     'enableModule',
-      //     [Web3Utils.toChecksumAddress(ambModuleAddress)],
-      //     checksumSafeAddr,
-      //   );
-      // } catch (error) {
-      //   errorToast({
-      //     title: 'Failed to Submit Gnosis Safe Tx Proposal',
-      //     description: error.message,
-      //   });
-      //   setFormState('idle');
-      // }
       const success = await submitEnableModuleTxProposal(
         foreignChainId,
         ambModuleAddress,

@@ -131,7 +131,13 @@ export const isBeaconProxyABI = response => {
 const isGnosisProxy = response => {
   return (
     response.length === 2 &&
-    response.every(fn => ['constructor', 'fallback'].includes(fn.type))
+    response.every(fn => ['constructor', 'fallback'].includes(fn.type)) &&
+    response
+      .find(fn => fn.type === 'constructor')
+      ?.['inputs']?.every?.(
+        // singleton param from IProxy or GnosisSafeProxy
+        input => ['_masterCopy', '_singleton'].includes(input.name),
+      )
   );
 };
 
@@ -148,9 +154,17 @@ const getImplementationOf = async (address, chainID, abi) => {
 };
 
 const getGnosisMasterCopy = async (address, chainID) => {
-  const web3Contract = createContract({ address, abi: GNOSIS_IPROXY, chainID });
-  const masterCopy = await web3Contract.methods.masterCopy().call();
-  return masterCopy;
+  try {
+    const web3Contract = createContract({
+      abi: GNOSIS_IPROXY,
+      address,
+      chainID,
+    });
+    const masterCopy = await web3Contract.methods.masterCopy().call();
+    return masterCopy;
+  } catch (error) {
+    console.log('Failed to fetch masterCopy from Proxy');
+  }
 };
 
 const processABI = async ({
@@ -171,13 +185,10 @@ const processABI = async ({
   }
   if (isBeaconProxyABI(abi)) {
     const contractDetails = await fetchContractCode(contractAddress, chainID);
-    if (
+    const implAddress =
       contractDetails['Implementation'] ||
-      contractDetails['ImplementationAddress']
-    ) {
-      const implAddress =
-        contractDetails['Implementation'] ||
-        contractDetails['ImplementationAddress'];
+      contractDetails['ImplementationAddress'];
+    if (implAddress) {
       const newData = await fetchABI(implAddress, chainID, parseJSON);
       return newData;
     }
@@ -195,6 +206,18 @@ const processABI = async ({
   }
   if (isGnosisProxy(abi)) {
     const gnosisProxy = await getGnosisMasterCopy(contractAddress, chainID);
+    if (!gnosisProxy) {
+      // used the new GnosisSafeProxy (no public getter)
+      const contractDetails = await fetchContractCode(contractAddress, chainID);
+      const implAddress =
+        contractDetails['Implementation'] ||
+        contractDetails['ImplementationAddress'];
+      if (implAddress) {
+        const newData = await fetchABI(implAddress, chainID, parseJSON);
+        return newData;
+      }
+      return; // TODO: should not happen
+    }
     const newData = await fetchABI(gnosisProxy, chainID, parseJSON);
     return newData;
   }

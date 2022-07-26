@@ -230,7 +230,7 @@ export const fetchSafeDetails = async ({
   minionAddress,
   crossChainController, // if cross-chain minion -> { address, bridgeModule, chainId }
 }) => {
-  const safeSdk = await getSafe({
+  const safeSdk = await getSafeInternal({
     chainID,
     safeAddress,
   });
@@ -273,7 +273,7 @@ export const createGnosisSafeTxProposal = async ({
     operation,
     gasToken: null,
   };
-  const safeSdk = await getSafe({
+  const safeSdk = await getSafeInternal({
     chainID,
     safeAddress,
   });
@@ -369,7 +369,7 @@ export const encodeSwapSafeOwnersBy = async (
     );
   }
   try {
-    const safeSdk = await getSafe({
+    const safeSdk = await getSafeInternal({
       chainID,
       safeAddress,
     });
@@ -725,12 +725,15 @@ export const getNomadTxStatus = async ({
         txHash: nomadStatus.events[1].transactionHash,
       };
 
-    if (nomadStatus.status === NomadSDK.MessageStatus.Relayed)
+    if (nomadStatus.status === NomadSDK.MessageStatus.Relayed) {
+      const confirmAt = Number((await msgToInspect.confirmAt()).toString());
       return {
         statusMsg: 'Relayed',
         stage: 'Replica',
+        attestOK: Date.now() / 1000 > confirmAt,
         txHash: nomadStatus.events[2].transactionHash,
       };
+    }
 
     if (nomadStatus.status === NomadSDK.MessageStatus.Processed) {
       return {

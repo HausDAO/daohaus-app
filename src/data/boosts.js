@@ -567,12 +567,11 @@ export const BOOSTS = {
     metaFields: ['ambModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
   },
   CROSS_CHAIN_MINION_NOMAD: {
-    dev: true,
     id: 'CROSS_CHAIN_MINION_NOMAD',
     boostContent: CONTENT.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
     minionData: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
     categories: ['devTools'],
-    steps: STEPS.CROSS_CHAIN_MINION_BOOST, // TODO:
+    steps: STEPS.CROSS_CHAIN_MINION_BOOST,
     playlist: BOOST_PLAYLISTS.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
     networks: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD].networks,
     cost: 'free',

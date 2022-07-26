@@ -39,7 +39,7 @@ const AMBExecute = ({ chainID, proposal }) => {
 const NomadExecute = ({ chainID, proposal }) => {
   const SHOULD_EXECUTE = {
     '0x1': true,
-    '0x5': true, // TODO: remove
+    '0x5': true,
   };
   const [status, setStatus] = useState();
   const [loading, setLoading] = useState();
@@ -162,7 +162,8 @@ const NomadExecute = ({ chainID, proposal }) => {
       </TextBox>
       {(!['Relayed', 'Processed'].includes(status?.statusMsg) ||
         (status?.statusMsg === 'Relayed' &&
-          !SHOULD_EXECUTE[foreignChainConfig.chain_id])) && <Spinner />}
+          (!status?.attestOK ||
+            !SHOULD_EXECUTE[foreignChainConfig.chain_id]))) && <Spinner />}
       {status?.statusMsg === 'Processed' && (
         <ProcessedIcon
           success={status.success}
@@ -200,6 +201,7 @@ const NomadExecute = ({ chainID, proposal }) => {
             <Text>Stage Tx</Text>
             {injectedProvider &&
               status.statusMsg === 'Relayed' &&
+              status.attestOK &&
               SHOULD_EXECUTE[foreignChainConfig.chain_id] && (
                 <ExecuteTxComponent />
               )}
