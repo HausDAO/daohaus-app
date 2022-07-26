@@ -15,7 +15,12 @@ export const BOOST_PLAYLISTS = {
   SAFE_DEV_SUITE: {
     name: 'Safe Minion Classics',
     id: 'safeMinionClassics',
-    forms: ['MINION_SAFE_SIMPLE', 'MINION_BUYOUT_TOKEN', 'SAFE_TX_BUILDER'],
+    forms: [
+      'MINION_SAFE_SIMPLE',
+      'MINION_BUYOUT_TOKEN',
+      'SAFE_TX_BUILDER',
+      'DAOSTAR_REGISTER',
+    ],
   },
   CROSSCHAIN_SAFE_DEV_SUITE: {
     name: 'Cross Chain Safe Minion Classics',
@@ -79,6 +84,11 @@ export const PLAYLISTS = [
     name: 'Favorites',
     id: 'favorites',
     forms: ['BUY_SHARES', 'SHARES_FOR_WORK', 'TOKEN', 'GUILDKICK'],
+  },
+  {
+    name: 'Daostar',
+    id: 'daostar',
+    forms: ['DAOSTAR_REGISTER'],
   },
   {
     name: 'The Classics',

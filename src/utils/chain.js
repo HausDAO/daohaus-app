@@ -122,6 +122,8 @@ export const supportedChains = {
       safe_mutisend_addr: '0xA238CBeb142c10Ef7Ad8442C6D1f9E89e07e7761',
       safe_sign_lib_addr: '0xa25b3579a295be016de5eb5F082b54B12d45F72C',
     },
+    daostar_registration_factory_addr:
+      '0x3d6f3410fb45d14f01320f2fb2e75f6504f9d777',
     superfluid: {
       cfa: '0xF4C5310E51F6079F601a5fb7120bC72a70b96e2A',
       host: '0xeD5B5b32110c3Ded02a07c8b8e97513FAfb883B6',

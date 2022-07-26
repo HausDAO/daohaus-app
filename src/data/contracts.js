@@ -219,6 +219,12 @@ export const CONTRACTS = {
     abiName: 'SBT_FACTORY',
     contractAddress: '.contextData.chainConfig.sbt_factory',
   },
+  DAOSTAR_FACTORY: {
+    location: 'local',
+    abiName: 'DAOSTAR_FACTORY',
+    contractAddress:
+      '.contextData.chainConfig.daostar_registration_factory_addr',
+  },
   HEDGEY_BATCH_MINT: {
     location: 'local',
     abiName: 'HEDGEY_BATCH_MINT',

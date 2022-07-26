@@ -142,6 +142,10 @@ export const DETAILS = {
     title: `Summon Soul Bound Token`,
     proposalType: '.formData.type',
   },
+  DAOSTAR_REGISTER: {
+    title: `Register with DAOStar`,
+    proposalType: '.formData.type',
+  },
   CONTRIBUTOR_REWARDS_TOKEN: {
     title: '.values.title || Contributor Rewards Proposal',
     description: `.values.description || ${HASH.EMPTY_FIELD}`,
