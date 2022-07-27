@@ -16,6 +16,7 @@ import { useTX } from '../contexts/TXContext';
 import useCanInteract from '../hooks/useCanInteract';
 import { TX } from '../data/txLegos/contractTX';
 import { chainByName } from '../utils/chain';
+import { useDao } from '../contexts/DaoContext';
 
 const MinionInternalBalanceActionMenu = ({
   targetDao,
@@ -25,13 +26,23 @@ const MinionInternalBalanceActionMenu = ({
   const { canInteract } = useCanInteract({});
   const { minion } = useParams();
   const { submitTransaction, refreshDao } = useTX();
+  const { daoOverview } = useDao();
   const [loading, setLoading] = useState();
 
   const handleWithdraw = async options => {
     setLoading(true);
 
+    let tx = TX.MINION_WITHDRAW;
+
+    const targetMinion = daoOverview.minion.find(
+      min => min.minionAddress === minion.toLowerCase(),
+    );
+    if (targetMinion && targetMinion.safeMinionVersion === '2') {
+      tx = TX.MINION_WITHDRAW_SAFE_V2;
+    }
+
     await submitTransaction({
-      tx: TX.MINION_WITHDRAW,
+      tx,
       args: [
         token.moloch.id,
         token.token.tokenAddress,
