@@ -34,7 +34,7 @@ const MinionInternalBalanceActionMenu = ({
 
     let tx = TX.MINION_WITHDRAW;
 
-    const targetMinion = daoOverview.minion.find(
+    const targetMinion = daoOverview.minions.find(
       min => min.minionAddress === minion.toLowerCase(),
     );
     if (targetMinion && targetMinion.safeMinionVersion === '2') {
