@@ -203,7 +203,8 @@ const SponsorCard = ({
           Sponsor {depositData?.deposit && `(${depositData.deposit})`}
         </Button>
         {proposal?.minionAddress &&
-          proposal.proposer === proposal.minionAddress && (
+          proposal.proposer === proposal.minionAddress &&
+          proposal?.createdBy === proposal.minionAddress && (
             <Button
               size='sm'
               fontWeight='700'
