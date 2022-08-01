@@ -216,7 +216,7 @@ const SponsorCard = ({
               Cancel Minion
             </Button>
           )}
-        {address?.toLowerCase() === proposal?.proposer?.toLowerCase() && (
+        {address?.toLowerCase() === proposal?.createdBy?.toLowerCase() && (
           <Button
             size='sm'
             fontWeight='700'
