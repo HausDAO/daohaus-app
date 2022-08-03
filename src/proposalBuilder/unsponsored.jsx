@@ -202,9 +202,10 @@ const SponsorCard = ({
         >
           Sponsor {depositData?.deposit && `(${depositData.deposit})`}
         </Button>
-        {proposal?.minionAddress &&
+        {(proposal?.minionAddress &&
           proposal.proposer === proposal.minionAddress &&
-          proposal?.createdBy === proposal.minionAddress && (
+          proposal.createdBy === proposal.minionAddress) ||
+          (proposal.createdBy === address && (
             <Button
               size='sm'
               fontWeight='700'
@@ -215,8 +216,8 @@ const SponsorCard = ({
             >
               Cancel Minion
             </Button>
-          )}
-        {address?.toLowerCase() === proposal?.createdBy?.toLowerCase() && (
+          ))}
+        {address?.toLowerCase() === proposal?.proposer?.toLowerCase() && (
           <Button
             size='sm'
             fontWeight='700'
