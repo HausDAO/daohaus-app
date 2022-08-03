@@ -205,7 +205,7 @@ const SponsorCard = ({
         {(proposal?.minionAddress &&
           proposal.proposer === proposal.minionAddress &&
           proposal.createdBy === proposal.minionAddress) ||
-          (proposal.createdBy === address && (
+          (proposal?.minionAddress && proposal.createdBy === address && (
             <Button
               size='sm'
               fontWeight='700'
