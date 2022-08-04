@@ -204,7 +204,18 @@ const SponsorCard = ({
         </Button>
         {(proposal?.minionAddress &&
           proposal.proposer === proposal.minionAddress &&
-          proposal.createdBy === proposal.minionAddress) ||
+          proposal.createdBy === proposal.minionAddress && (
+            <Button
+              size='sm'
+              fontWeight='700'
+              minW='4rem'
+              variant='outline'
+              onClick={cancelMinion}
+              isLoading={isLoadingTx}
+            >
+              Cancel Minion
+            </Button>
+          )) ||
           (proposal?.minionAddress && proposal.createdBy === address && (
             <Button
               size='sm'
