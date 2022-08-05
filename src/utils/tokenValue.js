@@ -29,7 +29,6 @@ export const initTokenData = async (
 ) => {
   const tokenData = await fetchTokenData();
 
-  console.log('tokenData', tokenData);
   if (tokenData && tokenPriceSetter) {
     tokenPriceSetter(tokenData);
   }
