@@ -54,6 +54,15 @@ export const MINION_TX = {
     errMsg: 'Error Transferring Balance',
     successMsg: 'Balance Transferred!',
   },
+  MINION_WITHDRAW_FROM_PARENT_DAO_SAFE_V2: {
+    contract: CONTRACTS.MINION_SAFE_V2_EXECUTE,
+    name: 'doWithdraw',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transfer Balance',
+    errMsg: 'Error Transferring Balance',
+    successMsg: 'Balance Transferred!',
+  },
   MINION_CANCEL: {
     contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'cancelAction',
