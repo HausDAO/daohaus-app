@@ -40,8 +40,11 @@ const MinionCancel = ({ proposal }) => {
     daochain === injectedProvider?.currentProvider?.chainId;
 
   useEffect(() => {
-    setIsProposer(proposal?.proposer === address);
-  }, [address, proposal?.proposer]);
+    setIsProposer(
+      proposal?.createdBy === address ||
+        proposal?.createdBy === proposal?.minionAddress,
+    );
+  }, [address, proposal?.proposer, proposal?.createdBy]);
 
   const getMinionAction = () => {
     return (
