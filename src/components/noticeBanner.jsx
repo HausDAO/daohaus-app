@@ -9,14 +9,15 @@ const NoticeBanner = () => {
         NOTICE
       </Text>
       <Text fontSize='md'>
-        The DAOhaus app isn't currently able to display the most recent onchain
-        data for any Gnosis Chain DAO. This is due to TheGraph subgraph errors.{' '}
+        The Rinkeby testnet is nearing end-of-life and our support is moving to
+        Goerli. Please summon any new test DAOs on Goerli and existing DAOs on
+        Rinkeby will no longer be supported in the near future.{' '}
         <Link
           color='white'
-          href='https://status.thegraph.com/incidents/l3vzzpl87l9w'
+          href='https://blog.ethereum.org/2022/06/21/testnet-deprecation'
           isExternal
         >
-          Monitor the incident here
+          See deprecation announcement here.
           <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
         </Link>
       </Text>
