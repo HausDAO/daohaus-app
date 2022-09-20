@@ -209,6 +209,7 @@ export const supportedChains = {
     },
     disperse_app: '0x3D0e848b6C55153E2b0154734ac6b5288A7f1B6F',
     poster: '0x3c1f4802be7e26d95b31ef7a566e18f42e360cab',
+    moloch_token_factory: '0x32aDC251482671C992D6feAb4A8163D1c9495273',
   },
   '0x2a': {
     name: 'Ethereum Kovan',
