@@ -10,8 +10,8 @@ const NoticeBanner = () => {
       </Text>
       <Text fontSize='md'>
         The Rinkeby testnet is nearing end-of-life and our support is moving to
-        Goerli. Please summon any new test DAOs on Goerli and existing DAOs on
-        Rinkeby will no longer be supported in the near future.{' '}
+        Goerli. Please summon new test DAOs on Goerli. DAOs on Rinkeby will not
+        be supported after September 30, 2022.{' '}
         <Link
           color='white'
           href='https://blog.ethereum.org/2022/06/21/testnet-deprecation'
