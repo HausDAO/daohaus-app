@@ -58,7 +58,9 @@ const Layout = ({ children, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
-        {(daochain === '0x4' || daochain === '0x5' || daochain === '0x2a') && <NoticeBanner />}
+        {(daochain === '0x4' || daochain === '0x5' || daochain === '0x2a') && (
+          <NoticeBanner />
+        )}
         {children}
       </Flex>
     </Flex>
