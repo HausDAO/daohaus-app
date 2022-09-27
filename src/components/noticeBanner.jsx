@@ -9,9 +9,9 @@ const NoticeBanner = () => {
         NOTICE
       </Text>
       <Text fontSize='md'>
-        The Rinkeby testnet is nearing end-of-life and our support is moving to
-        Goerli. Please summon new test DAOs on Goerli. DAOs on Rinkeby will not
-        be supported after September 30, 2022.{' '}
+        The Rinkeby and Kovan testnets are nearing end-of-life and our support
+        is moving to Goerli. Please summon new test DAOs on Goerli. DAOs on
+        Rinkeby or Kovan will not be supported after September 30, 2022.{' '}
         <Link
           color='white'
           href='https://blog.ethereum.org/2022/06/21/testnet-deprecation'
