@@ -67,7 +67,7 @@ export const supportedChains = {
       },
       foreign_networks: [
         {
-          name: 'xDAI',
+          name: 'GnosisChain',
           value: '0x64',
         },
       ],
@@ -77,6 +77,29 @@ export const supportedChains = {
       monitoring_app: {
         '0x64': 'https://alm-xdai.herokuapp.com/100',
       },
+    },
+    zodiac_nomad_module: {
+      bridge_domain_ids: {
+        '0x64': 2019844457,
+      },
+      domainId: 6648936,
+      environment: 'production',
+      homeContract: '0x92d3404a7e6c91455bbd81475cd9fad96acff4c8',
+      masterCopyAddress: {
+        '0x64': '0xFF8E1e6490CbaAb9db07b6ac665BF768E5396A61',
+      },
+      moduleProxyFactory: {
+        '0x64': '0x00000000062c52e29e8029dc2413172f6d619d85', // TODO: remove when Goerli is officially available
+      },
+      xAppConnectionManager: {
+        '0x64': '0x1e107186352122b763c766504ee28cb913cd83c5',
+      },
+      foreign_networks: [
+        {
+          name: 'GnosisChain',
+          value: '0x64',
+        },
+      ],
     },
   },
   '0x5': {
@@ -277,6 +300,29 @@ export const supportedChains = {
       monitoring_app: {
         '0x1': 'https://alm-xdai.herokuapp.com/100',
       },
+    },
+    zodiac_nomad_module: {
+      bridge_domain_ids: {
+        '0x1': 6648936,
+      },
+      domainId: 2019844457,
+      environment: 'production',
+      homeContract: '0x4fce8a84c8f2ade7159596208dcbff7ffad5d459',
+      masterCopyAddress: {
+        '0x1': '0xFF8E1e6490CbaAb9db07b6ac665BF768E5396A61',
+      },
+      moduleProxyFactory: {
+        '0x1': '0x00000000062c52e29e8029dc2413172f6d619d85', // TODO: remove when Goerli is officially available
+      },
+      xAppConnectionManager: {
+        '0x1': '0xfe8874778f946ac2990a29eba3cfd50760593b2f',
+      },
+      foreign_networks: [
+        {
+          name: 'Ethereum',
+          value: '0x1',
+        },
+      ],
     },
   },
   '0x89': {

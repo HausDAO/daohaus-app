@@ -15,7 +15,7 @@ import { createContract } from './contract';
 import { validate } from './validation';
 import { MINION_TYPES, PROPOSAL_TYPES } from './proposalUtils';
 import { chainByID } from './chain';
-import { encodeAmbTxProposal } from './gnosis';
+import { encodeBridgeTxProposal } from './gnosis';
 import { TX } from '../data/txLegos/contractTX';
 import { CONTRACTS } from '../data/contracts';
 import { ipfsPrePost } from './requests';
@@ -277,19 +277,10 @@ const argBuilderCallback = Object.freeze({
   },
   crossChainMultiActionSafe(data) {
     const { contextData, values } = data;
-    const localChain = chainByID(contextData.daochain);
-    const foreignChain = chainByID(values.foreignChainId);
-
+    const { bridgeTx } = values;
     const encodedTX = safeEncodeHexFunction(
-      getABIsnippet({
-        contract: CONTRACTS.AMB,
-        fnName: 'requireToPassMessage',
-      }),
-      [
-        values.ambTx.to,
-        values.ambTx.data, // multiSend Tx for execution on foreign chain
-        localChain.zodiac_amb_module.gas_limit[values.foreignChainId],
-      ],
+      JSON.parse(bridgeTx.abiInput),
+      bridgeTx.abiArgs,
     );
 
     return [
@@ -298,11 +289,7 @@ const argBuilderCallback = Object.freeze({
           contract: CONTRACTS.LOCAL_SAFE_MULTISEND,
           fnName: 'multiSend',
         }),
-        [
-          foreignChain.zodiac_amb_module.amb_bridge_address[
-            contextData.daochain
-          ],
-        ],
+        [bridgeTx.targetContract],
         ['0'],
         [encodedTX],
         ['0'],
@@ -389,20 +376,28 @@ const gatherArgs = async data => {
             })
           ).flatMap(a => a),
         );
+        // crossChain property is injected via vaults.js:getMinionActionFormLego
         if (arg.crossChain) {
-          // wrap encodedTx in a multiSend that sends a Tx through the AMB bridge
           const { contextData, localValues } = data;
-          const txProposal = await encodeAmbTxProposal(
-            localValues.ambModuleAddress,
-            contextData.daochain,
-            {
-              to: chainByID(contextData.daochain).safeMinion.safe_mutisend_addr,
+          const {
+            bridgeModule,
+            bridgeModuleAddress,
+            foreignChainId,
+          } = localValues;
+          const { daochain } = contextData;
+          const txProposal = await encodeBridgeTxProposal({
+            bridgeModule,
+            bridgeModuleAddress,
+            daochain,
+            // wrap encodedTx in a multiSend that submit a Tx through the selected bridge protocol
+            encodedTx: {
+              to: chainByID(daochain).safeMinion.safe_mutisend_addr,
               value: '0',
               data: encodedTx,
               operation: 1,
             },
-            localValues.foreignChainId,
-          );
+            foreignChainId,
+          });
           return encodeMulti(collapseToCallData({ TX: [txProposal] }));
         }
         return encodedTx;

@@ -4,7 +4,7 @@ import { Button, Tooltip } from '@chakra-ui/react';
 import { useAppModal } from '../hooks/useModals';
 import useCanInteract from '../hooks/useCanInteract';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { fetchAmbModule } from '../utils/gnosis';
+import { fetchCrossChainZodiacModule } from '../utils/gnosis';
 import { getMinionActionFormLego } from '../utils/vaults';
 
 const LABELS = {
@@ -52,16 +52,18 @@ const MinionTransfer = ({
         balance: token.tokenBalance,
         tokenDecimals: isNativeToken ? '18' : token.decimals,
         foreignChainId: vault.foreignChainId,
-        ambModuleAddress:
+        bridgeModule: vault.bridgeModule,
+        bridgeModuleAddress:
           vault.foreignSafeAddress &&
-          (await fetchAmbModule(
-            {
-              chainId: daochain,
+          (await fetchCrossChainZodiacModule({
+            chainID: vault.foreignChainId,
+            crossChainController: {
               address: vault.safeAddress,
+              bridgeModule: vault.bridgeModule,
+              chainId: daochain,
             },
-            vault.foreignChainId,
-            vault.foreignSafeAddress,
-          )),
+            safeAddress: vault.foreignSafeAddress,
+          })),
       },
     });
     setLoading(false);

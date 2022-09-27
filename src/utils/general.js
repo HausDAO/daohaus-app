@@ -253,8 +253,13 @@ export const daoConnectedAndSameChain = (
   address,
   injectedChainID,
   daochain,
+  foreignChainId,
 ) => {
-  return address && daochain && injectedChainID === daochain;
+  return !foreignChainId
+    ? address && daochain && injectedChainID === daochain
+    : address &&
+        daochain &&
+        [daochain, foreignChainId].includes(injectedChainID);
 };
 
 export const isEthAddress = string =>

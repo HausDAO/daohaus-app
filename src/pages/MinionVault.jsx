@@ -123,9 +123,10 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
             const foreignSafe = await fetchSafeDetails({
               chainID: vaultMatch.foreignChainId,
               safeAddress: vaultMatch.foreignSafeAddress,
-              ambController: {
-                chainId: daochain,
+              crossChainController: {
                 address: vaultMatch.safeAddress,
+                bridgeModule: vaultMatch.bridgeModule,
+                chainId: daochain,
               },
             });
             setForeignSafeDetails(foreignSafe);

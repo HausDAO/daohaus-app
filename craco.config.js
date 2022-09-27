@@ -17,12 +17,20 @@ module.exports = {
       module: {
         rules: [
           {
+            test: /\.wasm$/,
+            type: 'webassembly/sync',
+          },
+          {
             test: /\.m?js$/,
             resolve: {
               fullySpecified: false, // disable the behaviour
             },
           },
         ],
+      },
+      experiments: {
+        syncWebAssembly: true,
+        topLevelAwait: true, // so we can do `const lib = await import('libraryName');`
       },
     },
     plugins: {
