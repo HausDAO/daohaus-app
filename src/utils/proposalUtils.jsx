@@ -17,7 +17,6 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
   NeedsExecution: 'NeedsExecution',
 };
-
 export const BASE_ACTIVE_STATES = {
   Unknown: 'Unknown',
   InQueue: 'InQueue',
@@ -60,6 +59,8 @@ export const PROPOSAL_TYPES = {
   POSTER_RATIFY: 'Ratify Content',
   POSTER_RATIFY_DOC: 'Ratify DAO DOC',
   POSTER_UPDATE_LOCATION: 'change location of DAO DOC',
+  SBT_SUMMON: 'Summon SBT',
+  HEDGEY_CONTRIBUTOR_REWARDS: 'Hedgey Contributor Rewards',
 };
 
 export const MINION_TYPES = {
@@ -73,6 +74,7 @@ export const MINION_TYPES = {
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
   SAFE_MINION: 'actions',
+  SAFE_MINION_V2: 'actions',
   SUPERFLUID_MINION: 'streams',
 };
 
@@ -259,6 +261,35 @@ export const titleMaker = proposal => {
     return proposal.details ? proposal.details : 'Proposal';
   }
 };
+
+export const newLocationMaker = proposal => {
+  if (!proposal.details) {
+    proposal.details = '';
+  }
+  const details = proposal.details.split('~');
+  if (details[0] === 'id') {
+    return details[3];
+  }
+  if (details[0][0] === '{') {
+    let parsedDetails;
+
+    try {
+      parsedDetails = IsJsonString(proposal.details)
+        ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
+        : '';
+      return (
+        [parsedDetails.newLocation, parsedDetails.docId] ||
+        'Whoops! Could not parse JSON data'
+      );
+    } catch {
+      console.log("Couldn't parse JSON from metadata");
+      return 'Proposal';
+    }
+  } else {
+    return proposal.details ? proposal.details : 'Proposal';
+  }
+};
+
 export const hashMaker = proposal => {
   try {
     const parsed =

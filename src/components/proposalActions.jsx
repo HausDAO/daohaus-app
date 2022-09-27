@@ -11,6 +11,7 @@ import {
   Tooltip,
   Stack,
   Text,
+  IconButton,
 } from '@chakra-ui/react';
 import { isAfter, isBefore } from 'date-fns';
 import { MaxUint256 } from '@ethersproject/constants';
@@ -229,7 +230,7 @@ const ProposalActions = ({
                       shouldWrapChildren
                       placement='bottom'
                       label={`Insufficient Funds: You only have ${Number(
-                        daoMember?.depositTokenBalance,
+                        daoMember?.depositTokenData?.balance,
                       )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
@@ -297,6 +298,7 @@ const ProposalActions = ({
             </Flex>
           </Flex>
         )}
+
         {(proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' && (
             <>
@@ -317,43 +319,61 @@ const ProposalActions = ({
                         canInteract &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
-                            <Flex
+                            <IconButton
+                              icon={
+                                <Flex justiy='center' align='center'>
+                                  <Icon boxSize='1.5em' as={FaThumbsUp}></Icon>
+                                </Flex>
+                              }
                               p={3}
+                              size='xl'
+                              color='green.500'
+                              background='none'
+                              borderRadius='40px'
                               borderWidth='1px'
                               borderColor='green.500'
                               borderStyle='solid'
+                              _hover={{ cursor: 'pointer' }}
+                              _disabled={{
+                                borderColor: 'green.900',
+                                color: 'green.900',
+                                cursor: 'not-allowed',
+                                _hover: {
+                                  cursor: 'not-allowed',
+                                },
+                              }}
+                              isDisabled={proposal?.executed}
+                              onClick={() => submitVote(proposal, 1)}
+                            />
+                            <IconButton
+                              icon={
+                                <Flex p={3} justiy='center' align='center'>
+                                  <Icon
+                                    boxSize='1.5em'
+                                    as={FaThumbsDown}
+                                  ></Icon>
+                                </Flex>
+                              }
                               borderRadius='40px'
-                              justiy='center'
-                              align='center'
-                            >
-                              <Icon
-                                as={FaThumbsUp}
-                                color='green.500'
-                                w='25px'
-                                h='25px'
-                                _hover={{ cursor: 'pointer' }}
-                                onClick={() => submitVote(proposal, 1)}
-                              />
-                            </Flex>
-                            <Flex
-                              p={3}
                               borderWidth='1px'
                               borderColor='red.500'
                               borderStyle='solid'
-                              borderRadius='40px'
-                              justiy='center'
-                              align='center'
-                            >
-                              <Icon
-                                as={FaThumbsDown}
-                                color='red.500'
-                                w='25px'
-                                h='25px'
-                                transform='rotateY(180deg)'
-                                _hover={{ cursor: 'pointer' }}
-                                onClick={() => submitVote(proposal, 2)}
-                              />
-                            </Flex>
+                              color='red.500'
+                              size='xl'
+                              background='none'
+                              _hover={{ cursor: 'pointer' }}
+                              _disabled={{
+                                color: 'red.900',
+                                borderColor: 'red.900',
+                                cursor: 'not-allowed',
+                                _hover: {
+                                  cursor: 'not-allowed',
+                                },
+                              }}
+                              transform='rotateY(180deg)'
+                              isDisabled={proposal?.executed}
+                              onClick={() => submitVote(proposal, 2)}
+                            />
                           </Flex>
                         )}
                       <Flex
@@ -379,9 +399,8 @@ const ProposalActions = ({
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
-                          {+proposal?.yesShares > +proposal?.noShares && (
-                            <Box>Currently Passing</Box>
-                          )}
+                          {+proposal?.yesShares > +proposal?.noShares &&
+                            'Currently Passing'}
                           {+proposal?.yesShares === 0 &&
                             +proposal?.noShares === 0 &&
                             'Awaiting Votes'}
@@ -502,33 +521,34 @@ const ProposalActions = ({
 
           {((proposal?.status === 'NeedsExecution' &&
             proposal?.minionAddress) ||
-            earlyExecuteMinionType(proposal)) && (
-            <Stack mt='15px' justify='center'>
-              {(proposal?.status === 'NeedsExecution' &&
-                proposal?.minionAddress) ||
-              (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
-                <MinionExecute
-                  hideMinionExecuteButton={hideMinionExecuteButton}
-                  minionAction={minionAction}
-                  proposal={proposal}
-                  early={
-                    earlyExecuteMinionType(proposal) &&
-                    proposal.yesShares >= quorumNeeded &&
-                    proposal?.status === 'NeedsExecution'
-                  }
-                />
-              ) : (
-                quorumNeeded &&
-                isMinionProposalType(proposal) && (
-                  <Text size='sm' textAlign='center' maxW='60%' m='auto'>
-                    {proposal?.minion?.minQuorum}% quorum or{' '}
-                    {utils.commify(quorumNeeded)} shares needed for Early
-                    Execution
-                  </Text>
-                )
-              )}
-            </Stack>
-          )}
+            earlyExecuteMinionType(proposal)) &&
+            proposal?.status !== 'ReadyForProcessing' && (
+              <Stack mt='15px' justify='center'>
+                {(proposal?.status === 'NeedsExecution' &&
+                  proposal?.minionAddress) ||
+                (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
+                  <MinionExecute
+                    hideMinionExecuteButton={hideMinionExecuteButton}
+                    minionAction={minionAction}
+                    proposal={proposal}
+                    early={
+                      earlyExecuteMinionType(proposal) &&
+                      proposal.yesShares >= quorumNeeded &&
+                      !proposal?.processed
+                    }
+                  />
+                ) : (
+                  quorumNeeded &&
+                  isMinionProposalType(proposal) && (
+                    <Text size='sm' textAlign='center' maxW='60%' m='auto'>
+                      {proposal?.minion?.minQuorum}% quorum or{' '}
+                      {utils.commify(quorumNeeded)} shares needed for Early
+                      Execution
+                    </Text>
+                  )
+                )}
+              </Stack>
+            )}
           {proposal?.executed && proposal?.minionExecuteActionTx && (
             <CrossChainMinionExecute chainID={daochain} proposal={proposal} />
           )}

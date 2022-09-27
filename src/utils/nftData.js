@@ -171,7 +171,7 @@ export const attributeModifiers = Object.freeze({
     return description.split(' ')[4];
   },
   hydrateImageURI(nft) {
-    if (nft.image.match(/^ipfs:\/\/(Qm[a-zA-Z0-9]+)/)) {
+    if (nft.image?.match(/^ipfs:\/\/(Qm[a-zA-Z0-9]+)/)) {
       return `https://daohaus.mypinata.cloud/ipfs/${
         nft.image.match(/^ipfs:\/\/(Qm[a-zA-Z0-9]+)/)[1]
       }`;

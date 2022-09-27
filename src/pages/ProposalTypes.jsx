@@ -17,8 +17,8 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const dev = process.env.REACT_APP_DEV === 'true';
 
-const orderPlaylistForms = playlists =>
-  playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
+const orderPlaylistForms = (playlists, customData) =>
+  playlists?.map(list => ({ ...list, forms: list.forms.sort(), customData }));
 
 const ProposalTypes = () => {
   const {
@@ -122,7 +122,7 @@ const ProposalTypes = () => {
       <Flex flexDir='column' maxW={['100%', '90%', '80%']}>
         <Flex mb={[6, 12]} justifyContent='flex-end'>
           <SaveButton
-            watch={orderPlaylistForms(playlists)}
+            watch={orderPlaylistForms(playlists, customData)}
             saveFn={saveConfig}
             disabled={loading || !isMember}
             blockRouteOnDiff

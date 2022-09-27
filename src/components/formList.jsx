@@ -21,6 +21,7 @@ import NoListItem from './NoListItem';
 import TextBox from './TextBox';
 import { FORM } from '../data/formLegos/forms';
 import { areAnyFields } from '../utils/general';
+import deepEqual from 'deep-eql';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
@@ -54,20 +55,26 @@ const FormList = ({
     );
   }, [selectedListID, playlists, allForms, searchStr]);
 
-  const handleEditProposal = formId =>
-    formModal({
+  const handleEditProposal = formId => {
+    const form = FORM[formId];
+    const defaultValues = { ...form, name: form.title };
+
+    return formModal({
       ...FORM.EDIT_PROPOSAL,
+      defaultValues,
       onSubmit: ({ values }) => {
-        dispatchPropConfig({
-          action: 'EDIT_PROPOSAL',
-          title: values.title,
-          description: values.description,
-          formId,
-        });
+        if (!deepEqual(values, defaultValues)) {
+          dispatchPropConfig({
+            action: 'EDIT_PROPOSAL',
+            title: values.title,
+            description: values.description,
+            formId,
+          });
+        }
         closeModal();
       },
     });
-
+  };
   const handleRestoreProposal = formId =>
     dispatchPropConfig({ action: 'RESTORE_PROPOSAL', formId });
 

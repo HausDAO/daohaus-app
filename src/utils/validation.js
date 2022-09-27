@@ -20,6 +20,8 @@ export const TYPE_ERR_MSGS = {
   boolean: 'Must be a Booolean value',
   disperseList:
     'Must be a proper list with addresses and token values on each line',
+  contributorRewardList:
+    'Must be a proper list with addresses, token values, and optional unlock date overrides on each line',
 };
 
 export const validate = {
@@ -84,6 +86,21 @@ export const validate = {
     } catch (e) {
       return false;
     }
+  },
+  contributorRewardList(val) {
+    return val
+      ?.split(/\r?\n/)
+      .reduce(
+        (acc, item) =>
+          acc &&
+          item.match(/0x[a-fA-F0-9]{40}/)?.[0] &&
+          Number(
+            item
+              ?.replace(/0x[a-fA-F0-9]{40}/, '')
+              .match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0],
+          ),
+        true,
+      );
   },
 };
 

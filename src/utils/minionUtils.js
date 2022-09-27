@@ -15,6 +15,7 @@ export const MINION_ACTION_FUNCTION_NAMES = {
   NIFTY_MINION: 'actions',
   [MINION_TYPES.NIFTY]: 'actions',
   SAFE_MINION: 'actions',
+  SAFE_V2_MINION: 'actions',
   [MINION_TYPES.SAFE]: 'actions',
   SUPERFLUID_MINION: 'streams',
   [MINION_TYPES.SUPERFLUID]: 'streams',
@@ -205,9 +206,10 @@ export const getMinionAction = async params => {
     minionType,
     proposalType,
     actions,
+    safeMinionVersion,
   } = params;
 
-  const abi = getMinionAbi(minionType);
+  const abi = getMinionAbi(minionType, safeMinionVersion || '1');
   const actionName =
     MINION_ACTION_FUNCTION_NAMES[minionType] ||
     MINION_ACTION_FUNCTION_NAMES[proposalType];
@@ -251,4 +253,8 @@ export const getExecuteAction = ({ minion }) => {
   if (minionType === MINION_TYPES.SAFE) {
     return TX.MINION_SAFE_EXECUTE;
   }
+};
+
+export const isEarlyExecutionMinion = minion => {
+  return Number(minion?.minQuorum) > 0;
 };

@@ -59,6 +59,8 @@ export const supportedChains = {
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     poster: '0x000000000000cd17345801aa8147b8d3950260ff',
     moloch_token_factory: '0x94b68149aA9603eeF3fD31A63f6d52AdB4f978D9',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0xB3d4EFE7ECF102afCd3262cF4d5fc768D0c55459',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x64': '0x75Df5AF045d91108662D8080fD1FEFAd6aA0bb59',
@@ -89,23 +91,24 @@ export const supportedChains = {
     providers: ['walletconnect'],
     rpc_url: `https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
-      'https://api.goerli.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url: 'https://api.goerli.etherscan.io/api',
+      'https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api-goerli.etherscan.io/api',
     subgraph_url:
-      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-goerli',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-goerli',
     stats_graph_url:
-      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-stats-goerli',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-goerli',
     boosts_graph_url:
-      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/daohaus-boosts-goerli',
-    // TODO update graph endpoints when ready
-    // erc721_graph_url:
-    //   'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
-    // erc1155_graph_url:
-    //   'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-matic-subgraph',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-goerli',
+    erc721_graph_url:
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/erc721-goerli-subgraph',
+    erc1155_graph_url:
+      'https://thegraph.com/hosted-service/subgraph/odyssy-automaton/erc1155-goerli-subgraph',
+    shaman_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-shamans-goerli',
     moloch_factory_addr: '0x72B8Bf40C8B316753a3E470689DA625759D2b025',
     wrapper_contract: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
     wrap_n_zap_factory_addr: '0xf89f79A0E5aF89BFa5c4d4FC6F7fD25700bC4905',
-    escrow_minion: '0xceE7f251Bd38B21E8F71C1d62cFbb18219a7F606',
+    escrow_minion: '0xF95abF7f2e46f3f7F114b219bafBAa0272711059',
     block_explorer: 'https://goerli.etherscan.io/',
     safeMinion: {
       minion_factory_addr: '0x121931c0Bc458A5f13F3861444AeB036cc8a5363',
@@ -114,6 +117,7 @@ export const supportedChains = {
     },
     disperse_app: '0x3D0e848b6C55153E2b0154734ac6b5288A7f1B6F',
     poster: '0x3c1f4802be7e26d95b31ef7a566e18f42e360cab',
+    moloch_token_factory: '0x32aDC251482671C992D6feAb4A8163D1c9495273',
   },
   '0xa': {
     name: 'Optimism Mainnet',
@@ -164,7 +168,10 @@ export const supportedChains = {
     },
     escrow_minion: '', // TODO team will add
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0x119E1a9421dF2d310a324e04f0ECe83278618ddc',
     moloch_token_factory: '0xdb0f2d9ef30ffae97474d6db8c1f0e999934737d',
+    hedgey_nft_addr: '0x4bc8ea84bdc3ebb01d495e5d1605d4f082aeb5d7',
+    hedgey_batch_mint_addr: '0x0ad2501f3CD2016EDC0e4D9d0E6e31ee34b0C9Af',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0xa': '', // TODO team will add
@@ -243,13 +250,15 @@ export const supportedChains = {
       minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
+    sbt_factory: '0xb1b470Bc443934F6a92987F2F535B8AC9b96da88',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '0xF89e2f69FB1351D37b9F82e77bbF10A02cdC5042',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
     dao_conditional_helper_addr: '0x55c8F8a71aD01FC707Bbb1A04d2c0Ef246973392',
     zodiac_amb_module: {
       amb_bridge_address: {
         '0x1': '0x4C36d2919e407f0Cc2Ee3c993ccF8ac26d9CE64e',
-        '0x4': '0xD4075FB57fCf038bFc702c915Ef9592534bED5c1',
       },
       foreign_networks: [
         {
@@ -267,7 +276,6 @@ export const supportedChains = {
       },
       monitoring_app: {
         '0x1': 'https://alm-xdai.herokuapp.com/100',
-        '0x4': 'https://alm-rinkeby.herokuapp.com/100',
       },
     },
   },
@@ -328,7 +336,10 @@ export const supportedChains = {
       version: 'v1',
     },
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
+    poster: '0xc59220828774cB373700e7fEf92Aba4417C6B175',
     moloch_token_factory: '0x651657ffc274f492c8006e847350e12ed1c8491a',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
     dao_conditional_helper_addr: '0x8beE9422987ddd6fB57Cd546d184A0a6094DF7A8',
   },
   '0xa4b1': {
@@ -380,6 +391,9 @@ export const supportedChains = {
     },
     disperse_app: '0x692B5A7eCcCad243a07535E8C24B0E7433238C6a',
     moloch_token_factory: '0x691086c17418589688f0d3031cfc8d9400df8817',
+    poster: '0x10ecbe39b914bdb43850932eb9d505cd0c673321',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
     dao_conditional_helper_addr: '0xF5fb9ce16dbf5B0a7b632Ed5D3F0278E0043B7AE',
   },
   '0xa4ec': {
@@ -429,8 +443,11 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    poster: '0x55fB3D52bF8D2c56cA2159A107aA43e8C16015a1',
     disperse_app: '0xD152f549545093347A162Dce210e7293f1452150',
     moloch_token_factory: '',
+    hedgey_nft_addr: '0x2aa5d15eb36e5960d056e8fea6e7bb3e2a06a351',
+    hedgey_batch_mint_addr: '0x4Bc8Ea84bdC3EBB01D495e5D1605d4F082aEb5d7',
   },
 };
 

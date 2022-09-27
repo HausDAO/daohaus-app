@@ -17,7 +17,7 @@ const VaultCard = ({ vault, currentDaoTokens }) => {
   const currentVaultBalance =
     vault.type === 'treasury'
       ? tallyUSDs(currentDaoTokens)
-      : vault.currentBalance;
+      : vault.currentBalance || 0;
 
   const vaultBadge = useMemo(() => {
     if (vault.type !== 'treasury') {

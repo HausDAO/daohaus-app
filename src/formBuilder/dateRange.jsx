@@ -10,11 +10,14 @@ const DateRange = props => {
   const today = new Date();
   const startDate = watch('startDate');
 
+  // remove label prop from date selects
+  const { label: _l, ...selectProps } = props;
+
   return (
     <FieldWrapper {...props}>
       <Flex flexDir='row' justify='space-between'>
         <DateSelect
-          {...props}
+          {...selectProps}
           htmlFor='startDate'
           name='startDate'
           width='48%'
@@ -23,7 +26,7 @@ const DateRange = props => {
           minDate={today}
         />
         <DateSelect
-          {...props}
+          {...selectProps}
           htmlFor='endDate'
           name='endDate'
           width='48%'

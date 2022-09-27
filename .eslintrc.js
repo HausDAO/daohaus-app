@@ -6,8 +6,14 @@ module.exports = {
     node: true,
     browser: true,
   },
+  root: true,
   // prettier should be last
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    'plugin:react/recommended',
+    // 'plugin:react/app',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -30,7 +36,7 @@ module.exports = {
       configFile: './babel.config.json',
     },
   },
-  plugins: ['react-hooks'],
+  plugins: ['react-hooks', 'react'],
   settings: {
     react: {
       version: 'detect',
@@ -39,7 +45,7 @@ module.exports = {
   rules: {
     // default rules
     'no-console': 'off',
-    'no-unused-vars': 'warn', // change to 'error' 🙏
+    'no-unused-vars': ['warn', { "varsIgnorePattern": "^_" }], // change to 'error' 🙏
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
     'no-param-reassign': 'off', // priority 1, easy

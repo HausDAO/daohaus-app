@@ -56,12 +56,6 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'network',
     default: true,
   },
-  // {
-  //   name: 'IDChain',
-  //   value: 74,
-  //   type: 'network',
-  //   default: true,
-  // },
   {
     name: 'Göerli',
     value: 5,

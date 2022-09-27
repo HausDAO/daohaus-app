@@ -134,6 +134,20 @@ export const DETAILS = {
   },
   POSTER_LOCATION: {
     title: `.values.title || Proposal to Update Doc Location`,
+    newLocation: `.values.newLocation`,
+    docId: `.values.docSelect`,
     proposalType: '.formData.type',
+  },
+  SBT_SUMMON: {
+    title: `Summon Soul Bound Token`,
+    proposalType: '.formData.type',
+  },
+  CONTRIBUTOR_REWARDS_TOKEN: {
+    title: '.values.title || Contributor Rewards Proposal',
+    description: `.values.description || ${HASH.EMPTY_FIELD}`,
+    link: `.values.link || ${HASH.EMPTY_FIELD}`,
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.SAFE,
+    token: '.values.tokenAddress',
   },
 };

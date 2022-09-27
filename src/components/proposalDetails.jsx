@@ -11,6 +11,7 @@ import DiscourseProposalTopic from './discourseProposalTopic';
 import MediaBox from './mediaBox';
 import MemberIndicator from './memberIndicator';
 import ProposalMinionCard from './proposalMinionCard';
+import ProposalDocLocationCard from './proposalDocLocationCard';
 import TextBox from './TextBox';
 import TextIndicator from './textIndicator';
 import TokenDisplay from './tokenDisplay';
@@ -120,6 +121,14 @@ const ProposalDetails = ({
                   <Box w='100%'>{proposal?.description}</Box>
                 ))}
             </Skeleton>
+          )}
+          {proposal?.proposalType === 'change location of DAO DOC' ? (
+            <>
+              <Box w='100%'>{proposal?.description}</Box>
+              <ProposalDocLocationCard proposal={proposal} />
+            </>
+          ) : (
+            ''
           )}
           {proposal?.proposalType === PROPOSAL_TYPES.WHITELIST && (
             <TokenDisplay tokenAddress={proposal.tributeToken} />

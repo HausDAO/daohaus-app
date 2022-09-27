@@ -99,6 +99,11 @@ export const CONTRACTS = {
     abiName: 'SAFE_MINION',
     contractAddress: '.localValues.minionAddress',
   },
+  MINION_SAFE_V2_EXECUTE: {
+    location: 'local',
+    abiName: 'SAFE_MINION_V2',
+    contractAddress: '.localValues.minionAddress',
+  },
   SUPERFLUID_MINION_LOCAL: {
     location: 'local',
     abiName: 'SUPERFLUID_MINION',
@@ -208,5 +213,15 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'MOLOCH_TOKEN_FACTORY',
     contractAddress: '.contextData.chainConfig.moloch_token_factory',
+  },
+  SBT_FACTORY: {
+    location: 'local',
+    abiName: 'SBT_FACTORY',
+    contractAddress: '.contextData.chainConfig.sbt_factory',
+  },
+  HEDGEY_BATCH_MINT: {
+    location: 'local',
+    abiName: 'HEDGEY_BATCH_MINT',
+    contractAddress: '.contextData.chainConfig.hedgey_batch_mint_addr',
   },
 };

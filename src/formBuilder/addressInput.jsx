@@ -37,7 +37,7 @@ const AddressInput = props => {
       const memberProfiles = await Promise.all(
         getActiveMembers(daoMembers)?.map(async member => {
           const profile = await handleGetProfile(member.memberAddress);
-          if (profile?.status !== 'error') {
+          if (!profile) {
             return {
               name: profile.name || truncateAddr(member.memberAddress),
               value: member.memberAddress,
