@@ -1,5 +1,5 @@
 import React from 'react';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Flex, Box, useBreakpointValue } from '@chakra-ui/react';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
@@ -8,11 +8,11 @@ import MobileNav from '../nav/mobileNav';
 import { themeImagePath } from '../utils/metadata';
 
 import '../global.css';
-// import NoticeBanner from './noticeBanner';
+import NoticeBanner from './noticeBanner';
 
 const Layout = ({ children, dao }) => {
   const { theme } = useCustomTheme();
-  // const { daochain } = useParams();
+  const { daochain } = useParams();
   const mainNav = useBreakpointValue({
     lg: <DesktopNav dao={dao} />,
     md: <MobileNav dao={dao} />,
@@ -58,7 +58,7 @@ const Layout = ({ children, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
-        {/* {daochain === '0x64' && <NoticeBanner />} */}
+        {daochain === '0x5' && <NoticeBanner />}
         {children}
       </Flex>
     </Flex>
