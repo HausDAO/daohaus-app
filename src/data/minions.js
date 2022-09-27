@@ -38,6 +38,15 @@ export const MINION_NETWORKS = {
     '0x5': true,
     '0x64': true,
   },
+  [MINION_TYPES.CROSSCHAIN_SAFE_NOMAD]: {
+    '0x1': true,
+    '0x4': true,
+    '0x5': true,
+    '0x64': true,
+    '0xa': false,
+    '0x89': false,
+    '0xa4b1': false,
+  },
 };
 
 export const MINION_CONTENT = {
@@ -84,12 +93,23 @@ export const MINION_CONTENT = {
     version: '3',
   },
   [MINION_TYPES.CROSSCHAIN_SAFE]: {
-    title: 'Cross-chain Safe Minion',
+    title: 'Cross-chain Safe Minion (AMB)',
     description:
       'Move assets & execute transactions on a Mainnet Gnosis Safe through your Gnosis Chain DAO proposals',
     info: [
       "This operation will deploy a new Gnosis Safe Minion with an AMB Module for your DAO. The Gnosis Safe Minion manages your DAO's funds & interacts with smart contracts, while the AMB Module helps relay data between chains.",
       'By installing this Minion, your DAO will be able to vote on & pass proposals on Gnosis Chain, while controlling assets and executing transactions on Ethereum Mainnet. This gives DAOs greater access to use cases on Mainnet such as DeFis and NFTs, while minimizing governance costs.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity.',
+    ],
+    version: '1',
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE_NOMAD]: {
+    title: 'Cross-chain Safe Minion (Nomad)',
+    description:
+      'Move assets & execute transactions on a Gnosis Safe from another chain through your DAO proposals',
+    info: [
+      "This operation will deploy a new Gnosis Safe Minion and Nomad Module for your DAO. The Gnosis Safe Minion manages your DAO's funds & interacts with smart contracts, while the Nomad Module helps relay data between chains.",
+      'By installing this Minion, your DAO will be able to vote on & pass proposals on your Home Chain, while controlling assets and executing transactions on a Foreign Chain like Ethereum Mainnet. This gives DAOs greater access to use cases on Mainnet such as DeFis and NFTs, while minimizing governance costs.',
       'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity.',
     ],
     version: '1',
@@ -152,6 +172,26 @@ export const MINIONS = {
         ctaText: 'Deploy & Add Module',
         next: 'FINISH',
         stepLabel: 'Deploy Brigde Module for Avatar on Foreign Chain',
+        isUserStep: true,
+        checklist: ['isConnected'],
+      },
+    },
+    settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER],
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE_NOMAD]: {
+    minionType: MINION_TYPES.SAFE,
+    content: MINION_CONTENT[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
+    networks: MINION_NETWORKS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
+    summonForm: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
+    addSummonSteps: {
+      STEP3: {
+        type: 'zodiacActionForm',
+        form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+        finish: true,
+        ctaText: 'Deploy & Add Module',
+        next: 'FINISH',
+        stepLabel: 'Deploy Nomad Module for Avatar on Foreign Chain',
         isUserStep: true,
         checklist: ['isConnected'],
       },

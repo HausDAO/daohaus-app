@@ -1,6 +1,6 @@
 import { encodeMultiSend } from '@gnosis.pm/safe-contracts';
 import Web3 from 'web3';
-import { Contract, BigNumber } from 'ethers';
+import { Contract, BigNumber, utils as EthersUtils } from 'ethers';
 
 import { chainByID } from './chain';
 import { createContract } from './contract';
@@ -44,6 +44,8 @@ import NATIVE_WRAPPER from '../contracts/nativeWrapper.json';
 import MOLOCH_TOKEN_FACTORY from '../contracts/molochTokenFactory.json';
 import SBT_FACTORY from '../contracts/sbtFactory.json';
 import HEDGEY_BATCH_MINT from '../contracts/hedgeyBatchMint.json';
+import NOMAD_MODULE from '../contracts/nomadModule.json';
+import NOMAD_HOME from '../contracts/nomadHome.json';
 import { validate } from './validation';
 
 import { cacheABI, getCachedABI } from './localForage';
@@ -84,6 +86,8 @@ export const LOCAL_ABI = Object.freeze({
   MOLOCH_TOKEN_FACTORY,
   SBT_FACTORY,
   HEDGEY_BATCH_MINT,
+  NOMAD_MODULE,
+  NOMAD_HOME,
 });
 
 const getBlockExplorerApiKey = chainID => {
@@ -113,10 +117,27 @@ export const isProxyABI = response => {
   }
 };
 
+export const isBeaconProxyABI = response => {
+  return (
+    response.length == 3 &&
+    response.some(
+      fn =>
+        fn.type === 'constructor' &&
+        fn.inputs?.some(i => i.name === '_upgradeBeacon'),
+    )
+  );
+};
+
 const isGnosisProxy = response => {
   return (
     response.length === 2 &&
-    response.every(fn => ['constructor', 'fallback'].includes(fn.type))
+    response.every(fn => ['constructor', 'fallback'].includes(fn.type)) &&
+    response
+      .find(fn => fn.type === 'constructor')
+      ?.['inputs']?.every?.(
+        // singleton param from IProxy or GnosisSafeProxy
+        input => ['_masterCopy', '_singleton'].includes(input.name),
+      )
   );
 };
 
@@ -133,9 +154,17 @@ const getImplementationOf = async (address, chainID, abi) => {
 };
 
 const getGnosisMasterCopy = async (address, chainID) => {
-  const web3Contract = createContract({ address, abi: GNOSIS_IPROXY, chainID });
-  const masterCopy = await web3Contract.methods.masterCopy().call();
-  return masterCopy;
+  try {
+    const web3Contract = createContract({
+      abi: GNOSIS_IPROXY,
+      address,
+      chainID,
+    });
+    const masterCopy = await web3Contract.methods.masterCopy().call();
+    return masterCopy;
+  } catch (error) {
+    console.log('Failed to fetch masterCopy from Proxy');
+  }
 };
 
 const processABI = async ({
@@ -154,6 +183,17 @@ const processABI = async ({
     const newData = await fetchABI(proxyAddress, chainID, parseJSON);
     return newData;
   }
+  if (isBeaconProxyABI(abi)) {
+    const contractDetails = await fetchContractCode(contractAddress, chainID);
+    const implAddress =
+      contractDetails['Implementation'] ||
+      contractDetails['ImplementationAddress'];
+    if (implAddress) {
+      const newData = await fetchABI(implAddress, chainID, parseJSON);
+      return newData;
+    }
+    return abi;
+  }
   if (isSuperfluidProxy(abi)) {
     const proxy = createContract({
       address: contractAddress,
@@ -166,6 +206,18 @@ const processABI = async ({
   }
   if (isGnosisProxy(abi)) {
     const gnosisProxy = await getGnosisMasterCopy(contractAddress, chainID);
+    if (!gnosisProxy) {
+      // used the new GnosisSafeProxy (no public getter)
+      const contractDetails = await fetchContractCode(contractAddress, chainID);
+      const implAddress =
+        contractDetails['Implementation'] ||
+        contractDetails['ImplementationAddress'];
+      if (implAddress) {
+        const newData = await fetchABI(implAddress, chainID, parseJSON);
+        return newData;
+      }
+      return; // TODO: should not happen
+    }
     const newData = await fetchABI(gnosisProxy, chainID, parseJSON);
     return newData;
   }
@@ -209,6 +261,27 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
       });
       return processedABI;
     }
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchContractCode = async (
+  contractAddress,
+  chainID,
+  parseJSON = true,
+) => {
+  const baseURI = `
+    ${
+      chainByID(chainID).tokenlist_api_url
+    }?module=contract&action=getsourcecode&address=${contractAddress}`;
+  const key = getBlockExplorerApiKey(chainID);
+  const url = key ? `${baseURI}&apiKey=${key}` : baseURI;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.message === 'OK' && parseJSON) return data.result[0];
     return data;
   } catch (error) {
     console.error(error);
@@ -335,6 +408,18 @@ export const decodeAMBTx = (ambModuleAddress, encodedTx) => {
     'executeTransaction',
     encodedTx,
   );
+};
+
+export const decodeNomadTx = (recipientAddress, messageBody) => {
+  const nomadModuleAddress = `0x${recipientAddress.substring(
+    recipientAddress.length - 40,
+    recipientAddress.length,
+  )}`;
+  const [to, , data] = EthersUtils.defaultAbiCoder.decode(
+    ['address', 'uint256', 'bytes', 'uint8'],
+    messageBody,
+  );
+  return { to, data, nomadModuleAddress };
 };
 
 export const getLocalABI = contract => LOCAL_ABI[contract.abiName];

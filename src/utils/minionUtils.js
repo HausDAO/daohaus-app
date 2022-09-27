@@ -1,9 +1,16 @@
 import Web3, { utils as Web3Utils } from 'web3';
 import abiDecoder from 'abi-decoder';
 import { createContract } from './contract';
-import { decodeAMBTx, decodeMultisendTx, fetchABI, getMinionAbi } from './abi';
+import {
+  decodeAMBTx,
+  decodeMultisendTx,
+  decodeNomadTx,
+  fetchABI,
+  getMinionAbi,
+} from './abi';
 import { MINION_TYPES } from './proposalUtils';
 import { chainByID, getScanKey } from './chain';
+import { BOOSTS } from '../data/boosts';
 import { TX } from '../data/txLegos/contractTX';
 
 // If a minion has separate action names (ex. UBER),
@@ -131,9 +138,33 @@ export const decodeAction = async (action, params, depth = 0) => {
   return decodedAction;
 };
 
+export const decodeBundledMultiAction = async (
+  chainID,
+  decodedActions,
+  decodedBundledTx,
+) => {
+  return {
+    ...decodedActions,
+    actions: [
+      {
+        ...decodedActions.actions[0],
+        actions: await Promise.all(
+          decodeMultisendTx(decodedBundledTx.to, decodedBundledTx.data).map(
+            async action => ({
+              ...action,
+              data: await decodeAction(action, { chainID }),
+            }),
+          ),
+        ),
+      },
+    ],
+  };
+};
+
 export const decodeMultiAction = async ([encodedMulti], params) => {
   const { chainID } = params;
-  const multiSendAddress = chainByID(chainID).safeMinion.safe_mutisend_addr;
+  const chainConfig = chainByID(chainID);
+  const multiSendAddress = chainConfig.safeMinion.safe_mutisend_addr;
 
   //   SINGLE ARRAY VERSION
 
@@ -152,24 +183,33 @@ export const decodeMultiAction = async ([encodedMulti], params) => {
     // cross-chain AMB bridge call
     const [contract, data] = decodedActions.actions[0].data.params;
     const ambDecodedTx = decodeAMBTx(contract.value, data.value);
-    return {
-      ...decodedActions,
-      actions: [
-        {
-          ...decodedActions.actions[0],
-          actions: await Promise.all(
-            decodeMultisendTx(ambDecodedTx.to, ambDecodedTx.data).map(
-              async action => ({
-                ...action,
-                data: await decodeAction(action, {
-                  chainID: params.foreignChainId,
-                }),
-              }),
-            ),
-          ),
-        },
-      ],
-    };
+    return await decodeBundledMultiAction(
+      params.foreignChainId,
+      decodedActions,
+      ambDecodedTx,
+    );
+  }
+  if (
+    decodedActions.actions[0]?.data?.name === 'dispatch' &&
+    chainConfig.zodiac_nomad_module?.homeContract &&
+    decodedActions.actions[0]?.to ===
+      chainConfig.zodiac_nomad_module.homeContract
+  ) {
+    // cross-chain Nomad bridge call
+    const [
+      ,
+      recipientAddress,
+      messageBody,
+    ] = decodedActions.actions[0].data.params;
+    const nomadDecodedTx = decodeNomadTx(
+      recipientAddress.value,
+      messageBody.value,
+    );
+    return await decodeBundledMultiAction(
+      params.foreignChainId,
+      decodedActions,
+      nomadDecodedTx,
+    );
   }
   return decodedActions;
 
@@ -257,4 +297,24 @@ export const getExecuteAction = ({ minion }) => {
 
 export const isEarlyExecutionMinion = minion => {
   return Number(minion?.minQuorum) > 0;
+};
+
+export const getMinionSafeNameByPattern = ({ boostId, minionType, values }) => {
+  const SEPARATOR = /<\d+>/g;
+  const getPattern = () => {
+    if (
+      boostId === BOOSTS.CROSS_CHAIN_MINION.id ||
+      minionType === MINION_TYPES.CROSSCHAIN_SAFE
+    ) {
+      return '0xab270234/<0>/<1>/<2>'; // bytes4(keccak256(abi.encodePacked('AMBMinionSafe'))) === 0xab270234
+    }
+    if (
+      boostId === BOOSTS.CROSS_CHAIN_MINION_NOMAD.id ||
+      minionType === MINION_TYPES.CROSSCHAIN_SAFE_NOMAD
+    ) {
+      return '0xfc3b5b76/<0>/<1>/<2>'; // bytes4(keccak256(abi.encodePacked("NomadMinionSafe"))) === 0xfc3b5b76
+    }
+  };
+  const pattern = getPattern();
+  return pattern?.replace(SEPARATOR, k => values[k]) || values['_minionName'];
 };

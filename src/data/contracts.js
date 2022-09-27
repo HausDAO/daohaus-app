@@ -224,4 +224,14 @@ export const CONTRACTS = {
     abiName: 'HEDGEY_BATCH_MINT',
     contractAddress: '.contextData.chainConfig.hedgey_batch_mint_addr',
   },
+  NOMAD_MODULE: {
+    location: 'local',
+    abiName: 'NOMAD_MODULE',
+    conractAddress: '.localValues.nomadModuleAddress',
+  },
+  NOMAD_HOME: {
+    location: 'local',
+    abiName: 'NOMAD_HOME',
+    contractAddress: '.localValues.nomadHomeAddress',
+  },
 };

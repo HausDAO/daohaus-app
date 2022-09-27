@@ -174,6 +174,7 @@ const StepperForm = props => {
             : currentStep?.next?.ctaText || 'Next >'
         }
         handleThen={handleThen}
+        boostId={props.id}
       />
     );
   }
@@ -250,6 +251,7 @@ const StepperForm = props => {
   if (currentStep?.type === 'zodiacActionForm') {
     return (
       <ZodiacActionForm
+        boostId={props.id}
         currentStep={currentStep}
         goToNext={goToNext}
         metaFields={metaFields}

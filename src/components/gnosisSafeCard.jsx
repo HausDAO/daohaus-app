@@ -14,10 +14,12 @@ import { chainByID } from '../utils/chain';
 const GnosisSafeCard = ({
   actionDetails,
   handleCopy,
+  minionDetails,
   safeDetails,
   targetChain,
   title = 'Gnosis Safe',
   vaultAddress,
+  zodiacModules,
 }) => {
   const { daochain } = useParams();
   const chainConfig = chainByID(targetChain || daochain);
@@ -50,6 +52,50 @@ const GnosisSafeCard = ({
           <Text fontWeight='bold'>{`${chainConfig.name}`}</Text>
         </>
       )}
+      {zodiacModules?.length && (
+        <Box>
+          <Text>Modules</Text>
+          {zodiacModules.map(module => (
+            <Flex direction='row' align='center' key={module} ml={2}>
+              <Text fontWeight='bold'>{`- ${module.name}`}</Text>
+              {module.address ? (
+                <Link
+                  href={`${chainConfig.block_explorer}/address/${module.address}`}
+                  isExternal
+                  ml={2}
+                >
+                  <Icon
+                    as={RiExternalLinkLine}
+                    name='explorer link'
+                    color='secondary.300'
+                    _hover={{ cursor: 'pointer' }}
+                  />
+                </Link>
+              ) : (
+                <Text size='xs'>
+                  : (Pend. Approval
+                  <Link
+                    href={`https://gnosis-safe.io/app/${chainConfig.shortNamePrefix ||
+                      chainConfig.short_name}:${
+                      safeDetails.address
+                    }/transactions/queue`}
+                    isExternal
+                  >
+                    <Icon
+                      as={RiExternalLinkLine}
+                      name='explorer link'
+                      color='secondary.300'
+                      _hover={{ cursor: 'pointer' }}
+                      ml={2}
+                    />
+                  </Link>
+                  )
+                </Text>
+              )}
+            </Flex>
+          ))}
+        </Box>
+      )}
       {vaultAddress && (
         <Box fontFamily='mono'>
           Minion Address (Do Not Send Funds)
@@ -67,6 +113,7 @@ const GnosisSafeCard = ({
         </Box>
       )}
       {actionDetails}
+      {minionDetails}
     </Flex>
   );
 };

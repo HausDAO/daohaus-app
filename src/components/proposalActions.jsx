@@ -92,6 +92,13 @@ const ProposalActions = ({
         title={getTitle(customTerms, 'Proposal')}
       >
         {`Connect to ${capitalize(supportedChains[daochain]?.network)}
+      ${
+        proposal?.minion?.foreignChainId
+          ? `or ${capitalize(
+              supportedChains[proposal?.minion?.foreignChainId]?.network,
+            )}`
+          : ''
+      }
       for ${getTerm(customTerms, 'proposal')} actions`}
       </Box>
     </Flex>
@@ -199,10 +206,20 @@ const ProposalActions = ({
   return (
     <>
       <ContentBox position='relative'>
-        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
+        {!daoConnectedAndSameChain(
+          address,
+          injectedChain?.chainId,
+          daochain,
+          proposal?.minion?.foreignChainId,
+        ) &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
-        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
+        {!daoConnectedAndSameChain(
+          address,
+          injectedChain?.chainId,
+          daochain,
+          proposal?.minion?.foreignChainId,
+        ) &&
           (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' &&
           !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
@@ -313,8 +330,8 @@ const ProposalActions = ({
                     <>
                       {daoConnectedAndSameChain(
                         address,
-                        daochain,
                         injectedChain?.chainId,
+                        daochain,
                       ) &&
                         canInteract &&
                         memberVote(proposal, address) === null && (
@@ -488,8 +505,8 @@ const ProposalActions = ({
         <Stack>
           {daoConnectedAndSameChain(
             address,
-            daochain,
             injectedChain?.chainId,
+            daochain,
           ) &&
             proposal?.status === 'ReadyForProcessing' &&
             !injectedProvider?.currentProvider?.safe &&
@@ -549,9 +566,11 @@ const ProposalActions = ({
                 )}
               </Stack>
             )}
-          {proposal?.executed && proposal?.minionExecuteActionTx && (
-            <CrossChainMinionExecute chainID={daochain} proposal={proposal} />
-          )}
+          {proposal?.minion?.crossChainMinion &&
+            proposal?.executed &&
+            proposal?.minionExecuteActionTx && (
+              <CrossChainMinionExecute chainID={daochain} proposal={proposal} />
+            )}
           {proposal?.escrow &&
             (proposal?.status === 'Failed' ||
               proposal?.status === 'Cancelled') && (

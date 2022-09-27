@@ -527,11 +527,11 @@ export const FIELD = {
     warningMessage: '',
     expectType: 'any',
   },
-  AMB_ENCODER: {
-    type: 'ambEncoder',
+  BRIDGE_ENCODER: {
+    type: 'bridgeEncoder',
     label: '',
-    name: 'ambEncoder',
-    htmlFor: 'ambEncoder',
+    name: 'bridgeEncoder',
+    htmlFor: 'bridgeEncoder',
   },
   POST_TITLE: {
     type: 'input',
