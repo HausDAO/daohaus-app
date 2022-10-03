@@ -114,7 +114,7 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
         {
           ...VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`]
             .gatherArgs[0],
-          crossChain: true, // mark as cross-chain
+          crossChain: true, // mark as cross-chain. This is used in txHelpers.js
         },
         ...VAULT_TRANSFER_TX[
           `${tokenFormsString[tokenType]}_SAFE`

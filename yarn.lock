@@ -2956,10 +2956,10 @@
     "@gnosis.pm/safe-core-sdk-types" "^1.1.0"
     "@gnosis.pm/safe-core-sdk-utils" "^1.1.0"
 
-"@gnosis.pm/zodiac@^1.0.3":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@gnosis.pm/zodiac/-/zodiac-1.0.11.tgz#97032d9d8940a297ebd1a87f142565c57edfd8e4"
-  integrity sha512-J24TtMRS/5fEhFJE6BDLQu3Jjcm3u6k9KBtUSix7aidwWZzZ671RUzu+DxxZNlzA1/iuoG1uWlDCEWmxElbCEA==
+"@gnosis.pm/zodiac@^1.0.11":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/zodiac/-/zodiac-1.1.1.tgz#b6d402861ec8f524cfd06b2fbe9b3ce8c72a0915"
+  integrity sha512-XnjNT64F4JVCOCG5hVQm+GBnrfkB01s+6TDCLtI8L0A6OlFDbeKIW6vqm9lWDin336hCXN+yu0mu3qIXmClTCg==
   dependencies:
     "@gnosis.pm/mock-contract" "^4.0.0"
     "@gnosis.pm/safe-contracts" "1.3.0"
@@ -3443,6 +3443,39 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@nomad-xyz/configuration@^0.1.0-rc.23":
+  version "0.1.0-rc.25"
+  resolved "https://registry.yarnpkg.com/@nomad-xyz/configuration/-/configuration-0.1.0-rc.25.tgz#c48df1873856ecb6b21a51d6246a16bd81720da6"
+  integrity sha512-h1j0af7qZfc5Q0XGUW1EZYph3paBG8YmkyJEa3BJH64tmZ0yZ4qjWSOa2IMNfI7d0h2/+mCcUCTyTwfHfSZpFg==
+
+"@nomad-xyz/contracts-core@^1.1.0-rc.0":
+  version "1.1.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@nomad-xyz/contracts-core/-/contracts-core-1.1.0-rc.0.tgz#0a7279b38c6f531bed00fa7c42c8aeaeac7042d8"
+  integrity sha512-uH4n8U5njvNSU2b9iTFmJTCDk0ettqadwi8VlsgT3fuW3bPqfPVFIcOVqSaUmnw7E4lw/FdYK+UA93eklN+lZQ==
+  dependencies:
+    "@openzeppelin/contracts" "^3.4.2"
+    "@openzeppelin/contracts-upgradeable" "~3.4.2"
+    "@summa-tx/memview-sol" "^2.0.0"
+
+"@nomad-xyz/multi-provider@^1.0.0-rc.5":
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@nomad-xyz/multi-provider/-/multi-provider-1.0.0-rc.5.tgz#292f4a963c2b463eee79c65c7a914dca016baf1c"
+  integrity sha512-ANb9xxDM7D5nEiM2KnHZquzfnH4B3VqRA2OA7NS7SZIpE1Oz6p/FfzZX50LIkc4lV3p8t4lhRqbr+d6pw0/p0g==
+  dependencies:
+    ethers "^5.4.6"
+    web3 "^1.6.1"
+
+"@nomad-xyz/sdk@^2.1.0-rc.0":
+  version "2.1.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@nomad-xyz/sdk/-/sdk-2.1.0-rc.0.tgz#d8918c099f0a00733701c403329531cc90143ed0"
+  integrity sha512-Vg1PtVc8tB7Zgf49Elk9RgLJUKCkJfLa/fQ1QOv3fadHjDyLHjVlxllNeb8SW+q92cafc/2zg4K+J6PhgVMIeA==
+  dependencies:
+    "@nomad-xyz/configuration" "^0.1.0-rc.23"
+    "@nomad-xyz/contracts-core" "^1.1.0-rc.0"
+    "@nomad-xyz/multi-provider" "^1.0.0-rc.5"
+    axios "^0.27.2"
+    ethers "^5.0.0"
+
 "@npmcli/fs@^1.0.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@npmcli/fs/-/fs-1.1.1.tgz#72f719fe935e687c56a4faecf3c03d06ba593257"
@@ -3519,6 +3552,16 @@
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.7.0.tgz#6437261286879d353f6de7bf3ac8216bef8a486d"
   integrity sha512-wO3PyoAaAV/rA77cK8H4c3SbO98QylTjfiFxyvURUZKTFLV180rnAvna1x7/Nxvt0Gqv+jt1sXKC7ygxsq8iCw==
+
+"@openzeppelin/contracts-upgradeable@~3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-3.4.2.tgz#2c2a1b0fa748235a1f495b6489349776365c51b3"
+  integrity sha512-mDlBS17ymb2wpaLcrqRYdnBAmP1EwqhOXMvqWk2c5Q1N1pm5TkiCtXM9Xzznh4bYsQBq0aIWEkFFE2+iLSN1Tw==
+
+"@openzeppelin/contracts@^3.4.2":
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-3.4.2.tgz#d81f786fda2871d1eb8a8c5a73e455753ba53527"
+  integrity sha512-z0zMCjyhhp4y7XKAcDAi3Vgms4T2PstwBdahiO0+9NaGICQKjynK3wduSRplTgk4LXmoO1yfDGO5RbjKYxtuxA==
 
 "@openzeppelin/contracts@^4.3.2":
   version "4.7.0"
@@ -4669,6 +4712,11 @@
     qs "^6.10.0"
     regenerator-runtime "^0.13.7"
     resolve-from "^5.0.0"
+
+"@summa-tx/memview-sol@^2.0.0":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@summa-tx/memview-sol/-/memview-sol-2.0.1.tgz#1ef30762451683d3484c0aaa08e1453a0075d0c4"
+  integrity sha512-GuaXBYG6/aIjKae3UJSBS61J/IuK/NTuk2IJBpGxytkxN1p3ZdRNIp8HQAIOVoCKZQtvzdPaBWokzCk/LakA/Q==
 
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
@@ -6745,6 +6793,14 @@ axios@^0.21.0:
   integrity sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==
   dependencies:
     follow-redirects "^1.14.0"
+
+axios@^0.27.2:
+  version "0.27.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+  integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
+  dependencies:
+    follow-redirects "^1.14.9"
+    form-data "^4.0.0"
 
 axobject-query@^2.2.0:
   version "2.2.0"
@@ -10365,7 +10421,7 @@ ethers-multisend@^2.1.1:
     "@ethersproject/solidity" "^5.0.0"
     "@ethersproject/units" "^5.0.0"
 
-ethers@^5.4.5, ethers@^5.4.6, ethers@^5.6.4:
+ethers@^5.0.0, ethers@^5.4.5, ethers@^5.4.6, ethers@^5.6.4:
   version "5.6.9"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.6.9.tgz#4e12f8dfcb67b88ae7a78a9519b384c23c576a4d"
   integrity sha512-lMGC2zv9HC5EC+8r429WaWu3uWJUCgUCt8xxKCFqkrFuBDZXDYIdzDUECxzjf2BMF8IVBByY1EBoGSL3RTm8RA==
@@ -10896,7 +10952,7 @@ focus-lock@^0.8.1:
   dependencies:
     tslib "^1.9.3"
 
-follow-redirects@^1.0.0, follow-redirects@^1.12.1, follow-redirects@^1.14.0:
+follow-redirects@^1.0.0, follow-redirects@^1.12.1, follow-redirects@^1.14.0, follow-redirects@^1.14.9:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.1.tgz#0ca6a452306c9b276e4d3127483e29575e207ad5"
   integrity sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==
@@ -10962,6 +11018,15 @@ form-data@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
   integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
+  dependencies:
+    asynckit "^0.4.0"
+    combined-stream "^1.0.8"
+    mime-types "^2.1.12"
+
+form-data@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
+  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"

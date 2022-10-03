@@ -86,7 +86,7 @@ export const CONTENT = {
     ],
   },
   SAFE_CROSSCHAIN_DEV_SUITE: {
-    title: 'Cross-chain Minion DEV Suite v4 (Safe Minion)',
+    title: 'Cross-chain Minion DEV Suite v4 (Safe Minion + AMB)',
     description:
       'Move assets & execute transactions on a Mainnet Gnosis Safe through your Gnosis Chain DAO proposals.',
     publisher: PUBLISHERS.DAOHAUS,
@@ -99,6 +99,20 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
+  // SAFE_NOMAD_CROSSCHAIN_DEV_SUITE: {
+  //   title: 'Cross-chain Minion DEV Suite v5 (Safe Minion + Nomad)',
+  //   description:
+  //     'Move assets & execute transactions on a Gnosis Safe from another chain through your DAO proposals.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '1.00',
+  //   pars: [
+  //     'Deploying a Gnosis Safe and a Nomad Module, this Boost enables your DAO to manage funds and execute transactions in a Gnosis Safe that lives in another chain, while voting on proposals on your Home Chain.',
+  //     'For example, this Boost gives your DAO control & access to Mainnet assets, dapps and contracts, while keeping governance and voting costs low.',
+  //   ],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+  //   ],
+  // },
   NIFTY_INK: {
     title: 'Nifty Ink',
     description: 'Buy and Sell Nifty Ink NFTs as a DAO.',
@@ -488,8 +502,6 @@ if (process.env.REACT_APP_DEV) {
     networks: {
       // LIT_NETWORKS - https://github.com/LIT-Protocol/lit-js-sdk/blob/main/src/lib/constants.js#L30
       '0x1': true,
-      '0x4': true,
-      '0x2a': true,
       '0xa': true,
       '0x64': true,
       '0x89': true,
@@ -552,6 +564,18 @@ export const BOOSTS = {
     settings: 'none',
     metaFields: ['ambModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
   },
+  // CROSS_CHAIN_MINION_NOMAD: {
+  //   id: 'CROSS_CHAIN_MINION_NOMAD',
+  //   boostContent: CONTENT.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
+  //   minionData: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
+  //   categories: ['devTools'],
+  //   steps: STEPS.CROSS_CHAIN_MINION_BOOST,
+  //   playlist: BOOST_PLAYLISTS.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
+  //   networks: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD].networks,
+  //   cost: 'free',
+  //   settings: 'none',
+  //   metaFields: ['nomadModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
+  // },
   RARIBLE: {
     id: 'RARIBLE',
     boostContent: CONTENT.RARIBLE,
@@ -559,7 +583,7 @@ export const BOOSTS = {
     categories: ['nft'],
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.RARIBLE,
-    networks: { '0x4': true, '0x1': true },
+    networks: { '0x1': true, '0x5': true },
     cost: 'free',
     settings: 'none',
   },
@@ -571,9 +595,9 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.NFT_TRIBUTE,
     networks: {
-      '0x4': true,
       '0x5': true,
       '0x1': true,
+      '0x5': true,
       '0x64': true,
       '0x89': true,
       '0xa4b1': true,
@@ -589,7 +613,6 @@ export const BOOSTS = {
     steps: STEPS.MINION_BOOST,
     playlist: BOOST_PLAYLISTS.BANK_BUYOUT,
     networks: {
-      '0x4': true,
       '0x1': false,
       '0x5': true,
       '0x64': true,
@@ -631,7 +654,6 @@ export const BOOSTS = {
     networks: {
       '0x1': false,
       '0x5': false,
-      '0x4': true,
       '0xa': true,
       '0x64': true,
       '0x89': true,
@@ -733,7 +755,7 @@ export const BOOSTS = {
     steps: STEPS.BASIC_BOOST,
     playlist: BOOST_PLAYLISTS.POSTER,
     categories: ['governance', 'community'],
-    networks: { '0x64': true, '0x1': true, '0x4': true, '0x5': true },
+    networks: { '0x64': true, '0x1': true, '0x5': true },
     cost: 'free',
     settings: {
       type: 'internalLink',

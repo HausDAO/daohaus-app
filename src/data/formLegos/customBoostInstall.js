@@ -165,7 +165,6 @@ export const CUSTOM_BOOST_INSTALL_FORMS = {
           ...FIELD.PROPOSAL_NAME,
           name: 'zodiacAction',
           htmlFor: 'zodiacAction',
-          defaultValue: 'ambModule',
           hidden: true,
         },
       ],

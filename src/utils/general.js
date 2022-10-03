@@ -253,8 +253,13 @@ export const daoConnectedAndSameChain = (
   address,
   injectedChainID,
   daochain,
+  foreignChainId,
 ) => {
-  return address && daochain && injectedChainID === daochain;
+  return !foreignChainId
+    ? address && daochain && injectedChainID === daochain
+    : address &&
+        daochain &&
+        [daochain, foreignChainId].includes(injectedChainID);
 };
 
 export const isEthAddress = string =>
@@ -386,17 +391,4 @@ export const handleJsonEscaping = obj => {
     .replace(/\\t/g, '\\t')
     .replace(/\\b/g, '\\b')
     .replace(/\\f/g, '\\f');
-};
-
-export const getRPCUrl = chainID => {
-  switch (chainID) {
-    case 4:
-      return process.env?.REACT_APP_RPC_URL?.split('.rpc')?.join(
-        '.rinkeby.rpc',
-      );
-    case 1:
-      return process.env?.REACT_APP_RPC_URL?.split('.rpc')?.join('.eth.rpc');
-    default:
-      return process.env.REACT_APP_RPC_URL;
-  }
 };
