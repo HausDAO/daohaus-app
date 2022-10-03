@@ -17,7 +17,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useAppModal } from '../hooks/useModals';
 import useCanInteract from '../hooks/useCanInteract';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { fetchAmbModule } from '../utils/gnosis';
+import { fetchCrossChainZodiacModule } from '../utils/gnosis';
 import { getMinionActionFormLego, getNftType } from '../utils/vaults';
 import { getNftCardActions } from '../utils/nftData';
 
@@ -69,16 +69,18 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
           ? currentMinion.foreignSafeAddress
           : currentMinion.safeAddress,
         foreignChainId: vault.foreignChainId,
-        ambModuleAddress:
+        bridgeModule: vault.bridgeModule,
+        bridgeModuleAddress:
           vault.foreignSafeAddress &&
-          (await fetchAmbModule(
-            {
-              chainId: daochain,
+          (await fetchCrossChainZodiacModule({
+            chainID: vault.foreignChainId,
+            crossChainController: {
               address: vault.safeAddress,
+              bridgeModule: vault.bridgeModule,
+              chainId: daochain,
             },
-            vault.foreignChainId,
-            vault.foreignSafeAddress,
-          )),
+            safeAddress: vault.foreignSafeAddress,
+          })),
       },
     );
     const nftType = getNftType(nft, action.nftTypeOverride);

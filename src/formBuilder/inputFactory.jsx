@@ -48,7 +48,7 @@ import MinionTokenSelect from './minionTokenSelect';
 import ForeignChainSelect from './foreignChainSelect';
 import SwitchNetwork from './switchNetwork';
 import PrecomputedMinionName from './precomputedMinionName';
-import AmbEncoder from './ambEncoder';
+import BridgeEncoder from './bridgeEncoder';
 import Tutorial from './tutorial';
 import Tutorial2 from './tutorial2';
 import MarkdownEditor from './mdEditor';
@@ -229,8 +229,8 @@ export const InputFactory = props => {
   if (type === 'precomputedMinionName') {
     return <PrecomputedMinionName {...props} />;
   }
-  if (type === 'ambEncoder') {
-    return <AmbEncoder {...props} />;
+  if (type === 'bridgeEncoder') {
+    return <BridgeEncoder {...props} />;
   }
   if (type === 'walletConnectTx') {
     return <WalletConnectTx {...props} />;

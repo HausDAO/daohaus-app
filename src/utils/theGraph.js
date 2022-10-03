@@ -457,6 +457,7 @@ const buildCrossChainQuery = (supportedChains, endpointType) => {
   let array = [];
 
   for (const chain in supportedChains) {
+    if (!supportedChains[chain][endpointType]) continue;
     array = [
       ...array,
       {

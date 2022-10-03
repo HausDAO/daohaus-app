@@ -16,6 +16,7 @@ const getActionDataByMinion = (minionAction, minionType, crossChainMinion) => {
     const {
       decoded: { actions },
     } = minionAction;
+    if (actions[0].data.error) return { tokenAddress: '0x' };
     const transferAction = crossChainMinion
       ? actions[0].actions[0]
       : actions[0];
