@@ -99,20 +99,20 @@ export const CONTENT = {
       { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
     ],
   },
-  SAFE_NOMAD_CROSSCHAIN_DEV_SUITE: {
-    title: 'Cross-chain Minion DEV Suite v5 (Safe Minion + Nomad)',
-    description:
-      'Move assets & execute transactions on a Gnosis Safe from another chain through your DAO proposals.',
-    publisher: PUBLISHERS.DAOHAUS,
-    version: '1.00',
-    pars: [
-      'Deploying a Gnosis Safe and a Nomad Module, this Boost enables your DAO to manage funds and execute transactions in a Gnosis Safe that lives in another chain, while voting on proposals on your Home Chain.',
-      'For example, this Boost gives your DAO control & access to Mainnet assets, dapps and contracts, while keeping governance and voting costs low.',
-    ],
-    externalLinks: [
-      { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
-    ],
-  },
+  // SAFE_NOMAD_CROSSCHAIN_DEV_SUITE: {
+  //   title: 'Cross-chain Minion DEV Suite v5 (Safe Minion + Nomad)',
+  //   description:
+  //     'Move assets & execute transactions on a Gnosis Safe from another chain through your DAO proposals.',
+  //   publisher: PUBLISHERS.DAOHAUS,
+  //   version: '1.00',
+  //   pars: [
+  //     'Deploying a Gnosis Safe and a Nomad Module, this Boost enables your DAO to manage funds and execute transactions in a Gnosis Safe that lives in another chain, while voting on proposals on your Home Chain.',
+  //     'For example, this Boost gives your DAO control & access to Mainnet assets, dapps and contracts, while keeping governance and voting costs low.',
+  //   ],
+  //   externalLinks: [
+  //     { href: 'https://discord.gg/daohaus', label: 'Boost Support' },
+  //   ],
+  // },
   NIFTY_INK: {
     title: 'Nifty Ink',
     description: 'Buy and Sell Nifty Ink NFTs as a DAO.',
@@ -564,18 +564,18 @@ export const BOOSTS = {
     settings: 'none',
     metaFields: ['ambModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
   },
-  CROSS_CHAIN_MINION_NOMAD: {
-    id: 'CROSS_CHAIN_MINION_NOMAD',
-    boostContent: CONTENT.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
-    minionData: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
-    categories: ['devTools'],
-    steps: STEPS.CROSS_CHAIN_MINION_BOOST,
-    playlist: BOOST_PLAYLISTS.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
-    networks: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD].networks,
-    cost: 'free',
-    settings: 'none',
-    metaFields: ['nomadModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
-  },
+  // CROSS_CHAIN_MINION_NOMAD: {
+  //   id: 'CROSS_CHAIN_MINION_NOMAD',
+  //   boostContent: CONTENT.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
+  //   minionData: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
+  //   categories: ['devTools'],
+  //   steps: STEPS.CROSS_CHAIN_MINION_BOOST,
+  //   playlist: BOOST_PLAYLISTS.SAFE_NOMAD_CROSSCHAIN_DEV_SUITE,
+  //   networks: MINIONS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD].networks,
+  //   cost: 'free',
+  //   settings: 'none',
+  //   metaFields: ['nomadModuleAddress', 'foreignChainId', 'foreignSafeAddress'],
+  // },
   RARIBLE: {
     id: 'RARIBLE',
     boostContent: CONTENT.RARIBLE,
