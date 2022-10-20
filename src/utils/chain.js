@@ -24,8 +24,7 @@ export const supportedChains = {
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.etherscan.io/api',
-    subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
+    subgraph_url: process.env.REACT_APP_GRAPH_URL_MAINNET,
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats',
     boosts_graph_url:
