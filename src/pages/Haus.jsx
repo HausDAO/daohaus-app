@@ -72,7 +72,7 @@ const Haus = () => {
                     <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
                   </Link>
                   <Link
-                    href='https://swapr.eth.link/#/swap?chainId=100&outputCurrency=0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb'
+                    href='https://swapr.eth.limo/#/swap?chainId=100&outputCurrency=0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb'
                     isExternal
                   >
                     <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
@@ -89,7 +89,7 @@ const Haus = () => {
                     <Text fontSize='sm'>ON ETHEREUM &gt;</Text>
                   </Link>
                   <Link
-                    href='https://swapr.eth.link/#/pools/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0xb0C5f3100A4d9d9532a4CfD68c55F1AE8da987Eb?chainId=100'
+                    href='https://swapr.eth.limo/#/pools/0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1/0xb0C5f3100A4d9d9532a4CfD68c55F1AE8da987Eb?chainId=100'
                     isExternal
                   >
                     <Text fontSize='sm'>ON GNOSIS CHAIN &gt;</Text>
