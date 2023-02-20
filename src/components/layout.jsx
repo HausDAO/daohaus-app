@@ -55,6 +55,7 @@ const Layout = ({ children, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
+        <NoticeBanner />
         {children}
       </Flex>
     </Flex>
