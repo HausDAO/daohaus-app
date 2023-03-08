@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, Link, Icon, Flex } from '@chakra-ui/react';
+import { Box, Text, Link, Icon } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 const NoticeBanner = () => {
