@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Text, Link, Icon } from '@chakra-ui/react';
+import { Button, Flex, Text, Link, Icon, Heading } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -161,29 +161,22 @@ const Summon = () => {
             as={ContentBox}
             mt={2}
             direction='column'
-            w={['100%', '100%', null, null, '50%']}
+            w={['100%', '100%', null, null, '60%']}
           >
-            <Text fontSize='xl' mb='3rem'>
+            <Heading fontSize='xl' mb='3rem'>
               Why summon a v2 when you could summon a v3?{' '}
-              <Link
-                color='white'
-                href='https://docs.daohaus.club/v3Upgrade'
-                isExternal
-              >
-                Let us tell you of the wonders of the new Moloch.
-              </Link>
-            </Text>
+            </Heading>
             <Button
+              size='lg'
               as={Link}
               color='white'
               href='https://summon.daohaus.club'
               isExternal
-              w='200px'
-              p='20px'
+              w='250px'
               mb='3rem'
             >
               <Text>
-                Summon a v3 here
+                Summon a v3 here{' '}
                 <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
               </Text>
             </Button>
@@ -191,10 +184,20 @@ const Summon = () => {
               color='white'
               href='https://docs.daohaus.club/v3Upgrade'
               isExternal
-              mb='3rem'
+              mb='1.5rem'
             >
               <Text fontSize='lg'>
-                Learn more about v2 deprecation and migration to v3
+                Let us tell you of the wonders of the new Moloch.{' '}
+                <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
+              </Text>
+            </Link>
+            <Link
+              color='white'
+              href='https://docs.daohaus.club/v3Upgrade'
+              isExternal
+            >
+              <Text fontSize='lg'>
+                Learn more about v2 deprecation and migration to v3{' '}
                 <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
               </Text>
             </Link>
