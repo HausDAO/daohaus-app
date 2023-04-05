@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Text, Link, Icon, Heading } from '@chakra-ui/react';
+import { Button, Flex, Text, Link, Icon } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
