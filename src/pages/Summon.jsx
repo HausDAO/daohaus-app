@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Box, Text } from '@chakra-ui/react';
+import { Button, Flex, Text, Link, Icon } from '@chakra-ui/react';
+import { RiExternalLinkLine } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -20,14 +21,10 @@ import {
 } from '../utils/summoning';
 import { getGraphEndpoint } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
+import ContentBox from '../components/ContentBox';
 
 const Summon = () => {
-  const {
-    address,
-    injectedChain,
-    requestWallet,
-    injectedProvider,
-  } = useInjectedProvider();
+  const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { cachePoll, resolvePoll, refetchUserHubDaos } = useUser();
   const { errorToast, successToast } = useOverlay();
   const [hardMode, setHardMode] = useState(false);
@@ -154,10 +151,56 @@ const Summon = () => {
     }
   };
 
+  const summonOn = false;
+
   return (
     <Layout>
       <MainViewLayout header='Summon'>
-        {injectedChain ? (
+        {!summonOn && (
+          <Flex
+            as={ContentBox}
+            mt={2}
+            direction='column'
+            w={['100%', '100%', null, null, '50%']}
+          >
+            <Text fontSize='xl' mb='3rem'>
+              Why summon a v2 when you could summon a v3?{' '}
+              <Link
+                color='white'
+                href='https://docs.daohaus.club/v3Upgrade'
+                isExternal
+              >
+                Let us tell you of the wonders of the new Moloch.
+              </Link>
+            </Text>
+            <Button
+              as={Link}
+              color='white'
+              href='https://summon.daohaus.club'
+              isExternal
+              w='200px'
+              p='20px'
+              mb='3rem'
+            >
+              <Text>
+                Summon a v3 here
+                <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
+              </Text>
+            </Button>
+            <Link
+              color='white'
+              href='https://docs.daohaus.club/v3Upgrade'
+              isExternal
+              mb='3rem'
+            >
+              <Text fontSize='lg'>
+                Learn more about v2 deprecation and migration to v3
+                <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
+              </Text>
+            </Link>
+          </Flex>
+        )}
+        {injectedChain && summonOn && (
           <>
             {!isSummoning ? (
               <>
@@ -215,25 +258,6 @@ const Summon = () => {
               />
             )}
           </>
-        ) : (
-          <Box
-            rounded='lg'
-            bg='blackAlpha.600'
-            borderWidth='1px'
-            borderColor='whiteAlpha.200'
-            p={6}
-            m={[10, 'auto', 0, 'auto']}
-            w='50%'
-            textAlign='center'
-          >
-            <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-              Connect your wallet to summon a DAO.
-            </Box>
-
-            <Flex direction='column' align='center'>
-              <Button onClick={requestWallet}>Connect Wallet</Button>
-            </Flex>
-          </Box>
         )}
       </MainViewLayout>
     </Layout>

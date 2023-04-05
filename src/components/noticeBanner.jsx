@@ -4,13 +4,16 @@ import { RiExternalLinkLine } from 'react-icons/ri';
 
 const NoticeBanner = () => {
   return (
-    <Box w='100%' backgroundColor='red.500' p='20px' textAlign='center'>
-      <Text fontSize='xl' fontWeight='700' fontStyle='mono'>
-        👹 MOLOCH V3 RISES 👹
+    <Box w='100%' backgroundColor='red.600' p='20px' textAlign='center'>
+      <Text fontSize='xl' fontWeight='700'>
+        👹 MOLOCH III RISES 👹
       </Text>
-      <Link color='white' href='https://daohaus.club/' isExternal>
+      <Text fontSize='md' fontStyle='mono'>
+        With Moloch v3 we are on a path to a decentralized future.
+      </Text>
+      <Link color='white' href='https://docs.daohaus.club/v3Upgrade' isExternal>
         <Text fontSize='md'>
-          Learn more
+          Learn more about how it impacts the features you know and love.
           <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
         </Text>
       </Link>
