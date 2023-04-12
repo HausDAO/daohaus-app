@@ -360,34 +360,6 @@ const completeQueries = {
             return vault;
           }),
         );
-
-        // const balanceData = await fetchBankValues({
-        //   daoID: args.daoID,
-        //   chainID: args.chainID,
-        // });
-
-        // const guildBank = {
-        //   type: 'treasury',
-        //   name: 'DAO Treasury',
-        //   address: args.daoID,
-        //   currentBalance: '',
-        //   erc20s: daoTokenBalances.tokenBalances.map(token => {
-        //     const priceData = prices[token.token.tokenAddress];
-        //     return {
-        //       ...token,
-        //       ...priceData,
-        //       usd: priceData?.price,
-        //       totalUSD: calcTotalUSD(
-        //         token.token.decimals,
-        //         token.tokenBalance,
-        //         priceData?.price || 0,
-        //       ),
-        //     };
-        //   }),
-        //   nfts: [],
-        //   balanceHistory: balanceData,
-        // };
-        // setter.setDaoVaults([guildBank, ...vaultData]);
         setter.setDaoVaults(vaultData);
       }
     } catch (error) {
