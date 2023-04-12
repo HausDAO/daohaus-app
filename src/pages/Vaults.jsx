@@ -7,6 +7,7 @@ import {
   Flex,
   HStack,
   Link as ChakraLink,
+  Spinner,
 } from '@chakra-ui/react';
 
 import useCanInteract from '../hooks/useCanInteract';
@@ -20,14 +21,16 @@ import { DAO_BOOKS_HOST } from '../data/boosts';
 import DocLink from '../components/docLink';
 import { POST_LOCATIONS } from '../utils/poster';
 
-const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
+const Vaults = ({ customTerms, currentDaoTokens, daoVaults }) => {
   const { canInteract } = useCanInteract({});
   const { daoid, daochain } = useParams();
   const [filter, setFilter] = useState('all');
   const [listVaults, setListVaults] = useState(null);
-  const [chartBalances, setChartBalances] = useState([]);
+  // const [chartBalances, setChartBalances] = useState([]);
   const [hasNfts, setHasNfts] = useState(false);
   const { daoMetaData } = useMetaData();
+
+  console.log('daoVaults', daoVaults);
 
   const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
@@ -41,13 +44,13 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
     const filterVaults = () => {
       if (filter.value === 'all') {
         setListVaults(daoVaults);
-        setChartBalances(daoVaults.flatMap(vault => vault.balanceHistory));
+        // setChartBalances(daoVaults.flatMap(vault => vault.balanceHistory));
       } else {
         const filteredVaults = daoVaults.filter(vault => {
           return vault.type === filter.value;
         });
         setListVaults(filteredVaults);
-        setChartBalances(filteredVaults.flatMap(vault => vault.balanceHistory));
+        // setChartBalances(filteredVaults.flatMap(vault => vault.balanceHistory));
       }
     };
     if (daoVaults) {
@@ -72,13 +75,13 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
       headerEl={ctaButton}
       isDao
     >
-      <BankChart
+      {/* <BankChart
         overview={overview}
         customTerms={customTerms}
         daoVaults={daoVaults}
         balanceData={chartBalances}
         visibleVaults={listVaults}
-      />
+      /> */}
       <Flex justify='space-between' mt='5'>
         <Box>
           <ListFilter
@@ -114,6 +117,7 @@ const Vaults = ({ overview, customTerms, currentDaoTokens, daoVaults }) => {
       </Flex>
 
       <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>
+        {!listVaults && <Spinner />}
         {listVaults &&
           listVaults.map((vault, i) => {
             return (

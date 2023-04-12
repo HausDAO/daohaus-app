@@ -32,7 +32,7 @@ import { DAO_BOOKS_HOST } from '../data/boosts';
 import { BOOST_PLAYLISTS } from '../data/playlists';
 import { getWalletConnectFormLego } from '../utils/vaults';
 
-const MinionVault = ({ overview, customTerms, daoVaults }) => {
+const MinionVault = ({ customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
@@ -228,14 +228,14 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
             pr={[0, null, null, null, 6]}
             pb={6}
           >
-            <BankChart
+            {/* <BankChart
               overview={overview}
               customTerms={customTerms}
               minionVault={vault}
               balanceData={vault.balanceHistory}
               daoVaults={daoVaults}
               visibleVaults={[vault]}
-            />
+            /> */}
             {vault?.minionType === MINION_TYPES.SAFE && (
               <SafeMinionDetails
                 vault={vault}

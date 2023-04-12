@@ -328,9 +328,13 @@ const completeQueries = {
 
         const prices = await fetchTokenData();
         const vaultApiData = await fetchApiVaultData(
-          supportedChains[args.chainID].network,
+          // supportedChains[args.chainID].network,
+          args.chainID,
           minionAddresses,
+          args.daoID,
         );
+
+        console.log('vaultApiData', vaultApiData);
         const vaultData = await Promise.all(
           vaultApiData.map(async vault => {
             if (vault.minionType === MINION_TYPES.SAFE) {
@@ -357,33 +361,34 @@ const completeQueries = {
           }),
         );
 
-        const balanceData = await fetchBankValues({
-          daoID: args.daoID,
-          chainID: args.chainID,
-        });
+        // const balanceData = await fetchBankValues({
+        //   daoID: args.daoID,
+        //   chainID: args.chainID,
+        // });
 
-        const guildBank = {
-          type: 'treasury',
-          name: 'DAO Treasury',
-          address: args.daoID,
-          currentBalance: '',
-          erc20s: daoTokenBalances.tokenBalances.map(token => {
-            const priceData = prices[token.token.tokenAddress];
-            return {
-              ...token,
-              ...priceData,
-              usd: priceData?.price,
-              totalUSD: calcTotalUSD(
-                token.token.decimals,
-                token.tokenBalance,
-                priceData?.price || 0,
-              ),
-            };
-          }),
-          nfts: [],
-          balanceHistory: balanceData,
-        };
-        setter.setDaoVaults([guildBank, ...vaultData]);
+        // const guildBank = {
+        //   type: 'treasury',
+        //   name: 'DAO Treasury',
+        //   address: args.daoID,
+        //   currentBalance: '',
+        //   erc20s: daoTokenBalances.tokenBalances.map(token => {
+        //     const priceData = prices[token.token.tokenAddress];
+        //     return {
+        //       ...token,
+        //       ...priceData,
+        //       usd: priceData?.price,
+        //       totalUSD: calcTotalUSD(
+        //         token.token.decimals,
+        //         token.tokenBalance,
+        //         priceData?.price || 0,
+        //       ),
+        //     };
+        //   }),
+        //   nfts: [],
+        //   balanceHistory: balanceData,
+        // };
+        // setter.setDaoVaults([guildBank, ...vaultData]);
+        setter.setDaoVaults(vaultData);
       }
     } catch (error) {
       console.error(error);
