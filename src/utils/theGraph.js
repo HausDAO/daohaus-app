@@ -1,5 +1,5 @@
 import { graphQuery } from './apollo';
-import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
+import { ADDRESS_BALANCES } from '../graphQL/bank-queries';
 import {
   DAO_ACTIVITIES,
   HOME_DAO,
@@ -31,7 +31,7 @@ import {
 } from '../graphQL/boost-queries';
 import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
-import { calcTotalUSD, fetchTokenData } from './tokenValue';
+import { fetchTokenData } from './tokenValue';
 
 const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
@@ -54,17 +54,6 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-export const fetchBankValues = async args => {
-  return graphFetchAll({
-    endpoint: getGraphEndpoint(args.chainID, 'stats_graph_url'),
-    query: BANK_BALANCES,
-    subfield: 'balances',
-    variables: {
-      molochAddress: args.daoID,
-    },
-  });
 };
 
 export const getWrapNZap = async (daochain, daoid) => {
@@ -326,7 +315,6 @@ const completeQueries = {
           minion => minion.minionAddress,
         );
 
-        const prices = await fetchTokenData();
         const vaultApiData = await fetchApiVaultData(
           // supportedChains[args.chainID].network,
           args.chainID,

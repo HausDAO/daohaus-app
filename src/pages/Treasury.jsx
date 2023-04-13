@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 
 import BalanceList from '../components/balanceList';
-import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';

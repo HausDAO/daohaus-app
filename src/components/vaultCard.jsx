@@ -10,14 +10,28 @@ import { capitalize, numberWithCommas } from '../utils/general';
 import { tallyUSDs } from '../utils/tokenValue';
 import { vaultUrlPart, getVaultListData } from '../utils/vaults';
 
+const getTotalVaultUsd = (vault, currentDaoTokens) => {
+  if (vault.type === 'treasury') {
+    return tallyUSDs(currentDaoTokens);
+  } else {
+    return vault.erc20s.reduce((sum, token) => {
+      const bal = +token.balance / 10 ** +token.decimals;
+      sum += token.usd * bal;
+      return sum;
+    }, vault.networkBalance.usdTotal);
+  }
+};
+
 const VaultCard = ({ vault, currentDaoTokens }) => {
   const { daoid, daochain } = useParams();
 
   const bgImgUrl = vault.nfts[0]?.imageUrl;
-  const currentVaultBalance =
-    vault.type === 'treasury'
-      ? tallyUSDs(currentDaoTokens)
-      : vault.currentBalance || 0;
+
+  const currentVaultBalance = useMemo(() => {
+    if (vault) {
+      return getTotalVaultUsd(vault, currentDaoTokens);
+    }
+  }, [vault]);
 
   const vaultBadge = useMemo(() => {
     if (vault.type !== 'treasury') {

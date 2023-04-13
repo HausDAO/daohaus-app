@@ -14,7 +14,6 @@ import {
 
 import { useToken } from '../contexts/TokenContext';
 import BalanceList from '../components/balanceList';
-import BankChart from '../components/bankChart';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import Loading from '../components/loading';
 import MainViewLayout from '../components/mainViewLayout';
@@ -24,7 +23,6 @@ import SafeMinionDetails from '../components/safeMinionDetails';
 import { useAppModal } from '../hooks/useModals';
 import { fetchSafeDetails } from '../utils/gnosis';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
-import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { formatNativeData } from '../utils/vaults';
 import { MINION_TYPES } from '../utils/proposalUtils';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -142,12 +140,10 @@ const MinionVault = ({ customTerms, daoVaults }) => {
         };
       });
 
-      const nativeBalance = await fetchNativeBalance(
-        vaultMatch.foreignSafeAddress || vaultMatch.safeAddress || minion,
-        targetChainId,
-      );
-      if (+nativeBalance > 0) {
-        setNativeBalance(formatNativeData(targetChainId, nativeBalance));
+      if (vaultMatch.networkBalance.balance) {
+        setNativeBalance(
+          formatNativeData(targetChainId, vaultMatch.networkBalance),
+        );
       }
 
       const internalBalanceRes = await fetchMinionInternalBalances({
@@ -220,7 +216,9 @@ const MinionVault = ({ customTerms, daoVaults }) => {
           )}
         </HStack>
       </Flex>
-      {!vault && <Loading message='Fetching treasury holdings...' />}
+      {!vault && (
+        <Loading message='Fetching treasury holdings. This can take several seconds.' />
+      )}
       {vault && (
         <Flex wrap='wrap'>
           <Box

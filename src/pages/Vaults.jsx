@@ -7,13 +7,12 @@ import {
   Flex,
   HStack,
   Link as ChakraLink,
-  Spinner,
 } from '@chakra-ui/react';
 
 import useCanInteract from '../hooks/useCanInteract';
-import BankChart from '../components/bankChart';
 import ListFilter from '../components/listFilter';
 import MainViewLayout from '../components/mainViewLayout';
+import Loading from '../components/loading';
 import VaultCard from '../components/vaultCard';
 import { vaultFilterOptions } from '../utils/vaults';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -29,8 +28,6 @@ const Vaults = ({ customTerms, currentDaoTokens, daoVaults }) => {
   // const [chartBalances, setChartBalances] = useState([]);
   const [hasNfts, setHasNfts] = useState(false);
   const { daoMetaData } = useMetaData();
-
-  console.log('daoVaults', daoVaults);
 
   const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
@@ -117,7 +114,9 @@ const Vaults = ({ customTerms, currentDaoTokens, daoVaults }) => {
       </Flex>
 
       <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>
-        {!listVaults && <Spinner />}
+        {!listVaults && (
+          <Loading message='Fetching treasury holdings. This can take several seconds.' />
+        )}
         {listVaults &&
           listVaults.map((vault, i) => {
             return (
