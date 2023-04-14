@@ -42,7 +42,6 @@ export const TXProvider = ({ children }) => {
     daoMembers,
     daoProposals,
     daoVaults,
-    refreshAllDaoVaults,
   } = useDao();
   const { daoMetaData } = useMetaData();
   const {
@@ -91,7 +90,6 @@ export const TXProvider = ({ children }) => {
     resolvePoll,
     cachePoll,
     refetch,
-    refreshAllDaoVaults,
     setTxInfoModal,
     setGenericModal,
     setModal,
@@ -118,7 +116,6 @@ export const TXProvider = ({ children }) => {
     // entire component tree. It should also recache the new data automatically
     if (!skipVaults) {
       console.log('refresh');
-      await refreshAllDaoVaults();
       console.log('refresh done');
     }
     await refetch();
