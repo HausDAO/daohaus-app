@@ -33,30 +33,9 @@ export const getApiMetadata = async () => {
 
 export const fetchApiVaultData = async (network, minions, daoid) => {
   try {
-    // const response = await fetch(`${metadataApiUrl}/dao/vaults`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({ network, minions }),
-    // });
-
     const response = await fetch(
       `${metadataApiUrl}/dao/allvaults/${network}/${daoid}`,
     );
-
-    return response.json();
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-export const putRefreshApiVault = async args => {
-  try {
-    const body = { ...args };
-    const response = await fetch(`${metadataApiUrl}/dao/refresh-vault`, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-    });
-
-    console.log('response', response);
 
     return response.json();
   } catch (err) {

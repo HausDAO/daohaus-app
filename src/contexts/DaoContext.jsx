@@ -9,7 +9,6 @@ import { useInjectedProvider } from './InjectedProviderContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { bigGraphQuery } from '../utils/theGraph';
 import { supportedChains } from '../utils/chain';
-import { putRefreshApiVault } from '../utils/metadata';
 
 export const DaoContext = createContext();
 
@@ -110,11 +109,6 @@ export const DaoProvider = ({ children }) => {
     bigGraphQuery(bigQueryOptions);
   };
 
-  const refreshAllDaoVaults = async () => {
-    const { network } = supportedChains[daochain];
-    await putRefreshApiVault({ network, molochAddress: daoid });
-  };
-
   return (
     <DaoContext.Provider
       value={{
@@ -125,7 +119,6 @@ export const DaoProvider = ({ children }) => {
         daoVaults,
         isCorrectNetwork,
         refetch,
-        refreshAllDaoVaults,
         hasPerformedBatchQuery, // Ref, not state
       }}
     >
@@ -152,7 +145,6 @@ export const useDao = () => {
     daoVaults,
     isCorrectNetwork,
     refetch,
-    refreshAllDaoVaults,
     hasPerformedBatchQuery, // Ref, not state
   } = useContext(DaoContext);
   return {
@@ -163,7 +155,6 @@ export const useDao = () => {
     daoVaults,
     isCorrectNetwork,
     refetch,
-    refreshAllDaoVaults,
     hasPerformedBatchQuery,
   };
 };
