@@ -37,9 +37,10 @@ const balanceCard = ({
       );
 
       if (match) {
+        console.log('match', match, token);
         setTokenPrice({
           usd: match.usd,
-          totalUSD: +match.usd * (token.balance / 10 ** +token.decimals),
+          totalUSD: +match.usd * (token.tokenBalance / 10 ** +token.decimals),
         });
       }
     }
