@@ -31,12 +31,16 @@ export const getApiMetadata = async () => {
   }
 };
 
-export const fetchApiVaultData = async (network, minions) => {
+export const fetchApiVaultData = async (network, minions, daoid) => {
   try {
-    const response = await fetch(`${metadataApiUrl}/dao/vaults`, {
-      method: 'POST',
-      body: JSON.stringify({ network, minions }),
-    });
+    // const response = await fetch(`${metadataApiUrl}/dao/vaults`, {
+    //   method: 'POST',
+    //   body: JSON.stringify({ network, minions }),
+    // });
+
+    const response = await fetch(
+      `${metadataApiUrl}/dao/allvaults/${network}/${daoid}`,
+    );
 
     return response.json();
   } catch (err) {

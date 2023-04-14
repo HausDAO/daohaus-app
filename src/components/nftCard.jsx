@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Flex, Image, AspectRatio } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
@@ -15,10 +15,15 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [hydratedNft, setHydratedNft] = useState();
 
-  const hydratedNft = useMemo(() => {
+  useEffect(() => {
+    const getMeta = async () => {
+      const meta = await hydrateNftCard(nft);
+      setHydratedNft(meta);
+    };
     if (nft) {
-      return hydrateNftCard(nft);
+      getMeta();
     }
   }, [nft]);
 
@@ -36,7 +41,7 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
         mb={5}
       >
         <Box size='xs' noOfLines={1}>
-          {hydratedNft?.metadata?.name || hydratedNft.name}
+          {hydratedNft?.metadata?.name || hydratedNft?.name}
         </Box>
 
         <Box
@@ -89,22 +94,26 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
         w='100%'
         mt={5}
       >
-        {hydratedNft.creator && (
+        {hydratedNft?.creator && (
           <Box size='xs' fontFamily='mono'>
             Creator
-            <AddressAvatar addr={hydratedNft.creator} hideCopy alwaysShowName />
+            <AddressAvatar
+              addr={hydratedNft?.creator}
+              hideCopy
+              alwaysShowName
+            />
           </Box>
         )}
-        {hydratedNft.lastPrice && (
+        {hydratedNft?.lastPrice && (
           <Box size='xs' fontFamily='mono'>
             Last Price
-            <Box>{hydratedNft.lastPrice} ETH</Box>
+            <Box>{hydratedNft?.lastPrice} ETH</Box>
           </Box>
         )}
-        {!hydratedNft.lastPrice && hydratedNft.name && (
+        {!hydratedNft?.lastPrice && hydratedNft?.name && (
           <Box size='xs' fontFamily='mono'>
             Created on
-            <Box>{hydratedNft.name}</Box>
+            <Box>{hydratedNft?.name}</Box>
           </Box>
         )}
       </Flex>

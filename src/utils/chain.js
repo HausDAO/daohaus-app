@@ -25,8 +25,6 @@ export const supportedChains = {
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.etherscan.io/api',
     subgraph_url: process.env.REACT_APP_GRAPH_URL_MAINNET,
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts',
     erc721_graph_url:
@@ -117,8 +115,6 @@ export const supportedChains = {
     tokenlist_api_url: 'https://api-goerli.etherscan.io/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-goerli',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-goerli',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-goerli',
     erc721_graph_url:
@@ -157,8 +153,6 @@ export const supportedChains = {
     tokenlist_api_url: 'https://api-optimistic.etherscan.io/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-optimism',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-optimism',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-optimism',
     erc721_graph_url:
@@ -230,8 +224,6 @@ export const supportedChains = {
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-xdai',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-xdai',
     erc721_graph_url:
@@ -341,8 +333,6 @@ export const supportedChains = {
     tokenlist_api_url: 'https://api.polygonscan.com/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-matic',
     erc721_graph_url:
@@ -402,8 +392,6 @@ export const supportedChains = {
     tokenlist_api_url: 'https://api.arbiscan.io/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-arbitrum',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-arbitrum',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
     erc721_graph_url:
@@ -456,8 +444,6 @@ export const supportedChains = {
     tokenlist_api_url: 'https://explorer.celo.org/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-celo',
-    stats_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-celo',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-celo',
     erc721_graph_url:

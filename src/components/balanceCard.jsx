@@ -28,6 +28,22 @@ const balanceCard = ({
   const [wnzAddress, setWnzAddress] = useState(null);
   const [needsPoke, setNeedsPoke] = useState(null);
   const { injectedProvider } = useInjectedProvider();
+  const [tokenPrice, setTokenPrice] = useState({ usd: 0, totalUSD: 0 });
+
+  useEffect(() => {
+    if (vault && token) {
+      const match = vault.erc20s.find(
+        erc => erc.tokenAddress == token.tokenAddress,
+      );
+
+      if (match) {
+        setTokenPrice({
+          usd: match.usd,
+          totalUSD: +match.usd * (token.balance / 10 ** +token.decimals),
+        });
+      }
+    }
+  }, [vault, token]);
 
   useEffect(() => {
     if (token?.contractBalances) {
@@ -88,25 +104,40 @@ const balanceCard = ({
       </Box>
       <Box w={['40%', null, null, '40%']}>
         <Box fontFamily='mono'>
-          {`${displayBalance(token.tokenBalance, token.decimals) || 0} ${
-            token.symbol
-          }`}
+          {`${displayBalance(
+            token.tokenBalance || token.balance,
+            token.decimals,
+          ) || 0} ${token.symbol}`}
         </Box>
       </Box>
       {!isNativeToken && (
         <>
           <Box w='20%' d={['none', null, null, 'inline-block']}>
             <Box fontFamily='mono'>
-              <Box>{`$${numberWithCommas(token?.usd?.toFixed(2)) || 0}`}</Box>
+              {token.usd ? (
+                <Box>{`$${numberWithCommas(token?.usd?.toFixed(2)) || 0}`}</Box>
+              ) : (
+                <Box>{`$${numberWithCommas(tokenPrice?.usd?.toFixed(2)) ||
+                  0}`}</Box>
+              )}
             </Box>
           </Box>
           <Box w={['25%', null, null, '30%']}>
             <Box fontFamily='mono'>
-              <Box>
-                {!isNaN(token?.totalUSD)
-                  ? `$${numberWithCommas(token?.totalUSD?.toFixed(2)) || 0}`
-                  : `$0`}
-              </Box>
+              {token.totalUSD ? (
+                <Box>
+                  {!isNaN(token?.totalUSD)
+                    ? `$${numberWithCommas(token?.totalUSD?.toFixed(2)) || 0}`
+                    : `$0`}
+                </Box>
+              ) : (
+                <Box>
+                  {!isNaN(tokenPrice?.totalUSD)
+                    ? `$${numberWithCommas(tokenPrice?.totalUSD?.toFixed(2)) ||
+                        0}`
+                    : `$0`}
+                </Box>
+              )}
             </Box>
           </Box>
         </>
@@ -116,7 +147,7 @@ const balanceCard = ({
         {hasBalance && <Withdraw token={token} />}
         {needsPoke && <PokeTokenButton wnzAddress={wnzAddress} />}
         {needsSync && <SyncTokenButton token={token} />}
-        {minion && token?.tokenBalance > 0 && (
+        {minion && Number(token?.tokenBalance) > 0 && (
           <MinionTransfer
             daochain={daochain}
             isMember={isMember || delegate}

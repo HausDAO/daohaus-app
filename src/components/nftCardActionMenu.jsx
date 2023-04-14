@@ -34,14 +34,14 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
 
   const nftActions = useMemo(() => {
     const vaultMatch = vault || daoVaults.find(v => v.address === minion);
-    if (minionType) {
+    if (minionType && nft) {
       return getNftCardActions(
         vaultMatch.crossChainMinion ? MINION_TYPES.CROSSCHAIN_SAFE : minionType,
         nft,
         daochain,
       );
     }
-  }, [minionType]);
+  }, [minionType, nft]);
 
   useEffect(() => {
     enableActions(
@@ -118,24 +118,25 @@ const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
           />
         </MenuButton>
         <MenuList>
-          {nftActions.map(action => {
-            return (
-              <MenuItem
-                key={action.menuLabel}
-                onClick={() => handleActionClick(action)}
-                isDisabled={!(actionsEnabled && canInteract)}
-              >
-                <Tooltip
-                  hasArrow
-                  shouldWrapChildren
-                  placement='bottom'
-                  label={action.toolTipLabel}
+          {nftActions &&
+            nftActions.map(action => {
+              return (
+                <MenuItem
+                  key={action.menuLabel}
+                  onClick={() => handleActionClick(action)}
+                  isDisabled={!(actionsEnabled && canInteract)}
                 >
-                  {action.menuLabel}
-                </Tooltip>
-              </MenuItem>
-            );
-          })}
+                  <Tooltip
+                    hasArrow
+                    shouldWrapChildren
+                    placement='bottom'
+                    label={action.toolTipLabel}
+                  >
+                    {action.menuLabel}
+                  </Tooltip>
+                </MenuItem>
+              );
+            })}
         </MenuList>
       </Menu>
     </>
