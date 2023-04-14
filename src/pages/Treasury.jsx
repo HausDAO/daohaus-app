@@ -11,13 +11,11 @@ import {
 } from '@chakra-ui/react';
 
 import BalanceList from '../components/balanceList';
-import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { DAO_BOOKS_HOST } from '../data/boosts';
 
 const Treasury = ({
-  overview,
   customTerms,
   currentDaoTokens,
   daoMember,
@@ -93,13 +91,13 @@ const Treasury = ({
           </Button>
         )}
       </Flex>
-      <BankChart
+      {/* <BankChart
         overview={overview}
         customTerms={customTerms}
         daoVaults={daoVaults}
         balanceData={treasuryVaultData?.balanceHistory}
         visibleVaults={[treasuryVaultData]}
-      />
+      /> */}
       <BalanceList
         vault={treasuryVaultData}
         balances={currentDaoTokens}

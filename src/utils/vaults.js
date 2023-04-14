@@ -64,12 +64,12 @@ export const formatNativeData = (daochain, balance) => {
   return [
     {
       isNative: true,
-      totalUSD: 0,
-      usd: 0,
+      totalUSD: balance.usdTotal,
+      usd: balance.usd,
       id: daochain,
       logoUri: '',
       tokenAddress: daochain,
-      tokenBalance: balance,
+      tokenBalance: balance.balance,
       decimals: '18',
       tokenName: supportedChains[daochain].nativeCurrency,
       symbol: supportedChains[daochain].nativeCurrency,

@@ -1,5 +1,5 @@
 import { graphQuery } from './apollo';
-import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
+import { ADDRESS_BALANCES } from '../graphQL/bank-queries';
 import {
   DAO_ACTIVITIES,
   HOME_DAO,
@@ -31,7 +31,7 @@ import {
 } from '../graphQL/boost-queries';
 import { MINION_TYPES } from './proposalUtils';
 import { proposalResolver, daoResolver } from './resolvers';
-import { calcTotalUSD, fetchTokenData } from './tokenValue';
+import { fetchTokenData } from './tokenValue';
 
 const SNAPSHOT_ENDPOINT = 'https://hub.snapshot.org/graphql';
 
@@ -54,17 +54,6 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-export const fetchBankValues = async args => {
-  return graphFetchAll({
-    endpoint: getGraphEndpoint(args.chainID, 'stats_graph_url'),
-    query: BANK_BALANCES,
-    subfield: 'balances',
-    variables: {
-      molochAddress: args.daoID,
-    },
-  });
 };
 
 export const getWrapNZap = async (daochain, daoid) => {
@@ -326,11 +315,14 @@ const completeQueries = {
           minion => minion.minionAddress,
         );
 
-        const prices = await fetchTokenData();
         const vaultApiData = await fetchApiVaultData(
-          supportedChains[args.chainID].network,
+          // supportedChains[args.chainID].network,
+          args.chainID,
           minionAddresses,
+          args.daoID,
         );
+
+        console.log('vaultApiData', vaultApiData);
         const vaultData = await Promise.all(
           vaultApiData.map(async vault => {
             if (vault.minionType === MINION_TYPES.SAFE) {
@@ -356,34 +348,7 @@ const completeQueries = {
             return vault;
           }),
         );
-
-        const balanceData = await fetchBankValues({
-          daoID: args.daoID,
-          chainID: args.chainID,
-        });
-
-        const guildBank = {
-          type: 'treasury',
-          name: 'DAO Treasury',
-          address: args.daoID,
-          currentBalance: '',
-          erc20s: daoTokenBalances.tokenBalances.map(token => {
-            const priceData = prices[token.token.tokenAddress];
-            return {
-              ...token,
-              ...priceData,
-              usd: priceData?.price,
-              totalUSD: calcTotalUSD(
-                token.token.decimals,
-                token.tokenBalance,
-                priceData?.price || 0,
-              ),
-            };
-          }),
-          nfts: [],
-          balanceHistory: balanceData,
-        };
-        setter.setDaoVaults([guildBank, ...vaultData]);
+        setter.setDaoVaults(vaultData);
       }
     } catch (error) {
       console.error(error);

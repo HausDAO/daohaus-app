@@ -145,23 +145,6 @@ export const hydrate1155s = async nfts => {
   );
 };
 
-const nftDefaultConfig = {
-  platform: 'unknown',
-  fields: {
-    image: 'hydrateImageURI',
-  },
-};
-
-const nftConfigs = {
-  '0xcf964c89f509a8c0ac36391c5460df94b91daba5': {
-    platform: 'nifty ink',
-    fields: {
-      ...nftDefaultConfig.fields,
-      creator: 'getNiftyCreator',
-    },
-  },
-};
-
 export const attributeModifiers = Object.freeze({
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
@@ -180,21 +163,49 @@ export const attributeModifiers = Object.freeze({
   },
 });
 
-export const hydrateNftCard = nft => {
-  const config = nftConfigs[nft.contractAddress] || nftDefaultConfig;
-  const hydratedFields = Object.keys(config.fields).reduce((fieldObj, key) => {
-    const mod = config.fields[key];
-    if (!mod) {
-      return fieldObj;
-    }
-    fieldObj[key] = attributeModifiers[mod](nft);
-    return fieldObj;
-  }, {});
-
+export const hydrateNftCard = async nft => {
+  const hydratedFields = await nftUriFetch(nft.uri);
   return {
     ...nft,
     ...hydratedFields,
   };
+};
+
+const nftUriFetch = async uri => {
+  if (!uri) return;
+
+  const gatewayUrl = 'https://gateway.pinata.cloud/ipfs/';
+  // const gatewayUrl = "https://daohaus.mypinata.cloud/ipfs/";
+
+  try {
+    if (!uri) {
+      return {};
+    }
+
+    let url = uri;
+    if (uri.slice(0, 2) === 'Qm') {
+      url = `${gatewayUrl}${uri}`;
+    }
+
+    if (uri.slice(0, 2) === 'oU') {
+      url = `https://ufaqt23lzwol6i2tvvy2err2fakzscgo6foyywvpp7xk7atmdpba.arweave.net/${uri}`;
+    }
+
+    if (uri.indexOf('ipfs://ipfs/') === 0) {
+      url = uri.replace('ipfs://ipfs/', `${gatewayUrl}`);
+    }
+
+    if (uri.indexOf('https://ipfs.io/ipfs/') === 0) {
+      url = uri.replace('https://ipfs.io/ipfs/', `${gatewayUrl}`);
+    }
+
+    const res = await getNftMeta(url);
+
+    return res;
+  } catch (err) {
+    console.log('meta fetch err', err);
+    return {};
+  }
 };
 
 export const concatNftSearchData = nft => {
