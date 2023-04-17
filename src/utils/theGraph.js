@@ -316,13 +316,11 @@ const completeQueries = {
         );
 
         const vaultApiData = await fetchApiVaultData(
-          // supportedChains[args.chainID].network,
           args.chainID,
           minionAddresses,
           args.daoID,
         );
 
-        console.log('vaultApiData', vaultApiData);
         const vaultData = await Promise.all(
           vaultApiData.map(async vault => {
             if (vault.minionType === MINION_TYPES.SAFE) {
