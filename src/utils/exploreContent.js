@@ -44,12 +44,7 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'network',
     default: true,
   },
-  {
-    name: 'Celo',
-    value: 42220,
-    type: 'network',
-    default: true,
-  },
+
   {
     name: 'Optimism',
     value: 10,
@@ -60,57 +55,13 @@ export const EXPLORE_FILTER_OPTIONS = [
     name: 'Göerli',
     value: 5,
     type: 'network',
+    default: false,
   },
   {
-    name: 'Grants (Accelerators)',
-    value: 'Grants',
-    type: 'purpose',
-  },
-  {
-    name: 'Ventures (Investments)',
-    value: 'Ventures',
-    type: 'purpose',
-  },
-  {
-    name: 'Guilds (Services)',
-    value: 'Guilds',
-    type: 'purpose',
-  },
-  {
-    name: 'Clubs (Social)',
-    value: 'Clubs',
-    type: 'purpose',
-  },
-  {
-    name: 'Non-profit (Impact)',
-    value: 'Non-profit',
-    type: 'purpose',
-  },
-  {
-    name: 'Product (Project)',
-    value: 'Products',
-    type: 'purpose',
-  },
-  {
-    name: 'Moloch V2.5',
-    value: '2.2',
-    type: 'version',
-  },
-  {
-    name: 'Moloch V2.1',
-    value: '2.1',
-    type: 'version',
-  },
-  {
-    name: 'Moloch V2',
-    value: '2',
-    type: 'version',
-  },
-
-  {
-    name: 'Moloch V1',
-    value: '1',
-    type: 'version',
+    name: 'Celo',
+    value: 42220,
+    type: 'network',
+    default: false,
   },
   {
     name: 'More than one member',
