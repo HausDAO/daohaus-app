@@ -8,14 +8,13 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import useBoost from '../hooks/useBoost';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import VaultTotal from './vaultTotal';
 import DocLink from './docLink';
 
 import { getActiveMembers } from '../utils/dao';
 import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
 import { POST_LOCATIONS } from '../utils/poster';
 
-const OverviewCard = ({ daoOverview, members, daoVaults }) => {
+const OverviewCard = ({ daoOverview, members }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
   const [activeMembers, setActiveMembers] = useState(null);
@@ -63,11 +62,9 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             <TextBox size='xs' title={getTitle(customTerms, 'Members')}>
               {`Active ${getTerm(customTerms, 'members')}`}
             </TextBox>
-            {/* <Skeleton isLoaded={members}> */}
             <TextBox size='lg' variant='value'>
               {activeMembers ? activeMembers.length : <Spinner size='sm' />}
             </TextBox>
-            {/* </Skeleton> */}
           </Box>
           <Box>
             <TextBox size='xs'>Shares</TextBox>
@@ -86,16 +83,6 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
             </Skeleton>
           </Box>
         </Flex>
-        <Box mt={6}>
-          {daoVaults && (
-            <>
-              <TextBox size='sm' title={getTitle(customTerms, 'Bank')}>
-                {getTerm(customTerms, 'vault total')}
-              </TextBox>
-              <VaultTotal vaults={daoVaults} />
-            </>
-          )}
-        </Box>
         <DocLink locationName={POST_LOCATIONS.FRONT_PAGE} />
         <Flex mt={6}>
           <Button
