@@ -33,7 +33,6 @@ import Settings from '../pages/Settings';
 import Snapshot from '../pages/Snapshot';
 import SnapshotSettings from '../pages/SnapshotSettings';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
-import ThemeBuilder from '../pages/ThemeBuilder';
 import Treasury from '../pages/Treasury';
 import Vaults from '../pages/Vaults';
 import ProposalsSpam from '../pages/ProposalsSpam';
@@ -151,9 +150,6 @@ const DaoRouter = () => {
             daoMetaData={daoMetaData}
             refetchMetaData={refetchMetaData}
           />
-        </Route>
-        <Route exact path={`${path}/settings/theme`}>
-          <ThemeBuilder refetchMetaData={refetchMetaData} />
         </Route>
         <Route exact path={`${path}/settings`}>
           <Settings
