@@ -1,20 +1,15 @@
 import React, { useState } from 'react';
 import { BsArrowReturnRight } from 'react-icons/bs';
 import { RiExternalLinkLine } from 'react-icons/ri';
-import { useParams } from 'react-router-dom';
 import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import Icon from '@chakra-ui/icon';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useAppModal } from '../hooks/useModals';
 import MemberIndicator from './memberIndicator';
 import TextIndicator from './textIndicator';
 import TextBox from './TextBox';
-import { chainByID } from '../utils/chain';
-import { handleRestorePlaylist } from '../utils/metadata';
 import { hasPlaylist } from '../data/playlists';
 
 const BoostDetails = ({
@@ -36,11 +31,8 @@ const BoostDetails = ({
   } = boostContent;
   const { name, link, daoData } = publisher;
 
-  const [loading, setLoading] = useState(false);
-  const { successToast, errorToast } = useOverlay();
-  const { daochain } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
-  const { daoMetaData, daoProposals, refetchMetaData } = useMetaData();
+  const [loading] = useState(false);
+  const { daoMetaData } = useMetaData();
 
   const handleNext = () => {
     if (next && goToNext) {

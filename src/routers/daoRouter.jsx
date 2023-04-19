@@ -12,12 +12,10 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useToken } from '../contexts/TokenContext';
 
-// import Allies from '../pages/Allies';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import Layout from '../components/layout';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
 import Members from '../pages/Members';
-import Meta from '../pages/Meta';
 import MetaAudit from '../pages/MetaAudit';
 import MinionGallery from '../pages/MinionGallery';
 import MinionVault from '../pages/MinionVault';
