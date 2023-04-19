@@ -1,88 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
-import {
-  Flex,
-  Stack,
-  Icon,
-  Switch,
-  Box,
-  Button,
-  Spinner,
-  useToast,
-  Link,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Icon, Box, useToast, Link, Text } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import MainViewLayout from '../components/mainViewLayout';
-import { boostPost } from '../utils/metadata';
 
-const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
-  const { injectedProvider, injectedChain, address } = useInjectedProvider();
-  const { daoid } = useParams();
-  const { successToast, errorToast } = useOverlay();
+const DiscourseSettings = ({ daoMetaData }) => {
   const toast = useToast();
   const [localMetadata, setLocalMetadata] = useState();
-  const [hasChanges, setHasChanges] = useState();
-  const [loading, setLoading] = useState();
 
   useEffect(() => {
     if (daoMetaData?.boosts?.DISCOURSE?.active) {
       setLocalMetadata(daoMetaData.boosts.DISCOURSE.metadata);
     }
   }, [daoMetaData]);
-
-  const handleSave = async () => {
-    setLoading(true);
-    try {
-      const messageHash = injectedProvider.utils.sha3(daoid);
-      const signature = await injectedProvider.eth.personal.sign(
-        messageHash,
-        address,
-      );
-
-      const updatedBoost = {
-        contractAddress: daoid,
-        boostKey: 'DISCOURSE',
-        metadata: localMetadata,
-        network: injectedChain.network,
-        signature,
-      };
-
-      const updateRes = await boostPost('dao/boost', updatedBoost);
-      console.log('updateRes', updateRes);
-      setLoading(false);
-      setHasChanges(false);
-      refetchMetaData();
-      successToast({
-        title: 'Discourse Settings Updated',
-        description: 'You DAOd it!',
-      });
-    } catch (err) {
-      console.log('update error', err);
-      setLoading(false);
-      errorToast({
-        title: 'Something went wrong',
-        description: 'Are you an active member of this DAO?',
-      });
-    }
-  };
-
-  const handleActionChange = e => {
-    setLocalMetadata(prevState => {
-      return {
-        ...prevState,
-        autoProposal: e.target.checked,
-      };
-    });
-
-    setHasChanges(true);
-  };
 
   const copiedToast = () => {
     toast({
@@ -128,41 +60,6 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
                 the topics.
               </Text>
             </Box>
-            <Box w='55%'>
-              <Stack spacing={6}>
-                <TextBox color='white' size='sm' mb={2}>
-                  Settings
-                </TextBox>
-                <Text fontSize='md' mt={6}>
-                  You can always manually add a topic from the proposal detail
-                  page.
-                </Text>
-                <ContentBox as={Flex} justify='space-between'>
-                  <TextBox fontSize='md'>
-                    Create forum topics on proposal submission
-                  </TextBox>
-                  <Flex align='center'>
-                    <Switch
-                      id='autoProposal'
-                      colorScheme='green'
-                      isChecked={localMetadata.autoProposal}
-                      onChange={e => handleActionChange(e)}
-                      disabled={loading}
-                    />
-                  </Flex>
-                </ContentBox>
-              </Stack>
-            </Box>
-          </Flex>
-          <Flex justify='flex-end' align='center' w='100%' mt={5}>
-            {loading ? <Spinner /> : null}
-            <Button
-              mr='2.5%'
-              disabled={!hasChanges || loading}
-              onClick={() => handleSave()}
-            >
-              Save Changes
-            </Button>
           </Flex>
         </>
       ) : (

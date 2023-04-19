@@ -158,13 +158,6 @@ const DaoRouter = () => {
             customTerms={customTerms}
           />
         </Route>
-        <Route exact path={`${path}/settings/meta`}>
-          <Meta
-            daoMetaData={daoMetaData}
-            isMember={isMember}
-            refetchMetaData={refetchMetaData}
-          />
-        </Route>
         <Route exact path={`${path}/settings/audit`}>
           <MetaAudit daoMetaData={daoMetaData} />
         </Route>

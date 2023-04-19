@@ -50,38 +50,8 @@ const BoostDetails = ({
     }
   };
 
-  const restorePlaylist = {
-    text: 'Restore Playlist',
-    fn: async () => {
-      setLoading(true);
-      await handleRestorePlaylist({
-        playlist,
-        injectedProvider,
-        meta: daoMetaData,
-        address,
-        network: chainByID(daochain).network,
-        proposalConfig: daoProposals,
-        onSuccess: () => {
-          successToast({
-            title: 'Playlist Restored',
-          });
-          setLoading(false);
-          refetchMetaData();
-        },
-        onError: error => {
-          console.log(`errorMsg`, error.message);
-          errorToast({
-            title: 'Error Restoring Playlist',
-            description: error.message,
-          });
-          setLoading(false);
-        },
-      });
-    },
-  };
   const daoHasPlaylist = hasPlaylist(daoMetaData, playlist);
-  const canRestore = !userSteps;
-  const secondBtn = canRestore ? restorePlaylist : secondaryBtn;
+  const secondBtn = secondaryBtn;
   return (
     <Flex flexDirection='column'>
       <Flex justifyContent='space-between' flexWrap='wrap'>
@@ -158,7 +128,7 @@ const BoostDetails = ({
       <Box>
         <Flex alignItems='flex-end' flexDir='column'>
           <Flex>
-            {isAvailable && isInstalled && playlist && (
+            {isAvailable && isInstalled && playlist && secondBtn && (
               <Button
                 type='button'
                 variant='outline'

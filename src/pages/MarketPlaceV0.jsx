@@ -7,7 +7,6 @@ import { useAppModal } from '../hooks/useModals';
 import BoostDetails from '../components/boostDetails';
 import Installed from './Installed';
 import MainViewLayout from '../components/mainViewLayout';
-import Market from './Market';
 import { getSettingsLink } from '../utils/marketplace';
 
 const MarketPlaceV0 = () => {
@@ -50,32 +49,10 @@ const MarketPlaceV0 = () => {
           >
             Installed
           </Tab>
-          <Tab
-            px={6}
-            color='white'
-            _selected={{
-              color: 'white',
-              borderBottom: '2px solid white',
-            }}
-            _hover={{
-              color: 'white',
-              borderBottom: '2px solid rgba(255,255,255,0.4)',
-            }}
-            borderBottom='2px solid transparent'
-          >
-            Market
-          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
             <Installed
-              installBoost={installBoost}
-              openDetails={openDetails}
-              goToSettings={goToSettings}
-            />
-          </TabPanel>
-          <TabPanel>
-            <Market
               installBoost={installBoost}
               openDetails={openDetails}
               goToSettings={goToSettings}

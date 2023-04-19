@@ -1,25 +1,14 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
 
 import useBoost from '../hooks/useBoost';
-import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
 import { getReadableBalance } from '../utils/tokenValue';
-import { BOOST_SETTING } from '../data/boostSettings';
 
 const SpamFilterSettings = ({ daoMetaData, daoOverview }) => {
   const { daoid, daochain } = useParams();
   const { isActive, isLaunched } = useBoost();
-  const { boostModal } = useAppModal();
-
-  const handleEditClick = () => {
-    boostModal(BOOST_SETTING.SPAM_FILTER);
-  };
-
-  const isFoundations = useMemo(() => {
-    return daoid === '0x1b975a9daf25e7b01e0a6c72d657ff74925327a8';
-  }, [daoid]);
 
   return (
     <MainViewLayout header='Spam Filter' isDao>
@@ -56,7 +45,6 @@ const SpamFilterSettings = ({ daoMetaData, daoOverview }) => {
           </Flex>
 
           <Flex mt={10}>
-            {!isFoundations && <Button onClick={handleEditClick}>Edit</Button>}
             {isActive('SPAM_FILTER') && (
               <Button
                 to={`/dao/${daochain}/${daoid}/proposals/spam`}

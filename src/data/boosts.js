@@ -375,7 +375,7 @@ export const STEPS = {
       stepLabel: 'Deploy Minion',
       isUserStep: true,
     },
-    STEP2: COMMON_STEPS.SIGNER,
+    // STEP2: COMMON_STEPS.SIGNER,
   },
   CROSS_CHAIN_MINION_BOOST: {
     DISPLAY: COMMON_STEPS.DISPLAY,
@@ -397,7 +397,7 @@ export const STEPS = {
       isUserStep: true,
       checklist: ['isConnected'],
     },
-    STEP3: COMMON_STEPS.SIGNER,
+    // STEP3: COMMON_STEPS.SIGNER,
   },
   ADD_DISCORD: {
     DISPLAY: COMMON_STEPS.DISPLAY,
