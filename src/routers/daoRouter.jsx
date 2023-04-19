@@ -28,7 +28,6 @@ import PartyFavor from '../pages/PartyFavor';
 import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
 import Proposals from '../pages/Proposals';
-import ProposalTypes from '../pages/ProposalTypes';
 import ProposalAudit from '../pages/ProposalAudit';
 import Settings from '../pages/Settings';
 import Snapshot from '../pages/Snapshot';
@@ -172,12 +171,6 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/settings/audit`}>
           <MetaAudit daoMetaData={daoMetaData} />
-        </Route>
-        <Route exact path={`${path}/settings/proposals`}>
-          <ProposalTypes
-            daoMetaData={daoMetaData}
-            refetchMetaData={refetchMetaData}
-          />
         </Route>
         <Route exact path={`${path}/settings/spam`}>
           <SpamFilterSettings
