@@ -19,7 +19,7 @@ import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 import { truncateAddr } from '../utils/general';
 import { chainByID } from '../utils/chain';
-import { handleGetProfile } from '../utils/3box';
+// import { handleGetProfile } from '../utils/3box';
 import { handleGetENS } from '../utils/ens';
 
 const defaultTipLabel =
@@ -65,10 +65,10 @@ const AddressInput = ({
     let shouldSet = true;
 
     const getMemberName = async memberAddress => {
-      const profileResult = await handleGetProfile(memberAddress);
-      if (profileResult?.name) {
-        return profileResult;
-      }
+      // const profileResult = await handleGetProfile(memberAddress);
+      // if (profileResult?.name) {
+      //   return profileResult;
+      // }
 
       const ensResult = await handleGetENS(memberAddress);
       if (ensResult) {
