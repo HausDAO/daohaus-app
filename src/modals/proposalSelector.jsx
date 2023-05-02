@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import { VscGear } from 'react-icons/vsc';
 import {
   Modal,
   ModalContent,
@@ -12,24 +10,24 @@ import {
   Flex,
   Select,
   Divider,
-  Icon,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useAppModal } from '../hooks/useModals';
 import TextBox from '../components/TextBox';
 import { FORM } from '../data/formLegos/forms';
 import { CARD_BG } from '../themes/theme';
+import { defaultProposals } from '../data/playlists';
 
 const ProposalSelector = () => {
   const { daoProposals } = useMetaData();
   const { proposalSelector, setProposalSelector } = useOverlay();
   const { formModal } = useAppModal();
   const { theme } = useCustomTheme();
+  const [allPlaylists, setAllPlaylists] = useState();
 
   const { playlists, customData } = daoProposals || {};
 
@@ -38,6 +36,7 @@ const ProposalSelector = () => {
   useEffect(() => {
     if (playlists) {
       setCurrentPlaylist(playlists?.[0]);
+      setAllPlaylists([...playlists, defaultProposals]);
     }
   }, [playlists]);
 
@@ -55,8 +54,8 @@ const ProposalSelector = () => {
   };
 
   const selectPlaylist = id => {
-    if (!id || !playlists) return;
-    setCurrentPlaylist(playlists.find(list => list.id === id));
+    if (!id || !allPlaylists) return;
+    setCurrentPlaylist(allPlaylists.find(list => list.id === id));
   };
 
   return (
@@ -92,7 +91,7 @@ const ProposalSelector = () => {
           overflowY='auto'
         >
           <PlaylistSelect
-            playlists={playlists}
+            playlists={allPlaylists}
             selectPlaylist={selectPlaylist}
             handleClose={handleClose}
           />
@@ -113,9 +112,7 @@ const ProposalSelector = () => {
 
 export default ProposalSelector;
 
-const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
-  const { daochain, daoid } = useParams();
-  const { isMember } = useDaoMember();
+const PlaylistSelect = ({ playlists, selectPlaylist }) => {
   const handleChange = e => {
     if (!e?.target?.value) return;
     selectPlaylist(e.target.value);
@@ -136,19 +133,6 @@ const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
           </option>
         ))}
       </Select>
-      {isMember && (
-        <RouterLink
-          to={`/dao/${daochain}/${daoid}/settings/proposals`}
-          onClick={handleClose}
-        >
-          <Flex alignItems='center' transform='translateY(5px)'>
-            <Icon as={VscGear} mr={2} />
-            <TextBox variant='body' color='secondary.600'>
-              Manage
-            </TextBox>
-          </Flex>
-        </RouterLink>
-      )}
     </Flex>
   );
 };
