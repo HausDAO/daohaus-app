@@ -61,31 +61,6 @@ const DaoMetaOverview = ({ daoMetaData }) => {
                 fontSize='xs'
                 textTransform='uppercase'
                 letterSpacing='0.15em'
-                to={`/dao/${daochain}/${daoid}/settings/meta`}
-                mt={5}
-                mb={3}
-              >
-                Edit Metadata
-              </Link>
-              <Link
-                as={RouterLink}
-                color='secondary.500'
-                fontFamily='heading'
-                fontSize='xs'
-                textTransform='uppercase'
-                letterSpacing='0.15em'
-                to={`/dao/${daochain}/${daoid}/settings/theme`}
-                mb={3}
-              >
-                Edit Custom Theme
-              </Link>
-              <Link
-                as={RouterLink}
-                color='secondary.500'
-                fontFamily='heading'
-                fontSize='xs'
-                textTransform='uppercase'
-                letterSpacing='0.15em'
                 to={`/dao/${daochain}/${daoid}/settings/audit`}
               >
                 View Metadata Edit Log

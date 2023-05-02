@@ -304,15 +304,6 @@ export const getForumTopics = async categoryId => {
   }
 };
 
-export const getDateTime = async () => {
-  try {
-    const response = await fetch('https://data.daohaus.club/dao/get-utc');
-    return response.json();
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 export const getNftMeta = async url => {
   try {
     const response = await fetch(url);

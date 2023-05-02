@@ -12,12 +12,10 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useToken } from '../contexts/TokenContext';
 
-// import Allies from '../pages/Allies';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import Layout from '../components/layout';
 import MarketPlaceV0 from '../pages/MarketPlaceV0';
 import Members from '../pages/Members';
-import Meta from '../pages/Meta';
 import MetaAudit from '../pages/MetaAudit';
 import MinionGallery from '../pages/MinionGallery';
 import MinionVault from '../pages/MinionVault';
@@ -28,13 +26,11 @@ import PartyFavor from '../pages/PartyFavor';
 import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
 import Proposals from '../pages/Proposals';
-import ProposalTypes from '../pages/ProposalTypes';
 import ProposalAudit from '../pages/ProposalAudit';
 import Settings from '../pages/Settings';
 import Snapshot from '../pages/Snapshot';
 import SnapshotSettings from '../pages/SnapshotSettings';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
-import ThemeBuilder from '../pages/ThemeBuilder';
 import Treasury from '../pages/Treasury';
 import Vaults from '../pages/Vaults';
 import ProposalsSpam from '../pages/ProposalsSpam';
@@ -153,9 +149,6 @@ const DaoRouter = () => {
             refetchMetaData={refetchMetaData}
           />
         </Route>
-        <Route exact path={`${path}/settings/theme`}>
-          <ThemeBuilder refetchMetaData={refetchMetaData} />
-        </Route>
         <Route exact path={`${path}/settings`}>
           <Settings
             overview={daoOverview}
@@ -163,21 +156,8 @@ const DaoRouter = () => {
             customTerms={customTerms}
           />
         </Route>
-        <Route exact path={`${path}/settings/meta`}>
-          <Meta
-            daoMetaData={daoMetaData}
-            isMember={isMember}
-            refetchMetaData={refetchMetaData}
-          />
-        </Route>
         <Route exact path={`${path}/settings/audit`}>
           <MetaAudit daoMetaData={daoMetaData} />
-        </Route>
-        <Route exact path={`${path}/settings/proposals`}>
-          <ProposalTypes
-            daoMetaData={daoMetaData}
-            refetchMetaData={refetchMetaData}
-          />
         </Route>
         <Route exact path={`${path}/settings/spam`}>
           <SpamFilterSettings

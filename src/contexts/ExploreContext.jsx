@@ -12,12 +12,6 @@ export const ExploreContext = createContext();
 const initialState = {
   filters: {
     members: ['1'],
-    purpose: EXPLORE_FILTER_OPTIONS.filter(o => o.type === 'purpose').map(
-      o => o.value,
-    ),
-    version: EXPLORE_FILTER_OPTIONS.filter(o => o.type === 'version').map(
-      o => o.value,
-    ),
     network: EXPLORE_FILTER_OPTIONS.filter(o => o.type === 'network')
       .filter(o => o.default)
       .map(o => o.value),
