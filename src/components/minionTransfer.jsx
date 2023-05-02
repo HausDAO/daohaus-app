@@ -44,10 +44,17 @@ const MinionTransfer = ({
 
   const openSendModal = async () => {
     setLoading(true);
+
+    let tokenAddress;
+    if (isNativeToken) {
+      tokenAddress = '0x00';
+    } else {
+      tokenAddress = token.contractAddress || token.tokenAddress;
+    }
     formModal({
       ...transferFormLego,
       localValues: {
-        tokenAddress: isNativeToken ? '0x00' : token.tokenAddress,
+        tokenAddress,
         minionAddress: minion,
         balance: token.tokenBalance,
         tokenDecimals: isNativeToken ? '18' : token.decimals,

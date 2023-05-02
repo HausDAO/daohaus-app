@@ -6,7 +6,7 @@ import GenericInput from './genericInput';
 import GenericSelect from './genericSelect';
 import ModButton from './modButton';
 import { getActiveMembers } from '../utils/dao';
-import { handleGetProfile } from '../utils/3box';
+// import { handleGetProfile } from '../utils/3box';
 import { isEthAddress, truncateAddr } from '../utils/general';
 import { lookupENS } from '../utils/ens';
 
@@ -36,13 +36,13 @@ const AddressInput = props => {
       setLoadingMembers(true);
       const memberProfiles = await Promise.all(
         getActiveMembers(daoMembers)?.map(async member => {
-          const profile = await handleGetProfile(member.memberAddress);
-          if (!profile) {
-            return {
-              name: profile.name || truncateAddr(member.memberAddress),
-              value: member.memberAddress,
-            };
-          }
+          // const profile = await handleGetProfile(member.memberAddress);
+          // if (!profile) {
+          //   return {
+          //     name: profile.name || truncateAddr(member.memberAddress),
+          //     value: member.memberAddress,
+          //   };
+          // }
           return {
             name: truncateAddr(member.memberAddress) || member.memberAddress,
             value: member.memberAddress,
