@@ -71,13 +71,18 @@ export const deriveChainId = provider => {
 };
 
 export const deriveSelectedAddress = provider => {
+  console.log('provider', provider);
   if (provider.isMetaMask) {
+    console.log('is metamaskish');
     return provider.selectedAddress;
   }
   if (provider.wc) {
+    console.log('is wcish');
     return provider.accounts[0];
   }
   if (provider.safe) {
+    console.log('is safeish');
+
     return provider.safe.safeAddress;
   }
   // else if (provider.isPortis) {
