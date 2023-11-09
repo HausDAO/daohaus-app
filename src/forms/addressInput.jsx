@@ -217,7 +217,7 @@ const AddressInput = ({
                   key={member.memberAddress}
                   value={member.memberAddress}
                   color={theme.colors.whiteAlpha[900]}
-                  background={theme.colors.blackAlpha[900]}
+                  // background={theme.colors.blackAlpha[900]}
                 >
                   {member?.name
                     ? member?.name
