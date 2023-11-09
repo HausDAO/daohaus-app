@@ -182,7 +182,7 @@ const Summon = () => {
             </Button>
             <Link
               color='white'
-              href='https://docs.daohaus.club/v3Upgrade'
+              href='https://guide.daohaus.club/'
               isExternal
               mb='1.5rem'
             >
@@ -193,11 +193,11 @@ const Summon = () => {
             </Link>
             <Link
               color='white'
-              href='https://docs.daohaus.club/v3Upgrade'
+              href='https://guide.daohaus.club/quickstart/migrate'
               isExternal
             >
               <Text fontSize='lg'>
-                Learn more about v2 deprecation and migration to v3{' '}
+                Learn more about migration to v3{' '}
                 <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
               </Text>
             </Link>

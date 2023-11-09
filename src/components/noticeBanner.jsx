@@ -11,9 +11,13 @@ const NoticeBanner = () => {
       <Text fontSize='md' fontStyle='mono'>
         With Moloch v3 we are on a path to a decentralized future.
       </Text>
-      <Link color='white' href='https://docs.daohaus.club/v3Upgrade' isExternal>
+      <Link
+        color='white'
+        href='https://guide.daohaus.club/quickstart/migrate'
+        isExternal
+      >
         <Text fontSize='md'>
-          Learn more about how it impacts the features you know and love.
+          Learn about how to upgrade to v3
           <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
         </Text>
       </Link>
