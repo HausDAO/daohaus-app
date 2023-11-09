@@ -52,7 +52,11 @@ export const InjectedProvider = ({ children }) => {
     });
 
     const provider = await web3Modal.requestProvider();
-    provider.selectedAddress = deriveSelectedAddress(provider);
+    // this stopped working
+    // selectedAddress = deriveSelectedAddress(provider);
+
+    const derivedSelectedAddress = deriveSelectedAddress(provider);
+
     const chainId = deriveChainId(provider);
 
     const chain = {
@@ -61,10 +65,17 @@ export const InjectedProvider = ({ children }) => {
     };
     const web3 = new Web3(provider);
     if (web3?.currentProvider?.selectedAddress) {
-      setInjectedProvider(web3);
-      setAddress(web3.currentProvider.selectedAddress.toLowerCase());
-      setInjectedChain(chain);
-      setWeb3Modal(web3Modal);
+      if (web3?.currentProvider?.selectedAddress != derivedSelectedAddress) {
+        setInjectedProvider(web3);
+        setAddress(derivedSelectedAddress.toLowerCase());
+        setInjectedChain(chain);
+        setWeb3Modal(web3Modal);
+      } else {
+        setInjectedProvider(web3);
+        setAddress(web3.currentProvider.selectedAddress.toLowerCase());
+        setInjectedChain(chain);
+        setWeb3Modal(web3Modal);
+      }
     }
   };
 
