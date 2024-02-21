@@ -220,7 +220,8 @@ export const supportedChains = {
     archive_node_url:
       'https://poa-xdai-archival.gateway.pokt.network/v1/lb/624b0c653bd808003a85478e',
     abi_api_url:
-      'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
+      // 'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
+      'https://api.gnosisscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',

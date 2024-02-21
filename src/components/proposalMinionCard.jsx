@@ -55,6 +55,8 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
     let key;
     if (daochain === '0x89') {
       key = process.env.REACT_APP_POLYGONSCAN_KEY;
+    } else if (daochain === '0x64') {
+      key = process.env.REACT_APP_GNOSISSCAN_KEY;
     } else {
       key = process.env.REACT_APP_ETHERSCAN_KEY;
     }

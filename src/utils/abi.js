@@ -91,12 +91,17 @@ export const LOCAL_ABI = Object.freeze({
 });
 
 const getBlockExplorerApiKey = chainID => {
+  console.log('case', chainID);
   switch (chainID) {
     case '0x89': {
       return process.env.REACT_APP_POLYGONSCAN_KEY;
     }
     case '0x64': {
-      return null;
+      console.log(
+        'REACT_APP_GNOSISSCAN_KEY',
+        process.env.REACT_APP_GNOSISSCAN_KEY,
+      );
+      return process.env.REACT_APP_GNOSISSCAN_KEY;
     }
     default: {
       return process.env.REACT_APP_ETHERSCAN_KEY;
@@ -106,6 +111,8 @@ const getBlockExplorerApiKey = chainID => {
 
 const getABIurl = (contractAddress, chainID) => {
   const key = getBlockExplorerApiKey(chainID);
+
+  console.log('key', key);
   return key
     ? `${chainByID(chainID).abi_api_url}${contractAddress}&apiKey=${key}`
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
