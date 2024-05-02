@@ -435,9 +435,9 @@ export const supportedChains = {
       'https://explorer.celo.org/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://explorer.celo.org/api',
     subgraph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/8WBczDc3mUbtKymVSJJ6to5gUHDis6cWhd3RQnqAgpKW`,
-    boosts_graph_url: 'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-celo',
-    erc721_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-celo-subgraph',
+    boosts_graph_url: 
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-celo',
+    erc721_graph_url:'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-celo-subgraph',
     erc1155_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc1155-celo-subgraph',
     minion_factory_addr: '0xaD791Ef059A25b6C82e56977C6489974333C5A0C',
