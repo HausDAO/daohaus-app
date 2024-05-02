@@ -24,9 +24,9 @@ export const supportedChains = {
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.etherscan.io/api',
-    subgraph_url: process.env.REACT_APP_GRAPH_URL_MAINNET,
+    subgraph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/B4YHqrAJuQ1yD2U2tqgGXWGWJVeBrD25WRus3o9jLLBJ`,
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts',
+      `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/GT35VihGafYYf4oTJE49WqyVRfUq5q84sQpBvzmk21uv`,
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/sunguru98/mainnet-erc721-subgraph',
     erc1155_graph_url:
@@ -152,9 +152,9 @@ export const supportedChains = {
       'https://api-optimistic.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api-optimistic.etherscan.io/api',
     subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-optimism',
+      `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/E3sX66aoo1nCweKBENUPWWv3G3aBcoveMVCoDPGh3zCg`,
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-optimism',
+      `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/Bv8vCJbEm9Fa6GdPDUGQXv1z6AVoniPFQFgiL73JnMrZ`,
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-optimism-subgraph',
     erc1155_graph_url:
@@ -224,9 +224,9 @@ export const supportedChains = {
       'https://api.gnosisscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
     subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
+      `hhttps://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}//subgraphs/id/2GJY9uxsLQUCvgqSfy6QCLAJgM9P9kdxBUpwNcGs7nPR`,
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-xdai',
+    `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/DkcR1v7tYMSUYJpGqqryPaMY4AenpEa3Cg1MKcJNDSzy`,
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-xdai-subgraph',
     erc1155_graph_url:
@@ -332,10 +332,8 @@ export const supportedChains = {
     abi_api_url:
       'https://api.polygonscan.com/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.polygonscan.com/api',
-    subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
-    boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-matic',
+    subgraph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/AkzZk4BsvfNRkRDtzz7Bc8TgktTJN4uv9tgfCehhE6fB`,
+    boosts_graph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/JCt4yfxm1R3sEuJCy2j1HG7zpwrC63sWEUz44iwFd47A`,
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/sunguru98/matic-erc721-subgraph',
     erc1155_graph_url:
@@ -391,10 +389,9 @@ export const supportedChains = {
     abi_api_url:
       'https://api.arbiscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.arbiscan.io/api',
-    subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-arbitrum',
+    subgraph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/2c41cggebRCMzFiDqoqDwShZtz4xYucsFKbQnEiXUTzY`,
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-arbitrum',
+      `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/452sXAGYP2HBBCJa6i3DCYVhrhWZePh3vRDCD3PgrK6P`,
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/erc721-arbitrum-subgraph',
     erc1155_graph_url:
@@ -444,7 +441,7 @@ export const supportedChains = {
       'https://explorer.celo.org/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://explorer.celo.org/api',
     subgraph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-celo',
+      `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/8WBczDc3mUbtKymVSJJ6to5gUHDis6cWhd3RQnqAgpKW`,
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-celo',
     erc721_graph_url:
