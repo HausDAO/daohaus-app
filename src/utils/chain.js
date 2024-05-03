@@ -220,7 +220,7 @@ export const supportedChains = {
       // 'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
       'https://api.gnosisscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
-    subgraph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}//subgraphs/id/2GJY9uxsLQUCvgqSfy6QCLAJgM9P9kdxBUpwNcGs7nPR`,
+    subgraph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/2GJY9uxsLQUCvgqSfy6QCLAJgM9P9kdxBUpwNcGs7nPR`,
     boosts_graph_url: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.REACT_APP_GRAPH_KEY}/subgraphs/id/DkcR1v7tYMSUYJpGqqryPaMY4AenpEa3Cg1MKcJNDSzy`,
     erc721_graph_url:
       'https://api.thegraph.com/subgraphs/name/sunguru98/erc721-xdai-subgraph',
