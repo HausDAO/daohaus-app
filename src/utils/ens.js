@@ -104,9 +104,9 @@ export const handleGetENS = async address => {
   if (cachedENS) {
     return cachedENS;
   }
-  const ens = await fetchENS(address);
-  cacheENS(ens, address);
-  return ens;
+  // const ens = await fetchENS(address);
+  // cacheENS(ens, address);
+  // return ens;
 };
 
 export const lookupENS = async ens => {

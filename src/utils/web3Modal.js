@@ -23,7 +23,6 @@ const addNetworkProviders = chainData => {
         // infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
         rpc: {
           1: getRPCUrl(1),
-          5: `https://goerli.prylabs.net`,
           100: 'https://rpc.gnosischain.com/',
           137: 'https://polygon-rpc.com/',
           42161: 'https://arb1.arbitrum.io/rpc',
