@@ -52,12 +52,6 @@ export const EXPLORE_FILTER_OPTIONS = [
     default: true,
   },
   {
-    name: 'Göerli',
-    value: 5,
-    type: 'network',
-    default: false,
-  },
-  {
     name: 'Celo',
     value: 42220,
     type: 'network',

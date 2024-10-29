@@ -279,7 +279,7 @@ export const createGnosisSafeTxProposal = async ({
   });
   if (!safeSdk) throw new Error('Safe not found');
   const gasEstimate =
-    ['mainnnet', 'goerli'].includes(networkName) &&
+    ['mainnnet'].includes(networkName) &&
     (await postGnosisRelayApi(
       networkName,
       `safes/${safeAddress}/transactions/estimate/`,
