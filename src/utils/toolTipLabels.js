@@ -1,11 +1,4 @@
 export const TIP_LABELS = {
-  UBER_PROPOSAL: {
-    title: 'Uber Proposal',
-    pars: [
-      'This Proposal was created by an UberHaus Minion.',
-      "To perform the minion's action, hit the 'Execute' button after processing the proposal",
-    ],
-  },
   MINION_PROPOSAL: {
     title: 'Minion Proposal',
     pars: [
@@ -24,11 +17,13 @@ export const generateSFLabels = proposal => {
     const tokenRate = JSON.parse(proposal?.details)?.tokenRate;
     return {
       title: 'Superfluid Proposal',
-      pars: [
-        'This Minion will execute an agreement using Superfluid Protocol.',
-        'Constant Flow Agreement',
-        `Rate: ${tokenRate}`,
-      ],
+      pars: tokenRate
+        ? [
+            'This Minion will execute an agreement using Superfluid Protocol.',
+            'Constant Flow Agreement',
+            `Rate: ${tokenRate}`,
+          ]
+        : [],
     };
   } catch (error) {
     console.error('Could not parse details.tokenRate rate from JSON');
@@ -54,10 +49,12 @@ export const SF_LABEL = {
     body: 'You can cancel this stream before the proposal voting period ends.',
   },
   WITHDRAW: {
-    body: 'Outstanding balance will be downgraded and sent back to the DAO',
+    body:
+      'Outstanding balance will be downgraded and sent back to the DAO treasury',
   },
   UPGRADE: {
-    body: 'This action will convert the token balance into supertoken balance',
+    body:
+      'This action will request token funds from the DAO treasury so they can be conveted into Supertoken for streaming',
   },
   REGISTER: {
     title: 'IMPORTANT',
@@ -69,5 +66,8 @@ export const SF_LABEL = {
   TOKEN_BALANCES: {
     body:
       'To fund the Superfluid Minion you need to make a funding proposal from the DAO to the minion. Do not send tokens directly.',
+  },
+  CANCEL_STREAM: {
+    body: 'This action will send a DAO proposal to cancel the stream',
   },
 };

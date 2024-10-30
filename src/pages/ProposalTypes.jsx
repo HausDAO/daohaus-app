@@ -8,16 +8,17 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useAppModal } from '../hooks/useModals';
 import MainViewLayout from '../components/mainViewLayout';
 import PlaylistSelector from '../components/playlistSelector';
-import ProposalList from '../components/formList';
+import FormList from '../components/formList';
 import SaveButton from '../components/saveButton';
-import { CORE_FORMS } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { chainByID } from '../utils/chain';
 import { updateProposalConfig } from '../utils/metadata';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const dev = process.env.REACT_APP_DEV;
+const dev = process.env.REACT_APP_DEV === 'true';
 
-const orderPlaylistForms = playlists =>
-  playlists?.map(list => ({ ...list, forms: list.forms.sort() }));
+const orderPlaylistForms = (playlists, customData) =>
+  playlists?.map(list => ({ ...list, forms: list.forms.sort(), customData }));
 
 const ProposalTypes = () => {
   const {
@@ -26,6 +27,7 @@ const ProposalTypes = () => {
     dispatchPropConfig,
     refetchMetaData,
   } = useMetaData();
+  const { isMember } = useDaoMember();
   const { injectedProvider, address } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
   const { formModal, confirmModal, closeModal } = useAppModal();
@@ -35,6 +37,7 @@ const ProposalTypes = () => {
   const [selectedListID, setListID] = useState(
     dev && devList?.forms?.length ? 'dev' : 'all',
   );
+
   const [loading, setLoading] = useState(false);
 
   const selectList = id => {
@@ -73,7 +76,7 @@ const ProposalTypes = () => {
     const playlist = playlists?.find(list => list.id === id);
 
     formModal({
-      ...CORE_FORMS.EDIT_PLAYLIST,
+      ...FORM.EDIT_PLAYLIST,
       title: `Edit ${playlist?.name || 'Playlist'}?`,
       onSubmit: ({ values }) => {
         const name = values?.title;
@@ -102,7 +105,7 @@ const ProposalTypes = () => {
 
   const addPlaylist = () => {
     formModal({
-      ...CORE_FORMS.ADD_PLAYLIST,
+      ...FORM.ADD_PLAYLIST,
       onSubmit: ({ values }) => {
         dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
         closeModal();
@@ -119,9 +122,9 @@ const ProposalTypes = () => {
       <Flex flexDir='column' maxW={['100%', '90%', '80%']}>
         <Flex mb={[6, 12]} justifyContent='flex-end'>
           <SaveButton
-            watch={orderPlaylistForms(playlists)}
+            watch={orderPlaylistForms(playlists, customData)}
             saveFn={saveConfig}
-            disabled={loading}
+            disabled={loading || !isMember}
             blockRouteOnDiff
             undoChanges={undoChanges}
           >
@@ -131,6 +134,7 @@ const ProposalTypes = () => {
         {daoProposals ? (
           <Flex flexDir={['column', 'column', 'row']}>
             <PlaylistSelector
+              dev={dev}
               selectList={selectList}
               addPlaylist={addPlaylist}
               allForms={allForms}
@@ -140,7 +144,7 @@ const ProposalTypes = () => {
               editPlaylist={editPlaylist}
               devList={devList}
             />
-            <ProposalList
+            <FormList
               playlists={playlists}
               customData={customData}
               selectedListID={selectedListID}

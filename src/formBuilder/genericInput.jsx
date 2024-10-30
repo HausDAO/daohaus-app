@@ -20,8 +20,11 @@ const GenericInput = props => {
     onChange = null,
     disabled,
     defaultValue,
+    registerOptions,
+    formState,
   } = props;
   const { register } = localForm;
+
   return (
     <FieldWrapper {...props}>
       <InputGroup>
@@ -31,19 +34,21 @@ const GenericInput = props => {
           </InputLeftAddon>
         )}
         <Input
+          key={name}
           id={htmlFor}
           name={name}
           onChange={onChange}
           placeholder={placeholder || label || htmlFor}
-          ref={register}
-          disabled={disabled}
-          defaultValue={
-            defaultValue &&
-            (typeof defaultValue === 'function' ? defaultValue() : defaultValue)
-          }
+          ref={register(registerOptions)}
+          disabled={disabled || formState === 'loading'}
+          defaultValue={defaultValue}
         />
         {append && (
-          <InputRightAddon background='primary.600' p={0} borderColor='inherit'>
+          <InputRightAddon
+            background='primary.600'
+            p={typeof append === 'string' ? 4 : 0}
+            borderColor='inherit'
+          >
             {append}
           </InputRightAddon>
         )}

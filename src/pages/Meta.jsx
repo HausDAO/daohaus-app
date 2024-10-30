@@ -17,6 +17,7 @@ const Meta = ({ isMember, daoMetaData, refetchMetaData }) => {
         address: daoMetaData.contractAddress,
         name: daoMetaData.name,
         description: daoMetaData.description,
+        longDescription: daoMetaData.longDescription,
         purpose: daoMetaData.purpose,
         links: daoMetaData.links,
         avatarImg: daoMetaData.avatarImg,

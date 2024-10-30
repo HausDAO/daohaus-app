@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Box, Button, FormHelperText, Image, Spinner } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -67,10 +67,10 @@ const NiftyInkUrl = props => {
         setValue('targetInk', '');
       }
     };
-    if (targetInk) {
+    if (targetInk && daochain && injectedProvider) {
       getNiftyData();
     }
-  }, [targetInk]);
+  }, [targetInk, daochain, injectedProvider]);
   //  REVIEW
   //  Can this component use the usual FieldWrapper pattern?
 
@@ -78,7 +78,9 @@ const NiftyInkUrl = props => {
     <Box>
       <LinkInput {...props} />
 
-      {invalidLink && <ErrorList message='Invalid NiftyInk Url' />}
+      {invalidLink && (
+        <ErrorList singleError={{ message: 'Invalid NiftyInk Url' }} />
+      )}
       {nftData ? (
         <>
           <Image src={nftData.metadata.image} w='300px' h='300px' />

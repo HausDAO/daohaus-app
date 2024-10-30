@@ -7,7 +7,7 @@ import TextBox from './TextBox';
 const StakingSnapshot = () => {
   const [view, setView] = useState('staked');
 
-  const switchView = (e) => {
+  const switchView = e => {
     if (e?.target?.value) {
       setView(e.target.value);
     }

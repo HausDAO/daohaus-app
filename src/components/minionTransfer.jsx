@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
 import { Button, Tooltip } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
-import { daoConnectedAndSameChain } from '../utils/general';
+import useCanInteract from '../hooks/useCanInteract';
+import { MINION_TYPES } from '../utils/proposalUtils';
+import { fetchCrossChainZodiacModule } from '../utils/gnosis';
 import { getMinionActionFormLego } from '../utils/vaults';
 
 const LABELS = {
@@ -12,37 +12,80 @@ const LABELS = {
   MINION_NOT_READY: 'Must complete your minion setup',
 };
 
-const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
-  const { address, injectedChain } = useInjectedProvider();
+const MinionTransfer = ({
+  daochain,
+  isMember,
+  isNativeToken,
+  minion,
+  token,
+  vault,
+}) => {
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { formModal } = useAppModal();
-  const { daochain } = useParams();
+  const [loading, setLoading] = useState(false);
 
   const enableTransfer =
     isMember &&
     (!vault.safeAddress || (vault.safeAddress && vault.isMinionModule));
 
+  const tooltip =
+    ((!canInteract || !isMember) && LABELS.NO_MEMBER) ||
+    (!enableTransfer && LABELS.MINION_NOT_READY);
+
   const transferFormLego = useMemo(() => {
     const tokenType = isNativeToken ? 'network' : 'erc20';
-    return getMinionActionFormLego(tokenType, vault.minionType);
+    return getMinionActionFormLego(
+      tokenType,
+      vault.crossChainMinion ? MINION_TYPES.CROSSCHAIN_SAFE : vault.minionType,
+    );
   }, [isNativeToken]);
 
-  const openSendModal = () => {
+  const openSendModal = async () => {
+    setLoading(true);
+
+    let tokenAddress;
+    if (isNativeToken) {
+      tokenAddress = '0x00';
+    } else {
+      tokenAddress = token.contractAddress || token.tokenAddress;
+    }
     formModal({
       ...transferFormLego,
       localValues: {
-        tokenAddress: isNativeToken ? '0x00' : token.tokenAddress,
+        tokenAddress,
         minionAddress: minion,
         balance: token.tokenBalance,
         tokenDecimals: isNativeToken ? '18' : token.decimals,
+        foreignChainId: vault.foreignChainId,
+        bridgeModule: vault.bridgeModule,
+        bridgeModuleAddress:
+          vault.foreignSafeAddress &&
+          (await fetchCrossChainZodiacModule({
+            chainID: vault.foreignChainId,
+            crossChainController: {
+              address: vault.safeAddress,
+              bridgeModule: vault.bridgeModule,
+              chainId: daochain,
+            },
+            safeAddress: vault.foreignSafeAddress,
+          })),
       },
     });
+    setLoading(false);
   };
 
   return (
     <>
-      {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
-      enableTransfer ? (
-        <Button size='md' variant='outline' ml={6} onClick={openSendModal}>
+      {canInteract && enableTransfer ? (
+        <Button
+          size='md'
+          variant='outline'
+          ml={6}
+          isLoading={loading}
+          onClick={openSendModal}
+        >
           Transfer
         </Button>
       ) : (
@@ -50,7 +93,7 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token, vault }) => {
           hasArrow
           shouldWrapChildren
           placement='bottom'
-          label={!isMember ? LABELS.NO_MEMBER : LABELS.MINION_NOT_READY}
+          label={tooltip}
           bg='secondary.500'
         >
           <Button size='md' variant='outline' disabled>

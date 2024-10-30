@@ -10,6 +10,7 @@ const InputSelect = props => {
     localForm,
     selectChange,
     selectPlaceholder,
+    selectOptions,
     disabled,
   } = props;
 
@@ -35,7 +36,7 @@ const InputSelect = props => {
         <Select
           name={selectName || 'select'}
           onChange={handleSelectChange}
-          ref={register}
+          ref={selectOptions ? register(selectOptions) : register}
           disabled={disabled}
           borderTopLeftRadius='0'
           borderBottomLeftRadius='0'

@@ -1,25 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/button';
 import { Flex } from '@chakra-ui/layout';
 
 import GenericInput from './genericInput';
 
-const MultiInput = props => {
-  const { name } = props;
-  const [inputs, setInputs] = useState([
+const checkExistingMultis = props => {
+  const { name, localForm } = props;
+  const values = localForm?.watch?.();
+
+  if (Array.isArray(values[name])) {
+    return values[name].map((multi, index) => ({
+      ...props,
+      name: `${name}.${index}`,
+      htmlFor: `${name}.${index}`,
+    }));
+  }
+  return [
     {
       ...props,
-      name: `${name}*MULTI*${0}`,
-      htmlFor: `${name}*MULTI*${0}`,
+      name: `${name}.0`,
+      htmlFor: `${name}.0`,
     },
-  ]);
+  ];
+};
 
+const MultiInput = props => {
+  const { name } = props;
+  const [inputs, setInputs] = useState(null);
+
+  useEffect(() => {
+    console.log('COMPONENT MOUNT');
+    setInputs(checkExistingMultis(props));
+  }, [name]);
   const addCopy = () => {
     const nextIndex = inputs.length;
     const nextInput = {
       ...props,
-      name: `${name}*MULTI*${nextIndex}`,
-      htmlFor: `${name}-${nextIndex}`,
+      name: `${name}.${nextIndex}`,
+      htmlFor: `${name}.${nextIndex}`,
     };
     setInputs([...inputs, nextInput]);
   };
@@ -33,7 +51,7 @@ const MultiInput = props => {
 
   const getLabel = index => (index === 0 ? props.label : null);
   return (
-    <Flex flexDirection='column' maxH='200px' overflow='auto'>
+    <Flex flexDirection='column' maxH='200px' overflow='auto' key={name}>
       {inputs?.map((input, index) => {
         return (
           <GenericInput

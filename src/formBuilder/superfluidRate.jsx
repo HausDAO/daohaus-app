@@ -22,6 +22,7 @@ const SuperfluidRate = props => {
 
   const superfluidRate = watch('superfluidRate');
   const paymentToken = watch('paymentToken');
+  const rateString = watch('rateString');
 
   useEffect(() => {
     register('weiRatePerSec');
@@ -29,20 +30,27 @@ const SuperfluidRate = props => {
   }, []);
 
   useEffect(() => {
-    if (superfluidRate && +superfluidRate > 0) {
-      const newRate = parseFloat(+superfluidRate / +baseRate).toFixed(10);
-      const selectedTokenDecimals = currentDaoTokens.find(token => {
+    if (superfluidRate && Number(superfluidRate) > 0) {
+      const newRate = parseFloat(
+        Number(superfluidRate) / Number(baseRate),
+      ).toFixed(10);
+      const selectedToken = currentDaoTokens.find(token => {
         return token.tokenAddress === paymentToken;
-      }).decimals;
+      });
       const weiRatePerSec = parseInt(
-        (+superfluidRate * 10 ** +selectedTokenDecimals) / +baseRate,
+        (Number(superfluidRate) * 10 ** Number(selectedToken.decimals)) /
+          Number(baseRate),
       );
-      setPerSecond(newRate);
+      setPerSecond(`${newRate} ${selectedToken.symbol}/sec`);
       setValue(
         'rateString',
-        `${superfluidRate} ${rates.find(r => r.value === +baseRate).name}`,
+        `${superfluidRate} ${
+          rates.find(r => r.value === Number(baseRate)).name
+        }`,
       );
       setValue('weiRatePerSec', weiRatePerSec);
+    } else {
+      setValue('rateString', '');
     }
   }, [superfluidRate, baseRate]);
 
@@ -54,16 +62,20 @@ const SuperfluidRate = props => {
     <>
       <InputSelect
         {...props}
-        selectName='paymentToken'
+        selectName='availableRates'
         options={rates}
         selectChange={handleBaseRateChange}
+        disabled={!paymentToken}
       />
-      <GenericFormDisplay
-        override={perSecond}
-        localForm={localForm}
-        label='Tokens Streamed Per Second'
-        variant='value'
-      />
+      {rateString && (
+        <GenericFormDisplay
+          override={perSecond}
+          localForm={localForm}
+          label='Rate:'
+          name='streamedPerSecond'
+          variant='value'
+        />
+      )}
     </>
   );
 };

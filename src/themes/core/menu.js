@@ -20,6 +20,9 @@ const Menu = {
       _active: { bg: 'secondary.500' },
       _focus: { bg: 'secondary.500' },
     },
+    button: props => ({
+      ...props,
+    }),
   },
   sizes: {},
   defaultProps: {

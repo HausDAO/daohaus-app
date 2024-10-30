@@ -1,31 +1,24 @@
 import React from 'react';
 import { RiAddFill } from 'react-icons/ri';
-import { useParams } from 'react-router-dom';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
-import ActivitiesFeed from '../components/activitiesFeed';
 import MainViewLayout from '../components/mainViewLayout';
 import ProposalsList from '../components/proposalList';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { daoConnectedAndSameChain } from '../utils/general';
-import { getProposalsActivites } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
+import useCanInteract from '../hooks/useCanInteract';
 
-const Proposals = React.memo(({ proposals, activities, customTerms }) => {
-  const { daochain } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
+const Proposals = React.memo(({ proposals, customTerms }) => {
   const { setProposalSelector } = useOverlay();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain', 'spamFilterMemberOnlyOff'],
+  });
 
   const openProposalSelector = () => {
     setProposalSelector(true);
   };
 
-  const ctaButton = daoConnectedAndSameChain(
-    address,
-    injectedChain?.chainId,
-    daochain,
-  ) && (
+  const ctaButton = canInteract && (
     <Button
       rightIcon={<RiAddFill />}
       title={getTitle(customTerms, 'Proposal')}
@@ -43,18 +36,11 @@ const Proposals = React.memo(({ proposals, activities, customTerms }) => {
     >
       <Flex wrap='wrap'>
         <Box
-          w={['100%', null, null, null, '60%']}
+          w={['100%', null, null, '100%', '80%']}
           pr={[0, null, null, null, 6]}
           pb={6}
         >
           <ProposalsList proposals={proposals} customTerms={customTerms} />
-        </Box>
-        <Box w={['100%', null, null, null, '40%']}>
-          <ActivitiesFeed
-            limit={5}
-            activities={activities}
-            hydrateFn={getProposalsActivites}
-          />
         </Box>
       </Flex>
     </MainViewLayout>

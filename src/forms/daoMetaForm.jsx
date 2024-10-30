@@ -8,7 +8,6 @@ import {
   RiMediumFill,
 } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
 import {
   Flex,
   FormControl,
@@ -30,10 +29,8 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { daoPresets } from '../utils/summoning';
-import { getQueryStringParams } from '../utils/general';
 import { put, themeImagePath } from '../utils/metadata';
 import ImageUploadModal from '../modals/imageUploadModal';
-import { supportedChains } from '../utils/chain';
 
 const puposes = daoPresets('0x1').map(preset => preset.presetName);
 
@@ -43,7 +40,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const [loading, setLoading] = useState();
   const [uploading, setUploading] = useState();
   const { register, handleSubmit } = useForm();
-  const location = useLocation();
 
   const onSubmit = async data => {
     setLoading(true);
@@ -67,19 +63,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
         version: metadata.version,
         signature,
       };
-
-      if (location.search) {
-        const searchParams = getQueryStringParams(location.search);
-        if (searchParams.parentDao && searchParams.parentChainId) {
-          const ally = {
-            parent: searchParams.parentDao,
-            parentNetwork: supportedChains[searchParams.parentChainId].network,
-            allyType: 'uberHausBurner',
-          };
-
-          updateData.ally = ally;
-        }
-      }
 
       const res = await put('dao/update', updateData);
 
@@ -155,6 +138,18 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                     defaultValue={metadata.description}
                     placeholder='Describe your DAO...'
                     name='description'
+                  />
+                </FormControl>
+
+                <FormControl id='longDescription' mb={4}>
+                  <TextBox size='xs' mb={2}>
+                    Long Description
+                  </TextBox>
+                  <Textarea
+                    ref={register}
+                    defaultValue={metadata.longDescription}
+                    placeholder='More content (not currently displayed in the app, maybe soon)'
+                    name='longDescription'
                   />
                 </FormControl>
 

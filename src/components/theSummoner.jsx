@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { Box, Divider, Flex, Link } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
@@ -11,17 +11,7 @@ import TextBox from './TextBox';
 
 import { ignoreAwaitStep } from '../utils/formBuilder';
 import { MINIONS } from '../data/minions';
-
-// Make avaiable across app
-const minionFromDaoOverview = ({ searchBy, daoOverview, searchParam }) => {
-  if (!daoOverview || !searchBy || !searchParam) return;
-  if (searchBy === 'type')
-    return daoOverview.minions?.filter(
-      minion => minion.minionType === searchParam,
-    );
-  if (searchBy === 'name')
-    return daoOverview.minions.find(minion => minion.details === searchParam);
-};
+import { minionFromDaoOverview } from '../utils/general';
 
 const MinionFound = props => {
   const { minionType = 'minion' } = props;
@@ -65,6 +55,7 @@ const TheSummoner = props => {
     next,
     handleThen,
     currentStep,
+    updateFormSteps,
   } = props;
 
   const { daoOverview } = useDao();
@@ -79,11 +70,18 @@ const TheSummoner = props => {
   const summonData = MINIONS[minionType];
 
   useEffect(() => {
+    if (summonData.addSummonSteps) {
+      updateFormSteps(summonData.addSummonSteps);
+    }
+  }, [minionType]);
+
+  useEffect(() => {
     if (daoOverview && minionType && !menuState) {
       const minionsOfType = minionFromDaoOverview({
         searchBy: 'type',
         daoOverview,
         searchParam: minionType,
+        crossChain: false,
       });
       if (minionsOfType?.length) {
         setExistingMinions(minionsOfType);
@@ -169,6 +167,7 @@ const TheSummoner = props => {
           handleThen={handleThen}
           next={next}
           goToNext={goToNext}
+          parentForm={parentForm}
         />
         {!summonData?.summonForm && <TextBox>Error: Form not found</TextBox>}
       </Flex>

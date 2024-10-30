@@ -87,24 +87,6 @@ const ExploreFilterList = () => {
             })}
           </MenuGroup>
           <MenuDivider />
-          <MenuGroup title='Purpose'>
-            {EXPLORE_FILTER_OPTIONS.map(option => {
-              if (option.type === 'purpose') {
-                return renderOption(option, 'purpose');
-              }
-              return null;
-            })}
-          </MenuGroup>
-          <MenuDivider />
-          <MenuGroup title='Version'>
-            {EXPLORE_FILTER_OPTIONS.map(option => {
-              if (option.type === 'version') {
-                return renderOption(option, 'version');
-              }
-              return null;
-            })}
-          </MenuGroup>
-          <MenuDivider />
           <MenuGroup title='Member Count'>
             {EXPLORE_FILTER_OPTIONS.map(option => {
               if (option.type === 'members') {

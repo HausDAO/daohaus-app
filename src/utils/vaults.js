@@ -1,31 +1,18 @@
-import { ethers } from 'ethers';
-import { utils as Web3Utils } from 'web3';
-import { chainByID, supportedChains } from './chain';
+import { supportedChains } from './chain';
 import { isSameAddress } from './general';
 import { MINION_TYPES } from './proposalUtils';
-import { fetchSafeDetails } from './requests';
-import { FORM } from '../data/forms';
-import { VAULT_TRANSFER_TX } from '../data/transferContractTx';
+import { FORM } from '../data/formLegos/forms';
+import { VAULT_TRANSFER_TX } from '../data/txLegos/transferContractTX';
+import { getReadableBalance } from './tokenValue';
 
-export const getReadableBalance = tokenData => {
-  if (tokenData?.balance && tokenData.decimals) {
-    const { balance, decimals } = tokenData;
-    return Number(balance) / 10 ** Number(decimals);
-  }
+export const getVaultERC20s = (daoVaults, vaultAddress, localTokenAddress) => {
+  const erc20s = daoVaults?.find(vault =>
+    isSameAddress(vault.address, vaultAddress),
+  )?.erc20s;
+  return localTokenAddress && erc20s.length
+    ? erc20s.filter(erc20 => erc20.tokenAddress === localTokenAddress)
+    : erc20s;
 };
-export const getContractBalance = (readableBalance, decimals) => {
-  const floatPoint = readableBalance.split('.')[1]?.length;
-  const exponent = ethers.BigNumber.from(10).pow(
-    floatPoint ? decimals - floatPoint : decimals,
-  );
-  return ethers.utils
-    .parseUnits(readableBalance, floatPoint || 0)
-    .mul(exponent)
-    .toString();
-};
-
-export const getVaultERC20s = (daoVaults, vaultAddress) =>
-  daoVaults?.find(vault => isSameAddress(vault.address, vaultAddress))?.erc20s;
 
 export const getTokenFromList = (erc20s, tokenAddress) =>
   erc20s?.find(token => isSameAddress(token.contractAddress, tokenAddress));
@@ -77,12 +64,12 @@ export const formatNativeData = (daochain, balance) => {
   return [
     {
       isNative: true,
-      totalUSD: 0,
-      usd: 0,
+      totalUSD: balance.usdTotal,
+      usd: balance.usd,
       id: daochain,
       logoUri: '',
       tokenAddress: daochain,
-      tokenBalance: balance,
+      tokenBalance: balance.balance,
       decimals: '18',
       tokenName: supportedChains[daochain].nativeCurrency,
       symbol: supportedChains[daochain].nativeCurrency,
@@ -93,9 +80,14 @@ export const formatNativeData = (daochain, balance) => {
 const tokenFormsString = {
   erc20: 'MINION_SEND_ERC20_TOKEN',
   erc721: 'MINION_SEND_ERC721_TOKEN',
-  erc1155: 'MINION_SEND_ERC155_TOKEN',
+  erc1155: 'MINION_SEND_ERC1155_TOKEN',
   network: 'MINION_SEND_NETWORK_TOKEN',
   sellNifty: 'MINION_SELL_NIFTY',
+};
+
+export const getNftType = (nft, typeOverride) => {
+  if (typeOverride) return typeOverride;
+  return nft.type === 'ERC-1155' ? 'erc1155' : 'erc721';
 };
 
 export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
@@ -115,8 +107,34 @@ export const getMinionActionFormLego = (tokenType, vaultMinionType) => {
       tx: VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
     };
   }
+  if (vaultMinionType === MINION_TYPES.CROSSCHAIN_SAFE) {
+    const tx = {
+      ...VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`],
+      gatherArgs: [
+        {
+          ...VAULT_TRANSFER_TX[`${tokenFormsString[tokenType]}_SAFE`]
+            .gatherArgs[0],
+          crossChain: true, // mark as cross-chain. This is used in txHelpers.js
+        },
+        ...VAULT_TRANSFER_TX[
+          `${tokenFormsString[tokenType]}_SAFE`
+        ].gatherArgs.slice(1),
+      ],
+    };
+    return {
+      ...formLego,
+      minionType: MINION_TYPES.SAFE,
+      tx,
+    };
+  }
 
   return formLego;
+};
+
+export const getWalletConnectFormLego = vaultMinionType => {
+  if (vaultMinionType === MINION_TYPES.SAFE) {
+    return FORM.MINION_WALLETCONNECT;
+  }
 };
 
 export const vaultFilterOptions = [
@@ -145,14 +163,6 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion.minionAddress}`,
       };
-    case MINION_TYPES.UBER:
-      return {
-        badgeColor: 'purple',
-        badgeTextColor: 'white',
-        badgeName: 'UHS',
-        badgeVariant: 'solid',
-        url: `/dao/${daochain}/${daoid}/allies`,
-      };
     case MINION_TYPES.NIFTY:
       return {
         badgeColor: 'orange',
@@ -164,8 +174,10 @@ export const getVaultListData = (minion, daochain, daoid) => {
     case MINION_TYPES.SAFE:
       return {
         badgeColor: 'pink',
-        badgeTextColor: '#632b16',
-        badgeName: 'GNOSIS SAFE',
+        badgeTextColor: minion.crossChainMinion ? '#632fef' : '#632b16',
+        badgeName: minion.crossChainMinion
+          ? 'CROSS-CHAIN MINION'
+          : 'GNOSIS SAFE',
         badgeVariant: 'outline',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
@@ -177,25 +189,5 @@ export const getVaultListData = (minion, daochain, daoid) => {
         badgeVariant: 'solid',
         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
       };
-  }
-};
-
-export const validateSafeMinion = async (chainId, vault) => {
-  try {
-    const safeDetails = await fetchSafeDetails(
-      chainByID(chainId).network,
-      vault,
-    );
-    return {
-      isMinionModule: safeDetails.modules.includes(
-        Web3Utils.toChecksumAddress(vault.address),
-      ),
-      safeDetails,
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      isMinionModule: false,
-    };
   }
 };

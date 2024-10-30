@@ -24,115 +24,248 @@ export const HOME_DAO = gql`
         details
         minQuorum
         safeAddress
-        uberHausAddress
-        uberHausDelegate
-        uberHausDelegateRewardFactor
+        crossChainMinion
+        foreignChainId
+        foreignSafeAddress
+        bridgeModule
+        safeMinionVersion
       }
       depositToken {
         tokenAddress
         symbol
         decimals
       }
-      tokenBalances(where: { guildBank: true }) {
+    }
+  }
+`;
+
+export const HOME_DAO_TOKENS = gql`
+  query tokenBalances($contractAddr: String!) {
+    tokenBalances(
+      where: { guildBank: true, moloch: $contractAddr }
+      first: 500
+    ) {
+      id
+      token {
+        tokenAddress
+        symbol
+        decimals
+      }
+      tokenBalance
+      guildBank
+      moloch {
         id
-        token {
-          tokenAddress
-          symbol
-          decimals
-        }
-        tokenBalance
-        guildBank
-        # contractBalances @client
-        moloch {
-          id
-          version
-        }
+        version
       }
     }
   }
 `;
 
+const proposalFields = `
+id
+aborted
+applicant
+cancelled
+cancelledAt
+createdAt
+createdBy
+details
+didPass
+executed
+gracePeriodEnds
+guildkick
+isMinion
+lootRequested
+memberAddress
+minionExecuteActionTx {
+  id
+}
+newMember
+noShares
+noVotes
+paymentRequested
+paymentTokenDecimals
+paymentTokenSymbol
+processed
+processor
+processedAt
+proposer
+proposalId
+proposalIndex
+sharesRequested
+sponsored
+sponsor
+sponsoredAt
+startingPeriod
+trade
+tributeOffered
+tributeTokenDecimals
+tributeTokenSymbol
+tributeToken
+votingPeriodStarts
+votingPeriodEnds
+whitelist
+yesShares
+yesVotes
+molochAddress
+molochVersion
+minionAddress
+minion {
+  minionType
+  minQuorum
+  crossChainMinion
+  foreignChainId
+  safeMinionVersion
+  bridgeModule
+}
+actions {
+  target
+  data
+  memberOnly
+}
+moloch {
+  gracePeriodLength
+  periodDuration
+  version
+  votingPeriodLength
+}
+votes {
+  id
+  memberAddress
+  memberPower
+  uintVote
+  createdAt
+  molochAddress
+}
+escrow {
+  tokenAddresses
+  tokenTypes
+  tokenIds
+  amounts
+}
+`;
+
 export const DAO_ACTIVITIES = gql`
-  query molochActivities($contractAddr: String!, $skip: Int) {
-    moloch(id: $contractAddr) {
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits(where: {molochAddress: $contractAddr}) {
       id
-      version
-      proposals(orderBy: createdAt, orderDirection: desc, skip: $skip) {
-        id
-        aborted
-        applicant
-        cancelled
-        cancelledAt
-        createdAt
-        details
-        didPass
-        executed
-        gracePeriodEnds
-        guildkick
-        isMinion
-        lootRequested
-        memberAddress
-        newMember
-        noShares
-        noVotes
-        paymentRequested
-        paymentTokenDecimals
-        paymentTokenSymbol
-        processed
-        processor
-        processedAt
-        proposer
-        proposalId
-        proposalIndex
-        sharesRequested
-        sponsored
-        sponsor
-        sponsoredAt
-        startingPeriod
-        trade
-        tributeOffered
-        tributeTokenDecimals
-        tributeTokenSymbol
-        tributeToken
-        votingPeriodStarts
-        votingPeriodEnds
-        whitelist
-        yesShares
-        yesVotes
-        molochAddress
-        molochVersion
-        minionAddress
-        uberHausMinionExecuted
-        minion {
-          minionType
-          minQuorum
-        }
-        actions {
-          target
-          data
-        }
-        moloch {
-          gracePeriodLength
-          periodDuration
-          version
-          votingPeriodLength
-        }
-        votes {
-          id
-          memberAddress
-          memberPower
-          uintVote
-          createdAt
-          molochAddress
-        }
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_ACTIVITIES = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: true }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_GK_WL = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { 
+        molochAddress: $contractAddr
+        createdAt_gt: $createdAt
+        sponsored: false
+        guildkickOrWhitelistOrMinion: true
       }
-      rageQuits {
-        id
-        createdAt
-        memberAddress
-        shares
-        loot
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_TRIBUTE = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!, $requiredTributeMin: String!, $requiredTributeToken: String!) {
+    proposals(
+      where: { 
+        molochAddress: $contractAddr
+        createdAt_gt: $createdAt
+        sponsored: false
+        tributeOffered_gte: $requiredTributeMin
+        tributeToken: $requiredTributeToken
       }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+    rageQuits {
+      id
+      createdAt
+      memberAddress
+      shares
+      loot
+    }
+  }
+`;
+
+export const SPAM_FILTER_UNSPONSORED = gql`
+  query molochActivities($contractAddr: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr, createdAt_gt: $createdAt, sponsored: false, guildkickOrWhitelistOrMinion: false }
+      orderBy: createdAt
+      orderDirection: asc
+      first: 1000
+    ) {
+      ${proposalFields}
+    }
+  }
+`;
+
+export const SINGLE_PROPOSAL = gql`
+  query proposal($molochAddress: String!, $proposalId: String!) {
+    proposals(where: { molochAddress: $molochAddress, proposalId: $proposalId }) {
+      ${proposalFields}
+    }
+  }
+`;
+
+export const SINGLE_MEMBER = gql`
+  query member($id: String!) {
+    member(id: $id) {
+      id
+      createdAt
+      molochAddress
+      memberAddress
+      shares
+      loot
     }
   }
 `;
@@ -152,17 +285,6 @@ export const MINION_POLL = gql`
     moloch(id: $molochAddress) {
       id
       minions(where: { createdAt_gt: $createdAt }) {
-        id
-      }
-    }
-  }
-`;
-
-export const RAGE_QUIT_POLL = gql`
-  query rageQuits($molochAddress: String!, $createdAt: String!) {
-    moloch(id: $molochAddress) {
-      id
-      rageQuits(where: { createdAt_gt: $createdAt }) {
         id
       }
     }

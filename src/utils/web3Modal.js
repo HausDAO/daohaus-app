@@ -1,6 +1,6 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
-import { chainByID, chainByNetworkId } from './chain';
+import { chainByID, chainByNetworkId, getRPCUrl } from './chain';
 
 const isInjected = () => window.ethereum?.chainId;
 
@@ -22,12 +22,11 @@ const addNetworkProviders = chainData => {
       options: {
         // infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
         rpc: {
-          1: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
-          4: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
-          42: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-          100: 'https://dai.poa.network',
-          137: 'https://rpc-mainnet.maticvigil.com',
+          1: getRPCUrl(1),
+          100: 'https://rpc.gnosischain.com/',
+          137: 'https://polygon-rpc.com/',
           42161: 'https://arb1.arbitrum.io/rpc',
+          42220: 'https://forno.celo.org',
         },
       },
     };
@@ -71,13 +70,18 @@ export const deriveChainId = provider => {
 };
 
 export const deriveSelectedAddress = provider => {
+  console.log('provider', provider);
   if (provider.isMetaMask) {
+    console.log('is metamaskish');
     return provider.selectedAddress;
   }
   if (provider.wc) {
+    console.log('is wcish');
     return provider.accounts[0];
   }
   if (provider.safe) {
+    console.log('is safeish');
+
     return provider.safe.safeAddress;
   }
   // else if (provider.isPortis) {

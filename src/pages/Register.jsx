@@ -24,6 +24,7 @@ const Register = () => {
         address: daoid,
         name: '',
         description: '',
+        longDescription: '',
         purpose: '',
         summonerAddress: address,
         version: '2.1',

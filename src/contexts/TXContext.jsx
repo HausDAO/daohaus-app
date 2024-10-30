@@ -1,5 +1,6 @@
-import React, { useContext, createContext } from 'react';
+import React, { useContext, createContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
@@ -10,7 +11,6 @@ import { useToken } from './TokenContext';
 import { useUser } from './UserContext';
 import {
   createActions,
-  exposeValues,
   getArgs,
   handleFieldModifiers,
   createHydratedString,
@@ -21,12 +21,13 @@ import { createPoll } from '../services/pollService';
 import { createForumTopic } from '../utils/discourse';
 import { customValidations } from '../utils/validation';
 import { supportedChains } from '../utils/chain';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
+import { handleChecklist } from '../utils/appChecks';
 
 export const TXContext = createContext();
 
 export const TXProvider = ({ children }) => {
-  const { injectedProvider, address } = useInjectedProvider();
+  const { injectedProvider, address, injectedChain } = useInjectedProvider();
   const {
     resolvePoll,
     cachePoll,
@@ -41,7 +42,6 @@ export const TXProvider = ({ children }) => {
     daoMembers,
     daoProposals,
     daoVaults,
-    refreshAllDaoVaults,
   } = useDao();
   const { daoMetaData } = useMetaData();
   const {
@@ -58,9 +58,11 @@ export const TXProvider = ({ children }) => {
     memberWalletRef,
     isMember,
     daoMember,
+    delegate,
   } = useDaoMember();
 
   const { daoid, daochain, minion } = useParams();
+  const [txClock, setTxClock] = useState(uuid());
   const chainConfig = supportedChains[daochain];
 
   const contextData = {
@@ -75,6 +77,7 @@ export const TXProvider = ({ children }) => {
     currentDaoTokens,
     isMember,
     daoMember,
+    delegate,
     userHubDaos,
     outstandingTXs,
     daoVaults,
@@ -87,7 +90,6 @@ export const TXProvider = ({ children }) => {
     resolvePoll,
     cachePoll,
     refetch,
-    refreshAllDaoVaults,
     setTxInfoModal,
     setGenericModal,
     setModal,
@@ -113,15 +115,15 @@ export const TXProvider = ({ children }) => {
     // This should get up all the up to date data from the Graph and spread across the
     // entire component tree. It should also recache the new data automatically
     if (!skipVaults) {
-      console.log('vault fetch');
-      await refreshAllDaoVaults();
+      console.log('refresh');
+      console.log('refresh done');
     }
-    refetch();
+    await refetch();
+    setTxClock(uuid());
   };
 
   const buildTXPoll = data => {
     const { tx, values, formData, now, lifeCycleFns, localValues } = data;
-
     return createPoll({
       action: tx.poll || tx.specialPoll || tx.name,
       cachePoll,
@@ -200,7 +202,8 @@ export const TXProvider = ({ children }) => {
     });
 
     try {
-      const args = getArgs({ ...consolidatedData });
+      const args = await getArgs({ ...consolidatedData });
+      console.log(`args`, args);
       const poll = buildTXPoll({
         ...consolidatedData,
       });
@@ -239,10 +242,12 @@ export const TXProvider = ({ children }) => {
     if (!txExists) {
       throw new Error('TX CONTEXT: TX does not exist');
     }
-
-    //  Searches for items within the data tree and adds them to {values}
-    if (data?.tx?.exposeValues) {
-      return createTX(exposeValues({ ...data, contextData, injectedProvider }));
+    if (data?.tx?.minionType) {
+      const newData = {
+        ...data,
+        formData: { ...data?.formData, minionType: data?.tx?.minionType },
+      };
+      return createTX(newData);
     }
     return createTX(data);
   };
@@ -262,6 +267,24 @@ export const TXProvider = ({ children }) => {
       injectedProvider,
     });
 
+  const checkState = (checklist, errorDeliveryType, checkApiData) =>
+    checkApiData
+      ? handleChecklist(
+          {
+            ...contextData,
+            ...apiData,
+            injectedProvider,
+            injectedChain,
+          },
+          checklist,
+          errorDeliveryType,
+        )
+      : handleChecklist(
+          { ...contextData, injectedProvider, injectedChain },
+          checklist,
+          errorDeliveryType,
+        );
+
   return (
     <TXContext.Provider
       value={{
@@ -271,6 +294,8 @@ export const TXProvider = ({ children }) => {
         modifyFields,
         submitCallback,
         hydrateString,
+        checkState,
+        txClock,
       }}
     >
       {children}
@@ -286,6 +311,8 @@ export const useTX = () => {
     modifyFields,
     submitCallback,
     hydrateString,
+    checkState,
+    txClock,
   } = useContext(TXContext) || {};
   return {
     refreshDao,
@@ -294,5 +321,7 @@ export const useTX = () => {
     modifyFields,
     submitCallback,
     hydrateString,
+    checkState,
+    txClock,
   };
 };

@@ -10,16 +10,16 @@ import {
 } from 'react-icons/ri';
 import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import useCanInteract from '../hooks/useCanInteract';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
 import { fixSocialLink } from '../utils/navLinks';
-import { daoConnectedAndSameChain } from '../utils/general';
 
-const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
+const DaoMetaOverview = ({ daoMetaData }) => {
+  const { canInteract } = useCanInteract({});
+
   const { daochain, daoid } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
 
   return (
     <Flex as={ContentBox} mt={2} direction='column' w='100%'>
@@ -41,7 +41,7 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
           </Flex>
           <Flex mt={5}>{daoMetaData.description}</Flex>
           <Flex mt={5}>{daoMetaData.purpose}</Flex>
-          {daoMetaData.tags ? (
+          {daoMetaData.tags && (
             <>
               <Flex mt={5}>
                 <Stack direction='row'>
@@ -51,12 +51,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                 </Stack>
               </Flex>
             </>
-          ) : null}
-          {daoConnectedAndSameChain(
-            address,
-            daochain,
-            injectedChain?.chainId,
-          ) && +daoMember?.shares > 0 ? (
+          )}
+          {canInteract && (
             <>
               <Link
                 as={RouterLink}
@@ -65,27 +61,15 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                 fontSize='xs'
                 textTransform='uppercase'
                 letterSpacing='0.15em'
-                to={`/dao/${daochain}/${daoid}/settings/meta`}
-                mb={3}
+                to={`/dao/${daochain}/${daoid}/settings/audit`}
               >
-                Edit Metadata
-              </Link>
-              <Link
-                as={RouterLink}
-                color='secondary.500'
-                fontFamily='heading'
-                fontSize='xs'
-                textTransform='uppercase'
-                letterSpacing='0.15em'
-                to={`/dao/${daochain}/${daoid}/settings/theme`}
-              >
-                Edit Custom Theme
+                View Metadata Edit Log
               </Link>
             </>
-          ) : null}
+          )}
           {daoMetaData.name && (
             <Flex mt={3}>
-              {daoMetaData.links?.website ? (
+              {daoMetaData.links?.website && (
                 <Link
                   href={daoMetaData.links.website}
                   target='_blank'
@@ -100,8 +84,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.discord ? (
+              )}
+              {daoMetaData.links?.discord && (
                 <Link
                   href={fixSocialLink('discord', daoMetaData.links.discord)}
                   target='_blank'
@@ -115,8 +99,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.telegram ? (
+              )}
+              {daoMetaData.links?.telegram && (
                 <Link
                   href={fixSocialLink('telegram', daoMetaData.links.telegram)}
                   target='_blank'
@@ -130,8 +114,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.twitter ? (
+              )}
+              {daoMetaData.links?.twitter && (
                 <Link
                   href={fixSocialLink('twitter', daoMetaData.links.twitter)}
                   target='_blank'
@@ -145,8 +129,8 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
-              {daoMetaData.links?.medium ? (
+              )}
+              {daoMetaData.links?.medium && (
                 <Link
                   href={fixSocialLink('medium', daoMetaData.links.medium)}
                   target='_blank'
@@ -160,9 +144,9 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
+              )}
 
-              {daoMetaData.links?.other ? (
+              {daoMetaData.links?.other && (
                 <Link
                   href={daoMetaData.links.other}
                   target='_blank'
@@ -176,7 +160,7 @@ const DaoMetaOverview = ({ daoMetaData, daoMember }) => {
                     color='secondary.500'
                   />
                 </Link>
-              ) : null}
+              )}
             </Flex>
           )}
         </>

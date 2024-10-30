@@ -1,15 +1,18 @@
+// const { off } = require('process');
+
 module.exports = {
   env: {
     es2020: true,
     node: true,
     browser: true,
   },
+  root: true,
   // prettier should be last
   extends: [
     'eslint:recommended',
-    'airbnb',
     'plugin:prettier/recommended',
     'plugin:react/recommended',
+    // 'plugin:react/app',
   ],
   globals: {
     Atomics: 'readonly',
@@ -33,7 +36,7 @@ module.exports = {
       configFile: './babel.config.json',
     },
   },
-  plugins: ['react', 'react-hooks'],
+  plugins: ['react-hooks', 'react'],
   settings: {
     react: {
       version: 'detect',
@@ -42,7 +45,9 @@ module.exports = {
   rules: {
     // default rules
     'no-console': 'off',
-    'no-unused-vars': 'warn', // change to 'error' 🙏
+    'no-unused-vars': ['warn', { "varsIgnorePattern": "^_" }], // change to 'error' 🙏
+    'react/jsx-uses-react': 'error',
+    'react/jsx-uses-vars': 'error',
     'no-param-reassign': 'off', // priority 1, easy
     'no-shadow': 'off', // priority 1, med
     'no-nested-ternary': 'off', // priority 2, med
@@ -51,6 +56,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'guard-for-in': 'off', // priority 2, two instances
     'max-len': 'off',
+    'no-unsafe-optional-chaining': 'off',
     'no-return-assign': 'off', // priority 1, easy
     'consistent-return': 'off', // priority 2, harder basically all the services
     radix: 'off', // priority 1, parseInt ??

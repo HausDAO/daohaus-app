@@ -4,26 +4,21 @@ import { useParams } from 'react-router-dom';
 import { Box, Button, Flex, Icon, Tooltip } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { capitalize, daoConnectedAndSameChain } from '../utils/general';
-import { chainByID, EIP3085, MM_ADDCHAIN_DATA } from '../utils/chain';
+import useCanInteract from '../hooks/useCanInteract';
+import { capitalize } from '../utils/general';
+import { chainByID, EIP3085, switchNetwork } from '../utils/chain';
 
 const WrongNetworkToolTip = () => {
-  const { address, injectedChain, injectedProvider } = useInjectedProvider();
+  const { address, injectedProvider } = useInjectedProvider();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { daochain } = useParams();
   const daoChainName = chainByID(daochain)?.name;
 
   const handleSwitchNetwork = async () => {
     if (daochain && window.ethereum) {
-      try {
-        await window.ethereum?.request({
-          id: '1',
-          jsonrpc: '2.0',
-          method: 'wallet_addEthereumChain',
-          params: [MM_ADDCHAIN_DATA[daochain]],
-        });
-      } catch (error) {
-        console.error(error);
-      }
+      switchNetwork(daochain);
     }
   };
 
@@ -31,10 +26,7 @@ const WrongNetworkToolTip = () => {
     return null;
   }
 
-  if (
-    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) ||
-    !injectedProvider?.currentProvider?.isMetaMask
-  ) {
+  if (canInteract || !injectedProvider?.currentProvider?.isMetaMask) {
     return <NetworkTextBox name={daoChainName} />;
   }
 
@@ -101,7 +93,7 @@ const NetworkTextBox = ({ name }) => (
   </Flex>
 );
 
-const ToolTipLabel = ({ daoChainName }) => (
+export const ToolTipLabel = ({ daoChainName }) => (
   <Box fontFamily='heading' color='white'>
     {`Please update your network to
       ${capitalize(daoChainName)} to interact with

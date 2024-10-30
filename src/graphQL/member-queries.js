@@ -21,6 +21,8 @@ export const HUB_MEMBERSHIPS = gql`
       id
       memberAddress
       molochAddress
+      shares
+      loot
       moloch {
         id
         version
@@ -98,6 +100,17 @@ export const MEMBERS_LIST = gql`
       memberAddress
       exists
       createdAt
+      isDao {
+        id
+      }
+      isSafeMinion {
+        id
+        minions {
+          minionAddress
+          molochAddress
+          safeMinionVersion
+        }
+      }
       moloch {
         id
         totalShares
@@ -130,17 +143,6 @@ export const MEMBERS_LIST = gql`
         didPass
         cancelled
       }
-    }
-  }
-`;
-
-export const MEMBER_DELEGATE_KEY = gql`
-  query membersList($contractAddr: String!, $memberAddr: String!) {
-    members(
-      where: { molochAddress: $contractAddr, memberAddress: $memberAddr }
-    ) {
-      memberAddress
-      delegateKey
     }
   }
 `;

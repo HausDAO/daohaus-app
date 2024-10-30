@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Flex, Box, Image, useToast, Icon } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -28,6 +28,23 @@ const balanceCard = ({
   const [wnzAddress, setWnzAddress] = useState(null);
   const [needsPoke, setNeedsPoke] = useState(null);
   const { injectedProvider } = useInjectedProvider();
+  const [tokenPrice, setTokenPrice] = useState({ usd: 0, totalUSD: 0 });
+
+  useEffect(() => {
+    if (vault && token) {
+      const match = vault.erc20s.find(
+        erc => erc.tokenAddress == token.tokenAddress,
+      );
+
+      if (match) {
+        console.log('match', match, token);
+        setTokenPrice({
+          usd: match.usd,
+          totalUSD: +match.usd * (token.tokenBalance / 10 ** +token.decimals),
+        });
+      }
+    }
+  }, [vault, token]);
 
   useEffect(() => {
     if (token?.contractBalances) {
@@ -88,23 +105,40 @@ const balanceCard = ({
       </Box>
       <Box w={['40%', null, null, '40%']}>
         <Box fontFamily='mono'>
-          {`${displayBalance(token.tokenBalance, token.decimals) || 0} ${
-            token.symbol
-          }`}
+          {`${displayBalance(
+            token.tokenBalance || token.balance,
+            token.decimals,
+          ) || 0} ${token.symbol}`}
         </Box>
       </Box>
       {!isNativeToken && (
         <>
           <Box w='20%' d={['none', null, null, 'inline-block']}>
             <Box fontFamily='mono'>
-              <Box>{`$${numberWithCommas(token?.usd.toFixed(2)) || 0}`}</Box>
+              {token.usd ? (
+                <Box>{`$${numberWithCommas(token?.usd?.toFixed(2)) || 0}`}</Box>
+              ) : (
+                <Box>{`$${numberWithCommas(tokenPrice?.usd?.toFixed(2)) ||
+                  0}`}</Box>
+              )}
             </Box>
           </Box>
           <Box w={['25%', null, null, '30%']}>
             <Box fontFamily='mono'>
-              <Box>
-                {`$${numberWithCommas(token?.totalUSD.toFixed(2)) || 0}`}
-              </Box>
+              {token.totalUSD ? (
+                <Box>
+                  {!isNaN(token?.totalUSD)
+                    ? `$${numberWithCommas(token?.totalUSD?.toFixed(2)) || 0}`
+                    : `$0`}
+                </Box>
+              ) : (
+                <Box>
+                  {!isNaN(tokenPrice?.totalUSD)
+                    ? `$${numberWithCommas(tokenPrice?.totalUSD?.toFixed(2)) ||
+                        0}`
+                    : `$0`}
+                </Box>
+              )}
             </Box>
           </Box>
         </>
@@ -114,8 +148,9 @@ const balanceCard = ({
         {hasBalance && <Withdraw token={token} />}
         {needsPoke && <PokeTokenButton wnzAddress={wnzAddress} />}
         {needsSync && <SyncTokenButton token={token} />}
-        {minion && token?.tokenBalance > 0 && (
+        {minion && Number(token?.tokenBalance) > 0 && (
           <MinionTransfer
+            daochain={daochain}
             isMember={isMember || delegate}
             isNativeToken={isNativeToken}
             minion={minion}

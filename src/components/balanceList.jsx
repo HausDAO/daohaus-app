@@ -4,7 +4,6 @@ import { Flex, Text, Box } from '@chakra-ui/react';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import BalanceCard from './balanceCard';
-import MinionVaultRefreshButton from './minionVaultRefreshButton';
 
 const BalanceList = ({
   balances,
@@ -13,7 +12,6 @@ const BalanceList = ({
   needsSync,
   vault,
   isNativeToken,
-  isTreasury,
 }) => {
   const balanceListTitle = useMemo(() => {
     if (vault) {
@@ -34,9 +32,9 @@ const BalanceList = ({
         <TextBox size='xs' mb={6}>
           {balanceListTitle}
         </TextBox>
-        {!isNativeToken && !isTreasury && balances?.length > 0 && (
+        {/* {!isNativeToken && !isTreasury && isMember && (
           <MinionVaultRefreshButton />
-        )}
+        )} */}
       </Flex>
       <Flex w='100%'>
         <Box w='25%' d={['none', null, null, 'inline-block']}>
@@ -61,10 +59,10 @@ const BalanceList = ({
       {balances ? (
         balances
           .sort((a, b) => b.totalUSD - a.totalUSD)
-          .map(token => {
+          .map((token, i) => {
             return (
               <BalanceCard
-                key={token?.id}
+                key={token?.contractAddress || i}
                 token={token}
                 hasBalance={hasBalance}
                 hasSync={needsSync}

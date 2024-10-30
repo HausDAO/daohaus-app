@@ -1,10 +1,13 @@
 import { BOOSTS } from '../data/boosts';
 import { capitalize, omit } from './general';
 import { chainByNetworkId } from './chain';
-import { addBoostPlaylist, checkIsPlaylist, hasPlaylist } from './playlists';
+import {
+  addBoostPlaylist,
+  checkIsPlaylist,
+  hasPlaylist,
+} from '../data/playlists';
 
 const metadataApiUrl = 'https://data.daohaus.club';
-const ccoApiUrl = 'https://cco.daohaus.club';
 
 export const fetchMetaData = async endpoint => {
   const url = `${metadataApiUrl}/dao/${endpoint}`;
@@ -13,7 +16,7 @@ export const fetchMetaData = async endpoint => {
     const response = await fetch(url);
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -24,36 +27,19 @@ export const getApiMetadata = async () => {
     );
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
-export const fetchApiVaultData = async (network, minions) => {
+export const fetchApiVaultData = async (network, minions, daoid) => {
   try {
-    const response = await fetch(`${metadataApiUrl}/dao/vaults`, {
-      method: 'POST',
-      body: JSON.stringify({ network, minions }),
-    });
+    const response = await fetch(
+      `${metadataApiUrl}/dao/allvaults/${network}/${daoid}`,
+    );
 
     return response.json();
   } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const putRefreshApiVault = async args => {
-  try {
-    const body = { ...args };
-    const response = await fetch(`${metadataApiUrl}/dao/refresh-vault`, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-    });
-
-    console.log('response', response);
-
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -206,24 +192,7 @@ export const boostPost = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const ccoPost = async (endpoint, data) => {
-  const url = `${ccoApiUrl}/${endpoint}`;
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Haus-Key': process.env.REACT_APP_HAUS_KEY,
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -240,7 +209,7 @@ export const ipfsPrePost = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -257,7 +226,7 @@ export const ipfsPost = async (creds, file) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -275,7 +244,17 @@ export const ipfsJsonPin = async (creds, obj) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
+  }
+};
+
+export const getIPFSPinata = async ({ hash }) => {
+  const url = `https://daohaus.mypinata.cloud/ipfs/${hash}`;
+  try {
+    const res = await fetch(url);
+    return res.json();
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -292,7 +271,7 @@ export const post = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -309,7 +288,7 @@ export const put = async (endpoint, data) => {
     });
     return response.json();
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -321,27 +300,7 @@ export const getForumTopics = async categoryId => {
 
     return response.json();
   } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getEligibility = async (ccoId, address) => {
-  try {
-    const response = await fetch(
-      `${ccoApiUrl}/cco/eligibility/${ccoId}/${address}`,
-    );
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getDateTime = async () => {
-  try {
-    const response = await fetch('https://data.daohaus.club/dao/get-utc');
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
@@ -351,11 +310,11 @@ export const getNftMeta = async url => {
 
     return response.json();
   } catch (error) {
-    throw new Error(error);
+    console.error(error);
   }
 };
 
-export const updateProposalConfig = async (proposalConfig, params) => {
+export const updateProposalConfig = async (daoProposals, params) => {
   const {
     meta,
     injectedProvider,
@@ -365,6 +324,7 @@ export const updateProposalConfig = async (proposalConfig, params) => {
     onSuccess,
   } = params;
 
+  const proposalConfig = omit(['devList'], daoProposals);
   if (!meta || !injectedProvider || !proposalConfig || !network)
     throw new Error('proposalConfig => handlePostNewConfig');
   try {
@@ -401,6 +361,7 @@ export const addBoost = async ({
   onSuccess,
   onError,
 }) => {
+  const propConfig = proposalConfig && omit(['devList'], proposalConfig);
   if (!meta || !injectedProvider || !address || !network)
     throw new Error('proposalConfig => @ addBoost(), undefined param(s)');
 
@@ -418,11 +379,8 @@ export const addBoost = async ({
       signature,
     };
 
-    if (proposalConfig) {
-      const newPropConfig = addBoostPlaylist(
-        proposalConfig,
-        boostData.playlist,
-      );
+    if (propConfig) {
+      const newPropConfig = addBoostPlaylist(propConfig, boostData.playlist);
       updateData.proposalConfig = newPropConfig;
     }
 

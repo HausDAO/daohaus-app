@@ -1,9 +1,12 @@
 import React from 'react';
 import { Flex, Button } from '@chakra-ui/react';
 
+import useCanInteract from '../hooks/useCanInteract';
 import TextBox from './TextBox';
 
-const ListItemButton = ({ onClick, helperText, mainText, value, disabled }) => {
+const ListItemButton = ({ onClick, helperText, mainText, value }) => {
+  const { canInteract } = useCanInteract({});
+
   const handleClick = () => onClick?.(value);
   return (
     <Flex flexDir='column' alignItems={['flex-start', 'flex-end']} mt='1'>
@@ -11,7 +14,7 @@ const ListItemButton = ({ onClick, helperText, mainText, value, disabled }) => {
         variant='ghost'
         p={0}
         onClick={handleClick}
-        disabled={disabled}
+        disabled={!canInteract}
         h='fit-content'
         w='fit-content'
       >

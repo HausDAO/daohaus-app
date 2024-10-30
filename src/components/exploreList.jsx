@@ -31,18 +31,9 @@ const ExploreList = ({ handleDaoCalculate }) => {
 
         const memberCount =
           dao.members.length > (state.filters.members[0] || 0);
-        const versionMatch = state.filters.version.includes(dao.version);
-        const purposeMatch = state.filters.purpose.includes(dao.meta.purpose);
         const networkMatch = state.filters.network.includes(dao.networkId);
 
-        return (
-          searchMatch &&
-          tagMatch &&
-          memberCount &&
-          versionMatch &&
-          purposeMatch &&
-          networkMatch
-        );
+        return searchMatch && tagMatch && memberCount && networkMatch;
       })
       .sort((a, b) => {
         if (state.sort.count) {

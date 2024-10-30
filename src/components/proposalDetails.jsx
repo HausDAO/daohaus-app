@@ -11,11 +11,10 @@ import DiscourseProposalTopic from './discourseProposalTopic';
 import MediaBox from './mediaBox';
 import MemberIndicator from './memberIndicator';
 import ProposalMinionCard from './proposalMinionCard';
+import ProposalDocLocationCard from './proposalDocLocationCard';
 import TextBox from './TextBox';
 import TextIndicator from './textIndicator';
 import TokenDisplay from './tokenDisplay';
-import UberDaoInfo from './uberDaoInfo';
-import UberHausDelegate from './uberhausDelegate';
 import Vote from './voteIcon';
 import {
   determineProposalStatus,
@@ -28,10 +27,6 @@ import {
 import { getCustomProposalTerm } from '../utils/metadata';
 import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
 import { handleDecimals } from '../utils/general';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
-
-const UBER_LINK =
-  '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
 
 const urlify = text => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -42,16 +37,13 @@ const urlify = text => {
 
 const ProposalDetails = ({
   proposal,
-  daoMember,
   hideMinionExecuteButton,
   minionAction,
 }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
-  const { isUberHaus, daoOverview } = useDao();
+  const { daoOverview } = useDao();
   const [status, setStatus] = useState(null);
-  const { daoid } = useParams();
-
   useEffect(() => {
     if (proposal) {
       const statusStr = determineProposalStatus(proposal);
@@ -60,9 +52,6 @@ const ProposalDetails = ({
   }, [proposal]);
 
   const handleRecipient = () => {
-    if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
-      return <UberDaoInfo proposal={proposal} />;
-    }
     if (proposal?.minion) {
       return (
         <MinionBox
@@ -133,13 +122,41 @@ const ProposalDetails = ({
                 ))}
             </Skeleton>
           )}
+          {proposal?.proposalType === 'change location of DAO DOC' ? (
+            <>
+              <Box w='100%'>{proposal?.description}</Box>
+              <ProposalDocLocationCard proposal={proposal} />
+            </>
+          ) : (
+            ''
+          )}
           {proposal?.proposalType === PROPOSAL_TYPES.WHITELIST && (
             <TokenDisplay tokenAddress={proposal.tributeToken} />
+          )}
+          {proposal?.escrow?.tokenAddresses?.length > 0 && (
+            <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
+              <Box mb={3}>
+                <TextBox size='xs' mb={2}>
+                  Token Offered
+                </TextBox>
+                <TextBox size='xs'>
+                  Type:{' '}
+                  {proposal.escrow.tokenTypes[0] === '1' ? 'ERC721' : 'ERC1155'}
+                </TextBox>
+                <TextBox size='xs'>
+                  Address: {proposal.escrow.tokenAddresses[0]}
+                </TextBox>
+                <TextBox size='xs'>ID: {proposal.escrow.tokenIds[0]} </TextBox>
+                <TextBox size='xs'>
+                  Amount: {1 || proposal.escrow.amounts[0]}
+                </TextBox>
+              </Box>
+            </Flex>
           )}
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link && <MediaBox link={proposal.link} />}
           </Box>
-          <DiscourseProposalTopic proposal={proposal} daoMember={daoMember} />
+          <DiscourseProposalTopic proposal={proposal} />
         </Box>
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
@@ -192,7 +209,7 @@ const ProposalDetails = ({
           w='100%'
         >
           <MemberIndicator
-            address={proposal?.proposer}
+            address={proposal?.createdBy}
             label='submitted by'
             shouldFetchProfile
           />
@@ -206,9 +223,6 @@ const ProposalDetails = ({
               ))}
           </Flex>
         </Flex>
-        {proposal?.minion?.minionType === MINION_TYPES.UBER && (
-          <UberHausDelegate proposal={proposal} />
-        )}
       </ContentBox>
     </Box>
   );
@@ -219,13 +233,15 @@ export default ProposalDetails;
 const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
   const { daoid, daochain } = useParams();
 
-  const minionName = useMemo(() => {
+  const minion = useMemo(() => {
     if (daoOverview && proposal) {
       return daoOverview.minions.find(minion => {
         return minion.minionAddress === proposal.minionAddress;
-      })?.details;
+      });
     }
   }, [daoOverview, proposal]);
+
+  const minionName = minion?.details;
 
   if (!daoOverview || !proposal) {
     return <Spinner />;
@@ -233,19 +249,6 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
 
   const { minionType } = proposal.minion;
 
-  if (minionType === MINION_TYPES.UBER) {
-    return (
-      <MemberIndicator
-        address={proposal?.minionAddress}
-        label='uberhaus minion'
-        tooltip
-        tooltipText={TIP_LABELS.UBER_PROPOSAL}
-        link={UBER_LINK}
-        shouldFetchProfile
-        name={minionName}
-      />
-    );
-  }
   // handles case of a funding proposal sending funds to a minion address
   if (
     [MINION_TYPES.VANILLA, MINION_TYPES.NIFTY, MINION_TYPES.SAFE].includes(
@@ -256,9 +259,13 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
     return (
       <MemberIndicator
         address={proposal?.minionAddress}
-        label='minion'
+        label={`${minion?.crossChainMinion ? 'cross-chain ' : ''}minion`}
         tooltip
-        tooltipText={TIP_LABELS.FUNDING_MINION_PROPOSAL}
+        tooltipText={
+          proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID
+            ? generateSFLabels(proposal)
+            : TIP_LABELS.FUNDING_MINION_PROPOSAL
+        }
         link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
         shouldFetchProfile
         name={minionName}
@@ -273,9 +280,13 @@ const MinionBox = ({ proposal, daoOverview, hideMinionExecuteButton }) => {
     return (
       <MemberIndicator
         address={proposal?.minionAddress}
-        label='minion'
+        label={`${minion?.crossChainMinion ? 'cross-chain ' : ''}minion`}
         tooltip
-        tooltipText={TIP_LABELS.MINION_PROPOSAL}
+        tooltipText={
+          proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID
+            ? generateSFLabels(proposal)
+            : TIP_LABELS.MINION_PROPOSAL
+        }
         link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
         shouldFetchProfile
         name={minionName}

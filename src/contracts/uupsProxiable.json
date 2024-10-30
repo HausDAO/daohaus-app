@@ -1,0 +1,16 @@
+
+[
+  {
+    "inputs": [],
+    "name": "getCodeAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "codeAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

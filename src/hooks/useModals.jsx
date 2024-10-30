@@ -3,6 +3,7 @@ import { Flex } from '@chakra-ui/react';
 
 import { OverlayContext } from '../contexts/OverlayContext';
 import FormBuilder from '../formBuilder/formBuilder';
+import MultiForm from '../formBuilder/multiForm';
 import StepperForm from '../formBuilder/StepperForm';
 import TextBox from '../components/TextBox';
 
@@ -25,13 +26,31 @@ export const useAppModal = () => {
 
   return {
     formModal(form) {
-      setModal({
-        title: form.title,
-        subtitle: form.subtitle || form.type,
-        description: form.description,
-        body: <FormBuilder {...form} />,
-        width: form.customWidth || calcMaxWidth(form),
-      });
+      if (form.type === 'multiForm') {
+        setModal({
+          title: form.title,
+          subtitle: form.subtitle,
+          description: form.description,
+          body: <MultiForm {...form} />,
+          width: form.customWidth || calcMaxWidth(form),
+        });
+      } else if (form.type === 'multiStep') {
+        const updateModalUI = ({ subtitle, title }) => {
+          setModal(prevState => ({ ...prevState, subtitle, title }));
+        };
+        setModal({
+          body: <StepperForm steps={form} updateModalUI={updateModalUI} />,
+          width: form.customWidth || calcMaxWidth(form),
+        });
+      } else {
+        setModal({
+          title: form.title,
+          subtitle: form.subtitle || form.type,
+          description: form.description,
+          body: <FormBuilder {...form} />,
+          width: form.customWidth || calcMaxWidth(form),
+        });
+      }
     },
     devFormModal(form) {
       setModal({

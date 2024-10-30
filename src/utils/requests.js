@@ -1,11 +1,11 @@
 import { utils as Web3Utils } from 'web3';
 
+import { supportedChains } from './chain';
+
 const metadataApiUrl = 'https://data.daohaus.club';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
-const apiPricedataUrl =
-  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const apiPricedataUrl = 'https://data.daohaus.club/dao-tokens';
 const mintGateUrl = 'https://link.mintgate.app/api';
-const snapshotUrl = 'https://hub.snapshot.page/api';
 
 export const get = async endpoint => {
   const url = `${metadataApiUrl}/${endpoint}`;
@@ -125,7 +125,6 @@ export const getApiPriceData = async () => {
 
 export const getApiGnosis = async (networkName, endpoint) => {
   const apiGnosisUrl = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
-
   try {
     const response = await fetch(apiGnosisUrl);
     if (response.status >= 400) {
@@ -140,11 +139,12 @@ export const getApiGnosis = async (networkName, endpoint) => {
   }
 };
 
-export const fetchSafeDetails = async (networkName, vault) => {
+// Use fetchSafeDetails from ./gnosis instead
+export const fetchSafeDetails = async (networkName, safeAddress) => {
   try {
     return await getApiGnosis(
       networkName,
-      `safes/${Web3Utils.toChecksumAddress(vault.safeAddress)}`,
+      `safes/${Web3Utils.toChecksumAddress(safeAddress)}`,
     );
   } catch (error) {
     console.error(error);
@@ -158,7 +158,8 @@ export const postApiGnosis = async (
   data,
   getJSONResponse = true,
 ) => {
-  const url = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
+  const network = networkName === 'matic' ? 'polygon' : networkName;
+  const url = `https://safe-transaction.${network}.gnosis.io/api/v1/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -218,31 +219,22 @@ export const getMintGates = async tokenAddress => {
   }
 };
 
-export const getSnapshotProposals = async space => {
-  const snapshotProposalUrl = `${snapshotUrl}/${space}/proposals`;
+export const getRaribleApi = async (daochain, endpoint) => {
+  const url = `${supportedChains[daochain].rarible.api_url}/${endpoint}`;
   try {
-    const response = await fetch(snapshotProposalUrl);
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getSnapshotVotes = async (space, snapshotId) => {
-  const snapshotVoteUrl = `${snapshotUrl}/${space}/proposal/${snapshotId}`;
-  try {
-    const response = await fetch(snapshotVoteUrl);
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getSnapshotSpaces = async () => {
-  const snapshotSpacesUrl = `${snapshotUrl}/spaces`;
-  try {
-    const response = await fetch(snapshotSpacesUrl);
-    return response.json();
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (data.status && data.code) {
+      throw new Error(
+        `An error occurred while calling Rarible GET (${endpoint}) API (${data.code}): ${data.message}`,
+      );
+    }
+    return data;
   } catch (err) {
     throw new Error(err);
   }

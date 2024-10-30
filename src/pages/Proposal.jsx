@@ -12,9 +12,10 @@ import TextBox from '../components/TextBox';
 import { createContract } from '../utils/contract';
 import { getProposalHistories } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
-import { LOCAL_ABI } from '../utils/abi';
-import { MINION_ACTION_FUNCTION_NAMES } from '../utils/proposalUtils';
-import { transactionByProposalType } from '../utils/txHelpers';
+import { getMinionAbi } from '../utils/abi';
+import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
+import { fetchSingleProposal } from '../utils/theGraph';
+import { proposalResolver } from '../utils/resolvers';
 
 const Proposal = ({
   activities,
@@ -29,32 +30,66 @@ const Proposal = ({
 
   const [minionAction, setMinionAction] = useState(null);
   const [hideMinionExecuteButton, setHideMinionExecuteButton] = useState(null);
+  const [currentProposal, setCurrentProposal] = useState(null);
 
-  const currentProposal = activities
-    ? activities?.proposals?.find(proposal => proposal.proposalId === propid)
-    : null;
+  useEffect(() => {
+    const setUpProposal = async () => {
+      const prop = activities.proposals?.find(
+        proposal => proposal.proposalId === propid,
+      );
+
+      if (!prop) {
+        const res = await fetchSingleProposal({
+          chainID: daochain,
+          molochAddress: daoid,
+          proposalId: propid,
+        });
+
+        if (res.proposals[0]) {
+          setCurrentProposal(
+            proposalResolver(res.proposals[0], {
+              status: true,
+              title: true,
+              description: true,
+              link: true,
+              hash: true,
+              proposalType: true,
+            }),
+          );
+        }
+      } else {
+        setCurrentProposal(prop);
+      }
+    };
+    if (activities && propid.match(/^\d+$/)) {
+      setUpProposal();
+    }
+  }, [activities, propid]);
 
   const handleRefreshDao = () => {
-    refreshDao();
+    const skipVaults = true;
+    refreshDao(skipVaults);
   };
 
   useEffect(() => {
     const getMinionAction = async currentProposal => {
       try {
-        const tx = transactionByProposalType(currentProposal);
-        const abi = LOCAL_ABI[tx.contract.abiName];
+        const { minionType, safeMinionVersion } = currentProposal.minion;
+        const abi = getMinionAbi(minionType, safeMinionVersion || '1');
         const web3Contract = createContract({
           address: currentProposal.minionAddress,
           abi,
           chainID: daochain,
         });
-        const action = await web3Contract.methods[
-          MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
-        ](currentProposal.proposalId).call();
+
+        const actionName = MINION_ACTION_FUNCTION_NAMES[minionType];
+        const action = await web3Contract.methods[actionName](
+          currentProposal.proposalId,
+        ).call();
 
         setMinionAction(action);
 
-        // hides execute minion button on funding and payroll proposals
+        // hides execute minion button on funding and payroll proposals, & executed action on safe minion
         if (action[1] === '0x0000000000000000000000000000000000000000') {
           setHideMinionExecuteButton(true);
         } else {
@@ -99,7 +134,6 @@ const Proposal = ({
             </Link>
             <ProposalDetails
               proposal={currentProposal}
-              daoMember={daoMember}
               overview={overview}
               hideMinionExecuteButton={hideMinionExecuteButton}
               minionAction={minionAction}
@@ -111,7 +145,7 @@ const Proposal = ({
             pt={[6, 0]}
           >
             <Flex justifyContent='space-between'>
-              {!currentProposal?.cancelled && (
+              {(!currentProposal?.cancelled || currentProposal?.escrow) && (
                 <TextBox size='md'>Actions</TextBox>
               )}
 
@@ -124,7 +158,7 @@ const Proposal = ({
               />
             </Flex>
             <Stack pt={6} spacing={6}>
-              {!currentProposal?.cancelled && (
+              {(!currentProposal?.cancelled || currentProposal?.escrow) && (
                 <ProposalActions
                   proposal={currentProposal}
                   overview={overview}

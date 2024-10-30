@@ -7,8 +7,12 @@ import deepEqual from 'deep-eql';
 import MainViewLayout from '../components/mainViewLayout';
 import NftCard from '../components/nftCard';
 import NftFilter from '../components/nftFilter';
-import { concatNftSearchData } from '../utils/nftVaults';
-import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
+import {
+  concatNftSearchData,
+  filterUniqueNfts,
+  nftFilterOptions,
+  nftSortOptions,
+} from '../utils/nftData';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
@@ -20,24 +24,24 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   const [allCollections, setAllCollections] = useState([]);
   const [nfts, setNfts] = useState(null);
   const [nftData, setNftData] = useState(null); // Grab Vault NFTs
+  const [vaultMatch, setVaultMatch] = useState(null);
   useEffect(() => {
     if (daoVaults) {
       let nfts = [];
       if (minion) {
-        nfts = daoVaults?.find(vault => {
+        const vault = daoVaults?.find(vault => {
           return vault.address === minion;
-        })?.nfts;
+        });
+        nfts = vault?.nfts?.map(n => {
+          return {
+            ...n,
+            minionAddress: vault.address,
+            minionType: vault.minionType,
+          };
+        });
+        setVaultMatch(vault);
       } else {
-        nfts = daoVaults?.reduce((acc, item) => {
-          const nftsWithMinionAddress = item.nfts.map(n => {
-            return {
-              ...n,
-              minionAddress: item.address,
-              minionType: item.minionType,
-            };
-          });
-          return [...acc, ...nftsWithMinionAddress];
-        }, []);
+        nfts = filterUniqueNfts(daoVaults);
       }
       setNftData(nfts);
       setNfts(nfts);
@@ -166,16 +170,6 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
               options={nftFilterOptions}
             />
           </Box>
-          {/* <Box
-            ml='auto'
-            mt={[5, 0, null, 0]}
-            mr={[0, 5, null, 5]}
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize={['sm', null, null, 'md']}
-          >
-            View Balances
-          </Box> */}
         </Flex>
         <Wrap flex={1} spacing={4} w='100%'>
           {nfts &&
@@ -187,6 +181,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
                   minion={minion || nft.minionAddress}
                   minionType={nft.minionType}
                   width={['85vw', '85vw', 350, 350]}
+                  vault={vaultMatch}
                 />
               </WrapItem>
             ))}

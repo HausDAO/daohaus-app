@@ -4,12 +4,10 @@ import { useDao } from '../contexts/DaoContext';
 import InputSelect from './inputSelect';
 import ModButton from './modButton';
 import { handleDecimals } from '../utils/general';
-import {
-  getReadableBalanceFromList,
-  getReadableBalance,
-  getVaultERC20s,
-} from '../utils/vaults';
+import { getReadableBalanceFromList, getVaultERC20s } from '../utils/vaults';
 import { validate } from '../utils/validation';
+import { getContractBalance, getReadableBalance } from '../utils/tokenValue';
+import { spreadOptions } from '../utils/formBuilder';
 
 const MinionToken = props => {
   const { daoVaults } = useDao();
@@ -19,10 +17,12 @@ const MinionToken = props => {
     name,
     listenTo = 'selectedMinion',
     selectName = 'minionToken',
+    registerOptions,
   } = props;
   const { watch, setValue } = localForm;
 
   const [minionTokens, setMinionTokens] = useState(null);
+  const [selectedToken, setSelectedToken] = useState(null);
 
   const selectedMinion = localValues?.minionAddress || watch(listenTo);
   const minionToken = watch(selectName);
@@ -46,14 +46,17 @@ const MinionToken = props => {
       const tokenData = minionTokens?.find(
         token => token.contractAddress === minionToken,
       );
-      const commified = handleDecimals(
-        tokenData.balance,
-        tokenData.decimals,
-      )?.toFixed(4);
-      return commified;
+      if (tokenData) {
+        const { balance, decimals } = tokenData;
+        const commified = handleDecimals(balance, decimals)?.toFixed(4);
+
+        setSelectedToken(tokenData);
+        return commified;
+      }
     }
 
-    if (localValues?.balance) {
+    if (localValues?.balance && localValues?.tokenDecimals) {
+      setSelectedToken(localValues);
       return handleDecimals(
         localValues.balance,
         localValues.tokenDecimals,
@@ -65,8 +68,13 @@ const MinionToken = props => {
 
   useEffect(() => {
     if (daoVaults && selectedMinion) {
-      const minionErc20s = getVaultERC20s(daoVaults, selectedMinion);
-      if (minionErc20s?.length && !localValues?.tokenAddress) {
+      const minionErc20s = getVaultERC20s(
+        daoVaults,
+        selectedMinion,
+        localValues?.tokenAddress,
+      );
+
+      if (minionErc20s?.length) {
         setMinionTokens(minionErc20s);
       } else {
         setMinionTokens(false);
@@ -78,6 +86,7 @@ const MinionToken = props => {
   const setMax = () => {
     if (minionToken && minionTokens) {
       const balance = getReadableBalanceFromList(minionTokens, minionToken);
+
       setValue(name, balance);
     }
 
@@ -86,9 +95,18 @@ const MinionToken = props => {
         balance: localValues.balance,
         decimals: localValues.tokenDecimals,
       });
+
       setValue(name, formattedBalance);
     }
   };
+  const options = spreadOptions({
+    registerOptions,
+    setValueAs: val =>
+      getContractBalance(
+        val,
+        localValues?.tokenDecimals || selectedToken?.decimals,
+      ),
+  });
 
   return (
     <InputSelect
@@ -97,6 +115,7 @@ const MinionToken = props => {
       options={minionTokenDisplay}
       disabled={isDisabled}
       helperText={!selectedMinion && 'Please select a minion'}
+      registerOptions={options}
       btn={
         selectedMinion && (
           <ModButton

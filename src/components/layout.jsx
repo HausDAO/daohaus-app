@@ -7,6 +7,7 @@ import MobileNav from '../nav/mobileNav';
 import { themeImagePath } from '../utils/metadata';
 
 import '../global.css';
+import NoticeBanner from './noticeBanner';
 
 const Layout = ({ children, dao }) => {
   const { theme } = useCustomTheme();
@@ -55,6 +56,7 @@ const Layout = ({ children, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
+        <NoticeBanner />
         {children}
       </Flex>
     </Flex>

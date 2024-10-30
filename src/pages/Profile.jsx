@@ -3,7 +3,7 @@ import { Flex, Box } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import BankList from '../components/BankList';
+import BankList from '../components/bankList';
 import ActivitiesFeed from '../components/activitiesFeed';
 import ProfileCard from '../components/profileCard';
 import MainViewLayout from '../components/mainViewLayout';
@@ -14,9 +14,9 @@ import { initTokenData } from '../utils/tokenValue';
 const Profile = ({ members, overview, daoTokens, activities }) => {
   const { userid, daochain } = useParams();
   const { address } = useInjectedProvider();
+  const [profile, setProfile] = useState(null);
 
   const [memberEntity, setMemberEntity] = useState(null);
-  const [profile, setProfile] = useState(null);
   const [tokensReceivable, setTokensReceivable] = useState([]);
 
   useEffect(() => {
@@ -34,20 +34,20 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     const getProfile = async () => {
       try {
         const profile = await handleGetProfile(userid);
-        if (profile.status === 'error') return;
+        if (!profile) return;
         setProfile(profile);
       } catch (error) {
         console.error(error);
       }
     };
-    if (userid && !profile) {
+    if (userid) {
       getProfile();
     }
-  }, [userid, profile]);
+  }, [userid]);
 
   useEffect(() => {
     const initMemberTokens = async tokensWithBalance => {
-      const newTokenData = await initTokenData(tokensWithBalance);
+      const newTokenData = await initTokenData(daochain, tokensWithBalance);
       setTokensReceivable(newTokenData);
     };
     if (memberEntity?.tokenBalances && daochain) {
@@ -84,6 +84,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
             ens={profile?.ens}
             profile={profile}
             memberEntity={memberEntity}
+            refreshProfile={setProfile}
           />
           <BankList
             tokens={tokensReceivable}

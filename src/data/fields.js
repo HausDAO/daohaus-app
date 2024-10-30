@@ -1,6 +1,6 @@
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
-import { generateNonce } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { POST_LOCATIONS } from '../utils/poster';
 
 export const INFO_TEXT = {
   SHARES_REQUEST:
@@ -19,6 +19,8 @@ export const INFO_TEXT = {
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
   NFT_PRICE: 'Price in xDai',
   MINION_VALUE: 'Value in wei of network token for payable functions.',
+  SPAM_FILTER_AMOUNT:
+    'Proposals with tribute offered less than this amount in the deposit token will be filterd out of your proposal list.',
   MINION_QUORUM:
     'Warning: 51% or more is recommended to ensure the community majority approve decisions.',
   NIFTY_REPAYMENT_REQUEST:
@@ -27,8 +29,15 @@ export const INFO_TEXT = {
     'Allows the DAO to execute proposals once a set percentage of passed votes has been reached. We recommend 50% or higher. This cannot be changed once deployed.',
   RAGE_QUIT_INPUT: 'Shares or loot to rage quit. Whole numbers only please.',
   SAFE_ADDRESS: 'Address of an already deployed Gnosis Safe.',
+  FOREIGN_SAFE_ADDRESS:
+    'Address of an already deployed Gnosis Safe on the Foreign Chain.',
+  TRIBUTE_MINION:
+    'This is the minion that will receive the NFT after the proposal passes.',
+  NFT_ADDRESS: 'This should be the contract address for the NFT.',
+  NFT_TOKEN_ID:
+    'This should be the Token ID for your NFT and then select the correct NFT standard.',
+  BUYOUT_MINION: 'This proposal must be executed by a minion.',
 };
-
 export const FIELD = {
   TITLE: {
     type: 'input',
@@ -106,7 +115,6 @@ export const FIELD = {
     label: 'Tribute Offered',
     info: INFO_TEXT.TOKEN_TRIBUTE,
     expectType: 'number',
-    modifiers: ['addTributeDecimals'],
   },
   PAYMENT_REQUEST: {
     type: 'paymentInput',
@@ -116,7 +124,6 @@ export const FIELD = {
     label: 'Payment Requested',
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
-    modifiers: ['addPaymentDecimals'],
   },
   ONLY_ERC20: {
     type: 'gatedInput',
@@ -167,7 +174,23 @@ export const FIELD = {
     expectType: 'address',
     filters: {
       [MINION_TYPES.SAFE]: minionVault => {
-        return minionVault.isMinionModule;
+        return minionVault.isMinionModule && !minionVault.crossChainMinion;
+      },
+      [MINION_TYPES.CROSSCHAIN_SAFE]: minionVault => {
+        return minionVault.crossChainMinion;
+      },
+    },
+  },
+  CROSSCHAIN_MINION_SELECT: {
+    type: 'minionSelect',
+    label: 'Select a minion',
+    name: 'selectedMinion',
+    htmlFor: 'selectedMinion',
+    placeholder: 'Choose a cross-chain minion',
+    expectType: 'address',
+    filters: {
+      [MINION_TYPES.SAFE]: minionVault => {
+        return minionVault.isMinionModule && minionVault.crossChainMinion;
       },
     },
   },
@@ -189,8 +212,8 @@ export const FIELD = {
   },
   SET_PRICE: {
     type: 'priceInput',
-    htmlFor: 'sellPrice',
-    name: 'sellPrice',
+    htmlFor: 'orderPrice',
+    name: 'orderPrice',
     placeholder: '0',
     label: 'Set Price (Take)',
     expectType: 'number',
@@ -200,7 +223,7 @@ export const FIELD = {
     htmlFor: 'nftAddress',
     name: 'nftAddress',
     label: 'Select an NFT',
-    expectType: 'address',
+    expectType: 'any',
   },
   RARIBLE_NFT_DATA: {
     type: 'raribleNftData',
@@ -209,11 +232,49 @@ export const FIELD = {
     label: 'Vaild Rarible Order Data',
     expectType: 'any',
   },
+  DATE_RANGE_SWITCH: {
+    type: 'toggleForm',
+    listenTo: 'formCondition',
+    checked: 'fixed',
+    unchecked: 'unset',
+    label: {
+      type: 'formCondition',
+      fixed: 'Fixed Length',
+      unset: 'Unset',
+    },
+    title: 'Auction Duration',
+    expectType: 'any',
+  },
+  NFT_INPUT: {
+    type: 'input',
+    htmlFor: 'nftAddress',
+    name: 'nftAddress',
+    placeholder: '0x',
+    label: 'Token Address',
+    expectType: 'address',
+    info: INFO_TEXT.NFT_ADDRESS,
+  },
+  TOKEN_INFO_INPUT: {
+    type: 'tokenInfoInput',
+    htmlFor: 'tokenId',
+    name: 'tokenId',
+    placeholder: '0',
+    label: 'Token Info',
+    expectType: 'number',
+    info: INFO_TEXT.NFT_TOKEN_ID,
+  },
+  NFT_APPROVAL: {
+    type: 'nftApproval',
+    htmlFor: 'nftApproval',
+    name: 'nftApproval',
+    label: 'NFT Approval',
+    expectType: 'boolean',
+  },
   DATE_RANGE: {
     type: 'dateRange',
     htmlFor: 'dateRange',
     name: 'dateRange',
-    label: 'Set Auction Duration',
+    label: 'Set Date Range',
     expectType: 'any',
   },
   DELEGATE_ADDRESS: {
@@ -252,27 +313,37 @@ export const FIELD = {
     placeholder: 'Sally',
     expectType: 'any',
   },
+  PRECOMPUTED_MINION_NAME: {
+    type: 'precomputedMinionName',
+    label: 'Minion Name',
+    name: 'minionName',
+    helperText: 'All minions get a name',
+    htmlFor: 'minionName',
+    placeholder: 'Sally',
+    expectType: 'any',
+  },
   MINION_QUORUM: {
-    type: 'conditionalInput',
-    append: '%',
-    conditionalLabel: 'Allow Minimum Quorum',
-    conditionalDesc: INFO_TEXT.QUORUM,
-    label: 'Minumum Quorum',
-    name: 'minQuorum',
-    htmlFor: 'minQuorum',
-    placeholder: '50',
-    info: INFO_TEXT.MINION_QUORUM,
-    expectType: 'number',
-    defaultValue: () => 0,
+    type: 'checkGate',
+    title: 'Allow Minimum Quorum',
+    description: INFO_TEXT.QUORUM,
+    renderOnCheck: {
+      name: 'minQuorum',
+      htmlFor: 'minQuorum',
+      label: 'Minumum Quorum',
+      expectType: 'number',
+      append: '%',
+      type: 'input',
+      info: INFO_TEXT.MINION_QUORUM,
+      placeholder: '51',
+    },
   },
   SALT_NONCE: {
-    type: 'input',
+    type: 'saltGenerator',
     label: 'Salt Nonce',
     name: 'saltNonce',
     hidden: true,
     htmlFor: 'saltNonce',
     expectType: 'any',
-    defaultValue: generateNonce,
   },
   NIFTY_MINION_PAYMENT_REQUEST: {
     type: 'paymentInput',
@@ -291,6 +362,13 @@ export const FIELD = {
     label: 'Target NiftyInk Url',
     expectType: 'any',
   },
+  NFT_URI: {
+    type: 'targetNft',
+    htmlFor: 'targetNft',
+    name: 'targetNft',
+    label: 'Target NFT Uri',
+    expectType: 'any',
+  },
   PROPOSAL_NAME: {
     name: 'name',
     type: 'input',
@@ -300,14 +378,6 @@ export const FIELD = {
     placeholder: 'Proposal Name',
     expectType: 'any',
   },
-  // PARAGRAPHS: {
-  //   type: 'paragraphs',
-  //   pars: [] /* Overwrite with customCopy */,
-  // },
-  // HEADER: {
-  //   type: 'header',
-  //   headerText: 'Empty' /* Overwrite with custom Copy */,
-  // },
   MINION_TYPE_SELECT: {
     type: 'minionTypeSelect',
     name: 'minionType',
@@ -362,31 +432,166 @@ export const FIELD = {
     htmlFor: 'discourseMeta',
     expectType: 'any',
   },
-
-  TEST_SWITCH: {
-    type: 'checkSwitch',
+  SUMMON_MODE_SWITCH: {
+    type: 'toggleForm',
     listenTo: 'formCondition',
-    checked: 'token',
-    unchecked: 'signal',
+    checked: 'advanced',
+    unchecked: 'easy',
     label: {
       type: 'formCondition',
-      token: 'checked',
-      signal: 'not checked',
+      easy: 'Easy Mode',
+      advanced: 'Advanced Mode',
     },
-    title: 'Create a token proposal',
-    description: {
-      type: 'formCondition',
-      token: 'This creates a WhiteList Token TX',
-      signal: 'This creates a signal proposal',
-    },
+    title: 'Minion Setup',
     expectType: 'any',
   },
-  TEST_GATE: {
-    type: 'checkGate',
-    startsChecked: false,
-    label: 'Toggle Field State',
-    title: 'Check to render Description',
-    description: 'You bet',
+  BASIC_SWITCH: {
+    type: 'switch',
+    checked: 'true',
+    unchecked: 'false',
+    label: 'Yes or No?',
+    expectType: 'any',
+  },
+  AVATAR: {
+    type: 'imageInput',
+    label: 'avatar',
+    name: 'image',
+    htmlFor: 'avatar',
+  },
+  DISPERSE_CSV: {
+    type: 'disperseListInput',
+    listenTo: 'formCondition',
+    label: 'Recipients and Amounts',
+    name: 'disperseList',
+    htmlFor: 'disperseList',
+    disperseType: {
+      type: 'formCondition',
+      eth: 'eth',
+      token: 'token',
+    },
+    placeholder: '0x1234...5678 1.23 \n0x8765...4321,3.21\n0x5678...1234=3.21',
+    expectType: 'disperseList',
+  },
+  DISPERSE_TYPE_SWITCH: {
+    type: 'toggleToken',
+    listenTo: 'formCondition',
+    checked: 'eth',
+    unchecked: 'token',
+    label: {
+      type: 'formCondition',
+      token: 'Token',
+      eth: 'Eth',
+    },
+    title: 'Funding Type',
+    expectType: 'any',
+  },
+  MINION_TOKEN_SELECT: {
+    type: 'minionTokenSelect',
+    label: 'Select a Token',
+    name: 'tokenAddress',
+    htmlFor: 'tokenAddress',
+    placeholder: 'Choose a Token',
+    expectType: 'address',
+  },
+  TUTORIAL: {
+    type: 'tutorial',
+    label: 'Test',
+    name: 'stakingAddress',
+    htmlFor: 'stakingAddress',
+    placeholder: '0x',
+    expectType: 'address',
+  },
+  TUTORIAL2: {
+    type: 'tutorial2',
+    label: 'Token Amount',
+    name: 'tokenAmt',
+    htmlFor: 'tokenAmt',
+    listenTo: 'stakingTokenDecimals',
+    placeholder: '3.14',
+    expectType: 'number',
+  },
+  FOREIGN_CHAIN_SELECT: {
+    type: 'foreignChainSelect',
+    label: 'Select a Foreign Chain',
+    name: 'foreignChainId',
+    htmlFor: 'foreignChainId',
+    placeholder: 'Choose a Foreign Chain',
+    expectType: 'any',
+  },
+  SWITCH_NETWORK: {
+    type: 'switchNetwork',
+    label: 'Switch Network',
+    name: 'swithNetwork',
+    htmlFor: 'swithNetwork',
+    placeholder: 'Change Network',
+    warningMessage: '',
+    expectType: 'any',
+  },
+  BRIDGE_ENCODER: {
+    type: 'bridgeEncoder',
+    label: '',
+    name: 'bridgeEncoder',
+    htmlFor: 'bridgeEncoder',
+  },
+  POST_TITLE: {
+    type: 'input',
+    label: 'Post Title',
+    name: 'posterData.title',
+    htmlFor: 'posterData.title',
+    placeholder: 'Post Title',
+    expectType: 'any',
+  },
+  POST_LOCATION_SELECT: {
+    type: 'select',
+    name: 'posterData.location',
+    htmlFor: 'posterData.location',
+    label: 'Post Location',
+    options: [
+      { name: 'Docs', value: POST_LOCATIONS.DOCS },
+      { name: 'Front Page', value: POST_LOCATIONS.FRONT_PAGE },
+      { name: 'Vaults Page', value: POST_LOCATIONS.VAULT_PAGE },
+    ],
+  },
+  MD_EDITOR: {
+    type: 'mdEditor',
+    name: 'posterData.content',
+    htmlFor: 'posterData.content',
+  },
+  POSTER_ENCODER: {
+    type: 'posterEncoder',
+    name: 'posterData',
+  },
+  DOC_SELECT: {
+    type: 'docSelect',
+    name: 'docSelect',
+    label: 'DAO Docs',
+    listenTo: 'newLocation',
+  },
+  // STRINGIFY: {
+  //   type: 'stringify',
+  //   name: 'stringified',
+  //   listenTo: null, // restructure with this field targeting the field you'd like to stringify
+  // },
+  WALLETCONNECT_TX: {
+    type: 'walletConnectTx',
+    name: 'wcTxRequest',
+    label: 'WalletConnect Link',
+    expectType: 'any',
+  },
+  TOKEN_NAME: {
+    type: 'input',
+    label: 'Name',
+    name: 'token_name',
+    htmlFor: 'token_name',
+    placeholder: 'Token Name',
+    expectType: 'any',
+  },
+  TOKEN_SYMBOL: {
+    type: 'input',
+    label: 'Symbol',
+    name: 'token_symbol',
+    htmlFor: 'token_symbol',
+    placeholder: 'Token Symbol',
     expectType: 'any',
   },
 };

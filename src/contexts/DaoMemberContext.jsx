@@ -29,7 +29,7 @@ export const DaoMemberProvider = ({
   useEffect(() => {
     const checkForMember = daoMembers => {
       return daoMembers.find(
-        member => member.memberAddress === address && +member.shares > 0,
+        member => member.memberAddress === address && Number(member.shares) > 0,
       );
     };
 
@@ -100,7 +100,7 @@ export const DaoMemberProvider = ({
     ) {
       assembleMemberWallet();
     }
-  }, [daoMember, overview, daochain, daoid, delegate]);
+  }, [daoMember, overview, daochain, daoid, delegate, address]);
 
   return (
     <DaoMemberContext.Provider

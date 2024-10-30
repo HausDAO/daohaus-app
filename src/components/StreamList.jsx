@@ -2,24 +2,28 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Flex, Box, Skeleton, Text } from '@chakra-ui/react';
 
+import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useUser } from '../contexts/UserContext';
+import { SUPERFLUID_MINION_TX as TX } from '../data/txLegos/superfluidMinionTx';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import StreamListItem from './StreamListItem';
+import StreamListItemV2 from './StreamListItemV2';
 import { createPoll } from '../services/pollService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 
-const StreamList = ({ list, loadingStreams, balances }) => {
+const StreamList = ({ list, loadingStreams, balances, minionType }) => {
   const [loading, setLoading] = useState({
     active: false,
     proposalId: null,
   });
+  const { daoOverview } = useDao();
   const { daoMember } = useDaoMember();
   const { daochain, daoid, minion } = useParams();
   const { address, injectedProvider } = useInjectedProvider();
@@ -29,7 +33,7 @@ const StreamList = ({ list, loadingStreams, balances }) => {
     setProposalModal,
     setTxInfoModal,
   } = useOverlay();
-  const { refreshDao } = useTX();
+  const { refreshDao, submitTransaction } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const network = supportedChains[daochain]?.network;
 
@@ -93,6 +97,38 @@ const StreamList = ({ list, loadingStreams, balances }) => {
     }
   };
 
+  const cancelStreamProposal = async stream => {
+    setLoading({
+      active: true,
+      condition: stream.id,
+    });
+    try {
+      const selectedMinion = daoOverview?.minions?.find(m => {
+        return m.minionAddress === minion;
+      });
+      await submitTransaction({
+        tx: TX.SAFE_CANCEL_SUPERFLUID_STREAM,
+        localValues: {
+          rateString: stream.currentFlowRate,
+          receiverAddress: stream.receiver.id,
+          senderAddress:
+            selectedMinion.safeAddress || selectedMinion.minionAddress,
+          superTokenAddress: stream.token.id,
+        },
+        values: {
+          selectedMinion: minion,
+          title: 'Cancel Superfluid Proposal',
+        },
+      });
+    } catch (err) {
+      console.log('error: ', err);
+    }
+    setLoading({
+      active: false,
+      condition: null,
+    });
+  };
+
   return (
     <Box>
       <Flex pt={4}>
@@ -118,17 +154,29 @@ const StreamList = ({ list, loadingStreams, balances }) => {
         </Flex>
         <Skeleton isLoaded={!loadingStreams}>
           {list?.length > 0 ? (
-            list.map(stream => (
-              <StreamListItem
-                stream={stream}
-                key={stream.createdAt}
-                loading={loading}
-                cancelStream={cancelStream}
-                balances={balances}
-                daoMember={daoMember}
-                network={network}
-              />
-            ))
+            list.map(stream =>
+              minionType === MINION_TYPES.SAFE ? (
+                <StreamListItemV2
+                  stream={stream}
+                  key={stream.id}
+                  loading={loading}
+                  cancelStream={cancelStreamProposal}
+                  balances={balances}
+                  daoMember={daoMember}
+                  network={network}
+                />
+              ) : (
+                <StreamListItem
+                  stream={stream}
+                  key={stream.createdAt}
+                  loading={loading}
+                  cancelStream={cancelStream}
+                  balances={balances}
+                  daoMember={daoMember}
+                  network={network}
+                />
+              ),
+            )
           ) : (
             <Text fontFamily='mono' mt='5'>
               No streams have been created

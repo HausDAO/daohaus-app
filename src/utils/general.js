@@ -1,5 +1,5 @@
-import { randomBytes } from 'crypto';
-import { formatDistanceToNow } from 'date-fns';
+import { randomBytes } from 'crypto-browserify';
+import { format, formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 import Web3 from 'web3';
 import { validate } from './validation';
@@ -16,8 +16,6 @@ export const SECONDS = {
   PER_DAY: 86400,
   PER_WEEK: 604800,
 };
-
-export const JANUARY_2024 = 1705936544;
 
 export const calcSeconds = (val, unit) => {
   if (!unit || !val) return;
@@ -43,7 +41,7 @@ export const calcSeconds = (val, unit) => {
   return false;
 };
 
-export const pipe = fns => x => fns.reduce((prev, func) => () => func(prev), x);
+export const pipe = fns => x => fns.reduce((prev, fn) => fn(prev), x);
 
 export const parseIfJSON = data => {
   try {
@@ -83,12 +81,6 @@ export const detailsToJSON = values => {
   if (values.forumId) {
     details.forumId = values.forumId;
   }
-  if (values.uberHaus) {
-    details.uberHaus = values.uberHaus;
-  }
-  if (values.uberType) {
-    details.uberType = values.uberType;
-  }
   if (values.ratePerSec) {
     details.recipient = values.recipient;
     details.token = values.token;
@@ -96,14 +88,14 @@ export const detailsToJSON = values => {
     details.ratePerSec = values.ratePerSec;
     details.minDeposit = values.minDeposit;
   }
-  if (values.cco) {
-    details.cco = values.cco;
-  }
   if (values.isTransmutation) {
     details.isTransmutation = true;
   }
   if (values.minionType) {
     details.minionType = values.minionType;
+  }
+  if (values.proposalType) {
+    details.proposalType = values.proposalType;
   }
   if (values.fundsRequested) {
     details.fundsRequested = values.fundsRequested;
@@ -150,6 +142,23 @@ export const areAnyFields = (param, obj) => {
   }
 };
 
+export const minionFromDaoOverview = ({
+  searchBy,
+  daoOverview,
+  searchParam,
+  crossChain,
+}) => {
+  if (!daoOverview || !searchBy || !searchParam) return;
+  if (searchBy === 'type')
+    return daoOverview.minions?.filter(
+      minion =>
+        minion.minionType === searchParam &&
+        !!minion.crossChainMinion === !!crossChain,
+    );
+  if (searchBy === 'name')
+    return daoOverview.minions.find(minion => minion.details === searchParam);
+};
+
 export const numberWithCommas = num => {
   if (num === 0) return 0;
   if (!num) return;
@@ -168,6 +177,14 @@ export const numberWithCommas = num => {
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
+export const fromWeiToFixedDecimal = (value, decimals = 2) => {
+  const commaIndex = utils.formatEther(value).indexOf('.');
+  if (commaIndex === -1) {
+    return Number(utils.formatEther(value));
+  }
+  return Number(utils.formatEther(value).slice(0, commaIndex + decimals + 1));
+};
+
 export const truncateAddr = addr => {
   return addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : null;
 };
@@ -176,10 +193,12 @@ export const timeToNow = time => {
     addSuffix: true,
   });
 };
-
-// export const formatCreatedAt = (createdAt) => {
-//   return format(new Date(createdAt * 1000), 'MMM dd, yyyy');
-// };
+export const formatCreatedAt = createdAt => {
+  return format(new Date(createdAt * 1000), 'MMM dd, yyyy');
+};
+export const formatDate = (dateTimeMillis, formatDate = 'MMM dd, yyyy') => {
+  return format(new Date(dateTimeMillis * 1000), formatDate);
+};
 
 export const formatPeriods = (period, duration) => {
   if (period && duration) {
@@ -227,12 +246,20 @@ export const capitalizeWords = string => {
   return words.map(word => capitalize(word)).join(' ');
 };
 
+export const charLimit = (str = '', limit = 24) =>
+  str.length > limit ? `${str.slice(0, limit)}...` : str;
+
 export const daoConnectedAndSameChain = (
   address,
   injectedChainID,
   daochain,
+  foreignChainId,
 ) => {
-  return address && daochain && injectedChainID === daochain;
+  return !foreignChainId
+    ? address && daochain && injectedChainID === daochain
+    : address &&
+        daochain &&
+        [daochain, foreignChainId].includes(injectedChainID);
 };
 
 export const isEthAddress = string =>
@@ -248,7 +275,11 @@ export const isDelegating = member => {
 export const checkIfUserIsDelegate = (address, daoMembers) => {
   if (address && daoMembers) {
     const lowCaseAddress = address?.toLowerCase();
-    return daoMembers.filter(member => member.delegateKey === lowCaseAddress);
+    return daoMembers.filter(
+      member =>
+        member.memberAddress !== lowCaseAddress &&
+        member.delegateKey === lowCaseAddress,
+    );
   }
 };
 
@@ -286,6 +317,11 @@ export const handleDecimals = (balance, decimals, fallback = '--') => {
   return Number(balance) / 10 ** Number(decimals);
 };
 
+export const handleBNDecimals = (balance, decimals, fallback = '--') => {
+  if (!balance || !decimals) return fallback;
+  return utils.formatUnits(balance, decimals).toString();
+};
+
 export const handlePossibleNumber = (val, comma = true, roundAmt = 4) => {
   if (val == null) return;
   if (validate.number(val)) {
@@ -321,5 +357,38 @@ export const getKeyedArray = (obj, keyName = 'field') => {
 
 export const isLastItem = (list, index) => index === list?.length - 1;
 export const isFirstItem = (list, index) => index === 0;
-
 export const generateNonce = () => `0x${randomBytes(32).toString('hex')}`;
+
+export const NOUN = {
+  SHARES: {
+    singular: 'share',
+    plural: 'shares',
+  },
+  LOOT: {
+    singular: 'loot',
+    plural: 'loot',
+  },
+  PROPOSALS: {
+    singular: 'proposal',
+    plural: 'proposals',
+  },
+  ADDRESSES: {
+    singular: 'address',
+    plural: 'addresses',
+  },
+};
+
+export const handleNounCase = (amt, noun) =>
+  Number(amt) === 1 ? noun.singular : noun.plural;
+
+export const handleJsonEscaping = obj => {
+  return JSON.stringify(obj)
+    .replace(/\\n/g, '\\n')
+    .replace(/\\'/g, "\\'")
+    .replace(/\\"/g, '\\"')
+    .replace(/\\&/g, '\\&')
+    .replace(/\\r/g, '\\r')
+    .replace(/\\t/g, '\\t')
+    .replace(/\\b/g, '\\b')
+    .replace(/\\f/g, '\\f');
+};

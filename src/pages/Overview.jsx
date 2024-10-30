@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 
 import ActivitiesFeed from '../components/activitiesFeed';
-import CcoBanner from '../components/ccoBanner';
 import MainViewLayout from '../components/mainViewLayout';
 import MemberInfo from '../components/memberInfo';
 import OverviewBanner from '../components/overviewBanner';
@@ -20,7 +19,6 @@ const Overview = React.memo(function overview({
   daoMetaData,
   daoVaults,
 }) {
-  console.log('daoMetaData', daoMetaData);
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao>
       <Box w='100%'>
@@ -37,7 +35,6 @@ const Overview = React.memo(function overview({
                 members={members}
                 daoVaults={daoVaults}
               />
-              {daoMetaData?.boosts?.cco?.active ? <CcoBanner /> : null}
               {daoMetaData?.servicesUrl ? <ServicesBanner /> : null}
               {daoMetaData?.tags.includes('haus party favor') ? (
                 <OverviewBanner bannerType='hausPartyFavors' />

@@ -32,11 +32,10 @@ export const ToolTipWrapper = ({
   layoutProps,
   href,
   onClick,
+  isExternal,
 }) => {
-  const handleClick = () => {
-    console.log('test');
-    onClick?.();
-  };
+  const handleClick = () => onClick?.();
+
   const getLinkBox = () => {
     if (href) {
       return (
@@ -46,6 +45,7 @@ export const ToolTipWrapper = ({
           display='inline-block'
           {...layoutProps}
           onClick={handleClick}
+          isExternal={isExternal}
         >
           {children}
         </Box>

@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { getSnapshotSpaces } from './theGraph';
 
 // Error Model {
 //   message: String (required)
@@ -13,7 +14,14 @@ export const TYPE_ERR_MSGS = {
   string: 'Must be a valid string',
   address: 'Must be a valid Ethereum Address',
   urlNoHTTP: 'Must be a URL. Http not needed.',
+  url: 'Must be a URL.',
+  countryCode: 'Must be a valid country code.',
   greaterThanZero: 'Must be greater than zero.',
+  boolean: 'Must be a Booolean value',
+  disperseList:
+    'Must be a proper list with addresses and token values on each line',
+  contributorRewardList:
+    'Must be a proper list with addresses, token values, and optional unlock date overrides on each line',
 };
 
 export const validate = {
@@ -34,63 +42,66 @@ export const validate = {
   urlNoHTTP(val) {
     return !val.includes('http') && val.includes('.');
   },
+  url(val) {
+    return /https?:\/\/(www.)?[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/.test(
+      val,
+    );
+  },
+  countryCode(val) {
+    if (val) {
+      return /^[A-Z]{2}$/.test(val.toUpperCase());
+    }
+  },
   greaterThanZero(val) {
     return !isNaN(parseFloat(val)) && isFinite(val) && parseFloat(val) > 0;
   },
-};
-
-export const checkFormTypes = (values, fields) => {
-  if (!values || !fields) {
-    throw new Error(
-      `Did not receive truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,
-    );
-  }
-  const errors = fields.reduce((arr, field) => {
-    const inputVal = values[field.name];
-    //  check if empty
-    if (inputVal === '' || field.expectType === 'any' || !field.expectType) {
-      return arr;
+  boolean(val) {
+    return val === 'true' || val === 'false' || val === true || val === false;
+  },
+  bytes32(val) {
+    return val;
+  },
+  hex(val) {
+    return Web3.utils.isHexStrict(val);
+  },
+  disperseList(val) {
+    return val
+      ?.split(/\r?\n/)
+      .reduce(
+        (acc, item) =>
+          acc &&
+          item.match(/0x[a-fA-F0-9]{40}/)?.[0] &&
+          Number(
+            item
+              ?.replace(/0x[a-fA-F0-9]{40}/, '')
+              .match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0],
+          ),
+        true,
+      );
+  },
+  jsonStringObject(val) {
+    try {
+      const obj = JSON.parse(val);
+      return typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
+    } catch (e) {
+      return false;
     }
-    const isValid = validate[field.expectType];
-    if (typeof isValid !== 'function') {
-      console.log(field);
-      throw new Error(`Could not find validator function ${field.expectType}`);
-    }
-    if (!isValid(inputVal)) {
-      return [
-        ...arr,
-        { message: TYPE_ERR_MSGS[field.expectType], name: field.name },
-      ];
-    }
-    return arr;
-  }, []);
-  console.log(`errors`, errors);
-  if (!errors.length) {
-    return false;
-  }
-  return errors;
-};
-
-export const validateRequired = (values, required) => {
-  //  takes in array of required fields
-  if (!values || !required?.length) return;
-  const errors = required.reduce((arr, field) => {
-    if (!values[field.name]) {
-      return [
-        ...arr,
-        {
-          message: `${field.label} is required.`,
-          name: field.name,
-        },
-      ];
-    }
-    return arr;
-  }, []);
-
-  if (!errors.length) {
-    return false;
-  }
-  return errors;
+  },
+  contributorRewardList(val) {
+    return val
+      ?.split(/\r?\n/)
+      .reduce(
+        (acc, item) =>
+          acc &&
+          item.match(/0x[a-fA-F0-9]{40}/)?.[0] &&
+          Number(
+            item
+              ?.replace(/0x[a-fA-F0-9]{40}/, '')
+              .match(/(?=\.\d|\d)(?:\d+)?(?:\.?\d*)(?:[eE][+-]?\d+)?/)?.[0],
+          ),
+        true,
+      );
+  },
 };
 
 export const customValidations = {
@@ -104,7 +115,9 @@ export const customValidations = {
     return false;
   },
   superFluidStreamMinimum({ values }) {
-    const minDeposit = Web3.utils.toWei(values.paymentRequested);
+    // TODO: Check either if minion has enough balance or payment requested is enough
+    const minDeposit = values.paymentRequested;
+    // TODO: fetch minimum stream value from SF governance contracts
     if (Number(minDeposit) < Number(values.weiRatePerSec) * 3600) {
       return {
         name: 'paymentRequested',
@@ -126,7 +139,7 @@ export const customValidations = {
     return false;
   },
   noActiveStream({ values }) {
-    if (values.activeStreams) {
+    if (values.activeStream) {
       return {
         name: 'applicant',
         message:
@@ -209,17 +222,40 @@ export const customValidations = {
     }
     return false;
   },
-  noExistingSafeMinion({ appState, values }) {
-    const { minions } = appState.daoOverview;
-    const foundSafe = minions?.find(
-      m => m.safeAddress === values.safeAddress.toLowerCase(),
-    );
-    if (foundSafe) {
+  validMinionName({ values }) {
+    const invalidChars = /\//g;
+    const { minionName, _minionName } = values;
+    const name = _minionName ? '_minionName' : 'minionName';
+    const value = _minionName || minionName;
+    if (value.match(invalidChars)) {
       return {
-        name: 'safeAddress',
-        message: 'This Gnosis Safe has already been assigned to a Minion',
+        name,
+        message: 'Minion Name has invalid characters',
       };
     }
-    return false;
+  },
+};
+
+export const collectTypeValidations = valString => {
+  const valFn = validate[valString];
+  const valMsg = TYPE_ERR_MSGS[valString];
+  if (!valFn || !valMsg) {
+    console.log(`valFn`, valFn);
+    console.log(`valMsg`, valMsg);
+    throw new Error(
+      `validation.js => collectTypeValidations(): type validation is not valid. It may not match the registry of existing val callbacks or errMsgs`,
+    );
+  }
+  return val => (valFn(val) || val === '' ? true : valMsg);
+};
+
+export const handleStepValidation = {
+  validateSnapshot: async ({ values }) => {
+    const snapshotSpace = values?.space;
+    const space = await getSnapshotSpaces(snapshotSpace);
+    if (!space.space?.id) {
+      throw Error('No space found!');
+    }
+    return true;
   },
 };

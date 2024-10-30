@@ -19,8 +19,9 @@ import List from './list';
 import ListItem from './listItem';
 import NoListItem from './NoListItem';
 import TextBox from './TextBox';
-import { CORE_FORMS, FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { areAnyFields } from '../utils/general';
+import deepEqual from 'deep-eql';
 
 const handleSearch = (formsArr, str) => {
   if (!str) return formsArr;
@@ -30,7 +31,7 @@ const handleSearch = (formsArr, str) => {
   );
 };
 
-const ProposalList = ({
+const FormList = ({
   playlists,
   customData,
   selectedListID,
@@ -54,20 +55,26 @@ const ProposalList = ({
     );
   }, [selectedListID, playlists, allForms, searchStr]);
 
-  const handleEditProposal = formId =>
-    formModal({
-      ...CORE_FORMS.EDIT_PROPOSAL,
+  const handleEditProposal = formId => {
+    const form = FORM[formId];
+    const defaultValues = { ...form, name: form.title };
+
+    return formModal({
+      ...FORM.EDIT_PROPOSAL,
+      defaultValues,
       onSubmit: ({ values }) => {
-        dispatchPropConfig({
-          action: 'EDIT_PROPOSAL',
-          title: values.title,
-          description: values.description,
-          formId,
-        });
+        if (!deepEqual(values, defaultValues)) {
+          dispatchPropConfig({
+            action: 'EDIT_PROPOSAL',
+            title: values.title,
+            description: values.description,
+            formId,
+          });
+        }
         closeModal();
       },
     });
-
+  };
   const handleRestoreProposal = formId =>
     dispatchPropConfig({ action: 'RESTORE_PROPOSAL', formId });
 
@@ -145,7 +152,7 @@ const ProposalList = ({
                 key={proposalID}
                 menuSection={
                   <Flex flexDir='column' justifyContent='space-between'>
-                    {form?.dev ? (
+                    {form?.dev && selectedListID === 'dev' ? (
                       <DevMenu form={form} handlePreview={handlePreview} />
                     ) : (
                       <ProposalMenuList
@@ -171,7 +178,7 @@ const ProposalList = ({
   );
 };
 
-export default ProposalList;
+export default FormList;
 
 const ProposalMenuList = ({
   handleEditProposal,

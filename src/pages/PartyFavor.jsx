@@ -8,7 +8,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import MainViewLayout from '../components/mainViewLayout';
-import { TX } from '../data/contractTX';
+import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
 
@@ -80,7 +80,7 @@ const PartyFavor = ({ isMember }) => {
         </Flex>
         {address && (
           <Box fontSize='md'>
-            If you already claimed, withdraw your tokens your {` `}
+            If you already claimed, withdraw your tokens on your {` `}
             <Link to={`/dao/${daochain}/${daoid}/profile/${address}`}>
               DAO profile.
             </Link>

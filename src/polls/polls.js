@@ -1,33 +1,22 @@
 import Web3 from 'web3';
 
-import { MinionService } from '../services/minionService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import { TokenService } from '../services/tokenService';
-import { UberHausMinionService } from '../services/uberHausMinionService';
+import { NFTService } from '../services/nftService';
 import {
   DAO_POLL,
   MINION_POLL,
-  HOME_DAO,
-  RAGE_QUIT_POLL,
   MINION_PROPOSAL_POLL,
 } from '../graphQL/dao-queries';
-import { GET_TRANSMUTATIONS, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
-import { PROPOSALS_LIST, PROPOSAL_BY_ID } from '../graphQL/proposal-queries';
-import {
-  RAGE_KICK_POLL,
-  MEMBERS_LIST,
-  MEMBER_DELEGATE_KEY,
-} from '../graphQL/member-queries';
+import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { TX_HASH } from '../graphQL/general';
-import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
+import { SF_SUPERTOKEN_CREATED } from '../graphQL/superfluid-queries';
 import { createContract } from '../utils/contract';
-import { getContractABI } from '../utils/abi';
+import { getContractABI, LOCAL_ABI } from '../utils/abi';
 import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
-import {
-  MINION_ACTION_FUNCTION_NAMES,
-  PROPOSAL_TYPES,
-} from '../utils/proposalUtils';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { MINION_ACTION_FUNCTION_NAMES } from '../utils/minionUtils';
+import { TX_HASH_POSTER } from '../graphQL/postQueries';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({
@@ -35,6 +24,16 @@ export const pollTXHash = async ({ chainID, txHash }) => {
     query: TX_HASH,
     variables: {
       id: txHash,
+    },
+  });
+};
+
+export const pollPosterTXHash = async ({ chainID, txHash }) => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'poster_graph_url'),
+    query: TX_HASH_POSTER,
+    variables: {
+      transactionHash: txHash,
     },
   });
 };
@@ -66,44 +65,42 @@ export const pollWrapNZap = async ({ chainID, contractAddress }) => {
   return pollFinal;
 };
 
-export const pollProposals = async ({ daoID, chainID }) => {
-  return graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: PROPOSALS_LIST,
-    variables: {
-      contractAddr: daoID,
-      skip: 0,
-    },
-  });
-};
-
-export const pollProposal = async ({ proposalId, chainID, daoID }) => {
-  return graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: PROPOSAL_BY_ID,
-    variables: {
-      contractAddr: daoID,
-      id: proposalId,
-    },
-  });
-};
-
 export const pollTokenAllowances = async ({
   chainID,
   daoID,
   tokenAddress,
   userAddress,
 }) => {
-  const tokenContract = TokenService({
+  const tokenContract = createContract({
+    address: tokenAddress,
+    abi: LOCAL_ABI.ERC_20,
     chainID,
-    tokenAddress,
   });
 
-  const amountApproved = await tokenContract('allowance')({
-    accountAddr: userAddress,
-    contractAddr: daoID,
-  });
+  const amountApproved = await tokenContract.methods
+    .allowance(userAddress, daoID)
+    .call();
+
   return amountApproved;
+};
+
+export const pollTokenApproval = async ({
+  chainID,
+  contractAddress,
+  userAddress,
+  controllerAddress,
+}) => {
+  const tokenContract = NFTService({
+    chainID,
+    tokenAddress: contractAddress,
+  });
+
+  const args = [userAddress, controllerAddress];
+  const approved = await tokenContract('isApprovedForAll')({
+    args,
+    userAddress,
+  });
+  return approved;
 };
 
 export const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
@@ -147,11 +144,28 @@ export const pollMinionProposal = async ({
   });
 };
 
+export const pollSupertokenCreated = async ({
+  chainID,
+  underlyingTokenAddress,
+  createdAt,
+}) => {
+  const sfConfig = supportedChains[chainID].superfluid;
+  return graphQuery({
+    endpoint: sfConfig.subgraph_url_v2,
+    query: SF_SUPERTOKEN_CREATED,
+    variables: {
+      underlyingTokenAddress,
+      createdAt,
+    },
+  });
+};
+
 export const pollMinionExecuteAction = async ({
   chainID,
   minionAddress,
   proposalId,
   tx,
+  proposalType,
 }) => {
   try {
     const web3Contract = createContract({
@@ -159,60 +173,13 @@ export const pollMinionExecuteAction = async ({
       abi: await getContractABI({ tx }),
       chainID,
     });
-
-    const actionValue = await web3Contract.methods[
-      MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
-    ](proposalId).call();
+    const actionName =
+      MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName] ||
+      MINION_ACTION_FUNCTION_NAMES[proposalType];
+    const actionValue = await web3Contract.methods[actionName](
+      Number(proposalId),
+    ).call();
     return actionValue.executed;
-  } catch (error) {
-    console.error(error);
-    throw new Error('Error caught in Poll block of TX');
-  }
-};
-
-export const pollMinionExecute = async ({
-  chainID,
-  minionAddress,
-  proposalId,
-  proposalType,
-}) => {
-  try {
-    if (
-      proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
-      proposalType === PROPOSAL_TYPES.MINION_NIFTY
-    ) {
-      const action = await MinionService({
-        minion: minionAddress,
-        chainID,
-      })('getAction')({ proposalId });
-      return action.executed;
-    }
-    if (proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
-      const action = await SuperfluidMinionService({
-        minion: minionAddress,
-        chainID,
-      })('getStream')({ proposalId });
-      return action.executed;
-    }
-    if (
-      proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-      proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
-    ) {
-      const action = await UberHausMinionService({
-        uberHausMinion: minionAddress,
-        chainID,
-      })('getAction')({ proposalId });
-      return action.executed;
-    }
-    if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-      console.log('POLLS UBER DEL');
-      const action = await UberHausMinionService({
-        uberHausMinion: minionAddress,
-        chainID,
-      })('getAppointment')({ proposalId });
-      return action.executed;
-    }
-    return null;
   } catch (error) {
     console.error(error);
     throw new Error('Error caught in Poll block of TX');
@@ -236,35 +203,6 @@ export const pollMinionCancel = async ({
   } catch (error) {
     console.error(error);
     throw new Error('Error caught in Poll block of TX');
-  }
-};
-
-export const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
-  return graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: RAGE_QUIT_POLL,
-    variables: {
-      molochAddress,
-      createdAt,
-    },
-  });
-};
-
-export const syncTokenPoll = async ({ chainID, daoID, tokenAddress }) => {
-  try {
-    const daoOverview = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: HOME_DAO,
-      variables: {
-        contractAddr: daoID,
-      },
-    });
-    const graphBalance = daoOverview?.moloch?.tokenBalances?.find(
-      tokenObj => tokenObj?.token?.tokenAddress === tokenAddress,
-    )?.tokenBalance;
-    return graphBalance;
-  } catch (error) {
-    return error;
   }
 };
 
@@ -294,120 +232,23 @@ export const withdrawTokenFetch = async ({
   }
 };
 
-export const updateDelegateFetch = async ({
-  daoID,
-  chainID,
-  memberAddress,
-}) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: MEMBER_DELEGATE_KEY,
-      variables: {
-        contractAddr: daoID,
-        memberAddr: memberAddress,
-      },
-    });
-    return res.members[0];
-  } catch (error) {
-    return error;
-  }
-};
-
-export const pollUberHausDelegateSet = async ({
-  uberHausAddress,
-  minionAddress,
-  chainID,
-}) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: UBERHAUS_MEMBER_DELEGATE,
-      variables: {
-        molochAddress: uberHausAddress,
-        memberAddress: minionAddress,
-      },
-    });
-    return res.members[0];
-  } catch (error) {
-    return error;
-  }
-};
-
 export const pollGuildFunds = async ({
   chainID,
   uberMinionAddress,
   tokenAddress,
 }) => {
   try {
-    const newTokenBalance = TokenService({
+    const tokenContract = createContract({
+      address: tokenAddress,
+      abi: LOCAL_ABI.ERC_20,
       chainID,
-      tokenAddress,
-    })('balanceOf')(uberMinionAddress);
+    });
+
+    const newTokenBalance = await tokenContract.methods
+      .balanceOf(uberMinionAddress)
+      .call();
+
     return newTokenBalance;
-  } catch (error) {
-    return error;
-  }
-};
-
-export const pollDelegateRewards = async ({
-  uberMinionAddress,
-  chainID,
-  delegateAddress,
-}) => {
-  try {
-    const delegate = await UberHausMinionService({
-      uberMinionAddress,
-      chainID,
-    })('delegateByAddress')(delegateAddress);
-    return delegate;
-  } catch (error) {
-    console.error(error);
-  }
-  return null;
-};
-
-export const pollRageKick = async ({ chainID, daoID, memberAddress }) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: RAGE_KICK_POLL,
-      variables: {
-        contractAddr: daoID,
-        memberAddr: memberAddress,
-      },
-    });
-    return res;
-  } catch (error) {
-    return error;
-  }
-};
-
-export const pollWrapNZapSummon = async ({ chainID, daoID }) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'boosts_graph_url'),
-      query: GET_WRAP_N_ZAPS,
-      variables: {
-        contractAddress: daoID,
-      },
-    });
-    return res;
-  } catch (error) {
-    return error;
-  }
-};
-
-export const pollTransmutationSummon = async ({ chainID, daoID }) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'boosts_graph_url'),
-      query: GET_TRANSMUTATIONS,
-      variables: {
-        contractAddress: daoID,
-      },
-    });
-    return res;
   } catch (error) {
     return error;
   }

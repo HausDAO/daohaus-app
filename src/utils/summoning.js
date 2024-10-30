@@ -180,9 +180,9 @@ export const daoPresets = chainId => {
     });
   }
 
-  if (chainId === '0x4a') {
+  if (chainId === '0x5') {
     presets = presets.map(preset => {
-      preset.currency = 'WEIDI';
+      preset.currency = 'WETH';
       preset.approvedToken = supportedChains[chainId].wrapper_contract;
       preset.proposalDeposit = '10000000000000000000';
       preset.processingReward = '1000000000000000000';
@@ -190,6 +190,29 @@ export const daoPresets = chainId => {
       return preset;
     });
   }
+
+  if (chainId === '0xa4ec') {
+    presets = presets.map(preset => {
+      preset.currency = 'CELO';
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
+
+      return preset;
+    });
+  }
+
+  if (chainId === '0xa') {
+    presets = presets.map(preset => {
+      preset.currency = 'ETH';
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
+
+      return preset;
+    });
+  }
+
   return presets;
 };
 
@@ -230,6 +253,22 @@ export const currencyOptions = chainId => {
         address: supportedChains[chainId].dai_contract,
       },
     ];
+  } else if (chainId === '0xa4ec') {
+    options = [
+      {
+        value: 'CELO',
+        label: 'CELO',
+        address: supportedChains[chainId].wrapper_contract,
+      },
+    ];
+  } else if (chainId === '0xa' || chainId === '0x5') {
+    options = [
+      {
+        value: 'ETH',
+        label: 'ETH',
+        address: supportedChains[chainId].wrapper_contract,
+      },
+    ];
   } else {
     options = [
       {
@@ -246,38 +285,4 @@ export const currencyOptions = chainId => {
   }
 
   return options;
-};
-
-export const cloneDaoPresets = daoOverview => {
-  return {
-    votingPeriod: daoOverview.votingPeriodLength,
-    gracePeriod: daoOverview.gracePeriodLength,
-    proposalDeposit: daoOverview.proposalDeposit,
-    processingReward: daoOverview.processingReward,
-    periodDuration: daoOverview.periodDuration,
-    dilutionBound: daoOverview.dilutionBound || 3,
-    // summonerShares: 1,
-    version: 2.1,
-  };
-};
-
-export const cloneMembers = daoMembers =>
-  daoMembers
-    .reduce(
-      (string, member) =>
-        +member?.shares > 0
-          ? `${string}${member.memberAddress} ${member.shares}
-`
-          : string,
-      '',
-    )
-    .trim();
-
-export const cloneTokens = daoOverview => {
-  const primaryTokenAddress = daoOverview.depositToken.tokenAddress;
-  const otherTokensAddress = daoOverview.tokenBalances
-    .map(({ token }) => token.tokenAddress)
-    .filter(address => address !== primaryTokenAddress);
-  const allAddresses = [primaryTokenAddress, ...otherTokensAddress];
-  return allAddresses.join(', ');
 };

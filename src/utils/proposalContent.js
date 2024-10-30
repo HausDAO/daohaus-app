@@ -15,7 +15,7 @@ export const allFilter = {
 };
 
 export const defaultFilterOptions = {
-  main: [allFilter],
+  main: [activeFilter, allFilter],
   'Proposal Type': [
     {
       name: 'Funding Proposals',
@@ -44,7 +44,7 @@ export const defaultFilterOptions = {
     },
     {
       name: 'Minion Proposals',
-      value: 'Minion Proposal',
+      value: /Minion/i,
       type: 'proposalType',
     },
   ],
@@ -75,6 +75,11 @@ export const defaultFilterOptions = {
       type: 'status',
     },
     {
+      name: 'Needs Execution',
+      value: 'NeedsExecution',
+      type: 'status',
+    },
+    {
       name: 'Passed',
       value: 'Passed',
       type: 'status',
@@ -92,21 +97,16 @@ export const defaultFilterOptions = {
   ],
 };
 
-export const getFilters = (daoMember, unread) => {
-  if (+daoMember?.shares && unread?.length) {
-    return {
-      ...defaultFilterOptions,
-      main: [actionNeededFilter, allFilter],
-    };
-  }
-  if (!+daoMember?.shares && unread?.length) {
-    return {
-      ...defaultFilterOptions,
-      main: [activeFilter, allFilter],
-    };
-  }
-  return defaultFilterOptions;
-};
+export const getFilters = activeProposals =>
+  activeProposals?.length
+    ? {
+        ...defaultFilterOptions,
+        main: [activeFilter, allFilter, actionNeededFilter],
+      }
+    : {
+        ...defaultFilterOptions,
+        main: [allFilter, activeFilter, actionNeededFilter],
+      };
 
 export const sortOptions = {
   main: [

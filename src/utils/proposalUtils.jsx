@@ -15,6 +15,16 @@ export const ProposalStatus = {
   Failed: 'Failed',
   ReadyForProcessing: 'ReadyForProcessing',
   Unsponsored: 'Unsponsored',
+  NeedsExecution: 'NeedsExecution',
+};
+export const BASE_ACTIVE_STATES = {
+  Unknown: 'Unknown',
+  InQueue: 'InQueue',
+  VotingPeriod: 'VotingPeriod',
+  GracePeriod: 'GracePeriod',
+  ReadyForProcessing: 'ReadyForProcessing',
+  Unsponsored: 'Unsponsored',
+  NeedsExecution: 'NeedsExecution',
 };
 
 export const PROPOSAL_TYPES = {
@@ -22,15 +32,12 @@ export const PROPOSAL_TYPES = {
   MEMBER: 'Member Proposal',
   SIGNAL: 'Signal Proposal',
   WHITELIST: 'Whitelist Token Proposal',
-  GUILDKICK: 'Guild Kick Proposal',
+  GUILDKICK: 'Guildkick Proposal',
   TRADE: 'Trade Proposal',
-  MINION_UBER_STAKE: 'UberHAUS Staking Proposal',
-  MINION_UBER_RQ: 'UberHAUS RageQuit Proposal',
-  MINION_UBER_DEL: 'UberHAUS Delegate Proposal',
-  MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
   MINION_SAFE: 'SAFE MINION V0',
+  MULTI_TX_SAFE: 'Safe Minion Proposal',
   MINION_NIFTY: 'Nifty Minion',
   MINION_SUPERFLUID: 'Superfluid Proposal',
   MINION_RARIBLE: 'Rarible Proposal',
@@ -42,9 +49,18 @@ export const PROPOSAL_TYPES = {
   MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
   MINION_ERC1155: 'Minion Erc1155 Token Transfer Proposal',
   MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
-  MINION_BUYOUT: 'Minion Buyout Proposal',
+  MINION_BUYOUT: 'Bank Buyout Proposal',
+  MINION_TRIBUTE: 'NFT Tribute Proposal',
   BUY_NIFTY_INK: 'Minion NiftyInk Purchase',
-  SELL_NFT: 'Sell NFT',
+  BUY_NFT_RARIBLE: 'Buy NFT',
+  SELL_NFT_RARIBLE: 'Sell NFT',
+  DISPERSE: 'Disperse Proposal',
+  SWAPR_STAKING: 'Swapr Staking Proposal',
+  POSTER_RATIFY: 'Ratify Content',
+  POSTER_RATIFY_DOC: 'Ratify DAO DOC',
+  POSTER_UPDATE_LOCATION: 'change location of DAO DOC',
+  SBT_SUMMON: 'Summon SBT',
+  HEDGEY_CONTRIBUTOR_REWARDS: 'Hedgey Contributor Rewards',
 };
 
 export const MINION_TYPES = {
@@ -52,13 +68,14 @@ export const MINION_TYPES = {
   NIFTY: 'nifty minion',
   SUPERFLUID: 'Superfluid minion',
   SAFE: 'SAFE MINION V0',
-  UBER: 'UberHaus minion',
+  CROSSCHAIN_SAFE: 'CC SAFE MINION V0',
+  CROSSCHAIN_SAFE_NOMAD: 'CC SAFE NOMAD MINION V0',
 };
 
 export const MINION_ACTION_FUNCTION_NAMES = {
   VANILLA_MINION: 'actions',
   SAFE_MINION: 'actions',
-  UBERHAUS_MINION: 'appointments',
+  SAFE_MINION_V2: 'actions',
   SUPERFLUID_MINION: 'streams',
 };
 
@@ -84,12 +101,25 @@ export const afterGracePeriod = proposal => {
   return now > +proposal.gracePeriodEnds;
 };
 
+const determineNeedsExecution = proposal => {
+  return (
+    proposal.processed &&
+    proposal.isMinion &&
+    !proposal.executed &&
+    proposal.didPass &&
+    proposal.proposalType !== PROPOSAL_TYPES.FUNDING
+  );
+};
+
 export function determineProposalStatus(proposal) {
   if (proposal.cancelled) {
     return ProposalStatus.Cancelled;
   }
   if (!proposal.sponsored) {
     return ProposalStatus.Unsponsored;
+  }
+  if (determineNeedsExecution(proposal)) {
+    return ProposalStatus.NeedsExecution;
   }
   if (proposal.processed && proposal.didPass) {
     return ProposalStatus.Passed;
@@ -112,6 +142,27 @@ export function determineProposalStatus(proposal) {
   return ProposalStatus.Unknown;
 }
 
+export const checkCheatedExecutionCache = (proposalId, daoid) => {
+  const executeStorage = JSON.parse(
+    sessionStorage.getItem(`needsExecution-${daoid}`),
+  );
+  if (!Array.isArray(executeStorage)) return;
+  return executeStorage?.find(id => proposalId === id);
+};
+
+const checkForExecution = (proposal, daoid) =>
+  proposal &&
+  daoid &&
+  (proposal.status === ProposalStatus.Failed ||
+    proposal.status === ProposalStatus.Passed)
+    ? {
+        ...proposal,
+        status: checkCheatedExecutionCache(proposal, daoid)
+          ? ProposalStatus.NeedsExecution
+          : proposal.status,
+      }
+    : proposal;
+
 const tryGetDetails = details => {
   try {
     const parsedDetails = JSON.parse(details);
@@ -131,27 +182,6 @@ const tryGetDetails = details => {
 };
 
 const getMinionProposalType = (proposal, details) => {
-  const getUberTypeFromDetails = details => {
-    // TODO - temp for bad prop
-    // if (
-    //   details?.uberType === 'staking'
-    // ) {
-    if (
-      details?.uberType === 'staking' ||
-      details?.uberType === PROPOSAL_TYPES.MINION_UBER_STAKE
-    ) {
-      return PROPOSAL_TYPES.MINION_UBER_STAKE;
-    }
-    if (details?.uberType === 'delegate') {
-      return PROPOSAL_TYPES.MINION_UBER_DEL;
-    }
-    if (details?.uberType === 'ragequit') {
-      return PROPOSAL_TYPES.MINION_UBER_RQ;
-    }
-    console.warn('Uberhaus Minion type not detected');
-    console.log(details);
-    return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
-  };
   const getUberTypeFromGraphData = proposal => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
@@ -169,11 +199,15 @@ const getMinionProposalType = (proposal, details) => {
     return PROPOSAL_TYPES.MINION_DEFAULT;
   };
 
-  if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
-    return getUberTypeFromDetails(details);
+  if (details.proposalType) {
+    return details.proposalType;
   }
+
   return getUberTypeFromGraphData(proposal);
 };
+
+export const isMinionProposalType = proposal =>
+  proposal.isMinion && proposal.proposer === proposal.minionAddress;
 
 export const determineProposalType = proposal => {
   // can return a wide array of data types and structures. Be very defensive when dealing with
@@ -195,13 +229,19 @@ export const determineProposalType = proposal => {
   if (proposal.trade) {
     return PROPOSAL_TYPES.TRADE;
   }
-  if (proposal.isMinion) {
+  if (parsedDetails.proposalType === PROPOSAL_TYPES.SIGNAL) {
+    return PROPOSAL_TYPES.SIGNAL;
+  }
+  if (isMinionProposalType(proposal)) {
     return getMinionProposalType(proposal, parsedDetails);
   }
   return PROPOSAL_TYPES.FUNDING;
 };
 
 export const titleMaker = proposal => {
+  if (!proposal.details) {
+    proposal.details = '';
+  }
   const details = proposal.details.split('~');
   if (details[0] === 'id') {
     return details[3];
@@ -222,6 +262,35 @@ export const titleMaker = proposal => {
     return proposal.details ? proposal.details : 'Proposal';
   }
 };
+
+export const newLocationMaker = proposal => {
+  if (!proposal.details) {
+    proposal.details = '';
+  }
+  const details = proposal.details.split('~');
+  if (details[0] === 'id') {
+    return details[3];
+  }
+  if (details[0][0] === '{') {
+    let parsedDetails;
+
+    try {
+      parsedDetails = IsJsonString(proposal.details)
+        ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
+        : '';
+      return (
+        [parsedDetails.newLocation, parsedDetails.docId] ||
+        'Whoops! Could not parse JSON data'
+      );
+    } catch {
+      console.log("Couldn't parse JSON from metadata");
+      return 'Proposal';
+    }
+  } else {
+    return proposal.details ? proposal.details : 'Proposal';
+  }
+};
+
 export const hashMaker = proposal => {
   try {
     const parsed =
@@ -263,10 +332,9 @@ export const raribleHashMaker = proposal => {
   }
 };
 
-export const proposalTypeMaker = proposal => {
+export const proposalTypeMaker = proposalDetails => {
   try {
-    const parsed =
-      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    const parsed = IsJsonString(proposalDetails) && JSON.parse(proposalDetails);
     return parsed.proposalType || '';
   } catch (e) {
     return '';
@@ -299,6 +367,20 @@ export const determineUnreadActivityFeed = proposal => {
       (needsMemberVote || needsProcessing || !proposal.sponsored),
     message,
   };
+};
+
+export const isTwoWeeksOrOlder = proposal =>
+  Number(proposal.createdAt) > (new Date() / 1000 || 0) - 1.21e6;
+
+export const isProposalActive = proposal => {
+  const status = determineProposalStatus(proposal);
+  if (status === 'Unsponsored' && !isTwoWeeksOrOlder(proposal)) {
+    return true;
+  }
+  if (BASE_ACTIVE_STATES[status]) {
+    return true;
+  }
+  return false;
 };
 
 export const determineUnreadProposalList = (
@@ -512,7 +594,7 @@ export const getProposalDetailStatus = (proposal, status) => {
 };
 
 // return boolean as to whether user voted on a given proposal
-export const memberVote = (proposal, userAddress) => {
+export const memberVote = (proposal, userAddress = '0') => {
   const vote = proposal
     ? proposal?.votes?.find(
         vote => vote.memberAddress === userAddress?.toLowerCase(),
@@ -521,21 +603,31 @@ export const memberVote = (proposal, userAddress) => {
   return vote ? vote.uintVote : null;
 };
 
-export const handleListFilter = (proposals, filter, daoMember) => {
+export const handleListFilter = (proposals, filter, daoMember, daoid) => {
   const updatedProposals = proposals.map(proposal => ({
     ...proposal,
-    status: determineProposalStatus(proposal),
+    status: checkForExecution(determineProposalStatus(proposal), daoid),
   }));
   if (filter.value === 'All') {
     return updatedProposals;
   }
-  if (filter.value === 'Action Needed' || filter.value === 'Active') {
+  if (filter.value === 'Active') {
+    return updatedProposals.filter(proposal => isProposalActive(proposal));
+  }
+  if (filter.value === 'Action Needed') {
     return updatedProposals.filter(
       proposal =>
         determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
           ?.unread,
     );
   }
+
+  if (filter.value instanceof RegExp) {
+    return updatedProposals.filter(proposal =>
+      filter.value.test(proposal[filter.type]),
+    );
+  }
+
   return updatedProposals.filter(
     proposal => proposal[filter.type] === filter.value,
   );
@@ -567,23 +659,6 @@ export const searchProposals = (rawAddress, filterArr, proposals) => {
   );
 };
 
-export const pendingUberHausStakingProposalChildDao = prop => {
-  return (
-    prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE &&
-    !prop.cancelled &&
-    !prop.uberHausMinionExecuted
-  );
-};
-
-export const pendingUberHausStakingProposal = (prop, minionAddress) => {
-  return (
-    prop.applicant === minionAddress &&
-    prop.proposalType === 'Member Proposal' &&
-    !prop.cancelled &&
-    !prop.processed
-  );
-};
-
 export const multicallActionsFromProposal = prop => {
   return prop.actions.reduce(
     (obj, action) => {
@@ -597,7 +672,7 @@ export const multicallActionsFromProposal = prop => {
 };
 
 export const hasMinionActions = (prop, minionDeets) => {
-  if (prop.minion.minionType === MINION_TYPES.SAFE) {
+  if (prop.minion?.minionType === MINION_TYPES.SAFE) {
     return prop.actions > 0;
   }
   return (

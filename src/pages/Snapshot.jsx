@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 import { Flex, Stack, Button, Link, Spinner } from '@chakra-ui/react';
 
@@ -7,9 +8,10 @@ import BoostNotActive from '../components/boostNotActive';
 import MainViewLayout from '../components/mainViewLayout';
 import SnapshotCard from '../components/snapshotCard';
 import TextBox from '../components/TextBox';
-import { getSnapshotProposals } from '../utils/requests';
+import { getSnapshotProposals } from '../utils/theGraph';
 
 const Snapshot = ({ isMember, daoMetaData }) => {
+  const { daoid, daochain } = useParams();
   const [loading, setLoading] = useState(true);
   const [snapshots, setSnapshots] = useState({});
   const { errorToast } = useOverlay();
@@ -21,7 +23,7 @@ const Snapshot = ({ isMember, daoMetaData }) => {
           // daoMetaData?.boosts?.snapshot.metadata.space,
           daoMetaData?.boosts?.SNAPSHOT.metadata.space,
         );
-        setSnapshots(localSnapshots);
+        setSnapshots(localSnapshots.proposals);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -43,14 +45,24 @@ const Snapshot = ({ isMember, daoMetaData }) => {
   }, [daoMetaData?.boosts]);
 
   const newSnapshotButton = isMember && (
-    <Button
-      as={Link}
-      href={`https://snapshot.org/#/${daoMetaData?.boosts?.snapshot?.metadata?.space}/create`}
-      rightIcon={<RiAddFill />}
-      isExternal
-    >
-      New Snapshot
-    </Button>
+    <Flex>
+      <Button
+        as={Link}
+        href={`https://snapshot.org/#/${daoMetaData?.boosts?.SNAPSHOT?.metadata?.space}/create`}
+        rightIcon={<RiAddFill />}
+        isExternal
+        mr={10}
+      >
+        New Snapshot
+      </Button>
+
+      <Button
+        as={RouterLink}
+        to={`/dao/${daochain}/${daoid}/boost/snapshot/settings`}
+      >
+        Boost Settings
+      </Button>
+    </Flex>
   );
 
   return (
@@ -64,13 +76,13 @@ const Snapshot = ({ isMember, daoMetaData }) => {
           // daoMetaData && 'snapshot' in daoMetaData?.boosts ? (
           daoMetaData && 'SNAPSHOT' in daoMetaData?.boosts ? (
             Object.keys(snapshots).length > 0 ? (
-              Object.keys(snapshots)
+              Object.values(snapshots)
                 .slice(0, 10)
                 .map(snapshot => (
                   <SnapshotCard
-                    key={snapshots[snapshot].sig}
-                    snapshotId={snapshot}
-                    snapshot={snapshots[snapshot]}
+                    key={snapshot.id}
+                    snapshotId={snapshot.od}
+                    snapshot={snapshot}
                   />
                 ))
             ) : (

@@ -15,7 +15,13 @@ import { get } from '../utils/requests';
 import { notificationBoostContent } from '../data/boosts';
 
 const DiscordNotificationsLaunch = props => {
-  const { stepOverride, goToNext, setStepperStorage, next } = props;
+  const {
+    stepOverride,
+    goToNext,
+    setStepperStorage,
+    next,
+    handleUpdate,
+  } = props;
 
   const { handleSubmit, register, getValues, watch } = useForm();
   const [connectionError, setConnectionError] = useState();
@@ -27,36 +33,37 @@ const DiscordNotificationsLaunch = props => {
 
   const onSubmit = async values => {
     if (stepOverride) {
-      console.log('step override');
-      // TODO: can this be used in settings? update the meta here
-      // const boostMetadata = [
-      //   {
-      //     type: 'discord',
-      //     channelId: values.channelId,
-      //     active: true,
-      //     actions: ['votingPeriod', 'rageQuit', 'newProposal'],
-      //   },
-      // ];
-      // const success = await handleLaunch(boostMetadata);
-      return;
+      setLoading(true);
+      const boostMetadata = [
+        {
+          type: 'discord',
+          channelId: values.channelId,
+          active: true,
+          actions: ['votingPeriod', 'rageQuit', 'newProposal'],
+        },
+      ];
+      const success = await handleUpdate(boostMetadata);
+      setLoading(false);
+      if (success) {
+        goToNext();
+      }
+    } else {
+      setStepperStorage([
+        {
+          type: 'discord',
+          channelId: values.channelId,
+          active: true,
+          actions: ['votingPeriod', 'rageQuit', 'newProposal'],
+        },
+      ]);
+      goToNext(next);
     }
-    setStepperStorage([
-      {
-        type: 'discord',
-        channelId: values.channelId,
-        active: true,
-        actions: ['votingPeriod', 'rageQuit', 'newProposal'],
-      },
-    ]);
-    goToNext(next);
   };
 
   const testConnection = async () => {
     setLoading(true);
     const values = getValues();
-
     const res = await get(`dao/discord-status/${values.channelId}`);
-    console.log('res');
     if (res.error || res === []) {
       setConnectionError(res.error);
     } else {

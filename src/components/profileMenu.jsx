@@ -1,36 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import {
   Menu,
   MenuList,
   Icon,
   MenuButton,
   MenuItem,
-  Link,
   useToast,
 } from '@chakra-ui/react';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
+import useCanInteract from '../hooks/useCanInteract';
 import { useAppModal } from '../hooks/useModals';
-import { CORE_FORMS, FORM } from '../data/forms';
-import { TX } from '../data/contractTX';
+import { FORM } from '../data/formLegos/forms';
+import { TX } from '../data/txLegos/contractTX';
 import { createContract } from '../utils/contract';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { LOCAL_ABI } from '../utils/abi';
 
-const ProfileMenu = ({ member }) => {
+import { getProfileForm } from '../utils/profile';
+
+const ProfileMenu = ({ member, refreshProfile }) => {
   const toast = useToast();
-  const { address, injectedChain, injectedProvider } = useInjectedProvider();
-  const { formModal } = useAppModal();
+  const { address, injectedProvider } = useInjectedProvider();
+  const { stepperModal, formModal, closeModal } = useAppModal();
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
-  const { errorToast } = useOverlay();
+  const { successToast, errorToast } = useOverlay();
   const { submitTransaction } = useTX();
+  const { refreshMemberProfile } = useUser(null);
+  const history = useHistory();
+  const location = useLocation();
 
   const [canRageQuit, setCanRageQuit] = useState(false);
 
@@ -41,9 +49,27 @@ const ProfileMenu = ({ member }) => {
     });
   };
 
-  const handleRageQuitClick = () => formModal(CORE_FORMS.RAGE_QUIT);
+  const handleRageQuitClick = () => formModal(FORM.RAGE_QUIT);
 
-  const handleUpdateDelegateClick = () => formModal(CORE_FORMS.UPDATE_DELEGATE);
+  const handleUpdateDelegateClick = () => formModal(FORM.UPDATE_DELEGATE);
+
+  const profileForm = getProfileForm(profile => {
+    successToast({ title: 'Updated Profile!' });
+    refreshProfile(profile);
+    closeModal();
+  });
+
+  const handleEditProfile = useCallback(() => {
+    stepperModal(profileForm);
+    history.push(`/dao/${daochain}/${daoid}/profile/${member.memberAddress}`);
+  }, [member.memberAddress, refreshMemberProfile, profileForm]);
+
+  useEffect(() => {
+    const edit = new URLSearchParams(location.search).get('edit');
+    if (edit) {
+      handleEditProfile();
+    }
+  }, [handleEditProfile, location.search]);
 
   const copiedToast = () => {
     toast({
@@ -68,7 +94,6 @@ const ProfileMenu = ({ member }) => {
         args: [member.memberAddress],
       });
     } catch (err) {
-      console.log('error: ', err);
       userRejectedToast();
     }
   };
@@ -118,15 +143,10 @@ const ProfileMenu = ({ member }) => {
           <MenuItem>Copy Address</MenuItem>
         </CopyToClipboard>
 
-        <Link
-          href={`https://3box.io/${member?.memberAddress}`}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <MenuItem>View 3box Profile</MenuItem>
-        </Link>
-
-        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
+        {address === member.memberAddress && (
+          <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
+        )}
+        {canInteract ? (
           <>
             {isMember && hasSharesOrLoot && (
               <MenuItem onClick={handleRageQuitClick}>RageQuit</MenuItem>

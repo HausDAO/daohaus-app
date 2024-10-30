@@ -1,37 +1,52 @@
-import { FORM } from './forms';
+import { CUSTOM_BOOST_INSTALL_FORMS } from './formLegos/customBoostInstall';
+import { FORM } from './formLegos/forms';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import { NFT_ACTIONS } from '../utils/nftData';
 
 export const MINION_NETWORKS = {
   [MINION_TYPES.VANILLA]: {
-    '0x64': '0x0',
-    '0x89': '0x0',
-    '0x4': '0x0',
-    '0x1': '0x0',
-    '0x2a': '0x0',
+    '0x64': true,
+    '0x89': true,
+    '0x5': true,
+    '0x1': true,
   },
   [MINION_TYPES.NIFTY]: {
-    '0x64': '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
-    '0x1': '0x7EDfBDED3077Bc035eFcEA1835359736Fa342209',
-    '0x89': '0x4CCaDF3f5734436B28869c27A11B6D0F4776bc8E',
-    '0xa4b1': '0xA92CbC525EabFa5baE4e0ff7bDa8E011B43B9aCC',
+    '0x64': true,
+    '0x1': true,
+    '0x89': true,
+    '0xa4b1': true,
+    '0xa4ec': true,
   },
   [MINION_TYPES.SUPERFLUID]: {
-    '0x64': '0xfC86DfDd3b2e560729c78b51dF200384cfe87438',
-    '0x89': '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
-    '0x4': '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
+    '0x64': true,
+    '0x89': true,
   },
   [MINION_TYPES.SAFE]: {
-    '0x1': '0xbC37509A283E2bb67fd151c34E72e826C501E108',
-    '0x4': '0x13319a33b862E9B8BA21cb95f15A880247c22Dd2',
-    '0x2a': '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
-    '0x64': '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
-    '0x89': '0xA1b97D22e22507498B350A9edeA85c44bA7DBC01',
-    // '0xa4b1': '',
+    '0x1': true,
+    '0x5': true,
   },
-  // [MINION_TYPES.UBER]: {
-  //   '0x2a': '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
-  //   '0x64': '0xf5106077892992B84c33C35CA8763895eb80B298',
-  // },
+  [MINION_TYPES.SAFE]: {
+    '0x1': true,
+    '0x5': true,
+    '0x64': true,
+    '0x89': true,
+    '0xa4b1': true,
+    '0xa': true,
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE]: {
+    '0x1': false,
+    '0x5': true,
+    '0x64': true,
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE_NOMAD]: {
+    '0x1': true,
+    '0x4': true,
+    '0x5': true,
+    '0x64': true,
+    '0xa': false,
+    '0x89': false,
+    '0xa4b1': false,
+  },
 };
 
 export const MINION_CONTENT = {
@@ -43,7 +58,7 @@ export const MINION_CONTENT = {
       'A vanilla minion is a basic upgrade to your DAO proposals, enabling one-time interactions with other smart contracts once your proposals are passed.',
     ],
     publisher: 'DAOhaus',
-    //  MINION_NETWORKS[MINION_TYPES.VANILLA],
+    version: '1',
   },
   [MINION_TYPES.NIFTY]: {
     title: 'Nifty Minion',
@@ -53,17 +68,7 @@ export const MINION_CONTENT = {
       'This legacy boost is used for the Nifty Ink Boost, but will soon be phased out to the neapolitan minion.',
     ],
     publisher: 'DAOhaus',
-    //  MINION_NETWORKS[MINION_TYPES.NIFTY],
-  },
-  [MINION_TYPES.UBER]: {
-    title: 'Uberhaus Minion',
-    description: 'Join and participate in UberHaus - the DAOs of DAOs',
-    info: [
-      'UberHaus is the DAO of DAOs - governing the ecosystem and roadmap of DAOhaus.',
-      'As the gateway to UberHaus governance, the UberHaus Minion enables you to stake your HAUS tokens, manage delegates, withdraw funds and rage-quit from UberHaus.',
-    ],
-    publisher: 'DAOhaus',
-    //  MINION_NETWORKS[MINION_TYPES.UBER],
+    version: '2',
   },
   [MINION_TYPES.SUPERFLUID]: {
     title: 'Superfluid Minion',
@@ -74,7 +79,6 @@ export const MINION_CONTENT = {
       'Set it up once, and your payments will be streamed in real-time.',
     ],
     publisher: 'DAOhaus',
-    //  MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
   },
   [MINION_TYPES.SAFE]: {
     title: 'Safe Minion',
@@ -86,20 +90,34 @@ export const MINION_CONTENT = {
       'It also enables DAOs to upgrade their governance framework over time while keeping the assets in one location.',
       'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity, as well as expand proposal functionality beyond governance (such as DeFi, NFTs, etc.)',
     ],
-    //  MINION_NETWORKS[MINION_TYPES.SAFE],
+    version: '3',
   },
-  // [MINION_TYPES.RARIBLE]: {
-  //   title: 'Rarible Minion',
-  //   info: [],
-  //    { '0x1': true, '0x4': true },
-  // },
+  [MINION_TYPES.CROSSCHAIN_SAFE]: {
+    title: 'Cross-chain Safe Minion (AMB)',
+    description:
+      'Move assets & execute transactions on a Mainnet Gnosis Safe through your Gnosis Chain DAO proposals',
+    info: [
+      "This operation will deploy a new Gnosis Safe Minion with an AMB Module for your DAO. The Gnosis Safe Minion manages your DAO's funds & interacts with smart contracts, while the AMB Module helps relay data between chains.",
+      'By installing this Minion, your DAO will be able to vote on & pass proposals on Gnosis Chain, while controlling assets and executing transactions on Ethereum Mainnet. This gives DAOs greater access to use cases on Mainnet such as DeFis and NFTs, while minimizing governance costs.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity.',
+    ],
+    version: '1',
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE_NOMAD]: {
+    title: 'Cross-chain Safe Minion (Nomad)',
+    description:
+      'Move assets & execute transactions on a Gnosis Safe from another chain through your DAO proposals',
+    info: [
+      "This operation will deploy a new Gnosis Safe Minion and Nomad Module for your DAO. The Gnosis Safe Minion manages your DAO's funds & interacts with smart contracts, while the Nomad Module helps relay data between chains.",
+      'By installing this Minion, your DAO will be able to vote on & pass proposals on your Home Chain, while controlling assets and executing transactions on a Foreign Chain like Ethereum Mainnet. This gives DAOs greater access to use cases on Mainnet such as DeFis and NFTs, while minimizing governance costs.',
+      'With the ability to set quorum levels, transactions can be executed earlier once quorum requirements are met. This is especially useful for advanced DAOs looking to optimize their proposal velocity.',
+    ],
+    version: '1',
+  },
 };
 const SETTINGS_LINKS = {
   VAULT_LINK: {
     localUrl: '/dao/{.daochain}/{.daoid}/vaults/minion/{.minionAddress}',
-  },
-  UBER_LINK: {
-    localUrl: '/dao/{.daochain}/{.daoid}/allies',
   },
   SF_LINK: {
     localUrl: `/dao/{.daochain}/{.daoid}/settings/superfluid-minion/{.minionAddress}`,
@@ -110,20 +128,25 @@ export const MINIONS = {
   [MINION_TYPES.VANILLA]: {
     minionType: MINION_TYPES.VANILLA,
     content: MINION_CONTENT[MINION_TYPES.VANILLA],
+    deprecated: true,
     networks: MINION_NETWORKS[MINION_TYPES.VANILLA],
     summonForm: FORM.NEW_VANILLA_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_NIFTY],
   },
   [MINION_TYPES.NIFTY]: {
     minionType: MINION_TYPES.NIFTY,
     content: MINION_CONTENT[MINION_TYPES.NIFTY],
+    deprecated: true,
     networks: MINION_NETWORKS[MINION_TYPES.NIFTY],
     summonForm: FORM.NEW_NIFTY_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_NIFTY],
   },
   [MINION_TYPES.SUPERFLUID]: {
     minionType: MINION_TYPES.SUPERFLUID,
     content: MINION_CONTENT[MINION_TYPES.SUPERFLUID],
+    deprecated: true,
     networks: MINION_NETWORKS[MINION_TYPES.SUPERFLUID],
     summonForm: FORM.NEW_SUPERFLUID_MINION,
     settings: SETTINGS_LINKS.SF_LINK,
@@ -132,15 +155,48 @@ export const MINIONS = {
     minionType: MINION_TYPES.SAFE,
     content: MINION_CONTENT[MINION_TYPES.SAFE],
     networks: MINION_NETWORKS[MINION_TYPES.SAFE],
-    // summonForm: [FORM.NEW_SAFE_MINION, FORM.NEW_SAFE_MINION_ADVANCED],
     summonForm: FORM.NEW_SAFE_MINION,
     settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER, NFT_ACTIONS.SELL_RARIBLE],
   },
-  // [MINION_TYPES.UBER]: {
-  //   minionType: MINION_TYPES.UBER,
-  //   content: MINION_CONTENT[MINION_TYPES.UBER],
-  //   networks: MINION_NETWORKS[MINION_TYPES.UBER],
-  //   summonForm: null,
-  //   settings: SETTINGS_LINKS.UBER_LINK,
-  // },
+  [MINION_TYPES.CROSSCHAIN_SAFE]: {
+    minionType: MINION_TYPES.SAFE,
+    content: MINION_CONTENT[MINION_TYPES.CROSSCHAIN_SAFE],
+    networks: MINION_NETWORKS[MINION_TYPES.CROSSCHAIN_SAFE],
+    summonForm: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
+    addSummonSteps: {
+      STEP3: {
+        type: 'zodiacActionForm',
+        form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+        finish: true,
+        ctaText: 'Deploy & Add Module',
+        next: 'FINISH',
+        stepLabel: 'Deploy Brigde Module for Avatar on Foreign Chain',
+        isUserStep: true,
+        checklist: ['isConnected'],
+      },
+    },
+    settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER],
+  },
+  [MINION_TYPES.CROSSCHAIN_SAFE_NOMAD]: {
+    minionType: MINION_TYPES.SAFE,
+    content: MINION_CONTENT[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
+    networks: MINION_NETWORKS[MINION_TYPES.CROSSCHAIN_SAFE_NOMAD],
+    summonForm: CUSTOM_BOOST_INSTALL_FORMS.CROSSCHAIN_MINION,
+    addSummonSteps: {
+      STEP3: {
+        type: 'zodiacActionForm',
+        form: CUSTOM_BOOST_INSTALL_FORMS.ZODIAC_CROSSCHAIN_MODULE,
+        finish: true,
+        ctaText: 'Deploy & Add Module',
+        next: 'FINISH',
+        stepLabel: 'Deploy Nomad Module for Avatar on Foreign Chain',
+        isUserStep: true,
+        checklist: ['isConnected'],
+      },
+    },
+    settings: SETTINGS_LINKS.VAULT_LINK,
+    nftActions: [NFT_ACTIONS.TRANSFER],
+  },
 };

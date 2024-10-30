@@ -53,3 +53,59 @@ export const GET_POAP = gql`
 //     }
 //   }
 // }
+
+export const GET_ERC721 = gql`
+  query tokens($tokenHolder: String!) {
+    tokens(where: { owner: $tokenHolder }) {
+      id
+      identifier
+      uri
+      registry {
+        id
+        name
+        symbol
+      }
+    }
+  }
+`;
+
+export const GET_ERC1155 = gql`
+  query balances($tokenHolder: String!) {
+    balances(where: { account: $tokenHolder }) {
+      id
+      value
+      token {
+        id
+        identifier
+        name
+        symbol
+        URI
+        registry {
+          id
+        }
+      }
+    }
+  }
+`;
+
+export const GET_MINION_BY_NAME = gql`
+  query minions($molochAddress: String!, $minionName: String!) {
+    minions(
+      where: { details: $minionName, moloch: $molochAddress }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      id
+      minionAddress
+      safeAddress
+    }
+  }
+`;
+
+export const GET_MOLOCH_TOKEN = gql`
+  query molochTokens($contractAddress: String!) {
+    molochTokens(where: { moloch: $contractAddress }) {
+      id
+    }
+  }
+`;

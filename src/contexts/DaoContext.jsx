@@ -1,29 +1,19 @@
-import React, {
-  useEffect,
-  useContext,
-  createContext,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useContext, createContext, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DaoMemberProvider } from './DaoMemberContext';
 import { MetaDataProvider } from './MetaDataContext';
 import { TokenProvider } from './TokenContext';
 import { TXProvider } from './TXContext';
-import { useUser } from './UserContext';
 import { useInjectedProvider } from './InjectedProviderContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { bigGraphQuery } from '../utils/theGraph';
 import { supportedChains } from '../utils/chain';
-import { putRefreshApiVault } from '../utils/metadata';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 export const DaoContext = createContext();
 
 export const DaoProvider = ({ children }) => {
   const { daoid, daochain } = useParams();
-  const { apiData } = useUser();
   const { injectedChain, address } = useInjectedProvider();
 
   const daoNetworkData = supportedChains[daochain];
@@ -46,9 +36,6 @@ export const DaoProvider = ({ children }) => {
     null,
   );
 
-  const [uberMinionData, setUberMinionData] = useState(null);
-  const [isUberHaus, setIsUberHaus] = useState(false);
-
   const [daoVaults, setDaoVaults] = useSessionStorage(`vaults-${daoid}`, null);
 
   const hasPerformedBatchQuery = useRef(false);
@@ -57,13 +44,7 @@ export const DaoProvider = ({ children }) => {
   useEffect(() => {
     // This condition is brittle. If one request passes, but the rest fail
     // this stops the app from fetching. We'll need something better later on.
-    if (
-      daoProposals ||
-      daoActivities ||
-      daoOverview ||
-      daoMembers ||
-      uberMinionData
-    ) {
+    if (daoProposals || daoActivities || daoOverview || daoMembers) {
       return;
     }
     if (
@@ -87,7 +68,6 @@ export const DaoProvider = ({ children }) => {
           setter: { setDaoProposals, setDaoActivities },
         },
         { getter: 'getMembers', setter: setDaoMembers },
-        { getter: 'uberMinionData', setter: setUberMinionData },
       ],
     };
 
@@ -108,10 +88,9 @@ export const DaoProvider = ({ children }) => {
     setDaoProposals,
     setDaoVaults,
     isCorrectNetwork,
-    uberMinionData,
   ]);
 
-  const refetch = () => {
+  const refetch = async () => {
     const bigQueryOptions = {
       args: {
         daoID: daoid.toLowerCase(),
@@ -124,63 +103,22 @@ export const DaoProvider = ({ children }) => {
           setter: { setDaoProposals, setDaoActivities },
         },
         { getter: 'getMembers', setter: setDaoMembers },
-        { getter: 'uberMinionData', setter: setUberMinionData },
       ],
     };
     currentDao.current = null;
     bigGraphQuery(bigQueryOptions);
   };
 
-  const refreshMinionVault = async minionAddress => {
-    const { network } = supportedChains[daochain];
-    await putRefreshApiVault({ network, minionAddress });
-  };
-
-  const refreshAllDaoVaults = async () => {
-    const { network } = supportedChains[daochain];
-    await putRefreshApiVault({ network, molochAddress: daoid });
-  };
-
-  useEffect(() => {
-    if (apiData && daoMembers && uberMinionData) {
-      if (currentDao.current === daoid) return;
-      const membersWithUberData = daoMembers.map(member => {
-        const minionMember = uberMinionData.find(
-          minion => minion.minionAddress === member.memberAddress,
-        );
-        if (minionMember) {
-          return {
-            ...member,
-            uberMinion: minionMember,
-            uberMeta: apiData[minionMember.molochAddress][0],
-            isUberMinion: true,
-          };
-        }
-        return member;
-      });
-      setIsUberHaus(true);
-      currentDao.current = daoid;
-      setDaoMembers(membersWithUberData);
-    } else if (apiData && daoMembers && daoid !== UBERHAUS_DATA.ADDRESS) {
-      currentDao.current = daoid;
-      setIsUberHaus(false);
-    }
-  }, [daoMembers, daoid, apiData, uberMinionData]);
-
   return (
     <DaoContext.Provider
       value={{
         daoProposals,
-        isUberHaus,
         daoActivities,
         daoMembers,
         daoOverview,
         daoVaults,
-        setIsUberHaus,
         isCorrectNetwork,
         refetch,
-        refreshMinionVault,
-        refreshAllDaoVaults,
         hasPerformedBatchQuery, // Ref, not state
       }}
     >
@@ -203,28 +141,20 @@ export const useDao = () => {
     daoProposals,
     daoActivities,
     daoMembers,
-    setIsUberHaus,
     daoOverview,
     daoVaults,
-    isUberHaus,
     isCorrectNetwork,
     refetch,
-    refreshMinionVault,
-    refreshAllDaoVaults,
     hasPerformedBatchQuery, // Ref, not state
   } = useContext(DaoContext);
   return {
     daoProposals,
     daoActivities,
-    isUberHaus,
-    setIsUberHaus,
     daoMembers,
     daoOverview,
     daoVaults,
     isCorrectNetwork,
     refetch,
-    refreshMinionVault,
-    refreshAllDaoVaults,
     hasPerformedBatchQuery,
   };
 };

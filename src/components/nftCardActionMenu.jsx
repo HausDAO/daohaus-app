@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { BsThreeDots } from 'react-icons/bs';
-import { useParams } from 'react-router';
+import { FaSpinner } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
 import {
   Menu,
   MenuList,
@@ -13,17 +14,34 @@ import {
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useAppModal } from '../hooks/useModals';
-import { daoConnectedAndSameChain } from '../utils/general';
+import useCanInteract from '../hooks/useCanInteract';
+import { MINION_TYPES } from '../utils/proposalUtils';
+import { fetchCrossChainZodiacModule } from '../utils/gnosis';
+import { getMinionActionFormLego, getNftType } from '../utils/vaults';
+import { getNftCardActions } from '../utils/nftData';
 
-const NftCardActionMenu = ({ nft, minion, vault }) => {
-  const { daoOverview } = useDao();
+const NftCardActionMenu = ({ nft, minion, vault, minionType }) => {
+  const { canInteract } = useCanInteract({
+    checklist: ['isConnected', 'isSameChain'],
+  });
+  const { daoOverview, daoVaults } = useDao();
   const { daochain } = useParams();
   const { isMember } = useDaoMember();
-  const { address, injectedChain } = useInjectedProvider();
   const { formModal } = useAppModal();
   const [actionsEnabled, enableActions] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const nftActions = useMemo(() => {
+    const vaultMatch = vault || daoVaults.find(v => v.address === minion);
+    if (minionType && nft) {
+      return getNftCardActions(
+        vaultMatch.crossChainMinion ? MINION_TYPES.CROSSCHAIN_SAFE : minionType,
+        nft,
+        daochain,
+      );
+    }
+  }, [minionType, nft]);
 
   useEffect(() => {
     enableActions(
@@ -34,18 +52,51 @@ const NftCardActionMenu = ({ nft, minion, vault }) => {
     );
   }, [vault]);
 
-  const handleActionClick = action => {
+  const handleActionClick = async action => {
+    setLoading(true);
     const currentMinion = daoOverview.minions.find(
       m => m.minionAddress === minion,
     );
-    formModal({
-      ...action.formLego,
-      localValues: {
-        ...action.localValues,
-        minionAddress: currentMinion.minionAddress,
-        safeAddress: currentMinion.safeAddress,
+    const localValues = action.localValues.reduce(
+      (vals, key) => {
+        vals[key] = nft[key];
+        return vals;
       },
+      {
+        crossChainMinion: currentMinion.crossChainMinion,
+        minionAddress: currentMinion.minionAddress,
+        safeAddress: currentMinion.crossChainMinion
+          ? currentMinion.foreignSafeAddress
+          : currentMinion.safeAddress,
+        foreignChainId: vault.foreignChainId,
+        bridgeModule: vault.bridgeModule,
+        bridgeModuleAddress:
+          vault.foreignSafeAddress &&
+          (await fetchCrossChainZodiacModule({
+            chainID: vault.foreignChainId,
+            crossChainController: {
+              address: vault.safeAddress,
+              bridgeModule: vault.bridgeModule,
+              chainId: daochain,
+            },
+            safeAddress: vault.foreignSafeAddress,
+          })),
+      },
+    );
+    const nftType = getNftType(nft, action.nftTypeOverride);
+    const formLego =
+      action.formLego ||
+      getMinionActionFormLego(
+        nftType,
+        vault.crossChainMinion
+          ? MINION_TYPES.CROSSCHAIN_SAFE
+          : vault.minionType,
+      );
+    formModal({
+      ...formLego,
+      localValues,
     });
+    setLoading(false);
   };
 
   return (
@@ -53,12 +104,13 @@ const NftCardActionMenu = ({ nft, minion, vault }) => {
       <Menu isDisabled>
         <MenuButton
           as={Button}
+          disabled={loading}
           size='sm'
           color='secondary.400'
           _hover={{ cursor: 'pointer' }}
         >
           <Icon
-            as={BsThreeDots}
+            as={loading ? FaSpinner : BsThreeDots}
             color='white'
             h='20px'
             w='20px'
@@ -66,33 +118,25 @@ const NftCardActionMenu = ({ nft, minion, vault }) => {
           />
         </MenuButton>
         <MenuList>
-          {nft.actions.map(action => {
-            return (
-              <MenuItem
-                key={action.menuLabel}
-                onClick={() => handleActionClick(action)}
-                isDisabled={
-                  !(
-                    actionsEnabled &&
-                    daoConnectedAndSameChain(
-                      address,
-                      daochain,
-                      injectedChain?.chainId,
-                    )
-                  )
-                }
-              >
-                <Tooltip
-                  hasArrow
-                  shouldWrapChildren
-                  placement='bottom'
-                  label={action.toolTipLabel}
+          {nftActions &&
+            nftActions.map(action => {
+              return (
+                <MenuItem
+                  key={action.menuLabel}
+                  onClick={() => handleActionClick(action)}
+                  isDisabled={!(actionsEnabled && canInteract)}
                 >
-                  {action.menuLabel}
-                </Tooltip>
-              </MenuItem>
-            );
-          })}
+                  <Tooltip
+                    hasArrow
+                    shouldWrapChildren
+                    placement='bottom'
+                    label={action.toolTipLabel}
+                  >
+                    {action.menuLabel}
+                  </Tooltip>
+                </MenuItem>
+              );
+            })}
         </MenuList>
       </Menu>
     </>

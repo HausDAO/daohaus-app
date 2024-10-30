@@ -90,7 +90,7 @@ const buildProposalHistory = proposal => {
     {
       title: 'Submitted',
       createdAt: proposal.createdAt,
-      memberAddress: proposal.proposer,
+      memberAddress: proposal.createdBy,
     },
   ];
 

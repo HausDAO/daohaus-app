@@ -28,12 +28,21 @@ const Modal = () => {
       onClose={handleClose}
       closeOnOverlayClick={false}
       isCentered
+      scrollBehavior='inside'
     >
       <ModalOverlay
         bgColor={rgba(theme.colors.background[500], 0.8)}
         style={{ backdropFilter: 'blur(6px)' }}
       />
-      <ModalContent rounded='lg' bg='black' maxWidth={width}>
+      <ModalContent
+        borderWidth='1px'
+        borderColor='whiteAlpha.200'
+        rounded='lg'
+        bg='#0b0b0b'
+        maxWidth={width}
+        maxH='100vh'
+        overflowY='auto'
+      >
         <ModalBody>
           <Flex px={[3, 6]} py={[2, 4]} position='relative' flexDir='column'>
             <Box

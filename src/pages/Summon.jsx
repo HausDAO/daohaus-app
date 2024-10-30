@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Box, Text } from '@chakra-ui/react';
+import { Button, Flex, Text, Link, Icon, Heading } from '@chakra-ui/react';
+import { RiExternalLinkLine } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -9,34 +10,21 @@ import MainViewLayout from '../components/mainViewLayout';
 import SummonEasy from '../forms/summonEasy';
 import SummonHard from '../forms/summonHard';
 import SummonPending from '../components/summonPending';
-// import TemporaryCloneSummon from '../components/temporaryCloneSummon';
 import { createPoll } from '../services/pollService';
 import { SummonService } from '../services/summonService';
 import { DAO_POLL } from '../graphQL/dao-queries';
 import { capitalize } from '../utils/general';
 import {
-  // cloneDaoPresets,
-  // cloneMembers,
-  // cloneTokens,
   daoConstants,
   daoPresets,
   parseSummonersAndShares,
 } from '../utils/summoning';
 import { getGraphEndpoint } from '../utils/chain';
 import { graphQuery } from '../utils/apollo';
-
-// const tokenMsg =
-//   '''Token addresses are different across chains.
-//    If you would like to clone the same tokens to a different network,
-//    you will need to manually add the equivalent token addresses here.''';
+import ContentBox from '../components/ContentBox';
 
 const Summon = () => {
-  const {
-    address,
-    injectedChain,
-    requestWallet,
-    injectedProvider,
-  } = useInjectedProvider();
+  const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { cachePoll, resolvePoll, refetchUserHubDaos } = useUser();
   const { errorToast, successToast } = useOverlay();
   const [hardMode, setHardMode] = useState(false);
@@ -163,29 +151,59 @@ const Summon = () => {
     }
   };
 
-  // const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
-  //   const cloneData = {
-  //     ...daoConstants(injectedChain.chain_id),
-  //     summoner: '',
-  //     summonerAndShares: cloneMembers(daoMembers),
-  //     approvedToken:
-  //       injectedChain.chainId === daoNetwork
-  //         ? cloneTokens(daoOverview)
-  //         : tokenMsg,
-  //     ...cloneDaoPresets(daoOverview, daoMembers),
-  //   };
-
-  //   if (injectedChain.chainId !== daoNetwork) {
-  //     cloneData.proposalDeposit = '0';
-  //     cloneData.processingReward = '0';
-  //   }
-  //   setDaoData(cloneData);
-  // };
+  const summonOn = false;
 
   return (
     <Layout>
       <MainViewLayout header='Summon'>
-        {injectedChain ? (
+        {!summonOn && (
+          <Flex
+            as={ContentBox}
+            mt={2}
+            direction='column'
+            w={['100%', '100%', null, null, '60%']}
+          >
+            <Heading fontSize='xl' mb='3rem'>
+              Why summon a v2 when you could summon a v3?{' '}
+            </Heading>
+            <Button
+              size='lg'
+              as={Link}
+              color='white'
+              href='https://summon.daohaus.club'
+              isExternal
+              w='250px'
+              mb='3rem'
+            >
+              <Text>
+                Summon a v3 here{' '}
+                <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
+              </Text>
+            </Button>
+            <Link
+              color='white'
+              href='https://guide.daohaus.club/'
+              isExternal
+              mb='1.5rem'
+            >
+              <Text fontSize='lg'>
+                Let us tell you of the wonders of the new Moloch.{' '}
+                <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
+              </Text>
+            </Link>
+            <Link
+              color='white'
+              href='https://guide.daohaus.club/quickstart/migrate'
+              isExternal
+            >
+              <Text fontSize='lg'>
+                Learn more about migration to v3{' '}
+                <Icon as={RiExternalLinkLine} ml='2px' mt='-3px' />
+              </Text>
+            </Link>
+          </Flex>
+        )}
+        {injectedChain && summonOn && (
           <>
             {!isSummoning ? (
               <>
@@ -243,29 +261,7 @@ const Summon = () => {
               />
             )}
           </>
-        ) : (
-          <Box
-            rounded='lg'
-            bg='blackAlpha.600'
-            borderWidth='1px'
-            borderColor='whiteAlpha.200'
-            p={6}
-            m={[10, 'auto', 0, 'auto']}
-            w='50%'
-            textAlign='center'
-          >
-            <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-              Connect your wallet to summon a DAO.
-            </Box>
-
-            <Flex direction='column' align='center'>
-              <Button onClick={requestWallet}>Connect Wallet</Button>
-            </Flex>
-          </Box>
         )}
-        {/* {hardMode && !isSummoning && (
-          <TemporaryCloneSummon handleCloneDAO={handleCloneDAO} />
-        )} */}
       </MainViewLayout>
     </Layout>
   );

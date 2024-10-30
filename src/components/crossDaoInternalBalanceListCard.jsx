@@ -5,13 +5,12 @@ import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';
-import { daoConnectedAndSameChain } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import { displayBalance } from '../utils/tokenValue';
 
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
-  const { minion, daochain } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
+  const { minion } = useParams();
+  const { address } = useInjectedProvider();
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
 
   useEffect(() => {
@@ -23,7 +22,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
           daoToken.tokenAddress.toLowerCase()
         );
       });
-    setTokenWhitelisted(!isWhitelisted);
+    setTokenWhitelisted(!!isWhitelisted);
   }, [currentDaoTokens]);
 
   return (
@@ -82,13 +81,6 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
               targetDao={token}
               tokenWhitelisted={tokenWhitelisted}
               token={token}
-              daoConnectedAndSameChain={
-                !daoConnectedAndSameChain(
-                  address,
-                  daochain,
-                  injectedChain?.chainId,
-                )
-              }
             />
           </Box>
         )}

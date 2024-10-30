@@ -11,6 +11,7 @@ import {
   Tooltip,
   Stack,
   Text,
+  IconButton,
 } from '@chakra-ui/react';
 import { isAfter, isBefore } from 'date-fns';
 import { MaxUint256 } from '@ethersproject/constants';
@@ -20,44 +21,26 @@ import { utils } from 'ethers';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useTX } from '../contexts/TXContext';
+import useCanInteract from '../hooks/useCanInteract';
+import CrossChainMinionExecute from './crossChainMinionExecute';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
-import { TokenService } from '../services/tokenService';
-import { TX } from '../data/contractTX';
-import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
+import EscrowActions from './escrowActions';
+
+import { TX } from '../data/txLegos/contractTX';
+import { isMinionProposalType, memberVote } from '../utils/proposalUtils';
 import { getTerm, getTitle } from '../utils/metadata';
-import {
-  capitalize,
-  daoConnectedAndSameChain,
-  isDelegating,
-} from '../utils/general';
+import { capitalize, daoConnectedAndSameChain } from '../utils/general';
+import { createContract } from '../utils/contract';
+import { LOCAL_ABI } from '../utils/abi';
 import { supportedChains } from '../utils/chain';
+import { earlyExecuteMinionType } from '../utils/minionUtils';
 
 const MotionBox = motion(Box);
 
-const getAllowance = (daoMember, delegate) => {
-  if (daoMember?.hasWallet && daoMember?.allowance) {
-    return +daoMember.allowance;
-  }
-  if (delegate?.hasWallet && delegate?.allowance) {
-    return +delegate.allowance;
-  }
-  return null;
-};
-
-const canInteract = (daoMember, delegate) => {
-  if (+daoMember?.shares > 0 && !isDelegating(daoMember)) {
-    return true;
-  }
-  if (delegate) {
-    return true;
-  }
-  return false;
-};
-
-const ProposalVote = ({
+const ProposalActions = ({
   daoMember,
   daoProposals,
   delegate,
@@ -70,18 +53,13 @@ const ProposalVote = ({
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { submitTransaction } = useTX();
   const { customTerms } = useMetaData();
-
+  const { canInteract, interactErrors } = useCanInteract({
+    checklist: ['canSponsorAndVote'],
+  });
   const [enoughDeposit, setEnoughDeposit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [quorumNeeded, setQuorumNeeded] = useState(null);
-
-  const earlyExecuteMinionType = proposal => {
-    return (
-      proposal?.minion?.minionType === MINION_TYPES.NIFTY ||
-      proposal?.minion?.minionType === MINION_TYPES.SAFE
-    );
-  };
 
   const currentlyVoting = proposal => {
     return (
@@ -100,6 +78,9 @@ const ProposalVote = ({
       align='center'
       justify='center'
       style={{ backdropFilter: 'blur(6px)' }}
+      sx={{ '-webkit-backdrop-filter': 'blur(6px)' }}
+      w='100%'
+      h='100%'
     >
       <Box
         maxW={['70%', null, null, 'auto']}
@@ -111,6 +92,13 @@ const ProposalVote = ({
         title={getTitle(customTerms, 'Proposal')}
       >
         {`Connect to ${capitalize(supportedChains[daochain]?.network)}
+      ${
+        proposal?.minion?.foreignChainId
+          ? `or ${capitalize(
+              supportedChains[proposal?.minion?.foreignChainId]?.network,
+            )}`
+          : ''
+      }
       for ${getTerm(customTerms, 'proposal')} actions`}
       </Box>
     </Flex>
@@ -119,14 +107,19 @@ const ProposalVote = ({
   useEffect(() => {
     let shouldUpdate = true;
     const getDepositTokenBalance = async () => {
-      const depositTokenBalance = await TokenService({
-        tokenAddress: overview?.depositToken.tokenAddress,
+      const tokenContract = createContract({
+        address: overview?.depositToken.tokenAddress,
+        abi: LOCAL_ABI.ERC_20,
         chainID: daochain,
-      })('balanceOf')(address);
+      });
+      const tokenBalance = await tokenContract.methods
+        .balanceOf(address)
+        .call();
+
       if (shouldUpdate) {
         setEnoughDeposit(
           +overview?.proposalDeposit === 0 ||
-            +depositTokenBalance / 10 ** overview?.depositToken.decimals >=
+            +tokenBalance / 10 ** overview?.depositToken.decimals >=
               +overview?.proposalDeposit /
                 10 ** overview?.depositToken.decimals,
         );
@@ -148,7 +141,6 @@ const ProposalVote = ({
       const proposalsToProcess = daoProposals
         .filter(p => p.status === 'ReadyForProcessing')
         .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
-
       if (proposalsToProcess.length > 0) {
         setNextProposal(proposalsToProcess[0]);
       }
@@ -214,10 +206,20 @@ const ProposalVote = ({
   return (
     <>
       <ContentBox position='relative'>
-        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
+        {!daoConnectedAndSameChain(
+          address,
+          injectedChain?.chainId,
+          daochain,
+          proposal?.minion?.foreignChainId,
+        ) &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
-        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
+        {!daoConnectedAndSameChain(
+          address,
+          injectedChain?.chainId,
+          daochain,
+          proposal?.minion?.foreignChainId,
+        ) &&
           (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' &&
           !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
@@ -245,7 +247,7 @@ const ProposalVote = ({
                       shouldWrapChildren
                       placement='bottom'
                       label={`Insufficient Funds: You only have ${Number(
-                        daoMember?.depositTokenBalance,
+                        daoMember?.depositTokenData?.balance,
                       )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
@@ -260,12 +262,12 @@ const ProposalVote = ({
               </Flex>
             </Flex>
             <Flex justify='space-around'>
-              {canInteract(daoMember, delegate) ? (
+              {canInteract ? (
                 <>
-                  {getAllowance(daoMember, delegate) *
-                    10 ** overview?.depositToken?.decimals >=
-                    +overview?.proposalDeposit ||
-                  +overview?.proposalDeposit === 0 ? (
+                  {Number(daoMember?.depositTokenData?.allowance) ||
+                  Number(delegate?.depositTokenData?.allowance) >=
+                    Number(overview?.proposalDeposit) ||
+                  Number(overview?.proposalDeposit === 0) ? (
                     <Button
                       onClick={() => sponsorProposal(proposal?.proposalId)}
                       isDisabled={!enoughDeposit}
@@ -287,7 +289,7 @@ const ProposalVote = ({
                   hasArrow
                   shouldWrapChildren
                   placement='bottom'
-                  label='You have no shares to vote with. Either you are not a member or you have delegated voting power to another member'
+                  label={interactErrors}
                   bg='secondary.500'
                 >
                   <Button isDisabled>Sponsor</Button>
@@ -305,11 +307,15 @@ const ProposalVote = ({
                 )}
               {proposal?.minionAddress &&
                 proposal?.proposer === proposal?.minionAddress && (
-                  <MinionCancel proposal={proposal} />
+                  <MinionCancel
+                    proposal={proposal}
+                    minionAction={minionAction}
+                  />
                 )}
             </Flex>
           </Flex>
         )}
+
         {(proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' && (
             <>
@@ -324,49 +330,67 @@ const ProposalVote = ({
                     <>
                       {daoConnectedAndSameChain(
                         address,
-                        daochain,
                         injectedChain?.chainId,
+                        daochain,
                       ) &&
-                        canInteract(daoMember, delegate) &&
+                        canInteract &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
-                            <Flex
+                            <IconButton
+                              icon={
+                                <Flex justiy='center' align='center'>
+                                  <Icon boxSize='1.5em' as={FaThumbsUp}></Icon>
+                                </Flex>
+                              }
                               p={3}
+                              size='xl'
+                              color='green.500'
+                              background='none'
+                              borderRadius='40px'
                               borderWidth='1px'
                               borderColor='green.500'
                               borderStyle='solid'
+                              _hover={{ cursor: 'pointer' }}
+                              _disabled={{
+                                borderColor: 'green.900',
+                                color: 'green.900',
+                                cursor: 'not-allowed',
+                                _hover: {
+                                  cursor: 'not-allowed',
+                                },
+                              }}
+                              isDisabled={proposal?.executed}
+                              onClick={() => submitVote(proposal, 1)}
+                            />
+                            <IconButton
+                              icon={
+                                <Flex p={3} justiy='center' align='center'>
+                                  <Icon
+                                    boxSize='1.5em'
+                                    as={FaThumbsDown}
+                                  ></Icon>
+                                </Flex>
+                              }
                               borderRadius='40px'
-                              justiy='center'
-                              align='center'
-                            >
-                              <Icon
-                                as={FaThumbsUp}
-                                color='green.500'
-                                w='25px'
-                                h='25px'
-                                _hover={{ cursor: 'pointer' }}
-                                onClick={() => submitVote(proposal, 1)}
-                              />
-                            </Flex>
-                            <Flex
-                              p={3}
                               borderWidth='1px'
                               borderColor='red.500'
                               borderStyle='solid'
-                              borderRadius='40px'
-                              justiy='center'
-                              align='center'
-                            >
-                              <Icon
-                                as={FaThumbsDown}
-                                color='red.500'
-                                w='25px'
-                                h='25px'
-                                transform='rotateY(180deg)'
-                                _hover={{ cursor: 'pointer' }}
-                                onClick={() => submitVote(proposal, 2)}
-                              />
-                            </Flex>
+                              color='red.500'
+                              size='xl'
+                              background='none'
+                              _hover={{ cursor: 'pointer' }}
+                              _disabled={{
+                                color: 'red.900',
+                                borderColor: 'red.900',
+                                cursor: 'not-allowed',
+                                _hover: {
+                                  cursor: 'not-allowed',
+                                },
+                              }}
+                              transform='rotateY(180deg)'
+                              isDisabled={proposal?.executed}
+                              onClick={() => submitVote(proposal, 2)}
+                            />
                           </Flex>
                         )}
                       <Flex
@@ -392,9 +416,8 @@ const ProposalVote = ({
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
-                          {+proposal?.yesShares > +proposal?.noShares && (
-                            <Box>Currently Passing</Box>
-                          )}
+                          {+proposal?.yesShares > +proposal?.noShares &&
+                            'Currently Passing'}
                           {+proposal?.yesShares === 0 &&
                             +proposal?.noShares === 0 &&
                             'Awaiting Votes'}
@@ -482,8 +505,8 @@ const ProposalVote = ({
         <Stack>
           {daoConnectedAndSameChain(
             address,
-            daochain,
             injectedChain?.chainId,
+            daochain,
           ) &&
             proposal?.status === 'ReadyForProcessing' &&
             !injectedProvider?.currentProvider?.safe &&
@@ -513,36 +536,52 @@ const ProposalVote = ({
               </Flex>
             ))}
 
-          {((proposal?.status === 'Passed' && proposal?.minionAddress) ||
-            earlyExecuteMinionType(proposal)) && (
-            <Stack mt='15px' justify='center'>
-              {(proposal?.status === 'Passed' && proposal?.minionAddress) ||
-              proposal.yesShares >= quorumNeeded ? (
-                <MinionExecute
-                  hideMinionExecuteButton={hideMinionExecuteButton}
-                  minionAction={minionAction}
-                  proposal={proposal}
-                  early={
-                    earlyExecuteMinionType(proposal) &&
-                    proposal.yesShares >= quorumNeeded &&
-                    !proposal?.status === 'Passed'
-                  }
-                />
-              ) : (
-                quorumNeeded && (
-                  <Text size='sm' textAlign='center' maxW='60%' m='auto'>
-                    {proposal?.minion?.minQuorum}% quorum or{' '}
-                    {utils.commify(quorumNeeded)} shares needed for Early
-                    Execution
-                  </Text>
-                )
-              )}
-            </Stack>
-          )}
+          {((proposal?.status === 'NeedsExecution' &&
+            proposal?.minionAddress) ||
+            earlyExecuteMinionType(proposal)) &&
+            proposal?.status !== 'ReadyForProcessing' && (
+              <Stack mt='15px' justify='center'>
+                {(proposal?.status === 'NeedsExecution' &&
+                  proposal?.minionAddress) ||
+                (quorumNeeded && proposal.yesShares >= quorumNeeded) ? (
+                  <MinionExecute
+                    hideMinionExecuteButton={hideMinionExecuteButton}
+                    minionAction={minionAction}
+                    proposal={proposal}
+                    early={
+                      earlyExecuteMinionType(proposal) &&
+                      proposal.yesShares >= quorumNeeded &&
+                      !proposal?.processed
+                    }
+                  />
+                ) : (
+                  quorumNeeded &&
+                  isMinionProposalType(proposal) && (
+                    <Text size='sm' textAlign='center' maxW='60%' m='auto'>
+                      {proposal?.minion?.minQuorum}% quorum or{' '}
+                      {utils.commify(quorumNeeded)} shares needed for Early
+                      Execution
+                    </Text>
+                  )
+                )}
+              </Stack>
+            )}
+          {proposal?.minion?.crossChainMinion &&
+            proposal?.executed &&
+            proposal?.minionExecuteActionTx && (
+              <CrossChainMinionExecute chainID={daochain} proposal={proposal} />
+            )}
+          {proposal?.escrow &&
+            (proposal?.status === 'Failed' ||
+              proposal?.status === 'Cancelled') && (
+              <Flex justify='center'>
+                <EscrowActions proposal={proposal} />
+              </Flex>
+            )}
         </Stack>
       </ContentBox>
     </>
   );
 };
 
-export default ProposalVote;
+export default ProposalActions;

@@ -15,21 +15,17 @@ import {
 } from '@chakra-ui/react';
 import abiDecoder from 'abi-decoder';
 import { rgba } from 'polished';
+import { v4 as uuid } from 'uuid';
 import Web3, { utils as Web3Utils } from 'web3';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
-import UberHausAvatar from './uberHausAvatar';
 import { chainByID } from '../utils/chain';
-import { decodeMultisendTx } from '../utils/abi';
-import {
-  hasMinionActions,
-  MINION_TYPES,
-  PROPOSAL_TYPES,
-} from '../utils/proposalUtils';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { decodeAMBTx, decodeMultisendTx, decodeNomadTx } from '../utils/abi';
+import { decodeAction } from '../utils/minionUtils';
+import { hasMinionActions, MINION_TYPES } from '../utils/proposalUtils';
 
 const ProposalMinionCard = ({ proposal, minionAction }) => {
   const { daochain } = useParams();
@@ -59,6 +55,8 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
     let key;
     if (daochain === '0x89') {
       key = process.env.REACT_APP_POLYGONSCAN_KEY;
+    } else if (daochain === '0x64') {
+      key = process.env.REACT_APP_GNOSISSCAN_KEY;
     } else {
       key = process.env.REACT_APP_ETHERSCAN_KEY;
     }
@@ -69,10 +67,15 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
   };
 
   const checkIfProxy = async (abi, to) => {
-    const rpcUrl = chainByID(daochain).rpc_url;
-    const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-    const contract = new web3.eth.Contract(abi, to);
-    return contract.methods.implementation().call();
+    try {
+      const rpcUrl = chainByID(daochain).rpc_url;
+      const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+      const contract = new web3.eth.Contract(abi, to);
+      const implAddress = await contract.methods.implementation().call();
+      return implAddress;
+    } catch (error) {
+      console.log('Error getting Proxy implementation', error);
+    }
   };
 
   const buildEthTransferAction = action => ({
@@ -93,44 +96,90 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           const hydratedAction = { ...action };
           try {
             if (proposal.minion.minionType === MINION_TYPES.SAFE) {
-              const multisendAddress = `${
-                chainByID(daochain).safeMinion.safe_mutisend_addr
-              }`;
+              const chainConfig = chainByID(daochain);
+              const multisendAddress = `${chainConfig.safeMinion.safe_mutisend_addr}`;
               const decodedMultisend = decodeMultisendTx(
                 multisendAddress,
                 action.data,
               );
-              hydratedAction.decodedMultisend = decodedMultisend;
               hydratedAction.decodedData = {
                 name: 'multiSend',
                 actions: await Promise.all(
                   decodedMultisend.map(async action => {
-                    if (action.data.slice(2).length === 0) {
-                      return buildEthTransferAction(action);
-                    }
-                    const json = await decodeFromEtherscan(action);
-                    if (json.status === '0') {
-                      return null;
-                    }
-                    const parsed = JSON.parse(json.result);
-                    const imp = parsed.find(p => p.name === 'implementation');
-                    if (imp) {
-                      hydratedAction.proxyTo = await checkIfProxy(
-                        parsed,
-                        action.to,
-                      );
-                      return null;
-                    }
-                    abiDecoder.addABI(parsed);
+                    const decodedAction = await decodeAction(action, {
+                      chainID: daochain,
+                    });
                     return {
-                      ...abiDecoder.decodeMethod(action.data),
-                      value: Web3Utils.toBN(action.value).toString(),
+                      ...decodedAction,
+                      to: action.to,
+                      value:
+                        Number(action.value) > 0 &&
+                        Web3Utils.toBN(action.value).toString(),
                     };
                   }),
                 ),
               };
+              if (
+                hydratedAction.decodedData.actions[0]?.name ===
+                'requireToPassMessage'
+              ) {
+                // cross-chain AMB bridge call
+                const [
+                  contract,
+                  data,
+                ] = hydratedAction.decodedData.actions[0].params;
+                const ambDecodedTx = decodeAMBTx(contract.value, data.value);
+                hydratedAction.decodedData.actions[0].actions = [
+                  ...(await Promise.all(
+                    decodeMultisendTx(ambDecodedTx.to, ambDecodedTx.data).map(
+                      async action => ({
+                        ...action,
+                        data: await decodeAction(action, {
+                          chainID: proposal.minion.foreignChainId,
+                        }),
+                      }),
+                    ),
+                  )),
+                ];
+              }
+              if (
+                hydratedAction.decodedData.actions[0]?.name === 'dispatch' &&
+                chainConfig.zodiac_nomad_module?.homeContract &&
+                hydratedAction.decodedData.actions[0]?.to ===
+                  chainConfig.zodiac_nomad_module.homeContract
+              ) {
+                // cross-chain Nomad bridge call
+                const [
+                  ,
+                  recipientAddress,
+                  messageBody,
+                ] = hydratedAction.decodedData.actions[0].params;
+                const nomadDecodedTx = decodeNomadTx(
+                  recipientAddress.value,
+                  messageBody.value,
+                );
+                hydratedAction.decodedData.actions[0].actions = [
+                  ...(await Promise.all(
+                    decodeMultisendTx(
+                      nomadDecodedTx.to,
+                      nomadDecodedTx.data,
+                    ).map(async action => ({
+                      ...action,
+                      data: await decodeAction(action, {
+                        chainID: proposal.minion.foreignChainId,
+                      }),
+                    })),
+                  )),
+                ];
+              }
               return hydratedAction;
             }
+
+            // console.log('action', action);
+            if (!action.data) {
+              return;
+            }
+
             if (action.data.slice(2).length === 0) {
               return buildEthTransferAction(action);
             }
@@ -142,8 +191,10 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
             const imp = parsed.find(p => p.name === 'implementation');
             if (imp) {
               hydratedAction.proxyTo = await checkIfProxy(parsed, action.to);
-              json = await decodeFromEtherscan(hydratedAction);
-              if (json.status === '0') {
+              json =
+                hydratedAction.proxyTo &&
+                (await decodeFromEtherscan(hydratedAction));
+              if (!json || json.status === '0') {
                 return hydratedAction;
               }
               parsed = JSON.parse(json.result);
@@ -162,11 +213,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
       setDecodedData(promRes);
     };
 
-    if (
-      proposal &&
-      minionDeets &&
-      proposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_DEL
-    ) {
+    if (proposal && minionDeets) {
       hydrateActions();
     }
   }, [proposal, minionDeets]);
@@ -175,38 +222,52 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
     setShowModal(prevState => !prevState);
   };
 
-  const getAvatar = addr => {
-    if (addr?.toLowerCase() === UBERHAUS_DATA.ADDRESS.toLowerCase()) {
-      return <UberHausAvatar />;
-    }
+  const getAvatar = () => {
     return <AddressAvatar addr={minionDeets.to} alwaysShowName />;
   };
 
   const displayActionData = (action, idx) => (
-    <Box key={idx}>
+    <Box key={uuid()}>
       <HStack spacing={3}>
-        <TextBox size='xs'>{`Param${idx + 1}:`}</TextBox>
+        <TextBox size='xs'>{`- Param${idx + 1}:`}</TextBox>
         <TextBox variant='value'>{action.name}</TextBox>
       </HStack>
-      <HStack spacing={3}>
+      <HStack spacing={3} pl={3}>
         <TextBox size='xs'>Type:</TextBox>
         <TextBox variant='value'>{action.type}</TextBox>
       </HStack>
-      <TextBox size='xs'>Value:</TextBox>
-      <TextBox variant='value'>{action.value.toString()}</TextBox>
+      <HStack spacing={3} pl={3}>
+        <TextBox size='xs'>Value:</TextBox>
+        <TextBox variant='value'>{action.value?.toString() || '0x'}</TextBox>
+      </HStack>
       <Divider my={2} />
     </Box>
   );
 
-  const displayDecodedData = data => {
+  const displayDecodedData = (data, subaction = null) => {
     if (data.decodedData) {
       return (
-        <>
+        <Box key={uuid()}>
+          {subaction && <TextBox mt={2}>{`Subaction #${subaction}`}</TextBox>}
+          {data.decodedData.targetContract && (
+            <HStack spacing={3}>
+              <TextBox size='xs'>Target</TextBox>
+              <TextBox size='sm' variant='value'>
+                {data.decodedData.targetContract}
+              </TextBox>
+            </HStack>
+          )}
+          {data.decodedData.value && (
+            <TextBox size='xs' variant='mono'>
+              {`Value ${data.decodedData.value}`}
+            </TextBox>
+          )}
           <HStack spacing={3}>
             <TextBox size='xs'>Method</TextBox>
-            <TextBox variant='value'>{data.decodedData?.name}</TextBox>
+            <TextBox size='sm' variant='value'>
+              {data.decodedData?.name}
+            </TextBox>
           </HStack>
-          <Divider my={2} />
           <Box fontFamily='heading' mt={4}>
             {data.decodedData?.params && 'Params'}
             {data.decodedData?.actions && 'Actions'}
@@ -214,27 +275,58 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           <Divider my={2} />
           {data.decodedData?.params?.map(displayActionData)}
           {data.decodedData?.actions?.map((action, idx) => {
-            return action ? (
-              <Box key={`subaction_${idx}`}>
+            return (
+              <Box key={uuid()}>
                 <HStack spacing={3}>
-                  <TextBox size='xs'>
-                    {`Action ${idx + 1}: ${action.name}`}
+                  <TextBox size='xs' variant='mono'>
+                    {`Action ${idx + 1}: ${action?.name || ''}`}
                   </TextBox>
                 </HStack>
-                {+action.value > 0 && (
+                {action?.to && (
                   <HStack spacing={3}>
-                    <TextBox size='xs'>{`Value: ${action.value}`}</TextBox>
+                    <TextBox size='xs' variant='mono'>
+                      Target
+                    </TextBox>
+                    <TextBox size='xs' variant='value' mb={2}>
+                      {action.to}
+                    </TextBox>
                   </HStack>
                 )}
-                {action.params.map(displayActionData)}
+                {action?.value && (
+                  <TextBox size='xs' variant='mono'>
+                    {`Value ${action?.value}`}
+                  </TextBox>
+                )}
+                {action?.actions ? (
+                  <Box ml={3}>
+                    {action?.actions.map((a, idx) =>
+                      displayDecodedData(
+                        {
+                          decodedData: {
+                            name: a.data.name,
+                            params: a.data.params,
+                            targetContract: a.to,
+                            value: a.value,
+                          },
+                        },
+                        idx + 1,
+                      ),
+                    )}
+                  </Box>
+                ) : action?.params ? (
+                  <Box>{action.params.map(displayActionData)}</Box>
+                ) : (
+                  <Box>
+                    <TextBox mt={2} size='sm' key={`decerror_${idx}`}>
+                      Could not decode action data
+                    </TextBox>
+                    <Divider my={2} />
+                  </Box>
+                )}
               </Box>
-            ) : (
-              <TextBox mt={2} size='sm' key={`decerror_${idx}`}>
-                Could not decode action data
-              </TextBox>
             );
           })}
-        </>
+        </Box>
       );
     }
     return (
@@ -258,7 +350,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
                 <TextBox size='xs' mb={3}>
                   {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
                 </TextBox>
-                {minionDeets?.to && getAvatar(minionDeets.to)}
+                {minionDeets?.to && getAvatar()}
                 {minionDeets?.nominee && (
                   <Box>
                     <AddressAvatar addr={minionDeets.nominee} alwaysShowName />
@@ -287,7 +379,7 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           </Flex>
         </Flex>
       )}
-      <Modal isOpen={showModal} onClose={toggleModal} isCentered>
+      <Modal isOpen={showModal} onClose={toggleModal} isCentered size='xl'>
         <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
           rounded='lg'
@@ -316,16 +408,26 @@ const ProposalMinionCard = ({ proposal, minionAction }) => {
           >
             {minionDeets?.actions.map((action, i) => {
               return (
-                <Box key={`${action.to}_${i}`}>
+                <Box key={uuid()}>
                   {proposal.minion.minionType !== MINION_TYPES.SAFE && (
                     <TextBox size='sm' fontWeight='900'>
                       Action {i + 1}
                     </TextBox>
                   )}
                   {action.proxyTo ? (
-                    <TextBox size='xs'>Target Proxy: {action.proxyTo}</TextBox>
+                    <TextBox size='xs'>
+                      Target Proxy:{' '}
+                      <TextBox size='xs' variant='value'>
+                        {action.proxyTo}
+                      </TextBox>
+                    </TextBox>
                   ) : (
-                    <TextBox size='xs'>Target: {action.to}</TextBox>
+                    <TextBox size='xs'>
+                      Target:{' '}
+                      <TextBox size='xs' variant='value'>
+                        {action.to}
+                      </TextBox>
+                    </TextBox>
                   )}
                   <TextBox size='xs'>VALUE: {action.value || '0'}</TextBox>
                   {decodedData && displayDecodedData(decodedData[i])}

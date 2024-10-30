@@ -11,23 +11,53 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 
-import { useAppModal } from '../hooks/useModals';
 import ErrorList from './ErrorList';
+import useCanInteract from '../hooks/useCanInteract';
 
-const FormFooter = ({
-  options,
-  loading,
-  addOption,
-  errors,
-  ctaText,
-  customSecondaryBtn,
-  customPrimaryBtn,
-}) => {
-  const { closeModal } = useAppModal();
+const buttonTextByFormState = formState => {
+  if (!formState) return;
+  if (formState === 'idle') return 'Submit';
+  if (formState === 'loading') return 'Submitting';
+  if (formState === 'success') return 'Finish';
+  if (formState === 'error') return 'Try Again';
+};
+const getPrimaryButtonFn = props => {
+  const { customPrimaryBtn, closeModal, goToNext } = props;
+  if (customPrimaryBtn?.fn) {
+    return customPrimaryBtn.fn;
+  }
+  if (props.formState === 'success' && props.next && props.next !== 'FINISH') {
+    return () => goToNext(props.next);
+  }
+  if (props.formState === 'success') {
+    return closeModal;
+  }
+  return null;
+};
+const FormFooter = props => {
+  const {
+    options,
+    loading,
+    addOption,
+    formState,
+    errors,
+    ctaText,
+    customSecondaryBtn,
+    customPrimaryBtn,
+    handleAddStep,
+    addStep,
+    closeModal,
+    checklist,
+    disableCallback,
+  } = props;
+  const isLoading = loading === 'loading' || loading === 'loadingStepper';
+
   const defaultSecondary = { text: 'Cancel', fn: closeModal };
-
+  const { canInteract, interactErrors } = useCanInteract({
+    errorDeliveryType: 'softErrors',
+    checklist,
+  });
   const secondaryBtn = customSecondaryBtn || defaultSecondary;
-
   return (
     <Flex flexDir='column'>
       <Flex alignItems={['flex-row', 'flex-end']} flexDir={['column', 'row']}>
@@ -38,16 +68,16 @@ const FormFooter = ({
             addOption={addOption}
           />
         )}
+        {addStep && <Button onClick={handleAddStep}>Add Step</Button>}
         <Flex
           ml={['0', 'auto']}
-          // wrap={['wrap-reverse', 'wrap']}
           w={['100%', 'inherit']}
           flexDir={['column-reverse', 'row']}
         >
           <Button
             type='button'
             variant='outline'
-            disabled={loading}
+            disabled={isLoading}
             onClick={secondaryBtn.fn}
             mr={[0, 2]}
           >
@@ -55,18 +85,32 @@ const FormFooter = ({
           </Button>
 
           <Button
-            type={customPrimaryBtn ? 'button' : 'submit'}
-            onClick={customPrimaryBtn && customPrimaryBtn?.fn}
+            type={
+              customPrimaryBtn || formState === 'success' ? 'button' : 'submit'
+            }
+            onClick={getPrimaryButtonFn(props)}
             loadingText={customPrimaryBtn ? 'Loading' : 'Submitting'}
-            isLoading={loading}
-            disabled={loading || errors?.length}
+            isLoading={isLoading}
+            disabled={isLoading || !canInteract || disableCallback?.()}
             mb={[2, 0]}
           >
-            {ctaText || customPrimaryBtn?.text || 'Submit'}
+            {ctaText ||
+              customPrimaryBtn?.text ||
+              buttonTextByFormState(formState) ||
+              'Submit'}
           </Button>
         </Flex>
       </Flex>
-      <ErrorList errors={errors} />
+      {interactErrors && (
+        <Flex justifyContent='flex-end' mt={4}>
+          <ErrorList errors={interactErrors} />
+        </Flex>
+      )}
+      {errors && (
+        <Flex justifyContent='flex-end' mt={4}>
+          <ErrorList errors={errors} />
+        </Flex>
+      )}
     </Flex>
   );
 };

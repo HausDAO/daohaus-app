@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { RiAddFill } from 'react-icons/ri';
 import { useParams, Link } from 'react-router-dom';
-import { Button, Flex, Icon, useToast } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Icon,
+  useToast,
+  Link as ChakraLink,
+} from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import BalanceList from '../components/balanceList';
-import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
-import { daoConnectedAndSameChain } from '../utils/general';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { DAO_BOOKS_HOST } from '../data/boosts';
 
 const Treasury = ({
-  overview,
   customTerms,
   currentDaoTokens,
   daoMember,
@@ -20,11 +23,13 @@ const Treasury = ({
   daoVaults,
 }) => {
   const { daoid, daochain } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
   const toast = useToast();
   const [needsSync, setNeedsSync] = useState(false);
 
   const treasuryVaultData = daoVaults?.find(vault => vault.type === 'treasury');
+  const { daoMetaData } = useMetaData();
+
+  const isBooksBoostEnabled = daoMetaData?.boosts?.DAO_BOOKS?.active;
 
   const handleCopy = () => {
     toast({
@@ -41,16 +46,6 @@ const Treasury = ({
       <CopyToClipboard text={daoid} mr={2} onCopy={handleCopy}>
         <Button>Copy Address</Button>
       </CopyToClipboard>
-      {daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
-        daoMember && (
-          <Button
-            as={Link}
-            to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
-            rightIcon={<RiAddFill />}
-          >
-            Whitelist Asset
-          </Button>
-        )}
     </Flex>
   );
 
@@ -75,22 +70,34 @@ const Treasury = ({
       headerEl={ctaButton}
       isDao
     >
-      <Flex
-        as={Link}
-        to={`/dao/${daochain}/${daoid}/vaults`}
-        align='center'
-        mb={3}
-      >
-        <Icon as={BiArrowBack} color='secondary.500' mr={2} />
-        All Vaults
+      <Flex justify='space-between' py='2'>
+        <Flex
+          as={Link}
+          to={`/dao/${daochain}/${daoid}/vaults`}
+          align='center'
+          mb={3}
+        >
+          <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+          All Vaults
+        </Flex>
+        {isBooksBoostEnabled && (
+          <Button
+            variant='outline'
+            as={ChakraLink}
+            isExternal
+            href={`${DAO_BOOKS_HOST}/dao/${daoid}/treasury`}
+          >
+            Vault Books
+          </Button>
+        )}
       </Flex>
-      <BankChart
+      {/* <BankChart
         overview={overview}
         customTerms={customTerms}
         daoVaults={daoVaults}
         balanceData={treasuryVaultData?.balanceHistory}
         visibleVaults={[treasuryVaultData]}
-      />
+      /> */}
       <BalanceList
         vault={treasuryVaultData}
         balances={currentDaoTokens}

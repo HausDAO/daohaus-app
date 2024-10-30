@@ -14,7 +14,11 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import CrossDaoInternalBalanceListCard from './crossDaoInternalBalanceListCard';
 
-const CrossDaoInternalBalanceList = ({ tokens, currentDaoTokens }) => {
+const CrossDaoInternalBalanceList = ({
+  tokens,
+  currentDaoTokens,
+  isMinion,
+}) => {
   return (
     <ContentBox mt={6}>
       <Accordion allowToggle defaultIndex={0} border='none' borderWidth='0'>
@@ -22,7 +26,7 @@ const CrossDaoInternalBalanceList = ({ tokens, currentDaoTokens }) => {
           <AccordionButton>
             <Flex direction='row' width='100%' justify='space-between'>
               <TextBox size='xs' mb={6}>
-                Internal Balances
+                {`${isMinion ? 'Minion ' : ''}Internal Balances`}
               </TextBox>
               <AccordionIcon />
             </Flex>

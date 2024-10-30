@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Flex, Image, AspectRatio } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
@@ -6,14 +6,24 @@ import ContentBox from './ContentBox';
 import AddressAvatar from './addressAvatar';
 import NftViewModal from '../modals/nftViewModal';
 import NftCardActionMenu from './nftCardActionMenu';
-import { hydrateNftCard } from '../utils/nftVaults';
+import { hydrateNftCard } from '../utils/nftData';
+
+import NFTImage from '../assets/img/nft-placeholder.png';
 
 const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
   const { setNftViewModal } = useOverlay();
 
-  const hydratedNft = useMemo(() => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [hydratedNft, setHydratedNft] = useState();
+
+  useEffect(() => {
+    const getMeta = async () => {
+      const meta = await hydrateNftCard(nft);
+      setHydratedNft(meta);
+    };
     if (nft) {
-      return hydrateNftCard(nft, vault?.minionType || minionType);
+      getMeta();
     }
   }, [nft]);
 
@@ -31,7 +41,7 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
         mb={5}
       >
         <Box size='xs' noOfLines={1}>
-          {hydratedNft?.metadata?.name || hydratedNft.name}
+          {hydratedNft?.metadata?.name || hydratedNft?.name}
         </Box>
 
         <Box
@@ -44,7 +54,12 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
         >
           View
         </Box>
-        <NftCardActionMenu nft={hydratedNft} vault={vault} minion={minion} />
+        <NftCardActionMenu
+          nft={hydratedNft}
+          vault={vault}
+          minion={minion}
+          minionType={minionType}
+        />
       </Flex>
       <AspectRatio
         ratio={1}
@@ -58,7 +73,19 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
           },
         }}
       >
-        <Image src={hydratedNft?.image} margin='auto' />
+        <Flex direction='column'>
+          <Image
+            src={
+              imageLoaded && !imageError && hydratedNft?.image
+                ? hydratedNft.image
+                : NFTImage
+            }
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+            margin='auto'
+          />
+          {imageError && <Box marginTop='-80px'>Could not load image</Box>}
+        </Flex>
       </AspectRatio>
       <Flex
         direction='row'
@@ -67,22 +94,26 @@ const NftCard = ({ nft, minion, minionType, vault, ...props }) => {
         w='100%'
         mt={5}
       >
-        {hydratedNft.creator && (
+        {hydratedNft?.creator && (
           <Box size='xs' fontFamily='mono'>
             Creator
-            <AddressAvatar addr={hydratedNft.creator} hideCopy alwaysShowName />
+            <AddressAvatar
+              addr={hydratedNft?.creator}
+              hideCopy
+              alwaysShowName
+            />
           </Box>
         )}
-        {hydratedNft.lastPrice && (
+        {hydratedNft?.lastPrice && (
           <Box size='xs' fontFamily='mono'>
             Last Price
-            <Box>{hydratedNft.lastPrice} ETH</Box>
+            <Box>{hydratedNft?.lastPrice} ETH</Box>
           </Box>
         )}
-        {!hydratedNft.lastPrice && hydratedNft.name && (
+        {!hydratedNft?.lastPrice && hydratedNft?.name && (
           <Box size='xs' fontFamily='mono'>
             Created on
-            <Box>{hydratedNft.name}</Box>
+            <Box>{hydratedNft?.name}</Box>
           </Box>
         )}
       </Flex>

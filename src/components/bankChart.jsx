@@ -75,7 +75,6 @@ const BankChart = ({ daoVaults, balanceData, visibleVaults }) => {
         });
 
         if (timeframe.value === 'lifetime' || data.length === 1) {
-          console.log('data', data.length);
           data.unshift({
             x: subtractDays(data[0].x, 7),
             y: 0,
@@ -124,7 +123,7 @@ const BankChart = ({ daoVaults, balanceData, visibleVaults }) => {
         {daoBalances?.length ? (
           <ContentBox minH='360px'>
             <Flex wrap='wrap' align='center' position='relative'>
-              <Box position='absolute' top='0px' left='10px'>
+              <Box position='absolute' top='30px' left='10px'>
                 <VaultTotal vaults={visibleVaults} />
               </Box>
 

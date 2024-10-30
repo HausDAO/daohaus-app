@@ -1,11 +1,10 @@
 // SAVE FOR LATER
-import { ethers } from 'ethers';
-import SafeMasterCopy from '@gnosis.pm/safe-contracts/build/artifacts/contracts/GnosisSafe.sol/GnosisSafe.json';
 import Web3 from 'web3';
 
 // import Erc20Abi from '../contracts/erc20a.json';
+import { getLocalABI } from './abi';
 import { chainByID } from './chain';
-import { postApiGnosis, postGnosisRelayApi } from './requests';
+import { CONTRACTS } from '../data/contracts';
 
 export const createContract = ({ address, abi, chainID, web3 }) => {
   if (!web3) {
@@ -59,85 +58,50 @@ export const createContract = ({ address, abi, chainID, web3 }) => {
 
 // test();
 
-export const createGnosisSafeTxProposal = async ({
-  chainID,
-  web3,
-  safeAddress,
-  fromDelegate,
-  to,
-  value,
-  data,
-  operation,
-}) => {
-  const { network } = chainByID(chainID);
-  const txBase = {
-    to: web3.utils.toChecksumAddress(to),
-    value,
-    data,
-    operation,
-    gasToken: null,
-  };
-  const gasEstimate = await postGnosisRelayApi(
-    network,
-    `safes/${safeAddress}/transactions/estimate/`,
-    txBase,
-  );
-  const { lastUsedNonce, safeTxGas } = gasEstimate.data;
-  // TODO: consider Txs in the queue?
-  const nonce = lastUsedNonce >= 0 ? lastUsedNonce + 1 : 0;
-  const txRefund = {
-    gasToken: ethers.constants.AddressZero,
-    baseGas: 0,
-    gasPrice: 0,
-    refundReceiver: ethers.constants.AddressZero,
-  };
-  const txDetails = {
-    safeTxGas,
-    nonce,
-    ...txBase,
-    ...txRefund,
-  };
-  const safe = new web3.eth.Contract(SafeMasterCopy.abi, safeAddress);
-  const txHash = await safe.methods
-    .getTransactionHash(
-      txBase.to,
-      txBase.value,
-      txBase.data,
-      txBase.operation,
-      txDetails.safeTxGas,
-      txRefund.baseGas,
-      txRefund.gasPrice,
-      txRefund.gasToken,
-      txRefund.refundReceiver,
-      txDetails.nonce,
-    )
-    .call();
-
-  const txProposal = {
-    tx: txDetails,
-    txHash,
-  };
-  // TODO: EIP-712 compliant?
-  const signature = await web3.eth.sign(txProposal.txHash, fromDelegate);
-
-  const tx = {
-    ...txProposal.tx,
-    contractTransactionHash: txProposal.txHash,
-    sender: fromDelegate,
-    signature,
-    origin: 'Minion Safe enableModule Tx Proposal',
-  };
-
+export const getNftUri = async (
+  daochain,
+  injectedProvider,
+  contractAbi,
+  getterName,
+  contractAddress,
+  tokenId,
+) => {
   try {
-    const rs = await postApiGnosis(
-      network,
-      `safes/${safeAddress}/multisig-transactions/`,
-      tx,
-      false,
-    );
-    console.log('Gnosis API Response', rs);
+    const contract = await createContract({
+      address: contractAddress,
+      abi: contractAbi,
+      chainID: daochain,
+      web3: injectedProvider,
+    });
+    return await contract.methods[getterName](tokenId).call();
   } catch (error) {
-    console.error('Errow while calling Gnosis API', error);
-    throw new Error(error);
+    console.error('Error trying to fetch URI using', getterName, error);
   }
+};
+
+export const getNftType = async (
+  daochain,
+  injectedProvider,
+  contractAddress,
+  tokenId,
+) => {
+  const erc721Uri = await getNftUri(
+    daochain,
+    injectedProvider,
+    getLocalABI(CONTRACTS.LOCAL_ERC_721),
+    'tokenURI',
+    contractAddress,
+    tokenId,
+  );
+  if (erc721Uri) return 'ERC721';
+  const erc1155Uri = await getNftUri(
+    daochain,
+    injectedProvider,
+    getLocalABI(CONTRACTS.LOCAL_ERC_1155_METADATA),
+    'uri',
+    contractAddress,
+    tokenId,
+  );
+  if (erc1155Uri) return 'ERC1155';
+  throw new Error('Not an NFT');
 };

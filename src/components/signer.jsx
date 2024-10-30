@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { BiErrorCircle } from 'react-icons/bi';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { Divider, Flex, Link, Button, Box } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -9,9 +9,10 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import ProgressIndicator from './progressIndicator';
 import TextBox from './TextBox';
-import { FORM } from '../data/forms';
+import { FORM } from '../data/formLegos/forms';
 import { addBoost } from '../utils/metadata';
 import { chainByID } from '../utils/chain';
+import { useTX } from '../contexts/TXContext';
 
 const indicatorStates = {
   signing: {
@@ -30,12 +31,22 @@ const indicatorStates = {
 };
 
 const Signer = props => {
-  const { playlist, boostData, goToNext, finish, stepperStorage } = props;
+  const {
+    playlist,
+    boostData,
+    goToNext,
+    finish,
+    stepperStorage,
+    daoRefetch,
+  } = props;
   const { daochain } = useParams();
   const { successToast, errorToast } = useOverlay();
   const { daoProposals, daoMetaData, refetchMetaData } = useMetaData();
+  const { refreshDao } = useTX();
   const { injectedProvider, address } = useInjectedProvider();
   const [state, setState] = useState(null);
+
+  console.log('daoRefetch', daoRefetch, props);
 
   const handleAddBoost = async () => {
     setState('signing');
@@ -60,6 +71,10 @@ const Signer = props => {
           title: 'Updated DAO Metadata',
         });
         refetchMetaData();
+        if (daoRefetch) {
+          const skipVaults = true;
+          refreshDao(skipVaults);
+        }
       },
     });
   };
@@ -68,8 +83,7 @@ const Signer = props => {
     <Flex flexDirection='column'>
       {!playlist && (
         <TextBox variant='body' mb={6}>
-          This boost is ready to launch. Sign with metamask to prove DAO
-          membership.
+          This boost is ready. Sign with metamask to prove DAO membership.
         </TextBox>
       )}
 

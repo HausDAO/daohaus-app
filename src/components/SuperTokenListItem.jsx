@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 import { RiQuestionLine } from 'react-icons/ri';
-import { VscLinkExternal } from 'react-icons/vsc';
-import { Flex, Box, Icon, Button, Link, Stack } from '@chakra-ui/react';
+import { Flex, Box, Icon, Button, Stack } from '@chakra-ui/react';
 
 import { ToolTipWrapper } from '../staticElements/wrappers';
 import { SF_LABEL } from '../utils/toolTipLabels';
@@ -81,7 +80,7 @@ const SuperTokenListItem = ({
               isLoading={isLoading && loadingCond === 'withdraw'}
               disabled={shouldDisableWithdraw}
             >
-              Return Balance
+              Return Balance to DAO
             </Button>
           </ToolTipWrapper>
           {token.underlyingTokenAddress && (
@@ -97,25 +96,7 @@ const SuperTokenListItem = ({
                 loadingText='Upgrading'
                 isLoading={isLoading && loadingCond === 'upgrade'}
               >
-                Convert
-              </Button>
-            </ToolTipWrapper>
-          )}
-          {!token.registeredToken && (
-            <ToolTipWrapper
-              placement='right'
-              tooltip
-              tooltipText={SF_LABEL.REGISTER}
-            >
-              <Button
-                leftIcon={<Icon as={VscLinkExternal} />}
-                rightIcon={<RiQuestionLine />}
-                variant='outline'
-                as={Link}
-                href='https://www.notion.so/Add-New-Tokens-to-Superfluid-8464f8c116c24cd6a0c5cb4f4174bb2d'
-                isExternal
-              >
-                Register Token
+                Request Funds
               </Button>
             </ToolTipWrapper>
           )}

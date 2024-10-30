@@ -6,7 +6,7 @@ import { Box, HStack, Icon, Image, Link } from '@chakra-ui/react';
 import TextBox from './TextBox';
 
 const hasImage = string => {
-  const imageExtensions = ['.jpg', '.png', '.gif', '/Qm'];
+  const imageExtensions = ['.gif', '.jpg', '.png', '.svg', 'ipfs/Qm'];
   return imageExtensions.some(o => string.includes(o));
 };
 
@@ -14,11 +14,11 @@ const hasHttp = string => {
   return string.indexOf('http') === 0;
 };
 
-const MediaBox = memo(({ link }) => {
+const MediaBox = memo(({ link, width = '100%' }) => {
   if (link === '') return;
   if (hasImage(link)) {
     return (
-      <Box width='100%'>
+      <Box width={width}>
         <Image
           src={hasHttp(link) ? link : `https://${link}`}
           maxW='100%'

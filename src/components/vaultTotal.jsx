@@ -14,6 +14,9 @@ const VaultTotal = ({ vaults }) => {
   const bankTotal = treasuryTotal + minionTotal;
   const uniqueTokenCount = vaultTokenCount(vaults);
 
+  console.log('treasuryTotal', treasuryTotal);
+  console.log('minionTotal', minionTotal);
+
   return (
     <>
       <Skeleton isLoaded={vaults?.length > 0}>
